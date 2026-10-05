@@ -23,7 +23,9 @@ bool pe_adventure_npc_refresh(PeAdventureNpc *npc,const PeWorld *world,
 bool pe_adventure_npc_refresh_at(PeAdventureNpc *npc,const PeWorld *world,
     const PeSandboxCollision *collision,PeVec3 anchor,char *error,size_t capacity);
 /* Archived pose: retain exact XZ and heading; allow vertical settling after
- * terrain edits. Unlike provisional encounters, never search nearby rings. */
+ * terrain edits. If ordinary settling fails, retain exact existing/archived
+ * XYZ only for a clear capsule with upward real contact within .06m and a
+ * walkable center floor within .15m. Never search nearby rings. */
 bool pe_adventure_npc_refresh_source(PeAdventureNpc *npc,const PeWorld *world,
     const PeSandboxCollision *collision,PeVec3 anchor,float yaw,char *error,size_t capacity);
 PeTreeCapsule pe_adventure_npc_capsule(const PeAdventureNpc *npc);
@@ -34,6 +36,8 @@ PeTreeCapsule pe_adventure_npc_capsule(const PeAdventureNpc *npc);
  * generated OutCollider (.1m larger). This is idle geometry eligibility;
  * caller owns alive/talk/UI,
  * priority and hover-delay gates. No facing cone. Invalid/miss leaves out alone. */
+bool pe_adventure_npc_pick_sex(const PeAdventureNpc *npc,bool male,PeVec3 player_position,
+    PeVec3 ray_origin,PeVec3 ray_direction,float obstacle_distance,float *out_distance);
 bool pe_adventure_npc_pick(const PeAdventureNpc *npc,PeVec3 player_position,
     PeVec3 ray_origin,PeVec3 ray_direction,float obstacle_distance,float *out_distance);
 #endif

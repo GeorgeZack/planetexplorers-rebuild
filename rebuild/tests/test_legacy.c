@@ -21,7 +21,7 @@ static unsigned char *fixture(int lod,const unsigned char *first,size_t first_si
 }
 int pe_test_legacy(void) {
     int failures=0;char error[200],path[1024];PeVoxel sample={99,99};
-    uint8_t *chunk=malloc(PE_LEGACY_CHUNK_BYTES);PeWorld *world=malloc(sizeof *world),*before=malloc(sizeof *before);
+    uint8_t *chunk=malloc(PE_LEGACY_CHUNK_BYTES);PeWorld *world=calloc(1,sizeof *world),*before=malloc(sizeof *before);
     if(!chunk||!world||!before){free(chunk);free(world);free(before);return 1;}
     for(int lod=0;lod<=4;lod++)for(int water=0;water<2;water++) {
         if(lod)snprintf(path,sizeof path,"%s/TutorialMode/Mainland/%s_x0_y0_%d.voxelform",PE_SOURCE_ROOT,water?"water":"map",lod);
@@ -80,7 +80,7 @@ int pe_test_legacy(void) {
         le32(raw,255);zipped_size=LZ4_compress_default((char *)raw,zipped,(int)raw_size,LZ4_compressBound((int)raw_size));
         data=fixture(0,(unsigned char *)zipped,(size_t)zipped_size,&size);
         if(data){CHECK(write_file(tmp,data,size));PeLegacyFile *f=pe_legacy_open(tmp,0,error,sizeof error);CHECK(f!=NULL);
-            if(f){memset(world,0x5a,sizeof *world);*before=*world;CHECK(!pe_legacy_crop(f,0,0,0,world,error,sizeof error));CHECK(memcmp(world,before,sizeof *world)==0);memset(chunk,0x7b,PE_LEGACY_CHUNK_BYTES);CHECK(!pe_legacy_chunk(f,0,0,0,chunk,error,sizeof error));CHECK(chunk[0]==0x7b&&chunk[PE_LEGACY_CHUNK_BYTES-1]==0x7b);pe_legacy_close(f);}free(data);}
+            if(f){pe_world_destroy(world);world->seed=0x5a5a5a5a;*before=*world;CHECK(!pe_legacy_crop(f,0,0,0,world,error,sizeof error));CHECK(memcmp(world,before,sizeof *world)==0);memset(chunk,0x7b,PE_LEGACY_CHUNK_BYTES);CHECK(!pe_legacy_chunk(f,0,0,0,chunk,error,sizeof error));CHECK(chunk[0]==0x7b&&chunk[PE_LEGACY_CHUNK_BYTES-1]==0x7b);pe_legacy_close(f);}free(data);}
     }
     free(raw);free(zipped);
     const unsigned char bad_lz4[3]={255,255,255};data=fixture(4,bad_lz4,sizeof bad_lz4,&size);

@@ -22,7 +22,7 @@ static int loader_tests(void){
     int failures=0;char error[256]={0},path[]=PE_SOURCE_ROOT "/rebuild/build/settlement-loader-XXXXXX";
     int fd=mkstemp(path);if(fd<0)return 1;close(fd);
     const size_t length=32+2*64*32*128;
-    unsigned char *bytes=calloc(length+1,1);PeWorld *w=malloc(sizeof *w),*before=malloc(sizeof *before);
+    unsigned char *bytes=calloc(length+1,1);PeWorld *w=calloc(1,sizeof *w),*before=calloc(1,sizeof *before);
     if(!bytes||!w||!before){free(bytes);free(w);free(before);unlink(path);return 1;}
     memcpy(bytes,"PEVX",4);put32(bytes+4,1);put32(bytes+8,(uint32_t)-627);put32(bytes+12,16);
     put32(bytes+16,323);put32(bytes+20,64);put32(bytes+24,32);put32(bytes+28,128);
@@ -76,12 +76,12 @@ static int actual_asset_child(void){
     if(!pe_settlement_start(game,error,sizeof error)){CHECK(false);goto done;}
     CHECK(pe_settlement_matches(&game->world));CHECK(game->world.seed==666);
     CHECK(fabsf(game->yaw-3.14159265358979323846f)<.000001f);
-    CHECK(game->welcome_page==0);CHECK(game->player.x>=0&&game->player.x<64&&game->player.z>=0&&game->player.z<128);
+    CHECK(game->welcome_page==0);CHECK(game->player.x>=0&&game->player.x<pe_world_width(&game->world)&&game->player.z>=0&&game->player.z<pe_world_depth(&game->world));
     if(!pe_game_collision_update(game,cache,error,sizeof error)){CHECK(false);goto done;}
     CHECK(!pe_sandbox_collision_overlap(cache,game->player,.3f,1.8f));
     CHECK(pe_sandbox_collision_support(cache,game->player,.3f,1.8f,.1f,.65f).hit);
     for(int role=1;role<=2;role++){
-        PeVec3 anchor=pe_settlement_npc_anchor(role);PeAdventureNpc npc={0};
+        PeVec3 anchor=pe_settlement_npc_anchor_for_world(&game->world,role);PeAdventureNpc npc={0};
         CHECK(pe_adventure_npc_refresh_source(&npc,&game->world,cache,anchor,pe_settlement_npc_yaw(role),error,sizeof error));
         CHECK(npc.placed&&npc.position.x==anchor.x&&npc.position.z==anchor.z);
         CHECK(fabsf(npc.position.y-anchor.y)<.5f);
@@ -90,13 +90,13 @@ static int actual_asset_child(void){
     int fd=mkstemp(save);CHECK(fd>=0);
     if(fd>=0){
         close(fd);CHECK(pe_game_save(game,save,error,sizeof error));CHECK(pe_game_load(loaded,save,error,sizeof error));
-        CHECK(pe_settlement_matches(&loaded->world));CHECK(loaded->world.depth==128);
-        CHECK(!memcmp(game->world.voxels,loaded->world.voxels,pe_world_voxel_count(&game->world)*sizeof game->world.voxels[0]));
+        CHECK(pe_settlement_matches(&loaded->world));CHECK(pe_world_depth(&loaded->world)==pe_world_depth(&game->world));
+        CHECK(!memcmp(pe_world_data_const(&game->world),pe_world_data_const(&loaded->world),pe_world_voxel_count(&game->world)*sizeof(PeVoxel)));
         CHECK(!memcmp(&game->player,&loaded->player,sizeof game->player));CHECK(loaded->welcome_page==0);CHECK(loaded->yaw==game->yaw);
         unlink(save);
     }
 done:
-    pe_sandbox_collision_free(cache);free(game);free(loaded);return failures;
+    pe_sandbox_collision_free(cache);pe_game_destroy(game);pe_game_destroy(loaded);free(game);free(loaded);return failures;
 }
 int pe_test_settlement(void){
     int failures=loader_tests()+world_arrival_tests();

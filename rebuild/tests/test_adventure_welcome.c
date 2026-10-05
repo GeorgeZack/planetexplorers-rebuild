@@ -7,7 +7,7 @@
 static int failures;
 #define CHECK(e) do{if(!(e)){fprintf(stderr,"adventure welcome:%d: %s\n",__LINE__,#e);failures++;}}while(0)
 int pe_test_adventure_welcome(void){
-    failures=0;PeGame *g=malloc(sizeof *g),*loaded=malloc(sizeof *loaded);
+    failures=0;PeGame *g=malloc(sizeof *g),*loaded=calloc(1,sizeof *loaded);
     CHECK(g&&loaded);if(!g||!loaded){free(g);free(loaded);return failures;}
     char path[]="/tmp/pe-welcome-XXXXXX",error[200];int fd=mkstemp(path);CHECK(fd>=0);
     if(fd<0){free(g);free(loaded);return failures;}close(fd);

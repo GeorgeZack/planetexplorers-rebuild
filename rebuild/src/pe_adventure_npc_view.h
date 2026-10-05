@@ -11,6 +11,7 @@ typedef struct {
 } PeAdventureNpcView;
 bool pe_adventure_npc_view_load(PeAdventureNpcView *view,const char *asset_root,char *error,size_t capacity);
 bool pe_adventure_npc_view_load_role(PeAdventureNpcView *view,const char *asset_root,int role,char *error,size_t capacity);
+bool pe_adventure_npc_view_load_scene(PeAdventureNpcView *view,const char *path,char *error,size_t capacity);
 void pe_adventure_npc_view_unload(PeAdventureNpcView *view);
 bool pe_adventure_npc_view_draw(PeAdventureNpcView *view,PeVec3 position,float yaw,double seconds);
 #endif

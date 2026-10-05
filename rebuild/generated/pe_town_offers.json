@@ -1,0 +1,175 @@
+{
+  "schema": 1,
+  "scope": "Bounded buy-only catalog; source Adventure digital currency; no sell/buyback or broad item support.",
+  "sources": [
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/index.arc",
+      "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/world.arc",
+      "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+    }
+  ],
+  "offers": [
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 1183,
+      "item_id": 1,
+      "price": 158,
+      "limit": 3,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 281,
+      "item_id": 424,
+      "price": 79,
+      "limit": 1,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 1184,
+      "item_id": 12,
+      "price": 158,
+      "limit": 3,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 285,
+      "item_id": 406,
+      "price": 79,
+      "limit": 1,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 1185,
+      "item_id": 19,
+      "price": 158,
+      "limit": 3,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 287,
+      "item_id": 412,
+      "price": 79,
+      "limit": 1,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 1186,
+      "item_id": 26,
+      "price": 158,
+      "limit": 3,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "store_id": 289,
+      "item_id": 418,
+      "price": 79,
+      "limit": 1,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20014,
+      "prototype_id": 146,
+      "store_id": 1308,
+      "item_id": 34,
+      "price": 189,
+      "limit": 3,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20014,
+      "prototype_id": 146,
+      "store_id": 283,
+      "item_id": 433,
+      "price": 95,
+      "limit": 1,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 1337,
+      "item_id": 937,
+      "price": 296,
+      "limit": 40,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 338,
+      "item_id": 916,
+      "price": 10,
+      "limit": 40,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 1343,
+      "item_id": 234,
+      "price": 3,
+      "limit": 40,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 1344,
+      "item_id": 235,
+      "price": 3,
+      "limit": 40,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 1347,
+      "item_id": 238,
+      "price": 3,
+      "limit": 40,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 1348,
+      "item_id": 239,
+      "price": 3,
+      "limit": 40,
+      "refresh_seconds": 46800
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "store_id": 1350,
+      "item_id": 241,
+      "price": 3,
+      "limit": 40,
+      "refresh_seconds": 46800
+    }
+  ],
+  "conditions": "UIShopWnd.UpdataShop leaves bPass true for type1 limits even without completed missions. Type2 rows are not included.",
+  "refresh": "On open, strict elapsed>refresh_seconds resets stock; each nonempty entry resets creation time even when not refreshed."
+}

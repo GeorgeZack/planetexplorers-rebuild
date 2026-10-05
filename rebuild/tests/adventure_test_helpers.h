@@ -11,14 +11,15 @@ static inline bool pe_test_ack_welcome(PeGame *game){
 }
 /* Produce older default-depth fixtures: v7 appends depth; v6 appends welcome. */
 static inline bool pe_test_save_pre_welcome(const char *path,unsigned version){
-    if(version<4||version>6)return false;
+    if(version<4||version>7)return false;
     FILE *file=fopen(path,"rb");if(!file)return false;
     if(fseek(file,0,SEEK_END)){fclose(file);return false;}
-    long size=ftell(file);if(size<20||size>400000){fclose(file);return false;}
+    long size=ftell(file);if(size<20||size>800000){fclose(file);return false;}
     rewind(file);unsigned char *data=malloc((size_t)size);if(!data){fclose(file);return false;}
     bool ok=fread(data,1,(size_t)size,file)==(size_t)size;fclose(file);
-    if(ok&&(data[4]==6||data[4]==7)&&data[5]==0&&data[6]==0&&data[7]==0){
-        if(data[4]==7){
+    if(ok&&(data[4]==6||data[4]==7||data[4]==8)&&data[5]==0&&data[6]==0&&data[7]==0){
+        if(data[4]==8)size-=12+4+16*PE_TOWN_STOCK_CAPACITY;
+        if(data[4]>=7&&version<7){
             if(data[size-4]!=PE_WORLD_Z||data[size-3]||data[size-2]||data[size-1]){free(data);return false;}
             size-=4;
         }

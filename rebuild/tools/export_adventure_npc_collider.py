@@ -11,9 +11,11 @@ PREFAB = ROOT/'Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab'
 OUTPUT = ROOT/'rebuild/generated/pe_adventure_npc_collider.h'
 
 
-def source_capsule():
+def source_capsule(sex="female"):
+    if sex not in ("female","male"): raise ValueError("Unknown capsule sex")
+    prefab = ROOT/("Assets/Resources/Prefab/PlayerPrefab/"+sex.title()+"Model.prefab")
     import UnityPy
-    objects = {o.path_id: o for o in UnityPy.load(str(PREFAB)).objects}
+    objects = {o.path_id: o for o in UnityPy.load(str(prefab)).objects}
     transforms = {o.path_id: o.read_typetree() for o in objects.values() if o.type.name == 'Transform'}
     by_go = {t['m_GameObject']['m_PathID']: i for i, t in transforms.items()}
 
@@ -37,11 +39,11 @@ def source_capsule():
         return dict(component=path_id, name=name, layer=layer, center=values[:3],
                     radius=values[3], height=values[4], direction=1, enabled=True, trigger=trigger)
 
-    body = capsule(13600000, 'Model', 10, False)
-    defence = capsule(13690738, 'Defence', 25, True)
+    body = capsule(13600000 if sex=='female' else 13654112, 'Model', 10, False)
+    defence = capsule(13690738 if sex=='female' else 13653336, 'Defence', 25, True)
     binary = b'PESC'+struct.pack('<I5fII', 1, *body['center'], body['radius'], body['height'], 1, 1)
-    metadata = dict(prefab=str(PREFAB.relative_to(ROOT)),
-                    prefab_sha256=hashlib.sha256(PREFAB.read_bytes()).hexdigest(),
+    metadata = dict(prefab=str(prefab.relative_to(ROOT)),
+                    prefab_sha256=hashlib.sha256(prefab.read_bytes()).hexdigest(),
                     physical=body, defence=defence,
                     outer_growth=dict(radius=.1, height=.2,
                         source='Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs:BuildOutCollider'))

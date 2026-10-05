@@ -76,7 +76,7 @@ int main(int argc,char **argv){
     if(argc<2||argc>3||(strcmp(argv[1],"--inspect")==0&&argc!=3)){
         fprintf(stderr,"Usage: %s OUTPUT.pesave [AIRBORNE.pesave]\n       %s --inspect EXISTING.pesave\n",argv[0],argv[0]);return 2;
     }
-    PeGame *game=malloc(sizeof *game),*loaded=malloc(sizeof *loaded);
+    PeGame *game=calloc(1,sizeof *game),*loaded=calloc(1,sizeof *loaded);
     PeSandboxCollision *collision=pe_sandbox_collision_create();
     bool ok=false;char error[200];
     if(!game||!loaded||!collision)goto done;
@@ -128,5 +128,5 @@ int main(int argc,char **argv){
 action_failed:
     fprintf(stderr,"Adventure fixture action failed: %s\n",game->message);
 done:
-    pe_sandbox_collision_free(collision);free(loaded);free(game);return ok?0:1;
+    pe_sandbox_collision_free(collision);pe_game_destroy(loaded);pe_game_destroy(game);free(loaded);free(game);return ok?0:1;
 }

@@ -12,6 +12,10 @@ bool pe_adventure_npc_view_load_role(PeAdventureNpcView *v,const char *root,int 
     if(!v||!root||(role!=1&&role!=2)||!IsWindowReady()||v->actor.loaded||v->portrait.id)return false;
     char path[4096];int n=snprintf(path,sizeof path,"%s/adventure-%s/recording.peas",root,role==1?"welcome":"supplier");
     if(n<0||(size_t)n>=sizeof path){if(error&&cap)snprintf(error,cap,"Adventure NPC asset path too long");return false;}
+    return pe_adventure_npc_view_load_scene(v,path,error,cap);
+}
+bool pe_adventure_npc_view_load_scene(PeAdventureNpcView *v,const char *path,char *error,size_t cap){
+    if(!v||!path||!IsWindowReady()||v->actor.loaded||v->portrait.id)return false;
     if(!pe_actor_scene_view_load(&v->actor,path,error,cap))return false;
     v->idle=pe_actor_scene_view_find_clip(&v->actor,"NormalIdle");
     const PeActorClip *clip=pe_actor_scene_view_clip_at(&v->actor,v->idle);

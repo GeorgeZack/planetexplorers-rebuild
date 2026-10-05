@@ -2,6 +2,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
+#include <stdio.h>
 #include <string.h>
 
 static bool hit(PeTrainingUIRect r,PeSandboxUIInput i) {
@@ -20,21 +21,44 @@ void pe_sandbox_ui_init(PeSandboxUI *u,float w,float h) {
 void pe_sandbox_ui_resize(PeSandboxUI *u,float w,float h) {
     if(u)pe_training_ui_windows_layout(w,h,&u->windows,&u->layout);
 }
+bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *u,const PeSandboxMapNpc *markers,size_t count) {
+    if(!u||count>128||(count&&!markers))return false;
+    for(size_t i=0;i<count;i++)if(!markers[i].entity_id||!isfinite(markers[i].position.x)||!isfinite(markers[i].position.y)||!isfinite(markers[i].position.z))return false;
+    u->resident_markers=markers;u->resident_marker_count=count;return true;
+}
 bool pe_sandbox_ui_cursor(const PeSandboxUI *u) {
-    return u&&(u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
+    return u&&(u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
 }
 static bool panel(const PeSandboxUI *u) {
-    return u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
+    return u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
 }
 PeTrainingUIRect pe_sandbox_ui_supplier_menu(const PeSandboxUI *u) {
     return pe_training_ui_map(&u->layout,(PeTrainingUIRect){107,140,426,486},PE_UI_CENTER);
 }
 PeTrainingUIRect pe_sandbox_ui_supplier_choice(const PeSandboxUI *u,int index) {
-    return relative(u,pe_sandbox_ui_supplier_menu(u),29,85+21*(float)index,370,21);
+    float step=u->dialogue.role==3?48.0f:21.0f;
+    return relative(u,pe_sandbox_ui_supplier_menu(u),29,85+step*(float)index,370,step);
 }
 PeTrainingUIRect pe_sandbox_ui_supplier_close(const PeSandboxUI *u) {
     return relative(u,pe_sandbox_ui_supplier_menu(u),391,19,25,25);
 }
+PeTrainingUIRect pe_sandbox_ui_shop_panel(const PeSandboxUI *u) {
+    PeTrainingUIRect p=pe_training_ui_map(&u->layout,(PeTrainingUIRect){325,100,630,520},PE_UI_CENTER);
+    p.x+=u->shop_offset_x*u->layout.scale;p.y+=u->shop_offset_y*u->layout.scale;
+    p.x=fmaxf(0,fminf(p.x,u->layout.width-p.w));p.y=fmaxf(0,fminf(p.y,u->layout.height-p.h));return p;
+}
+PeTrainingUIRect pe_sandbox_ui_shop_row(const PeSandboxUI *u,int row) {
+    return relative(u,pe_sandbox_ui_shop_panel(u),22,90+38*(float)row,586,36);
+}
+PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *u,int b) {
+    PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);
+    if(b==0)return relative(u,p,24,408,32,30);
+    if(b==1)return relative(u,p,122,408,32,30);
+    if(b==2)return relative(u,p,190,408,190,30);
+    if(b==3)return relative(u,p,445,408,160,30);
+    return relative(u,p,591,19,25,25);
+}
+void pe_sandbox_ui_cancel_town(PeSandboxUI *u){if(u){u->town_open=u->shop_open=u->shop_dragging=false;u->town_entity=0;u->town_name[0]=0;u->town_portrait=(Texture2D){0};}}
 static bool item_visible(const PeSandboxUI *u,const PeGame *g,int i) {
     const PeSlot *s=&g->inventory.slots[i];const PeItemDef *d=pe_item_def(s->item_id);
     return s->count>0&&d&&d->tab==u->inventory_tab&&
@@ -137,19 +161,61 @@ static void close_panels(PeSandboxUI *u) {
     u->menu_open=u->search_focus=false;u->dragging=false;
 }
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
-    if(!u||!g||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,1,entity,eligible))return false;
+    if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,1,entity,eligible))return false;
     close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_supplier(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
-    if(!u||!g||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,2,entity,eligible))return false;
+    if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,2,entity,eligible))return false;
     close_panels(u);return true;
+}
+bool pe_sandbox_ui_open_annot(PeSandboxUI *u,const PeGame *g,uint32_t entity,Texture2D portrait,bool eligible) {
+    if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,3,entity,eligible))return false;
+    u->annot_portrait=portrait;close_panels(u);return true;
+}
+bool pe_sandbox_ui_open_town(PeSandboxUI *u,const PeGame *g,uint32_t entity,const char *name,Texture2D portrait,bool eligible) {
+    if(!u||!g||!entity||!name||strlen(name)>128||!eligible||u->town_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0)return false;
+    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->town_portrait=portrait;u->shop_selection=0;u->shop_quantity=1;
+    snprintf(u->town_name,sizeof u->town_name,"%s",name);return true;
+}
+static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
+    if(i.escape||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0){pe_sandbox_ui_cancel_town(u);return;}
+    if(!u->shop_open){
+        bool vendor=pe_town_shop_count(u->town_entity)>0;
+        if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i))pe_sandbox_ui_cancel_town(u);
+        else if(vendor&&(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))){
+            if(pe_town_shop_open(g,u->town_entity)){u->shop_open=true;u->shop_selection=0;u->shop_quantity=1;}
+        }else if((!vendor&&i.advance)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,vendor?1:0),i)))pe_sandbox_ui_cancel_town(u);
+        return;
+    }
+    PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);
+    if(u->shop_dragging){
+        PeTrainingUIRect base=pe_training_ui_map(&u->layout,(PeTrainingUIRect){325,100,630,520},PE_UI_CENTER);
+        float x=fmaxf(0,fminf(i.mouse_x-u->shop_grab_x,u->layout.width-p.w));
+        float y=fmaxf(0,fminf(i.mouse_y-u->shop_grab_y,u->layout.height-p.h));
+        u->shop_offset_x=(x-base.x)/u->layout.scale;u->shop_offset_y=(y-base.y)/u->layout.scale;
+        if(i.left_released)u->shop_dragging=false;
+        return;
+    }
+    if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,4),i)){pe_sandbox_ui_cancel_town(u);return;}
+    if(i.left_pressed&&hit(relative(u,p,10,10,570,46),i)){u->shop_dragging=true;u->shop_grab_x=i.mouse_x-p.x;u->shop_grab_y=i.mouse_y-p.y;return;}
+    if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,3),i)){u->shop_open=false;return;}
+    if(i.left_pressed)for(size_t row=0;row<pe_town_shop_count(u->town_entity);row++)if(hit(pe_sandbox_ui_shop_row(u,(int)row),i)){u->shop_selection=(int)row;u->shop_quantity=1;}
+    const PeTownOffer *offer=u->shop_selection<0?NULL:pe_town_shop_offer(u->town_entity,(size_t)u->shop_selection);
+    if(!offer)return;
+    unsigned stock=pe_town_shop_stock(g,offer->store_id);
+    if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,0),i)&&u->shop_quantity>1)u->shop_quantity--;
+    if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,1),i)&&u->shop_quantity<stock)u->shop_quantity++;
+    if(!u->shop_quantity)u->shop_quantity=1;
+    if(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,2),i)))pe_town_shop_buy(g,u->town_entity,offer->store_id,u->shop_quantity);
 }
 PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
     PeSandboxUIResult r={0};
     if(!u||!g||!isfinite(i.mouse_x)||!isfinite(i.mouse_y)||!isfinite(i.wheel)||u->layout.scale<=0){r.consume_world=true;return r;}
     u->mouse_x=i.mouse_x;u->mouse_y=i.mouse_y;
+    if(u->discard_input){u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
     bool before=panel(u),cursor_before=pe_sandbox_ui_cursor(u);
-    if(!i.focused){u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
+    if(!i.focused){u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
+    if(u->town_open){r.consume_world=true;town_route(u,g,i);goto done;}
     unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0)|
         (u->missions_open?1u<<PE_UI_WINDOW_MISSION:0)|(u->replicator_open?1u<<PE_UI_WINDOW_REPLICATOR:0);
     int pointer_window=pe_training_ui_window_at(&u->layout,visible,i.mouse_x,i.mouse_y);

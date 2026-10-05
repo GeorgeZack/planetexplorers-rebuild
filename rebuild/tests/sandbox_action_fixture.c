@@ -185,7 +185,7 @@ static bool migration_fixture(PeGame *g,PeGame *loaded,PeSandboxCollision *colli
 }
 int main(int argc,char **argv){
     if(argc!=3){fprintf(stderr,"Usage: %s DIG.pesave FELL.pesave\n       %s --inspect SAVE.pesave\n       %s --migration OUTPUT.v4.pesave\n       %s --mine MINE.pesave\n",argv[0],argv[0],argv[0],argv[0]);return 2;}
-    PeGame *g=malloc(sizeof *g),*loaded=malloc(sizeof *loaded);PeSandboxCollision *collision=pe_sandbox_collision_create();
+    PeGame *g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded);PeSandboxCollision *collision=pe_sandbox_collision_create();
     bool ok=false;if(!g||!loaded||!collision)goto end;
     if(strcmp(argv[1],"--migration")==0){ok=migration_fixture(g,loaded,collision,argv[2]);goto end;}
     if(strcmp(argv[1],"--inspect")==0){char error[200];ok=pe_game_load(g,argv[2],error,sizeof error);if(ok)report(argv[2],g);else fprintf(stderr,"%s\n",error);goto end;}
@@ -235,5 +235,5 @@ int main(int argc,char **argv){
     ok=aimed&&save(g,loaded,argv[2]);
 end:
     if(!ok)fprintf(stderr,"Sandbox action fixture failed; no graphics or input were used.\n");
-    pe_sandbox_collision_free(collision);free(loaded);free(g);return ok?0:1;
+    pe_sandbox_collision_free(collision);pe_game_destroy(loaded);pe_game_destroy(g);free(loaded);free(g);return ok?0:1;
 }

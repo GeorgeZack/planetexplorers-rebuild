@@ -18,7 +18,7 @@ static bool corrupt(const char *path,int mode){
     if(fseek(f,0,SEEK_END)){fclose(f);return false;}long n=ftell(f);rewind(f);
     if(n<20){fclose(f);return false;}unsigned char *p=malloc((size_t)n+1);if(!p){fclose(f);return false;}
     bool ok=fread(p,1,(size_t)n,f)==(size_t)n;fclose(f);
-    if(mode==0)put32(p+n-4,96);else if(mode==1)n--;else p[n++]=0;
+    if(mode==0)put32(p+n-(12+4+16*PE_TOWN_STOCK_CAPACITY)-4,96);else if(mode==1)n--;else p[n++]=0;
     put32(p+8,(uint32_t)n-16);uint32_t sum=2166136261u;
     for(long i=16;i<n;i++){sum^=p[i];sum*=16777619u;}put32(p+12,sum);
     f=fopen(path,"wb");if(!f)ok=false;else{ok=ok&&fwrite(p,1,(size_t)n,f)==(size_t)n;if(fclose(f))ok=false;}
@@ -124,8 +124,71 @@ static int static_game_tests(void){
     int status=0;if(waitpid(pid,&status,0)!=pid)return 1;
     return !WIFEXITED(status)||WEXITSTATUS(status)!=0;
 }
+static int extended_dimensions_tests(void){
+    int failures=0;char error[200],path[]="/tmp/pe-dimensions-XXXXXX";
+    PeWorld *w=calloc(1,sizeof *w),*copy=calloc(1,sizeof *copy);
+    PeGame *g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded),*before=calloc(1,sizeof *before);
+    PeSandboxCollision *collision=pe_sandbox_collision_create();
+    if(!w||!copy||!g||!loaded||!before||!collision){failures++;goto done;}
+    CHECK(pe_world_resize(w,96,64,160));CHECK(w->extended);
+    CHECK(pe_world_width(w)==96&&pe_world_size_y(w)==64&&pe_world_depth(w)==160);
+    CHECK(pe_world_voxel_count(w)==96u*64u*160u&&pe_world_region_count(w)==30);
+    for(int z=0;z<160;z++)for(int y=0;y<=40;y++)for(int x=0;x<96;x++)
+        pe_world_set(w,x,y,z,(PeVoxel){255,PE_MAT_DIRT});
+    CHECK(pe_world_clone(copy,w));CHECK(copy->extended!=w->extended);
+    uint64_t hash=pe_world_hash(w);CHECK(hash==pe_world_hash(copy));
+    CHECK(!pe_world_resize(w,513,64,160)&&hash==pe_world_hash(w));
+    CHECK(!pe_world_set(w,96,40,140,(PeVoxel){0}));
+    CHECK(pe_world_set(copy,80,40,140,(PeVoxel){0}));CHECK(pe_world_get(w,80,40,140).volume==255);
+    CHECK(pe_world_mesh_region_changed(w,copy,64,32,128,31,31,31));
+    PeHit hit=pe_world_raycast(w,(PeVec3){80,60,140},(PeVec3){0,-1,0},60);
+    CHECK(hit.hit&&fabsf(hit.position.y-40.49804f)<.001f);
+    CHECK(pe_sandbox_collision_update(collision,w,NULL,0,NULL,0,error,sizeof error));
+    PeSceneHit physical=pe_sandbox_collision_ray_geometry(collision,(PeVec3){80,60,140},(PeVec3){0,-1,0},60);
+    CHECK(physical.hit&&fabsf(physical.position.y-hit.position.y)<.001f);
+    CHECK(!pe_sandbox_collision_overlap(collision,(PeVec3){80,41,140},.25f,1.8f));
+    CHECK(pe_sandbox_collision_overlap(collision,(PeVec3){80,39,140},.25f,1.8f));
+    PeSandboxCollisionStats stats=pe_sandbox_collision_stats(collision);
+    CHECK(pe_sandbox_collision_update(collision,w,NULL,0,NULL,0,error,sizeof error));
+    CHECK(pe_sandbox_collision_stats(collision).terrain_rebuilds==stats.terrain_rebuilds);
+    CHECK(pe_game_init_mode(g,91,PE_GAME_ADVENTURE));CHECK(pe_game_set_world(g,w,(PeVec3){80,42,140}));
+    CHECK(g->world.extended!=w->extended&&g->player.x==80&&g->player.z==140&&g->player.y>40);
+    CHECK(pe_game_clone(before,g));CHECK(before->world.extended!=g->world.extended);
+    PeWorld *empty=calloc(1,sizeof *empty);CHECK(empty);
+    if(empty){CHECK(pe_world_resize(empty,96,64,160));CHECK(!pe_game_set_world(g,empty,(PeVec3){80,42,140}));CHECK(pe_world_hash(&g->world)==pe_world_hash(&before->world));pe_world_destroy(empty);free(empty);}
+    int fd=mkstemp(path);CHECK(fd>=0);
+    if(fd>=0){close(fd);
+        CHECK(pe_game_save(g,path,error,sizeof error));CHECK(pe_game_load(loaded,path,error,sizeof error));
+        CHECK(pe_world_width(&loaded->world)==96&&pe_world_size_y(&loaded->world)==64&&pe_world_depth(&loaded->world)==160);
+        CHECK(pe_world_hash(&loaded->world)==pe_world_hash(&g->world));
+        CHECK(loaded->world.extended!=g->world.extended&&loaded->player.z==140);
+        CHECK(corrupt(path,1));hash=pe_world_hash(&loaded->world);
+        CHECK(!pe_game_load(loaded,path,error,sizeof error)&&hash==pe_world_hash(&loaded->world));
+        unlink(path);
+    }
+    pe_world_destroy(copy);CHECK(pe_world_resize(copy,512,128,512));CHECK(pe_world_region_count(copy)==PE_WORLD_MAX_REGIONS);
+    CHECK(pe_world_set(copy,511,127,511,(PeVoxel){255,17}));CHECK(pe_world_get(copy,511,127,511).material==17);
+    pe_world_destroy(copy);CHECK(pe_world_clone(copy,w));
+    CHECK(pe_world_set(copy,80,40,140,(PeVoxel){0}));
+    CHECK(pe_sandbox_collision_update(collision,copy,NULL,0,NULL,0,error,sizeof error));
+    CHECK(pe_sandbox_collision_stats(collision).terrain_rebuilds>stats.terrain_rebuilds);
+    CHECK(pe_sandbox_collision_stats(collision).terrain_rebuilds-stats.terrain_rebuilds<30);
+    /* A new independently owned world can share the same revision and metadata;
+     * replacement buffer identity must prevent an unchanged-world fast path. */
+    pe_world_data(copy)[((size_t)140*64+40)*96+80]=(PeVoxel){255,PE_MAT_DIRT};
+    copy->revision=w->revision;
+    CHECK(pe_sandbox_collision_update(collision,w,NULL,0,NULL,0,error,sizeof error));
+    stats=pe_sandbox_collision_stats(collision);
+    pe_world_data(copy)[((size_t)140*64+40)*96+80]=(PeVoxel){0};
+    CHECK(pe_sandbox_collision_update(collision,copy,NULL,0,NULL,0,error,sizeof error));
+    CHECK(pe_sandbox_collision_stats(collision).terrain_rebuilds>stats.terrain_rebuilds);
+ done:
+    pe_world_destroy(w);pe_world_destroy(copy);free(w);free(copy);
+    pe_game_destroy(g);pe_game_destroy(loaded);pe_game_destroy(before);free(g);free(loaded);free(before);
+    pe_sandbox_collision_free(collision);return failures;
+}
 int pe_test_world_depth(void){
-    int failures=static_geometry_tests()+static_game_tests();char error[200],path[]="/tmp/pe-depth-XXXXXX";
+    int failures=static_geometry_tests()+static_game_tests()+extended_dimensions_tests();char error[200],path[]="/tmp/pe-depth-XXXXXX";
     PeWorld *w=calloc(1,sizeof *w),*old=calloc(1,sizeof *old);
     PeGame *g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded),*before=calloc(1,sizeof *before);
     PeSandboxCollision *collision=pe_sandbox_collision_create();
@@ -192,17 +255,19 @@ int pe_test_world_depth(void){
         CHECK(pe_world_depth(&loaded->world)==128&&loaded->player.z==95);
         CHECK(pe_world_hash(&loaded->world)==pe_world_hash(&g->world));
         CHECK(!memcmp(loaded->world.voxels,g->world.voxels,sizeof g->world.voxels));
+        CHECK(pe_test_save_pre_welcome(path,7));CHECK(pe_game_load(loaded,path,error,sizeof error));
+        CHECK(pe_world_depth(&loaded->world)==128&&pe_world_hash(&loaded->world)==pe_world_hash(&g->world));
         for(int mode=1;mode<=2;mode++){
             CHECK(pe_game_save(g,path,error,sizeof error));CHECK(corrupt(path,mode));*before=*loaded;
             CHECK(!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(before,loaded,sizeof *loaded));
         }
         pe_game_init_mode(g,666,PE_GAME_ADVENTURE);CHECK(pe_game_welcome_advance(g,0));
-        for(unsigned v=4;v<=6;v++){
+        for(unsigned v=4;v<=7;v++){
             pe_game_init_mode(g,666,PE_GAME_ADVENTURE);
             if(v<6)CHECK(pe_test_ack_welcome(g));else CHECK(pe_game_welcome_advance(g,0));
             CHECK(pe_game_save(g,path,error,sizeof error));CHECK(pe_test_save_pre_welcome(path,v));
             CHECK(pe_game_load(loaded,path,error,sizeof error));CHECK(pe_world_depth(&loaded->world)==64);
-            CHECK(loaded->welcome_page==(v==6?1:PE_ADVENTURE_WELCOME_PAGES));
+            CHECK(loaded->welcome_page==(v>=6?1:PE_ADVENTURE_WELCOME_PAGES));
             for(size_t i=PE_VOXEL_COUNT;i<PE_MAX_VOXEL_COUNT;i++)CHECK(!loaded->world.voxels[i].volume&&!loaded->world.voxels[i].material);
         }
         for(int mode=0;mode<3;mode++){

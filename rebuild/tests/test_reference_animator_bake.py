@@ -201,6 +201,20 @@ class BakeTests(unittest.TestCase):
         self.assertEqual(result['returncode'],0); self.assertIsNone(result['signal'])
         self.assertTrue(result['observed_utc'].endswith('+00:00'))
 
+    def test_loaded_source_entity_is_bounded_and_provenance_recorded(self):
+        with mock.patch.object(tool,'build',return_value=self.setup_mock_launch()), \
+             mock.patch.object(tool.launch_reference,'launch_command',return_value=(['/original/client'],{})), \
+             mock.patch.object(tool.launch_reference,'prepare_settings'), \
+             mock.patch.object(tool.launch_reference,'prepare_unity_preferences'), \
+             mock.patch.object(tool.subprocess,'run',return_value=SimpleNamespace(returncode=0)) as launch:
+            self.assertEqual(tool.main(self.args()+['--source-entity','0','--launch']),1)
+            self.assertEqual(tool.main(self.args()+['--source-entity','1000001','--launch']),1)
+            launch.assert_not_called()
+            self.assertEqual(tool.main(self.args()+['--source-entity','20010','--launch']),0)
+            self.assertEqual(launch.call_args.kwargs['env']['PE_BAKE_SOURCE_ENTITY'],'20010')
+        path=next((self.root/'profile/pose-captures').glob('*.launch.json'))
+        self.assertEqual(json.loads(path.read_text())['plan']['source_entity_id'],20010)
+
     def test_exit_record_preserves_signal_and_existing_record_refused(self):
         profile=self.root/'profile'; output=profile/'pose-captures/test.jsonl'
         args=self.args()+['--launch','--output',str(output)]

@@ -21,7 +21,7 @@ static bool normalize(PeVec3 *v) {
 bool pe_game_static_segment_clear(const PeGame *g,PeVec3 start,PeVec3 end){
     if(!g||!finite3(start)||!finite3(end))return false;
     if(!pe_settlement_matches(&g->world))return true;
-    const PeSceneCollision *scene=pe_settlement_collision(NULL,0);if(!scene)return false;
+    const PeSceneCollision *scene=pe_settlement_collision_for_world(&g->world,NULL,0);if(!scene)return false;
     PeVec3 delta={end.x-start.x,end.y-start.y,end.z-start.z};float range=length3(delta);
     if(!isfinite(range))return false;
     /* Target contact is allowed; nearer immutable triangles block interaction. */
@@ -29,7 +29,7 @@ bool pe_game_static_segment_clear(const PeGame *g,PeVec3 start,PeVec3 end){
 }
 static bool static_box_clear(const PeGame *g,PeVec3 lo,PeVec3 hi){
     if(!pe_settlement_matches(&g->world))return true;
-    const PeSceneCollision *scene=pe_settlement_collision(NULL,0);
+    const PeSceneCollision *scene=pe_settlement_collision_for_world(&g->world,NULL,0);
     return scene&&!pe_scene_overlaps_aabb(scene,lo,hi);
 }
 int pe_inventory_count(const PeInventory *p, int id) {
@@ -173,11 +173,11 @@ static bool overlap(PeVec3 p, const PeBlock *b) {
            p.y+PE_PLAYER_HEIGHT>b->y && p.y<b->y+1;
 }
 static bool collides(const PeGame *g, PeVec3 p) {
-    if (p.x<PE_PLAYER_RADIUS || p.z<PE_PLAYER_RADIUS || p.x>PE_WORLD_X-1-PE_PLAYER_RADIUS ||
-        p.z>pe_world_depth(&g->world)-1-PE_PLAYER_RADIUS || p.y<0 || p.y+PE_PLAYER_HEIGHT>PE_WORLD_Y-1) return true;
+    if (p.x<PE_PLAYER_RADIUS || p.z<PE_PLAYER_RADIUS || p.x>pe_world_width(&g->world)-1-PE_PLAYER_RADIUS ||
+        p.z>pe_world_depth(&g->world)-1-PE_PLAYER_RADIUS || p.y<0 || p.y+PE_PLAYER_HEIGHT>pe_world_size_y(&g->world)-1) return true;
     if (pe_world_collides(&g->world,p,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)) return true;
     if(pe_settlement_matches(&g->world)){
-        const PeSceneCollision *scene=pe_settlement_collision(NULL,0);
+        const PeSceneCollision *scene=pe_settlement_collision_for_world(&g->world,NULL,0);
         if(!scene||pe_scene_capsule_overlap(scene,p,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT))return true;
     }
     for (int i=0;i<g->block_count;i++) if (overlap(p,&g->blocks[i])) return true;
@@ -187,32 +187,42 @@ static bool collides(const PeGame *g, PeVec3 p) {
 }
 bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
     if(!g||!world||world->source>1||!pe_world_depth(world)||!finite3(preferred))return false;
-    if(world->source==0)for(size_t i=0;i<pe_world_voxel_count(world);i++)if(world->voxels[i].material>PE_MAT_GRASS)return false;
-    PeGame *next=malloc(sizeof *next);if(!next)return false;
-    *next=*g;next->world=*world;next->block_count=0;next->tree_count=0;next->cell_count=0;
+    if(world->source==0)for(size_t i=0;i<pe_world_voxel_count(world);i++)if(pe_world_data_const(world)[i].material>PE_MAT_GRASS)return false;
+    PeGame *next=calloc(1,sizeof *next);if(!next)return false;
+    *next=*g;memset(&next->world,0,sizeof next->world);
+    if(!pe_world_clone(&next->world,world)){free(next);return false;}next->block_count=0;next->tree_count=0;next->cell_count=0;
     memset(next->blocks,0,sizeof next->blocks);memset(next->trees,0,sizeof next->trees);memset(next->cells,0,sizeof next->cells);
     PeSandboxCollision *collision=NULL;
     if(g->mode==PE_GAME_ADVENTURE||pe_settlement_matches(world)){
         char error[160];collision=pe_sandbox_collision_create();
-        if(!collision||!pe_game_collision_update(next,collision,error,sizeof error)){pe_sandbox_collision_free(collision);free(next);return false;}
+        if(!collision||!pe_game_collision_update(next,collision,error,sizeof error)){pe_sandbox_collision_free(collision);pe_game_destroy(next);free(next);return false;}
     }
-    int cx=(int)fminf(PE_WORLD_X-2,fmaxf(1,preferred.x));
+    int cx=(int)fminf(pe_world_width(world)-2,fmaxf(1,preferred.x));
     int cz=(int)fminf(pe_world_depth(world)-2,fmaxf(1,preferred.z));bool found=false;
     for(int ring=0;ring<pe_world_depth(world)&&!found;ring++)for(int z=cz-ring;z<=cz+ring&&!found;z++)for(int x=cx-ring;x<=cx+ring&&!found;x++){
-        if(x<1||z<1||x>=PE_WORLD_X-2||z>=pe_world_depth(world)-2||(abs(x-cx)!=ring&&abs(z-cz)!=ring))continue;
+        if(x<1||z<1||x>=pe_world_width(world)-2||z>=pe_world_depth(world)-2||(abs(x-cx)!=ring&&abs(z-cz)!=ring))continue;
         float h=pe_world_height(&next->world,(float)x,(float)z);
-        if(h<=0||h+PE_PLAYER_HEIGHT+0.1f>=PE_WORLD_Y-1)continue;
+        if(h<=0||h+PE_PLAYER_HEIGHT+0.1f>=pe_world_size_y(world)-1)continue;
         PeVec3 p={(float)x,h+0.05f,(float)z};
         if(collision){next->player=p;found=pe_game_collision_settle(next,collision);}
         else for(int lift=0;lift<15;lift++,p.y+=0.05f)if(!collides(next,p)){next->player=p;found=true;break;}
     }
-    if(found){next->velocity=(PeVec3){0};next->grounded=false;next->sprinting=false;next->jumping=false;next->jump_action_elapsed=0;*g=*next;say(g,"World imported; inventory retained.");}
-    pe_sandbox_collision_free(collision);free(next);return found;
+    if(found){next->velocity=(PeVec3){0};next->grounded=false;next->sprinting=false;next->jumping=false;next->jump_action_elapsed=0;pe_game_move(g,next);say(g,"World imported; inventory retained.");}
+    pe_sandbox_collision_free(collision);pe_game_destroy(next);free(next);return found;
 }
+void pe_game_destroy(PeGame *g){if(g){pe_world_destroy(&g->world);memset(g,0,sizeof *g);}}
+bool pe_game_clone(PeGame *out,const PeGame *g){
+    if(!out||!g)return false;
+    if(out==g)return true;
+    PeWorld *w=calloc(1,sizeof *w);if(!w)return false;
+    if(!pe_world_clone(w,&g->world)){free(w);return false;}
+    pe_game_destroy(out);*out=*g;out->world=*w;free(w);return true;
+}
+void pe_game_move(PeGame *out,PeGame *g){if(out&&g&&out!=g){pe_game_destroy(out);*out=*g;memset(g,0,sizeof *g);}}
 void pe_game_init(PeGame *g, uint32_t seed) {
     memset(g,0,sizeof *g); pe_world_init(&g->world,seed);
     g->player=(PeVec3){32,pe_world_height(&g->world,32,32)+0.05f,32};
-    while(collides(g,g->player) && g->player.y<PE_WORLD_Y-PE_PLAYER_HEIGHT-1.1f)g->player.y+=0.05f;
+    while(collides(g,g->player) && g->player.y<pe_world_size_y(&g->world)-PE_PLAYER_HEIGHT-1.1f)g->player.y+=0.05f;
     g->game_seconds=94.35*PE_DAY_SECONDS;
     g->inventory.next_instance_id=1;
     g->rng_state=seed?seed:UINT32_C(0x9e3779b9);
@@ -437,7 +447,7 @@ bool pe_game_collision_update(const PeGame *g,PeSandboxCollision *collision,char
     if(g->mode==PE_GAME_ADVENTURE)for(int i=0;i<g->tree_count;i++)if(g->trees[i].remaining>0)
         trees[count++]=pe_tree_collision_source(g->trees[i].position);
     const PeSceneCollision *scene=NULL;
-    if(pe_settlement_matches(&g->world)){scene=pe_settlement_collision(error,capacity);if(!scene)return false;}
+    if(pe_settlement_matches(&g->world)){scene=pe_settlement_collision_for_world(&g->world,error,capacity);if(!scene)return false;}
     return pe_sandbox_collision_update_with_static(collision,&g->world,g->cells,(size_t)g->cell_count,
         boxes,(size_t)g->block_count,trees,count,scene,error,capacity);
 }
@@ -533,7 +543,7 @@ static int item_material(int item){
 static bool same_cell(const PeB45Cell *a,const PeB45Cell *b){return a->x==b->x&&a->y==b->y&&a->z==b->z;}
 static bool cell_bounds(const PeGame *g,const PeB45Cell *c){
     return pe_b45_valid(c)&&c->x>=0&&c->y>=0&&c->z>=0&&
-           c->x<2*(PE_WORLD_X-1)&&c->y<2*(PE_WORLD_Y-1)&&c->z<2*(pe_world_depth(&g->world)-1);
+           c->x<2*(pe_world_width(&g->world)-1)&&c->y<2*(pe_world_size_y(&g->world)-1)&&c->z<2*(pe_world_depth(&g->world)-1);
 }
 static bool cell_reachable(const PeGame *g,const PeB45Cell *c){
     PeVec3 eye={g->player.x,g->player.y+1.5f,g->player.z};
@@ -719,7 +729,7 @@ static bool resource_yield(PeInventory *inventory,const PeTerrainResourceDef *re
     return true;
 }
 bool pe_game_dig_sample(PeGame *g,int sx,int sy,int sz,PeResourceEdit *out){
-    if(!g||!out||!(g->hp>0)||sx<0||sy<0||sz<0||sx>=PE_WORLD_X||sy>=PE_WORLD_Y||sz>=pe_world_depth(&g->world))return false;
+    if(!g||!out||!(g->hp>0)||sx<0||sy<0||sz<0||sx>=pe_world_width(&g->world)||sy>=pe_world_size_y(&g->world)||sz>=pe_world_depth(&g->world))return false;
     if(!pe_game_static_segment_clear(g,(PeVec3){g->player.x,g->player.y+1,g->player.z},(PeVec3){sx,sy,sz}))return false;
     PeToolStats stats;const PeSlot *equipped=pe_game_equipped_tool(g);
     if(!equipped||!isfinite(equipped->durability)||equipped->durability<=0||!pe_game_tool_stats(g,&stats)||
@@ -864,7 +874,7 @@ bool pe_game_place(PeGame *g,PeVec3 o,PeVec3 d,int item) {
             b.y=(int)ceilf(top);
         }
     } else {say(g,"Aim at nearby terrain or a block.");return false;}
-    if(b.x<0||b.z<0||b.y<0||b.x>=PE_WORLD_X-1||b.z>=pe_world_depth(&g->world)-1||b.y>=PE_WORLD_Y-2||overlap(g->player,&b)) {say(g,"Cannot place a block here.");return false;}
+    if(b.x<0||b.z<0||b.y<0||b.x>=pe_world_width(&g->world)-1||b.z>=pe_world_depth(&g->world)-1||b.y>=pe_world_size_y(&g->world)-2||overlap(g->player,&b)) {say(g,"Cannot place a block here.");return false;}
     if(!static_box_clear(g,(PeVec3){b.x+.001f,b.y+.001f,b.z+.001f},(PeVec3){b.x+.999f,b.y+.999f,b.z+.999f})){say(g,"Placement intersects settlement geometry.");return false;}
     if(!pe_game_static_segment_clear(g,o,(PeVec3){b.x+.5f,b.y+.5f,b.z+.5f}))return false;
     for(int k=0;k<g->block_count;k++) if(g->blocks[k].x==b.x&&g->blocks[k].y==b.y&&g->blocks[k].z==b.z) return false;

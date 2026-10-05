@@ -29,6 +29,7 @@ static Vector2 GetMouseDelta(void){return(Vector2){5,0};}
 static PeTraining training;
 static struct{PeTrainingUILayout layout;}ui;
 static Vector2 pointer;
+static Vector2 GetMousePosition(void){return pointer;}
 static bool menu_open,paused,inventory,log,dragging,equipment_tab;
 static int inventory_tab,build_rotation;
 static float preview_yaw;
@@ -153,6 +154,8 @@ int main(void) {
         if not compiler:
             self.skipTest("C compiler unavailable")
         source = (ROOT / "src/pe_training_view.c").read_text()
+        window_first = source.index("        unsigned visible_windows=")
+        window_last = source.index("        bool cancel_window_drag=", window_first)
         first = source.index("                const bool menu_was_open=")
         last = source.index("                bool interact=", first)
         block = source[first:last]
@@ -163,7 +166,7 @@ int main(void) {
         with tempfile.TemporaryDirectory(prefix="ui-input-", dir=parent) as folder:
             temporary = Path(folder)
             harness, binary = temporary / "input.c", temporary / "input"
-            harness.write_text(PREFIX + block + SUFFIX)
+            harness.write_text(PREFIX + source[window_first:window_last] + block + SUFFIX)
             environment = os.environ.copy()
             environment["TMPDIR"] = str(temporary)
             command = [compiler, "-std=c11", "-Wall", "-Wextra", "-Wpedantic", "-Werror",

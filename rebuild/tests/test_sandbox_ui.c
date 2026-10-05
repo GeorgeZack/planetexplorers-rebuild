@@ -301,5 +301,40 @@ int main(void) {
     u.inventory_open=true;i=input();i.mouse_x=u.layout.inventory.x+50;i.mouse_y=u.layout.inventory.y+20;i.left_pressed=true;
     pe_sandbox_ui_route(&u,g,i);assert(u.windows.dragging);
     i.focused=false;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!u.windows.dragging);
+    /* A host-cancelled encounter must consume keys before any transaction. */
+    pe_sandbox_ui_init(&u,1280,720);u.discard_input=true;i=input();i.inventory=i.save=i.load=i.tab=true;i.quickslot=0;
+    PeInventory discarded_inventory=g->inventory;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save&&!r.load&&!r.npc_interaction&&!u.inventory_open&&!u.free_cursor&&!u.discard_input);
+    assert(!memcmp(&discarded_inventory,&g->inventory,sizeof discarded_inventory));
+    PeSandboxMapNpc markers[]={{20002,{43,12,32}},{20011,{41,12,88}}};
+    assert(pe_sandbox_ui_set_resident_markers(&u,markers,2));assert(u.resident_markers==markers&&u.resident_marker_count==2);
+    assert(!pe_sandbox_ui_set_resident_markers(&u,NULL,1));assert(u.resident_marker_count==2);
+    markers[0].position.x=NAN;assert(!pe_sandbox_ui_set_resident_markers(&u,markers,2));markers[0].position.x=43;
+    assert(pe_sandbox_ui_set_resident_markers(&u,NULL,0));assert(!u.resident_markers&&!u.resident_marker_count);
+    /* Archived vendors share modal input ownership, including close/drag frames. */
+    pe_sandbox_ui_init(&u,1280,720);g->money=500;
+    assert(!pe_sandbox_ui_open_town(&u,g,20002,"Cherish Mercer",(Texture2D){0},false));
+    assert(pe_sandbox_ui_open_town(&u,g,20002,"Cherish Mercer",(Texture2D){0},true));
+    i=input();i.inventory=i.save=i.load=true;i.quickslot=0;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&r.cursor_visible&&!r.save&&!r.load&&!u.inventory_open&&!r.npc_interaction);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));assert(u.shop_open&&pe_town_shop_stock(g,1184)==3);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_row(&u,2),false));assert(u.shop_selection==2);
+    int shovels=pe_inventory_count(&g->inventory,12);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,2),false));
+    assert(r.consume_world&&g->money==342&&pe_inventory_count(&g->inventory,12)==shovels+1&&pe_town_shop_stock(g,1184)==2);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,1),false));assert(u.shop_quantity==2);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,2),false));assert(g->money==26&&pe_town_shop_stock(g,1184)==0);
+    PeTrainingUIRect shop=pe_sandbox_ui_shop_panel(&u);i=input();i.left_pressed=true;i.mouse_x=shop.x+100;i.mouse_y=shop.y+25;
+    r=pe_sandbox_ui_route(&u,g,i);assert(u.shop_dragging&&r.consume_world);
+    i.left_pressed=false;i.mouse_x=-100;i.mouse_y=-100;i.left_released=true;r=pe_sandbox_ui_route(&u,g,i);
+    shop=pe_sandbox_ui_shop_panel(&u);assert(!u.shop_dragging&&shop.x==0&&shop.y==0&&r.consume_world);
+    pe_sandbox_ui_resize(&u,1000,700);shop=pe_sandbox_ui_shop_panel(&u);assert(shop.x>=0&&shop.x+shop.w<=1000&&shop.y>=0&&shop.y+shop.h<=700);
+    i=input();i.escape=i.save=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save&&!u.town_open&&!r.paused);
+    assert(pe_sandbox_ui_open_town(&u,g,20009,"Dikeledi Sehgal",(Texture2D){0},true));
+    i=input();i.advance=true;r=pe_sandbox_ui_route(&u,g,i);assert(!u.town_open&&r.consume_world&&!r.npc_interaction);
+    assert(!pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));g->annot_complete=true;
+    assert(pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));
+    i=input();i.advance=true;r=pe_sandbox_ui_route(&u,g,i);assert(pe_adventure_dialogue_current(&u.dialogue,g)->talk_id==4096);
+    r=pe_sandbox_ui_route(&u,g,i);assert(u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&r.consume_world&&g->money==26);
     free(g);puts("sandbox UI: inventory, crafting, quickslots, welcome/supplier dialogue and modal ownership passed");return 0;
 }

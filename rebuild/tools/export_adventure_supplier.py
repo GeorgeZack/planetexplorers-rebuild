@@ -56,6 +56,18 @@ def tint_pixel(pixel, mask, color, skin, coefficient):
     return tuple(max(0,min(255,round(v*255))) for v in rgb)+(pixel[3],)
 
 
+def source_bone_names(names, avatar):
+    # Source #define IgnoreCaseOfBoneName maps male 'Bip01 mouth' to
+    # 'Bip01 Mouth'. Asset spellings remain separately recorded in the rig.
+    paths=[p for _,p in avatar['m_TOS']]
+    result=[]
+    for name in names:
+        matches={p.rsplit('/',1)[-1] for p in paths if p.rsplit('/',1)[-1].lower()==name.lower()}
+        if len(matches)>1: raise ValueError('Ambiguous case-insensitive source bone')
+        result.append(next(iter(matches)) if matches else name)
+    return result
+
+
 def recover(game, output, appearance, npc='supplier'):
     from UnityPy.helpers.MeshHelper import MeshHandler
     from PIL import Image
@@ -66,8 +78,10 @@ def recover(game, output, appearance, npc='supplier'):
         found=[o for o in found if o.type.name==kind]
         if len(found)!=1: raise ValueError('Ambiguous resource '+path+'/'+kind)
         return found[0]
-    avatar_obj=resource('Model/PlayerModel/Female','Avatar');avatar=avatar_obj.read_typetree();worlds,by_name=avatar_worlds(avatar)
-    rig=dict(schema=1,sex='female',appearance='archived-adventure-'+npc,avatar=avatar,avatar_id=avatar_obj.path_id,avatar_worlds=worlds,parts=[],materials=[],selection=appearance)
+    sex=appearance['sex']
+    if sex not in ('female','male'): raise ValueError('Unsupported humanoid sex')
+    avatar_obj=resource('Model/PlayerModel/'+sex.title(),'Avatar');avatar=avatar_obj.read_typetree();worlds,by_name=avatar_worlds(avatar)
+    rig=dict(schema=1,sex=sex,appearance='archived-adventure-'+npc,avatar=avatar,avatar_id=avatar_obj.path_id,avatar_worlds=worlds,parts=[],materials=[],selection=appearance)
     def world(transform,seen=None):
         seen=set() if seen is None else seen
         key=(transform.assets_file.name,transform.path_id)
@@ -84,10 +98,23 @@ def recover(game, output, appearance, npc='supplier'):
         return raw,mesh,keys,triangles
     # AvatarData.GetParts preserves slot order but emits each resource once.
     for path in dict.fromkeys(appearance['slots']):
-        resource_path,child=path.rsplit('-',1);go=assets.child(resource(resource_path,'GameObject'),child)
-        owner,=assets.components(go,'SkinnedMeshRenderer');renderer=owner.read_typetree();mesh_obj=assets.resolve(owner,renderer['m_Mesh']);raw,mesh,keys,triangles=mesh_data(owner,renderer,mesh_obj)
+        resource_path,child=path.rsplit('-',1)
+        root=resource(resource_path,'GameObject')
+        try: go=assets.child(root,child)
+        except ValueError as error:
+            if not str(error).startswith('Missing child '): raise
+            # AppearBuilder.GetPartInfos omits CustomPartInfo with null Smr.
+            rig.setdefault('skipped_slots',[]).append(dict(resource=path,reason='missing child; source null-Smr omission'))
+            continue
+        renderers=assets.components(go,'SkinnedMeshRenderer')
+        if not renderers:
+            rig.setdefault('skipped_slots',[]).append(dict(resource=path,reason='source null-Smr omission'))
+            continue
+        owner,=renderers;renderer=owner.read_typetree();mesh_obj=assets.resolve(owner,renderer['m_Mesh']);raw,mesh,keys,triangles=mesh_data(owner,renderer,mesh_obj)
         positions,normals,morphs=morph_mesh(mesh.m_Vertices,mesh.m_Normals,raw,child,appearance['weights'])
         bones=[assets.resolve(owner,p) for p in renderer['m_Bones']];names=[assets.resolve(b,b.read_typetree()['m_GameObject']).peek_name() for b in bones]
+        original_names=list(names)
+        names=source_bone_names(names,avatar)
         binds=[[[b[f'e{r}{c}'] for c in range(4)] for r in range(4)] for b in raw['m_BindPose']]
         skin=raw['m_Skin'];validate_skin(skin,len(bones))
         if not len(positions)==len(normals)==len(mesh.m_UV0)==len(skin) or len(binds)!=len(bones): raise ValueError('Mesh channel/bone lengths differ')
@@ -110,30 +137,30 @@ def recover(game, output, appearance, npc='supplier'):
             normals=baked
         if renderer['m_BlendShapeWeights'] and any(renderer['m_BlendShapeWeights']): raise ValueError('Nonzero resource default shape weights unsupported')
         rig['parts'].append(dict(resource=path,mesh_id=mesh_obj.path_id,mesh_asset=mesh_obj.assets_file.name,mesh_sha256=hashlib.sha256(mesh_obj.get_raw_data()).hexdigest(),bone_names=names,inverse_binds=binds,
-            positions=positions,normals=normals,uv=[list(v[:2]) for v in mesh.m_UV0],skin=skin,triangles=triangles,materials=keys,morphs=morphs,resource_skin_identity_error=residual))
+            source_bone_names=original_names,positions=positions,normals=normals,uv=[list(v[:2]) for v in mesh.m_UV0],skin=skin,triangles=triangles,materials=keys,morphs=morphs,resource_skin_identity_error=residual))
     body_part_count=len(rig['parts'])
     # Shield36 always attaches to Bone L Forearm (PESheild.InitEquipment).
     equipment={row['item_id']:row for row in appearance['equipment']}
-    if any(not row['replace_mask'] and item not in (3,33,36) for item,row in equipment.items()):
+    if any(not row['replace_mask'] and item not in (3,5,12,28,33,35,36,38,43,45,54,55) for item,row in equipment.items()):
         raise ValueError('Unsupported archived equipment attachment')
     attachment_sources=[]
-    for item_id,mount in ((36,'Bone L Forearm'),(3,'mountBack')):
+    for item_id,mount in ((35,'Bone L Forearm'),(36,'Bone L Forearm'),(38,'Bone L Forearm'),(3,'mountBack'),(5,'mountBack'),(12,'mountBack'),(28,'mountWaist'),(43,'Bow'),(45,'Bow'),(54,'Pistol'),(55,'Long_Gun')):
         if item_id not in equipment: continue
         path=equipment[item_id]['resource'];root=resource(path,'GameObject');rt,=assets.components(root,'Transform')
         mount_path=None
-        if item_id==3:
+        if item_id not in (35,36,38):
             import UnityPy
-            source=ROOT/'Assets/Resources/Prefab/Item/Equip/Weapon/Sword/copper_sword.prefab'
+            source=ROOT/('Assets/Resources/'+path+'.prefab')
             objects=list(UnityPy.load(str(source)).objects)
             root_transforms=[o.read_typetree() for o in objects if o.type.name=='Transform' and not o.read_typetree()['m_Father']['m_PathID']]
-            if len(root_transforms)!=1:raise ValueError('Ambiguous sword prefab root')
+            if len(root_transforms)!=1:raise ValueError('Ambiguous equipment prefab root')
             source_root=root_transforms[0]
             if trs(source_root['m_LocalPosition'],source_root['m_LocalRotation'],source_root['m_LocalScale'])!=IDENTITY:
-                raise ValueError('Sword source root requires transform handling')
+                raise ValueError('Equipment source root requires transform handling')
             equipment_trees=[o.read_typetree() for o in objects if o.type.name=='MonoBehaviour']
             attachment=next(t['m_HandChangeAttr'] for t in equipment_trees if 'm_HandChangeAttr' in t)
-            if attachment['m_PutOffBone']!=mount:raise ValueError('Sword stowed source mount differs')
-            model=ROOT/'Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab'
+            if attachment['m_PutOffBone']!=mount:raise ValueError('Equipment stowed source mount differs')
+            model=ROOT/('Assets/Resources/Prefab/PlayerPrefab/'+sex.title()+'Model.prefab')
             model_objects={o.path_id:o for o in UnityPy.load(str(model)).objects}
             transforms={i:o.read_typetree() for i,o in model_objects.items() if o.type.name=='Transform'}
             names={i:model_objects[t['m_GameObject']['m_PathID']].read_typetree()['m_Name'] for i,t in transforms.items()}
@@ -143,12 +170,12 @@ def recover(game, output, appearance, npc='supplier'):
                     index=transforms[index]['m_Father']['m_PathID']
                 return False
             matches=[i for i,n in names.items() if n==mount and below_model(i)]
-            if len(matches)!=1:raise ValueError('Ambiguous source sword mount')
+            if len(matches)!=1:raise ValueError('Ambiguous source equipment mount')
             current=matches[0];local=transforms[current];chain=[]
             while names[current]!='Model':
                 chain.append(names[current]);current=transforms[current]['m_Father']['m_PathID']
             mount_path='/'.join(reversed(chain))
-            rig['attachment_mounts']=[dict(name=mount,path=mount_path,local=trs(local['m_LocalPosition'],local['m_LocalRotation'],local['m_LocalScale']),equipment=attachment)]
+            rig.setdefault('attachment_mounts',[]).append(dict(name=mount,path=mount_path,local=trs(local['m_LocalPosition'],local['m_LocalRotation'],local['m_LocalScale']),equipment=attachment))
             attachment_sources += [source,model,ROOT/'Assets/Scripts/Items/PEEquipment/PEHoldAbleEquipment.cs']
         def add_rigid(go,matrix):
             for filt in assets.components(go,'MeshFilter'):
@@ -162,7 +189,9 @@ def recover(game, output, appearance, npc='supplier'):
                 ct=assets.resolve(t,ref);tree=ct.read_typetree();cg=assets.resolve(ct,tree['m_GameObject']);add_rigid(cg,multiply(matrix,trs(tree['m_LocalPosition'],tree['m_LocalRotation'],tree['m_LocalScale'])))
         root_tree=rt.read_typetree()
         if trs(root_tree['m_LocalPosition'],root_tree['m_LocalRotation'],root_tree['m_LocalScale'])!=IDENTITY: raise ValueError('Equipment root requires source reset audit')
+        previous=len(rig['parts'])
         add_rigid(root,IDENTITY)
+        if len(rig['parts'])==previous: raise ValueError('Equipment has no supported rigid visual: '+path)
     for index,(key,obj) in enumerate(sorted(materials.items())):
         tree=obj.read_typetree();saved=tree['m_SavedProperties'];name=tree['m_Name'];colors=property_map(saved['m_Colors']);floats=property_map(saved['m_Floats']);textures=property_map(saved['m_TexEnvs'])
         color=[colors.get('_Color',dict(r=1,g=1,b=1,a=1))[c] for c in 'rgba'];skin=[colors.get('_SkinColor',dict(r=1,g=1,b=1,a=1))[c] for c in 'rgba'];is_body=any(key in p['materials'] for p in rig['parts'][:body_part_count])

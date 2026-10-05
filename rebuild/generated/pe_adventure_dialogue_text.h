@@ -19,6 +19,8 @@ static const PeAdventureDialogueLine pe_adventure_lines[]={
     {4092,3004092,2,"We're actually short on a lot of supplies right now. But I can at least give you a starter pack. I'd suggest you take some folks with you, just to be safe, ya never know around these parts."},
     {4093,3004093,0,"Thanks. But I think I'll need a lot more scripts for everything from food to tools."},
     {4094,3004094,2,"Well! Don't we all? You'll have to work for 'em, yeah? Other people will give you odd jobs and such in which you can earn scripts and items. There are also old alien ruins and caves spread about the land that you can look around. Rumor has it the toughest of these offer some real bonafide treasure. I ain't tried none, too chicken, haha!"},
+    {4095,3004095,0,"Hey, what's holding up the supplies to \042Town%\042000?"},
+    {4096,3004096,3,"Oh, are you from there? We've a major issue with a virus right now. A lot of our people are sick and cannot work. We just created a script for the cure, can you go help us create it? We'd really appreciate it."},
 };
 typedef struct {int id;const char *title,*description,*objective;} PeAdventureMissionText;
 static const PeAdventureMissionText pe_adventure_missions[]={

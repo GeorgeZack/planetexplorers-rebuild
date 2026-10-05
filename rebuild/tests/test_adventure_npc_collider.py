@@ -8,7 +8,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT/'rebuild/tools'))
-from export_adventure_npc_collider import generate, OUTPUT
+from export_adventure_npc_collider import generate, OUTPUT, source_capsule
 import UnityPy
 
 
@@ -27,6 +27,16 @@ class SupplierColliderTest(unittest.TestCase):
         if folder.exists():
             self.assertEqual((folder/'supplier-collider.pesc').read_bytes(), binary)
             self.assertEqual(json.loads((folder/'supplier-collider.json').read_text()), source)
+
+    def test_male_capsule_shares_physical_but_retains_wider_defence(self):
+        female, _ = source_capsule()
+        male, source = source_capsule('male')
+        self.assertEqual(male, female)
+        self.assertEqual(source['physical']['component'], 13654112)
+        self.assertEqual(source['defence']['component'], 13653336)
+        self.assertAlmostEqual(source['defence']['radius'], .6)
+        self.assertTrue(source['prefab'].endswith('/MaleModel.prefab'))
+        with self.assertRaises(ValueError): source_capsule('unknown')
 
     def test_physical_player_npc_collision_policy(self):
         tags = next(iter(UnityPy.load(str(ROOT/'ProjectSettings/TagManager.asset')).objects)).read_typetree()['layers']

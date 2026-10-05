@@ -7,6 +7,11 @@
 #define PE_WORLD_Y 32
 #define PE_WORLD_Z 64
 #define PE_WORLD_MAX_Z 128
+#define PE_WORLD_LIMIT_X 512
+#define PE_WORLD_LIMIT_Y 128
+#define PE_WORLD_LIMIT_Z 512
+#define PE_WORLD_MAX_REGIONS 1024
+#define PE_WORLD_LIMIT_COUNT (PE_WORLD_LIMIT_X * PE_WORLD_LIMIT_Y * PE_WORLD_LIMIT_Z)
 #define PE_MAX_VOXEL_COUNT (PE_WORLD_X * PE_WORLD_Y * PE_WORLD_MAX_Z)
 #define PE_VOXEL_COUNT (PE_WORLD_X * PE_WORLD_Y * PE_WORLD_Z)
 #define PE_ISO_LEVEL 128
@@ -14,12 +19,14 @@
 typedef struct { float x, y, z; } PeVec3;
 typedef struct { uint8_t volume, material; } PeVoxel;
 enum { PE_MAT_AIR, PE_MAT_DIRT, PE_MAT_STONE, PE_MAT_GRASS };
-/* x-fast samples: ((z * PE_WORLD_Y) + y) * PE_WORLD_X + x; 1 m spacing. */
+/* x-fast samples: ((z * height) + y) * width + x; access dimensions via helpers. */
 typedef struct {
     uint32_t seed, revision;
     uint32_t source; /* 0: generated palette, 1: original terrain material IDs */
     int32_t origin_x, origin_y, origin_z; /* original file-local crop origin */
-    unsigned depth; /* 0 and 64: original bounded world; 128: extended crop. */
+    unsigned depth; /* Zero retains legacy depth64; otherwise actual sample depth. */
+    unsigned width, height; /* Zero retains legacy 64 x 32 dimensions. */
+    PeVoxel *extended; /* Owned only for nonlegacy dimensions; never shallow-copy. */
     PeVoxel voxels[PE_MAX_VOXEL_COUNT];
 } PeWorld;
 typedef struct { bool hit; PeVec3 position, normal; int x,y,z; float distance; } PeHit;
@@ -27,7 +34,22 @@ typedef struct { PeVec3 position, normal; uint8_t material; } PeVertex;
 typedef struct { PeVertex *vertices; size_t count; } PeMeshData;
 /* Invalid depths return zero; zero-initialized worlds retain depth 64. */
 int pe_world_depth(const PeWorld *world);
+int pe_world_width(const PeWorld *world);
+int pe_world_size_y(const PeWorld *world);
 size_t pe_world_voxel_count(const PeWorld *world);
+/* Bulk import may write this buffer; increment revision after later edits.
+ * Ordinary gameplay uses set/dig so collision/render invalidation stays exact. */
+PeVoxel *pe_world_data(PeWorld *world);
+const PeVoxel *pe_world_data_const(const PeWorld *world);
+/* Resize clears samples, preserves provenance, and fails atomically. All
+ * owning operations require initialized or zeroed destinations. init itself
+ * accepts uninitialized storage; destroy an existing world before re-init. */
+bool pe_world_resize(PeWorld *world,int width,int height,int depth);
+bool pe_world_clone(PeWorld *destination,const PeWorld *source);
+void pe_world_destroy(PeWorld *world);
+void pe_world_move(PeWorld *destination,PeWorld *source);
+int pe_world_region_count(const PeWorld *world);
+bool pe_world_region(const PeWorld *world,int index,int origin[3],int cells[3]);
 void pe_world_init(PeWorld *world, uint32_t seed);
 PeVoxel pe_world_get(const PeWorld *world, int x, int y, int z);
 bool pe_world_set(PeWorld *world, int x, int y, int z, PeVoxel voxel);

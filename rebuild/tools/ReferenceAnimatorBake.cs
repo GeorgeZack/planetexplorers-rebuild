@@ -30,6 +30,8 @@ public sealed class PoseProbe : MonoBehaviour {
     long bytes;
     bool finished, pending;
     FieldInfo playerField;
+    int sourceEntity;
+    Type entityManagerType;
     GameObject clone;
     Animator animator;
     AnimationClipPlayable playable;
@@ -64,6 +66,7 @@ public sealed class PoseProbe : MonoBehaviour {
         if (String.IsNullOrEmpty(arm) || String.IsNullOrEmpty(stop) || String.IsNullOrEmpty(expectedAvatar) || String.IsNullOrEmpty(expectedController))
             throw new ArgumentException("Missing bake configuration");
         if (expectedGender != "Female" && expectedGender != "Male") throw new ArgumentException("Unsupported gender");
+        sourceEntity = Setting("PE_BAKE_SOURCE_ENTITY", 0, 1, 1000000);
         sampleRate = Setting("PE_BAKE_RATE", 30, 1, 60);
         waitSeconds = Setting("PE_POSE_WAIT", 900, 1, 1800);
         bakeSeconds = Setting("PE_BAKE_SECONDS", 180, 1, 600);
@@ -83,6 +86,13 @@ public sealed class PoseProbe : MonoBehaviour {
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
             Type t = assembly.GetType("Pathea.MainPlayerCmpt", false);
             if (t != null) { playerField = t.GetField("gMainPlayer", BindingFlags.Public | BindingFlags.Static); break; }
+        }
+        if(sourceEntity != 0) {
+            foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies()) {
+                Type t=assembly.GetType("Pathea.EntityMgr",false);
+                if(t!=null){entityManagerType=t;break;}
+            }
+            if(entityManagerType==null)throw new InvalidOperationException("EntityMgr unavailable");
         }
         if (playerField == null) throw new InvalidOperationException("MainPlayerCmpt unavailable");
         output = new StreamWriter(new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read), new UTF8Encoding(false));
@@ -108,6 +118,15 @@ public sealed class PoseProbe : MonoBehaviour {
         Console.Error.WriteLine("[bake] Post-cleanup alive120frames");
         Destroy(gameObject);
     }
+    Component SourceEntity() {
+        if(sourceEntity==0)return playerField.GetValue(null) as Component;
+        PropertyInfo singleton=entityManagerType.GetProperty("Instance",BindingFlags.Public|BindingFlags.Static|BindingFlags.FlattenHierarchy);
+        MethodInfo get=entityManagerType.GetMethod("Get",new Type[]{typeof(int)});
+        if(singleton==null||get==null)throw new InvalidOperationException("EntityMgr read API unavailable");
+        object manager=singleton.GetValue(null,null);
+        if(manager==null)return null;
+        return get.Invoke(manager,new object[]{sourceEntity}) as Component;
+    }
     void Tick() {
         float now = Time.realtimeSinceStartup;
         if (File.Exists(stop)) { Finish("stop-file"); return; }
@@ -115,7 +134,7 @@ public sealed class PoseProbe : MonoBehaviour {
         if (startedAt >= 0 && (now-startedAt >= bakeSeconds || frames >= MaxSamples)) { Finish("bake-limit"); return; }
         if (animator == null) {
             if (!File.Exists(arm)) return;
-            Component player = playerField.GetValue(null) as Component;
+            Component player = SourceEntity();
             if (player == null) return;
             Transform model = Read(player.GetComponent("BiologyViewCmpt"), "modelTrans") as Transform;
             if (model == null) return;
@@ -182,6 +201,7 @@ public sealed class PoseProbe : MonoBehaviour {
         }
         sourceAvatar=original.avatar;CreateClone();
         StringBuilder b = new StringBuilder("{\"type\":\"skeleton\",\"gender\":"); b.Append(Q(gender));
+        b.Append(",\"sourceEntityId\":").Append(sourceEntity);
         b.Append(",\"sourceModelPath\":").Append(Q(FullPath(model))).Append(",\"sourceAnimatorPath\":").Append(Q(FullPath(original.transform)));
         b.Append(",\"sourceAnimatorId\":").Append(original.GetInstanceID()).Append(",\"sourceController\":").Append(Q(controller.name));
         b.Append(",\"avatar\":").Append(Q(original.avatar.name)).Append(",\"avatarId\":").Append(original.avatar.GetInstanceID());

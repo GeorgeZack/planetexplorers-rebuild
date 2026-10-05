@@ -8,6 +8,9 @@
  * process so existing immutable snapshots can safely borrow it. */
 bool pe_settlement_configure(const char *asset_root,char *error,size_t capacity);
 bool pe_settlement_matches(const PeWorld *world);
+bool pe_settlement_is_route(const PeWorld *world);
+const PeSceneCollision *pe_settlement_collision_for_world(const PeWorld *world,char *error,size_t capacity);
+PeVec3 pe_settlement_npc_anchor_for_world(const PeWorld *world,int role);
 const PeSceneCollision *pe_settlement_collision(char *error,size_t capacity);
 bool pe_settlement_load_world(const char *path,PeWorld *world,char *error,size_t capacity);
 bool pe_settlement_start(PeGame *game,char *error,size_t capacity);

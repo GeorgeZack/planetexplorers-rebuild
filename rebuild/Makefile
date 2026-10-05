@@ -3,10 +3,11 @@ PKG_CONFIG ?= pkg-config
 CPPFLAGS += -Isrc -DPE_SOURCE_ROOT=\"$(abspath ..)\"
 CFLAGS ?= -O2 -g
 CFLAGS += -std=c11 -Wall -Wextra -Wpedantic
-CORE = src/pe_settlement.c src/pe_terrain_material.c src/pe_adventure_dialogue.c src/pe_adventure_npc.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c
-HEADERS = src/pe_settlement.h generated/pe_adventure_settlement.h src/pe_terrain_material.h src/pe_terrain_material_view.h generated/pe_terrain_materials.h src/pe_adventure_dialogue.h generated/pe_adventure_dialogue_text.h generated/pe_adventure_npc_collider.h src/pe_adventure_npc.h src/pe_adventure_npc_view.h src/pe_sandbox_camera.h src/pe_tree_collision.h generated/pe_tree_collider.h src/pe_sandbox_actions.h src/pe_sandbox_world_view.h src/pe_sandbox_collision.h src/pe_sandbox_ui.h src/pe_app_menu.h src/pe_sandbox_actor.h src/pe_sandbox_view.h src/pe_world.h src/pe_game.h src/pe_content.h generated/pe_mc_tables.h src/pe_legacy.h src/pe_block.h src/pe_tutorial.h src/pe_scene_collision.h src/pe_training.h src/pe_player_locomotion.h src/pe_training_melee.h src/pe_training_tree_hit.h src/pe_training_dig.h src/pe_training_terrain.h src/pe_training_build.h src/pe_training_receiver.h src/pe_training_npc.h src/pe_training_ui_layout.h generated/pe_training_mound.h src/pe_training_gathering.h src/pe_training_text.h src/pe_actor.h src/pe_hare.h src/pe_combat.h src/pe_knife_contact.h src/pe_hare_attack.h src/pe_hitbox.h src/pe_actor_scene.h
+CORE = src/pe_town_interaction.c src/pe_settlement.c src/pe_terrain_material.c src/pe_adventure_dialogue.c src/pe_adventure_npc.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c
+HEADERS = generated/pe_adventure_population.h src/pe_town_interaction.h generated/pe_town_offers.h src/pe_settlement.h generated/pe_adventure_settlement.h src/pe_terrain_material.h src/pe_terrain_material_view.h generated/pe_terrain_materials.h src/pe_adventure_dialogue.h generated/pe_adventure_dialogue_text.h generated/pe_adventure_npc_collider.h src/pe_adventure_npc.h src/pe_adventure_npc_view.h src/pe_sandbox_camera.h src/pe_tree_collision.h generated/pe_tree_collider.h src/pe_sandbox_actions.h src/pe_sandbox_world_view.h src/pe_sandbox_collision.h src/pe_sandbox_ui.h src/pe_app_menu.h src/pe_sandbox_actor.h src/pe_sandbox_view.h src/pe_world.h src/pe_game.h src/pe_content.h generated/pe_mc_tables.h src/pe_legacy.h src/pe_block.h src/pe_tutorial.h src/pe_scene_collision.h src/pe_training.h src/pe_player_locomotion.h src/pe_training_melee.h src/pe_training_tree_hit.h src/pe_training_dig.h src/pe_training_terrain.h src/pe_training_build.h src/pe_training_receiver.h src/pe_training_npc.h src/pe_training_ui_layout.h generated/pe_training_mound.h src/pe_training_gathering.h src/pe_training_text.h src/pe_actor.h src/pe_hare.h src/pe_combat.h src/pe_knife_contact.h src/pe_hare_attack.h src/pe_hitbox.h src/pe_actor_scene.h
 FRONTEND = src/pe_terrain_material_view.c src/pe_adventure_npc_view.c src/pe_sandbox_world_view.c src/pe_app_menu.c src/pe_sandbox_view.c src/pe_sandbox_actor.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/main.c src/pe_reference.c src/pe_training_view.c src/pe_training_terrain_view.c src/pe_training_npc_view.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_shader.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_ui_assets.c src/pe_actor_view.c src/pe_actor_scene.c src/pe_actor_scene_view.c
-TESTS = tests/test_settlement.c tests/test_world_depth.c tests/test_adventure_welcome.c tests/test_adventure_dialogue.c tests/test_adventure_npc.c tests/test_sandbox_actions.c tests/test_sandbox_collision.c tests/test_main.c tests/test_world.c tests/test_mesh.c tests/test_legacy.c tests/test_block.c tests/test_game.c tests/test_tutorial.c tests/test_scene_collision.c tests/test_training.c tests/test_player_locomotion.c tests/test_training_melee.c tests/test_training_tree_hit.c tests/test_training_dig.c tests/test_training_terrain.c tests/test_training_build.c tests/test_training_receiver.c tests/test_training_npc.c tests/test_training_ui_layout.c tests/test_training_gathering.c tests/test_actor.c tests/test_hare.c tests/test_combat.c tests/test_knife_contact.c tests/test_hare_attack.c tests/test_hitbox.c tests/test_actor_scene.c
+HEADERS += $(wildcard src/*.h generated/*.h)
+TESTS = tests/test_adventure_population.c tests/test_town_interaction.c tests/test_settlement.c tests/test_world_depth.c tests/test_adventure_welcome.c tests/test_adventure_dialogue.c tests/test_adventure_npc.c tests/test_sandbox_actions.c tests/test_sandbox_collision.c tests/test_main.c tests/test_world.c tests/test_mesh.c tests/test_legacy.c tests/test_block.c tests/test_game.c tests/test_tutorial.c tests/test_scene_collision.c tests/test_training.c tests/test_player_locomotion.c tests/test_training_melee.c tests/test_training_tree_hit.c tests/test_training_dig.c tests/test_training_terrain.c tests/test_training_build.c tests/test_training_receiver.c tests/test_training_npc.c tests/test_training_ui_layout.c tests/test_training_gathering.c tests/test_actor.c tests/test_hare.c tests/test_combat.c tests/test_knife_contact.c tests/test_hare_attack.c tests/test_hitbox.c tests/test_actor_scene.c
 BUILD = build
 RAYLIB_CFLAGS = $(shell $(PKG_CONFIG) --cflags raylib)
 LZ4_CFLAGS = $(shell $(PKG_CONFIG) --cflags liblz4)
@@ -32,6 +33,10 @@ test: terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test san
 	python3 tests/test_adventure_settlement_export.py
 	python3 tests/test_adventure_settlement_assets.py
 	python3 tests/test_adventure_terrain_export.py
+	python3 tests/test_adventure_route_export.py
+	python3 tests/test_adventure_route_assets.py
+	python3 tests/test_adventure_population.py
+	python3 tests/test_town_interaction_export.py
 	python3 tests/test_adventure_dialogue_export.py
 	python3 tests/test_adventure_supplier.py
 	python3 tests/test_adventure_welcome_assets.py
@@ -73,6 +78,7 @@ content:
 	python3 tools/export_content.py
 	python3 tools/export_mc_tables.py
 check-content:
+	python3 tools/export_town_interaction.py --check
 	python3 tools/export_adventure_dialogue.py --check
 	python3 tools/export_content.py --check
 	python3 tools/export_mc_tables.py --check
@@ -173,6 +179,16 @@ $(BUILD)/test_sandbox_camera: tests/test_sandbox_camera.c src/pe_sandbox_camera.
 sandbox-camera-test: $(BUILD)/test_sandbox_camera
 	./$(BUILD)/test_sandbox_camera
 
+# Test-only funded saves for physical town UI and Annot completion checks.
+$(BUILD)/adventure_town_fixture: tests/adventure_town_fixture.c tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_town_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+.PHONY: adventure-town-fixtures adventure-shop-fixture adventure-annot-fixture
+adventure-shop-fixture: $(BUILD)/adventure_town_fixture
+	./$(BUILD)/adventure_town_fixture --shop $(BUILD)/adventure-shop-fixture.pesave
+adventure-annot-fixture: $(BUILD)/adventure_town_fixture
+	./$(BUILD)/adventure_town_fixture --annot $(BUILD)/adventure-annot-fixture.pesave
+adventure-town-fixtures: adventure-shop-fixture adventure-annot-fixture
+
 $(BUILD)/adventure_supplier_fixture: tests/adventure_supplier_fixture.c tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_supplier_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
 
@@ -194,3 +210,5 @@ terrain-assets-check:
 	$(ASSET_PYTHON) tools/export_terrain_assets.py --check
 $(BUILD)/terrain_material_fixture: tests/terrain_material_fixture.c $(CORE) $(HEADERS) | $(BUILD)
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/terrain_material_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/adventure_route_fixture: tests/adventure_route_fixture.c $(CORE) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_route_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm

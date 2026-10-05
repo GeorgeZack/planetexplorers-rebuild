@@ -616,7 +616,7 @@ static void adventure_tests(PeGame *g){
 static void furniture_shortcut_tests(PeGame *g){
     char path[]="/tmp/pe-furniture-shortcut-XXXXXX",error[200];int fd=mkstemp(path);
     CHECK(fd>=0);if(fd<0)return;close(fd);
-    PeGame *loaded=malloc(sizeof *loaded);CHECK(loaded!=NULL);if(!loaded){unlink(path);return;}
+    PeGame *loaded=calloc(1,sizeof *loaded);CHECK(loaded!=NULL);if(!loaded){unlink(path);return;}
     flat(g);settle(g);g->mode=PE_GAME_ADVENTURE;CHECK(pe_test_ack_welcome(g));
     CHECK(pe_inventory_add(&g->inventory,PE_ITEM_FENCE,2));CHECK(pe_inventory_add(&g->inventory,PE_ITEM_LADDER,1));
     CHECK(pe_game_quickslot_assign(g,0,0));CHECK(pe_game_quickslot_assign(g,1,1));CHECK(pe_game_quickslot_assign(g,2,2));
@@ -689,7 +689,7 @@ static void adventure_save_tests(PeGame *g){
 static void tree_save_migration_tests(PeGame *g){
     char path[]="/tmp/pe-tree-migration-XXXXXX",error[200];int fd=mkstemp(path);
     CHECK(fd>=0);if(fd<0)return;close(fd);
-    PeGame *before=malloc(sizeof *before),*loaded=malloc(sizeof *loaded);
+    PeGame *before=malloc(sizeof *before),*loaded=calloc(1,sizeof *loaded);
     CHECK(before&&loaded);if(!before||!loaded){free(before);free(loaded);unlink(path);return;}
     flat(g);g->world.depth=PE_WORLD_Z;g->mode=PE_GAME_ADVENTURE;CHECK(pe_test_ack_welcome(g));
     g->tree_count=1;g->trees[0]=(PeTree){{40.6f,9.5f,40.7f},8,255};

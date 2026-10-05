@@ -7,6 +7,7 @@ _Static_assert(PE_TRAINING_MOUND_COUNT==PE_TRAINING_TERRAIN_SAMPLES,"mound schem
 
 bool pe_training_terrain_valid(const PeWorld *w){
     return w&&w->source==1&&w->seed==PE_TRAINING_TERRAIN_SEED&&w->revision&&
+        pe_world_width(w)==PE_WORLD_X&&pe_world_size_y(w)==PE_WORLD_Y&&pe_world_depth(w)==PE_WORLD_Z&&
         w->origin_x==PE_TRAINING_TERRAIN_ORIGIN_X&&w->origin_y==PE_TRAINING_TERRAIN_ORIGIN_Y&&w->origin_z==PE_TRAINING_TERRAIN_ORIGIN_Z;
 }
 static size_t index_of(PeTrainingTerrainSample s){

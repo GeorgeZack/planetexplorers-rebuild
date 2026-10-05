@@ -15,7 +15,8 @@ bool pe_legacy_sample(PeLegacyFile *file,int x,int y,int z,PeVoxel *out,char *er
 /* Chunk coordinates in selected LOD grid; expands uniform data, includes halos.
  * Dense byte order is x-fast {volume,material}, logical coordinate0 at halo1. */
 bool pe_legacy_chunk(PeLegacyFile *file,int cx,int cy,int cz,uint8_t out[PE_LEGACY_CHUNK_BYTES],char *error,size_t capacity);
-/* LOD0 only; crops adjacent raw samples and preserves all material IDs. */
+/* LOD0 only; crops adjacent raw samples and preserves all material IDs.
+ * out must be zeroed/initialized; successful replacement releases its storage. */
 bool pe_legacy_crop(PeLegacyFile *file,int x,int y,int z,PeWorld *out,char *error,size_t capacity);
 /* Locate a terrain surface anchor with local support; returns base coordinates
  * of a solid sample below the surface, useful for crop selection and spawning. */

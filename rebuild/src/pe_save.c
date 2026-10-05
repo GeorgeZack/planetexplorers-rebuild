@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "pe_game.h"
 #include "pe_settlement.h"
+#include "pe_town_interaction.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -8,8 +9,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAVE_CAPACITY (PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 7u
+#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
+#define SAVE_VERSION 8u
 /* All numbers are little-endian; floats are IEEE-754 bit patterns. No ABI structs. */
 typedef struct { unsigned char *p;size_t pos,size;bool ok; } Stream;
 static void put32(Stream *s,uint32_t v) { if(s->pos+4>s->size){s->ok=false;return;} for(int i=0;i<4;i++)s->p[s->pos++]=(unsigned char)(v>>(i*8)); }
@@ -54,14 +55,14 @@ static bool valid(const PeGame *g,bool trees) {
     }
     if(!vecfinite(g->player)||!vecfinite(g->velocity)||!isfinite(g->yaw)||!isfinite(g->pitch)||
        !isfinite(g->game_seconds)||g->game_seconds<0||g->game_seconds>1e15||
-       g->player.x<PE_PLAYER_RADIUS||g->player.x>PE_WORLD_X-1-PE_PLAYER_RADIUS||
+       g->player.x<PE_PLAYER_RADIUS||g->player.x>pe_world_width(&g->world)-1-PE_PLAYER_RADIUS||
        g->player.z<PE_PLAYER_RADIUS||g->player.z>pe_world_depth(&g->world)-1-PE_PLAYER_RADIUS||
-       g->player.y<0||g->player.y+PE_PLAYER_HEIGHT>PE_WORLD_Y-1||
+       g->player.y<0||g->player.y+PE_PLAYER_HEIGHT>pe_world_size_y(&g->world)-1||
        fabsf(g->velocity.x)>1000||fabsf(g->velocity.y)>1000||fabsf(g->velocity.z)>1000||
        g->block_count<0||g->block_count>PE_MAX_BLOCKS||g->tree_count<0||g->tree_count>PE_MAX_TREES||
        g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS) return false;
-    if(g->world.source>1||!pe_world_depth(&g->world))return false;
-    if(g->world.source==0)for(size_t i=0;i<pe_world_voxel_count(&g->world);i++)if(g->world.voxels[i].material>PE_MAT_GRASS)return false;
+    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g))return false;
+    if(g->world.source==0)for(size_t i=0;i<pe_world_voxel_count(&g->world);i++)if(pe_world_data_const(&g->world)[i].material>PE_MAT_GRASS)return false;
     if(!g->inventory.next_instance_id||!g->rng_state||
        !isfinite(g->stamina)||!isfinite(g->stamina_max)||!isfinite(g->stamina_regen)||
        !isfinite(g->stamina_recover_delay)||!isfinite(g->stamina_idle)||!isfinite(g->tool_cooldown)||
@@ -93,7 +94,7 @@ static bool valid(const PeGame *g,bool trees) {
     }else if(g->craft.batches_left||g->craft.batches_pending||g->craft.elapsed!=0||g->craft.delivery_elapsed!=0)return false;
     for(int i=0;i<g->block_count;i++) {
         const PeBlock *b=&g->blocks[i];
-        if(b->x<0||b->x>=PE_WORLD_X-1||b->z<0||b->z>=pe_world_depth(&g->world)-1||b->y<0||b->y>=PE_WORLD_Y-2||
+        if(b->x<0||b->x>=pe_world_width(&g->world)-1||b->z<0||b->z>=pe_world_depth(&g->world)-1||b->y<0||b->y>=pe_world_size_y(&g->world)-2||
            (b->item_id!=PE_ITEM_WOOD&&b->item_id!=PE_ITEM_DIRT&&b->item_id!=PE_ITEM_STONE&&b->item_id!=PE_ITEM_FENCE&&b->item_id!=PE_ITEM_LADDER))return false;
         if(g->mode==PE_GAME_LEGACY&&g->player.x+PE_PLAYER_RADIUS>b->x&&g->player.x-PE_PLAYER_RADIUS<b->x+1&&
            g->player.z+PE_PLAYER_RADIUS>b->z&&g->player.z-PE_PLAYER_RADIUS<b->z+1&&
@@ -102,7 +103,7 @@ static bool valid(const PeGame *g,bool trees) {
     }
     for(int i=0;i<g->cell_count;i++){
         const PeB45Cell *c=&g->cells[i];
-        if(!pe_b45_valid(c)||c->x<0||c->y<0||c->z<0||c->x>=2*(PE_WORLD_X-1)||c->y>=2*(PE_WORLD_Y-1)||c->z>=2*(pe_world_depth(&g->world)-1))return false;
+        if(!pe_b45_valid(c)||c->x<0||c->y<0||c->z<0||c->x>=2*(pe_world_width(&g->world)-1)||c->y>=2*(pe_world_size_y(&g->world)-1)||c->z>=2*(pe_world_depth(&g->world)-1))return false;
         PeVec3 lo={g->player.x-PE_PLAYER_RADIUS,g->player.y,g->player.z-PE_PLAYER_RADIUS};
         PeVec3 hi={g->player.x+PE_PLAYER_RADIUS,g->player.y+PE_PLAYER_HEIGHT,g->player.z+PE_PLAYER_RADIUS};
         if(g->mode==PE_GAME_LEGACY&&pe_b45_overlaps_aabb(c,lo,hi))return false;
@@ -117,8 +118,8 @@ static bool valid(const PeGame *g,bool trees) {
     }
     for(int i=0;i<g->tree_count;i++) {
         const PeTree *t=&g->trees[i];
-        if(!vecfinite(t->position)||t->position.x<0||t->position.x>=PE_WORLD_X||t->position.z<0||t->position.z>=pe_world_depth(&g->world)||
-           t->position.y<0||t->position.y>=PE_WORLD_Y||t->remaining<0||t->remaining>1000000||
+        if(!vecfinite(t->position)||t->position.x<0||t->position.x>=pe_world_width(&g->world)||t->position.z<0||t->position.z>=pe_world_depth(&g->world)||
+           t->position.y<0||t->position.y>=pe_world_size_y(&g->world)||t->remaining<0||t->remaining>1000000||
            !isfinite(t->health)||t->health<0||t->health>255||(t->remaining>0&&t->health<=0)||(t->remaining==0&&t->health!=0))return false;
     }
     if(g->mode==PE_GAME_ADVENTURE||pe_settlement_matches(&g->world)){
@@ -142,7 +143,7 @@ static void encode(Stream *s,const PeGame *g) {
     for(int i=0;i<g->tree_count;i++){putvec(s,g->trees[i].position);put32(s,(uint32_t)g->trees[i].remaining);}
     put32(s,g->gathered);put32(s,g->crafted);put32(s,g->built);
     if(s->pos+PE_VOXEL_COUNT*2u>s->size){s->ok=false;return;}
-    for(int i=0;i<PE_VOXEL_COUNT;i++){s->p[s->pos++]=g->world.voxels[i].volume;s->p[s->pos++]=g->world.voxels[i].material;}
+    for(int z=0;z<PE_WORLD_Z;z++)for(int y=0;y<PE_WORLD_Y;y++)for(int x=0;x<PE_WORLD_X;x++){PeVoxel v=pe_world_get(&g->world,x,y,z);s->p[s->pos++]=v.volume;s->p[s->pos++]=v.material;}
     /* Version 2 extends the v1 payload without reinterpreting its prefix. */
     put32(s,g->world.source);put32(s,(uint32_t)g->world.origin_x);put32(s,(uint32_t)g->world.origin_y);put32(s,(uint32_t)g->world.origin_z);
     put32(s,g->inventory.next_instance_id);
@@ -166,10 +167,21 @@ static void encode(Stream *s,const PeGame *g) {
     put32(s,g->juice_buff_tick);put32(s,g->juice_buff_active?1:0);
     put32(s,g->welcome_page);
     /* V7 preserves every older byte offset, then appends depth and extra samples. */
-    put32(s,(uint32_t)pe_world_depth(&g->world));
-    size_t count=pe_world_voxel_count(&g->world);
-    if(s->pos+(count-PE_VOXEL_COUNT)*2u>s->size){s->ok=false;return;}
-    for(size_t i=PE_VOXEL_COUNT;i<count;i++){s->p[s->pos++]=g->world.voxels[i].volume;s->p[s->pos++]=g->world.voxels[i].material;}
+    unsigned legacy_depth=g->world.extended?PE_WORLD_Z:(unsigned)pe_world_depth(&g->world);
+    put32(s,legacy_depth);
+    size_t prefix_count=(size_t)PE_WORLD_X*PE_WORLD_Y*legacy_depth;
+    if(s->pos+(prefix_count-PE_VOXEL_COUNT)*2u>s->size){s->ok=false;return;}
+    for(size_t i=PE_VOXEL_COUNT;i<prefix_count;i++){s->p[s->pos++]=g->world.voxels[i].volume;s->p[s->pos++]=g->world.voxels[i].material;}
+    /* V8 preserves the V7 prefix and adds dimensions. Nonlegacy dimensions
+     * carry their full x-fast payload; the prefix remains a bounded crop. */
+    put32(s,(uint32_t)pe_world_width(&g->world));put32(s,(uint32_t)pe_world_size_y(&g->world));put32(s,(uint32_t)pe_world_depth(&g->world));
+    if(g->world.extended){
+        size_t count=pe_world_voxel_count(&g->world);const PeVoxel *v=pe_world_data_const(&g->world);
+        if(s->pos+count*2u>s->size){s->ok=false;return;}
+        for(size_t i=0;i<count;i++){s->p[s->pos++]=v[i].volume;s->p[s->pos++]=v[i].material;}
+    }
+    put32(s,g->annot_complete?1u:0u);
+    for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++){put32(s,g->town_stock[i].initialized?1u:0u);put32(s,g->town_stock[i].remaining);putd(s,g->town_stock[i].create_time);}
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -238,13 +250,33 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
     size_t count=pe_world_voxel_count(&g->world);
     if(s->pos+(count-PE_VOXEL_COUNT)*2u>s->size){s->ok=false;return;}
     for(size_t i=PE_VOXEL_COUNT;i<count;i++){g->world.voxels[i].volume=s->p[s->pos++];g->world.voxels[i].material=s->p[s->pos++];}
+    if(version>=8){
+        unsigned x=get32(s),y=get32(s),z=get32(s);
+        if(x<2||x>PE_WORLD_LIMIT_X||y<2||y>PE_WORLD_LIMIT_Y||z<2||z>PE_WORLD_LIMIT_Z){s->ok=false;return;}
+        bool inline_world=x==PE_WORLD_X&&y==PE_WORLD_Y&&(z==PE_WORLD_Z||z==PE_WORLD_MAX_Z);
+        if(inline_world){if(z!=g->world.depth){s->ok=false;return;}}
+        else {
+            size_t full=(size_t)x*y*z;
+            if(s->pos+full*2u>s->size){s->ok=false;return;}
+            uint32_t revision=g->world.revision;
+            if(!pe_world_resize(&g->world,(int)x,(int)y,(int)z)){s->ok=false;return;}
+            g->world.revision=revision;PeVoxel *v=pe_world_data(&g->world);
+            for(size_t i=0;i<full;i++){v[i].volume=s->p[s->pos++];v[i].material=s->p[s->pos++];}
+        }
+        uint32_t complete=get32(s);if(complete>1)s->ok=false;g->annot_complete=complete!=0;
+        for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++){
+            uint32_t initialized=get32(s);if(initialized>1)s->ok=false;
+            g->town_stock[i].initialized=initialized!=0;g->town_stock[i].remaining=get32(s);g->town_stock[i].create_time=getd(s);
+        }
+    }
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");
     if(!g||!path||!path[0]||!valid(g,true)){err(error,capacity,"Invalid save path or game state.");return false;}
-    unsigned char *data=malloc(SAVE_CAPACITY);
+    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+32768u;
+    unsigned char *data=malloc(buffer_size);
     if(!data){err(error,capacity,"Out of memory.");return false;}
-    Stream s={data,16,SAVE_CAPACITY,true};encode(&s,g);
+    Stream s={data,16,buffer_size,true};encode(&s,g);
     memcpy(data,"PECS",4);Stream header={data,4,16,true};put32(&header,SAVE_VERSION);put32(&header,(uint32_t)(s.pos-16));put32(&header,checksum(data+16,s.pos-16));
     size_t n=strlen(path);
     char *tmp=malloc(n+16);
@@ -278,11 +310,11 @@ bool pe_game_load(PeGame *g,const char *path,char *error,size_t capacity) {
         pe_sandbox_collision_free(collision);migration_failed=!ok;
         if(ok){migration_distance=hypotf(next->player.x-previous.x,next->player.z-previous.z);ok=valid(next,true);}
     }
-    if(ok){*g=*next;
+    if(ok){pe_game_move(g,next);
         if(migration_distance>0)snprintf(g->message,sizeof g->message,"Game loaded; moved %.2fm to clear a legacy tree overlap.",(double)migration_distance);
         else snprintf(g->message,sizeof g->message,"Game loaded.");
         err(error,capacity,"");
     }
     else err(error,capacity,migration_failed?"Version 4 player overlaps trees; no safe bounded escape. Save unchanged.":"Save is corrupt, incompatible, or contains invalid state.");
-    free(next);free(data);return ok;
+    pe_game_destroy(next);free(next);free(data);return ok;
 }

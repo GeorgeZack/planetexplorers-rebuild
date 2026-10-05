@@ -17,6 +17,7 @@
 #include <errno.h>
 #include <limits.h>
 
+static void destroy_game(PeGame *game){if(game){pe_game_destroy(game);free(game);}}
 static const Color ink = {219, 234, 228, 255};
 static const Color muted = {137, 166, 162, 255};
 static bool parse_origin(const char *text,int out[3]) {
@@ -44,7 +45,7 @@ static bool import_world(PeGame *game,const char *path,const int *explicit_origi
         origin[1]=(int)Clamp((float)y-10,0,(float)info.extent_y-PE_WORLD_Y);
         origin[2]=(int)Clamp((float)z-32,0,(float)info.extent_z-PE_WORLD_Z);
     } else {pe_legacy_close(file);return false;}
-    PeWorld *world=malloc(sizeof(*world));
+    PeWorld *world=calloc(1,sizeof(*world));
     if(!world){pe_legacy_close(file);snprintf(error,cap,"Out of memory importing terrain.");return false;}
     bool ok=pe_legacy_crop(file,origin[0],origin[1],origin[2],world,error,cap);
     pe_legacy_close(file);
@@ -53,7 +54,7 @@ static bool import_world(PeGame *game,const char *path,const int *explicit_origi
         ok=pe_game_set_world(game,world,preferred);
         if(!ok)snprintf(error,cap,"No safe player spawn in this terrain crop.");
     }
-    free(world);return ok;
+    pe_world_destroy(world);free(world);return ok;
 }
 static void usage(const char *name) {
     printf("Usage: %s [--seed UINT32] [--save PATH] [--smoke FRAMES] [--screenshot PATH]\n"
@@ -181,19 +182,19 @@ int main(int argc,char **argv) {
     if(!pe_settlement_configure(assets,error,sizeof error)){fprintf(stderr,"%s\n",error);return 1;}
     bool open_menu=main_menu||(!direct&&!smoke_frames&&!load_path&&!terrain_path);
     if(!open_menu) {
-        game=malloc(sizeof *game);
-        if(!game||!pe_game_init_mode(game,seed,PE_GAME_ADVENTURE)){free(game);return 1;}
+        game=calloc(1,sizeof *game);
+        if(!game||!pe_game_init_mode(game,seed,PE_GAME_ADVENTURE)){destroy_game(game);return 1;}
         if(load_path&&!pe_game_load(game,load_path,error,sizeof error)) {
-            fprintf(stderr,"Load failed: %s\n",error);free(game);return 1;
+            fprintf(stderr,"Load failed: %s\n",error);destroy_game(game);return 1;
         }
         if(terrain_path&&!import_world(game,terrain_path,origin_given?origin:NULL,error,sizeof error)) {
-            fprintf(stderr,"Import failed: %s\n",error);free(game);return 1;
+            fprintf(stderr,"Import failed: %s\n",error);destroy_game(game);return 1;
         }
         if(!load_path&&!terrain_path&&!pe_settlement_start(game,error,sizeof error)){
-            fprintf(stderr,"Settlement failed: %s\n",error);free(game);return 1;
+            fprintf(stderr,"Settlement failed: %s\n",error);destroy_game(game);return 1;
         }
         result=pe_sandbox_view(game,assets,save_path,smoke_frames,smoke_panel,screenshot);
-        if(result!=2){free(game);return result;}
+        if(result!=2){destroy_game(game);return result;}
     }
     char notice[256]={0};
     for(;;) {
@@ -208,21 +209,21 @@ int main(int argc,char **argv) {
             continue;
         }
         if(choice==PE_APP_NEW_SANDBOX||!game) {
-            PeGame *next=malloc(sizeof *next);
+            PeGame *next=calloc(1,sizeof *next);
             if(!next||!pe_game_init_mode(next,seed,PE_GAME_ADVENTURE)) {
-                free(next);snprintf(notice,sizeof notice,"Could not create the sandbox.");continue;
+                destroy_game(next);snprintf(notice,sizeof notice,"Could not create the sandbox.");continue;
             }
             if(choice==PE_APP_CONTINUE_SANDBOX&&!pe_game_load(next,save_path,error,sizeof error)) {
-                free(next);snprintf(notice,sizeof notice,"Load failed: %.220s",error);continue;
+                destroy_game(next);snprintf(notice,sizeof notice,"Load failed: %.220s",error);continue;
             }
             if(choice==PE_APP_NEW_SANDBOX&&!pe_settlement_start(next,error,sizeof error)){
-                free(next);snprintf(notice,sizeof notice,"Settlement failed: %.210s",error);continue;
+                destroy_game(next);snprintf(notice,sizeof notice,"Settlement failed: %.210s",error);continue;
             }
-            free(game);game=next;
+            destroy_game(game);game=next;
         }
         result=pe_sandbox_view(game,assets,save_path,0,NULL,NULL);
         if(result==0)break;
         if(result==1)snprintf(notice,sizeof notice,"Sandbox could not continue; see terminal for details.");
     }
-    free(game);return result;
+    destroy_game(game);return result;
 }

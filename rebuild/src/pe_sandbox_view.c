@@ -5,6 +5,8 @@
 #include "pe_sandbox_camera.h"
 #include "pe_sandbox_world_view.h"
 #include "pe_settlement.h"
+#include "pe_town_interaction.h"
+#include "../generated/pe_adventure_population.h"
 #include "pe_reference.h"
 #include "pe_terrain_material_view.h"
 #include "pe_adventure_npc.h"
@@ -36,14 +38,45 @@ static void source_end_3d(void){
     EndMode3D();rlSetCullFace(RL_CULL_FACE_BACK);
 }
 
+typedef struct {PeAdventureNpc npc;PeAdventureNpcView view;bool visible;} Resident;
+static bool residents_refresh(Resident *residents,const PeGame *g,const PeSandboxCollision *collision,const char *assets,char *error,size_t cap){
+    for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){
+        Resident *r=&residents[i];const PeAdventurePopulationSource *s=&pe_adventure_population_sources[i];r->visible=false;
+        if(!pe_settlement_matches(&g->world)||g->mode!=PE_GAME_ADVENTURE||s->adventure_role==1||s->adventure_role==2)continue;
+        if((s->adventure_role==3||s->adventure_role==4)&&!g->arrival_complete)continue;
+        if(s->adventure_role==5&&g->welcome_page<3)continue;
+        PeVec3 p={s->position[0]-g->world.origin_x,s->position[1]-g->world.origin_y,s->position[2]-g->world.origin_z};
+        if(p.x<0||p.z<0||p.y<0||p.x>=pe_world_width(&g->world)||p.z>=pe_world_depth(&g->world)||p.y>=pe_world_size_y(&g->world))continue;
+        if(!r->view.actor.loaded){
+            char path[4096];int n=snprintf(path,sizeof path,"%s/%s",assets,s->scene);
+            if(n<0||(size_t)n>=sizeof path||!pe_adventure_npc_view_load_scene(&r->view,path,error,cap))return false;
+        }
+        r->visible=pe_adventure_npc_refresh_source(&r->npc,&g->world,collision,p,s->yaw_degrees,error,cap);
+    }
+    return true;
+}
+static PeAdventureNpc *resident_entity(Resident *residents,uint32_t entity){
+    for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible&&(uint32_t)pe_adventure_population_sources[i].entity_id==entity)return &residents[i].npc;
+    return NULL;
+}
+static void load_town_name(PeSandboxUI *ui,const PeGame *game,const char *assets){
+    ui->start_town_name[0]=0;
+    /* Town names are observed metadata of this bounded reference world. */
+    if(pe_settlement_matches(&game->world)){
+        char path[4096];int n=snprintf(path,sizeof path,"%s/adventure-route/town-name.txt",assets);
+        FILE *f=n>0&&(size_t)n<sizeof path?fopen(path,"r"):NULL;
+        if(f){if(fgets(ui->start_town_name,sizeof ui->start_town_name,f))ui->start_town_name[strcspn(ui->start_town_name,"\r\n")]=0;fclose(f);}
+    }
+}
 static Color block_color(int item) {
     if (item == PE_ITEM_STONE) return (Color){143,156,160,255};
     if (item == PE_ITEM_DIRT) return (Color){145,111,81,255};
     return (Color){184,141,90,255};
 }
-static bool update_mesh(const PeWorld *world, Model *model, bool *loaded, size_t *triangles,int x,int z,const PeTerrainMaterialView *surface) {
+static bool update_mesh(const PeWorld *world, Model *model, bool *loaded, size_t *triangles,int region,const PeTerrainMaterialView *surface) {
     PeMeshData data = {0};
-    if (!pe_world_mesh_region(world,x,0,z,x?31:32,31,z+32<pe_world_depth(world)?32:31,&data)) return false;
+    int o[3],n[3];
+    if(!pe_world_region(world,region,o,n)||!pe_world_mesh_region(world,o[0],o[1],o[2],n[0],n[1],n[2],&data))return false;
     if (data.count > INT_MAX/3) {pe_mesh_free(&data);return false;}
     if (!data.count) {
         if (*loaded) UnloadModel(*model);
@@ -100,31 +133,32 @@ static bool update_mesh(const PeWorld *world, Model *model, bool *loaded, size_t
     *triangles=data.count/3; pe_mesh_free(&data); return true;
 }
 typedef struct {
-    Model model[8];
-    bool loaded[8],ready;
-    size_t triangles[8],uploads;
+    Model model[PE_WORLD_MAX_REGIONS];
+    bool loaded[PE_WORLD_MAX_REGIONS],ready;
+    size_t triangles[PE_WORLD_MAX_REGIONS],uploads;
     PeWorld previous;
 } TerrainCache;
 static bool update_terrain(const PeWorld *world,TerrainCache *cache,size_t *triangles,const PeTerrainMaterialView *surface) {
     *triangles=0;
-    for(int i=0;i<8;i++) {
-        if(i>=2*(pe_world_depth(world)/32)){
+    for(int i=0;i<PE_WORLD_MAX_REGIONS;i++) {
+        if(i>=pe_world_region_count(world)){
             if(cache->loaded[i])UnloadModel(cache->model[i]);
             cache->loaded[i]=false;cache->triangles[i]=0;continue;
         }
-        int x=(i&1)*32,z=(i>>1)*32;
-        if(!cache->ready||pe_world_mesh_region_changed(world,&cache->previous,x,0,z,x?31:32,31,z+32<pe_world_depth(world)?32:31)) {
-            if(!update_mesh(world,&cache->model[i],&cache->loaded[i],&cache->triangles[i],x,z,surface))return false;
+        int o[3],n[3];if(!pe_world_region(world,i,o,n))return false;
+        if(!cache->ready||pe_world_mesh_region_changed(world,&cache->previous,o[0],o[1],o[2],n[0],n[1],n[2])) {
+            if(!update_mesh(world,&cache->model[i],&cache->loaded[i],&cache->triangles[i],i,surface))return false;
             cache->uploads++;
         }
         *triangles+=cache->triangles[i];
     }
-    cache->previous=*world;cache->ready=true;return true;
+    if(!pe_world_clone(&cache->previous,world))return false;
+    cache->ready=true;return true;
 }
 static void free_terrain(TerrainCache *cache) {
     if(!cache)return;
-    for(int i=0;i<8;i++)if(cache->loaded[i])UnloadModel(cache->model[i]);
-    free(cache);
+    for(int i=0;i<PE_WORLD_MAX_REGIONS;i++)if(cache->loaded[i])UnloadModel(cache->model[i]);
+    pe_world_destroy(&cache->previous);free(cache);
 }
 static void draw_block(PeBlock b) {
     Vector3 c={(float)b.x+.5f,(float)b.y+.5f,(float)b.z+.5f};
@@ -216,12 +250,14 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     if(!IsWindowReady()){fprintf(stderr,"Unable to initialize graphics\n");return 1;}
     SetWindowMinSize(1000,700);SetTargetFPS(60);SetExitKey(KEY_NULL);
     char error[256]={0};int result=0,frame=0;
-    PeTerrainMaterialView surface={0};PeReferenceModel settlement={0};
+    PeTerrainMaterialView surface={0};PeReferenceModel settlement={0};bool settlement_route=false;
     TerrainCache *terrain=calloc(1,sizeof *terrain);
     PeSandboxCollision *collision=pe_sandbox_collision_create();
     PeSandboxUI ui={0};PeSandboxActor *actor=NULL;PeSandboxWorldView *world_view=NULL;size_t triangles=0;
     PeAdventureNpc supplier={0};PeAdventureNpcView supplier_view={0};bool supplier_visible=false;
     PeAdventureNpc welcome={0};PeAdventureNpcView welcome_view={0};bool welcome_visible=false,welcome_prompted=false;
+    Resident residents[PE_ADVENTURE_POPULATION_COUNT]={0};
+    PeSandboxMapNpc resident_markers[PE_ADVENTURE_POPULATION_COUNT];
     double supplier_seconds=0;
     PeSandboxActions tool_action;pe_sandbox_actions_init(&tool_action,false);
     PeSandboxCamera orbit;pe_sandbox_camera_init(&orbit);
@@ -245,6 +281,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     ui.welcome_portrait=welcome_view.portrait.texture;
     ui.supplier_portrait=supplier_view.portrait.texture;
     ui.supplier_entity=PE_ADVENTURE_NPC_ENTITY;
+    load_town_name(&ui,game,assets);
     pe_sandbox_ui_set_preview(&ui,pe_sandbox_actor_preview,actor);
     if(smoke_panel) {
         ui.inventory_open=!strcmp(smoke_panel,"inventory");
@@ -258,29 +295,44 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     double accumulator=0;float dig_cooldown=0;int look_settle=0;
     printf("Sandbox ready: mode %d\n",game->mode);fflush(stdout);
     while(!WindowShouldClose()) {
+        if(settlement.loaded&&settlement_route!=pe_settlement_is_route(&game->world))pe_reference_unload(&settlement);
         if(pe_settlement_matches(&game->world)&&!settlement.loaded){
-            char path[4096];int n=snprintf(path,sizeof path,"%s/adventure-settlement/settlement.obj",assets);
+            settlement_route=pe_settlement_is_route(&game->world);
+            char path[4096];int n=snprintf(path,sizeof path,"%s/%s",assets,settlement_route?"adventure-route/route.obj":"adventure-settlement/settlement.obj");
             if(n<0||(size_t)n>=sizeof path||!pe_reference_load(&settlement,path,error,sizeof error)){result=1;break;}
         }
         float dt=fminf(GetFrameTime(),.1f);
-        supplier_visible=game->mode==PE_GAME_ADVENTURE&&
+        supplier_visible=game->mode==PE_GAME_ADVENTURE&&(!pe_settlement_matches(&game->world)||game->welcome_page>=3)&&
             (pe_settlement_matches(&game->world)?
-                pe_adventure_npc_refresh_source(&supplier,&game->world,collision,pe_settlement_npc_anchor(2),pe_settlement_npc_yaw(2),error,sizeof error):
+                pe_adventure_npc_refresh_source(&supplier,&game->world,collision,pe_settlement_npc_anchor_for_world(&game->world,2),pe_settlement_npc_yaw(2),error,sizeof error):
                 pe_adventure_npc_refresh(&supplier,&game->world,collision,error,sizeof error));
         welcome_visible=game->mode==PE_GAME_ADVENTURE&&
             (pe_settlement_matches(&game->world)?
-                pe_adventure_npc_refresh_source(&welcome,&game->world,collision,pe_settlement_npc_anchor(1),pe_settlement_npc_yaw(1),error,sizeof error):
+                pe_adventure_npc_refresh_source(&welcome,&game->world,collision,pe_settlement_npc_anchor_for_world(&game->world,1),pe_settlement_npc_yaw(1),error,sizeof error):
                 pe_adventure_npc_refresh_at(&welcome,&game->world,collision,(PeVec3){28,0,35},error,sizeof error));
         ui.welcome_present=welcome_visible;ui.welcome_position=welcome.position;
         ui.supplier_present=supplier_visible;ui.supplier_position=supplier.position;
-        const PeAdventureNpc *talking=ui.dialogue.role==1?&welcome:&supplier;
-        bool talking_visible=ui.dialogue.role==1?welcome_visible:supplier_visible;
-        if(ui.dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE&&(!talking_visible||game->hp<=0||
-           Vector3Distance(rv(game->player),rv(talking->position))>9))pe_adventure_dialogue_cancel(&ui.dialogue);
-        if(supplier_visible&&!ui.paused&&(smoke_frames||IsWindowFocused()))pe_adventure_arrival_step(game,supplier.spawn_position);
+        if(!residents_refresh(residents,game,collision,assets,error,sizeof error)){result=1;break;}
+        bool host_cancelled_modal=false;
+        size_t marker_count=0;
+        for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible)resident_markers[marker_count++]=(PeSandboxMapNpc){(uint32_t)pe_adventure_population_sources[i].entity_id,residents[i].npc.position};
+        pe_sandbox_ui_set_resident_markers(&ui,resident_markers,marker_count);
+        uint32_t talking_id=ui.dialogue.entity_id;
+        const PeAdventureNpc *talking=talking_id==PE_ADVENTURE_WELCOME_ENTITY&&welcome_visible?&welcome:
+            talking_id==PE_ADVENTURE_NPC_ENTITY&&supplier_visible?&supplier:resident_entity(residents,talking_id);
+        if(ui.dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE&&(!talking||game->hp<=0||
+           Vector3Distance(rv(game->player),rv(talking->position))>9)){pe_adventure_dialogue_cancel(&ui.dialogue);host_cancelled_modal=true;}
+        const PeAdventureNpc *trader=resident_entity(residents,ui.town_entity);
+        if(ui.town_open&&(!trader||game->hp<=0||Vector3Distance(rv(game->player),rv(trader->position))>9)){pe_sandbox_ui_cancel_town(&ui);host_cancelled_modal=true;}
+        if(!ui.paused&&(smoke_frames||IsWindowFocused())){
+            if(supplier_visible)pe_adventure_arrival_step(game,supplier.spawn_position);
+            pe_adventure_annot_step(game);
+        }
         ui.building=build_mode;ui.build_item=selected_item;ui.build_shape=build_shape;
         ui.build_rotation=build_rotation;ui.build_brush=build_brush;
+        ui.discard_input=host_cancelled_modal;
         PeSandboxUIResult action=pe_sandbox_ui_update(&ui,game,dt);
+        if(host_cancelled_modal){action.consume_world=true;action.npc_interaction=false;}
         if(action.return_main){result=2;break;}
         if(action.selected_item)selected_item=action.selected_item;
         bool toggle_build=action.toggle_build;
@@ -299,11 +351,13 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             loaded=pe_game_load(game,save_path,error,sizeof error);
             if(loaded){autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
-                welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;}
+                welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
+                pe_sandbox_ui_cancel_town(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
             if(!loaded)snprintf(game->message,sizeof game->message,"%.159s",error);
             if(loaded&&(!pe_game_collision_update(game,collision,error,sizeof error)||
                 (game->mode==PE_GAME_ADVENTURE&&pe_sandbox_collision_overlap(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)))){result=1;break;}
         }
+        if(loaded){mesh_revision=game->world.revision-1;load_town_name(&ui,game,assets);pe_sandbox_ui_set_resident_markers(&ui,NULL,0);PollInputEvents();continue;}
         if(game->mode==PE_GAME_ADVENTURE&&!supplier_view.actor.loaded) {
             if(!pe_adventure_npc_view_load(&supplier_view,assets,error,sizeof error)){result=1;break;}
             ui.supplier_portrait=supplier_view.portrait.texture;
@@ -351,8 +405,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(look_settle>0)look_settle--;
         Camera3D aim_camera=game_camera(game,collision,third_person,false,orbit.distance);
         Ray aim=source_ray(build_mode?GetMousePosition():(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f},aim_camera);
-        int picked_role=0;float nearest_npc=INFINITY;
-        if(!build_mode&&(supplier_visible||welcome_visible)) {
+        int picked_role=0,picked_resident=-1;float nearest_npc=INFINITY;
+        if(!build_mode) {
             Vector2 point=captured?(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f}:GetMousePosition();
             Ray pick=source_ray(point,aim_camera);
             PeSceneHit obstacle=pe_sandbox_collision_ray_geometry(collision,pv(pick.position),pv(pick.direction),100);
@@ -362,15 +416,28 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 if(visible[i]&&pe_adventure_npc_pick(npcs[i],game->player,pv(pick.position),pv(pick.direction),
                    obstacle.hit?obstacle.distance:INFINITY,&distance)&&distance<nearest_npc){nearest_npc=distance;picked_role=i+1;}
             }
+            for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){
+                float distance;Resident *r=&residents[i];
+                if(r->visible&&pe_adventure_npc_pick_sex(&r->npc,pe_adventure_population_sources[i].male,game->player,pv(pick.position),pv(pick.direction),obstacle.hit?obstacle.distance:INFINITY,&distance)&&distance<nearest_npc){nearest_npc=distance;picked_resident=i;picked_role=0;}
+            }
         }
         bool auto_welcome=!welcome_prompted&&welcome_visible&&game->welcome_page<PE_ADVENTURE_WELCOME_PAGES&&
             Vector3Distance(rv(game->player),rv(welcome.position))<=9;
         int open_role=auto_welcome?1:((IsKeyPressed(KEY_E)||IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))?picked_role:0);
-        if(focused&&!loaded&&!build_mode&&action.npc_interaction&&open_role&&
-           (open_role==1?pe_sandbox_ui_open_welcome(&ui,game,PE_ADVENTURE_WELCOME_ENTITY,true):
-                         pe_sandbox_ui_open_supplier(&ui,game,PE_ADVENTURE_NPC_ENTITY,true))) {
-            PeAdventureNpc *selected=open_role==1?&welcome:&supplier;
-            if(open_role==1)welcome_prompted=true;
+        bool opened=false;PeAdventureNpc *selected=NULL;
+        if(focused&&!loaded&&!build_mode&&action.npc_interaction){
+            if(open_role){
+                opened=open_role==1?pe_sandbox_ui_open_welcome(&ui,game,PE_ADVENTURE_WELCOME_ENTITY,true):pe_sandbox_ui_open_supplier(&ui,game,PE_ADVENTURE_NPC_ENTITY,true);
+                selected=open_role==1?&welcome:&supplier;
+                if(opened&&open_role==1)welcome_prompted=true;
+            }else if(picked_resident>=0&&(IsKeyPressed(KEY_E)||IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))){
+                const PeAdventurePopulationSource *src=&pe_adventure_population_sources[picked_resident];Resident *r=&residents[picked_resident];selected=&r->npc;
+                opened=src->adventure_role==3&&game->annot_complete?
+                    pe_sandbox_ui_open_annot(&ui,game,(uint32_t)src->entity_id,r->view.portrait.texture,true):
+                    pe_sandbox_ui_open_town(&ui,game,(uint32_t)src->entity_id,src->name,r->view.portrait.texture,true);
+            }
+        }
+        if(opened){
             selected->yaw=atan2f(game->player.x-selected->position.x,game->player.z-selected->position.z)*RAD2DEG;
             world_input=false;autorun=false;jump_pending=false;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);
             action.consume_world=true;action.cursor_visible=true;
@@ -469,7 +536,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         DrawRectangleGradientV(0,0,GetScreenWidth(),GetScreenHeight(),(Color){62,115,146,255},sky);
         source_begin_3d(camera);
         pe_terrain_material_view_frame(&surface,&game->world,camera.position);
-        for(int i=0;i<8;i++)if(terrain->loaded[i])DrawModel(terrain->model[i],(Vector3){0},1,WHITE);
+        for(int i=0;i<PE_WORLD_MAX_REGIONS;i++)if(terrain->loaded[i])DrawModel(terrain->model[i],(Vector3){0},1,WHITE);
         if(pe_settlement_matches(&game->world))pe_reference_draw(&settlement);
         if(!pe_sandbox_world_view_draw_trees(world_view,game)){snprintf(error,sizeof error,"Tree rendering failed");result=1;}
         for(int i=0;i<game->block_count;i++)draw_block(game->blocks[i]);
@@ -496,6 +563,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(supplier_visible&&!pe_adventure_npc_view_draw(&supplier_view,supplier.position,supplier.yaw,supplier_seconds)){
             snprintf(error,sizeof error,"Supplier pose rendering failed");result=1;
         }
+        for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible&&!pe_adventure_npc_view_draw(&residents[i].view,residents[i].npc.position,residents[i].npc.yaw,supplier_seconds)){snprintf(error,sizeof error,"Town NPC rendering failed");result=1;}
         if(!game->world.source)DrawCube((Vector3){31.5f,5.5f,31.5f},63,.06f,63,(Color){54,132,149,170});
         source_end_3d();
         if(supplier_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
@@ -509,6 +577,14 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             const char *prompt=picked_role==1&&action.npc_interaction?"Westina  [RMB / E]":"Westina";
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->welcome_page<PE_ADVENTURE_WELCOME_PAGES?YELLOW:LIGHTGRAY);
+        }
+        if(ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!ui.town_open)for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible){
+            PeVec3 p=residents[i].npc.position;
+            if(Vector3Distance(rv(p),rv(game->player))>40||Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))<=0)continue;
+            Vector2 screen=source_screen((Vector3){p.x,p.y+residents[i].view.label_height,p.z},camera);
+            char label[180];snprintf(label,sizeof label,"%s%s",pe_adventure_population_sources[i].name,picked_resident==i&&action.npc_interaction?"  [RMB / E]":"");
+            Font f=pe_ui_font(ui.assets,false);Vector2 size=MeasureTextEx(f,label,18,0);
+            DrawTextEx(f,label,(Vector2){screen.x-size.x*.5f,screen.y},18,0,picked_resident==i?YELLOW:LIGHTGRAY);
         }
         pe_sandbox_ui_draw(&ui,game,build_mode);
         if(smoke_frames&&frame+1>=smoke_frames&&screenshot) {
@@ -531,6 +607,7 @@ cleanup:
     printf("Sandbox camera: desired %.3fm, distance %.3fm\n",orbit.desired_distance,orbit.distance);
     pe_reference_unload(&settlement);
     pe_sandbox_world_view_unload(world_view);pe_sandbox_actor_unload(actor);pe_sandbox_ui_unload(&ui);
+    for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)pe_adventure_npc_view_unload(&residents[i].view);
     pe_adventure_npc_view_unload(&supplier_view);pe_adventure_npc_view_unload(&welcome_view);
     pe_sandbox_collision_free(collision);free_terrain(terrain);pe_terrain_material_view_unload(&surface);CloseWindow();return result;
 }

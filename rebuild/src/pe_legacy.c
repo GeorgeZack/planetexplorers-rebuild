@@ -107,7 +107,7 @@ bool pe_legacy_crop(PeLegacyFile *f,int ox,int oy,int oz,PeWorld *out,char *erro
             next->voxels[((size_t)dz*PE_WORLD_Y+(size_t)dy)*PE_WORLD_X+(size_t)dx]=(PeVoxel){body[s],body[s+1]};
         }
     }
-    *out=*next;free(next);message(error,cap,"");return true;
+    pe_world_move(out,next);free(next);message(error,cap,"");return true;
 }
 bool pe_legacy_find_surface(PeLegacyFile *f,int *out_x,int *out_y,int *out_z,char *error,size_t cap) {
     if(!f||!out_x||!out_y||!out_z){message(error,cap,"Missing surface search arguments.");return false;}

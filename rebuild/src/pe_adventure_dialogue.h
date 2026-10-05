@@ -3,7 +3,7 @@
 #include "pe_game.h"
 
 typedef enum { PE_ADVENTURE_DIALOGUE_IDLE, PE_ADVENTURE_DIALOGUE_MENU, PE_ADVENTURE_DIALOGUE_TALK } PeAdventureDialogueStage;
-typedef enum { PE_ADVENTURE_SPEAKER_PLAYER, PE_ADVENTURE_SPEAKER_WELCOME, PE_ADVENTURE_SPEAKER_SUPPLIER } PeAdventureSpeaker;
+typedef enum { PE_ADVENTURE_SPEAKER_PLAYER, PE_ADVENTURE_SPEAKER_WELCOME, PE_ADVENTURE_SPEAKER_SUPPLIER, PE_ADVENTURE_SPEAKER_ANNOT } PeAdventureSpeaker;
 typedef struct { int talk_id,localization_id; PeAdventureSpeaker speaker; const char *text; } PeAdventureDialogueLine;
 typedef struct {
     PeAdventureDialogueStage stage;
@@ -14,6 +14,7 @@ typedef struct {
 typedef struct {
     const char *player_name,*welcome_name,*supplier_name,*town_name; /* Given names in source tokens. */
     const char *seed_name;
+    const char *annot_name,*annot_full_name,*start_town_name;
     const char *player_full_name,*welcome_full_name,*supplier_full_name; /* Optional speaker labels. */
 } PeAdventureDialogueBindings;
 typedef enum {
@@ -30,10 +31,11 @@ void pe_adventure_dialogue_cancel(PeAdventureDialogue *dialogue);
  * XZ target; below-world/dungeon playerY<0 rejected. Host passes actual resolved
  * supplier position, not an invented named prototype. No supply grant here. */
 bool pe_adventure_arrival_step(PeGame *game,PeVec3 supplier_position);
-/* Roles1 and2 supported. Welcome opens its next persisted source page. Host eligibility includes the actual NPC
+/* Roles1/2; role3 exposes source9071 only after completed9032. Welcome opens its next persisted source page. Host eligibility includes the actual NPC
  * hover/range/scene/UI query. Opening never changes game/progression/items. */
 bool pe_adventure_dialogue_open(PeAdventureDialogue *dialogue,const PeGame *game,
     int adventure_role,uint32_t entity_id,bool eligible);
+/* Role2 supplies or role3 source continuation question. */
 bool pe_adventure_dialogue_choose_supply(PeAdventureDialogue *dialogue,const PeGame *game);
 /* Welcome ACK persists each source page; final4088 starts Arrival.
  * Final supplier ACK4094 alone invokes authoritative pe_game_accept_supplies.

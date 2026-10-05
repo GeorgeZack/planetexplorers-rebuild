@@ -1,0 +1,378 @@
+{
+  "schema": 1,
+  "kind": "implemented-C-headless-route-movement",
+  "success": true,
+  "waypointsReached": 49,
+  "waypoints": 49,
+  "ticks": 15527,
+  "fixedDt": 0.0166666675,
+  "sampledTravelMeters": 1273.70606,
+  "midrouteSaveReload": true,
+  "annotComplete": true,
+  "startLocal": [
+    34,
+    27.4870186,
+    284
+  ],
+  "finalSource": [
+    -286.706299,
+    21.729929,
+    146.399338
+  ],
+  "error": "",
+  "command": "./rebuild/build/adventure_route_fixture rebuild/build/annot-route-native.xyz rebuild/build/annot-route-midpoint.pesave rebuild/build/annot-route-headless-result.json --arrival-save rebuild/build/annot-route-arrived.pesave --pre-annot-save rebuild/build/annot-route-prearrival.pesave --pre-annot-waypoint 46",
+  "waypoint_provenance": {
+    "observed_original_samples": "docs/reference/annot-route-original-walk.json",
+    "bounded_original_samples": 45,
+    "additional_original_HUD_rounded_XZ": [
+      [
+        -305,
+        131
+      ],
+      [
+        -305,
+        142
+      ],
+      [
+        -280,
+        156
+      ]
+    ],
+    "additional_HUD_waypoint_Y": "Desired goal field25 from source Annot target; ignored by steering, not inferred player height",
+    "final_archived_player_source": [
+      -287.3446044921875,
+      21.51923370361328,
+      145.36329650878906
+    ],
+    "final_player_archive": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2"
+  },
+  "waypoints_source_xyz": [
+    [
+      -597.358459,
+      27.52192,
+      365.5125
+    ],
+    [
+      -603.128052,
+      28.5117416,
+      402.3115
+    ],
+    [
+      -603.924255,
+      28.58836,
+      407.2896
+    ],
+    [
+      -603.924255,
+      28.58836,
+      407.2896
+    ],
+    [
+      -603.9235,
+      28.588356,
+      407.289734
+    ],
+    [
+      -603.9228,
+      28.588356,
+      407.289856
+    ],
+    [
+      -602.868652,
+      28.5274715,
+      391.257416
+    ],
+    [
+      -602.868652,
+      28.5274715,
+      391.257416
+    ],
+    [
+      -626.1663,
+      20.9139729,
+      429.526459
+    ],
+    [
+      -618.5497,
+      21.4481812,
+      448.5102
+    ],
+    [
+      -618.5497,
+      21.44818,
+      448.5102
+    ],
+    [
+      -580.813232,
+      19.3881149,
+      447.93277
+    ],
+    [
+      -543.8412,
+      22.0633011,
+      447.3596
+    ],
+    [
+      -505.033356,
+      19.1380234,
+      446.612671
+    ],
+    [
+      -467.0286,
+      19.28318,
+      445.7809
+    ],
+    [
+      -431.118744,
+      18.9594421,
+      445.2467
+    ],
+    [
+      -431.118744,
+      18.95944,
+      445.2467
+    ],
+    [
+      -394.29425,
+      20.6724625,
+      445.1379
+    ],
+    [
+      -356.845581,
+      20.1466389,
+      445.062225
+    ],
+    [
+      -320.0761,
+      21.1009026,
+      444.804443
+    ],
+    [
+      -295.35376,
+      21.9023228,
+      444.972626
+    ],
+    [
+      -295.35376,
+      21.9023228,
+      444.972626
+    ],
+    [
+      -296.577362,
+      23.3852882,
+      407.557556
+    ],
+    [
+      -297.7873,
+      23.53734,
+      369.466
+    ],
+    [
+      -298.851074,
+      23.4851437,
+      331.218
+    ],
+    [
+      -299.9178,
+      23.49804,
+      292.930847
+    ],
+    [
+      -299.921082,
+      23.49804,
+      292.81134
+    ],
+    [
+      -335.275848,
+      22.62899,
+      279.109619
+    ],
+    [
+      -370.1818,
+      22.3900776,
+      265.4721
+    ],
+    [
+      -405.506165,
+      23.49804,
+      251.721069
+    ],
+    [
+      -440.521637,
+      24.169775,
+      237.997253
+    ],
+    [
+      -475.8489,
+      23.7993736,
+      224.229889
+    ],
+    [
+      -511.234558,
+      23.49804,
+      210.482986
+    ],
+    [
+      -546.6482,
+      23.49804,
+      196.739182
+    ],
+    [
+      -581.9891,
+      24.7198029,
+      183.1149
+    ],
+    [
+      -591.2471,
+      25.2172127,
+      179.51506
+    ],
+    [
+      -591.2471,
+      25.2172127,
+      179.51506
+    ],
+    [
+      -557.248169,
+      23.6420517,
+      162.778717
+    ],
+    [
+      -522.986,
+      23.19276,
+      145.898132
+    ],
+    [
+      -489.095673,
+      19.3877258,
+      129.190842
+    ],
+    [
+      -455.1643,
+      17.5251083,
+      112.550842
+    ],
+    [
+      -455.1643,
+      17.5251083,
+      112.550842
+    ],
+    [
+      -417.410461,
+      17.7887764,
+      117.264069
+    ],
+    [
+      -379.54425,
+      16.4572277,
+      121.992569
+    ],
+    [
+      -366.11496,
+      15.7904778,
+      123.66716
+    ],
+    [
+      -305.0,
+      25.0,
+      131.0
+    ],
+    [
+      -305.0,
+      25.0,
+      142.0
+    ],
+    [
+      -280.0,
+      25.0,
+      156.0
+    ],
+    [
+      -287.3446044921875,
+      21.51923370361328,
+      145.36329650878906
+    ]
+  ],
+  "inputs": {
+    "movement": "Normalized XZ run input toward each waypoint",
+    "waypoint_radius_m": 1.25,
+    "jump": "Ordinary jump input if horizontal displacement stays below .002m for60ticks",
+    "player_relocation_after_spawn": false,
+    "terrain_edits": false,
+    "fixture_setup": "Acknowledged welcome, Arrival and supplies through public gameplay APIs before walking"
+  },
+  "assets_sha256": {
+    "rebuild/build/reference-assets/adventure-route/terrain.pevx": "4cd02038bb4127ba37639e8ddb7e2df42a29d0204d113671722aaaf12de920e1",
+    "rebuild/build/reference-assets/adventure-route/route-collision.obj": "1cc40f6818988249755d0d95a2765379410da1ab257731ec9c36d7978c0e1fda",
+    "rebuild/build/reference-assets/adventure-route/route-manifest.json": "5378e4cc6c165e0ed00df2ef4d234c9c6d08d08a2d77a5ce785c1be2b2dd7441",
+    "rebuild/tests/adventure_route_fixture.c": "ab9c8878d72c8de110ddaf0f954c35be2f5164c5ee20d1d622d7cd384e57cc2b"
+  },
+  "source_checkpoint_files": [
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/index.arc",
+      "sha256": "5c69435879e0c39953a1d95fcab30026195145b28e42c9a4e21853fd73bbd440"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/world.arc",
+      "sha256": "0c015f99944af29f70aa665ef9004a36a53a9d220bc59fc16aacde166920309a"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/index.arc",
+      "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/world.arc",
+      "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    }
+  ],
+  "limits": "Headless implemented-C movement/collision/save/progression verification; not graphical input testing, source transition parity, original survival or full NPC behavior.",
+  "money": 500,
+  "arrivalSaveReload": true,
+  "preAnnotSave": true,
+  "preAnnotSource": [
+    -305.19519,
+    21.5010395,
+    140.815475
+  ],
+  "saved_checkpoints": {
+    "midroute": {
+      "path": "rebuild/build/annot-route-midpoint.pesave",
+      "sha256": "82e171e00b371b2a3a12aba51d35e9cd0d0f8a9ef79680e6bc418821f98e062c",
+      "bytes": 22414416,
+      "source_player": [
+        -298.8200378417969,
+        23.473005294799805,
+        332.4609375
+      ],
+      "yaw_radians": 3.1415927410125732
+    },
+    "pre_Annot": {
+      "path": "rebuild/build/annot-route-prearrival.pesave",
+      "sha256": "0f22b21e95ff14386733cf3d5aefbe124254700b18895a71347e44bcbc706ecc",
+      "bytes": 22414416,
+      "source_player": [
+        -305.1951904296875,
+        21.501039505004883,
+        140.8154754638672
+      ],
+      "yaw_radians": 2.1131808757781982
+    },
+    "arrived": {
+      "path": "rebuild/build/annot-route-arrived.pesave",
+      "sha256": "5de7c16ede691efe0c30a7c9a04759788b6db174fb733a7c94491d40d47d41f4",
+      "bytes": 22414416,
+      "source_player": [
+        -286.706298828125,
+        21.729928970336914,
+        146.3993377685547
+      ],
+      "yaw_radians": 3.1415927410125732
+    }
+  },
+  "pre_Annot_checkpoint": "Reached waypoint46 through ordinary movement with annot_complete=false, supplies accepted and500money; only saved camera yaw faces the next observed waypoint(-280,156).",
+  "final_save_validation": "Loaded arrival save back through pe_game_load and checked completed Annot, supplies,500money, player position/velocity, inventory and game clock."
+}

@@ -15,6 +15,8 @@
 #define PE_FIXED_DT (1.0f / 60.0f)
 #define PE_KNOWN_RECIPES 128
 #define PE_QUICKSLOTS 9
+#define PE_TOWN_STOCK_CAPACITY 17
+typedef struct { bool initialized; unsigned remaining; double create_time; } PeTownStock;
 typedef enum { PE_GAME_LEGACY = 0, PE_GAME_ADVENTURE = 1 } PeGameMode;
 enum { PE_ADVENTURE_WELCOME_PAGES = 9, PE_ADVENTURE_ARRIVAL = 9031, PE_ADVENTURE_SUPPLIES = 9032 };
 typedef struct { int item_id; uint32_t instance_id; } PeQuickslot;
@@ -68,6 +70,8 @@ typedef struct {
     int adventure_mission;
     unsigned welcome_page; /* Next source welcome page;9 means Arrival accepted. */
     bool arrival_complete, supplies_claimed;
+    bool annot_complete; /* Source discovery4503 / completed mission9032. */
+    PeTownStock town_stock[PE_TOWN_STOCK_CAPACITY]; /* Stable exported offer order. */
     uint32_t money, scanner_mask;
     int known_recipe_count, known_recipes[PE_KNOWN_RECIPES];
     PeQuickslot quickslots[PE_QUICKSLOTS];
@@ -78,6 +82,10 @@ typedef struct {
     float jump_action_elapsed; /* Transient action state, reset on reload. */
 } PeGame;
 void pe_game_init(PeGame *game, uint32_t seed);
+/* Owning copies require zeroed/initialized destination; destroy before re-init. */
+void pe_game_destroy(PeGame *game);
+bool pe_game_clone(PeGame *destination,const PeGame *source);
+void pe_game_move(PeGame *destination,PeGame *source);
 /* Legacy remains the old explicit prototype; Adventure grants the source start. */
 bool pe_game_init_mode(PeGame *game, uint32_t seed, PeGameMode mode);
 bool pe_game_welcome_advance(PeGame *game,unsigned expected_page);

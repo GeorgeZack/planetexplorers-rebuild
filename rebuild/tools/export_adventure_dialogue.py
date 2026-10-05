@@ -14,8 +14,8 @@ from export_content import (ROOT,DEFAULT_DATABASE,DEFAULT_LOCALIZATION,c_string,
     connect_readonly,describe_source,integer,numeric_rows)
 
 DEFAULT_OUTPUT=ROOT/'rebuild/generated'
-TALKS=(1949,)+tuple(range(4081,4095))
-SPEAKERS={0:1,-9999:0,-9900:1,-9899:2}
+TALKS=(1949,)+tuple(range(4081,4097))
+SPEAKERS={0:1,-9999:0,-9900:1,-9899:2,-9898:3}
 
 def build_outputs(database,localization):
     with closing(connect_readonly(database)) as db:
@@ -43,10 +43,12 @@ def build_outputs(database,localization):
         row=quests[mission]
         if row['TalkOP']!=str(opening) or row['TalkED']!=str(ending) or row['NextQuest']!=str(mission+1) or row['AutoReply']!='1' or row['TargetIDList']!='0':
             raise ValueError('Adventure welcome chain changed')
+    if (quests[9071]['TalkOP']!='4096' or quests[9071]['player_talk']!='4095,0' or quests[9071]['PreLimit']!='1:9032' or quests[9071]['TargetIDList']!='0' or quests[9032]['AutoReply']!='1' or quests[9032]['RewardItem']!='0' or quests[9032]['NextQuest']!='0'):
+        raise ValueError('Annot completion/continuation changed')
     lines=[]
     for talk in TALKS:
         row=scenarios[talk];npc=int(row['npc_id'])
-        expected=0 if talk==1949 else (-9999 if talk%2 else (-9900 if talk<=4088 else -9899))
+        expected=0 if talk==1949 else (-9999 if talk%2 else (-9900 if talk<=4088 else (-9899 if talk<=4094 else -9898)))
         if npc!=expected:raise ValueError(f'unexpected speaker for {talk}')
         parts=str(row['talk_content']).split(':')
         if len(parts)!=3:raise ValueError(f'unsupported dialogue layout {talk}')

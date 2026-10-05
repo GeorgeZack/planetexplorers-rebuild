@@ -49,8 +49,8 @@ static bool valid(const PeSandboxActions *a,const PeGame *g){
     if(a->stage==PE_SANDBOX_ACTION_IDLE)return a->kind==PE_SANDBOX_ACTION_NONE&&a->seconds==0;
     if(!a->instance_id||!a->held||!pe_sandbox_actions_supported(a->item_id)||
        a->kind!=timing(a->item_id)->kind)return false;
-    if(a->kind==PE_SANDBOX_ACTION_DIG&&(a->target_x<0||a->target_x>=PE_WORLD_X||
-       a->target_y<0||a->target_y>=PE_WORLD_Y||a->target_z<0||a->target_z>=pe_world_depth(&g->world)))return false;
+    if(a->kind==PE_SANDBOX_ACTION_DIG&&(a->target_x<0||a->target_x>=pe_world_width(&g->world)||
+       a->target_y<0||a->target_y>=pe_world_size_y(&g->world)||a->target_z<0||a->target_z>=pe_world_depth(&g->world)))return false;
     if(a->kind==PE_SANDBOX_ACTION_FELL&&(a->tree_index<0||a->tree_index>=PE_MAX_TREES))return false;
     if(a->stage==PE_SANDBOX_ACTION_ENTRY&&a->seconds>entry_boundary(a)+1e-9)return false;
     if(a->stage==PE_SANDBOX_ACTION_EXIT&&a->seconds>exit_length(a)+1e-9)return false;

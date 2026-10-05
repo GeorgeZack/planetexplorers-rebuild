@@ -47,13 +47,14 @@ static bool strike(PeTrainingDig*s,PeWorld*w,PeTrainingGathering*inventory,PeTra
         changed.volume=old.volume>damage?(uint8_t)(old.volume-(uint8_t)damage):0;
         if(changed.volume<=127)changed=(PeVoxel){0,0};
         if(w->revision==UINT32_MAX)return false;
-        PeWorld *next=malloc(sizeof*next);if(!next)return false;*next=*w;
-        if(!pe_world_set(next,x,y,z,changed)){free(next);return false;}
+        PeWorld *next=calloc(1,sizeof*next);if(!next)return false;
+        if(!pe_world_clone(next,w)){free(next);return false;}
+        if(!pe_world_set(next,x,y,z,changed)){pe_world_destroy(next);free(next);return false;}
         PeTrainingGathering ledger=*inventory;
         if(!changed.volume&&!pe_training_gathering_removed_voxel(&ledger,w,next,x,y,z)){
-            free(next);out->capacity_blocked=true;s->first=false;return true;
+            pe_world_destroy(next);free(next);out->capacity_blocked=true;s->first=false;return true;
         }
-        *w=*next;free(next);*inventory=ledger;
+        pe_world_move(w,next);free(next);*inventory=ledger;
         out->removed=!changed.volume;out->dirt_added=out->removed?2:0;
     }
     tool->durability=fmaxf(0,tool->durability-5);

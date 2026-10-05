@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-05",
+  "kind": "physical-input-native-window-verification",
+  "mode": "Adventure",
+  "source_profile": "one archived world, no procedural parity claim",
+  "screenshots": {
+    "docs/reference/annot-original-arrival.png": "c9a72de112e6dd14685265c84cecddc1d05fcb23e2592df750a72cf207d3a5e1",
+    "docs/reference/annot-original-naoko-menu.png": "aa5d7d779a4a3e1fa690b800ad01272e324f803df8418b3c7daa912a8b651dff",
+    "docs/reference/annot-original-naoko-reply.png": "96aaf0fecce308e47bbb629adc8ee91c7ad0e07ddbf32c5998fe7d7fe618203d",
+    "docs/reference/annot-original-medicine-choices.png": "14122495f06169b1810f466abd16e4c317dcc9a4e6c498ef0726290a4a7c5fde",
+    "docs/reference/annot-rebuild-arrival.png": "964df23be8954f5e4a8237839a4eb20b97f1e82bc6fa3fb07e138bf7b047f2d7",
+    "docs/reference/annot-rebuild-naoko-menu.png": "c2b8beb5aa1fb793ee0d45272dc7e34ed617911035d012553d1bee3300215b67",
+    "docs/reference/annot-rebuild-naoko-reply.png": "41649289b001e5f04afcf37c4521f46e06aacaf22eb58c1f7c3fc6f9995559c6",
+    "docs/reference/town-rebuild-shop.png": "f18fdb25fa68c7d53421482cb9618e928ee55c7105066f9b69f4d2f53736f426",
+    "docs/reference/town-rebuild-shop-persisted.png": "ff79b3aa1682a61754fd6fcabf19a3c7647d77d9653d3401be1cef11c7d6128a",
+    "docs/reference/town-rebuild-shop-dragged.png": "21dc0cd61f4e37aa27aa7e1eff0ffc55100ad532662dbe626500053bf27409fa"
+  },
+  "assets": {
+    "rebuild/build/reference-assets/adventure-route/terrain.pevx": "4cd02038bb4127ba37639e8ddb7e2df42a29d0204d113671722aaaf12de920e1",
+    "rebuild/build/reference-assets/adventure-route/route.obj": "c05574b7829a250fea8eb14ec2e3745a266f36a9889578bc2e598884aad78a16",
+    "rebuild/build/reference-assets/adventure-route/route-collision.obj": "1cc40f6818988249755d0d95a2765379410da1ab257731ec9c36d7978c0e1fda"
+  },
+  "shop": {
+    "entity": 20002,
+    "fixture_only_extra_currency": 10000,
+    "initial_currency": 10500,
+    "purchase": {
+      "item": 1,
+      "count": 1,
+      "cost": 158,
+      "remaining_stock": 2
+    },
+    "rejected": {
+      "reason": "two nonstackable swords required two empty slots; fixture had one",
+      "currency_and_stock_unchanged": true
+    },
+    "modal_F9_created_no_save": true,
+    "sizes": [
+      [
+        1280,
+        720
+      ],
+      [
+        1000,
+        700
+      ]
+    ],
+    "drag_resize_and_translated_buy": true,
+    "F9_F10_reopen_preserved_stock_and_inventory": true,
+    "exit": 0,
+    "final_inspection": "TEST ONLY rebuild/build/adventure-shop-ui.pesave mode=1 world=416x64x416 origin=(-640,0,64) welcome=9 arrival=1 supplies=1 annot=0 mission=9032 money=10342 position=(54.534927,28.346663,293.532318) source=(-585.465088,28.346663,357.532318) yaw=0.78540176 pitch=-0.22999999\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1 1x1\n  changed stock: 0:2 1:1 2:3 3:1 4:3 5:1 6:3 7:1\n"
+  },
+  "annot": {
+    "start_save": "rebuild/build/annot-route-prearrival.pesave",
+    "start_save_sha256": "0f22b21e95ff14386733cf3d5aefbe124254700b18895a71347e44bcbc706ecc",
+    "physical_inputs": "normal WASD around western containers; one jump up the terrain bank; walk south into strict15m target",
+    "no_teleport_or_edit": true,
+    "arrival_source_position": [
+      -279.434967,
+      22.496981,
+      144.897232
+    ],
+    "first_session_exit": 143,
+    "first_session_note": "SIGTERM after saved arrival; no core dump; cause not established",
+    "resumed_from_arrival_save": true,
+    "naoko_entity": 20018,
+    "dialogue_menu_binding": "Haleiwa",
+    "reply_source_id": 4096,
+    "medicine_quest_9072_accepted": false,
+    "currency_and_inventory_unchanged": true,
+    "F9_F10_completion_persisted": true,
+    "final_session_exit": 0,
+    "final_inspection": "TEST ONLY rebuild/build/annot-route-graphical-final.pesave mode=1 world=416x64x416 origin=(-640,0,64) welcome=9 arrival=1 supplies=1 annot=1 mission=9032 money=500 position=(360.543793,22.501040,65.814880) source=(-279.456207,22.501040,129.814880) yaw=0.64677989 pitch=-0.08400000\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n  changed stock:\n"
+  },
+  "limitations": [
+    "Only Cherish was physically purchased from; other two vendors have transaction/UI tests.",
+    "Route length is proven by separate headless movement evidence; graphical continuation starts near Annot.",
+    "Medicine quest, Annot vendors, NPC schedules/AI and full streaming remain unimplemented."
+  ]
+}

@@ -1,0 +1,760 @@
+{
+  "schema": 1,
+  "kind": "observed-original-sampled-route-survey",
+  "source_walk": "/home/admin/.local/share/planet-explorers-route-reference/terrain-captures/annot3.pevx.chunks/walk.jsonl",
+  "source_walk_sha256": "8a24d466fcb06cb4efb0c20a02b0b5e17b337f54d9bdff2280b33315019d7a45",
+  "source_terrain": "/home/admin/.local/share/planet-explorers-route-reference/terrain-captures/annot3.pevx",
+  "source_terrain_sha256": "4cd02038bb4127ba37639e8ddb7e2df42a29d0204d113671722aaaf12de920e1",
+  "source_metadata_sha256": "2d30a52f18961ab70c6367c34fda0952d5aa4353c06a2721aec1f59f1962fe07",
+  "unity": "5.2.4f1",
+  "origin": [
+    -640,
+    0,
+    64
+  ],
+  "size": [
+    416,
+    64,
+    416
+  ],
+  "started_utc": "2026-10-05T17:26:52.325121+00:00",
+  "last_observation_utc": "2026-10-05T17:32:06.650961+00:00",
+  "arrival_utc": null,
+  "all_recorded_samples": 47,
+  "samples_through_capture": 45,
+  "excluded_samples": [
+    {
+      "source_record": 8,
+      "reason": "Outside captured native player capsule bounds"
+    },
+    {
+      "source_record": 9,
+      "reason": "Outside captured native player capsule bounds"
+    }
+  ],
+  "observed_destination": [
+    -284,
+    25,
+    134
+  ],
+  "source_XZ_radius": 15,
+  "reached_Annot_radius": false,
+  "sampled_polyline_meters": 1154.4688124751772,
+  "maximum_observation_gap_seconds": 27.403269290924072,
+  "observation_limit": "Periodic PeTrans positions from the original inside captured player bounds; omitted samples are listed by source row. Intervening trajectory, exact inputs, and quest UI completion are not inferred.",
+  "towns": [
+    {
+      "id": 0,
+      "nameId": 8500180,
+      "name": "Haleiwa",
+      "centerXZ": [
+        -593,
+        377
+      ],
+      "startXZ": [
+        -620,
+        327
+      ],
+      "endXZ": [
+        -566,
+        427
+      ],
+      "height": 30
+    },
+    {
+      "id": 4,
+      "nameId": 8500008,
+      "name": "Annot",
+      "centerXZ": [
+        -284,
+        134
+      ],
+      "startXZ": [
+        -331,
+        87
+      ],
+      "endXZ": [
+        -237,
+        181
+      ],
+      "height": 25
+    }
+  ],
+  "observations": [
+    {
+      "time": 1791221212.325121,
+      "player": [
+        -597.358459,
+        27.52192,
+        365.5125
+      ],
+      "cameraYaw": 359.9438,
+      "target": [
+        -610.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 0
+    },
+    {
+      "time": 1791221219.0085948,
+      "player": [
+        -603.128052,
+        28.5117416,
+        402.3115
+      ],
+      "cameraYaw": 351.018738,
+      "target": [
+        -610.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 1
+    },
+    {
+      "time": 1791221225.608517,
+      "player": [
+        -603.924255,
+        28.58836,
+        407.2896
+      ],
+      "cameraYaw": 350.8875,
+      "target": [
+        -610.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 2
+    },
+    {
+      "time": 1791221232.1972506,
+      "player": [
+        -603.924255,
+        28.58836,
+        407.2896
+      ],
+      "cameraYaw": 350.8875,
+      "target": [
+        -610.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 3
+    },
+    {
+      "time": 1791221238.7926164,
+      "player": [
+        -603.9235,
+        28.588356,
+        407.289734
+      ],
+      "cameraYaw": 350.8875,
+      "target": [
+        -610.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 4
+    },
+    {
+      "time": 1791221256.0593953,
+      "player": [
+        -603.9228,
+        28.588356,
+        407.289856
+      ],
+      "cameraYaw": 350.8875,
+      "target": [
+        -603.0,
+        394.0
+      ],
+      "captured": 80,
+      "source_record": 5
+    },
+    {
+      "time": 1791221261.8777552,
+      "player": [
+        -602.868652,
+        28.5274715,
+        391.257416
+      ],
+      "cameraYaw": 176.062546,
+      "target": [
+        -603.0,
+        394.0
+      ],
+      "captured": 80,
+      "source_record": 6
+    },
+    {
+      "time": 1791221261.9511049,
+      "player": [
+        -602.868652,
+        28.5274715,
+        391.257416
+      ],
+      "cameraYaw": 176.062546,
+      "target": [
+        -635.0,
+        394.0
+      ],
+      "captured": 80,
+      "source_record": 7
+    },
+    {
+      "time": 1791221277.5280213,
+      "player": [
+        -626.1663,
+        20.9139729,
+        429.526459
+      ],
+      "cameraYaw": 21.7312012,
+      "target": [
+        -620.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 10
+    },
+    {
+      "time": 1791221282.0990736,
+      "player": [
+        -618.5497,
+        21.4481812,
+        448.5102
+      ],
+      "cameraYaw": 21.7312012,
+      "target": [
+        -620.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 11
+    },
+    {
+      "time": 1791221293.583994,
+      "player": [
+        -618.5497,
+        21.44818,
+        448.5102
+      ],
+      "cameraYaw": 21.7312012,
+      "target": [
+        -430.0,
+        445.0
+      ],
+      "captured": 80,
+      "source_record": 12
+    },
+    {
+      "time": 1791221300.959188,
+      "player": [
+        -580.813232,
+        19.3881149,
+        447.93277
+      ],
+      "cameraYaw": 91.03122,
+      "target": [
+        -430.0,
+        445.0
+      ],
+      "captured": 90,
+      "source_record": 13
+    },
+    {
+      "time": 1791221307.5419536,
+      "player": [
+        -543.8412,
+        22.0633011,
+        447.3596
+      ],
+      "cameraYaw": 91.16246,
+      "target": [
+        -430.0,
+        445.0
+      ],
+      "captured": 100,
+      "source_record": 14
+    },
+    {
+      "time": 1791221314.1656885,
+      "player": [
+        -505.033356,
+        19.1380234,
+        446.612671
+      ],
+      "cameraYaw": 91.16246,
+      "target": [
+        -430.0,
+        445.0
+      ],
+      "captured": 110,
+      "source_record": 15
+    },
+    {
+      "time": 1791221320.757741,
+      "player": [
+        -467.0286,
+        19.28318,
+        445.7809
+      ],
+      "cameraYaw": 91.29371,
+      "target": [
+        -430.0,
+        445.0
+      ],
+      "captured": 120,
+      "source_record": 16
+    },
+    {
+      "time": 1791221327.3530614,
+      "player": [
+        -431.118744,
+        18.9594421,
+        445.2467
+      ],
+      "cameraYaw": 91.16248,
+      "target": [
+        -430.0,
+        445.0
+      ],
+      "captured": 140,
+      "source_record": 17
+    },
+    {
+      "time": 1791221337.064645,
+      "player": [
+        -431.118744,
+        18.95944,
+        445.2467
+      ],
+      "cameraYaw": 91.16248,
+      "target": [
+        -300.0,
+        445.0
+      ],
+      "captured": 140,
+      "source_record": 18
+    },
+    {
+      "time": 1791221343.6973526,
+      "player": [
+        -394.29425,
+        20.6724625,
+        445.1379
+      ],
+      "cameraYaw": 90.11247,
+      "target": [
+        -300.0,
+        445.0
+      ],
+      "captured": 150,
+      "source_record": 19
+    },
+    {
+      "time": 1791221350.3094597,
+      "player": [
+        -356.845581,
+        20.1466389,
+        445.062225
+      ],
+      "cameraYaw": 90.11247,
+      "target": [
+        -300.0,
+        445.0
+      ],
+      "captured": 160,
+      "source_record": 20
+    },
+    {
+      "time": 1791221356.887542,
+      "player": [
+        -320.0761,
+        21.1009026,
+        444.804443
+      ],
+      "cameraYaw": 90.11247,
+      "target": [
+        -300.0,
+        445.0
+      ],
+      "captured": 160,
+      "source_record": 21
+    },
+    {
+      "time": 1791221361.819764,
+      "player": [
+        -295.35376,
+        21.9023228,
+        444.972626
+      ],
+      "cameraYaw": 89.45622,
+      "target": [
+        -300.0,
+        445.0
+      ],
+      "captured": 160,
+      "source_record": 22
+    },
+    {
+      "time": 1791221361.88264,
+      "player": [
+        -295.35376,
+        21.9023228,
+        444.972626
+      ],
+      "cameraYaw": 89.45622,
+      "target": [
+        -300.0,
+        290.0
+      ],
+      "captured": 160,
+      "source_record": 23
+    },
+    {
+      "time": 1791221369.5250099,
+      "player": [
+        -296.577362,
+        23.3852882,
+        407.557556
+      ],
+      "cameraYaw": 181.724915,
+      "target": [
+        -300.0,
+        290.0
+      ],
+      "captured": 172,
+      "source_record": 24
+    },
+    {
+      "time": 1791221376.1148908,
+      "player": [
+        -297.7873,
+        23.53734,
+        369.466
+      ],
+      "cameraYaw": 181.724915,
+      "target": [
+        -300.0,
+        290.0
+      ],
+      "captured": 184,
+      "source_record": 25
+    },
+    {
+      "time": 1791221382.7038355,
+      "player": [
+        -298.851074,
+        23.4851437,
+        331.218
+      ],
+      "cameraYaw": 181.593689,
+      "target": [
+        -300.0,
+        290.0
+      ],
+      "captured": 208,
+      "source_record": 26
+    },
+    {
+      "time": 1791221389.3140738,
+      "player": [
+        -299.9178,
+        23.49804,
+        292.930847
+      ],
+      "cameraYaw": 181.593689,
+      "target": [
+        -300.0,
+        290.0
+      ],
+      "captured": 220,
+      "source_record": 27
+    },
+    {
+      "time": 1791221416.717343,
+      "player": [
+        -299.921082,
+        23.49804,
+        292.81134
+      ],
+      "cameraYaw": 181.593689,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 220,
+      "source_record": 28
+    },
+    {
+      "time": 1791221424.0913181,
+      "player": [
+        -335.275848,
+        22.62899,
+        279.109619
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 230,
+      "source_record": 29
+    },
+    {
+      "time": 1791221430.691809,
+      "player": [
+        -370.1818,
+        22.3900776,
+        265.4721
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 262,
+      "source_record": 30
+    },
+    {
+      "time": 1791221437.342394,
+      "player": [
+        -405.506165,
+        23.49804,
+        251.721069
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 268,
+      "source_record": 31
+    },
+    {
+      "time": 1791221443.9782996,
+      "player": [
+        -440.521637,
+        24.169775,
+        237.997253
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 290,
+      "source_record": 32
+    },
+    {
+      "time": 1791221450.6281126,
+      "player": [
+        -475.8489,
+        23.7993736,
+        224.229889
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 298,
+      "source_record": 33
+    },
+    {
+      "time": 1791221457.262879,
+      "player": [
+        -511.234558,
+        23.49804,
+        210.482986
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 306,
+      "source_record": 34
+    },
+    {
+      "time": 1791221463.8860643,
+      "player": [
+        -546.6482,
+        23.49804,
+        196.739182
+      ],
+      "cameraYaw": 248.79361,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 322,
+      "source_record": 35
+    },
+    {
+      "time": 1791221470.5510592,
+      "player": [
+        -581.9891,
+        24.7198029,
+        183.1149
+      ],
+      "cameraYaw": 248.92485,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 322,
+      "source_record": 36
+    },
+    {
+      "time": 1791221473.6044185,
+      "player": [
+        -591.2471,
+        25.2172127,
+        179.51506
+      ],
+      "cameraYaw": 248.793625,
+      "target": [
+        -590.0,
+        180.0
+      ],
+      "captured": 322,
+      "source_record": 37
+    },
+    {
+      "time": 1791221478.3911824,
+      "player": [
+        -591.2471,
+        25.2172127,
+        179.51506
+      ],
+      "cameraYaw": 248.793625,
+      "target": [
+        -450.0,
+        110.0
+      ],
+      "captured": 322,
+      "source_record": 38
+    },
+    {
+      "time": 1791221486.5354276,
+      "player": [
+        -557.248169,
+        23.6420517,
+        162.778717
+      ],
+      "cameraYaw": 116.231178,
+      "target": [
+        -450.0,
+        110.0
+      ],
+      "captured": 322,
+      "source_record": 39
+    },
+    {
+      "time": 1791221493.1782234,
+      "player": [
+        -522.986,
+        23.19276,
+        145.898132
+      ],
+      "cameraYaw": 116.231178,
+      "target": [
+        -450.0,
+        110.0
+      ],
+      "captured": 322,
+      "source_record": 40
+    },
+    {
+      "time": 1791221499.799995,
+      "player": [
+        -489.095673,
+        19.3877258,
+        129.190842
+      ],
+      "cameraYaw": 116.231178,
+      "target": [
+        -450.0,
+        110.0
+      ],
+      "captured": 324,
+      "source_record": 41
+    },
+    {
+      "time": 1791221506.4387295,
+      "player": [
+        -455.1643,
+        17.5251083,
+        112.550842
+      ],
+      "cameraYaw": 116.099922,
+      "target": [
+        -450.0,
+        110.0
+      ],
+      "captured": 326,
+      "source_record": 42
+    },
+    {
+      "time": 1791221506.50687,
+      "player": [
+        -455.1643,
+        17.5251083,
+        112.550842
+      ],
+      "cameraYaw": 116.099922,
+      "target": [
+        -284.0,
+        134.0
+      ],
+      "captured": 326,
+      "source_record": 43
+    },
+    {
+      "time": 1791221513.457789,
+      "player": [
+        -417.410461,
+        17.7887764,
+        117.264069
+      ],
+      "cameraYaw": 82.89366,
+      "target": [
+        -284.0,
+        134.0
+      ],
+      "captured": 330,
+      "source_record": 44
+    },
+    {
+      "time": 1791221520.0547142,
+      "player": [
+        -379.54425,
+        16.4572277,
+        121.992569
+      ],
+      "cameraYaw": 82.89366,
+      "target": [
+        -284.0,
+        134.0
+      ],
+      "captured": 334,
+      "source_record": 45
+    },
+    {
+      "time": 1791221526.6509612,
+      "player": [
+        -366.11496,
+        15.7904778,
+        123.66716
+      ],
+      "cameraYaw": 82.89366,
+      "target": [
+        -284.0,
+        134.0
+      ],
+      "captured": 338,
+      "source_record": 46
+    }
+  ]
+}

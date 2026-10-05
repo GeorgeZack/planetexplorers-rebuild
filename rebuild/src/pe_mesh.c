@@ -9,17 +9,17 @@
 typedef struct { PeMeshData data; size_t capacity; bool ok; } Builder;
 bool pe_world_mesh_region_changed(const PeWorld *w,const PeWorld *old,
                                  int x,int y,int z,int nx,int ny,int nz) {
-    if(!w||!old||w->source!=old->source||pe_world_depth(w)!=pe_world_depth(old)||x<0||y<0||z<0||nx<0||ny<0||nz<0||
-       x>=PE_WORLD_X||y>=PE_WORLD_Y||z>=pe_world_depth(w)||nx>PE_WORLD_X-1-x||
-       ny>PE_WORLD_Y-1-y||nz>pe_world_depth(w)-1-z)return true;
+    if(!w||!old||w->source!=old->source||pe_world_width(w)!=pe_world_width(old)||pe_world_size_y(w)!=pe_world_size_y(old)||pe_world_depth(w)!=pe_world_depth(old)||x<0||y<0||z<0||nx<0||ny<0||nz<0||
+       x>=pe_world_width(w)||y>=pe_world_size_y(w)||z>=pe_world_depth(w)||nx>pe_world_width(w)-1-x||
+       ny>pe_world_size_y(w)-1-y||nz>pe_world_depth(w)-1-z)return true;
     if(!nx||!ny||!nz)return false;
-    int xmax=x+nx+1<PE_WORLD_X?x+nx+1:PE_WORLD_X-1;
-    int ymax=y+ny+1<PE_WORLD_Y?y+ny+1:PE_WORLD_Y-1;
+    int xmax=x+nx+1<pe_world_width(w)?x+nx+1:pe_world_width(w)-1;
+    int ymax=y+ny+1<pe_world_size_y(w)?y+ny+1:pe_world_size_y(w)-1;
     int zmax=z+nz+1<pe_world_depth(w)?z+nz+1:pe_world_depth(w)-1;
     int xmin=x>0?x-1:0,ymin=y>0?y-1:0,zmin=z>0?z-1:0;
     for(int iz=zmin;iz<=zmax;iz++)for(int iy=ymin;iy<=ymax;iy++) {
-        size_t start=((size_t)iz*PE_WORLD_Y+(size_t)iy)*PE_WORLD_X+(size_t)xmin;
-        if(memcmp(&w->voxels[start],&old->voxels[start],(size_t)(xmax-xmin+1)*sizeof(PeVoxel)))return true;
+        size_t start=((size_t)iz*pe_world_size_y(w)+(size_t)iy)*pe_world_width(w)+(size_t)xmin;
+        if(memcmp(&pe_world_data_const(w)[start],&pe_world_data_const(old)[start],(size_t)(xmax-xmin+1)*sizeof(PeVoxel)))return true;
     }
     return false;
 }
@@ -31,7 +31,7 @@ static PeVec3 normal(PeVec3 a) {
     return n>1e-8f ? (PeVec3){a.x/n,a.y/n,a.z/n} : (PeVec3){0,1,0};
 }
 int pe_world_cell_triangles(const PeWorld *w,int x,int y,int z,PeVec3 out[15]) {
-    if(!w||!out||x<0||y<0||z<0||x>=PE_WORLD_X-1||y>=PE_WORLD_Y-1||z>=pe_world_depth(w)-1)return 0;
+    if(!w||!out||x<0||y<0||z<0||x>=pe_world_width(w)-1||y>=pe_world_size_y(w)-1||z>=pe_world_depth(w)-1)return 0;
     static const int corners[8][3]={{0,0,0},{1,0,0},{1,1,0},{0,1,0},{0,0,1},{1,0,1},{1,1,1},{0,1,1}};
     PeVec3 positions[8],edges[12];int volumes[8];unsigned mask=0;
     for(int c=0;c<8;c++) {
@@ -57,8 +57,8 @@ int pe_world_cell_triangles(const PeWorld *w,int x,int y,int z,PeVec3 out[15]) {
 }
 static PeVec3 gradient(const PeWorld *w, int x, int y, int z) {
     /* Clamp only at bounded crop edges. Interior chunk boundaries share neighbors. */
-    int xl=x?x-1:x, xr=x+1<PE_WORLD_X?x+1:x;
-    int yl=y?y-1:y, yr=y+1<PE_WORLD_Y?y+1:y;
+    int xl=x?x-1:x, xr=x+1<pe_world_width(w)?x+1:x;
+    int yl=y?y-1:y, yr=y+1<pe_world_size_y(w)?y+1:y;
     int zl=z?z-1:z, zr=z+1<pe_world_depth(w)?z+1:z;
     return (PeVec3){(float)pe_world_get(w,xl,y,z).volume-pe_world_get(w,xr,y,z).volume,
                     (float)pe_world_get(w,x,yl,z).volume-pe_world_get(w,x,yr,z).volume,
@@ -83,8 +83,8 @@ static void emit(Builder *b, PeVertex a, PeVertex c, PeVertex d) {
 }
 bool pe_world_mesh_region(const PeWorld *w,int x0,int y0,int z0,int nx,int ny,int nz,PeMeshData *mesh) {
     if(!w||!mesh||x0<0||y0<0||z0<0||nx<0||ny<0||nz<0||
-       x0>=PE_WORLD_X||y0>=PE_WORLD_Y||z0>=pe_world_depth(w)||
-       nx>PE_WORLD_X-1-x0||ny>PE_WORLD_Y-1-y0||nz>pe_world_depth(w)-1-z0) return false;
+       x0>=pe_world_width(w)||y0>=pe_world_size_y(w)||z0>=pe_world_depth(w)||
+       nx>pe_world_width(w)-1-x0||ny>pe_world_size_y(w)-1-y0||nz>pe_world_depth(w)-1-z0) return false;
     static const int corners[8][3]={{0,0,0},{1,0,0},{1,1,0},{0,1,0},{0,0,1},{1,0,1},{1,1,1},{0,1,1}};
     Builder builder={.ok=true};
     for(int z=z0;z<z0+nz&&builder.ok;z++) for(int y=y0;y<y0+ny&&builder.ok;y++) for(int x=x0;x<x0+nx&&builder.ok;x++) {
@@ -113,7 +113,7 @@ bool pe_world_mesh_region(const PeWorld *w,int x0,int y0,int z0,int nx,int ny,in
     pe_mesh_free(mesh);*mesh=builder.data;return true;
 }
 bool pe_world_mesh(const PeWorld *world,PeMeshData *mesh) {
-    return pe_world_mesh_region(world,0,0,0,PE_WORLD_X-1,PE_WORLD_Y-1,pe_world_depth(world)-1,mesh);
+    return pe_world_mesh_region(world,0,0,0,pe_world_width(world)-1,pe_world_size_y(world)-1,pe_world_depth(world)-1,mesh);
 }
 void pe_mesh_free(PeMeshData *mesh) {
     if(mesh) {free(mesh->vertices);mesh->vertices=NULL;mesh->count=0;}

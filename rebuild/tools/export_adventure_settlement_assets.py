@@ -214,7 +214,7 @@ def recover_bundle(bundle,entry,crop):
     return parts,material_data,report
 
 
-def write_obj(path,parts,symbols,materials,collision):
+def write_obj(path,parts,symbols,materials,collision,compact=False):
     # pe_reference_validate recognizes this exact generated-format signature.
     # Crop/instance provenance lives in manifest.json, outside the strict grammar.
     lines = ['# Baked Unity XYZ meters; original vertex/normal coordinate convention\n']
@@ -225,6 +225,12 @@ def write_obj(path,parts,symbols,materials,collision):
         if part['collision']!=collision: continue
         for index,faces in enumerate(part['submeshes']):
             vertices,normals,uvs = part['vertices'],part['normals'],part['uvs']
+            if compact and not collision:
+                # Keep exact indexed triangles and their normal/UV seams, while
+                # omitting vertices that this material submesh never references.
+                used=sorted({i for face in faces for i in face});remap={old:new for new,old in enumerate(used)}
+                vertices=[vertices[i] for i in used];normals=[normals[i] for i in used];uvs=[uvs[i] for i in used]
+                faces=[tuple(remap[i] for i in face) for face in faces]
             lines.append('o entity_%d_component_%d_sub_%d\n'%(part['entity_id'],part['component_id'],index))
             if not collision:
                 key = part['materials'][index]
@@ -247,7 +253,7 @@ def write_obj(path,parts,symbols,materials,collision):
     return dict(vertices=offset,triangles=triangle_count,bounds=bounds)
 
 
-def recover(game,output,settlement,crop=CROP_ORIGIN):
+def recover(game,output,settlement,crop=CROP_ORIGIN,compact=False):
     parts,materials,assets = [],{},[]
     for b in settlement['buildings']:
         path = game/'AssetBundles'/b['resource']
@@ -268,7 +274,7 @@ def recover(game,output,settlement,crop=CROP_ORIGIN):
         material_report.append(dict(entity_id=key[0],path_id=key[1],symbol=symbols[key],
             **{k:v for k,v in material.items() if k!='image'},texture_file=filename))
     (output/'settlement.mtl').write_text(''.join(mtl))
-    visual = write_obj(output/'settlement.obj',parts,symbols,materials,False)
+    visual = write_obj(output/'settlement.obj',parts,symbols,materials,False,compact=compact)
     collision = write_obj(output/'settlement-collision.obj',parts,symbols,materials,True)
     reports = []
     for p in parts:

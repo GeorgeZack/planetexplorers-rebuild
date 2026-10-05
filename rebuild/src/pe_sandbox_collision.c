@@ -8,7 +8,8 @@ typedef struct { PeSceneCollision *scene; signed char *orientation; } Terrain;
 struct PeSandboxCollision {
     bool ready;
     PeWorld world;
-    Terrain terrain[8];
+    const PeVoxel *source_data; /* Identity only; never dereferenced. */
+    Terrain terrain[PE_WORLD_MAX_REGIONS];
     int terrain_count;
     PeSceneCollision *construction;
     const PeSceneCollision *static_scene;
@@ -28,7 +29,7 @@ static bool finite3(PeVec3 a){return isfinite(a.x)&&isfinite(a.y)&&isfinite(a.z)
 static void error_set(char *error,size_t cap,const char *message){if(error&&cap)snprintf(error,cap,"%s",message);}
 static void terrain_free(Terrain *t){pe_scene_free(t->scene);free(t->orientation);*t=(Terrain){0};}
 PeSandboxCollision *pe_sandbox_collision_create(void){return calloc(1,sizeof(PeSandboxCollision));}
-void pe_sandbox_collision_free(PeSandboxCollision *c){if(c){for(int i=0;i<c->terrain_count;i++)terrain_free(&c->terrain[i]);pe_scene_free(c->construction);free(c);}}
+void pe_sandbox_collision_free(PeSandboxCollision *c){if(c){for(int i=0;i<c->terrain_count;i++)terrain_free(&c->terrain[i]);pe_scene_free(c->construction);pe_world_destroy(&c->world);free(c);}}
 PeSandboxCollisionStats pe_sandbox_collision_stats(const PeSandboxCollision *c){return c?c->stats:(PeSandboxCollisionStats){0};}
 PeSceneHit pe_sandbox_collision_ray_geometry(const PeSandboxCollision *c,PeVec3 p,PeVec3 d,float range){
     PeSceneHit best={0};
@@ -41,7 +42,7 @@ PeSceneHit pe_sandbox_collision_ray_geometry(const PeSandboxCollision *c,PeVec3 
 }
 static bool box_valid(const PeWorld *w,PeSandboxBox b){
     if(!finite3(b.minimum)||!finite3(b.maximum))return false;
-    for(int a=0;a<3;a++)if(component(b.minimum,a)<0||component(b.maximum,a)>(a==1?PE_WORLD_Y-1:(a==2?pe_world_depth(w)-1:PE_WORLD_X-1))||component(b.maximum,a)<=component(b.minimum,a))return false;
+    for(int a=0;a<3;a++)if(component(b.minimum,a)<0||component(b.maximum,a)>(a==1?pe_world_size_y(w)-1:(a==2?pe_world_depth(w)-1:pe_world_width(w)-1))||component(b.maximum,a)<=component(b.minimum,a))return false;
     return true;
 }
 static bool cells_equal(const PeB45Cell *a,const PeB45Cell *b){return a->x==b->x&&a->y==b->y&&a->z==b->z&&a->type==b->type&&a->material==b->material;}
@@ -66,7 +67,7 @@ bool pe_sandbox_collision_update_with_static(PeSandboxCollision *c,const PeWorld
     if(!c||!w||nc>PE_SANDBOX_COLLISION_MAX_CELLS||nb>PE_SANDBOX_COLLISION_MAX_BOXES||nt>PE_SANDBOX_COLLISION_MAX_TREES||(nc&&!cells)||(nb&&!boxes)||(nt&&!trees)||w->source>1||!pe_world_depth(w)){error_set(error,cap,"Invalid sandbox collision inputs");return false;}
     for(size_t i=0;i<nc;i++){
         const PeB45Cell *p=&cells[i];
-        if(!pe_b45_valid(p)||p->x<0||p->y<0||p->z<0||p->x>=2*(PE_WORLD_X-1)||p->y>=2*(PE_WORLD_Y-1)||p->z>=2*(pe_world_depth(w)-1)){error_set(error,cap,"Invalid sandbox construction cell");return false;}
+        if(!pe_b45_valid(p)||p->x<0||p->y<0||p->z<0||p->x>=2*(pe_world_width(w)-1)||p->y>=2*(pe_world_size_y(w)-1)||p->z>=2*(pe_world_depth(w)-1)){error_set(error,cap,"Invalid sandbox construction cell");return false;}
         if(static_scene&&pe_scene_overlaps_aabb(static_scene,
             (PeVec3){p->x*.5f+.001f,p->y*.5f+.001f,p->z*.5f+.001f},
             (PeVec3){p->x*.5f+.499f,p->y*.5f+.499f,p->z*.5f+.499f})){
@@ -81,20 +82,25 @@ bool pe_sandbox_collision_update_with_static(PeSandboxCollision *c,const PeWorld
         if(pe_scene_overlaps_aabb(static_scene,lo,hi)){error_set(error,cap,"Furniture intersects settlement geometry");return false;}
     }
     for(size_t i=0;i<nt;i++)if(!pe_tree_collision_valid(&trees[i])){error_set(error,cap,"Invalid sandbox tree capsule");return false;}
-    int count=2*(pe_world_depth(w)/32);
-    bool changed[8]={false},build_changed=!c->ready||c->cell_count!=nc||c->box_count!=nb,any=false;
+    int count=pe_world_region_count(w);
+    if(!count){error_set(error,cap,"Invalid terrain dimensions/storage");return false;}
+    bool changed[PE_WORLD_MAX_REGIONS]={false},build_changed=!c->ready||c->cell_count!=nc||c->box_count!=nb,any=false;
     bool static_changed=!c->ready||c->static_scene!=static_scene;
     bool trees_changed=!c->ready||c->tree_count!=nt;
     for(size_t i=0;!trees_changed&&i<nt;i++)trees_changed=!trees_equal(c->trees[i],trees[i]);
     for(size_t i=0;!build_changed&&i<nc;i++)build_changed=!cells_equal(&c->cells[i],&cells[i]);
     for(size_t i=0;!build_changed&&i<nb;i++)build_changed=!boxes_equal(c->boxes[i],boxes[i]);
-    Terrain pending[8]={{0}};PeSceneCollision *construction=NULL;
+    Terrain pending[PE_WORLD_MAX_REGIONS]={{0}};PeSceneCollision *construction=NULL;
+    PeWorld *snapshot=NULL;
+    bool same_key=c->ready&&pe_world_data_const(w)==c->source_data&&w->revision==c->world.revision&&w->seed==c->world.seed&&w->source==c->world.source&&
+        w->origin_x==c->world.origin_x&&w->origin_y==c->world.origin_y&&w->origin_z==c->world.origin_z&&
+        pe_world_width(w)==pe_world_width(&c->world)&&pe_world_size_y(w)==pe_world_size_y(&c->world)&&pe_world_depth(w)==pe_world_depth(&c->world);
     for(int i=0;i<count;i++){
-        int x=(i&1)*32,z=(i>>1)*32,nz=z+32<pe_world_depth(w)?32:31;
-        changed[i]=!c->ready||pe_world_mesh_region_changed(w,&c->world,x,0,z,x?31:32,31,nz);
+        int o[3],n[3];pe_world_region(w,i,o,n);
+        changed[i]=!(w->extended&&same_key)&&(!c->ready||pe_world_mesh_region_changed(w,&c->world,o[0],o[1],o[2],n[0],n[1],n[2]));
         if(!changed[i])continue;
         any=true;PeMeshData mesh={0};
-        if(!pe_world_mesh_region(w,x,0,z,x?31:32,31,nz,&mesh)){error_set(error,cap,"Sandbox terrain extraction failed");goto fail;}
+        if(!pe_world_mesh_region(w,o[0],o[1],o[2],n[0],n[1],n[2],&mesh)){error_set(error,cap,"Sandbox terrain extraction failed");goto fail;}
         pending[i].scene=pe_scene_from_mesh(&mesh,(PeVec3){0},error,cap);
         pending[i].orientation=mesh.count?malloc(mesh.count):NULL;
         if(!pending[i].scene||(mesh.count&&!pending[i].orientation)){pe_mesh_free(&mesh);if(error&&cap&&!error[0])error_set(error,cap,"Sandbox orientation allocation failed");goto fail;}
@@ -113,11 +119,16 @@ bool pe_sandbox_collision_update_with_static(PeSandboxCollision *c,const PeWorld
         for(size_t i=0;i<nb;i++){emit_box(boxes[i],mesh.vertices+mesh.count);mesh.count+=36;}
         construction=pe_scene_from_mesh(&mesh,(PeVec3){0},error,cap);pe_mesh_free(&mesh);if(!construction)goto fail;
     }
+    if(any||!same_key){snapshot=calloc(1,sizeof *snapshot);if(!snapshot||!pe_world_clone(snapshot,w)){error_set(error,cap,"Collision snapshot allocation failed");goto fail;}}
     for(int i=0;i<count;i++)if(changed[i]){terrain_free(&c->terrain[i]);c->terrain[i]=pending[i];c->stats.terrain_rebuilds++;}
     for(int i=count;i<c->terrain_count;i++)terrain_free(&c->terrain[i]);
     c->terrain_count=count;
     if(build_changed){pe_scene_free(c->construction);c->construction=construction;c->stats.construction_rebuilds++;}
-    c->world=*w;if(nc)memcpy(c->cells,cells,nc*sizeof *cells);if(nb)memcpy(c->boxes,boxes,nb*sizeof *boxes);c->cell_count=nc;c->box_count=nb;c->ready=true;
+    if(snapshot){pe_world_move(&c->world,snapshot);free(snapshot);snapshot=NULL;}
+    c->source_data=pe_world_data_const(w);
+    if(nc)memcpy(c->cells,cells,nc*sizeof *cells);
+    if(nb)memcpy(c->boxes,boxes,nb*sizeof *boxes);
+    c->cell_count=nc;c->box_count=nb;c->ready=true;
     if(nt)memcpy(c->trees,trees,nt*sizeof *trees);
     c->tree_count=nt;
     c->static_scene=static_scene;
@@ -127,10 +138,11 @@ bool pe_sandbox_collision_update_with_static(PeSandboxCollision *c,const PeWorld
     return true;
 fail:
     for(int i=0;i<count;i++)terrain_free(&pending[i]);
+    if(snapshot){pe_world_destroy(snapshot);free(snapshot);}
     pe_scene_free(construction);return false;
 }
-static bool capsule_valid(const PeSandboxCollision *c,PeVec3 p,float r,float h){return c&&c->ready&&finite3(p)&&isfinite(r)&&isfinite(h)&&r>0&&r<=PE_WORLD_Y/2.0f&&h>=2*r&&h<=PE_WORLD_Y-1;}
-static bool outside(const PeSandboxCollision *c,PeVec3 p,float r,float h){return p.x<r||p.z<r||p.x>PE_WORLD_X-1-r||p.z>pe_world_depth(&c->world)-1-r||p.y<0||p.y+h>PE_WORLD_Y-1;}
+static bool capsule_valid(const PeSandboxCollision *c,PeVec3 p,float r,float h){return c&&c->ready&&finite3(p)&&isfinite(r)&&isfinite(h)&&r>0&&r<=pe_world_size_y(&c->world)/2.0f&&h>=2*r&&h<=pe_world_size_y(&c->world)-1;}
+static bool outside(const PeSandboxCollision *c,PeVec3 p,float r,float h){return p.x<r||p.z<r||p.x>pe_world_width(&c->world)-1-r||p.z>pe_world_depth(&c->world)-1-r||p.y<0||p.y+h>pe_world_size_y(&c->world)-1;}
 static bool terrain_inside(const PeSandboxCollision *c,PeVec3 p){
     /* Surface queries deliberately return two-sided normals. Retain each MC
        face's original orientation to classify completely enclosed capsules. */
@@ -138,7 +150,7 @@ static bool terrain_inside(const PeSandboxCollision *c,PeVec3 p){
     const int axes[]={1,1,0,0,2,2};
     for(int d=0;d<6;d++){
         PeSceneHit best={0};int region=-1;
-        for(int i=0;i<c->terrain_count;i++){PeSceneHit hit=pe_scene_raycast(c->terrain[i].scene,p,directions[d],PE_WORLD_X+PE_WORLD_Y+pe_world_depth(&c->world));if(hit.hit&&(!best.hit||hit.distance<best.distance)){best=hit;region=i;}}
+        for(int i=0;i<c->terrain_count;i++){PeSceneHit hit=pe_scene_raycast(c->terrain[i].scene,p,directions[d],pe_world_width(&c->world)+pe_world_size_y(&c->world)+pe_world_depth(&c->world));if(hit.hit&&(!best.hit||hit.distance<best.distance)){best=hit;region=i;}}
         if(region>=0){int sign=c->terrain[region].orientation[best.triangle*3+axes[d]];if(sign)return sign*component(directions[d],axes[d])>0;}
     }
     /* An open cropped region may have no surface in any axial direction (e.g.
@@ -167,7 +179,7 @@ PeSceneHit pe_sandbox_collision_sweep_geometry(const PeSandboxCollision *c,PeVec
         PeSceneHit hit=pe_scene_capsule_sweep(i==c->terrain_count+1?c->static_scene:(i==c->terrain_count?c->construction:c->terrain[i].scene),p,r,h,delta);
         if(hit.hit&&(!best.hit||hit.fraction<best.fraction))best=hit;
     }
-    const float lo[]={r,0,r},hi[]={PE_WORLD_X-1-r,PE_WORLD_Y-1-h,pe_world_depth(&c->world)-1-r};
+    const float lo[]={r,0,r},hi[]={pe_world_width(&c->world)-1-r,pe_world_size_y(&c->world)-1-h,pe_world_depth(&c->world)-1-r};
     for(int a=0;a<3;a++){
         float v=component(delta,a),at=component(p,a);if(v==0)continue;
         float t=((v>0?hi[a]:lo[a])-at)/v;
@@ -188,7 +200,7 @@ PeSceneHit pe_sandbox_collision_sweep(const PeSandboxCollision *c,PeVec3 p,float
     return best;
 }
 PeSceneHit pe_sandbox_collision_support(const PeSandboxCollision *c,PeVec3 p,float r,float h,float drop,float minimum){
-    if(!isfinite(drop)||drop<=0||drop>PE_WORLD_Y||!isfinite(minimum)||minimum<0||minimum>1)return (PeSceneHit){0};
+    if(!isfinite(drop)||drop<=0||drop>pe_world_size_y(&c->world)||!isfinite(minimum)||minimum<0||minimum>1)return (PeSceneHit){0};
     PeSceneHit hit=pe_sandbox_collision_sweep(c,p,r,h,(PeVec3){0,-drop,0});return hit.hit&&hit.normal.y>=minimum?hit:(PeSceneHit){0};
 }
 static PeVec3 before_hit(PeVec3 p,PeVec3 delta,PeSceneHit hit){return add(p,mul(delta,fmaxf(0,hit.fraction-skin/fmaxf(length(delta),skin))));}

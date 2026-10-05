@@ -505,10 +505,11 @@ static void finish_mining(PeTraining*t,PeWorld*w,PeTrainingDigUpdate*out){
     if(!t->gathering.complete)return;
     PeTraining next=*t;
     if(!pe_training_gathering_enter(&next.gathering,752)) {out->capacity_blocked=true;return;}
-    PeWorld *cleared=malloc(sizeof*cleared);if(!cleared)return;*cleared=*w;
-    if(!pe_training_terrain_clear(cleared)||pe_tutorial_event(&next.tutorial,PE_TUTORIAL_DIRT_ACQUIRED,NULL)!=PE_TUTORIAL_COMPLETED){free(cleared);return;}
+    PeWorld *cleared=calloc(1,sizeof*cleared);if(!cleared)return;
+    if(!pe_world_clone(cleared,w)){free(cleared);return;}
+    if(!pe_training_terrain_clear(cleared)||pe_tutorial_event(&next.tutorial,PE_TUTORIAL_DIRT_ACQUIRED,NULL)!=PE_TUTORIAL_COMPLETED){pe_world_destroy(cleared);free(cleared);return;}
     pe_training_dig_cancel(&next.dig);next.dialogue_index=0;next.shovel_held=false;
-    *w=*cleared;free(cleared);*t=next;out->finished=true;
+    pe_world_move(w,cleared);free(cleared);*t=next;out->finished=true;
 }
 bool pe_training_mine_step(PeTraining*t,PeWorld*w,PeVec3 origin,PeVec3 direction,bool held,bool move_requested,PeTrainingDigUpdate*out){
     if(!active(t)||!out)return false;

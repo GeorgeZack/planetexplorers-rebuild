@@ -36,8 +36,38 @@ static int picking(void){
     CHECK(distance==123);n.placed=false;CHECK(!pe_adventure_npc_pick(&n,player,origin,(PeVec3){0,0,1},INFINITY,&distance));
     return failures;
 }
+static int archived_edge_pose(void){
+    int failures=0;char error[128];PeWorld *w=calloc(1,sizeof *w);PeSandboxCollision *c=pe_sandbox_collision_create();
+    CHECK(w&&c);if(!w||!c){free(w);pe_sandbox_collision_free(c);return failures;}
+    PeVec3 anchor={32,10,32},settled={0};PeAdventureNpc n={0},before=n;
+    /* A clear capsule rests against a raised edge with normalY .6, while its
+     * center sees a nearby flat floor. Ordinary walking/settling stays strict. */
+    PeSandboxBox boxes[]={{{30,8,30},{34,9.926f,34}},{{32.296f,9,30},{34,10.148f,34}}};
+    CHECK(pe_sandbox_collision_update(c,w,NULL,0,boxes,2,error,sizeof error));
+    CHECK(!pe_sandbox_collision_overlap(c,anchor,.3700000047683716f,1.75f));
+    CHECK(!pe_sandbox_collision_settle(c,anchor,.3700000047683716f,1.75f,4,5,&settled));
+    strcpy(error,"stale");CHECK(pe_adventure_npc_refresh_source(&n,w,c,anchor,17,error,sizeof error));CHECK(!error[0]);
+    CHECK(!memcmp(&n.position,&anchor,sizeof anchor)&&!memcmp(&n.spawn_position,&anchor,sizeof anchor));
+    CHECK(n.yaw==17&&n.placed);
+    /* A new snapshot retains the existing pose, not the new caller anchor. */
+    boxes[0].minimum.y-=.1f;CHECK(pe_sandbox_collision_update(c,w,NULL,0,boxes,2,error,sizeof error));
+    CHECK(pe_adventure_npc_refresh_source(&n,w,c,(PeVec3){30,10,30},17,error,sizeof error));
+    CHECK(!memcmp(&n.position,&anchor,sizeof anchor)&&!memcmp(&n.spawn_position,&anchor,sizeof anchor));
+    PeVec3 invalid[]={{32,10.07f,32},{32,9.99f,32},{32,NAN,32},{32,-1,32},{32,PE_WORLD_Y,32},{0,10,32}};
+    for(size_t i=0;i<sizeof invalid/sizeof *invalid;i++){
+        n=before;CHECK(!pe_adventure_npc_refresh_source(&n,w,c,invalid[i],17,error,sizeof error));
+        CHECK(error[0]&&!memcmp(&n,&before,sizeof n));
+    }
+    /* An edge without a center floor, and the synthetic empty crop bottom,
+     * must not create a supported archived actor. */
+    CHECK(pe_sandbox_collision_update(c,w,NULL,0,boxes+1,1,error,sizeof error));
+    n=before;CHECK(!pe_adventure_npc_refresh_source(&n,w,c,anchor,17,error,sizeof error));CHECK(!memcmp(&n,&before,sizeof n));
+    CHECK(pe_sandbox_collision_update(c,w,NULL,0,NULL,0,error,sizeof error));
+    CHECK(!pe_adventure_npc_refresh_source(&n,w,c,(PeVec3){32,.01f,32},17,error,sizeof error));CHECK(!memcmp(&n,&before,sizeof n));
+    free(w);pe_sandbox_collision_free(c);return failures;
+}
 int pe_test_adventure_npc(void){
-    int failures=picking();char error[128];PeWorld *w=calloc(1,sizeof *w);PeSandboxCollision *c=pe_sandbox_collision_create();
+    int failures=picking()+archived_edge_pose();char error[128];PeWorld *w=calloc(1,sizeof *w);PeSandboxCollision *c=pe_sandbox_collision_create();
     CHECK(w&&c);if(!w||!c){free(w);pe_sandbox_collision_free(c);return failures;}
     PeAdventureNpc n={0},untouched=n;
     CHECK(!pe_adventure_npc_refresh(&n,w,c,error,sizeof error));CHECK(!memcmp(&n,&untouched,sizeof n));

@@ -2,6 +2,7 @@
 #define PE_SANDBOX_UI_H
 #include "pe_game.h"
 #include "pe_adventure_dialogue.h"
+#include "pe_town_interaction.h"
 #include "pe_ui_assets.h"
 #include "pe_training_ui_layout.h"
 #include "pe_training_ui_shader.h"
@@ -24,6 +25,7 @@ typedef struct {
     int build_shape,build_brush; /* Zero means no selection request. */
     int selected_item; /* Explicit resource quickslot selection, otherwise0. */
 } PeSandboxUIResult;
+typedef struct { uint32_t entity_id; PeVec3 position; } PeSandboxMapNpc;
 typedef void (*PeSandboxUIPreview)(void *context,const PeGame *game);
 typedef struct {
     PeUiAssets *assets;
@@ -36,12 +38,20 @@ typedef struct {
     PeVec3 welcome_position;
     bool welcome_present;
     Texture2D supplier_portrait; /* Borrowed from the NPC view. */
+    Texture2D town_portrait,annot_portrait;
+    uint32_t town_entity;
+    bool town_open,shop_open,shop_dragging;
+    char town_name[129],start_town_name[129];
+    int shop_selection;
+    unsigned shop_quantity;
+    float shop_offset_x,shop_offset_y,shop_grab_x,shop_grab_y;
     PeAdventureDialogue dialogue;
     uint32_t supplier_entity;
     PeVec3 supplier_position;
     bool supplier_present;
     bool loaded, inventory_open, character_open, missions_open, replicator_open;
     bool paused, menu_open, free_cursor, search_focus;
+    bool discard_input; /* Host-cancelled modal: consume next route frame completely. */
     bool building;
     int build_item,build_shape,build_rotation,build_brush;
     int inventory_tab, inventory_page, recipe_scroll, recipe_id, batches;
@@ -54,7 +64,10 @@ typedef struct {
     char last_message[160];
     uint32_t map_revision, map_seed, map_source;
     int32_t map_origin_x, map_origin_y, map_origin_z;
+    int map_world_height;
     bool map_valid;
+    const PeSandboxMapNpc *resident_markers; /* Borrowed until replaced/cleared. */
+    size_t resident_marker_count;
     PeSandboxUIPreview draw_preview;
     void *preview_context;
 } PeSandboxUI;
@@ -65,6 +78,9 @@ void pe_sandbox_ui_init(PeSandboxUI *ui,float width,float height);
 bool pe_sandbox_ui_load(PeSandboxUI *ui,const char *asset_root,char *error,size_t capacity);
 void pe_sandbox_ui_unload(PeSandboxUI *ui);
 void pe_sandbox_ui_resize(PeSandboxUI *ui,float width,float height);
+/* Host supplies only actually present, supported residents. Not saved; storage
+ * must remain valid through drawing. NULL/count0 clears after load/teardown. */
+bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *ui,const PeSandboxMapNpc *markers,size_t count);
 /* Borrowed callback: UI begins/clears preview target; callback owns its 3D
  * camera/BeginMode3D and must return with 3D mode ended. No callback means no
  * character model is claimed. State remains owned by the game/actor host. */
@@ -97,6 +113,12 @@ PeTrainingUIRect pe_sandbox_ui_build_tool(const PeSandboxUI *ui,int index);
 PeTrainingUIRect pe_sandbox_ui_supplier_menu(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_supplier_choice(const PeSandboxUI *ui,int index);
 PeTrainingUIRect pe_sandbox_ui_supplier_close(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_shop_panel(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_shop_row(const PeSandboxUI *ui,int row);
+PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *ui,int button); /* minus,plus,buy,back,close */
+void pe_sandbox_ui_cancel_town(PeSandboxUI *ui);
+bool pe_sandbox_ui_open_town(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,const char *name,Texture2D portrait,bool eligible);
+bool pe_sandbox_ui_open_annot(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,Texture2D portrait,bool eligible);
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,bool eligible);
 bool pe_sandbox_ui_open_supplier(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,bool eligible);
 #endif

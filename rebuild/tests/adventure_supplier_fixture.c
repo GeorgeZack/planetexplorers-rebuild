@@ -79,7 +79,7 @@ int main(int argc,char **argv){
         fprintf(stderr,"Usage: %s [--welcome] OUTPUT.pesave\n       %s --inspect EXISTING.pesave\n",argv[0],argv[0]);return 2;
     }
     const char *path=argv[argc-1];PeVec3 anchor=welcome?(PeVec3){28,0,35}:(PeVec3){32,0,27};
-    PeGame *g=malloc(sizeof *g),*loaded=malloc(sizeof *loaded);
+    PeGame *g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded);
     PeSandboxCollision *c=pe_sandbox_collision_create();PeAdventureNpc npc={0},reloaded_npc={0};
     bool ok=false;char error[200]="Fixture allocation failed";int occluders=0;float distance=0;
     if(!g||!loaded||!c)goto done;
@@ -114,5 +114,5 @@ int main(int argc,char **argv){
     printf("PASS: %s fixture saved with Arrival and supplies unclaimed.\n",welcome?"initial welcome":"post-welcome supplier");ok=true;
 done:
     if(!ok)fprintf(stderr,"%s\n",error);
-    pe_sandbox_collision_free(c);free(loaded);free(g);return ok?0:1;
+    pe_sandbox_collision_free(c);pe_game_destroy(loaded);pe_game_destroy(g);free(loaded);free(g);return ok?0:1;
 }

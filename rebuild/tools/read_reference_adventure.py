@@ -70,8 +70,8 @@ def records(directory):
         rows[key]=data[begin:begin+length]
     r.end();return rows,sources,guid.hex()
 
-def decode(directory, entity_id=20016, database=ROOT/'Assets/Resources/DataBase/localData.bytes'):
-    expected=next((npc for npc in ARCHIVED_NPCS.values() if npc['entity_id']==entity_id),None)
+def decode(directory, entity_id=20016, database=ROOT/'Assets/Resources/DataBase/localData.bytes', *, expected=None):
+    expected=expected or next((npc for npc in ARCHIVED_NPCS.values() if npc['entity_id']==entity_id),None)
     if expected is None: raise ValueError('Expected archived supplier or welcome entity')
     rows,sources,guid=records(directory)
     outer=Reader(rows['ArchiveKeyCreature']);outer.version(0);c=outer.blob();outer.end();c.version(0);entity=None
@@ -95,7 +95,7 @@ def decode(directory, entity_id=20016, database=ROOT/'Assets/Resources/DataBase/
     info=component('EntityInfoCmpt');info.version(0);name=info.blob();full,family,given=[name.nullable() for _ in range(3)];name.end()
     entity['name']=full or ' '.join(v for v in (given,family) if v)
     avatar=component('AvatarCmpt');entity['prefab_path']=avatar.string();avatar.version(0);appear=avatar.blob();nude=avatar.blob();avatar.end()
-    if entity['prefab_path']!='Prefab/PlayerPrefab/FemaleModel': raise ValueError('Archived NPC is not the expected female rig')
+    if entity['prefab_path'] not in ('', 'Prefab/PlayerPrefab/FemaleModel', 'Prefab/PlayerPrefab/MaleModel'): raise ValueError('Unknown archived humanoid rig')
     appear.version(1)
     if appear.count(27)!=27: raise ValueError('Expected 27 source morph weights')
     entity['weights']=appear.floats(27)
@@ -103,7 +103,15 @@ def decode(directory, entity_id=20016, database=ROOT/'Assets/Resources/DataBase/
     entity['colors']={key:appear.floats(4) for key in ('eye','lip','skin','hair')};appear.end()
     if any(not 0<=v<=1 for color in entity['colors'].values() for v in color): raise ValueError('Color outside source range')
     nude.version(150911);count=nude.count(8);entity['base_model']=nude.string();slots={}
-    if entity['base_model']!=entity['prefab_path']: raise ValueError('Nude avatar base model differs')
+    if entity['base_model'] not in ('Prefab/PlayerPrefab/FemaleModel', 'Prefab/PlayerPrefab/MaleModel'): raise ValueError('Unknown nude avatar base model')
+    if entity['prefab_path'] and entity['base_model']!=entity['prefab_path']: raise ValueError('Nude avatar base model differs')
+    entity['sex']='male' if entity['base_model'].endswith('/MaleModel') else 'female'
+    if not entity['prefab_path']:
+        entity['serialized_prefab_path']=''
+        entity['prefab_path']=entity['base_model']
+    if 'CommonCmpt' in {key.rsplit('.',1)[-1] for key in components}:
+        common=component('CommonCmpt');common.boolean();sex=common.integer()
+        if sex != (2 if entity['sex']=='male' else 1): raise ValueError('Common sex disagrees with avatar base model')
     for _ in range(count):
         index,path=nude.integer(),nude.string()
         if not 0<=index<8 or index in slots: raise ValueError('Invalid avatar slot')
@@ -120,19 +128,20 @@ def decode(directory, entity_id=20016, database=ROOT/'Assets/Resources/DataBase/
     trans=component('PeTrans');trans.version(1);entity['saved_position']=trans.floats(3);entity['saved_rotation']=trans.floats(4)
     entity['equipment']=[];slot_masks={1024:0,1:1,2048:2,4096:3,2:4,4:5,64:6,128:7}
     with closing(sqlite3.connect(database.resolve().as_uri()+'?mode=ro',uri=True)) as connection:
-        role=connection.execute('SELECT RNPC_ID FROM AdRandNPCMission WHERE CAST(ID AS INTEGER)=?',(expected['adventure_role'],)).fetchall()
-        if len(role)!=1 or int(role[0][0])!=entity['prototype_id']: raise ValueError('Archive prototype disagrees with Adventure role')
+        if expected['adventure_role']:
+            role=connection.execute('SELECT RNPC_ID FROM AdRandNPCMission WHERE CAST(ID AS INTEGER)=?',(expected['adventure_role'],)).fetchall()
+            if len(role)!=1 or int(role[0][0])!=entity['prototype_id']: raise ValueError('Archive prototype disagrees with Adventure role')
         for ident in instance_ids:
             proto=objects[ident]
             row=connection.execute('SELECT _modelPath,sex,_replacePos FROM PrototypeItem WHERE CAST(id AS INTEGER)=?',(proto,)).fetchone()
             if row is None: raise ValueError('Unknown equipped item')
             path,sex,mask=row[0],int(row[1]),int(row[2])
-            if sex not in (0,1): raise ValueError('Equipment sex disagrees')
+            if sex not in (0,2 if entity['sex']=='male' else 1): raise ValueError('Equipment sex disagrees')
             entity['equipment'].append(dict(instance_id=ident,item_id=proto,resource=path,replace_mask=mask))
             if mask:
                 if mask<0 or mask & ~sum(slot_masks): raise ValueError('Unsupported appearance replacement mask')
                 for bit,slot in slot_masks.items():
                     if mask & bit: slots[slot]=path
-    entity.update(slots=[slots[i] for i in range(8)],sex='female',adventure_role=expected['adventure_role'],archive_guid=guid,
+    entity.update(slots=[slots[i] for i in range(8)],adventure_role=expected['adventure_role'],archive_guid=guid,
                   sources=[dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sources+[database]])
     return entity
