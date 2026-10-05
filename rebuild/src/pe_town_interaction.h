@@ -6,14 +6,15 @@ typedef struct {
     int prototype_id, store_id, item_id;
     unsigned price, limit, refresh_seconds;
 } PeTownOffer;
-/* One preserved settlement: source NPCstore.adven_single, supported catalog
+/* Two preserved settlements: source NPCstore.adven_single, supported catalog
  * only. Entity identity, not mission role or building ID, selects a vendor. */
+const PeTownOffer *pe_town_shop_offer_at(size_t stable_index);
 size_t pe_town_shop_count(uint32_t entity_id);
 const PeTownOffer *pe_town_shop_offer(uint32_t entity_id,size_t index);
 /* Opening refreshes exhausted entries after strict source interval, resets the
  * creation timestamp of nonempty entries as UIShopWnd.UpdataShop does. */
 bool pe_town_shop_open(PeGame *game,uint32_t entity_id);
-unsigned pe_town_shop_stock(const PeGame *game,int store_id);
+unsigned pe_town_shop_stock(const PeGame *game,uint32_t entity_id,int store_id);
 /* Call only for a currently eligible NPC interaction; the headless transaction
  * owns money/stock/inventory atomically. Caller owns physical range and modal UI. */
 bool pe_town_shop_buy(PeGame *game,uint32_t entity_id,int store_id,unsigned count);

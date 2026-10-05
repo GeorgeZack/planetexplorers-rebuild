@@ -293,6 +293,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     uint32_t mesh_revision=game->world.revision;
     int selected_item=PE_ITEM_WOOD,build_shape=PE_B45_CUBE,build_rotation=0,build_brush=4;
     double accumulator=0;float dig_cooldown=0;int look_settle=0;
+    PeSandboxPointerGate pointer_gate={0};
     printf("Sandbox ready: mode %d\n",game->mode);fflush(stdout);
     while(!WindowShouldClose()) {
         if(settlement.loaded&&settlement_route!=pe_settlement_is_route(&game->world))pe_reference_unload(&settlement);
@@ -332,6 +333,14 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         ui.build_rotation=build_rotation;ui.build_brush=build_brush;
         ui.discard_input=host_cancelled_modal;
         PeSandboxUIResult action=pe_sandbox_ui_update(&ui,game,dt);
+        bool focused=smoke_frames||IsWindowFocused(),resized=IsWindowResized();
+        unsigned pointer_buttons=0;for(int button=0;button<7;button++)if(IsMouseButtonDown(button))pointer_buttons|=1u<<button;
+        bool pointer_blocked=pe_sandbox_pointer_release_gate(&pointer_gate,
+            action.consume_world||action.cursor_visible||action.paused||!focused||resized,pointer_buttons);
+        if(pointer_blocked){
+            action.consume_world=true; /* Preserve intentional UI Save/Load commands. */
+            if(!action.cursor_visible)action.npc_interaction=false;
+        }
         if(host_cancelled_modal){action.consume_world=true;action.npc_interaction=false;}
         if(action.return_main){result=2;break;}
         if(action.selected_item)selected_item=action.selected_item;
@@ -366,12 +375,15 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(!pe_adventure_npc_view_load_role(&welcome_view,assets,1,error,sizeof error)){result=1;break;}
             ui.welcome_portrait=welcome_view.portrait.texture;
         }
-        bool focused=smoke_frames||IsWindowFocused();
-        bool resized=IsWindowResized();
-        bool wanted_capture=focused&&!action.cursor_visible&&!action.paused&&!smoke_frames&&!resized;
+        /* Do not warp/capture the pointer while a closing UI click is held.
+         * Otherwise its remaining hold becomes a world tool action, and the
+         * desktop's absolute pointer events become a large look delta. */
+        bool wanted_capture=focused&&!action.cursor_visible&&!action.paused&&!smoke_frames&&!resized&&!pointer_blocked;
         bool recaptured=wanted_capture&&!captured;
         if(wanted_capture!=captured){if(wanted_capture)DisableCursor();else EnableCursor();captured=wanted_capture;}
-        if(recaptured||resized)look_settle=2;
+        /* Raylib/GLFW can deliver the capture warp over subsequent event polls.
+         * Discard three complete display-frame deltas after that transition. */
+        if(recaptured||resized)look_settle=3;
         if(!captured){if(focused&&action.cursor_visible)HideCursor();else ShowCursor();}
         bool world_input=focused&&(captured||build_mode)&&!action.consume_world&&!action.paused&&!loaded;
         const PeSlot *equipped=pe_game_equipped_tool(game);
@@ -441,6 +453,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             selected->yaw=atan2f(game->player.x-selected->position.x,game->player.z-selected->position.z)*RAD2DEG;
             world_input=false;autorun=false;jump_pending=false;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);
             action.consume_world=true;action.cursor_visible=true;
+            pe_sandbox_pointer_release_gate(&pointer_gate,true,pointer_buttons);
             if(captured){EnableCursor();captured=false;}HideCursor();
         }
         PeVec3 eye={game->player.x,game->player.y+1.58f,game->player.z};

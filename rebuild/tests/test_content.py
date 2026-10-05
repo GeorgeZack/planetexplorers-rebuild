@@ -45,8 +45,8 @@ class ContentTests(unittest.TestCase):
     def test_original_recipe_and_item_invariants(self):
         items = {row['id']: row for row in self.manifest['items']}
         recipes = {row['id']: row for row in self.manifest['recipes']}
-        self.assertEqual(len(items), 72)
-        self.assertEqual(len(recipes), 21)
+        self.assertEqual(len(items), 314)
+        self.assertEqual(len(recipes), 93)
         self.assertEqual({k: items[279][k] for k in ('id', 'name', 'stack_limit')},
                          {'id': 279, 'name': 'Wood', 'stack_limit': 9999})
         self.assertEqual(items[20]['stack_limit'], 1)
@@ -86,6 +86,20 @@ class ContentTests(unittest.TestCase):
             if item['learn_kind'] == 'PE_LEARN_RECIPE':
                 self.assertTrue(set(item['learn_ids']) <= recipes)
         self.assertEqual(self.manifest['selected_recipe_ids'][:8], list(export.RECIPE_IDS))
+
+    def test_medicine_and_annot_closure(self):
+        items = {row['id']: row for row in self.manifest['items']}
+        recipes = {row['id']: row for row in self.manifest['recipes']}
+        self.assertEqual(items[877]['learn_kind'], 'PE_LEARN_RECIPE')
+        self.assertEqual(items[877]['item_type'], 0)
+        self.assertEqual(items[877]['learn_ids'], [337,388,390])
+        self.assertEqual(items[554]['learn_ids'], [149])
+        for identity in (337,388,390):
+            self.assertEqual((recipes[identity]['output_id'],recipes[identity]['seconds']), (917,1))
+        self.assertEqual(recipes[337]['ingredients'], [{'item_id':239,'count':1},{'item_id':235,'count':2},
+            {'item_id':241,'count':2},{'item_id':238,'count':1},{'item_id':233,'count':1}])
+        self.assertEqual(self.manifest['medicine_grants']['RewardItem'], [{'item_id':925,'count':10},{'item_id':554,'count':1}])
+        self.assertTrue(set(self.manifest['annot_vendor_item_ids']) <= set(items))
 
     def test_invalid_adventure_grants_rejected(self):
         database = self.clone_database()

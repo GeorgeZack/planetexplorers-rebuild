@@ -20,6 +20,7 @@ DEFAULT_DATABASE = ROOT / 'Assets/Resources/DataBase/localData.bytes'
 DEFAULT_LOCALIZATION = ROOT / 'i18n.db'
 DEFAULT_OUTPUT = ROOT / 'rebuild/generated'
 RECIPE_IDS = (1, 7, 8, 19, 20, 58, 152, 13)
+ANNOT_VENDOR_PROTOTYPES = (153, 158, 163, 143, 148)
 RESOURCE_IDS = (268, 271, 273, 279, 280)
 TOOL_SOURCES = (ROOT / 'Assets/Scripts/Items/PEEquipment/PEDigTool.cs',
                 ROOT / 'Assets/Scripts/Items/PEEquipment/PEAxe.cs')
@@ -147,11 +148,28 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
             if any(v['item_id'] == row['item_id'] for v in supplies):
                 raise ValueError('Adventure supplies9032: duplicate grant')
             supplies.append(row)
+        medicine_grants = {}
+        for field in ('Get_MissionItem', 'RewardItem', 'CoRemoveItem'):
+            medicine_grants[field] = [pairs(token, ';', 'Medicine9072 '+field)[0]
+                                      for token in str(quests[9072][field]).split(',')]
+        stores, _ = numeric_rows(db, 'store', 'store_id')
+        npc_stores, _ = numeric_rows(db, 'NPCstore', 'store_id')
+        vendor_items = set()
+        for prototype in ANNOT_VENDOR_PROTOTYPES:
+            matching = [r for r in npc_stores.values() if int(r['storenpc_id']) == prototype]
+            if len(matching) != 1:
+                raise ValueError('Missing or ambiguous Annot vendor')
+            for value in str(matching[0]['adven_single']).split(','):
+                vendor_items.add(integer(stores[integer(value, 'store ID', 1)]['item_id'], 'store item', 1))
+        item_classes, _ = numeric_rows(db, 'item_class', 'id', allow_duplicates=True)
+        formula_classes = {identity for identity, row in item_classes.items()
+                           if 'ReplicatorFormula' in str(row['classname']).split(',')}
         selected_ids = set(RESOURCE_IDS) | {v['item_id'] for v in starter + supplies}
+        selected_ids |= vendor_items | {v['item_id'] for rows in medicine_grants.values() for v in rows}
         recipe_ids = list(RECIPE_IDS)
         for identity in sorted(selected_ids):
             row = item_rows.get(identity)
-            if row is not None and str(row['_typeId']) == '38':
+            if row is not None and integer(row['_function'], 'item component class') in formula_classes:
                 for value in str(row['learn']).split(','):
                     formula = integer(value, f'book {identity} formula', 1)
                     if formula not in recipe_ids:
@@ -238,7 +256,7 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
             icons = str(row['_iconId']).split(',')
             if len(icons) != 3 or any('\0' in icon for icon in icons):
                 raise ValueError(f'item {identity}: invalid icon triple')
-            learn_kind = {27: 'PE_LEARN_SCAN', 38: 'PE_LEARN_RECIPE'}.get(item_type, 'PE_LEARN_NONE') if str(row['learn']) != '0' else 'PE_LEARN_NONE'
+            learn_kind = ('PE_LEARN_RECIPE' if integer(row['_function'], 'item component class') in formula_classes else 'PE_LEARN_SCAN' if item_type == 27 else 'PE_LEARN_NONE') if str(row['learn']) != '0' else 'PE_LEARN_NONE'
             learns = [] if learn_kind == 'PE_LEARN_NONE' else [integer(v, f'item {identity} learn ID', 1) for v in str(row['learn']).split(',')]
             if len(learns) > 16 or len(set(learns)) != len(learns):
                 raise ValueError(f'item {identity}: invalid learn list')
@@ -264,9 +282,11 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
 
     source = describe_source(database)
     manifest = {
-        'format_version': 3,
-        'scope': 'Legacy subset plus Adventure1289 starter and9032 supplies/book formula closure; full attributes remain bounded.',
+        'format_version': 4,
+        'scope': 'Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.',
         'adventure_starter': starter, 'adventure_supplies': supplies,
+        'medicine_grants': medicine_grants, 'annot_vendor_item_ids': sorted(vendor_items),
+        'formula_component_classes': sorted(formula_classes),
         'source_tool_overrides': {str(k): {'stamina_cost': v[0], 'source': describe_source(ROOT/v[1]), 'evidence': 'Serialized wood_hoe PEDigTool11466528; see SANDBOX_PICKAXE audit.' if k == 19 else 'Serialized wood_ax PEAxe11484812; see SANDBOX_ACTIONS audit.' if k == 26 else 'Serialized source/installed fields verified in TRAINING_MINING/TRAINING_GATHERING audits.'} for k,v in TOOL_OVERRIDES.items()},
         'source_database': source,
         'source_tool_defaults': [describe_source(path) for path in TOOL_SOURCES],

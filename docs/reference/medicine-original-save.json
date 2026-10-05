@@ -1,0 +1,288 @@
+{
+  "schema": 1,
+  "evidence": "Observed original native-client save, decoded read-only from source serializers.",
+  "baseline_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save2",
+  "save_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save3",
+  "input_sha256": {
+    "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save2": {
+      "MainAdventure/block45.arc": "2d25fc57e2c879e95148cb5f8fca3a303f5d9f9a62baea86302d593a4610c826",
+      "MainAdventure/index.arc": "d6113bc10bb71e511670a16a04b9ca90f0354a8887977343897ecd6d0803dd9f",
+      "MainAdventure/voxel.arc": "715e57d73ef7d80a4accdbf4b3bda00429aeda317257959ff7ededbd9b359e6a",
+      "MainAdventure/water.arc": "479386d34496f3bda3778df753388902cfc24fb2fd7993b5aef831c1d4452afa",
+      "MainAdventure/world.arc": "21da9cf0582805359f7d2da5ce714608181b06c6c741ea85c4db173154ca1668",
+      "index.arc": "5c69435879e0c39953a1d95fcab30026195145b28e42c9a4e21853fd73bbd440",
+      "world.arc": "0c015f99944af29f70aa665ef9004a36a53a9d220bc59fc16aacde166920309a"
+    },
+    "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save3": {
+      "MainAdventure/block45.arc": "461d2789395ddb7a78c1d956add09dcc8c9e4ef2bdba99b70fcf0f7534ef6f78",
+      "MainAdventure/index.arc": "3b10d89b7737b55bdf7348a5b47d8d8a5f92d5e16fc555b08848105fc9fd846d",
+      "MainAdventure/voxel.arc": "38eeef40357d91b6f419308cf731150bf7bf526efc4cfa2e7c95410da30b6960",
+      "MainAdventure/water.arc": "a4aaf46b63a90d3f8325bcc0e2b52bbdacf246e13d1ceb32b505cfbc2e962de1",
+      "MainAdventure/world.arc": "2d1182baa49d0e905df8ac78defd29f6423ac19db88257e0f65d7ff816785782",
+      "index.arc": "b6e85b3ec11d9fbf2e6ebbc3ce03523ae78dd2d31d2e6136444ca5a8175174b1",
+      "world.arc": "f705240d9cfbf467e65ea61bda3ce7605711e74ccfcef68bc81a234b1b5aaba1"
+    }
+  },
+  "archives_unchanged_during_audit": true,
+  "source_sha256": {
+    "Assets/Scripts/PeEntity/Cmpt/ReplicatorCmpt.cs": "0cbbc2e6df6ba1718ff60513a3ade68c0570bf89451ba5d8661ed6b05b99b1f9",
+    "Assets/Scripts/PeEntity/Cmpt/PlayerPackageCmpt.cs": "c3668318f7d210ec0e3d7a435fa98a2f3382bffea3c4761883f115d49ed1a165",
+    "Assets/Scripts/PeEntity/Cmpt/PackageCmpt.cs": "f07291fa43b9ca3c35b437862f592a99defb5eb1ea1cdaf3634e6ac0c9041039",
+    "Assets/Scripts/Items/ItemPak/ItemPackage.cs": "9d922083781d0bdbbab06cc0f2b0744009cf4b60bf51f58fd9a6dd96d2cae8be",
+    "Assets/Scripts/Items/ItemPak/SlotList.cs": "c2949a156c5dbd2b713619e732d96eb5d6d19e4e832c2ed7079db37f6aea50e7",
+    "Assets/Scripts/Mission/PlayerMission.cs": "11ba6d3f1e1c7627a0d114febd2256d4482dc498010157cfd40437d957397c35"
+  },
+  "baseline": {
+    "archive_guid": "41361f4e2222ba4e834286f531bf166f",
+    "player_entity_id": 20000,
+    "money": 500,
+    "records": {
+      "Pathea.MainPlayer": {
+        "file": "world.arc",
+        "offset": 65031,
+        "size": 15436
+      },
+      "ArchiveKeyMisRepository": {
+        "file": "world.arc",
+        "offset": 1376080,
+        "size": 248
+      },
+      "ArchiveKeyItemAsset": {
+        "file": "world.arc",
+        "offset": 1340760,
+        "size": 31654
+      }
+    },
+    "components": {
+      "ReplicatorCmpt": {
+        "file_offset": 79678,
+        "size": 14
+      },
+      "PlayerPackageCmpt": {
+        "file_offset": 65780,
+        "size": 13668
+      }
+    },
+    "known_formulas": [
+      {
+        "formula": 1,
+        "new_flag": false,
+        "file_offset": 79686
+      }
+    ],
+    "running_replication": false,
+    "medicine_mission": null,
+    "completed_mission_states": {
+      "9027": 1,
+      "9028": 1,
+      "9029": 1,
+      "9030": 1,
+      "9031": 1,
+      "9032": 1
+    },
+    "medicine_acceptance_grant_entries": 0,
+    "target_states": [],
+    "mission_prefix_decoded_bytes": 136,
+    "mission_record_tail_decoded": false,
+    "packages": {
+      "player": [
+        {
+          "category": 0,
+          "capacity": 420,
+          "occupied": 16,
+          "script877_instances": []
+        },
+        {
+          "category": 1,
+          "capacity": 420,
+          "occupied": 11,
+          "script877_instances": []
+        },
+        {
+          "category": 2,
+          "capacity": 420,
+          "occupied": 4,
+          "script877_instances": []
+        },
+        {
+          "category": 3,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        }
+      ],
+      "mission": [
+        {
+          "category": 0,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        },
+        {
+          "category": 1,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        },
+        {
+          "category": 2,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        },
+        {
+          "category": 3,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        }
+      ]
+    },
+    "item_registry_count": 165,
+    "script877_instances_in_entire_item_registry": []
+  },
+  "current": {
+    "archive_guid": "5dc2f03e7523a2489a68ce1cd6c7f259",
+    "player_entity_id": 20000,
+    "money": 500,
+    "records": {
+      "Pathea.MainPlayer": {
+        "file": "world.arc",
+        "offset": 65031,
+        "size": 15451
+      },
+      "ArchiveKeyMisRepository": {
+        "file": "world.arc",
+        "offset": 1398541,
+        "size": 267
+      },
+      "ArchiveKeyItemAsset": {
+        "file": "world.arc",
+        "offset": 1362966,
+        "size": 31654
+      }
+    },
+    "components": {
+      "ReplicatorCmpt": {
+        "file_offset": 79678,
+        "size": 29
+      },
+      "PlayerPackageCmpt": {
+        "file_offset": 65780,
+        "size": 13668
+      }
+    },
+    "known_formulas": [
+      {
+        "formula": 1,
+        "new_flag": false,
+        "file_offset": 79686
+      },
+      {
+        "formula": 337,
+        "new_flag": true,
+        "file_offset": 79691
+      },
+      {
+        "formula": 388,
+        "new_flag": true,
+        "file_offset": 79696
+      },
+      {
+        "formula": 390,
+        "new_flag": true,
+        "file_offset": 79701
+      }
+    ],
+    "running_replication": false,
+    "medicine_mission": {
+      "file_offset": 1398681,
+      "flags": [
+        [
+          "STEP",
+          "0"
+        ]
+      ]
+    },
+    "completed_mission_states": {
+      "9027": 1,
+      "9028": 1,
+      "9029": 1,
+      "9030": 1,
+      "9031": 1,
+      "9032": 1
+    },
+    "medicine_acceptance_grant_entries": 1,
+    "target_states": [],
+    "mission_prefix_decoded_bytes": 155,
+    "mission_record_tail_decoded": false,
+    "packages": {
+      "player": [
+        {
+          "category": 0,
+          "capacity": 420,
+          "occupied": 16,
+          "script877_instances": []
+        },
+        {
+          "category": 1,
+          "capacity": 420,
+          "occupied": 11,
+          "script877_instances": []
+        },
+        {
+          "category": 2,
+          "capacity": 420,
+          "occupied": 4,
+          "script877_instances": []
+        },
+        {
+          "category": 3,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        }
+      ],
+      "mission": [
+        {
+          "category": 0,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        },
+        {
+          "category": 1,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        },
+        {
+          "category": 2,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        },
+        {
+          "category": 3,
+          "capacity": 420,
+          "occupied": 0,
+          "script877_instances": []
+        }
+      ]
+    },
+    "item_registry_count": 165,
+    "script877_instances_in_entire_item_registry": []
+  },
+  "newly_learned_formulas": [
+    337,
+    388,
+    390
+  ],
+  "conclusions": [
+    "Mission9072 is accepted and active; its acceptance grant is recorded once.",
+    "Formulas337,388,390 are newly learned relative to the Annot checkpoint.",
+    "No item877 instance remains in the player/mission packages or global item registry.",
+    "This checkpoint does not establish crafting or medicine turn-in completion."
+  ],
+  "offset_convention": "Zero-based absolute byte offsets into each named archive file; formula offsets identify the signed32 ID preceding its boolean new flag."
+}

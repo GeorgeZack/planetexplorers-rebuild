@@ -21,10 +21,15 @@ static const PeAdventureDialogueLine pe_adventure_lines[]={
     {4094,3004094,2,"Well! Don't we all? You'll have to work for 'em, yeah? Other people will give you odd jobs and such in which you can earn scripts and items. There are also old alien ruins and caves spread about the land that you can look around. Rumor has it the toughest of these offer some real bonafide treasure. I ain't tried none, too chicken, haha!"},
     {4095,3004095,0,"Hey, what's holding up the supplies to \042Town%\042000?"},
     {4096,3004096,3,"Oh, are you from there? We've a major issue with a virus right now. A lot of our people are sick and cannot work. We just created a script for the cure, can you go help us create it? We'd really appreciate it."},
+    {4097,3004097,0,"Sure, why not."},
+    {4098,3004098,0,"Wha? No way."},
+    {4099,3004099,0,"I've created the cure that you need."},
+    {4100,3004100,3,"Oh thank you, thank you! We'll replicate the medicine right away. Our colonists will be up in no time! Here, take this as a sign of our appreciation."},
 };
 typedef struct {int id;const char *title,*description,*objective;} PeAdventureMissionText;
 static const PeAdventureMissionText pe_adventure_missions[]={
     {9031,"Arrival","Ask \042AdvNPC%\042002 for the supplies.","Talk to \042AdvNPC%\042002"},
     {9032,"The Delayed Supplies","Go to \042Town%\042004 and find out why the supplies has been delayed.","Go to \042Town%\042004"},
+    {9072,"Herb Collecting","Collect medical materials for the people in \042Town%\042004.","Gather \042itemnum%\042 units of \042itemid%\042"},
 };
 #endif

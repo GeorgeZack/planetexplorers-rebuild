@@ -1,4 +1,5 @@
 #include "pe_adventure_dialogue.h"
+#include "pe_adventure_medicine.h"
 #include "../generated/pe_adventure_dialogue_text.h"
 #include <math.h>
 #include <stdio.h>
@@ -17,7 +18,8 @@ static bool valid(const PeAdventureDialogue *d){
     if(!d)return false;
     if(d->stage==PE_ADVENTURE_DIALOGUE_IDLE)return !d->entity_id&&!d->page&&!d->role;
     return d->entity_id&&(d->role>=1&&d->role<=3)&&((d->stage==PE_ADVENTURE_DIALOGUE_MENU&&!d->page)||
-        (d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->page<(d->role==3?1u:5u)));
+        (d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->page<(d->role==3?2u:5u))||
+        (d->stage==PE_ADVENTURE_DIALOGUE_CHOICE&&d->role==3&&!d->page));
 }
 void pe_adventure_dialogue_init(PeAdventureDialogue *d){if(d)memset(d,0,sizeof *d);}
 void pe_adventure_dialogue_cancel(PeAdventureDialogue *d){pe_adventure_dialogue_init(d);}
@@ -35,15 +37,28 @@ bool pe_adventure_dialogue_open(PeAdventureDialogue *d,const PeGame *g,int role,
     *d=(PeAdventureDialogue){.stage=role==1&&g->welcome_page<PE_ADVENTURE_WELCOME_PAGES?PE_ADVENTURE_DIALOGUE_TALK:PE_ADVENTURE_DIALOGUE_MENU,.entity_id=entity,.role=role};return true;
 }
 bool pe_adventure_dialogue_choose_supply(PeAdventureDialogue *d,const PeGame *g){
-    if(valid(d)&&d->role==3&&menu_allowed(g)&&g->annot_complete&&d->stage==PE_ADVENTURE_DIALOGUE_MENU){d->stage=PE_ADVENTURE_DIALOGUE_TALK;return true;}
+    if(valid(d)&&d->role==3&&menu_allowed(g)&&g->annot_complete&&d->stage==PE_ADVENTURE_DIALOGUE_MENU){
+        if(g->medicine_state==PE_MEDICINE_COMPLETE||(g->medicine_state==PE_MEDICINE_ACTIVE&&!pe_adventure_medicine_ready(g)))return false;
+        d->stage=PE_ADVENTURE_DIALOGUE_TALK;d->page=g->medicine_state==PE_MEDICINE_ACTIVE?1:0;return true;
+    }
     if(!valid(d)||d->role!=2||!available(g)||d->stage!=PE_ADVENTURE_DIALOGUE_MENU)return false;
     d->stage=PE_ADVENTURE_DIALOGUE_TALK;return true;
 }
+const PeAdventureDialogueLine *pe_adventure_dialogue_choice(const PeAdventureDialogue *d,const PeGame *g,unsigned index){
+    if(!valid(d)||!menu_allowed(g)||!g->annot_complete||g->medicine_state!=PE_MEDICINE_NONE||d->stage!=PE_ADVENTURE_DIALOGUE_CHOICE||index>1)return NULL;
+    return pe_adventure_dialogue_line(4097+(int)index);
+}
+PeAdventureDialogueResult pe_adventure_dialogue_choose_medicine(PeAdventureDialogue *d,PeGame *g,bool accept){
+    if(!pe_adventure_dialogue_choice(d,g,0))return PE_ADVENTURE_DIALOGUE_REJECTED;
+    if(accept&&!pe_adventure_medicine_accept(g))return PE_ADVENTURE_DIALOGUE_NO_SPACE;
+    pe_adventure_dialogue_cancel(d);return PE_ADVENTURE_DIALOGUE_ACCEPTED;
+}
 PeAdventureDialogueResult pe_adventure_dialogue_advance(PeAdventureDialogue *d,PeGame *g){
     if(valid(d)&&d->role==3&&menu_allowed(g)&&g->annot_complete&&d->stage==PE_ADVENTURE_DIALOGUE_TALK){
-        pe_adventure_dialogue_cancel(d);
-        snprintf(g->message,sizeof g->message,"Medicine mission is not yet available in this rebuild.");
-        return PE_ADVENTURE_DIALOGUE_ACCEPTED;
+        if(d->page==0&&g->medicine_state==PE_MEDICINE_NONE){d->stage=PE_ADVENTURE_DIALOGUE_CHOICE;return PE_ADVENTURE_DIALOGUE_ADVANCED;}
+        if(d->page!=1||!pe_adventure_medicine_ready(g))return PE_ADVENTURE_DIALOGUE_REJECTED;
+        if(!pe_adventure_medicine_complete(g))return PE_ADVENTURE_DIALOGUE_NO_SPACE;
+        pe_adventure_dialogue_cancel(d);return PE_ADVENTURE_DIALOGUE_ACCEPTED;
     }
     if(valid(d)&&d->role==1&&d->stage==PE_ADVENTURE_DIALOGUE_TALK){
         if(!pe_game_welcome_advance(g,g?g->welcome_page:0))return PE_ADVENTURE_DIALOGUE_REJECTED;
@@ -63,7 +78,16 @@ const PeAdventureDialogueLine *pe_adventure_dialogue_line(int id){
 }
 const PeAdventureDialogueLine *pe_adventure_dialogue_current(const PeAdventureDialogue *d,const PeGame *g){
     if(!valid(d)||!menu_allowed(g))return NULL;
-    if(d->role==3)return g->annot_complete?pe_adventure_dialogue_line(d->stage==PE_ADVENTURE_DIALOGUE_MENU?4095:4096):NULL;
+    if(d->role==3){
+        if(!g->annot_complete||g->medicine_state==PE_MEDICINE_COMPLETE)return NULL;
+        if(d->stage==PE_ADVENTURE_DIALOGUE_CHOICE)return pe_adventure_dialogue_choice(d,g,0);
+        if(d->stage==PE_ADVENTURE_DIALOGUE_MENU)return pe_adventure_dialogue_line(g->medicine_state==PE_MEDICINE_ACTIVE?4099:4095);
+        if(d->stage==PE_ADVENTURE_DIALOGUE_TALK){
+            if(d->page==0&&g->medicine_state==PE_MEDICINE_NONE)return pe_adventure_dialogue_line(4096);
+            if(d->page==1&&g->medicine_state==PE_MEDICINE_ACTIVE)return pe_adventure_dialogue_line(4100);
+        }
+        return NULL;
+    }
     if(d->role==1){
         if(d->stage!=PE_ADVENTURE_DIALOGUE_TALK||g->welcome_page>=PE_ADVENTURE_WELCOME_PAGES)return NULL;
         return pe_adventure_dialogue_line(g->welcome_page?4080+(int)g->welcome_page:1949);
@@ -99,14 +123,14 @@ const char *pe_adventure_dialogue_speaker(const PeAdventureDialogueLine *line,co
 }
 bool pe_adventure_dialogue_format(const char *text,const PeAdventureDialogueBindings *b,char *output,size_t capacity){
     if(!text||!b||!output||!capacity||!name_valid(b->player_name)||!name_valid(b->welcome_name)||
-       !name_valid(b->supplier_name)||!name_valid(b->town_name)||!name_valid(b->seed_name)||!name_valid(b->annot_name)||!name_valid(b->start_town_name))return false;
-    const char *tokens[]={"\"name%\"","\"AdvNPC%\"001","\"AdvNPC%\"002","\"Town%\"004","\"seedname%\"","\"AdvNPC%\"003","\"Town%\"000"};
-    const char *names[]={b->player_name,b->welcome_name,b->supplier_name,b->town_name,b->seed_name,b->annot_name,b->start_town_name};
+       !name_valid(b->supplier_name)||!name_valid(b->town_name)||!name_valid(b->seed_name)||!name_valid(b->annot_name)||!name_valid(b->start_town_name)||!name_valid(b->item_name)||!name_valid(b->item_count))return false;
+    const char *tokens[]={"\"name%\"","\"AdvNPC%\"001","\"AdvNPC%\"002","\"Town%\"004","\"seedname%\"","\"AdvNPC%\"003","\"Town%\"000","\"itemid%\"","\"itemnum%\""};
+    const char *names[]={b->player_name,b->welcome_name,b->supplier_name,b->town_name,b->seed_name,b->annot_name,b->start_town_name,b->item_name,b->item_count};
     char result[2048];size_t written=0,read=0;
     while(text[read]){
         if(read>=2047)return false;
         const char *piece=text+read;size_t length=1,consumed=1;
-        for(size_t i=0;i<7;i++)if(names[i]&&names[i][0]&&strncmp(text+read,tokens[i],strlen(tokens[i]))==0){
+        for(size_t i=0;i<sizeof names/sizeof names[0];i++)if(names[i]&&names[i][0]&&strncmp(text+read,tokens[i],strlen(tokens[i]))==0){
             piece=names[i];length=strlen(piece);consumed=strlen(tokens[i]);break;
         }
         if(length>=sizeof result-written||length>=capacity-written)return false;

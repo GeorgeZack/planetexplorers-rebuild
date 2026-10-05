@@ -15,7 +15,8 @@
 #define PE_FIXED_DT (1.0f / 60.0f)
 #define PE_KNOWN_RECIPES 128
 #define PE_QUICKSLOTS 9
-#define PE_TOWN_STOCK_CAPACITY 17
+#define PE_TOWN_V8_STOCK_CAPACITY 17
+#define PE_TOWN_STOCK_CAPACITY 284
 typedef struct { bool initialized; unsigned remaining; double create_time; } PeTownStock;
 typedef enum { PE_GAME_LEGACY = 0, PE_GAME_ADVENTURE = 1 } PeGameMode;
 enum { PE_ADVENTURE_WELCOME_PAGES = 9, PE_ADVENTURE_ARRIVAL = 9031, PE_ADVENTURE_SUPPLIES = 9032 };
@@ -70,6 +71,7 @@ typedef struct {
     int adventure_mission;
     unsigned welcome_page; /* Next source welcome page;9 means Arrival accepted. */
     bool arrival_complete, supplies_claimed;
+    unsigned medicine_state; /* 0 unaccepted, 1 active9072, 2 completed. */
     bool annot_complete; /* Source discovery4503 / completed mission9032. */
     PeTownStock town_stock[PE_TOWN_STOCK_CAPACITY]; /* Stable exported offer order. */
     uint32_t money, scanner_mask;

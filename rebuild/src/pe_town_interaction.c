@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 static bool alive(const PeGame *g){return g&&g->mode==PE_GAME_ADVENTURE&&isfinite(g->hp)&&g->hp>0;}
+const PeTownOffer *pe_town_shop_offer_at(size_t i){return i<PE_TOWN_STOCK_CAPACITY?&pe_town_offers[i]:NULL;}
 size_t pe_town_shop_count(uint32_t entity){
     size_t n=0;for(size_t i=0;i<PE_TOWN_STOCK_CAPACITY;i++)if(pe_town_offers[i].entity_id==entity)n++;
     return n;
@@ -13,7 +14,7 @@ const PeTownOffer *pe_town_shop_offer(uint32_t entity,size_t index){
     for(size_t i=0;i<PE_TOWN_STOCK_CAPACITY;i++)if(pe_town_offers[i].entity_id==entity){if(!index)return &pe_town_offers[i];index--;}
     return NULL;
 }
-static int offer_index(int store){for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++)if(pe_town_offers[i].store_id==store)return i;return -1;}
+static int offer_index(uint32_t entity,int store){for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++)if(pe_town_offers[i].entity_id==entity&&pe_town_offers[i].store_id==store)return i;return -1;}
 bool pe_town_state_valid(const PeGame *g){
     if(!g||!isfinite(g->game_seconds)||g->game_seconds<0)return false;
     if(g->annot_complete&&(g->mode!=PE_GAME_ADVENTURE||!g->supplies_claimed||!g->arrival_complete||g->adventure_mission!=PE_ADVENTURE_SUPPLIES))return false;
@@ -35,11 +36,11 @@ bool pe_town_shop_open(PeGame *g,uint32_t entity){
     }
     return true;
 }
-unsigned pe_town_shop_stock(const PeGame *g,int store){
-    int i=offer_index(store);return g&&i>=0&&g->town_stock[i].initialized?g->town_stock[i].remaining:0;
+unsigned pe_town_shop_stock(const PeGame *g,uint32_t entity,int store){
+    int i=offer_index(entity,store);return g&&i>=0&&g->town_stock[i].initialized?g->town_stock[i].remaining:0;
 }
 bool pe_town_shop_buy(PeGame *g,uint32_t entity,int store,unsigned count){
-    int i=offer_index(store);
+    int i=offer_index(entity,store);
     if(!alive(g)||!pe_town_state_valid(g)||i<0||!count||pe_town_offers[i].entity_id!=entity)return false;
     const PeTownOffer *o=&pe_town_offers[i];PeTownStock *s=&g->town_stock[i];
     if(!s->initialized||count>s->remaining){snprintf(g->message,sizeof g->message,"Not enough stock.");return false;}

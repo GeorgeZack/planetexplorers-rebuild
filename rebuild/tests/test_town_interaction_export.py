@@ -12,12 +12,16 @@ class TownExportTests(unittest.TestCase):
         outputs=exporter.build_outputs()
         for name,data in outputs.items():self.assertEqual((exporter.ROOT/'rebuild/generated'/name).read_bytes(),data)
         rows=json.loads(outputs['pe_town_offers.json'])['offers']
-        self.assertEqual(len(rows),17)
-        self.assertEqual({r['entity_id'] for r in rows},{20002,20011,20014})
+        self.assertEqual(len(rows),284)
+        self.assertEqual({r['entity_id'] for r in rows},{20002,20011,20014,20028,20031,20032,20033,20037})
         catalog=json.loads((exporter.ROOT/'rebuild/generated/content_manifest.json').read_bytes())
         supported={r['id'] for r in catalog['items']}
         self.assertTrue(all(r['item_id'] in supported for r in rows))
         self.assertEqual(next(r['price'] for r in rows if r['store_id']==1184),158)
+        self.assertEqual([(r['entity_id'],r['store_id']) for r in rows[:17]],
+                         [(entity,store) for entity,_,ids in exporter.VENDORS for store in ids])
+        self.assertEqual(len({(r['entity_id'],r['store_id']) for r in rows}),len(rows))
+        self.assertEqual({r['store_id'] for r in rows if r['entity_id']==20028 and r['item_id'] in (239,235,241,238,233)}, {212,208,214,211,206})
     def changed(self,sql):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'source.db'

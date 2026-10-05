@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "adventure_test_helpers.h"
 #include "pe_adventure_dialogue.h"
+#include "pe_adventure_medicine.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,8 +131,41 @@ static void text_tests(void){
     bindings.player_name="bad\nname";CHECK(!pe_adventure_dialogue_format("text",&bindings,output,sizeof output));CHECK(strcmp(output,"untouched")==0);
     CHECK(!pe_adventure_dialogue_line(0));
 }
+static void medicine(PeGame *g,PeAdventureDialogue *d){
+    initialize(g,d);CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;
+    for(int slot=0;slot<PE_INVENTORY_SLOTS;slot++)if(g->inventory.slots[slot].item_id==552||g->inventory.slots[slot].item_id==512)CHECK(pe_game_use_slot(g,slot));
+    PeInventory before=g->inventory;
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_current(d,g)->talk_id==4095);
+    CHECK(pe_adventure_dialogue_choose_supply(d,g));CHECK(pe_adventure_dialogue_current(d,g)->talk_id==4096);
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ADVANCED&&d->stage==PE_ADVENTURE_DIALOGUE_CHOICE);
+    CHECK(pe_adventure_dialogue_choice(d,g,0)->talk_id==4097&&pe_adventure_dialogue_choice(d,g,1)->talk_id==4098&&!pe_adventure_dialogue_choice(d,g,2));
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_REJECTED);
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,false)==PE_ADVENTURE_DIALOGUE_ACCEPTED);
+    CHECK(!memcmp(&before,&g->inventory,sizeof before)&&g->medicine_state==PE_MEDICINE_NONE);
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_choose_supply(d,g));pe_adventure_dialogue_advance(d,g);
+    pe_adventure_dialogue_cancel(d);CHECK(g->medicine_state==PE_MEDICINE_NONE);
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_choose_supply(d,g));pe_adventure_dialogue_advance(d,g);
+    PeInventory before_accept=g->inventory;while(pe_inventory_add(&g->inventory,308,1)){}PeInventory full=g->inventory;
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_NO_SPACE&&d->stage==PE_ADVENTURE_DIALOGUE_CHOICE&&g->medicine_state==PE_MEDICINE_NONE);
+    CHECK(!memcmp(&full,&g->inventory,sizeof full));g->inventory=before_accept;
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_ACCEPTED&&g->medicine_state==PE_MEDICINE_ACTIVE);
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_REJECTED&&pe_inventory_count(&g->inventory,877)==1);
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_current(d,g)->talk_id==4099);
+    CHECK(!pe_adventure_dialogue_choose_supply(d,g));CHECK(pe_inventory_add(&g->inventory,917,5));
+    CHECK(pe_adventure_dialogue_choose_supply(d,g));CHECK(pe_adventure_dialogue_current(d,g)->talk_id==4100);
+    CHECK(pe_inventory_remove(&g->inventory,917,1));CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_REJECTED&&g->medicine_state==PE_MEDICINE_ACTIVE);
+    CHECK(pe_inventory_add(&g->inventory,917,1));PeInventory before_delivery=g->inventory;while(pe_inventory_add(&g->inventory,308,1)){}full=g->inventory;
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_NO_SPACE&&d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->page==1&&g->medicine_state==PE_MEDICINE_ACTIVE);
+    CHECK(!memcmp(&full,&g->inventory,sizeof full));g->inventory=before_delivery;
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ACCEPTED);
+    CHECK(g->medicine_state==PE_MEDICINE_COMPLETE&&pe_inventory_count(&g->inventory,917)==0);
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(!pe_adventure_dialogue_current(d,g)&&!pe_adventure_dialogue_choose_supply(d,g));
+    CHECK(strcmp(pe_adventure_mission_title(9072),"Herb Collecting")==0);
+    char text[2048];PeAdventureDialogueBindings names={.item_name="Medicine",.item_count="5"};
+    CHECK(pe_adventure_dialogue_format(pe_adventure_mission_objective(9072),&names,text,sizeof text));CHECK(strcmp(text,"Gather 5 units of Medicine")==0);
+}
 int pe_test_adventure_dialogue(void){
     failures=0;PeGame *g=malloc(sizeof *g);if(!g)return 1;PeAdventureDialogue d;
-    arrival(g,&d);close_only_menu(g,&d);pages(g,&d);cancellation_capacity(g,&d);text_tests();
+    arrival(g,&d);close_only_menu(g,&d);pages(g,&d);cancellation_capacity(g,&d);medicine(g,&d);text_tests();
     free(g);return failures;
 }

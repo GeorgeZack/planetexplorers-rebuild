@@ -5,6 +5,7 @@ Uses reference_input's input transport, with a separate allowlisted-title and ex
 executable selector. The original reference driver's selector is unchanged.
 Commands: --pid PID layout, shot FILE.png, key CHORD, click X Y, drag X Y X2 Y2.
 For captured gameplay: --pid PID hold left|right SECONDS (at most10s).
+For a hovered panel: --pid PID scroll STEPS (positive up, negative down;1–100 clicks).
 """
 import argparse
 import ctypes
@@ -63,14 +64,49 @@ def hold(button, duration, pid):
             x.XFlush(display)
 
 
-def main():
-    if "hold" in sys.argv[1:]:
+def scroll(steps, pid):
+    if type(steps) is not int or not 1 <= abs(steps) <= 100:
+        raise ValueError("Scroll requires 1–100 integer steps; positive up, negative down.")
+    if type(pid) is not int or pid <= 0:
+        raise ValueError("Scroll requires an exact positive application PID.")
+    transport.window = window
+    transport.focus(pid)
+    code = 4 if steps > 0 else 5
+    with transport.xdisplay() as (x, xt, display):
+        xt.XTestFakeButtonEvent.argtypes = [ctypes.c_void_p, ctypes.c_uint, ctypes.c_int, ctypes.c_ulong]
+        for _ in range(abs(steps)):
+            try:
+                if not xt.XTestFakeButtonEvent(display, code, 1, 0):
+                    raise RuntimeError("XTest rejected scroll press.")
+                x.XFlush(display)
+                time.sleep(0.04)
+            finally:
+                xt.XTestFakeButtonEvent(display, code, 0, 0)
+                x.XFlush(display)
+            time.sleep(0.04)
+
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
+    if "scroll" in argv:
+        parser = argparse.ArgumentParser(description=__doc__)
+        parser.add_argument("--pid", type=int, required=True)
+        parser.add_argument("action", choices=["scroll"])
+        parser.add_argument("steps", type=int, help="1–100 wheel clicks: positive up, negative down")
+        args = parser.parse_args(argv)
+        try:
+            scroll(args.steps, args.pid)
+            return 0
+        except (ValueError, RuntimeError, OSError) as error:
+            print(f"Rebuild scroll failed: {error}", file=sys.stderr)
+            return 1
+    if "hold" in argv:
         parser = argparse.ArgumentParser(description=__doc__)
         parser.add_argument("--pid", type=int, required=True)
         parser.add_argument("action", choices=["hold"])
         parser.add_argument("button", choices=["left", "right"])
         parser.add_argument("seconds", type=float)
-        args = parser.parse_args()
+        args = parser.parse_args(argv)
         try:
             hold(args.button, args.seconds, args.pid)
             return 0
@@ -79,7 +115,7 @@ def main():
             return 1
     transport.window = window
     transport.__doc__ = __doc__
-    return transport.main()
+    return transport.main(argv)
 
 
 if __name__ == '__main__':

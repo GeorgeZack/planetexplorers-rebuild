@@ -2,6 +2,7 @@
 #include "pe_game.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
+#include "pe_adventure_medicine.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #include <unistd.h>
 
 #define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 8u
+#define SAVE_VERSION 9u
 /* All numbers are little-endian; floats are IEEE-754 bit patterns. No ABI structs. */
 typedef struct { unsigned char *p;size_t pos,size;bool ok; } Stream;
 static void put32(Stream *s,uint32_t v) { if(s->pos+4>s->size){s->ok=false;return;} for(int i=0;i<4;i++)s->p[s->pos++]=(unsigned char)(v>>(i*8)); }
@@ -61,7 +62,7 @@ static bool valid(const PeGame *g,bool trees) {
        fabsf(g->velocity.x)>1000||fabsf(g->velocity.y)>1000||fabsf(g->velocity.z)>1000||
        g->block_count<0||g->block_count>PE_MAX_BLOCKS||g->tree_count<0||g->tree_count>PE_MAX_TREES||
        g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS) return false;
-    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g))return false;
+    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g)||!pe_adventure_medicine_state_valid(g))return false;
     if(g->world.source==0)for(size_t i=0;i<pe_world_voxel_count(&g->world);i++)if(pe_world_data_const(&g->world)[i].material>PE_MAT_GRASS)return false;
     if(!g->inventory.next_instance_id||!g->rng_state||
        !isfinite(g->stamina)||!isfinite(g->stamina_max)||!isfinite(g->stamina_regen)||
@@ -181,7 +182,13 @@ static void encode(Stream *s,const PeGame *g) {
         for(size_t i=0;i<count;i++){s->p[s->pos++]=v[i].volume;s->p[s->pos++]=v[i].material;}
     }
     put32(s,g->annot_complete?1u:0u);
-    for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++){put32(s,g->town_stock[i].initialized?1u:0u);put32(s,g->town_stock[i].remaining);putd(s,g->town_stock[i].create_time);}
+    for(int i=0;i<PE_TOWN_V8_STOCK_CAPACITY;i++){put32(s,g->town_stock[i].initialized?1u:0u);put32(s,g->town_stock[i].remaining);putd(s,g->town_stock[i].create_time);}
+    /* V9 retains the exact V8 payload and its first seventeen stable offers. */
+    put32(s,g->medicine_state);
+    put32(s,PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY);
+    for(int i=PE_TOWN_V8_STOCK_CAPACITY;i<PE_TOWN_STOCK_CAPACITY;i++){
+        put32(s,g->town_stock[i].initialized?1u:0u);put32(s,g->town_stock[i].remaining);putd(s,g->town_stock[i].create_time);
+    }
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -264,7 +271,15 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
             for(size_t i=0;i<full;i++){v[i].volume=s->p[s->pos++];v[i].material=s->p[s->pos++];}
         }
         uint32_t complete=get32(s);if(complete>1)s->ok=false;g->annot_complete=complete!=0;
-        for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++){
+        for(int i=0;i<PE_TOWN_V8_STOCK_CAPACITY;i++){
+            uint32_t initialized=get32(s);if(initialized>1)s->ok=false;
+            g->town_stock[i].initialized=initialized!=0;g->town_stock[i].remaining=get32(s);g->town_stock[i].create_time=getd(s);
+        }
+    }
+    if(version>=9){
+        g->medicine_state=get32(s);
+        if(get32(s)!=PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY){s->ok=false;return;}
+        for(int i=PE_TOWN_V8_STOCK_CAPACITY;i<PE_TOWN_STOCK_CAPACITY;i++){
             uint32_t initialized=get32(s);if(initialized>1)s->ok=false;
             g->town_stock[i].initialized=initialized!=0;g->town_stock[i].remaining=get32(s);g->town_stock[i].create_time=getd(s);
         }

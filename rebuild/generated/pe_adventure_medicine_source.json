@@ -1,0 +1,107 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "mission": {
+    "ID": "9072",
+    "MissionName": "3102568",
+    "MaxNum": "1",
+    "Type": "1",
+    "TargetIDList": "2531",
+    "PreLimit": "0",
+    "Reputation": "0",
+    "AutoReply": "0",
+    "Get_DemandItem": "0",
+    "Get_DeleteItem": "0",
+    "Get_MissionItem": "877_1",
+    "CoSelRewardItem": "0",
+    "RewardItem": "925_10,554_1",
+    "CoRemoveItem": "917_5",
+    "Description": "3102569",
+    "player_talk": "4097,4099",
+    "TalkOP": "0",
+    "TalkIN": "0",
+    "TalkED": "4100",
+    "NextQuest": "0",
+    "bGiveUp": "0",
+    "TalkOP_SP": "0",
+    "TalkIN_SP": "0",
+    "TalkED_SP": "0",
+    "RewardSP": "2",
+    "MutexLimit": "0",
+    "GuanLianList": "0",
+    "AdvPlot": "0",
+    "IncreaseChain": "1",
+    "ChangeReputation": "0",
+    "KeepItem": "0",
+    "TempLimit": "0",
+    "Dungeon": "0"
+  },
+  "target": {
+    "TargetID": "2531",
+    "ScriptID": "0",
+    "Desc": "3102224",
+    "Type": "0",
+    "ItemID": "917",
+    "ItemNum": "5",
+    "TargetItemID": "0",
+    "MaxNum": "0",
+    "Chance": "0",
+    "TargetPos": "0",
+    "ReceiveQuest": "0",
+    "RandNum": "0",
+    "RandID": "0"
+  },
+  "acceptance": {
+    "talk": 4097,
+    "grant": {
+      "item": 877,
+      "count": 1
+    },
+    "script_formulas": [
+      337,
+      388,
+      390
+    ]
+  },
+  "decline": {
+    "talk": 4098,
+    "mission": 9073,
+    "repeatable": true,
+    "grant": null
+  },
+  "completion": {
+    "choice": 4099,
+    "final_ack": 4100,
+    "consume": {
+      "item": 917,
+      "count": 5
+    },
+    "rewards": [
+      {
+        "item": 925,
+        "count": 10
+      },
+      {
+        "item": 554,
+        "count": 1
+      }
+    ]
+  },
+  "continuation": {
+    "chain": 32,
+    "next_group": 2,
+    "quest": 9074,
+    "implemented": false
+  },
+  "skill_reward": {
+    "database_value": 2,
+    "condition": "Adventure && RandomMapConfig.useSkillTree",
+    "actual_source_buff": 30200126,
+    "actual_source_value": 5,
+    "implemented": false
+  },
+  "scope": "Inventory/progression transactions. UI and physical NPC eligibility remain caller-owned."
+}

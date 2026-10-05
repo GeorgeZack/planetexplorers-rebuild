@@ -42,7 +42,7 @@ typedef struct {
     uint32_t town_entity;
     bool town_open,shop_open,shop_dragging;
     char town_name[129],start_town_name[129];
-    int shop_selection;
+    int shop_selection,shop_scroll;
     unsigned shop_quantity;
     float shop_offset_x,shop_offset_y,shop_grab_x,shop_grab_y;
     PeAdventureDialogue dialogue;
@@ -71,6 +71,12 @@ typedef struct {
     PeSandboxUIPreview draw_preview;
     void *preview_context;
 } PeSandboxUI;
+
+/* A UI-owned press remains owned until every mouse button is released. The
+ * release frame is consumed too; cursor recapture may start on the next frame.
+ * Kept outside PeGame so no held desktop input crosses a save/load boundary. */
+typedef struct { bool waiting_for_release; } PeSandboxPointerGate;
+bool pe_sandbox_pointer_release_gate(PeSandboxPointerGate *gate,bool ui_owned,unsigned buttons_down);
 
 void pe_sandbox_ui_init(PeSandboxUI *ui,float width,float height);
 /* Requires active GL context. asset_root contains ui/atlas.peui and effects/.

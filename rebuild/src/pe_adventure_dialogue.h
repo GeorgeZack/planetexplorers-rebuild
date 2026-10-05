@@ -2,18 +2,19 @@
 #define PE_ADVENTURE_DIALOGUE_H
 #include "pe_game.h"
 
-typedef enum { PE_ADVENTURE_DIALOGUE_IDLE, PE_ADVENTURE_DIALOGUE_MENU, PE_ADVENTURE_DIALOGUE_TALK } PeAdventureDialogueStage;
+typedef enum { PE_ADVENTURE_DIALOGUE_IDLE, PE_ADVENTURE_DIALOGUE_MENU, PE_ADVENTURE_DIALOGUE_TALK, PE_ADVENTURE_DIALOGUE_CHOICE } PeAdventureDialogueStage;
 typedef enum { PE_ADVENTURE_SPEAKER_PLAYER, PE_ADVENTURE_SPEAKER_WELCOME, PE_ADVENTURE_SPEAKER_SUPPLIER, PE_ADVENTURE_SPEAKER_ANNOT } PeAdventureSpeaker;
 typedef struct { int talk_id,localization_id; PeAdventureSpeaker speaker; const char *text; } PeAdventureDialogueLine;
 typedef struct {
     PeAdventureDialogueStage stage;
     uint32_t entity_id; /* Host's resolved Adventure role entity; never a prototype. */
     unsigned page;
-    int role; /* Resolved Adventure welcome1 or supplier2. */
+    int role; /* Resolved Adventure welcome1, supplier2 or Annot3. */
 } PeAdventureDialogue;
 typedef struct {
     const char *player_name,*welcome_name,*supplier_name,*town_name; /* Given names in source tokens. */
     const char *seed_name;
+    const char *item_name,*item_count;
     const char *annot_name,*annot_full_name,*start_town_name;
     const char *player_full_name,*welcome_full_name,*supplier_full_name; /* Optional speaker labels. */
 } PeAdventureDialogueBindings;
@@ -35,15 +36,20 @@ bool pe_adventure_arrival_step(PeGame *game,PeVec3 supplier_position);
  * hover/range/scene/UI query. Opening never changes game/progression/items. */
 bool pe_adventure_dialogue_open(PeAdventureDialogue *dialogue,const PeGame *game,
     int adventure_role,uint32_t entity_id,bool eligible);
-/* Role2 supplies or role3 source continuation question. */
+/* Role2 supplies or role3 introduction / ready delivery question. */
 bool pe_adventure_dialogue_choose_supply(PeAdventureDialogue *dialogue,const PeGame *game);
+/* Source4097 accepts immediately (no TalkOP);4098 refuses without persistent
+ * state. Capacity failure retains CHOICE for retry. */
+PeAdventureDialogueResult pe_adventure_dialogue_choose_medicine(PeAdventureDialogue *dialogue,PeGame *game,bool accept);
+const PeAdventureDialogueLine *pe_adventure_dialogue_choice(const PeAdventureDialogue *dialogue,const PeGame *game,unsigned index);
 /* Welcome ACK persists each source page; final4088 starts Arrival.
  * Final supplier ACK4094 alone invokes authoritative pe_game_accept_supplies.
+ * Annot4096 ACK opens the two source choices;4100 ACK completes medicine.
  * Capacity failure stays on4094 for retry; all grants remain atomic/idempotent. */
 PeAdventureDialogueResult pe_adventure_dialogue_advance(PeAdventureDialogue *dialogue,PeGame *game);
 /* Welcome TALK returns1949,4081..4088. Supplier MENU returns the player's
  * source option4089; supplier TALK returns4090..4094.
- * After acceptance MENU has no offer/current line; host may still render its
+ * After supplier acceptance / medicine completion MENU has no offer/current line; host may still render its
  * source close choice. Invalid/stale/dead state also returns NULL. Text is raw
  * source with role tokens. */
 const PeAdventureDialogueLine *pe_adventure_dialogue_current(const PeAdventureDialogue *dialogue,const PeGame *game);

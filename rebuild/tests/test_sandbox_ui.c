@@ -1,6 +1,7 @@
 /* Headless real-game UI routing regressions; no raylib/window calls. */
 #include "adventure_test_helpers.h"
 #include "pe_sandbox_ui.h"
+#include "pe_adventure_medicine.h"
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -26,6 +27,19 @@ static int visible(PeSandboxUI *u,const PeGame *g,int id) {
     return -1;
 }
 int main(void) {
+    /* A 150ms dialogue click outlives its closing frame. No frame in that
+       hold, including release, may recapture or supply a held tool action. */
+    PeSandboxPointerGate gate={0};
+    assert(!pe_sandbox_pointer_release_gate(&gate,false,1)); /* ordinary world hold */
+    assert(pe_sandbox_pointer_release_gate(&gate,true,1)); /* GUI closes here */
+    for(int frame=0;frame<9;frame++)assert(pe_sandbox_pointer_release_gate(&gate,false,1));
+    assert(pe_sandbox_pointer_release_gate(&gate,false,3)); /* second button joins */
+    assert(pe_sandbox_pointer_release_gate(&gate,false,2)); /* first button released */
+    assert(pe_sandbox_pointer_release_gate(&gate,false,0)); /* release is consumed */
+    assert(!pe_sandbox_pointer_release_gate(&gate,false,0)); /* capture permitted now */
+    assert(!pe_sandbox_pointer_release_gate(&gate,false,1)); /* fresh world click works */
+    assert(!pe_sandbox_pointer_release_gate(&gate,true,0)); /* keyboard-only close */
+
     PeGame *g=calloc(1,sizeof *g);assert(g);
     assert(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));
     PeSandboxUI u;pe_sandbox_ui_init(&u,1280,720);
@@ -90,7 +104,10 @@ int main(void) {
     /* Pause blocks quickslot actions, offers save/load/menu as requests only. */
     i=input();i.escape=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.paused&&r.consume_world);
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,1),false));assert(r.save&&r.paused&&!r.load);
+    assert(pe_sandbox_pointer_release_gate(&gate,r.consume_world,1)&&r.save); /* UI command survives held-press ownership. */
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,2),false));assert(r.load&&r.paused);
+    assert(pe_sandbox_pointer_release_gate(&gate,r.consume_world,1)&&r.load);
+    assert(pe_sandbox_pointer_release_gate(&gate,false,0));
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,3),false));assert(r.return_main&&r.consume_world);
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,0),false));assert(!r.paused&&r.consume_world);
     /* Search only learned recipes; bounded quantity/craft routes real transactions. */
@@ -317,13 +334,13 @@ int main(void) {
     assert(pe_sandbox_ui_open_town(&u,g,20002,"Cherish Mercer",(Texture2D){0},true));
     i=input();i.inventory=i.save=i.load=true;i.quickslot=0;
     r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&r.cursor_visible&&!r.save&&!r.load&&!u.inventory_open&&!r.npc_interaction);
-    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));assert(u.shop_open&&pe_town_shop_stock(g,1184)==3);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));assert(u.shop_open&&pe_town_shop_stock(g,20002,1184)==3);
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_row(&u,2),false));assert(u.shop_selection==2);
     int shovels=pe_inventory_count(&g->inventory,12);
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,2),false));
-    assert(r.consume_world&&g->money==342&&pe_inventory_count(&g->inventory,12)==shovels+1&&pe_town_shop_stock(g,1184)==2);
+    assert(r.consume_world&&g->money==342&&pe_inventory_count(&g->inventory,12)==shovels+1&&pe_town_shop_stock(g,20002,1184)==2);
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,1),false));assert(u.shop_quantity==2);
-    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,2),false));assert(g->money==26&&pe_town_shop_stock(g,1184)==0);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_button(&u,2),false));assert(g->money==26&&pe_town_shop_stock(g,20002,1184)==0);
     PeTrainingUIRect shop=pe_sandbox_ui_shop_panel(&u);i=input();i.left_pressed=true;i.mouse_x=shop.x+100;i.mouse_y=shop.y+25;
     r=pe_sandbox_ui_route(&u,g,i);assert(u.shop_dragging&&r.consume_world);
     i.left_pressed=false;i.mouse_x=-100;i.mouse_y=-100;i.left_released=true;r=pe_sandbox_ui_route(&u,g,i);
@@ -332,9 +349,41 @@ int main(void) {
     i=input();i.escape=i.save=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save&&!u.town_open&&!r.paused);
     assert(pe_sandbox_ui_open_town(&u,g,20009,"Dikeledi Sehgal",(Texture2D){0},true));
     i=input();i.advance=true;r=pe_sandbox_ui_route(&u,g,i);assert(!u.town_open&&r.consume_world&&!r.npc_interaction);
-    assert(!pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));g->annot_complete=true;
+    assert(!pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));assert(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));assert(pe_test_ack_welcome(g));assert(pe_game_arrival_complete(g));assert(pe_game_accept_supplies(g));g->money=26;g->annot_complete=true;
     assert(pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));
     i=input();i.advance=true;r=pe_sandbox_ui_route(&u,g,i);assert(pe_adventure_dialogue_current(&u.dialogue,g)->talk_id==4096);
-    r=pe_sandbox_ui_route(&u,g,i);assert(u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&r.consume_world&&g->money==26);
+    r=pe_sandbox_ui_route(&u,g,i);assert(u.dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE&&r.consume_world&&g->money==26);
+    pe_sandbox_ui_resize(&u,1280,720);
+    PeTrainingUIRect accept_choice=pe_sandbox_ui_supplier_choice(&u,0),refuse_choice=pe_sandbox_ui_supplier_choice(&u,1);
+    assert(accept_choice.x==395&&accept_choice.y==489&&refuse_choice.y==509&&accept_choice.h==20);
+    assert(pe_training_ui_contains(u.layout.dialogue,accept_choice.x,accept_choice.y));
+    i=click(pe_sandbox_ui_supplier_choice(&u,1),false);i.save=i.load=true;i.quickslot=0;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save&&!r.load&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&g->medicine_state==PE_MEDICINE_NONE);
+    assert(pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));
+    i=input();i.advance=true;pe_sandbox_ui_route(&u,g,i);pe_sandbox_ui_route(&u,g,i);
+    assert(u.dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE);
+    assert(pe_game_use_slot(g,find(g,552)));assert(pe_game_use_slot(g,find(g,512)));
+    int scripts=pe_inventory_count(&g->inventory,877);
+    i=click(pe_sandbox_ui_supplier_choice(&u,0),false);i.inventory=i.save=i.load=true;i.quickslot=0;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save&&!r.load&&!u.inventory_open&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE);
+    assert(g->medicine_state==PE_MEDICINE_ACTIVE&&pe_inventory_count(&g->inventory,877)==scripts+1);
+    assert(pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));
+    i=input();i.advance=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU);
+    assert(pe_inventory_add(&g->inventory,917,5));
+    r=pe_sandbox_ui_route(&u,g,i);assert(pe_adventure_dialogue_current(&u.dialogue,g)->talk_id==4100&&g->medicine_state==PE_MEDICINE_ACTIVE);
+    i.escape=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&pe_inventory_count(&g->inventory,917)==5);
+    assert(pe_sandbox_ui_open_annot(&u,g,20018,(Texture2D){0},true));i=input();i.advance=true;pe_sandbox_ui_route(&u,g,i);
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&g->medicine_state==PE_MEDICINE_COMPLETE);
+    assert(pe_inventory_count(&g->inventory,917)==0);
+    /* The large Annot catalogs remain bounded to eight visible rows and consume
+       wheel/keys. Reopening another vendor resets hidden selection/quantity. */
+    uint32_t large_vendor=0;for(uint32_t entity=20020;entity<20100;entity++)if(pe_town_shop_count(entity)>8){large_vendor=entity;break;}
+    assert(large_vendor&&pe_sandbox_ui_open_town(&u,g,large_vendor,"Annot vendor",(Texture2D){0},true));
+    i=input();i.advance=true;pe_sandbox_ui_route(&u,g,i);assert(u.shop_open);
+    i=input();PeTrainingUIRect row0=pe_sandbox_ui_shop_row(&u,0);i.mouse_x=row0.x+10;i.mouse_y=row0.y+10;i.wheel=-1;i.save=true;
+    for(int n=0;n<120;n++){r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save);}
+    assert(u.shop_scroll==(int)pe_town_shop_count(large_vendor)-8&&u.shop_selection>=u.shop_scroll);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_shop_row(&u,7),false));assert(u.shop_selection==(int)pe_town_shop_count(large_vendor)-1&&r.consume_world);
+    pe_sandbox_ui_cancel_town(&u);assert(pe_sandbox_ui_open_town(&u,g,20002,"Cherish Mercer",(Texture2D){0},true));assert(!u.shop_scroll&&!u.shop_selection&&u.shop_quantity==1);
     free(g);puts("sandbox UI: inventory, crafting, quickslots, welcome/supplier dialogue and modal ownership passed");return 0;
 }

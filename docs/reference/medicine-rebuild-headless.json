@@ -1,0 +1,396 @@
+{
+  "schema": 1,
+  "kind": "headless-C-medicine-transactions",
+  "input": "build/annot-route-graphical-final.pesave",
+  "output": "build/medicine-ready.pesave",
+  "physicalVendorTravel": false,
+  "before": {
+    "medicineState": 0,
+    "ready": false,
+    "money": 500,
+    "crafted": 0,
+    "gameSeconds": 8837165.000313185,
+    "worldHash": "6852b4422bda2475",
+    "sourcePosition": [
+      -279.456207,
+      22.5010395,
+      129.81488
+    ],
+    "velocity": [
+      0,
+      0,
+      0
+    ],
+    "yaw": 0.646779895,
+    "pitch": -0.0839999989,
+    "items": [
+      {
+        "id": 33,
+        "count": 1,
+        "instance": 1
+      },
+      {
+        "id": 1527,
+        "count": 1,
+        "instance": 2
+      },
+      {
+        "id": 73,
+        "count": 1,
+        "instance": 3
+      },
+      {
+        "id": 70,
+        "count": 1,
+        "instance": 4
+      },
+      {
+        "id": 973,
+        "count": 1,
+        "instance": 5
+      },
+      {
+        "id": 974,
+        "count": 1,
+        "instance": 6
+      },
+      {
+        "id": 975,
+        "count": 1,
+        "instance": 7
+      },
+      {
+        "id": 1579,
+        "count": 1,
+        "instance": 8
+      },
+      {
+        "id": 916,
+        "count": 10,
+        "instance": 0
+      },
+      {
+        "id": 228,
+        "count": 1,
+        "instance": 9
+      },
+      {
+        "id": 937,
+        "count": 10,
+        "instance": 0
+      },
+      {
+        "id": 229,
+        "count": 400,
+        "instance": 0
+      },
+      {
+        "id": 279,
+        "count": 200,
+        "instance": 0
+      },
+      {
+        "id": 12,
+        "count": 1,
+        "instance": 10
+      },
+      {
+        "id": 19,
+        "count": 1,
+        "instance": 11
+      },
+      {
+        "id": 26,
+        "count": 1,
+        "instance": 12
+      },
+      {
+        "id": 1,
+        "count": 1,
+        "instance": 13
+      },
+      {
+        "id": 34,
+        "count": 1,
+        "instance": 14
+      },
+      {
+        "id": 43,
+        "count": 1,
+        "instance": 15
+      },
+      {
+        "id": 552,
+        "count": 1,
+        "instance": 16
+      },
+      {
+        "id": 512,
+        "count": 1,
+        "instance": 17
+      },
+      {
+        "id": 519,
+        "count": 1,
+        "instance": 18
+      },
+      {
+        "id": 1550,
+        "count": 1,
+        "instance": 19
+      },
+      {
+        "id": 1551,
+        "count": 1,
+        "instance": 20
+      },
+      {
+        "id": 406,
+        "count": 1,
+        "instance": 21
+      },
+      {
+        "id": 412,
+        "count": 1,
+        "instance": 22
+      },
+      {
+        "id": 418,
+        "count": 1,
+        "instance": 23
+      },
+      {
+        "id": 424,
+        "count": 1,
+        "instance": 24
+      },
+      {
+        "id": 433,
+        "count": 1,
+        "instance": 25
+      },
+      {
+        "id": 510,
+        "count": 1,
+        "instance": 26
+      },
+      {
+        "id": 612,
+        "count": 1,
+        "instance": 27
+      }
+    ],
+    "knownRecipes": []
+  },
+  "learnedScripts": [
+    552,
+    512,
+    519,
+    1551,
+    406,
+    412,
+    418,
+    424,
+    433,
+    510,
+    612,
+    877
+  ],
+  "purchases": [
+    {
+      "vendor": 20028,
+      "store": 212,
+      "item": 239,
+      "count": 5,
+      "unitPrice": 3,
+      "remainingStock": 55
+    },
+    {
+      "vendor": 20028,
+      "store": 208,
+      "item": 235,
+      "count": 10,
+      "unitPrice": 3,
+      "remainingStock": 50
+    },
+    {
+      "vendor": 20028,
+      "store": 214,
+      "item": 241,
+      "count": 10,
+      "unitPrice": 3,
+      "remainingStock": 50
+    },
+    {
+      "vendor": 20028,
+      "store": 211,
+      "item": 238,
+      "count": 5,
+      "unitPrice": 3,
+      "remainingStock": 55
+    },
+    {
+      "vendor": 20028,
+      "store": 206,
+      "item": 233,
+      "count": 5,
+      "unitPrice": 3,
+      "remainingStock": 55
+    }
+  ],
+  "ticks": 301,
+  "fixedDt": 0.0166666675,
+  "spent": 105,
+  "success": true,
+  "saveReload": true,
+  "error": "",
+  "after": {
+    "medicineState": 1,
+    "ready": true,
+    "money": 395,
+    "crafted": 5,
+    "gameSeconds": 8837225.200316325,
+    "worldHash": "6852b4422bda2475",
+    "sourcePosition": [
+      -279.456207,
+      22.5010395,
+      129.81488
+    ],
+    "velocity": [
+      0,
+      0,
+      0
+    ],
+    "yaw": 0.646779895,
+    "pitch": -0.0839999989,
+    "items": [
+      {
+        "id": 33,
+        "count": 1,
+        "instance": 1
+      },
+      {
+        "id": 1527,
+        "count": 1,
+        "instance": 2
+      },
+      {
+        "id": 73,
+        "count": 1,
+        "instance": 3
+      },
+      {
+        "id": 70,
+        "count": 1,
+        "instance": 4
+      },
+      {
+        "id": 973,
+        "count": 1,
+        "instance": 5
+      },
+      {
+        "id": 974,
+        "count": 1,
+        "instance": 6
+      },
+      {
+        "id": 975,
+        "count": 1,
+        "instance": 7
+      },
+      {
+        "id": 1579,
+        "count": 1,
+        "instance": 8
+      },
+      {
+        "id": 916,
+        "count": 10,
+        "instance": 0
+      },
+      {
+        "id": 228,
+        "count": 1,
+        "instance": 9
+      },
+      {
+        "id": 937,
+        "count": 10,
+        "instance": 0
+      },
+      {
+        "id": 229,
+        "count": 400,
+        "instance": 0
+      },
+      {
+        "id": 279,
+        "count": 200,
+        "instance": 0
+      },
+      {
+        "id": 12,
+        "count": 1,
+        "instance": 10
+      },
+      {
+        "id": 19,
+        "count": 1,
+        "instance": 11
+      },
+      {
+        "id": 26,
+        "count": 1,
+        "instance": 12
+      },
+      {
+        "id": 1,
+        "count": 1,
+        "instance": 13
+      },
+      {
+        "id": 34,
+        "count": 1,
+        "instance": 14
+      },
+      {
+        "id": 43,
+        "count": 1,
+        "instance": 15
+      },
+      {
+        "id": 917,
+        "count": 5,
+        "instance": 0
+      },
+      {
+        "id": 1550,
+        "count": 1,
+        "instance": 19
+      }
+    ],
+    "knownRecipes": [
+      147,
+      107,
+      114,
+      42,
+      522,
+      192,
+      1,
+      7,
+      13,
+      19,
+      28,
+      105,
+      57,
+      296,
+      200,
+      207,
+      272,
+      337,
+      388,
+      390
+    ]
+  }
+}

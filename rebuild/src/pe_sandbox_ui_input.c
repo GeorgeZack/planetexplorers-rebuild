@@ -1,4 +1,5 @@
 #include "pe_sandbox_ui.h"
+#include "pe_adventure_medicine.h"
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
@@ -11,6 +12,13 @@ static bool hit(PeTrainingUIRect r,PeSandboxUIInput i) {
 static PeTrainingUIRect relative(const PeSandboxUI *u,PeTrainingUIRect p,float x,float y,float w,float h) {
     float s=u->layout.scale;
     return (PeTrainingUIRect){p.x+x*s,p.y+y*s,w*s,h*s};
+}
+bool pe_sandbox_pointer_release_gate(PeSandboxPointerGate *gate,bool ui_owned,unsigned buttons_down) {
+    if(!gate)return true;
+    if(ui_owned&&buttons_down)gate->waiting_for_release=true;
+    bool blocked=gate->waiting_for_release;
+    if(!buttons_down)gate->waiting_for_release=false;
+    return blocked;
 }
 void pe_sandbox_ui_init(PeSandboxUI *u,float w,float h) {
     if(!u)return;
@@ -36,6 +44,7 @@ PeTrainingUIRect pe_sandbox_ui_supplier_menu(const PeSandboxUI *u) {
     return pe_training_ui_map(&u->layout,(PeTrainingUIRect){107,140,426,486},PE_UI_CENTER);
 }
 PeTrainingUIRect pe_sandbox_ui_supplier_choice(const PeSandboxUI *u,int index) {
+    if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE)return pe_training_ui_map(&u->layout,(PeTrainingUIRect){395,489+20*(float)index,645,20},PE_UI_BOTTOM_CENTER);
     float step=u->dialogue.role==3?48.0f:21.0f;
     return relative(u,pe_sandbox_ui_supplier_menu(u),29,85+step*(float)index,370,step);
 }
@@ -174,7 +183,7 @@ bool pe_sandbox_ui_open_annot(PeSandboxUI *u,const PeGame *g,uint32_t entity,Tex
 }
 bool pe_sandbox_ui_open_town(PeSandboxUI *u,const PeGame *g,uint32_t entity,const char *name,Texture2D portrait,bool eligible) {
     if(!u||!g||!entity||!name||strlen(name)>128||!eligible||u->town_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0)return false;
-    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->town_portrait=portrait;u->shop_selection=0;u->shop_quantity=1;
+    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->town_portrait=portrait;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;
     snprintf(u->town_name,sizeof u->town_name,"%s",name);return true;
 }
 static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
@@ -183,7 +192,7 @@ static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
         bool vendor=pe_town_shop_count(u->town_entity)>0;
         if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i))pe_sandbox_ui_cancel_town(u);
         else if(vendor&&(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))){
-            if(pe_town_shop_open(g,u->town_entity)){u->shop_open=true;u->shop_selection=0;u->shop_quantity=1;}
+            if(pe_town_shop_open(g,u->town_entity)){u->shop_open=true;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;}
         }else if((!vendor&&i.advance)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,vendor?1:0),i)))pe_sandbox_ui_cancel_town(u);
         return;
     }
@@ -199,10 +208,19 @@ static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
     if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,4),i)){pe_sandbox_ui_cancel_town(u);return;}
     if(i.left_pressed&&hit(relative(u,p,10,10,570,46),i)){u->shop_dragging=true;u->shop_grab_x=i.mouse_x-p.x;u->shop_grab_y=i.mouse_y-p.y;return;}
     if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,3),i)){u->shop_open=false;return;}
-    if(i.left_pressed)for(size_t row=0;row<pe_town_shop_count(u->town_entity);row++)if(hit(pe_sandbox_ui_shop_row(u,(int)row),i)){u->shop_selection=(int)row;u->shop_quantity=1;}
+    int count=(int)pe_town_shop_count(u->town_entity),maxscroll=count>8?count-8:0;
+    if(i.wheel&&hit(relative(u,p,22,90,586,304),i))u->shop_scroll+=i.wheel>0?-1:1;
+    if(u->shop_scroll<0)u->shop_scroll=0;
+    if(u->shop_scroll>maxscroll)u->shop_scroll=maxscroll;
+    int selected=u->shop_selection;
+    if(selected<u->shop_scroll)selected=u->shop_scroll;
+    if(selected>=u->shop_scroll+8)selected=u->shop_scroll+7;
+    if(selected>=count)selected=count-1;
+    if(selected!=u->shop_selection){u->shop_selection=selected;u->shop_quantity=1;}
+    if(i.left_pressed)for(int row=0;row<8&&row+u->shop_scroll<count;row++)if(hit(pe_sandbox_ui_shop_row(u,row),i)){u->shop_selection=row+u->shop_scroll;u->shop_quantity=1;}
     const PeTownOffer *offer=u->shop_selection<0?NULL:pe_town_shop_offer(u->town_entity,(size_t)u->shop_selection);
     if(!offer)return;
-    unsigned stock=pe_town_shop_stock(g,offer->store_id);
+    unsigned stock=pe_town_shop_stock(g,u->town_entity,offer->store_id);
     if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,0),i)&&u->shop_quantity>1)u->shop_quantity--;
     if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,1),i)&&u->shop_quantity<stock)u->shop_quantity++;
     if(!u->shop_quantity)u->shop_quantity=1;
@@ -229,7 +247,10 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         bool empty_menu=u->dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU&&g->mode==PE_GAME_ADVENTURE&&g->hp>0&&
             (g->welcome_page<PE_ADVENTURE_WELCOME_PAGES||g->adventure_mission==PE_ADVENTURE_ARRIVAL||g->adventure_mission==PE_ADVENTURE_SUPPLIES);
         if(i.escape||(!offer&&!empty_menu))pe_adventure_dialogue_cancel(&u->dialogue);
-        else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU) {
+        else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE) {
+            if(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))pe_adventure_dialogue_choose_medicine(&u->dialogue,g,true);
+            else if(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,1),i))pe_adventure_dialogue_choose_medicine(&u->dialogue,g,false);
+        } else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU) {
             if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i))pe_adventure_dialogue_cancel(&u->dialogue);
             else if(offer&&(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i))))pe_adventure_dialogue_choose_supply(&u->dialogue,g);
             else if((!offer&&i.advance)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,offer?1:0),i)))pe_adventure_dialogue_cancel(&u->dialogue);

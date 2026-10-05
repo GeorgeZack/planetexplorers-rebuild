@@ -138,6 +138,34 @@
       "npc_id": -9898,
       "speaker": 3,
       "text": "Oh, are you from there? We've a major issue with a virus right now. A lot of our people are sick and cannot work. We just created a script for the cure, can you go help us create it? We'd really appreciate it."
+    },
+    {
+      "talk_id": 4097,
+      "localization_id": 3004097,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "Sure, why not."
+    },
+    {
+      "talk_id": 4098,
+      "localization_id": 3004098,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "Wha? No way."
+    },
+    {
+      "talk_id": 4099,
+      "localization_id": 3004099,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "I've created the cure that you need."
+    },
+    {
+      "talk_id": 4100,
+      "localization_id": 3004100,
+      "npc_id": -9898,
+      "speaker": 3,
+      "text": "Oh thank you, thank you! We'll replicate the medicine right away. Our colonists will be up in no time! Here, take this as a sign of our appreciation."
     }
   ],
   "missions": [
@@ -154,6 +182,13 @@
       "description": "Go to \"Town%\"004 and find out why the supplies has been delayed.",
       "objective": "Go to \"Town%\"004",
       "target_id": 4503
+    },
+    {
+      "id": 9072,
+      "title": "Herb Collecting",
+      "description": "Collect medical materials for the people in \"Town%\"004.",
+      "objective": "Gather \"itemnum%\" units of \"itemid%\"",
+      "target_id": 2531
     }
   ]
 }
