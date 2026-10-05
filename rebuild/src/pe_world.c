@@ -7,7 +7,9 @@
 
 /* Bootstrap generator preserves density storage, not the original seed algorithm.
  * Original CPU marching-cubes extraction lives in pe_mesh.c. */
-static bool inside(int x,int y,int z) { return x>=0&&x<PE_WORLD_X&&y>=0&&y<PE_WORLD_Y&&z>=0&&z<PE_WORLD_Z; }
+int pe_world_depth(const PeWorld *w) { return !w?0:(!w->depth||w->depth==PE_WORLD_Z?PE_WORLD_Z:(w->depth==PE_WORLD_MAX_Z?PE_WORLD_MAX_Z:0)); }
+size_t pe_world_voxel_count(const PeWorld *w) { return (size_t)pe_world_depth(w)*PE_WORLD_X*PE_WORLD_Y; }
+static bool inside(const PeWorld *w,int x,int y,int z) { return x>=0&&x<PE_WORLD_X&&y>=0&&y<PE_WORLD_Y&&z>=0&&z<pe_world_depth(w); }
 static size_t index_at(int x,int y,int z) { return ((size_t)z*PE_WORLD_Y+(size_t)y)*PE_WORLD_X+(size_t)x; }
 static PeVec3 add(PeVec3 a,PeVec3 b) { return (PeVec3){a.x+b.x,a.y+b.y,a.z+b.z}; }
 static PeVec3 scale(PeVec3 a,float s) { return (PeVec3){a.x*s,a.y*s,a.z*s}; }
@@ -36,19 +38,19 @@ void pe_world_init(PeWorld *w,uint32_t seed) {
         }
     }
 }
-PeVoxel pe_world_get(const PeWorld *w,int x,int y,int z) { return w&&inside(x,y,z)?w->voxels[index_at(x,y,z)]:(PeVoxel){0,0}; }
+PeVoxel pe_world_get(const PeWorld *w,int x,int y,int z) { return w&&inside(w,x,y,z)?w->voxels[index_at(x,y,z)]:(PeVoxel){0,0}; }
 bool pe_world_set(PeWorld *w,int x,int y,int z,PeVoxel v) {
-    if(!w||!inside(x,y,z))return false;
+    if(!w||!inside(w,x,y,z))return false;
     PeVoxel *old=&w->voxels[index_at(x,y,z)];
     if(old->volume!=v.volume||old->material!=v.material){*old=v;w->revision++;}
     return true;
 }
 float pe_world_density(const PeWorld *w,PeVec3 p) {
-    if(!w||!finite3(p)||p.x<0||p.y<0||p.z<0||p.x>PE_WORLD_X-1||p.y>PE_WORLD_Y-1||p.z>PE_WORLD_Z-1)return 0;
+    if(!w||!finite3(p)||p.x<0||p.y<0||p.z<0||p.x>PE_WORLD_X-1||p.y>PE_WORLD_Y-1||p.z>pe_world_depth(w)-1)return 0;
     int x=(int)floorf(p.x),y=(int)floorf(p.y),z=(int)floorf(p.z);
     if(x==PE_WORLD_X-1)x--;
     if(y==PE_WORLD_Y-1)y--;
-    if(z==PE_WORLD_Z-1)z--;
+    if(z==pe_world_depth(w)-1)z--;
     float fx=p.x-x,fy=p.y-y,fz=p.z-z,v[2];
     for(int k=0;k<2;k++) {
         float a=lerp(pe_world_get(w,x,y,z+k).volume,pe_world_get(w,x+1,y,z+k).volume,fx);
@@ -65,14 +67,14 @@ static PeVec3 normal_at(const PeWorld *w,PeVec3 p) {
     return unit(n);
 }
 float pe_world_height(const PeWorld *w,float x,float z) {
-    if(!w||!isfinite(x)||!isfinite(z)||x<0||x>PE_WORLD_X-1||z<0||z>PE_WORLD_Z-1)return 0;
+    if(!w||!isfinite(x)||!isfinite(z)||x<0||x>PE_WORLD_X-1||z<0||z>pe_world_depth(w)-1)return 0;
     if(pe_world_density(w,(PeVec3){x,PE_WORLD_Y-1,z})>=128)return PE_WORLD_Y-1;
     PeHit hit=pe_world_raycast(w,(PeVec3){x,PE_WORLD_Y-1,z},(PeVec3){0,-1,0},PE_WORLD_Y-1);
     return hit.hit?hit.position.y:0;
 }
 bool pe_world_collides(const PeWorld *w,PeVec3 feet,float radius,float height) {
     if(!w||!finite3(feet)||!isfinite(radius)||!isfinite(height)||radius<0||height<=0)return true;
-    if(feet.x-radius<0||feet.z-radius<0||feet.x+radius>PE_WORLD_X-1||feet.z+radius>PE_WORLD_Z-1||feet.y<0)return true;
+    if(feet.x-radius<0||feet.z-radius<0||feet.x+radius>PE_WORLD_X-1||feet.z+radius>pe_world_depth(w)-1||feet.y<0)return true;
     /* Cylinder probes are provisional character physics, not a rigid-body engine. */
     int steps=(int)ceilf(fminf(height,PE_WORLD_Y*2.0f)/.20f);
     static const float ring[8][2]={{1,0},{.70710678f,.70710678f},{0,1},{-.70710678f,.70710678f},{-1,0},{-.70710678f,-.70710678f},{0,-1},{.70710678f,-.70710678f}};
@@ -112,7 +114,7 @@ PeHit pe_world_raycast(const PeWorld *w,PeVec3 origin,PeVec3 direction,float ran
     if(len<1e-15)return h;
     PeVec3 d={(float)(direction.x/len),(float)(direction.y/len),(float)(direction.z/len)};
     float o[3]={origin.x,origin.y,origin.z},v[3]={d.x,d.y,d.z};
-    int maxc[3]={PE_WORLD_X-1,PE_WORLD_Y-1,PE_WORLD_Z-1};
+    int maxc[3]={PE_WORLD_X-1,PE_WORLD_Y-1,pe_world_depth(w)-1};
     double enter=0,leave=range;
     for(int a=0;a<3;a++) {
         if(fabs(v[a])<1e-15){if(o[a]<0||o[a]>maxc[a])return h;continue;}
@@ -125,7 +127,7 @@ PeHit pe_world_raycast(const PeWorld *w,PeVec3 origin,PeVec3 direction,float ran
     if(pe_world_density(w,p)>=128){h.hit=true;h.distance=(float)t;h.position=p;}
     int cell[3];float pp[3]={p.x,p.y,p.z};
     for(int a=0;a<3;a++){cell[a]=(int)floorf(pp[a]);if(v[a]<0&&fabsf(pp[a]-cell[a])<1e-5f)cell[a]--;if(cell[a]<0)cell[a]=0;if(cell[a]>=maxc[a])cell[a]=maxc[a]-1;}
-    for(int iter=0;!h.hit&&t<leave&&iter<PE_WORLD_X+PE_WORLD_Y+PE_WORLD_Z+8;iter++) {
+    for(int iter=0;!h.hit&&t<leave&&iter<PE_WORLD_X+PE_WORLD_Y+pe_world_depth(w)+8;iter++) {
         double next=leave,boundary[3];
         for(int a=0;a<3;a++){boundary[a]=DBL_MAX;if(v[a]!=0)boundary[a]=((cell[a]+(v[a]>0?1:0))-o[a])/(double)v[a];if(boundary[a]>t+1e-8&&boundary[a]<next)next=boundary[a];}
         double hit_distance;PeVec3 hit_normal;
@@ -143,14 +145,14 @@ PeHit pe_world_raycast(const PeWorld *w,PeVec3 origin,PeVec3 direction,float ran
     return h;
 }
 static bool dig_supported(const PeWorld *w,int x,int y,int z) {
-    if(!inside(x,y,z))return false;
+    if(!inside(w,x,y,z))return false;
     if(pe_world_get(w,x,y,z).volume>=128)return true;
     static const int offsets[6][3]={{-1,0,0},{1,0,0},{0,-1,0},{0,1,0},{0,0,-1},{0,0,1}};
     for(int i=0;i<6;i++)if(pe_world_get(w,x+offsets[i][0],y+offsets[i][1],z+offsets[i][2]).volume>=128)return true;
     return false;
 }
 static bool dig_index(const PeWorld *w,const double p[3],int index[3],bool nearest) {
-    const int size[3]={PE_WORLD_X,PE_WORLD_Y,PE_WORLD_Z};
+    const int size[3]={PE_WORLD_X,PE_WORLD_Y,pe_world_depth(w)};
     const int32_t offset[3]={w->origin_x,w->origin_y,w->origin_z};
     for(int a=0;a<3;a++) {
         double n=floor(p[a]);
@@ -167,7 +169,7 @@ static PeHit dig_box_ray(const PeWorld *w,PeVec3 origin,PeVec3 direction,int thr
     PeHit hit={0};
     double o[3]={origin.x+.5,origin.y+.5,origin.z+.5};
     double d[3]={direction.x,direction.y,direction.z};
-    int index[3],size[3]={PE_WORLD_X,PE_WORLD_Y,PE_WORLD_Z};
+    int index[3],size[3]={PE_WORLD_X,PE_WORLD_Y,pe_world_depth(w)};
     if(dig_index(w,o,index,false)&&pe_world_get(w,index[0],index[1],index[2]).volume>=threshold)return hit;
     double enter[3]={10001,10001,10001};int samples[3][3]={{0}},step[3]={0};
     const int32_t offsets[3]={w->origin_x,w->origin_y,w->origin_z};
@@ -215,11 +217,11 @@ PeHit pe_world_dig_target(const PeWorld *w,PeVec3 origin,PeVec3 direction,PeVec3
     return hit;
 }
 int pe_world_dig(PeWorld *w,PeVec3 c,float radius) {
-    if(!w||!finite3(c)||!isfinite(radius)||radius<=0)return 0;
+    if(!w||!pe_world_depth(w)||!finite3(c)||!isfinite(radius)||radius<=0)return 0;
     int removed=0;bool changed=false;
     /* Clamp before float-to-int conversion, including arbitrarily large brushes. */
-    int lo[3]={(int)fmaxf(0,fminf(PE_WORLD_X-1,ceilf(c.x-radius-1))),(int)fmaxf(0,fminf(PE_WORLD_Y-1,ceilf(c.y-radius-1))),(int)fmaxf(0,fminf(PE_WORLD_Z-1,ceilf(c.z-radius-1)))};
-    int hi[3]={(int)fmaxf(0,fminf(PE_WORLD_X-1,floorf(c.x+radius+1))),(int)fmaxf(0,fminf(PE_WORLD_Y-1,floorf(c.y+radius+1))),(int)fmaxf(0,fminf(PE_WORLD_Z-1,floorf(c.z+radius+1)))};
+    int lo[3]={(int)fmaxf(0,fminf(PE_WORLD_X-1,ceilf(c.x-radius-1))),(int)fmaxf(0,fminf(PE_WORLD_Y-1,ceilf(c.y-radius-1))),(int)fmaxf(0,fminf(pe_world_depth(w)-1,ceilf(c.z-radius-1)))};
+    int hi[3]={(int)fmaxf(0,fminf(PE_WORLD_X-1,floorf(c.x+radius+1))),(int)fmaxf(0,fminf(PE_WORLD_Y-1,floorf(c.y+radius+1))),(int)fmaxf(0,fminf(pe_world_depth(w)-1,floorf(c.z+radius+1)))};
     for(int z=lo[2];z<=hi[2];z++)for(int y=lo[1];y<=hi[1];y++)for(int x=lo[0];x<=hi[0];x++) {
         double dx=x-(double)c.x,dy=y-(double)c.y,dz=z-(double)c.z;
         double dist=sqrt(dx*dx+dy*dy+dz*dz);
@@ -235,7 +237,7 @@ uint64_t pe_world_hash(const PeWorld *w) {
     if(!w)return 0;
     uint64_t h=UINT64_C(14695981039346656037);
     for(int i=0;i<4;i++){h^=(w->seed>>(8*i))&255;h*=UINT64_C(1099511628211);}
-    for(size_t i=0;i<PE_VOXEL_COUNT;i++){h^=w->voxels[i].volume;h*=UINT64_C(1099511628211);h^=w->voxels[i].material;h*=UINT64_C(1099511628211);}
+    for(size_t i=0;i<pe_world_voxel_count(w);i++){h^=w->voxels[i].volume;h*=UINT64_C(1099511628211);h^=w->voxels[i].material;h*=UINT64_C(1099511628211);}
     return h;
 }
 

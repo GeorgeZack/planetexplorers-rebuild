@@ -27,6 +27,12 @@ bool pe_sandbox_collision_update(PeSandboxCollision *collision,const PeWorld *wo
 bool pe_sandbox_collision_update_with_trees(PeSandboxCollision *collision,const PeWorld *world,
     const PeB45Cell *cells,size_t cell_count,const PeSandboxBox *boxes,size_t box_count,
     const PeTreeCapsule *trees,size_t tree_count,char *error,size_t error_capacity);
+/* Borrowed immutable building triangles; owner must outlive this snapshot.
+ * NULL clears a previous static scene. Legacy update entry points also clear it. */
+bool pe_sandbox_collision_update_with_static(PeSandboxCollision *collision,const PeWorld *world,
+    const PeB45Cell *cells,size_t cell_count,const PeSandboxBox *boxes,size_t box_count,
+    const PeTreeCapsule *trees,size_t tree_count,const PeSceneCollision *static_scene,
+    char *error,size_t error_capacity);
 PeSandboxCollisionStats pe_sandbox_collision_stats(const PeSandboxCollision *collision);
 /* All queries use the last successful snapshot. Unready/invalid overlap is
  * conservatively true; invalid sweep/support is no hit. Bounds are solid at

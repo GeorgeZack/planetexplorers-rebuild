@@ -117,6 +117,9 @@ bool pe_game_gather(PeGame *game);
  * once per successful event. Empty samples succeed unchanged; capacity blocks
  * succeed with capacity_blocked and preserve all gameplay state. No reach test
  * here: the source action locks its first target before the later event. */
+/* Immutable settlement obstruction only; target contact tolerates .005 m.
+ * Ordinary worlds are clear; missing required settlement assets fail closed. */
+bool pe_game_static_segment_clear(const PeGame *game,PeVec3 start,PeVec3 end);
 bool pe_game_dig_sample(PeGame *game,int x,int y,int z,PeResourceEdit *edit);
 bool pe_game_cut_tree(PeGame *game,int tree_index,PeResourceEdit *edit);
 bool pe_game_place(PeGame *game, PeVec3 origin, PeVec3 direction, int item_id);

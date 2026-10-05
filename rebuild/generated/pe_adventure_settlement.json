@@ -1,0 +1,298 @@
+{
+  "schema": 1,
+  "scope": "One archived reference lot, source-world coordinates; no terrain or invented markers.",
+  "archive_guid": "03f788c050bd5446a419dd567f0d980d",
+  "sources": [
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/index.arc",
+      "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/world.arc",
+      "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/index.arc",
+      "sha256": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/world.arc",
+      "sha256": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/voxel.arc",
+      "sha256": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/water.arc",
+      "sha256": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/block45.arc",
+      "sha256": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21"
+    },
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    },
+    {
+      "path": "Assets/Resources/RandomTown/VArtifactTown.xml",
+      "sha256": "ffb97ded0f47143e13aec2ac409f2c13cb57b23ebd180854f36503ad7ae58337"
+    }
+  ],
+  "lot": {
+    "artifact_id": 11,
+    "template_id": -1,
+    "name": "town1_8",
+    "size_x_z_y": [
+      55.0,
+      100.0,
+      14.0
+    ],
+    "origin": [
+      -623.0,
+      16.0,
+      327.0
+    ],
+    "rotation_degrees": 0,
+    "source_npc_born": [
+      17.0,
+      11.0,
+      22.0
+    ]
+  },
+  "buildings": [
+    {
+      "entity_id": 20001,
+      "prototype_id": 163,
+      "townhouse_id": 21,
+      "slot": 0,
+      "resource": "Item/town_store01.unity3d",
+      "dimensions": [
+        8.0,
+        9.0
+      ],
+      "yaw_degrees": 270.0,
+      "position": [
+        -583.0,
+        27.5,
+        356.0
+      ],
+      "rotation": [
+        0.0,
+        0.7071068286895752,
+        0.0,
+        -0.7071068286895752
+      ]
+    },
+    {
+      "entity_id": 20003,
+      "prototype_id": 164,
+      "townhouse_id": 22,
+      "slot": 1,
+      "resource": "Item/town_board01.unity3d",
+      "dimensions": [
+        1.0,
+        1.0
+      ],
+      "yaw_degrees": 180.0,
+      "position": [
+        -599.0,
+        27.5,
+        364.0
+      ],
+      "rotation": [
+        0.0,
+        1.0,
+        0.0,
+        -4.371138828673793e-08
+      ]
+    },
+    {
+      "entity_id": 20004,
+      "prototype_id": 162,
+      "townhouse_id": 20,
+      "slot": 2,
+      "resource": "Item/town_hotel01.unity3d",
+      "dimensions": [
+        11.0,
+        9.0
+      ],
+      "yaw_degrees": 170.0,
+      "position": [
+        -601.0,
+        28.5,
+        408.0
+      ],
+      "rotation": [
+        0.0,
+        0.9961947202682495,
+        0.0,
+        0.08715580403804779
+      ]
+    },
+    {
+      "entity_id": 20005,
+      "prototype_id": 161,
+      "townhouse_id": 19,
+      "slot": 3,
+      "resource": "Item/town_dwelling01.unity3d",
+      "dimensions": [
+        17.0,
+        18.0
+      ],
+      "yaw_degrees": 250.0,
+      "position": [
+        -583.0,
+        28.5,
+        388.0
+      ],
+      "rotation": [
+        0.0,
+        0.8191519975662231,
+        0.0,
+        -0.5735764503479004
+      ]
+    },
+    {
+      "entity_id": 20006,
+      "prototype_id": 145,
+      "townhouse_id": 63,
+      "slot": 4,
+      "resource": "Item/RepairMachine_Static.unity3d",
+      "dimensions": [
+        3.0,
+        3.0
+      ],
+      "yaw_degrees": 180.0,
+      "position": [
+        -613.5,
+        29.5,
+        404.0
+      ],
+      "rotation": [
+        0.0,
+        1.0,
+        0.0,
+        -4.371138828673793e-08
+      ]
+    },
+    {
+      "entity_id": 20007,
+      "prototype_id": 146,
+      "townhouse_id": 64,
+      "slot": 5,
+      "resource": "Item/PowerPlanetSolar.unity3d",
+      "dimensions": [
+        3.0,
+        3.0
+      ],
+      "yaw_degrees": 180.0,
+      "position": [
+        -611.0,
+        29.5,
+        404.0
+      ],
+      "rotation": [
+        0.0,
+        1.0,
+        0.0,
+        -4.371138828673793e-08
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "role": 1,
+      "entity_id": 20008,
+      "prototype_id": 17,
+      "position": [
+        -606.0,
+        27.50515365600586,
+        349.0
+      ],
+      "rotation": [
+        0.0,
+        1.0,
+        0.0,
+        -4.371138828673793e-08
+      ]
+    },
+    {
+      "role": 2,
+      "entity_id": 20016,
+      "prototype_id": 22,
+      "position": [
+        -598.5214233398438,
+        22.978425979614258,
+        341.3612365722656
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    }
+  ],
+  "player": {
+    "entity_id": 20000,
+    "saved_pose": {
+      "position": [
+        -598.5061645507812,
+        24.299278259277344,
+        343.4537353515625
+      ],
+      "rotation": [
+        0.0,
+        0.5014163255691528,
+        0.0,
+        0.8652061223983765
+      ]
+    },
+    "initial_spawn": {
+      "position": [
+        -606.0,
+        28.0,
+        348.0
+      ],
+      "evidence": "Derived from source InitTownHeight: lot origin + NPC_born[0] + (0,1,-1); not saved pose."
+    }
+  },
+  "start_building_front_door": [
+    -599.7844848632812,
+    28.5,
+    401.1063537597656
+  ],
+  "destination": {
+    "mission_id": 9032,
+    "target_id": 4503,
+    "town_id": 4,
+    "title": "The Delayed Supplies",
+    "description": "Go to \"Town%\"004 and find out why the supplies has been delayed.",
+    "position": [
+      -284.0,
+      25.0,
+      134.0
+    ],
+    "completion_radius": 15,
+    "track_radius": 60,
+    "strict": true,
+    "axes": "XZ",
+    "not_for_dungeon": true
+  },
+  "colony_candidates": {
+    "town_ids": [
+      1,
+      2,
+      3
+    ],
+    "coordinates": null,
+    "marker_visibility": "Unverified; inspected source excludes empty-town labels."
+  },
+  "saved_label_counts": {
+    "PeMap.StaticPoint+Mgr": 0,
+    "ArchiveKeyMapUserLabel": 0,
+    "PeMap.TowerMark+Mgr": 0
+  }
+}

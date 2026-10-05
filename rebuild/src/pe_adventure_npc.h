@@ -22,6 +22,10 @@ bool pe_adventure_npc_refresh(PeAdventureNpc *npc,const PeWorld *world,
 /* Same placement contract around an explicit finite crop-local XZ anchor. */
 bool pe_adventure_npc_refresh_at(PeAdventureNpc *npc,const PeWorld *world,
     const PeSandboxCollision *collision,PeVec3 anchor,char *error,size_t capacity);
+/* Archived pose: retain exact XZ and heading; allow vertical settling after
+ * terrain edits. Unlike provisional encounters, never search nearby rings. */
+bool pe_adventure_npc_refresh_source(PeAdventureNpc *npc,const PeWorld *world,
+    const PeSandboxCollision *collision,PeVec3 anchor,float yaw,char *error,size_t capacity);
 PeTreeCapsule pe_adventure_npc_capsule(const PeAdventureNpc *npc);
 /* Source MousePickableNPC: rough root-axis filter, 4.5m AABB distance, capsule
  * camera ray to 100m, then obstacle-distance +10m allowance (layers11/12).

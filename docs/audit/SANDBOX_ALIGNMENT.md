@@ -2,7 +2,7 @@
 
 Original audit and reference playtest: 2026-10-03, US/Central. That session changed no C gameplay; its 23:59 stopping deadline was session-specific. An implementation checkpoint dated 2026-10-05 is appended below. The original observations and work-order table remain historical evidence, with the checkpoint identifying which parts are now implemented.
 
-The default sandbox is a separate host from the tutorial. As of October 5 it connects recovered UI and player presentation to real Adventure progression and shared render-derived collision. Its bounded procedural world, population, most actions and wider survival systems still differ substantially from the original. The checkpoint does not claim full Adventure parity.
+The default sandbox is a separate host from the tutorial. As of October 5 it connects recovered UI and player presentation to real Adventure progression and shared render-derived collision. New sessions now use one captured reference settlement; population, wider world generation and survival systems still differ substantially from the original. The checkpoint does not claim full Adventure parity.
 
 ## Evidence and scope
 
@@ -207,3 +207,10 @@ The flat terrain colors are replaced by recovered original diffuse atlases with 
 The next bounded settlement step is complete: [Westina's welcome](ADVENTURE_WELCOME.md) now auto-opens on fresh Adventure, runs1949→4081..4088, persists acknowledged replies and starts Arrival only at the final acknowledgment. Both recovered role1/role2 NPCs share the sandbox interaction host, with distinct appearances and portraits. PECSv6 saves the page counter; older Adventure saves retain their post-welcome progression. Graphical welcome and supplier regressions pass, as do core/UI/sanitizer, content and CLI checks. See the latest [playtest](../PLAYTEST.md#october-5-adventure-welcome).
 
 Next settlement work should audit and reproduce the reference town's placement/layout and source colony-site/Annot targets, then build the required bounded geometry and mission destinations. Current NPC anchors and terrain/world generation remain provisional; source dialogue mentions three sites that the native map does not yet provide. General NPC generation/AI and full procedural travel are separate larger stages.
+
+
+## October 5 recovered starting settlement checkpoint
+
+[Settlement integration](ADVENTURE_SETTLEMENT.md) supersedes the provisional town/NPC placement above for new sessions. The C host loads a64×32×128 original terrain capture, six intact archived buildings and their physical colliders, and archived Westina/Eitai anchors. PECSv7 preserves the extended crop while older saves keep their worlds. Source-coordinate projection, screen queries and horizontal controls were corrected after a visual mirrored-sign finding. Core/sanitizer, UI/CLI and physical movement/dialogue/save tests passed.
+
+The source does not display empty candidate colony towns as map icons, and the inspected save has no colony-site markers; those are not missing UI features to invent. Annot's archived destination is known but remains outside the crop. Next: remaining town population and interactions, then actual travel/arrival at Annot. See the [placement/quest audit](ADVENTURE_COLONY_MARKERS.md), [captured terrain](ADVENTURE_SETTLEMENT_TERRAIN.md), and [physical result](../reference/settlement/result.json).

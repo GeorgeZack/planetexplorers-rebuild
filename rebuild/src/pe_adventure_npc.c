@@ -14,7 +14,7 @@ PeTreeCapsule pe_adventure_npc_capsule(const PeAdventureNpc *npc){
 }
 static bool valid_pose(const PeAdventureNpc *npc){
     return npc&&npc->placed&&finite3(npc->position)&&finite3(npc->spawn_position)&&isfinite(npc->yaw)&&
-        npc->position.x>=0&&npc->position.x<PE_WORLD_X&&npc->position.z>=0&&npc->position.z<PE_WORLD_Z&&
+        npc->position.x>=0&&npc->position.x<PE_WORLD_X&&npc->position.z>=0&&npc->position.z<PE_WORLD_MAX_Z&&
         npc->position.y>=0&&npc->position.y<PE_WORLD_Y;
 }
 static bool settle(const PeSandboxCollision *c,PeVec3 root,PeVec3 *out){
@@ -30,7 +30,7 @@ static bool settle(const PeSandboxCollision *c,PeVec3 root,PeVec3 *out){
 bool pe_adventure_npc_refresh_at(PeAdventureNpc *npc,const PeWorld *world,const PeSandboxCollision *c,PeVec3 anchor,char *error,size_t cap){
     if(error&&cap)*error=0;
     uint64_t generation=pe_sandbox_collision_stats(c).generation;
-    if(!npc||!world||!finite3(anchor)||anchor.x<0||anchor.z<0||anchor.x>=PE_WORLD_X||anchor.z>=PE_WORLD_Z||world->source>1||!generation||(npc->placed&&!valid_pose(npc))){
+    if(!npc||!world||!finite3(anchor)||anchor.x<0||anchor.z<0||anchor.x>=PE_WORLD_X||anchor.z>=pe_world_depth(world)||world->source>1||!generation||(npc->placed&&!valid_pose(npc))){
         error_set(error,cap,"Invalid supplier placement state or collision snapshot");return false;
     }
     if(npc->placed&&npc->collision_generation==generation)return true;
@@ -55,6 +55,22 @@ bool pe_adventure_npc_refresh_at(PeAdventureNpc *npc,const PeWorld *world,const 
 }
 bool pe_adventure_npc_refresh(PeAdventureNpc *npc,const PeWorld *world,const PeSandboxCollision *c,char *error,size_t cap){
     return pe_adventure_npc_refresh_at(npc,world,c,(PeVec3){32,0,27},error,cap);
+}
+bool pe_adventure_npc_refresh_source(PeAdventureNpc *npc,const PeWorld *w,const PeSandboxCollision *c,PeVec3 anchor,float yaw,char *error,size_t cap){
+    uint64_t generation=pe_sandbox_collision_stats(c).generation;
+    if(!npc||!w||!finite3(anchor)||!isfinite(yaw)||anchor.x<0||anchor.x>=PE_WORLD_X||
+       anchor.z<0||anchor.z>=pe_world_depth(w)||!generation||(npc->placed&&!valid_pose(npc))){
+        error_set(error,cap,"Invalid archived NPC placement");return false;
+    }
+    if(npc->placed&&npc->collision_generation==generation)return true;
+    PeVec3 p;
+    if(!settle(c,npc->placed?npc->position:anchor,&p)){
+        error_set(error,cap,"Archived NPC position has no clear supported ground");return false;
+    }
+    PeAdventureNpc next=*npc;
+    next.position=p;next.yaw=yaw;next.placed=true;next.collision_generation=generation;
+    if(!npc->placed)next.spawn_position=anchor;
+    *npc=next;return true;
 }
 static void sphere_entry(const double p[3],const double d[3],double y,double r,int side,double *best){
     double cy=p[1]-y,b=p[0]*d[0]+cy*d[1]+p[2]*d[2];

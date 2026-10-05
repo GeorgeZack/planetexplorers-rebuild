@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-05",
+  "reference": "Steam native V1.1.4 Unity5.2.4f1",
+  "original_profile": "~/.local/share/planet-explorers-settlement-reference",
+  "reference_preservation": "30 archived source save file SHA256 values unchanged",
+  "terrain_sha256": "99e0006dd2866b17f741988f90eb815ca3c589b14c8daf43dc62dcfdc67ab387",
+  "origin": [
+    -627,
+    16,
+    323
+  ],
+  "dimensions": [
+    64,
+    32,
+    128
+  ],
+  "buildings": 6,
+  "visual_triangles": 40820,
+  "collision_triangles": 920,
+  "observations": [
+    "Original archived Adventure loaded through normal Single Player/Load/slot1 UI; bounded read-only probe captured30 loaded LOD0 chunks stable across2 frames",
+    "C new sandbox via main menu opened welcome in recovered settlement",
+    "Welcome9 acknowledgments then Arrival, no early reward",
+    "D moved toward positive sourceX while facingpositiveZ; right mouse motion rotated viewright",
+    "Walked from sourceZ348 through373 to398, beyond prior64sample crop",
+    "Hotel blocked forward movement near crop(27.4895,12.4964,81.4113); F9/F10 restored that pose",
+    "Returned downhill near archived Eitai; Arrival completed; reflected free-cursor RMB correctly selectedNPC",
+    "Supplies final acknowledgment produced Go to Annot tracker; native v7 save succeeded",
+    "Quit original and C viaUI; original archivespreserved"
+  ],
+  "save_version": 7,
+  "final_player_local": [
+    21.0,
+    11.487014770507812,
+    25.0
+  ],
+  "captures": {
+    "original-starttown.png": "6bc46f0de36eb02b404b5126ca13836d8f47635604bf141e656d850106e2fab6",
+    "rebuild-new-sandbox.png": "ac4a452246b93dd63e013412342deb0f1c95de6036b34a0e1648fe4dd349905b",
+    "rebuild-hotel.png": "98b195832481e749e21fee562450a4eccbb9e9eb05320262e467cdb6bd7348a6",
+    "rebuild-wall.png": "b5ff949ceae436320fff56d8db93c27a0b33e5ba5ba6ebf16f0a2def1ff3d7f7",
+    "rebuild-npc-menu.png": "b1c2effa3328ad81bcfcfd8e7cdc4a8b6d5f5b7ba632bb5ccf16fd47b93da1fc",
+    "rebuild-supplies.png": "3a2289d8daa4de316944b9244c743b41f9569554780bb6adb0babad4aa59a04d"
+  }
+}

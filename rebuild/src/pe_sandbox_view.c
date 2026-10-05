@@ -4,6 +4,8 @@
 #include "pe_sandbox_actions.h"
 #include "pe_sandbox_camera.h"
 #include "pe_sandbox_world_view.h"
+#include "pe_settlement.h"
+#include "pe_reference.h"
 #include "pe_terrain_material_view.h"
 #include "pe_adventure_npc.h"
 #include "pe_adventure_npc_view.h"
@@ -17,6 +19,23 @@
 #include <string.h>
 static Vector3 rv(PeVec3 p) { return (Vector3){p.x,p.y,p.z}; }
 static PeVec3 pv(Vector3 p) { return (PeVec3){p.x,p.y,p.z}; }
+/* Unity source coordinates are left-handed. Reflect clip X for presentation;
+ * retain source XYZ throughout simulation/collision and invert screen queries. */
+static Ray source_ray(Vector2 point,Camera3D camera){
+    point.x=GetScreenWidth()-point.x;return GetScreenToWorldRay(point,camera);
+}
+static Vector2 source_screen(Vector3 point,Camera3D camera){
+    Vector2 p=GetWorldToScreen(point,camera);p.x=GetScreenWidth()-p.x;return p;
+}
+static void source_begin_3d(Camera3D camera){
+    BeginMode3D(camera);Matrix projection=rlGetMatrixProjection();
+    projection.m0=-projection.m0;rlSetMatrixProjection(projection);
+    rlSetCullFace(RL_CULL_FACE_FRONT);
+}
+static void source_end_3d(void){
+    EndMode3D();rlSetCullFace(RL_CULL_FACE_BACK);
+}
+
 static Color block_color(int item) {
     if (item == PE_ITEM_STONE) return (Color){143,156,160,255};
     if (item == PE_ITEM_DIRT) return (Color){145,111,81,255};
@@ -24,7 +43,7 @@ static Color block_color(int item) {
 }
 static bool update_mesh(const PeWorld *world, Model *model, bool *loaded, size_t *triangles,int x,int z,const PeTerrainMaterialView *surface) {
     PeMeshData data = {0};
-    if (!pe_world_mesh_region(world,x,0,z,x?31:32,31,z?31:32,&data)) return false;
+    if (!pe_world_mesh_region(world,x,0,z,x?31:32,31,z+32<pe_world_depth(world)?32:31,&data)) return false;
     if (data.count > INT_MAX/3) {pe_mesh_free(&data);return false;}
     if (!data.count) {
         if (*loaded) UnloadModel(*model);
@@ -81,16 +100,20 @@ static bool update_mesh(const PeWorld *world, Model *model, bool *loaded, size_t
     *triangles=data.count/3; pe_mesh_free(&data); return true;
 }
 typedef struct {
-    Model model[4];
-    bool loaded[4],ready;
-    size_t triangles[4],uploads;
+    Model model[8];
+    bool loaded[8],ready;
+    size_t triangles[8],uploads;
     PeWorld previous;
 } TerrainCache;
 static bool update_terrain(const PeWorld *world,TerrainCache *cache,size_t *triangles,const PeTerrainMaterialView *surface) {
     *triangles=0;
-    for(int i=0;i<4;i++) {
+    for(int i=0;i<8;i++) {
+        if(i>=2*(pe_world_depth(world)/32)){
+            if(cache->loaded[i])UnloadModel(cache->model[i]);
+            cache->loaded[i]=false;cache->triangles[i]=0;continue;
+        }
         int x=(i&1)*32,z=(i>>1)*32;
-        if(!cache->ready||pe_world_mesh_region_changed(world,&cache->previous,x,0,z,x?31:32,31,z?31:32)) {
+        if(!cache->ready||pe_world_mesh_region_changed(world,&cache->previous,x,0,z,x?31:32,31,z+32<pe_world_depth(world)?32:31)) {
             if(!update_mesh(world,&cache->model[i],&cache->loaded[i],&cache->triangles[i],x,z,surface))return false;
             cache->uploads++;
         }
@@ -100,7 +123,7 @@ static bool update_terrain(const PeWorld *world,TerrainCache *cache,size_t *tria
 }
 static void free_terrain(TerrainCache *cache) {
     if(!cache)return;
-    for(int i=0;i<4;i++)if(cache->loaded[i])UnloadModel(cache->model[i]);
+    for(int i=0;i<8;i++)if(cache->loaded[i])UnloadModel(cache->model[i]);
     free(cache);
 }
 static void draw_block(PeBlock b) {
@@ -162,7 +185,7 @@ static Camera3D game_camera(const PeGame *g,const PeSandboxCollision *collision,
         float f=hit.hit?fmaxf(.05f,hit.fraction-.02f):1;
         camera.position=Vector3Add(eye,Vector3Scale(delta,f));
     }
-    if(overview){camera.target=rv(g->player);camera.position=Vector3Add(camera.target,(Vector3){9,6,11});camera.fovy=62;}
+    if(overview){camera.target=rv(g->player);camera.position=Vector3Add(camera.target,(Vector3){9,6,pe_settlement_matches(&g->world)?-11:11});camera.fovy=62;}
     return camera;
 }
 /* Construction transactions retain their player-origin reach validation. Aim
@@ -193,7 +216,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     if(!IsWindowReady()){fprintf(stderr,"Unable to initialize graphics\n");return 1;}
     SetWindowMinSize(1000,700);SetTargetFPS(60);SetExitKey(KEY_NULL);
     char error[256]={0};int result=0,frame=0;
-    PeTerrainMaterialView surface={0};
+    PeTerrainMaterialView surface={0};PeReferenceModel settlement={0};
     TerrainCache *terrain=calloc(1,sizeof *terrain);
     PeSandboxCollision *collision=pe_sandbox_collision_create();
     PeSandboxUI ui={0};PeSandboxActor *actor=NULL;PeSandboxWorldView *world_view=NULL;size_t triangles=0;
@@ -235,11 +258,19 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     double accumulator=0;float dig_cooldown=0;int look_settle=0;
     printf("Sandbox ready: mode %d\n",game->mode);fflush(stdout);
     while(!WindowShouldClose()) {
+        if(pe_settlement_matches(&game->world)&&!settlement.loaded){
+            char path[4096];int n=snprintf(path,sizeof path,"%s/adventure-settlement/settlement.obj",assets);
+            if(n<0||(size_t)n>=sizeof path||!pe_reference_load(&settlement,path,error,sizeof error)){result=1;break;}
+        }
         float dt=fminf(GetFrameTime(),.1f);
         supplier_visible=game->mode==PE_GAME_ADVENTURE&&
-            pe_adventure_npc_refresh(&supplier,&game->world,collision,error,sizeof error);
+            (pe_settlement_matches(&game->world)?
+                pe_adventure_npc_refresh_source(&supplier,&game->world,collision,pe_settlement_npc_anchor(2),pe_settlement_npc_yaw(2),error,sizeof error):
+                pe_adventure_npc_refresh(&supplier,&game->world,collision,error,sizeof error));
         welcome_visible=game->mode==PE_GAME_ADVENTURE&&
-            pe_adventure_npc_refresh_at(&welcome,&game->world,collision,(PeVec3){28,0,35},error,sizeof error);
+            (pe_settlement_matches(&game->world)?
+                pe_adventure_npc_refresh_source(&welcome,&game->world,collision,pe_settlement_npc_anchor(1),pe_settlement_npc_yaw(1),error,sizeof error):
+                pe_adventure_npc_refresh_at(&welcome,&game->world,collision,(PeVec3){28,0,35},error,sizeof error));
         ui.welcome_present=welcome_visible;ui.welcome_position=welcome.position;
         ui.supplier_present=supplier_visible;ui.supplier_position=supplier.position;
         const PeAdventureNpc *talking=ui.dialogue.role==1?&welcome:&supplier;
@@ -308,7 +339,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(IsKeyPressed(KEY_T))build_rotation=(build_rotation+1)%4;
             if(IsKeyPressed(KEY_G))build_brush=build_brush==4?1:4;
             Vector2 delta=(look_settle||(!captured&&!IsMouseButtonDown(MOUSE_BUTTON_RIGHT)))?(Vector2){0}:GetMouseDelta();
-            game->yaw=remainderf(game->yaw+delta.x*.0024f,2*PI);
+            game->yaw=remainderf(game->yaw-delta.x*.0024f,2*PI);
             game->pitch=Clamp(game->pitch-delta.y*.0024f,-1.4f,1.4f);
         }
         PeSandboxCameraInput camera_input={.dt=smoke_frames?PE_FIXED_DT:dt,
@@ -319,11 +350,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(look_settle>0)look_settle--;
         Camera3D aim_camera=game_camera(game,collision,third_person,false,orbit.distance);
-        Ray aim=GetScreenToWorldRay(build_mode?GetMousePosition():(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f},aim_camera);
+        Ray aim=source_ray(build_mode?GetMousePosition():(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f},aim_camera);
         int picked_role=0;float nearest_npc=INFINITY;
         if(!build_mode&&(supplier_visible||welcome_visible)) {
             Vector2 point=captured?(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f}:GetMousePosition();
-            Ray pick=GetScreenToWorldRay(point,aim_camera);
+            Ray pick=source_ray(point,aim_camera);
             PeSceneHit obstacle=pe_sandbox_collision_ray_geometry(collision,pv(pick.position),pv(pick.direction),100);
             PeAdventureNpc *npcs[]={&welcome,&supplier};bool visible[]={welcome_visible,supplier_visible};
             for(int i=0;i<2;i++) {
@@ -352,7 +383,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             PeInput input={0};
             if(world_input) {
                 float forward=(float)(IsKeyDown(KEY_W)-IsKeyDown(KEY_S));
-                float side=(float)(IsKeyDown(KEY_D)-IsKeyDown(KEY_A));
+                float side=(float)(IsKeyDown(KEY_A)-IsKeyDown(KEY_D));
                 if(forward<0)autorun=false;
                 if(autorun&&forward==0&&side==0)forward=1;
                 input.move_x=side*cosf(game->yaw)+forward*sinf(game->yaw);
@@ -436,15 +467,16 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         pe_sandbox_ui_prepare(&ui,game);
         BeginDrawing();ClearBackground(sky);
         DrawRectangleGradientV(0,0,GetScreenWidth(),GetScreenHeight(),(Color){62,115,146,255},sky);
-        BeginMode3D(camera);
+        source_begin_3d(camera);
         pe_terrain_material_view_frame(&surface,&game->world,camera.position);
-        for(int i=0;i<4;i++)if(terrain->loaded[i])DrawModel(terrain->model[i],(Vector3){0},1,WHITE);
+        for(int i=0;i<8;i++)if(terrain->loaded[i])DrawModel(terrain->model[i],(Vector3){0},1,WHITE);
+        if(pe_settlement_matches(&game->world))pe_reference_draw(&settlement);
         if(!pe_sandbox_world_view_draw_trees(world_view,game)){snprintf(error,sizeof error,"Tree rendering failed");result=1;}
         for(int i=0;i<game->block_count;i++)draw_block(game->blocks[i]);
         for(int i=0;i<game->cell_count;i++)draw_cell(&game->cells[i]);
         if(third_person||smoke_frames)pe_sandbox_actor_draw(actor,game);
         if(world_input&&build_mode&&!IsKeyDown(KEY_LEFT_ALT)&&!IsKeyDown(KEY_RIGHT_ALT)){
-            Ray pointer=GetScreenToWorldRay(GetMousePosition(),camera);
+            Ray pointer=source_ray(GetMousePosition(),camera);
             PeVec3 origin={game->player.x,game->player.y+1.58f,game->player.z};
             PeVec3 direction=construction_direction(game,pointer,origin);
             PeB45Cell cells[4];size_t count;
@@ -454,7 +486,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         const PeSlot *indicator_tool=pe_game_equipped_tool(game);
         if(world_input&&!build_mode&&tool_ready&&tool_drawn&&indicator_tool&&indicator_tool->durability>0&&
            (indicator_tool->item_id==12||indicator_tool->item_id==19)){
-            Ray indicator=GetScreenToWorldRay((Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f},camera);
+            Ray indicator=source_ray((Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f},camera);
             PeHit hit=pe_world_dig_target(&game->world,pv(indicator.position),pv(indicator.direction),game->player,3);
             if(hit.hit)DrawCubeWires((Vector3){hit.x,hit.y,hit.z},1,1,1,(Color){71,216,245,255});
         }
@@ -465,15 +497,15 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             snprintf(error,sizeof error,"Supplier pose rendering failed");result=1;
         }
         if(!game->world.source)DrawCube((Vector3){31.5f,5.5f,31.5f},63,.06f,63,(Color){54,132,149,170});
-        EndMode3D();
+        source_end_3d();
         if(supplier_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
-            PeVec3 p=supplier.position;Vector2 pos=GetWorldToScreen((Vector3){p.x,p.y+supplier_view.label_height,p.z},camera);
+            PeVec3 p=supplier.position;Vector2 pos=source_screen((Vector3){p.x,p.y+supplier_view.label_height,p.z},camera);
             const char *prompt=picked_role==2&&action.npc_interaction?"Eitai  [RMB / E]":"Eitai";
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->supplies_claimed?LIGHTGRAY:YELLOW);
         }
         if(welcome_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
-            PeVec3 p=welcome.position;Vector2 pos=GetWorldToScreen((Vector3){p.x,p.y+welcome_view.label_height,p.z},camera);
+            PeVec3 p=welcome.position;Vector2 pos=source_screen((Vector3){p.x,p.y+welcome_view.label_height,p.z},camera);
             const char *prompt=picked_role==1&&action.npc_interaction?"Westina  [RMB / E]":"Westina";
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->welcome_page<PE_ADVENTURE_WELCOME_PAGES?YELLOW:LIGHTGRAY);
@@ -497,6 +529,7 @@ cleanup:
            frame,triangles,game->mode,game->known_recipe_count,game->adventure_mission,result);
     printf("Sandbox tools: %llu swings, %llu resource changes\n",(unsigned long long)tool_action.swings,(unsigned long long)tool_edits);
     printf("Sandbox camera: desired %.3fm, distance %.3fm\n",orbit.desired_distance,orbit.distance);
+    pe_reference_unload(&settlement);
     pe_sandbox_world_view_unload(world_view);pe_sandbox_actor_unload(actor);pe_sandbox_ui_unload(&ui);
     pe_adventure_npc_view_unload(&supplier_view);pe_adventure_npc_view_unload(&welcome_view);
     pe_sandbox_collision_free(collision);free_terrain(terrain);pe_terrain_material_view_unload(&surface);CloseWindow();return result;

@@ -27,6 +27,11 @@ void pe_scene_free(PeSceneCollision *scene);
 PeSceneStats pe_scene_stats(const PeSceneCollision *scene);
 PeSceneHit pe_scene_raycast(const PeSceneCollision *scene, PeVec3 origin,
                            PeVec3 direction, float range);
+/* Triangle surface versus open box interior; exact boundary contact is allowed.
+ * Conservative placement uses a shape's inset bounds. This does not classify
+ * closed-mesh interiors as solid (merged building scenes can contain rooms).
+ * NULL scene is empty; invalid box inputs conservatively overlap. */
+bool pe_scene_overlaps_aabb(const PeSceneCollision *scene,PeVec3 minimum,PeVec3 maximum);
 /* Capsule includes hemispheres: feet is bottom, axis y=[radius,height-radius].
  * Radius>0, height>=2*radius. Exact touching is not penetrating overlap.
  * Invalid inputs conservatively overlap; invalid sweeps return no hit. */

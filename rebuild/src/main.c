@@ -7,6 +7,7 @@
 #include "pe_actor_scene.h"
 #include "pe_sandbox_view.h"
 #include "pe_app_menu.h"
+#include "pe_settlement.h"
 #include <raylib.h>
 #include <raymath.h>
 #include <math.h>
@@ -177,6 +178,7 @@ int main(int argc,char **argv) {
         return reference_preview(reference_path,smoke_frames,screenshot);
     }
     PeGame *game=NULL;int result=0;char error[256]={0};
+    if(!pe_settlement_configure(assets,error,sizeof error)){fprintf(stderr,"%s\n",error);return 1;}
     bool open_menu=main_menu||(!direct&&!smoke_frames&&!load_path&&!terrain_path);
     if(!open_menu) {
         game=malloc(sizeof *game);
@@ -186,6 +188,9 @@ int main(int argc,char **argv) {
         }
         if(terrain_path&&!import_world(game,terrain_path,origin_given?origin:NULL,error,sizeof error)) {
             fprintf(stderr,"Import failed: %s\n",error);free(game);return 1;
+        }
+        if(!load_path&&!terrain_path&&!pe_settlement_start(game,error,sizeof error)){
+            fprintf(stderr,"Settlement failed: %s\n",error);free(game);return 1;
         }
         result=pe_sandbox_view(game,assets,save_path,smoke_frames,smoke_panel,screenshot);
         if(result!=2){free(game);return result;}
@@ -209,6 +214,9 @@ int main(int argc,char **argv) {
             }
             if(choice==PE_APP_CONTINUE_SANDBOX&&!pe_game_load(next,save_path,error,sizeof error)) {
                 free(next);snprintf(notice,sizeof notice,"Load failed: %.220s",error);continue;
+            }
+            if(choice==PE_APP_NEW_SANDBOX&&!pe_settlement_start(next,error,sizeof error)){
+                free(next);snprintf(notice,sizeof notice,"Settlement failed: %.210s",error);continue;
             }
             free(game);game=next;
         }

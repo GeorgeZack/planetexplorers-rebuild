@@ -153,6 +153,35 @@ PeSceneCollision *pe_scene_from_mesh(const PeMeshData *mesh,PeVec3 origin,char *
 }
 void pe_scene_free(PeSceneCollision *scene){if(scene){free(scene->triangles);free(scene->nodes);free(scene);}}
 PeSceneStats pe_scene_stats(const PeSceneCollision *scene){return scene?scene->stats:(PeSceneStats){0};}
+/* Separating-axis test: three box axes, triangle normal, and nine edge/box
+ * cross products. Strict separation includes mere boundary contact. */
+static bool triangle_box_axis(PeVec3 a,PeVec3 b,PeVec3 c,PeVec3 half,PeVec3 axis){
+    if(dot(axis,axis)<1e-20)return true;
+    double x=dot(a,axis),y=dot(b,axis),z=dot(c,axis);
+    double radius=fabs(axis.x)*half.x+fabs(axis.y)*half.y+fabs(axis.z)*half.z;
+    return fmin(x,fmin(y,z))<radius&&fmax(x,fmax(y,z))> -radius;
+}
+static bool triangle_box(const Triangle *t,Box box){
+    if(t->degenerate||!boxes_overlap(t->box,box))return false;
+    PeVec3 center=times(plus(box.lo,box.hi),.5),half=times(minus(box.hi,box.lo),.5);
+    PeVec3 a=minus(t->a,center),b=minus(t->b,center),c=minus(t->c,center);
+    PeVec3 axes[]={{1,0,0},{0,1,0},{0,0,1}},edges[]={minus(b,a),minus(c,b),minus(a,c)};
+    for(int i=0;i<3;i++)if(!triangle_box_axis(a,b,c,half,axes[i]))return false;
+    if(!triangle_box_axis(a,b,c,half,cross(edges[0],edges[1])))return false;
+    for(int i=0;i<3;i++)for(int j=0;j<3;j++)if(!triangle_box_axis(a,b,c,half,cross(edges[i],axes[j])))return false;
+    return true;
+}
+bool pe_scene_overlaps_aabb(const PeSceneCollision *scene,PeVec3 lo,PeVec3 hi){
+    if(!finite_vec(lo)||!finite_vec(hi)||lo.x>=hi.x||lo.y>=hi.y||lo.z>=hi.z)return true;
+    if(!scene||!scene->count)return false;
+    Box box={lo,hi};uint32_t stack[64];size_t count=0;stack[count++]=0;
+    while(count){const Node *node=&scene->nodes[stack[--count]];
+        if(!boxes_overlap(node->box,box))continue;
+        if(!node->count){stack[count++]=node->left;stack[count++]=node->right;continue;}
+        for(uint32_t i=node->start;i<node->start+node->count;i++)if(triangle_box(&scene->triangles[i],box))return true;
+    }
+    return false;
+}
 static bool box_ray(Box box,PeVec3 o,PeVec3 d,double maximum){
     double low=0,high=maximum;
     for(int a=0;a<3;a++){

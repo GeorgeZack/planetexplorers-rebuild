@@ -9,16 +9,21 @@ static inline bool pe_test_ack_welcome(PeGame *game){
         if(!pe_game_welcome_advance(game,game->welcome_page))return false;
     return game->welcome_page==PE_ADVENTURE_WELCOME_PAGES;
 }
-/* v6 adds only the final u32 welcome page to the v4/v5 payload. */
+/* Produce older default-depth fixtures: v7 appends depth; v6 appends welcome. */
 static inline bool pe_test_save_pre_welcome(const char *path,unsigned version){
-    if(version!=4&&version!=5)return false;
+    if(version<4||version>6)return false;
     FILE *file=fopen(path,"rb");if(!file)return false;
     if(fseek(file,0,SEEK_END)){fclose(file);return false;}
     long size=ftell(file);if(size<20||size>400000){fclose(file);return false;}
     rewind(file);unsigned char *data=malloc((size_t)size);if(!data){fclose(file);return false;}
     bool ok=fread(data,1,(size_t)size,file)==(size_t)size;fclose(file);
-    if(ok&&data[4]==6&&data[5]==0&&data[6]==0&&data[7]==0){
-        size-=4;uint32_t sum=2166136261u;
+    if(ok&&(data[4]==6||data[4]==7)&&data[5]==0&&data[6]==0&&data[7]==0){
+        if(data[4]==7){
+            if(data[size-4]!=PE_WORLD_Z||data[size-3]||data[size-2]||data[size-1]){free(data);return false;}
+            size-=4;
+        }
+        if(version<6)size-=4;
+        uint32_t sum=2166136261u;
         for(long i=16;i<size;i++){sum^=data[i];sum*=16777619u;}
         uint32_t fields[]={version,(uint32_t)size-16,sum};
         for(unsigned field=0;field<3;field++)for(unsigned byte=0;byte<4;byte++)

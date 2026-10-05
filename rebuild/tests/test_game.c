@@ -691,11 +691,11 @@ static void tree_save_migration_tests(PeGame *g){
     CHECK(fd>=0);if(fd<0)return;close(fd);
     PeGame *before=malloc(sizeof *before),*loaded=malloc(sizeof *loaded);
     CHECK(before&&loaded);if(!before||!loaded){free(before);free(loaded);unlink(path);return;}
-    flat(g);g->mode=PE_GAME_ADVENTURE;CHECK(pe_test_ack_welcome(g));
+    flat(g);g->world.depth=PE_WORLD_Z;g->mode=PE_GAME_ADVENTURE;CHECK(pe_test_ack_welcome(g));
     g->tree_count=1;g->trees[0]=(PeTree){{40.6f,9.5f,40.7f},8,255};
     g->player=(PeVec3){44,10.05f,40.5f};g->velocity=(PeVec3){0,-1,0};g->grounded=false;
     *before=*g;
-    /* Strip v6 welcome footer before exercising the v4 collision migration. */
+    /* Strip depth and welcome footers before exercising the v4 collision migration. */
     CHECK(pe_game_save(g,path,error,sizeof error));CHECK(pe_test_save_pre_welcome(path,4));
     CHECK(patch_save(path,24,float_bits(40.5f)));CHECK(pe_game_load(loaded,path,error,sizeof error));
     CHECK(loaded->player.x!=40.5f||loaded->player.z!=40.5f);
@@ -709,7 +709,7 @@ static void tree_save_migration_tests(PeGame *g){
     PeSandboxCollision *collision=pe_sandbox_collision_create();CHECK(collision!=NULL);
     if(collision){CHECK(pe_game_collision_update(loaded,collision,error,sizeof error));
         CHECK(!pe_sandbox_collision_overlap(collision,loaded->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT));}
-    /* Newly written v6 cannot introduce overlapping positions. */
+    /* Newly written saves cannot introduce overlapping positions. */
     CHECK(pe_game_save(g,path,error,sizeof error));CHECK(patch_save(path,24,float_bits(40.5f)));
     *loaded=*before;CHECK(!pe_game_load(loaded,path,error,sizeof error));CHECK(memcmp(loaded,before,sizeof *loaded)==0);
     g->player.x=40.5f;CHECK(!pe_game_save(g,path,error,sizeof error));*g=*before;

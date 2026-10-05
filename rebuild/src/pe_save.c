@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "pe_game.h"
+#include "pe_settlement.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -7,8 +8,8 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAVE_CAPACITY (PE_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 6u
+#define SAVE_CAPACITY (PE_MAX_VOXEL_COUNT*2u+32768u)
+#define SAVE_VERSION 7u
 /* All numbers are little-endian; floats are IEEE-754 bit patterns. No ABI structs. */
 typedef struct { unsigned char *p;size_t pos,size;bool ok; } Stream;
 static void put32(Stream *s,uint32_t v) { if(s->pos+4>s->size){s->ok=false;return;} for(int i=0;i<4;i++)s->p[s->pos++]=(unsigned char)(v>>(i*8)); }
@@ -54,13 +55,13 @@ static bool valid(const PeGame *g,bool trees) {
     if(!vecfinite(g->player)||!vecfinite(g->velocity)||!isfinite(g->yaw)||!isfinite(g->pitch)||
        !isfinite(g->game_seconds)||g->game_seconds<0||g->game_seconds>1e15||
        g->player.x<PE_PLAYER_RADIUS||g->player.x>PE_WORLD_X-1-PE_PLAYER_RADIUS||
-       g->player.z<PE_PLAYER_RADIUS||g->player.z>PE_WORLD_Z-1-PE_PLAYER_RADIUS||
+       g->player.z<PE_PLAYER_RADIUS||g->player.z>pe_world_depth(&g->world)-1-PE_PLAYER_RADIUS||
        g->player.y<0||g->player.y+PE_PLAYER_HEIGHT>PE_WORLD_Y-1||
        fabsf(g->velocity.x)>1000||fabsf(g->velocity.y)>1000||fabsf(g->velocity.z)>1000||
        g->block_count<0||g->block_count>PE_MAX_BLOCKS||g->tree_count<0||g->tree_count>PE_MAX_TREES||
        g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS) return false;
-    if(g->world.source>1)return false;
-    if(g->world.source==0)for(int i=0;i<PE_VOXEL_COUNT;i++)if(g->world.voxels[i].material>PE_MAT_GRASS)return false;
+    if(g->world.source>1||!pe_world_depth(&g->world))return false;
+    if(g->world.source==0)for(size_t i=0;i<pe_world_voxel_count(&g->world);i++)if(g->world.voxels[i].material>PE_MAT_GRASS)return false;
     if(!g->inventory.next_instance_id||!g->rng_state||
        !isfinite(g->stamina)||!isfinite(g->stamina_max)||!isfinite(g->stamina_regen)||
        !isfinite(g->stamina_recover_delay)||!isfinite(g->stamina_idle)||!isfinite(g->tool_cooldown)||
@@ -92,7 +93,7 @@ static bool valid(const PeGame *g,bool trees) {
     }else if(g->craft.batches_left||g->craft.batches_pending||g->craft.elapsed!=0||g->craft.delivery_elapsed!=0)return false;
     for(int i=0;i<g->block_count;i++) {
         const PeBlock *b=&g->blocks[i];
-        if(b->x<0||b->x>=PE_WORLD_X-1||b->z<0||b->z>=PE_WORLD_Z-1||b->y<0||b->y>=PE_WORLD_Y-2||
+        if(b->x<0||b->x>=PE_WORLD_X-1||b->z<0||b->z>=pe_world_depth(&g->world)-1||b->y<0||b->y>=PE_WORLD_Y-2||
            (b->item_id!=PE_ITEM_WOOD&&b->item_id!=PE_ITEM_DIRT&&b->item_id!=PE_ITEM_STONE&&b->item_id!=PE_ITEM_FENCE&&b->item_id!=PE_ITEM_LADDER))return false;
         if(g->mode==PE_GAME_LEGACY&&g->player.x+PE_PLAYER_RADIUS>b->x&&g->player.x-PE_PLAYER_RADIUS<b->x+1&&
            g->player.z+PE_PLAYER_RADIUS>b->z&&g->player.z-PE_PLAYER_RADIUS<b->z+1&&
@@ -101,7 +102,7 @@ static bool valid(const PeGame *g,bool trees) {
     }
     for(int i=0;i<g->cell_count;i++){
         const PeB45Cell *c=&g->cells[i];
-        if(!pe_b45_valid(c)||c->x<0||c->y<0||c->z<0||c->x>=2*(PE_WORLD_X-1)||c->y>=2*(PE_WORLD_Y-1)||c->z>=2*(PE_WORLD_Z-1))return false;
+        if(!pe_b45_valid(c)||c->x<0||c->y<0||c->z<0||c->x>=2*(PE_WORLD_X-1)||c->y>=2*(PE_WORLD_Y-1)||c->z>=2*(pe_world_depth(&g->world)-1))return false;
         PeVec3 lo={g->player.x-PE_PLAYER_RADIUS,g->player.y,g->player.z-PE_PLAYER_RADIUS};
         PeVec3 hi={g->player.x+PE_PLAYER_RADIUS,g->player.y+PE_PLAYER_HEIGHT,g->player.z+PE_PLAYER_RADIUS};
         if(g->mode==PE_GAME_LEGACY&&pe_b45_overlaps_aabb(c,lo,hi))return false;
@@ -116,11 +117,11 @@ static bool valid(const PeGame *g,bool trees) {
     }
     for(int i=0;i<g->tree_count;i++) {
         const PeTree *t=&g->trees[i];
-        if(!vecfinite(t->position)||t->position.x<0||t->position.x>=PE_WORLD_X||t->position.z<0||t->position.z>=PE_WORLD_Z||
+        if(!vecfinite(t->position)||t->position.x<0||t->position.x>=PE_WORLD_X||t->position.z<0||t->position.z>=pe_world_depth(&g->world)||
            t->position.y<0||t->position.y>=PE_WORLD_Y||t->remaining<0||t->remaining>1000000||
            !isfinite(t->health)||t->health<0||t->health>255||(t->remaining>0&&t->health<=0)||(t->remaining==0&&t->health!=0))return false;
     }
-    if(g->mode==PE_GAME_ADVENTURE){
+    if(g->mode==PE_GAME_ADVENTURE||pe_settlement_matches(&g->world)){
         PeSandboxCollision *collision=pe_sandbox_collision_create();
         if(!collision)return false;
         bool clear=pe_game_collision_update(g,collision,NULL,0)&&
@@ -164,6 +165,11 @@ static void encode(Stream *s,const PeGame *g) {
     putf(s,g->hp);putf(s,g->max_hp);putd(s,g->juice_cooldown);putd(s,g->juice_buff_elapsed);
     put32(s,g->juice_buff_tick);put32(s,g->juice_buff_active?1:0);
     put32(s,g->welcome_page);
+    /* V7 preserves every older byte offset, then appends depth and extra samples. */
+    put32(s,(uint32_t)pe_world_depth(&g->world));
+    size_t count=pe_world_voxel_count(&g->world);
+    if(s->pos+(count-PE_VOXEL_COUNT)*2u>s->size){s->ok=false;return;}
+    for(size_t i=PE_VOXEL_COUNT;i<count;i++){s->p[s->pos++]=g->world.voxels[i].volume;s->p[s->pos++]=g->world.voxels[i].material;}
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -227,6 +233,11 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
         g->juice_buff_tick=get32(s);uint32_t active=get32(s);if(active>1)s->ok=false;g->juice_buff_active=active!=0;
     }
     g->welcome_page=version>=6?get32(s):(g->mode==PE_GAME_ADVENTURE?PE_ADVENTURE_WELCOME_PAGES:0);
+    g->world.depth=version>=7?get32(s):PE_WORLD_Z;
+    if(g->world.depth!=PE_WORLD_Z&&g->world.depth!=PE_WORLD_MAX_Z){s->ok=false;return;}
+    size_t count=pe_world_voxel_count(&g->world);
+    if(s->pos+(count-PE_VOXEL_COUNT)*2u>s->size){s->ok=false;return;}
+    for(size_t i=PE_VOXEL_COUNT;i<count;i++){g->world.voxels[i].volume=s->p[s->pos++];g->world.voxels[i].material=s->p[s->pos++];}
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");

@@ -38,8 +38,8 @@ static double change_time(const PeSandboxActions *a){return timing(a->item_id)->
 static double hit_time(const PeSandboxActions *a){return timing(a->item_id)->hit[a->male?1:0];}
 static bool vector_valid(PeVec3 p){return isfinite(p.x)&&isfinite(p.y)&&isfinite(p.z);}
 bool pe_sandbox_actions_supported(int item){return timing(item)!=NULL;}
-static bool valid(const PeSandboxActions *a){
-    if(!a||a->stage<PE_SANDBOX_ACTION_IDLE||a->stage>PE_SANDBOX_ACTION_EXIT||
+static bool valid(const PeSandboxActions *a,const PeGame *g){
+    if(!a||!g||a->stage<PE_SANDBOX_ACTION_IDLE||a->stage>PE_SANDBOX_ACTION_EXIT||
        !isfinite(a->seconds)||a->seconds<0||a->seconds>1000000||
        !isfinite(a->exit_seconds)||a->exit_seconds<0||a->exit_seconds>1000002||
        !isfinite(a->ending_seconds)||a->ending_seconds<0||a->ending_seconds>6||
@@ -50,7 +50,7 @@ static bool valid(const PeSandboxActions *a){
     if(!a->instance_id||!a->held||!pe_sandbox_actions_supported(a->item_id)||
        a->kind!=timing(a->item_id)->kind)return false;
     if(a->kind==PE_SANDBOX_ACTION_DIG&&(a->target_x<0||a->target_x>=PE_WORLD_X||
-       a->target_y<0||a->target_y>=PE_WORLD_Y||a->target_z<0||a->target_z>=PE_WORLD_Z))return false;
+       a->target_y<0||a->target_y>=PE_WORLD_Y||a->target_z<0||a->target_z>=pe_world_depth(&g->world)))return false;
     if(a->kind==PE_SANDBOX_ACTION_FELL&&(a->tree_index<0||a->tree_index>=PE_MAX_TREES))return false;
     if(a->stage==PE_SANDBOX_ACTION_ENTRY&&a->seconds>entry_boundary(a)+1e-9)return false;
     if(a->stage==PE_SANDBOX_ACTION_EXIT&&a->seconds>exit_length(a)+1e-9)return false;
@@ -67,7 +67,7 @@ void pe_sandbox_actions_cancel(PeSandboxActions *a){
     if(a){bool male=a->male;uint64_t swings=a->swings;pe_sandbox_actions_init(a,male);a->swings=swings;}
 }
 bool pe_sandbox_actions_pose(const PeSandboxActions *a,const PeGame *g,PeSandboxActionPose *out){
-    if(!valid(a)||!g||!out)return false;
+    if(!valid(a,g)||!out)return false;
     const PeSlot *tool=pe_game_equipped_tool(g);PeSandboxActionPose pose={0};
     if(tool){pose.item_id=tool->item_id;pose.instance_id=tool->instance_id;pose.held=a->held;}
     if(a->stage!=PE_SANDBOX_ACTION_IDLE){
@@ -110,7 +110,7 @@ static bool strike(PeSandboxActions *a,PeGame *g,PeHit current,PeSlot *tool,floa
     return true;
 }
 bool pe_sandbox_actions_step(PeSandboxActions *a,PeGame *g,PeSandboxActionInput input,PeSandboxActionUpdate *out){
-    if(!valid(a)||!g||!out)return false;
+    if(!valid(a,g)||!out)return false;
     PeSandboxActionUpdate result={.tree_index=-1};
     const PeSlot *equipped=pe_game_equipped_tool(g);
     if(!input.enabled||!input.tool_drawn||!(g->hp>0)||!equipped||
@@ -135,12 +135,20 @@ bool pe_sandbox_actions_step(PeSandboxActions *a,PeGame *g,PeSandboxActionInput 
         double magnitude=hypot(hypot(input.ray_direction.x,input.ray_direction.y),input.ray_direction.z);
         if(!isfinite(magnitude)||magnitude<1e-12)return false;
         current=pe_world_dig_target(&g->world,input.ray_origin,input.ray_direction,g->player,3);
+        if(current.hit&&(!pe_game_static_segment_clear(g,input.ray_origin,current.position)||
+            !pe_game_static_segment_clear(g,(PeVec3){g->player.x,g->player.y+1,g->player.z},
+                (PeVec3){current.x,current.y,current.z})))current=(PeHit){0};
     }
     if(next.stage==PE_SANDBOX_ACTION_IDLE){
         bool can_start=input.held&&g->tool_cooldown<=0;
         if(timing(equipped->item_id)->kind==PE_SANDBOX_ACTION_DIG)can_start=can_start&&current.hit;
         else can_start=can_start&&input.camera_tree>=0&&input.camera_tree==input.forward_tree&&
             g->trees[input.camera_tree].remaining>0&&g->trees[input.camera_tree].health>0;
+        if(can_start&&timing(equipped->item_id)->kind!=PE_SANDBOX_ACTION_DIG){
+            PeVec3 tree=g->trees[input.camera_tree].position;tree.y+=1;
+            can_start=pe_game_static_segment_clear(g,(PeVec3){g->player.x,g->player.y+1,g->player.z},tree)&&
+                pe_game_static_segment_clear(g,input.ray_origin,tree);
+        }
         if(!can_start){*a=next;*out=result;return true;}
         next.kind=timing(equipped->item_id)->kind;
         next.item_id=equipped->item_id;next.instance_id=equipped->instance_id;next.stage=PE_SANDBOX_ACTION_ENTRY;

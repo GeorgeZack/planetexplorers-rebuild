@@ -130,21 +130,23 @@ PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *u,PeGame *g,float dt) {
 }
 static void prepare_map(PeSandboxUI *u,const PeGame *g) {
     const PeWorld *w=&g->world;
-    if(u->map_valid&&u->map_revision==w->revision&&u->map_seed==w->seed&&u->map_source==w->source&&
+    int depth=pe_world_depth(w);
+    if(u->map_valid&&u->minimap.height==depth&&u->map_revision==w->revision&&u->map_seed==w->seed&&u->map_source==w->source&&
        u->map_origin_x==w->origin_x&&u->map_origin_y==w->origin_y&&u->map_origin_z==w->origin_z)return;
-    Color pixels[PE_WORLD_X*PE_WORLD_Z];
+    Color pixels[PE_WORLD_X*PE_WORLD_MAX_Z];
     /* Actual bounded-world top samples. No training-room map or fictitious NPC
        markers. This is a terrain overview, not the original top-down renderer. */
-    for(int z=0;z<PE_WORLD_Z;z++)for(int x=0;x<PE_WORLD_X;x++) {
+    for(int z=0;z<depth;z++)for(int x=0;x<PE_WORLD_X;x++) {
         int y=PE_WORLD_Y-1;PeVoxel v={0};
         for(;y>=0;y--){v=pe_world_get(w,x,y,z);if(v.volume>=PE_ISO_LEVEL)break;}
         int id=pe_world_material_item(w,v.material);Color c=y<0?(Color){12,24,32,255}:
             id==PE_ITEM_STONE?(Color){114,127,135,255}:id==PE_ITEM_DIRT?(Color){102,119,68,255}:(Color){91,113,78,255};
         float light=.6f+.4f*(y+1)/(float)PE_WORLD_Y;c.r=(unsigned char)(c.r*light);c.g=(unsigned char)(c.g*light);c.b=(unsigned char)(c.b*light);
-        pixels[(PE_WORLD_Z-1-z)*PE_WORLD_X+x]=c;
+        pixels[(depth-1-z)*PE_WORLD_X+x]=c;
     }
+    if(u->minimap.id&&u->minimap.height!=depth){UnloadTexture(u->minimap);u->minimap=(Texture2D){0};}
     if(u->minimap.id)UpdateTexture(u->minimap,pixels);
-    else {Image image={.data=pixels,.width=PE_WORLD_X,.height=PE_WORLD_Z,.mipmaps=1,.format=PIXELFORMAT_UNCOMPRESSED_R8G8B8A8};u->minimap=LoadTextureFromImage(image);}
+    else {Image image={.data=pixels,.width=PE_WORLD_X,.height=depth,.mipmaps=1,.format=PIXELFORMAT_UNCOMPRESSED_R8G8B8A8};u->minimap=LoadTextureFromImage(image);}
     if(u->minimap.id){u->map_valid=true;u->map_revision=w->revision;u->map_seed=w->seed;u->map_source=w->source;
         u->map_origin_x=w->origin_x;u->map_origin_y=w->origin_y;u->map_origin_z=w->origin_z;}
 }
@@ -186,24 +188,25 @@ static void hud(const PeSandboxUI *u,const PeGame *g,bool building) {
     if(pe_training_ui_contains(l->stamina,u->mouse_x,u->mouse_y))text(u,TextFormat("Stamina %.0f / %.0f",g->stamina,g->stamina_max),l->stamina.x,l->stamina.y-20*z,14,ink,false);
 }
 static void minimap(const PeSandboxUI *u,const PeGame *g) {
+    int depth=pe_world_depth(&g->world);
     float z=u->layout.scale;PeTrainingUIRect area=map(u,1090,3,156,174,PE_UI_TOP_RIGHT);
-    if(u->minimap.id)DrawTexturePro(u->minimap,(Rectangle){0,0,PE_WORLD_X,PE_WORLD_Z},rect(area),(Vector2){0},0,WHITE);
+    if(u->minimap.id)DrawTexturePro(u->minimap,(Rectangle){0,0,PE_WORLD_X,depth},rect(area),(Vector2){0},0,WHITE);
     BeginScissorMode((int)area.x,(int)area.y,(int)area.w,(int)area.h);
     for(int i=0;i<g->cell_count;i++) {
         const PeB45Cell *c=&g->cells[i];
-        DrawRectangleRec((Rectangle){area.x+c->x*.5f/(PE_WORLD_X-1)*area.w,area.y+(1-c->z*.5f/(PE_WORLD_Z-1))*area.h,2*z,2*z},gold);
+        DrawRectangleRec((Rectangle){area.x+c->x*.5f/(PE_WORLD_X-1)*area.w,area.y+(1-c->z*.5f/(depth-1))*area.h,2*z,2*z},gold);
     }
     if(g->mode==PE_GAME_ADVENTURE&&u->supplier_present) {
         float bx=area.x+u->supplier_position.x/(PE_WORLD_X-1)*area.w;
-        float bz=area.y+(1-u->supplier_position.z/(PE_WORLD_Z-1))*area.h;
+        float bz=area.y+(1-u->supplier_position.z/(depth-1))*area.h;
         sprite(u,"sign_npc",(PeTrainingUIRect){bx-6*z,bz-6*z,12*z,12*z},g->supplies_claimed?dim:gold);
     }
     if(g->mode==PE_GAME_ADVENTURE&&u->welcome_present) {
         float bx=area.x+u->welcome_position.x/(PE_WORLD_X-1)*area.w;
-        float bz=area.y+(1-u->welcome_position.z/(PE_WORLD_Z-1))*area.h;
+        float bz=area.y+(1-u->welcome_position.z/(depth-1))*area.h;
         sprite(u,"sign_npc",(PeTrainingUIRect){bx-6*z,bz-6*z,12*z,12*z},g->welcome_page<PE_ADVENTURE_WELCOME_PAGES?gold:dim);
     }
-    float px=area.x+g->player.x/(PE_WORLD_X-1)*area.w,py=area.y+(1-g->player.z/(PE_WORLD_Z-1))*area.h;
+    float px=area.x+g->player.x/(PE_WORLD_X-1)*area.w,py=area.y+(1-g->player.z/(depth-1))*area.h;
     DrawCircleV((Vector2){px,py},3*z,WHITE);
     DrawLineEx((Vector2){px,py},(Vector2){px+sinf(g->yaw)*9*z,py+cosf(g->yaw)*9*z},2*z,blue);
     EndScissorMode();

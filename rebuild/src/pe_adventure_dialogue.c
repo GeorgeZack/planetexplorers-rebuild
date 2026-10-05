@@ -24,7 +24,8 @@ bool pe_adventure_arrival_step(PeGame *g,PeVec3 supplier){
     if(!g||g->mode!=PE_GAME_ADVENTURE||g->arrival_complete||g->adventure_mission!=PE_ADVENTURE_ARRIVAL||
        !finite3(g->player)||!finite3(supplier)||g->player.y<0||!(g->hp>0)||!isfinite(g->hp))return false;
     /* Original random-target initialization truncates XZ to IntVector2. */
-    double dx=(double)g->player.x-trunc((double)supplier.x),dz=(double)g->player.z-trunc((double)supplier.z);
+    double ox=g->world.source?g->world.origin_x:0,oz=g->world.source?g->world.origin_z:0;
+    double dx=(double)g->player.x+ox-trunc((double)supplier.x+ox),dz=(double)g->player.z+oz-trunc((double)supplier.z+oz);
     if(hypot(dx,dz)>=PE_ADVENTURE_ARRIVAL_RADIUS)return false;
     return pe_game_arrival_complete(g);
 }

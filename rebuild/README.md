@@ -17,9 +17,9 @@ make -C rebuild
 
 The main menu offers **New Sandbox**, **Continue Sandbox**, and **Tutorial**. Both gameplay modes return through **Esc → Main Menu**. Continue resumes the in-memory sandbox after a tutorial visit, or loads your save after restarting the program. New Sandbox confirms before discarding an active session. The menu uses recovered logo/fonts; its background is a new approximation.
 
-New Sandbox starts the bounded **Adventure** reconstruction: source starter items, 500 currency, empty learned formulas and Westina Nangle's welcome. Her introduction opens automatically nearby; Enter or a dialogue click advances its nine source pages. Esc interrupts it; speak to Westina again to resume. The final reply starts Arrival. Approach **Eitai Takayama**, the recovered supplier near world X32/Z27. Arrival completes automatically within the source5m XZ target radius; aim at her and press E or right mouse to open the NPC choice window. Select the supplies question, then use Enter, a dialogue click or the arrow through source pages4090–4094. Only acknowledgment of the final page grants the one-time package; closing early grants nothing, and a full inventory leaves the final page available for retry. Q shows current progression.
+New Sandbox starts the bounded **Adventure** reconstruction: source starter items, 500 currency, empty learned formulas and Westina Nangle's welcome. Her introduction opens automatically nearby; Enter or a dialogue click advances its nine source pages. Esc interrupts it; speak to Westina again to resume. The final reply starts Arrival. Approach **Eitai Takayama**, the recovered supplier near original world X−599/Z341 (downhill from the starting pad). Arrival completes automatically within the source5m XZ target radius; aim at her and press E or right mouse to open the NPC choice window. Select the supplies question, then use Enter, a dialogue click or the arrow through source pages4090–4094. Only acknowledgment of the final page grants the one-time package; closing early grants nothing, and a full inventory leaves the final page available for retry. Q shows current progression.
 
-This supplier is the exact archived role2 identity, entity20016/RandomNpc22, with recovered saved appearance and original idle evaluation. Her local supported placement is provisional; the original settlement layout, general NPC generator and later trip to Annot are not implemented. Headless, asset and integrated graphical/input checks pass, including cancellation, final grant and save/reload without duplicates. [Interaction and placement](../docs/audit/ADVENTURE_NPC.md) and [appearance provenance](../docs/audit/ADVENTURE_SUPPLIER_APPEARANCE.md) define the limits.
+This supplier is the exact archived role2 identity, entity20016/RandomNpc22, with recovered saved appearance and original idle evaluation. New Sandbox now uses the archived starting settlement: captured ground, six intact buildings, and source Westina/Eitai positions. Older saves retain their existing worlds and provisional NPC placements. General NPC generation and the later trip to Annot remain unimplemented. Headless, asset and integrated graphical/input checks pass, including cancellation, final grant and save/reload without duplicates. [Interaction and placement](../docs/audit/ADVENTURE_NPC.md) and [appearance provenance](../docs/audit/ADVENTURE_SUPPLIER_APPEARANCE.md) define the limits.
 
 I opens inventory; right-click an item to use a consumable, learn a recipe book or equip a supported tool. Learn **Wood Shovel Script** from the supplies, then open Y, select Wood Shovel and replicate one for ten wood. C opens the character and equipment panel. Drag inventory items to the nine quickslots; 1–9 activate those shortcuts. Scanner upgrades do not unlock recipes. HUD, inventory, character, mission and Replicator panels use the recovered training UI assets with real sandbox state; the minimap shows this world.
 
@@ -31,14 +31,26 @@ The drawn wood shovel shows a cyan wire around the current source-style target s
 
 In both Tutorial and Sandbox, **drag a panel by its title bar** to move Inventory, Character, Storage, Replicator or Mission. Buttons and item slots follow the panel; resizing keeps it on-screen. Positions last for the current gameplay session and reset when that host is reopened. The minimap and quest tracker remain anchored, with quest headings below the full map frame.
 
-F9 saves and F10 loads outside dialogue. PECS v6 saves the acknowledged welcome page; interrupt with Esc before saving. Loading an unfinished welcome resumes nearby. Older v4/v5 Adventure saves retain their existing quest state and treat the welcome as completed. There is no automatic save on exit. By default the file is `planet_explorers.pesave` in the working directory; `--load` also becomes the save destination unless `--save` is specified.
+F9 saves and F10 loads outside dialogue. PECS v7 saves the active world depth and acknowledged welcome page; interrupt with Esc before saving. Loading an unfinished welcome resumes nearby. Older v4/v5 Adventure saves retain their existing quest state and treat the welcome as completed. There is no automatic save on exit. By default the file is `planet_explorers.pesave` in the working directory; `--load` also becomes the save destination unless `--save` is specified.
 
 Recovered runtime assets default to `rebuild/build/reference-assets`; use `--assets DIR` to override them. `--sandbox` bypasses the main menu. Rebuild save versions 1–3 load as Legacy mode, retaining their previous movement rules and unlocked recipes; v4 Adventure retains its mode and progression through the tree-collision migration described below. New Adventure uses rendered-mesh and live-tree capsule collision and learned formulas. Tutorial progress resets when leaving that mode.
 
 ```sh
-./rebuild/build/planet_explorers --sandbox --seed 12345 --save /tmp/exploration.pesave
+./rebuild/build/planet_explorers --sandbox --save /tmp/exploration.pesave
 ./rebuild/build/planet_explorers --load /tmp/exploration.pesave
 ```
+
+### Starting settlement
+
+New Sandbox uses one archived reference settlement, with a64×32×128 metre sample grid. `--seed` does not regenerate this recovered crop. The terrain includes changes present in the archived original save; it is not a fresh procedural seed. Its boundaries remain finite, and Annot lies outside them. Full population, shops, machine interactions, vegetation and wider travel are unfinished.
+
+The local recovered assets are already installed. To recover the six buildings again:
+
+```sh
+/tmp/pe-asset-tools/bin/python rebuild/tools/export_adventure_settlement_assets.py
+```
+
+Terrain must come from the bounded observation probe running in the original game, then be validated/installed with `export_adventure_terrain.py --capture PATH`. The artifact-only diagnostic is not a substitute for surrounding terrain. See [capture instructions](../docs/audit/ADVENTURE_SETTLEMENT_TERRAIN.md) and [integration](../docs/audit/ADVENTURE_SETTLEMENT.md). Missing settlement assets produce an explicit startup error. Existing saves and `--terrain` imports still use their own worlds.
 
 ### Adventure NPC recovery and checks
 

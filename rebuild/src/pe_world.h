@@ -6,6 +6,8 @@
 #define PE_WORLD_X 64
 #define PE_WORLD_Y 32
 #define PE_WORLD_Z 64
+#define PE_WORLD_MAX_Z 128
+#define PE_MAX_VOXEL_COUNT (PE_WORLD_X * PE_WORLD_Y * PE_WORLD_MAX_Z)
 #define PE_VOXEL_COUNT (PE_WORLD_X * PE_WORLD_Y * PE_WORLD_Z)
 #define PE_ISO_LEVEL 128
 
@@ -17,11 +19,15 @@ typedef struct {
     uint32_t seed, revision;
     uint32_t source; /* 0: generated palette, 1: original terrain material IDs */
     int32_t origin_x, origin_y, origin_z; /* original file-local crop origin */
-    PeVoxel voxels[PE_VOXEL_COUNT];
+    unsigned depth; /* 0 and 64: original bounded world; 128: extended crop. */
+    PeVoxel voxels[PE_MAX_VOXEL_COUNT];
 } PeWorld;
 typedef struct { bool hit; PeVec3 position, normal; int x,y,z; float distance; } PeHit;
 typedef struct { PeVec3 position, normal; uint8_t material; } PeVertex;
 typedef struct { PeVertex *vertices; size_t count; } PeMeshData;
+/* Invalid depths return zero; zero-initialized worlds retain depth 64. */
+int pe_world_depth(const PeWorld *world);
+size_t pe_world_voxel_count(const PeWorld *world);
 void pe_world_init(PeWorld *world, uint32_t seed);
 PeVoxel pe_world_get(const PeWorld *world, int x, int y, int z);
 bool pe_world_set(PeWorld *world, int x, int y, int z, PeVoxel voxel);
