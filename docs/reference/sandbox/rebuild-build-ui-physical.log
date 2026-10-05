@@ -1,0 +1,29 @@
+/home/admin/source/planetexplorers/rebuild/build/build-ui-unaffordable.png
+/home/admin/source/planetexplorers/rebuild/build/build-ui-preview.png
+placement 640 360 {'mode': '1', 'mission': '9032', 'supplies': '1', 'tool': '12', 'instance': '10', 'wear_remaining': '3553.000', 'wood': '199', 'dirt': '0', 'stone': '0', 'juice': '10', 'gathered': '0', 'cells': '4', 'position': '(45.000000,12.271612,45.000000)', 'yaw': '0.00000000', 'pitch': '-0.64999998', 'stamina': '100.000'}
+/home/admin/source/planetexplorers/rebuild/build/build-ui-placed.png
+removal {'mode': '1', 'mission': '9032', 'supplies': '1', 'tool': '12', 'instance': '10', 'wear_remaining': '3553.000', 'wood': '200', 'dirt': '0', 'stone': '0', 'juice': '10', 'gathered': '0', 'cells': '0', 'position': '(45.000000,12.271612,45.000000)', 'yaw': '0.00000000', 'pitch': '-0.64999998', 'stamina': '100.000'}
+/home/admin/source/planetexplorers/rebuild/build/build-ui-removed.png
+/home/admin/source/planetexplorers/rebuild/build/build-ui-continued.png
+build input and menu/tutorial/continue PASS {'mode': '1', 'mission': '9032', 'supplies': '1', 'tool': '12', 'instance': '10', 'wear_remaining': '3553.000', 'wood': '200', 'dirt': '0', 'stone': '0', 'juice': '10', 'gathered': '0', 'cells': '0', 'position': '(45.000000,12.271612,45.000000)', 'yaw': '0.00000000', 'pitch': '-0.64999998', 'stamina': '100.000'}
+exit 0 Sandbox ready: mode 1
+Sandbox: 695 frames, 9741 triangles, mode 1, recipes 0, mission 9032, result 2
+Sandbox tools: 0 swings, 0 resource changes
+Main menu: 144 frames, choice 3
+Training room: 52 frames, mission 739, camera mask 0, movement mask 0, position 27.000 1.479 11.000
+Training visuals: recovered diffuse room textures; recovered starter character with six locomotion clips.
+Training locomotion: clip NormalIdle, seconds 0.450, exercised mask 1; discrete selection, sprint uses run fallback.
+Training items: Herbal Juice 0; kit transferred 0; Andy reached 0
+Training NPCs: 9 of 9 recovered characters, idle clock 0.450
+Training hare: mode 0, position 15.000 1.477 12.000, decisions 0
+Training equipment: knife owned 0, equipped 0; HP 500 / 500
+Training gathering: 0 herbs depleted, axe 0, ledger mission 0
+Training crafting: wood 0, script 0, shovel 0, formula 0, axe equipped 0
+Training mining: 0 swings, 0 removals, dirt 0, shovel -1, durability 0/0, triangles 0
+Training building: 0 added, 0 removed, score 0, cells 0
+Training melee: 0 starts, 0 contacts, hare HP 212.000 / 212.000
+Main menu: 60 frames, choice 2
+Sandbox ready: mode 1
+Sandbox: 166 frames, 9741 triangles, mode 1, recipes 0, mission 9032, result 0
+Sandbox tools: 0 swings, 0 resource changes
+

@@ -1,0 +1,14 @@
+cc -Isrc -DPE_SOURCE_ROOT=\"/home/admin/source/planetexplorers\" -std=c11 -g -O1 -Wall -Wextra -Wpedantic -fno-omit-frame-pointer -fsanitize=address,undefined tests/test_sandbox_actions.c tests/test_sandbox_collision.c tests/test_main.c tests/test_world.c tests/test_mesh.c tests/test_legacy.c tests/test_block.c tests/test_game.c tests/test_tutorial.c tests/test_scene_collision.c tests/test_training.c tests/test_player_locomotion.c tests/test_training_melee.c tests/test_training_tree_hit.c tests/test_training_dig.c tests/test_training_terrain.c tests/test_training_build.c tests/test_training_receiver.c tests/test_training_npc.c tests/test_training_ui_layout.c tests/test_training_gathering.c tests/test_actor.c tests/test_hare.c tests/test_combat.c tests/test_knife_contact.c tests/test_hare_attack.c tests/test_hitbox.c tests/test_actor_scene.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c -o build/test_sanitize -llz4 -lm
+ASAN_OPTIONS=detect_leaks=1 ./build/test_sanitize
+Block45 source geometry, collisions, rotations and costs: OK
+Training original-room floor, capsule and initial lessons: OK
+Training NPC 9004 settled root 27.000000 1.474127 17.500000 yaw 0
+Training NPC 9005 settled root 32.000000 1.855870 6.500000 yaw 0
+Training NPC 9006 settled root 58.000000 1.891949 12.500000 yaw 0
+Training NPC 9009 settled root 10.000000 1.500408 3.500000 yaw 0
+Training NPC 9020 settled root 2.500000 1.535432 6.000000 yaw 0
+Training NPC 9031 settled root -27.000000 9.939374 20.500000 yaw 0
+Training NPC 9041 settled root 32.000000 1.823208 12.000000 yaw 275
+Training NPC 9047 settled root 27.500000 8.346012 2.000000 yaw 0
+Training NPC 9049 settled root 37.000000 1.870197 5.500000 yaw 0
+Core tests: PASS (0 failures)

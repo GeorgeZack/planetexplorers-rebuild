@@ -1,0 +1,89 @@
+{
+  "date": "2026-10-05",
+  "files": {
+    "rebuild-tree-adventure-smoke.log": {
+      "bytes": 3026,
+      "sha256": "d24b788cb0765c78a7a198c2aa706f777936d0a312ce5819b0585c42a25cfc78"
+    },
+    "rebuild-tree-game-sanitize.log": {
+      "bytes": 2341,
+      "sha256": "ea5eba5b46f19ba1e8342d9de8ae74e7a3c652c31ec2e4e73fa2639ba1c9f351"
+    },
+    "rebuild-tree-integration-tests.log": {
+      "bytes": 11318,
+      "sha256": "788ede98bbb4b679b529c4f9b4bbed062dc510bb74fd8627fc0ec29c24d8d8b2"
+    },
+    "rebuild-tree-migration-notice.png": {
+      "bytes": 449250,
+      "sha256": "5faff0af0785a5f80bdabae8a2637e969e032e257b8ddc7887426bec5e2bc28b"
+    },
+    "rebuild-tree-migration-reload.log": {
+      "bytes": 192,
+      "sha256": "18f8fcebe6598f82ebe273a31a704c4ab76e5d3390620c459f21b7aa8fa06c38"
+    },
+    "rebuild-tree-migration.log": {
+      "bytes": 192,
+      "sha256": "5baf5ea130d67cd578d3edc719d038a7bd708be0d4c1ada73381540443606a12"
+    },
+    "rebuild-tree-physical-final.log": {
+      "bytes": 945,
+      "sha256": "9b111d1a8f4b014426cba83662c02b1a76024dc2e65a92b515f3330792a7c3aa"
+    },
+    "rebuild-tree-result.json": {
+      "bytes": 2681,
+      "sha256": "77446324eaff41e77776f67d17225e1e828a442642729fc9382c2c2118fe872d"
+    },
+    "rebuild-tree-smoke-adventure-airborne.png": {
+      "bytes": 1418398,
+      "sha256": "1ddaf5159bd28b36f0cef970b25b7d81ca3c0cef5f53cdfc7c98758e069ef51c"
+    },
+    "rebuild-tree-smoke-adventure-character.png": {
+      "bytes": 1289602,
+      "sha256": "c2cf972f52c7ea373ccefc6914f3f3b8f1c9c915c66933cc689c3d02c632f9cc"
+    },
+    "rebuild-tree-smoke-adventure-crafting.png": {
+      "bytes": 1119857,
+      "sha256": "26057e69e031007e54eded2bdd8b32272e0fb65ed25b86616b9d4094915d0013"
+    },
+    "rebuild-tree-tree-blocked.png": {
+      "bytes": 449228,
+      "sha256": "7fd41e08694c46294101310e267800f0bd4cec534c5bdab9ef1c52fc34e13d2f"
+    },
+    "rebuild-tree-tree-contact.png": {
+      "bytes": 449091,
+      "sha256": "95f3ad74298c44923304a4b228d1fd55985605d31bce5bad10d73c3d85979126"
+    },
+    "rebuild-tree-tree-depleted.png": {
+      "bytes": 407416,
+      "sha256": "258da39c5e2a6a8cdca6d6011a99c8bb7ce275943a25abbad375770fa47187f9"
+    },
+    "rebuild-tree-tree-passed.png": {
+      "bytes": 551186,
+      "sha256": "d7eb2a0e9a7bcb93d1308831de5159ea5abd97b609dc8305c8e45a157f104ee3"
+    },
+    "rebuild-tree-tree-states.txt": {
+      "bytes": 6123,
+      "sha256": "edb55868b0da0ff32e2a031083926da57e30606022e4115a5cc6396c860db728"
+    },
+    "rebuild-tree-tree.log": {
+      "bytes": 194,
+      "sha256": "6bafd404eb9ebd846a20621d90ac64f36e0c795a84d7ac4c8b2b1c858113ad6c"
+    },
+    "rebuild-tree-zoom-after-panel.png": {
+      "bytes": 166087,
+      "sha256": "600d6a89914ff2c4ad8839f5c713f9ccceda22aa2abf8f1887c4aadd04489422"
+    },
+    "rebuild-tree-zoom-closer.png": {
+      "bytes": 166880,
+      "sha256": "78123fd255aa2bd00e919645f23b5db8a965f7f1223c9aef415839e0d1b2601b"
+    },
+    "rebuild-tree-zoom-default.png": {
+      "bytes": 212175,
+      "sha256": "cec842d7139cc2cb913cd1027deb59f111ca85ac2fb23bffe37e9faab93d02bb"
+    },
+    "rebuild-tree-zoom.log": {
+      "bytes": 193,
+      "sha256": "ed36cb8c09ebc94aef77dbfb997200a4f3de9462d3dcc47a8487e8a699ee9c34"
+    }
+  }
+}

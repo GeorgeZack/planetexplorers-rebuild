@@ -1,0 +1,265 @@
+# Planet Explorers replication specification for C
+
+This document defines how to rebuild the supplied Planet Explorers project as a new C program. It records what the source actually contains, what is missing, the behavior to reproduce, and the implementation order. The intended reader is an engineer extending the rebuild without depending on Unity or undocumented assumptions.
+
+The source audit is complete at the subsystem level; it is not an exhaustive review of every method. The installed original Linux game, **V1.1.4 on Unity 5.2.4f1**, now runs: its main menu and tutorial featuring Andy on the simulation deck have been verified in screenshots. The Unity editor has not been run and this source project has not been rebuilt in Unity. The [playtest record](PLAYTEST.md) covers original tutorial observations through knife grant/equipment/drawing, recovered C room/actor rendering, and C keyboard/mouse progression through mission 746. The original observations do not establish a successful combat hit or kill. The C implementation now connects stationary knife animation, posed contacts, HP and death dispatch; its 3600-frame graphical combat check passed, reaching 719 through actual contacts and HP depletion. The compiled frontend now connects five timed herb depletions to 748 and its one-time axe grant; the 6000-frame graphics check passed at 748 with five herbs depleted and one axe. The 9000-frame graphical check also passes tree cutting, script learning and shovel crafting through 751, preserving 11 wood and two shovels. The 12000-frame check passes real mining through 752, with five shovel events removing three samples and conserving 9006 dirt and independent tool wear. Construction and the 50-ray receiver puzzle pass the 15,000-frame graphical check through the unsupported 756 boundary, with 19 placements, one removal, score 50 and complete lesson-geometry cleanup. Detailed evidence accompanies this document in [the gameplay audit](audit/GAMEPLAY.md), [the world audit](audit/WORLD.md), [the content audit](audit/CONTENT.md), and [the Block45 audit](audit/BLOCKS.md). The [reference-runtime investigation](REFERENCE_RUNTIME.md) records the working launch configuration and the limits of the observations; a successful tutorial launch does not establish complete campaign or rebuild parity.
+
+The rebuild now implements a bounded exploration, tools, crafting, and construction loop in C, with original terrain-file import and selected source-derived rules. It remains a foundation, not a claim of feature parity. Preserve original numeric content IDs and source provenance as it expands toward the original systems.
+
+The [sandbox alignment work order](audit/SANDBOX_ALIGNMENT.md) adds the 2026-10-03 live original Adventure and Build fixtures, the observed supply→learn→craft→equip→dig→build→save/load loop, and the remaining implementation dependencies. This is audit evidence; it does not change the delivered C sandbox behavior listed below.
+
+## Source baseline and evidence rules
+
+Audited repository revision: `de214409` (`Update README.md`). The original project targets **Unity 5.2.4f1**, as recorded in `ProjectSettings/ProjectVersion.txt`. This repository contains C# gameplay code, shaders, native/OpenCL integration code, serialized Unity content, SQLite databases, and external world data.
+
+Statements described as **verified** refer to this checkout and cite source paths in the audit appendices. **Proposed** behavior describes the new implementation. **Temporary** behavior deliberately substitutes for an original system that is not yet ported. An enum or class establishes that a system exists in code; it does not establish that every branch was playable in the shipped game.
+
+Keep the original `Assets`, `ProjectSettings`, databases, and external content unchanged. All new runtime code belongs under `rebuild/`; audit documents belong under `docs/`. Do not require the Unity editor, managed runtime, original proprietary plugins, or Steam login to compile or run the initial rebuild.
+
+The repository's [README](../README.md) retains the source project's terms. It says the assets remain Pathea's property, prohibits direct resale of recompilation, and requires written consent for commercial asset use. It also states that third-party plugins were deliberately excluded. Preserve those terms and the provenance of converted assets; this document does not grant new rights or assign an alternative license to the source project.
+
+## Delivered native runtime
+
+The current implementation is under `rebuild/`; its [README](../rebuild/README.md) contains build commands, exact controls, import examples, and verification commands. The following are implemented, rather than merely proposed:
+
+| System | Implemented behavior | Fidelity boundary |
+| --- | --- | --- |
+| Terrain | 64 × 32 × 64 density/material samples, source threshold 128, CPU marching cubes using exported original tables and four cached render regions | Bounded crop/test world; no streamed planet, original generator, or terrain LOD transitions |
+| Original files | Read-only `.voxelform`/LZ4 decoding, LOD 0 crops, raw material IDs, crop metadata and safe spawning | Imports terrain samples, not complete scenes, vegetation, or Unity saves |
+| Items/tools | 72 exported item definitions, stable non-stack instances, per-instance wear, equipped pickaxe/shovel/axe, source player/tool properties | Shared 32-slot inventory; no full component/equipment system or combat |
+| Movement | Walk/run/sprint 2/5/8 m/s, serialized sprint threshold 15 and drain 5/s, jump stamina cost 10, Z and autorun controls | Adventure now uses mesh capsule collision and a recovered third-person avatar; acceleration, air steering, jump impulse/gravity and full camera modes remain incomplete |
+| Training room | Recovered room and all three static mesh colliders, swept capsule movement, three camera modes; lessons 739 → 747 → 718 → 740 → 741 → 742 → 743 → 744 → 749 → 745 → 746; source English dialogue, kit transfer, inventory, quick-bar assignment, juice healing/cooldown and knife equipment | Optional baked stationary third-person knife attacks, source contact damage and death dialogue reach 719; 3600-frame graphics check passed; herbs connect 719→ 748; the6000-frame herb,9000-frame tree/craft and12000-frame mining checks pass through 752; building753→756 passes the 15,000-frame graphical check. Nine recovered NPC appearances and per-Avatar idle clips at source placements; source UI integration with bounded controls, no NPC behavior trees or mission persistence |
+| Actor/contact foundation | Eight recovered hare clips, CPU skinning, bounded leisure patrol, source capsule geometry, headless knife/hare action rules; recovered starter character, ten baked clips and six-state locomotion | Stationary knife host connects shared body/blade clocks, posed capsules and HP; full Animator blends/root motion, hostile hare attacks and original contact equivalence unfinished |
+| Mining | Source voxel-box indicator/threshold search, snapped body-relative reach, attack/resource formula, material hardness attenuation, byte-density reduction and primary resource distributions | Selected single-sample tool footprint; rare/special bonuses and complete skill runtime remain absent |
+| Crafting | 21 original recipes, Adventure book learning, total-input check, per-batch consumption, accumulated delivery, cancellation, persistent pending products | Legacy mode retains all recipes; Adventure has the source starter/supply path and recovered Replicator UI; safe stalls replace destructive legacy failures |
+| Construction | Original half-meter Block45 cube/ramp, packed bytes, four rotations, grouped ceiling/floor costs, transactional brushes | Other primitives, extended blocks, complete editing/undo, structural simulation and original furniture behavior absent |
+| Persistence | Explicit `PECS` v4, validation, atomic load/save, v1–3 rebuild-save migrations | No Unity archive compatibility |
+
+The native controller, generated vegetation, cosmetic water, and event pacing remain explicitly temporary. The running original tutorial now provides a reference for controlled comparisons, but an end-to-end comparison of these systems has not been completed. Passing native fixtures establishes behavior within their scope, not complete reference-game equivalence.
+
+The optional `--training-room` mode is separate from the terrain sandbox and its saves. Its Herbal Juice path is five items from the kit, five more on accepting inventory lesson 743, then one consumed through quick-bar slot 1, leaving nine. Inventory opens with I, dialogue advances with Space/Enter or a dialogue click, and kit/Andy interactions use E or a right-click target ray. Source English strings and their IDs are retained. The current UI supplies category tabs and source status chrome, and Herbal Juice healing is implemented; general NPC conversations, full character attributes and the creation lesson remain outside this subset. The optional `training-kit` asset export supplies the storage prop. See [training interaction provenance](audit/TRAINING_INTERACTION.md) and the [rebuild controls](../rebuild/README.md#playable-training-room).
+
+Launch the installed original with `python3 rebuild/tools/launch_reference.py`; use `--game-dir PATH` for another installation and `--user-data PATH` for another isolated profile. The helper defaults to `~/.local/share/planet-explorers-reference`, preserves other settings, and backs up existing settings before changing graphics quality and disabling MSAA. It isolates Unity preferences as well as game saves: the child process uses the profile's `engine-config` directory as `XDG_CONFIG_HOME`, and only that directory's `UnityGraphicsQuality` is reset to 0 before each launch. Shared Unity preferences are untouched. It starts the native 64-bit player in English, windowed at 1280 × 720, with CPU terrain extraction. Disabling MSAA resolved the observed black window and `GLXBadContextTag` errors; resetting engine startup quality prevents the failure from recurring before game settings load. See the [rebuild README](../rebuild/README.md#original-game-reference) for commands and profile details. Ordinary Steam Play remains unverified, and this optional reference launch does not add an original-game installation requirement to the C rebuild.
+
+## Tutorial UI integration
+
+The training frontend now renders the original source HUD/dialogue chrome, category-grid inventory/storage, independent character window with a recovered player preview, mission tracker/log, Replicator and a limited source-style menu. It uses 2,474 extracted sprites from three PNG atlases, source BMFont metrics, Andy/unknown portraits and item overlays. Thirteen source specular/scanline roles use eleven recovered textures and translated GLSL; the training minimap uses its original bitmap rather than substituting a procedural map. Source Quest_List/localization data provides 19 mission titles/descriptions and 24 ordered objectives. The complete evidence and layout are in [TRAINING_UI.md](audit/TRAINING_UI.md), [TRAINING_UI_LAYOUT.json](audit/TRAINING_UI_LAYOUT.json) and [UI_EFFECTS.md](audit/UI_EFFECTS.md).
+
+Controls preserve the original distinction: C character, I inventory, Q mission log, Y Replicator, Space dialogue advance, with Enter retained as a convenience. The bottom menu exposes these supported commands and Pause. Character opening neither opens the bag nor completes its lesson. Inventory actions and right-click equipment removal preserve the same headless item instances; source storage opens the bag alongside it. Acknowledgement and UI clicks are consumed before movement/tool/world actions. Startup now presents739 TalkOP300215, then Plot351’s300258 Tips line before the camera objectives.
+
+Nine assignable shortcut cells plus the equipped-item display are drawn; only slot1/juice is implemented. General armor equipment, arbitrary item operations, sorting/splitting/discard, arbitrary recipe browser and quantity/cancel controls, full mission history, settings/options and the complete original window/drag/fade system remain outside this subset. Other storage-category buttons and general window dragging are unsupported. The source shader ports and extracted fonts improve fidelity but do not establish complete shipped-framebuffer parity. Manual checks passed at1280×720 for welcome/Tips, I/C/Q/Y windows, the source blue cursor, inventory category clicks and close button, mission close and menu→Replicator. A954×1048 portrait window also passed character display and drag-to-rotate preview checks. The replacement UI’s15,000-frame rerun reached mission756 with all expected state checks; the final tracked15,000-frame run after visual polish passed with exit0 ([log](reference/rebuilt-ui-result.txt), [completed frame](reference/rebuilt-ui-complete.png)). Earlier combat/gathering/building and NPC graphics results remain valid historical checks of the previous frontend. Current full tests and the positive UI core harness pass, including startup sequencing and independent character state. Runtime `UISwitchFont`/`MakePixelPerfect` makes headings32 pixels, dialogue/tabs18 and overhead names26; serialized37/20/30 scales are not final rendered sizes. Blanket dialogue blocking of movement and F5 remains an explicit C modal simplification.
+
+## Product to replicate
+
+Planet Explorers combines exploration of a deformable voxel world with gathering, item production, combat, NPC missions, settlement management, and player-designed creations. Replication requires the relationships among those systems, not just terrain rendering.
+
+The core loop is: explore and encounter resources or NPCs; gather or fight; acquire items and recipes; produce equipment and structures; use those capabilities to reach new areas and missions; preserve the world, characters, and construction across sessions. The creation editor additionally turns designed voxel objects and functional parts into usable items such as vehicles and weapons.
+
+### Modes and lifecycle
+
+Verified in `Assets/PeLauncher/PeGameMgr.cs`:
+
+| Axis | Values in source | Replication requirement |
+| --- | --- | --- |
+| Player type | Single, Multiple, Creation, Tutorial | Keep session type separate from world mode |
+| Scene mode | Story, Adventure, Build, TowerDefense, Custom, Tutorial | Separate authored campaign, procedural world, and construction rules |
+| Game type | Cooperation, VS, Survive | Separate team and competitive rules from content |
+| Tutorial | GatherCut, Replicate, DigBuild | Reproduce explicit teaching tasks |
+| Difficulty | Easy, Normal | Load tuning from data rather than duplicate systems |
+
+`PeFlowMgr` selects a shared `PeGame` scene for active play. Older names such as `GameStory` in `GameConfig` are not proof that equivalent scene files still exist. `PeLauncher` executes a sequence of modules, updates loading progress, and waits for completion. `PeGameMgr.Run` gates play on terrain colliders, a main player, motion state, and safe positioning. This is a functional requirement: never release a character into unloaded collision geometry.
+
+The C lifecycle should be `boot → content validation → menu/new or load → world preparation → safe player spawn → play → save → shutdown`. Rendering failures should produce a clear error, while headless simulation tests remain runnable without a window.
+
+### World and physical interaction
+
+Reproduce a scalar density terrain rather than treating the full game as a collection of cubes. Preserve material identity separately from volume. Terrain, water, vegetation, block construction, and editable creations have different representations and must remain separate systems. World edits must invalidate visual geometry and collision queries together and survive reloading.
+
+The source has chunked terrain, level of detail, compressed storage, procedural generation, water, grass, subterrain trees, authored maps, and random towns/dungeons. Exact binary formats and constants are described in [the world audit](audit/WORLD.md). Original procedural output depends on noise, ordering, seed streams, and data; a different generator using the same seed is not equivalent.
+
+The native world can now be either a generated test world or a crop decoded from an original terrain file. Original marching-cubes tables drive CPU geometry extraction. Four bounded render regions of up to 32 cells cache their meshes; invalidation compares density/material bytes with a normal-gradient halo, so an edit can update an adjacent region even if it only changes that region’s normals. This is a bounded rendering optimization, not world streaming. Ray queries and sampled player collision use the same density field; a sampled cylinder is still a substitute for Unity physics. Streaming, original generator parity, octrees, terrain LOD transitions, water simulation, and imported vegetation remain later milestones. Source cube/ramp construction geometry is implemented separately from smooth terrain.
+
+### Characters and combat
+
+Represent entities with stable IDs and explicit component data: transform, motion, identity/faction, attributes, inventory/equipment, combat/skills, AI, dialogue, and mission state. Avoid translating every Unity component into an independently allocated C object. Keep simulation state independent of graphics and preserve reference validity across spawn, despawn, and load.
+
+Original combat includes animation-driven attacks, skill expressions, weapon-specific actions, projectile behavior, shields, buff effects, faction/reputation checks, and attribute changes. The audit identifies source owners and data tables. A single damage subtraction loop is insufficient for parity. Capture representative melee, ranged, shield, resource-tool, and death cases before porting the complete expression and action machinery.
+
+The native runtime uses a sampled player collider at a fixed simulation step. Walk/run/sprint speeds are 2/5/8 m/s; Z toggles walking and middle mouse toggles autorun, canceled by backward input. The serialized MaleModel/FemaleModel parameters require 15 stamina to start sprinting and drain 5/s, overriding the C# initializers of 10 and 20/s. A sprint continues below its entry threshold until exhausted. Jump requires and consumes 10 stamina. Jump impulse/gravity, acceleration, and air steering remain temporary. The [tutorial and movement audit](audit/TUTORIAL.md) records source/asset provenance and the actual tutorial graph.
+
+Equipped resource tools have stable item identities and per-instance durability. The separate training mode has a recovered animated hare and a bounded leisure patrol. Knife/hare action modules preserve recovered timing, stamina, damage arithmetic and contact-window rules. With the optional baked body, drawn knife and hare hitboxes installed, training now connects four stationary third-person knife stages to actual posed capsule contacts and target HP. Body and blade share the authored clip clock; one target can be hit once per stage. An actual prototype 13 death receipt opens 300230, then its acknowledgement enters 719 and presents 4072/300231. The 3600-frame graphical combat check passed with eight attack starts, 24 contacts and actual hare HP 212→0 before entering 719. Recorded female poses, the original starter outfit and six-state baked locomotion render in C; missing character assets retain visual fallbacks. General humanoid animation, AI and character customization remain incomplete. Source stamina defaults are capacity 100, recovery speed 40, and reduction multiplier 1. Recovery waits for active stamina-consuming actions to finish and at least 0.1 seconds afterward. Stamina is clamped at zero; thresholds 40 and 20 multiply tool-swing speed by 0.9 each instead of prohibiting the action. A temporary cooldown substitutes for the missing animation-event schedule. Sprint/jump action flags are transient and clear on load/world replacement; persisted velocity and stamina remain intact, but airborne reloads do not resume the old jump's regeneration lock.
+
+### Inventory and production
+
+Preserve prototype IDs, stack limits, item categories, ingredient quantities, product counts, recipe IDs, and craft durations from the database. The original inventory distinguishes categories and item instances; equipment and creations require state beyond a count. Production supports up to six ingredient entries and is affected by workspaces, unlocks, and progression.
+
+The runtime exports 27 item definitions and eight original recipes reproducibly. Non-stack items receive stable instance IDs; equipped tool references survive slot relocation and save/load, and tools preserve individual durability. Inventory additions/removals and construction batches reject invalid or unaffordable operations before committing. The full category-tab/component model remains to be ported.
+
+Crafting checks that the total requested ingredients exist at start but consumes them only when each batch completes. Completed outputs accumulate. Delivery is checked on a batch completion and occurs when more than five seconds have passed since the previous delivery, or immediately on the final batch. Thus a longer job using a three-second recipe first delivers two batches at six seconds, not one at five seconds. Cancellation delivers completed products, preserves unconsumed inputs, and leaves the job intact if output cannot fit. Pending batches and both timers persist. Jobs may pause safely when inputs/space change; source bugs that lose items or over-restrict cancellation are not intentionally reproduced. All exposed recipes are currently unlocked.
+
+Mining and construction use different data. Source `resource` records provide mining hardness, primary cumulative drop distributions, and fixed/self counts; smooth-terrain `buildblock` and construction `blocktype` are placement mappings, not drop tables. Native digging selects centered voxel boxes through the source threshold search and six-neighbor support check, independently of rendered-mesh picking. It requires a snapped sample strictly less than 3 m from player feet plus one meter; a supported nonzero sample below isovalue 128 may be mined. Empty fallback targets are safe no-ops with no tool wear in the current single-sample implementation.
+
+Damage uses `(player attack + tool attack) × (1 + resource damage) × 5` for resource-return actions, applies source material-hardness attenuation, truncates byte-density damage, and removes the sample below threshold 128. Known resources with no primary drops remain removable without awarding items. Unknown resource definitions do not receive fabricated drops. RNG state persists, although its sequence is not Unity-compatible. Generated dirt/grass alias source resource 2 and generated stone aliases 17; imported materials retain their original byte IDs. Rare/special bonuses remain unported.
+
+Block45 uses source half-meter cells and the packed shape/rotation/material bytes described in [the Block45 audit](audit/BLOCKS.md). Cube and ramp count equally for resource accounting. Group each operation by material: construction costs `ceil(cells/4)`, removal refunds `floor(cells/4)`. Four cells placed/removed together cost/refund one resource; four independent single-cell placements cost four, and independent single-cell removals refund zero. Validate the entire batch, including collision and capacity, before committing. Crafted furniture proxies remain separate item-based objects, as do structures migrated from older rebuild saves.
+
+### Missions and progression
+
+Retain authored mission IDs and prerequisite relationships. Missions include more than quest text: acceptance, dialogue, target counts, location/radius, escort/follow behavior, delivery/use/craft actions, rewards, branching, abandonment, and persistence. Custom scenarios also have explicit trigger/action machinery.
+
+Implement objectives as typed data plus event consumers. Replaying a completed event or loading a save must not duplicate rewards. A local tutorial task counter in the first slice is illustrative only and must not reuse a campaign quest ID. Port the full mission graph after inventory, entities, and world interactions are stable enough to emit authoritative events.
+
+### Colony and creation systems
+
+Colony parity requires facilities, power, storage, jobs, workers, production, farming, maintenance, medical functions, and attacks. Creation parity requires voxel/material editing, parts, symmetry/tools, save/import/export, validation, calculated properties, item instantiation, and controllable vehicles/weapons. These are separate major milestones, not UI additions to the first terrain demo. See the gameplay and world appendices for source owners and archive formats.
+
+### Presentation and input
+
+The original uses Unity rendering, animation, physics, UI middleware, camera systems, effects, audio, and serialized resource references. Binary scenes cannot be read as text YAML. Asset conversion must recover object relationships and transforms before claiming scene parity. Missing model and audio dependencies prevent visual/audio equivalence from this checkout alone.
+
+For the initial implementation, use raylib through its C API for windowing, input, mesh drawing, text, and GPU resource management. This machine has raylib 6.0 installed; the [official API reference](https://www.raylib.com/cheatsheet/cheatsheet.html) documents the graphics/input functions. Keep raylib types outside the simulation interface so another rendering or physics library can be adopted later without rewriting game rules.
+
+Use generated geometry and a legible HUD initially. Provide movement, mouse look, jumping, mining, crafting, placement, inventory counts, time of day, an explicit save/load action, and an escape/pause state. Display failed-action feedback. No fabricated campaign dialogue or original-looking placeholder characters are required for this milestone.
+
+## Content recovery and conversion
+
+The source databases are a key bridge to faithful reconstruction. Use Python's standard-library SQLite reader for offline conversion and generate plain C tables for the first executable. Runtime SQLite can be added when data scale warrants it. Read databases in read-only mode and never rewrite the originals.
+
+Every conversion output should record source paths, source hashes, table names, selected IDs, schema assumptions, and row counts. Sort deterministically. Fail on duplicate IDs, missing mandatory items, unsupported ingredient formats, invalid counts, or unmapped references rather than silently dropping records.
+
+Content conversion includes implemented exporters and remaining recovery work:
+
+| Input | Output | Validation |
+| --- | --- | --- |
+| Item, recipe, player and resource tables | Selected typed catalog and provenance (implemented) | IDs, ingredients, stack bounds, localization, source properties/distributions |
+| Original CPU extraction tables | Generated C marching-cubes tables (implemented) | Table integrity and source-derived mesh fixtures |
+| Mission and dialogue tables | Mission graph and dialogue resources | Foreign keys, reachability, objective types |
+| Unity binary scenes and prefabs | Entity/scene manifests | GUID resolution, transforms, component inventory |
+| Available meshes/textures/animations | glTF and image resources | Scale, handedness, materials, skeleton naming |
+| Terrain files | Read-only original LZ4 reader and bounded native crop (implemented) | Chunk halos, uniform/dense records, compression, index bounds |
+| Subterrain and streamed terrain | Vegetation manifests and scalable world storage (remaining) | Cross-chunk references, placement, persistence and LOD |
+| Creation archives | Versioned creation resources | Version, checksums, voxel/material/part references |
+| Audio records and available clips | Event-to-clip catalog | Explicit missing-clip report |
+
+Do not infer successful conversion from a filename extension alone. Record unavailable dependencies and which visible behaviors they block. Binary Unity recovery is a separate tool task; the first game should not guess at undocumented serialized offsets.
+
+## C runtime architecture
+
+Use C11 for the new game code. Supporting libraries may be C or C++, but any C++ integration should expose a narrow C boundary. Start with a Makefile and `pkg-config` so builds work with the tools available here; add other build systems only when useful.
+
+| Module | Owns | Does not own |
+| --- | --- | --- |
+| World / Mesh | Density/material samples, generation, edits, bounds, ray queries, source-table mesh extraction | GPU handles, inventories |
+| Legacy reader | Validated original terrain records, LZ4 decoding, bounded crops | Original Unity scenes or save archives |
+| Block45 | Source cube/ramp shape data, rotations, exact shape ray/AABB queries and cost rounding | Inventory debits or renderer input |
+| Game | Player movement, action validation, inventory, craft state, simulation time | Window/input APIs, disk byte order |
+| Save | Explicit versioned serialization, validation, replacement of complete state | Native struct dumping or Unity save compatibility |
+| Content | Immutable prototype/recipe definitions, stable IDs, provenance | Mutable session quantities |
+| Frontend | Input mapping, camera, rendering, HUD, resource lifetime | Authoritative item consumption or world edits |
+| Tests | Deterministic core fixtures and failure cases | Mandatory graphics context |
+
+Current memory model: a finite density volume allocated in a world object, 32 item slots, 1,024 Block45 cells, a separate bounded legacy/furniture array, and one craft job with pending output. The production engine will replace the finite volume with chunk storage, but keep query/edit APIs stable. Floating point physics is not promised to be bit-identical across CPUs; use integer grid/hash operations where practical for deterministic terrain generation.
+
+Simulation should run at a fixed step with a bounded number of catch-up steps per rendered frame. Pause stops simulation and crafting. Clamp pathological frame gaps. Input commands are sampled separately from rendering; a pressed action must not execute repeatedly during catch-up.
+
+### Time model
+
+Verified in `Assets/Scripts/Global/PETimer.cs`, `UTimer.cs`, and `GameTime.cs`: a local day contains **26 hours**, normal game time advances **12 game seconds per real second**, and Story and Build start at days **94.35** and **94.50**. The original timer uses 100,000 ticks per second; its daylight cycle is `-cos(day_fraction * 2π)`. Preserve the 26-hour clock and 12× rate in the initial build. Do not accidentally substitute a 24-hour clock in the HUD or save format.
+
+### New save format
+
+The rebuild uses `PECS` version 4. It accepts rebuild versions 1–3 as Legacy mode, assigning stable item identities and source stamina/full tool durability defaults when those fields are absent. Old one-meter structures are retained separately rather than silently reinterpreted as half-meter cells. Version 3 adds packed Block45 cells after the v2 state. Version 4 appends mode, Adventure grants, known formulas, stable quickslot references, health and medicine clocks. Adventure movement and saved-player validation use actual rendered MC/Block45/furniture collision; Legacy preserves its earlier controller and validator. Original Unity archives still require a dedicated importer; shared item IDs do not imply save compatibility.
+
+Serialize fixed-width integers and floating point fields in a defined byte order, with magic, version, dimensions/counts, length validation, and an integrity check. The current payload stores seed, world revision/source/crop metadata, the full bounded density/material volume, player state, stable inventory identities and durability, stamina/cooldown, deterministic drop RNG state, both construction representations, tree depletion/health, active/pending production and world time. Do not serialize pointers, padding, GPU handles, or platform-native structs.
+
+Load into a temporary state, validate all bounds and finite values, then replace the live state only on success. A truncated, corrupt, incompatible, or maliciously oversized save must leave the running game unchanged. Write a temporary file in the destination directory and rename it after successful serialization; avoid destroying the previous save on a write error. Validation rejects malformed counts, unknown IDs, duplicate item/cell identities, invalid float values, out-of-bounds or embedded players, invalid geometry and trailing data. Tests cover round trips, v1/v2 migration, mid-craft pending products, and semantic invalid states whose checksums have been recomputed.
+
+## Implementation milestones and acceptance
+
+### First playable foundation — implemented subset
+
+The standalone C executable opens a 3D world, spawns safely, supports movement/jumping with collision, mines into an inventory, crafts real recipes, places/removes resource shapes and furniture proxies, and saves/loads state. The HUD shows controls, tool wear, stamina, crafting progress, inventory counts and local tutorial counters. A deterministic seed option, headless test executable, and unattended graphics smoke fixtures are available.
+
+Both generated terrain and original-file crops are now available. Generated terrain is not the original procedural generator. Flat-shaded colors, generated objects, the local tutorial objective, sampled controller, and shared inventory are rebuild design choices. Original primary mining drops and selected tool rules have replaced the initial arbitrary mining-yield shortcut.
+
+Acceptance evidence must include successful build commands, meaningful headless tests, a graphics smoke run when a display is available, and a visible rendering check. State any untested platform or missing dependency in the rebuild README. Passing these checks establishes a working foundation only.
+
+### Terrain and content parity — partial
+
+Original CPU marching-cubes tables, bounded regional mesh caching with gradient-halo invalidation, LZ4 terrain decoding/crops, and source cube/ramp Block45 geometry/material accounting are implemented with native fixtures. Complete the streaming chunk cache, dirty-neighbor/LOD transitions, original noise/seed rules, water and vegetation placement/depletion, remaining block primitives, and scene conversion. Capture controlled fixtures from the running original reference; native fixtures alone do not establish full-world parity. Require stable memory usage over repeated streaming and edits.
+
+### Survival and equipment — partial
+
+Stable instances, selected equipped tools, durability, stamina, primary mining drops, and pending/cancellable production are implemented. Next port the complete item-component/equipment model, hunger/oxygen and other attributes, workspaces/unlocks, remaining harvest/bonus tables, broader weapon/action states and hostile AI encounters beyond the stationary training slice. Use real records and validate damage eligibility, ownership, and deterministic replay. Generated-tree bootstrap gathering and unit cutting factors remain temporary.
+
+### Narrative and settlements
+
+Recover usable scene content, character resources, and animations. Port dialogue and mission interpretation, reputation, traders, followers, NPC scheduling, colony facilities and jobs, farming, production and defense. Require a selected campaign/tutorial sequence to complete, save midway, reload, and finish without duplicate rewards or lost references.
+
+### Creation and vehicles
+
+Implement the creation editor and conversion into runtime objects, with archive versioning, invalid-design rejection, geometry, mass/energy calculations, controls and physics for a representative ground vehicle, aircraft, boat, and weapon. Check import/export against known files before broadening supported versions.
+
+### Multiplayer and release parity
+
+Only after authoritative single-player transactions are stable, add transport, session/lobby, entity replication, command validation, terrain edit replication, creation transfer, save ownership, reconnection and host/server rules. Existing uLink RPC code is a behavioral reference, not a requirement to reproduce its unavailable middleware. Define a new protocol and version it. Include latency, loss, duplicate-command, late-join and corrupted-payload tests.
+
+## Verification strategy
+
+| Area | Required evidence |
+| --- | --- |
+| Terrain | Original-file samples and malformed LZ4 cases, source marching-cubes fixtures, bounded/negative queries, edits, finite meshes, ray boundaries, region invalidation including normals-only neighbor changes |
+| Movement | Stable grounded state, walk/run/sprint distances, serialized sprint entry/drain/exhaustion, jump stamina and recovery, no penetration into terrain/blocks, world-edge behavior, pause |
+| Inventory/tools | Capacity/overflow, unique stable instances, worn tools, unsupported/broken tool gates, stamina timing, no negative quantities |
+| Crafting | Real IDs/counts/durations, strict completion-triggered delivery, cancellation conservation, blocked output, pause, pending-output save |
+| Building | Source shape/rotation geometry, grouped ceil/floor accounting, atomic invalid batches, overlaps, refund overflow, loaded collision |
+| Save | v1/v2→v3 migration, metadata/tools/pending-output/cell round trips, semantic tampering with valid checksum, truncation/trailing data, unchanged live state on failure |
+| Content tools | Repeatable output, read-only source access, hash provenance, schema failure diagnostics |
+| Graphics | Launch, several frames, world/HUD visible, clean teardown, mesh rebuild after edit |
+| Performance | Record world dimensions and triangle count with frame rate; no unsupported claim of original scale |
+
+Keep source facts, planned functionality, and verified implementation status separate. Record actual delivered functionality and commands in `rebuild/README.md`. Any important mismatch found during implementation should update this specification or its audit appendices, rather than becoming an undocumented approximation.
+
+## Remaining uncertainties
+
+The original native V1.1.4 player provides a running tutorial reference through camera/movement, storage, Andy reply, the five-to-ten juice grant, quick-bar use leaving nine, and knife grant/equipment/drawing. A hare and a knife swing are visible, but no successful hit or kill is confirmed. The complete tutorial and campaign remain unverified.
+
+C training equips the knife at 746 and conditionally enables stationary third-person combat when matching baked body/drawn-knife scenes and source hitboxes are available. Grounded, stopped attacks consume stamina, use source animation events to gate the actual blade capsule, and apply source damage to the posed hare defence capsules. A positive-to-zero HP transition dispatches the prototype 13 death objective once; completion dialogue then enters 719. This integrated path has headless coverage and a passing 3600-frame graphical run: eight attack starts produced 24 capsule contacts and reduced actual hare HP from 212 to 0. The run acknowledged the death and 719 introduction, retained nine juices and the equipped knife, and finished at 500/500 player HP. It used real pursuit and room movement without teleporting or assigning target HP. [Completed C combat sequence](reference/rebuilt-training-combat-complete.png). This does not establish an original-game hit outcome.
+
+The current armed locomotion uses ordinary movement clips; draw/stow switches mounts immediately without its source animation. Aiming follows the camera provisionally. Eligibility uses an explicit fixed tutorial-pair whitelist rather than the full faction/reputation/skill pipeline. Hare behavior remains leisure patrol: hostile attacks, hit reactions and ragdoll are absent. Contacts are instantaneous capsules without a swept history. Moving/air/first-person attacks, root motion, transition blending and complete controller/IK behavior remain unsupported. The gathering ledger now connects719’s five real herb positions and timed depletions to 748, granting safety axe 1527 once and presenting 300233. The 6000-frame graphical check passed with five herbs depleted and one axe; tree cutting, script learning and crafting pass the 9000-frame graphical sequence through 751, and actual mining passes the 12000-frame sequence through 752. Construction is graphically verified through the unsupported 756 boundary. See [baked knife assets](audit/BAKED_KNIFE.md) and [combat evidence](audit/TRAINING_COMBAT.md).
+
+Historical checks remain useful at their then-supported boundaries: the short 90-frame graphics check and early interactive run reached 718; the earlier 1500-frame storage/return check reached 743 with five juices. A later pointer playthrough reached 745 with nine, proving invalid-drop preservation, valid assignment and consumption. The extended 1500-frame graphics check now reaches 746 with nine juices and the knife equipped. A separate 38,308-frame keyboard/mouse playthrough verified the same result at 500/500 HP and conserved knife ownership through equip/unequip/re-equip. The newest 1500-frame run also exercised patrol, reporting mode 1, position `(3.293,1.632,17.898)` and one decision. Core/sanitizer checks, eighteen CLI tests and the headless actor/combat/hitbox modules pass.
+
+The standalone hare preview passed idle/run at 90 frames and all eight clips with source hitbox overlay at 630 frames. A matching original-runtime female pose capture now contains 566 evaluated frames, including all four TP/FP knife stages. Strict matrix/palette validation passes, and the C multipart preview renders the recovered starter outfit plus captured knife attachment in eleven material parts. Training now selects six recovered idle/walk/run/jump/fall/land clips and optionally animates the stowed knife from the same sampled hierarchy. The 90-frame graphics check exercised idle, walk, run, jump and land. Full directional blends, transitions, sprint/weapon locomotion, root motion and original contact equivalence remain unfinished. See [locomotion evidence](audit/PLAYER_LOCOMOTION.md) and [isolated clip recovery](audit/ANIMATOR_BAKE.md). See [recorded-pose analysis](audit/POSE_CAPTURE_ANALYSIS.md) and [playtest evidence](PLAYTEST.md).
+
+The combat foundation includes [the recorded-geometry melee fixture](../rebuild/tests/REFERENCE_MELEE.md), [knife geometry and attachment](audit/KNIFE_COLLISION.md), [player animation/event recovery](audit/PLAYER_ANIMATION.md), [player mesh and Avatar recovery](audit/PLAYER_ASSET_RECOVERY.md), [hare event and cooldown rules](audit/TRAINING_ENEMY.md), [hare movement](audit/HARE_MOVEMENT.md), [sampled skeletal animation](audit/ACTOR_RECOVERY.md), and [source hitbox recovery](audit/HITBOX_RECOVERY.md). Full humanoid retargeting and original hit-outcome equivalence remain work in progress. The new stationary training host connects capsule-confirmed hits, HP/death and the 719 dialogue boundary; its extended graphical check passed through the 719 introduction.
+
+The [scene collision audit](audit/SCENE_COLLISION.md) records collider validation. Original lighting, full physics, player/NPC animation, full HUD, medicine visual effects and later missions remain incomplete. See the [playtest log](PLAYTEST.md), [terrain parity audit](audit/TERRAIN_PARITY.md), [tutorial audit](audit/TUTORIAL.md), [interaction audit](audit/TRAINING_INTERACTION.md), and [asset recovery audit](audit/ASSET_RECOVERY.md). The [reference-runtime investigation](REFERENCE_RUNTIME.md) records launch evidence and configuration. The Unity editor/source build remains untested, and omitted third-party dependencies still constrain rebuilding the original project. Exact movement feel, animation/action timing, material/shader appearance, sounds, native plugin algorithms, server behavior and old archive compatibility need further reference observations and fixtures. Temporary replacements remain explicit while the C rebuild expands.
+
+
+## Herb lesson integration status
+
+Combat completion dialogue initializes the 719 ledger; its 4072/300231 introduction must be acknowledged before gathering. The controller accepts living players with closed inventory within the source strict distance²<7, without an equipment restriction. Each accepted action depletes its herb at 1.1 seconds and releases movement locking, while its local 1.966-second timer finishes separately. Physical falling remains active. Herbs yield no items. The fifth depletion, mission transition to 748 and one-time safety axe 1527 grant are atomic; a capacity failure cannot consume the herb without its grant. Death cancels pending undepleted actions. Headless regressions cover dialogue/range/health/modal gates, duplicate input, timing, movement locking, continued action after a later inventory opening, and grant conservation under ASan/UBSan/leak checks.
+
+The graphical frontend uses E on the nearest eligible herb. Source herb components independently observe the input, allowing multiple eligible plants to start together; the core allows concurrent distinct actions, but nearest selection is a frontend simplification. Recovered meshes use their original world transforms and diffuse materials directly, without the hologram renderer, production fade or original player gathering animation. The 748 lumbering introduction and subsequent tree/script/crafting inputs are now connected. Original-client herb interactions remain unobserved. The compiled 6000-frame smoke follows real room movement to all five positions and requires five depletions plus exactly one axe; its graphical check passed with exit 0, mission 748, five depletions and one axe. [Completed herb lesson](reference/rebuilt-training-herbs-complete.png). The separate 3600-frame combat check remains verified at 719. Export and run commands are in the [rebuild README](../rebuild/README.md#training-herbs-and-next-lesson-boundary).
+
+
+The training controller additionally bridges 748 → 757 → 721 → 751 with passing headless tests and the 9000-frame graphical sequence. It uses the source seven-hit tree ledger and requires explicit held-axe state, a real player-forward 2m tree hit and animator-readiness input. Knife 33 and safety axe1527 share equipment slot 16; swapping preserves ownership. Tree completion grants wood279×1, then script 406×1. Learning consumes the script exactly once, accepts 721 and adds 20 wood. Recipe 1 debits 10 wood at start and produces one shovel at 180 fixed ticks; acceptance of751 grants the second shovel. The conserved path is wood1→21→11 and shovels0→1→2. Repeated input and blocked successor grants cannot repeat earned output. The original Y prompt and mission dialogue are preserved, while cutting animation readiness and immediate draw/stow remain explicit boundaries. The source cutting poses are integrated, and mining now has a passing graphical path described below. No unverified stamina or durability formula is applied to the scripted hologram cutter.
+
+
+## Mining integration: verified through building entry
+
+The 12,000-frame graphical check exited successfully at mission 752. The original 726-sample mound is editable, with matching marching-cubes render and capsule-collision snapshots rebuilt after each change. Five authored shovel hits removed three actual samples, yielding six dirt; mission acceptance then granted 9,000 more and cleared the authored mound. Final dirt was 9,006, the equipped shovel retained 3,528/3,553 durability, and the second shovel remained untouched at 3,553. Wood 11, two shovels, nine juices and 500/500 player HP were conserved. [Digging](reference/rebuilt-training-mining.png) and [completed mining lesson](reference/rebuilt-training-mining-complete.png).
+
+Body and held/stowed shovel meshes use recovered source attachments; the digging poses come from91 original-runtime samples across Spade1/2/3. The action scheduler uses source clip events, stamina4, wear5 and density damage34, with explicit discrete transitions. Full Animator blending, IK and original live digging outcomes remain unverified. The mound uses a temporary dirt color; full terrain shading and world streaming remain absent. Training building interaction and the source50-ray receiver evaluator are implemented as described below; the generic sandbox retains its separate construction loop.
+
+
+## Construction integration: verified through the creation boundary
+
+The training core/frontend implements752 build-mode entry, the ordered300246/4075/4076 completion dialogue,753 introduction300249/300247/300248 and actual receiver-occlusion completion. The database successor is756, not754 or755. Mission756 remains an explicit unsupported creation boundary. No new completion condition or item grant is invented.
+
+Training controls are B for Build Mode, left mouse for a half-meter dirt cube, Alt+left mouse for removal and T for cube rotation. Only cubes are exposed in this training frontend. Actual geometry uses the existing Block45 module, the shared dirt ledger, atomic per-operation costs and player-capsule exclusion. One-cell add costs1; one-cell remove refunds0. Receiver slabs and placed cells share dynamic collision; source terrain anchors use marching cubes. Activation performs bounded combined overlap recovery, preserving horizontal position and allowing gravity/slide from a clear airborne candidate at steep edges.
+
+Each of50 source rays queries the nearest layer12 hit over20m from its source-offset origin. Receiver hits subtract100; other hits and misses add1. Therefore49 shielded receivers still fail at−51, while50 pass at 50. The evaluator uses actual receiver boxes, terrain triangles and Block45 shapes; no arbitrary block-count objective exists. Successful completion clears 32 authored terrain anchors and all lesson-written cells, exits build mode and reaches756 without refunding cleanup. Source geometry, installed-hierarchy comparisons, callback validation and known tie-order limitations are recorded in [training building](audit/TRAINING_BUILDING.md).
+
+The headless evaluator, collision and mission regressions pass, including actual cube occlusion, duplicate/early-event rejection, independent inventory conservation, slab-edge recovery and invalid-query rollback. The 15,000-frame graphical fixture passed with exit 0 at mission 756:19 actual cube placements, one removal, score 50, zero remaining lesson cells and zero terrain triangles. Dirt ended at 8,987; wood 11, two shovels, nine juices and HP 500/500 were conserved. The equipped shovel retained 3528/3553 durability and the unused second 3553/3553. Combat again produced eight attack starts and 24 contacts with hare HP 0/212. [Construction](reference/rebuilt-training-building.png) and [completed construction lesson](reference/rebuilt-training-building-complete.png). These observations establish the supported C route, not an original-game building outcome. Procedural beams and recovered receiver/indicator art are integrated, while original hologram shaders/particles, the full construction palette and creation editor remain absent.

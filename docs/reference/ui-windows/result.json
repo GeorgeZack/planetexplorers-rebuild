@@ -1,0 +1,21 @@
+{
+  "completed": true,
+  "sizes": [
+    [
+      1280,
+      720
+    ],
+    [
+      1000,
+      700
+    ]
+  ],
+  "checks": [
+    "tracker clearance",
+    "title drag",
+    "moved close",
+    "resize clamp",
+    "mission panel drag"
+  ],
+  "note": "Screenshots require visual review; deterministic geometry/input tests separately verify state."
+}

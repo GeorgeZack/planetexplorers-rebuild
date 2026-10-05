@@ -1,0 +1,7 @@
+{
+  "schema": "pe-animator-bake-exit-1",
+  "capture": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.jsonl",
+  "returncode": -9,
+  "signal": 9,
+  "observed_utc": "2026-10-05T13:18:30.436471+00:00"
+}

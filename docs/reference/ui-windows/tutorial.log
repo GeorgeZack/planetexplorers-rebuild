@@ -1,0 +1,12 @@
+Training room: 1328 frames, mission 739, camera mask 0, movement mask 0, position 27.000 1.479 11.000
+Training visuals: recovered diffuse room textures; recovered starter character with six locomotion clips.
+Training locomotion: clip NormalIdle, seconds 0.200, exercised mask 1; discrete selection, sprint uses run fallback.
+Training items: Herbal Juice 0; kit transferred 0; Andy reached 0
+Training NPCs: 9 of 9 recovered characters, idle clock 22.200
+Training hare: mode 0, position 15.000 1.477 12.000, decisions 0
+Training equipment: knife owned 0, equipped 0; HP 500 / 500
+Training gathering: 0 herbs depleted, axe 0, ledger mission 0
+Training crafting: wood 0, script 0, shovel 0, formula 0, axe equipped 0
+Training mining: 0 swings, 0 removals, dirt 0, shovel -1, durability 0/0, triangles 0
+Training building: 0 added, 0 removed, score 0, cells 0
+Training melee: 0 starts, 0 contacts, hare HP 212.000 / 212.000

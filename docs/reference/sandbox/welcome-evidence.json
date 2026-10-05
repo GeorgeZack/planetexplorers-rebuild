@@ -1,0 +1,20 @@
+{
+  "files": {
+    "docs/reference/sandbox/rebuild-welcome-page-1949.png": "c2518efd12599404e2e6352d0828c924553ecdb9bc578fa37ed5f32e769007d0",
+    "docs/reference/sandbox/rebuild-welcome-resumed-4083.png": "f42784452e85e61fbb8968523b9dfc520e894d159f9033056d976ffb45f0c3c8",
+    "docs/reference/sandbox/rebuild-welcome-page-4084.png": "b3d3845ee5e5365c6dca1a1fd976924697d9ac1739e29193adbc2d4e66d0e196",
+    "docs/reference/sandbox/rebuild-welcome-page-4088.png": "87c3ec10d84f0055d2e04ffbade21a940610d5c96bd3e22d89145a141da24c74",
+    "docs/reference/sandbox/rebuild-welcome-accepted.png": "314a52d9ba4bebce942a8fd31ac00d0190fbcde6ba64f3a73c4b9327d70b28a3",
+    "docs/reference/sandbox/rebuild-welcome-completed-menu.png": "8fd4caa556fea57093ef1c65f2cc77fdfa9209fa456992d108d67397fc10c79b",
+    "docs/reference/sandbox/rebuild-welcome-result.json": "d2a9d99f0cd289598f2659721e1e67113b4f2d4837c11ecaa44414f7d106e74a",
+    "docs/reference/sandbox/rebuild-welcome-welcome.log": "644bd2dd64b30fc6e479761c5a461a439245570bf2bb11c997e08f36c7566d95",
+    "docs/reference/sandbox/rebuild-welcome-supplier-result.json": "93e689557fa13b5e2b5495fe961d97d3a925802bf191f53a229f69c679079dfc",
+    "docs/reference/sandbox/rebuild-welcome-supplier-supplier.log": "e3e554ffcc0cf104ca75f7fdd8bfc199ffd868dfbb6c3aa435ef6131223a40c0"
+  },
+  "native_skinning": {
+    "parts": 9,
+    "vertices": 7991,
+    "part_frame_checks": 558
+  },
+  "reference": "Source/archive and previously captured Steam UI; no new Steam run"
+}

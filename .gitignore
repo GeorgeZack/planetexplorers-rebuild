@@ -1,0 +1,18 @@
+# Local native game saves and compiler/core artifacts
+*.pesave
+*.pesave.tmp
+/core
+/core.*
+
+# Generated Unity workspace data
+/Library/
+/Temp/
+/Obj/
+/Logs/
+/UserSettings/
+
+# Local credentials and editor state
+.env
+.env.*
+/.vscode/
+/.idea/

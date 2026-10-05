@@ -1,0 +1,24 @@
+make: Entering directory '/home/admin/source/planetexplorers/rebuild'
+cc -Isrc -DPE_SOURCE_ROOT=\"/home/admin/source/planetexplorers\"  -O2 -g -std=c11 -Wall -Wextra -Wpedantic tests/adventure_fixture.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c -o build/adventure_fixture -llz4 -lm
+./build/adventure_fixture build/adventure-fixture.pesave build/adventure-airborne.pesave
+Executed source start/quest/script/craft transactions; 1 successful shovel swings, 1 removed resource samples, two four-cell brushes.
+build/adventure-fixture.pesave: mode=1 mission=9032 arrival=1 supplies=1 known=1 crafted=1 wood=188 dirt=2 stone=0 shovels=2 axes=1 juice=10 cells=8 craft=0 left=0 pending=0 elapsed=0.000000 equipped=12 instance=28 durability=3548.000 position=(32.000000,11.548594,32.000000) velocity=(0.000000,0.000000,0.000000) grounded=1 hp=500.0/500.0
+  recipes: 1; quickslots: 279:0 916:0 12:28 0:0 0:0 0:0 0:0 0:0 0:0
+build/adventure-airborne.pesave: mode=1 mission=9032 arrival=1 supplies=1 known=1 crafted=1 wood=188 dirt=2 stone=0 shovels=2 axes=1 juice=10 cells=8 craft=0 left=0 pending=0 elapsed=0.000000 equipped=12 instance=28 durability=3548.000 position=(32.000000,17.548595,32.000000) velocity=(0.000000,-1.000000,0.000000) grounded=0 hp=500.0/500.0
+  recipes: 1; quickslots: 279:0 916:0 12:28 0:0 0:0 0:0 0:0 0:0 0:0
+./build/planet_explorers --load build/adventure-fixture.pesave --smoke 90 --smoke-panel character --screenshot build/smoke-adventure-character.png
+Sandbox ready: mode 1
+Sandbox: 90 frames, 9765 triangles, mode 1, recipes 1, mission 9032, result 0
+Sandbox tools: 0 swings, 0 resource changes
+Sandbox camera: desired 6.000m, distance 6.000m
+./build/planet_explorers --load build/adventure-fixture.pesave --smoke 90 --smoke-panel crafting --screenshot build/smoke-adventure-crafting.png
+Sandbox ready: mode 1
+Sandbox: 90 frames, 9765 triangles, mode 1, recipes 1, mission 9032, result 0
+Sandbox tools: 0 swings, 0 resource changes
+Sandbox camera: desired 6.000m, distance 6.000m
+./build/planet_explorers --load build/adventure-airborne.pesave --smoke 90 --screenshot build/smoke-adventure-airborne.png
+Sandbox ready: mode 1
+Sandbox: 90 frames, 9765 triangles, mode 1, recipes 1, mission 9032, result 0
+Sandbox tools: 0 swings, 0 resource changes
+Sandbox camera: desired 6.000m, distance 6.000m
+make: Leaving directory '/home/admin/source/planetexplorers/rebuild'

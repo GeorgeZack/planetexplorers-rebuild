@@ -1,0 +1,101 @@
+{
+  "scope": "C native desktop; source/installed asset recovery; no new Steam execution",
+  "tool_checks": [
+    {
+      "kind": "dig",
+      "swings": 2,
+      "changes": 2,
+      "before": {
+        "mode": "1",
+        "mission": "9032",
+        "supplies": "1",
+        "tool": "12",
+        "instance": "10",
+        "wear_remaining": "3553.000",
+        "wood": "200",
+        "dirt": "0",
+        "stone": "0",
+        "juice": "10",
+        "gathered": "0",
+        "cells": "0",
+        "position": "(45.000000,12.271614,45.000000)",
+        "yaw": "0.00000000",
+        "pitch": "-0.64999998",
+        "stamina": "100.000"
+      },
+      "after": {
+        "mode": "1",
+        "mission": "9032",
+        "supplies": "1",
+        "tool": "12",
+        "instance": "10",
+        "wear_remaining": "3543.000",
+        "wood": "200",
+        "dirt": "2",
+        "stone": "0",
+        "juice": "10",
+        "gathered": "1",
+        "cells": "0",
+        "position": "(45.000000,12.271612,45.000000)",
+        "yaw": "0.00959996",
+        "pitch": "-0.65000004",
+        "stamina": "88.000"
+      },
+      "log": "/home/admin/source/planetexplorers/rebuild/build/terrain-playtest/dig.log",
+      "passed": true
+    },
+    {
+      "kind": "mine",
+      "swings": 1,
+      "changes": 1,
+      "before": {
+        "mode": "1",
+        "mission": "9032",
+        "supplies": "1",
+        "tool": "19",
+        "instance": "11",
+        "wear_remaining": "3553.000",
+        "wood": "200",
+        "dirt": "0",
+        "stone": "0",
+        "juice": "10",
+        "gathered": "0",
+        "cells": "0",
+        "position": "(45.000000,12.271614,45.000000)",
+        "yaw": "0.00000000",
+        "pitch": "-0.64999998",
+        "stamina": "100.000"
+      },
+      "after": {
+        "mode": "1",
+        "mission": "9032",
+        "supplies": "1",
+        "tool": "19",
+        "instance": "11",
+        "wear_remaining": "3548.000",
+        "wood": "200",
+        "dirt": "2",
+        "stone": "0",
+        "juice": "10",
+        "gathered": "1",
+        "cells": "0",
+        "position": "(45.000000,12.271612,45.000000)",
+        "yaw": "0.00000000",
+        "pitch": "-0.64999998",
+        "stamina": "100.000"
+      },
+      "log": "/home/admin/source/planetexplorers/rebuild/build/terrain-playtest/mine.log",
+      "passed": true
+    }
+  ],
+  "imported_smoke_frames": 60,
+  "layer_fixture": "Controlled cut crossing x32/z32 render-region seams; trees cleared only in fixture; F9/F10 verified visually",
+  "captures": {
+    "rebuild-terrain-dig-before.png": "de9ef3d4f3f14403392bd080754d75477bb3af73a15fb5228392e1db1154e385",
+    "rebuild-terrain-dig-action.png": "687149f78003fc8338ad5c044eced8708c1cda00bfdbca98bf71374c6e16e6ab",
+    "rebuild-terrain-dig-after.png": "fcaccd22703b2bea2b16f02c90b3b6263525afb89c8c842690e655903f144a81",
+    "rebuild-terrain-mine-after.png": "e75e8ba756b2f9aebeaf7bd11bf4f1f676ad1537ca0b7ecc574e1feb161f8b6f",
+    "rebuild-terrain-imported.png": "e6ddacdbf6ac33cb5e7ead159ee64fa9203189b53c8fb46fa0378639d6537e84",
+    "rebuild-terrain-layers-reloaded.png": "5f5bf76209175088fefa5a0a47fdc4257e0e92a8120edb6fe0b763029cd7a54e"
+  }
+}

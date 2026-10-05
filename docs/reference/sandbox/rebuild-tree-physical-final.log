@@ -1,0 +1,11 @@
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/tree-contact.png
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/tree-blocked.png
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/tree-depleted.png
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/tree-passed.png
+Tree: blocked, six swings, eight wood, cleared trunk crossed: PASS
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/migration-notice.png
+Migration: v4 input unchanged, safe v5 save/reload: PASS
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/zoom-default.png
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/zoom-closer.png
+/home/admin/source/planetexplorers/rebuild/build/sandbox-tree-playtest-final/zoom-after-panel.png
+Zoom: smoothed to 3.6 m, character panel consumed wheel: PASS

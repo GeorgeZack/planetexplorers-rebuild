@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-05",
+  "capture_closed": true,
+  "poses": 91,
+  "watchdog": "Post-cleanup alive120frames observed; responsive Escape menu and Quit Game+Yes",
+  "exit": "-9 per original shipped self-kill handler; not a clean0 claim",
+  "source_files": {
+    "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.jsonl": {
+      "sha256": "a006463469ba00bf7768f1e5748d46437f74d9fb205848a09672ec93f62bc309",
+      "bytes": 2176821
+    },
+    "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.launch.json": {
+      "sha256": "16b665aa7a382f99be12e9972eb4d38f008fb23272650fc0b09e394b091f285b",
+      "bytes": 5297
+    },
+    "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.player.log": {
+      "sha256": "24836e0b74790dab5fc78f9bfd450a9d61a7316dcdf24711e19321eab55cf499",
+      "bytes": 45480
+    }
+  },
+  "physical_result": "dig2strikes/10wear/2dirt; mine1strike/5wear/2dirt; fell6strikes/30wear/8wood; mine modal prestrike cancellation0strikes",
+  "scope": "Sampled original poses/events plus C gameplay outcomes. No original pickaxe gameplay outcome compared."
+}

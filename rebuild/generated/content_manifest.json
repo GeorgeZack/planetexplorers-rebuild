@@ -1,0 +1,4193 @@
+{
+  "format_version": 3,
+  "scope": "Legacy subset plus Adventure1289 starter and9032 supplies/book formula closure; full attributes remain bounded.",
+  "adventure_starter": [
+    {
+      "item_id": 33,
+      "count": 1
+    },
+    {
+      "item_id": 1527,
+      "count": 1
+    },
+    {
+      "item_id": 73,
+      "count": 1
+    },
+    {
+      "item_id": 70,
+      "count": 1
+    },
+    {
+      "item_id": 973,
+      "count": 1
+    },
+    {
+      "item_id": 974,
+      "count": 1
+    },
+    {
+      "item_id": 975,
+      "count": 1
+    },
+    {
+      "item_id": 1579,
+      "count": 1
+    },
+    {
+      "item_id": 916,
+      "count": 10
+    },
+    {
+      "item_id": 228,
+      "count": 1
+    },
+    {
+      "item_id": 937,
+      "count": 10
+    },
+    {
+      "item_id": 229,
+      "count": 400
+    },
+    {
+      "item_id": 279,
+      "count": 200
+    }
+  ],
+  "adventure_supplies": [
+    {
+      "item_id": 12,
+      "count": 1
+    },
+    {
+      "item_id": 19,
+      "count": 1
+    },
+    {
+      "item_id": 26,
+      "count": 1
+    },
+    {
+      "item_id": 1,
+      "count": 1
+    },
+    {
+      "item_id": 34,
+      "count": 1
+    },
+    {
+      "item_id": 43,
+      "count": 1
+    },
+    {
+      "item_id": 552,
+      "count": 1
+    },
+    {
+      "item_id": 512,
+      "count": 1
+    },
+    {
+      "item_id": 519,
+      "count": 1
+    },
+    {
+      "item_id": 1550,
+      "count": 1
+    },
+    {
+      "item_id": 1551,
+      "count": 1
+    },
+    {
+      "item_id": 406,
+      "count": 1
+    },
+    {
+      "item_id": 412,
+      "count": 1
+    },
+    {
+      "item_id": 418,
+      "count": 1
+    },
+    {
+      "item_id": 424,
+      "count": 1
+    },
+    {
+      "item_id": 433,
+      "count": 1
+    },
+    {
+      "item_id": 510,
+      "count": 1
+    },
+    {
+      "item_id": 612,
+      "count": 1
+    }
+  ],
+  "source_tool_overrides": {
+    "12": {
+      "stamina_cost": 4.0,
+      "source": {
+        "path": "Assets/Resources/Prefab/Item/Equip/Weapon/Spade/wood_spade.prefab",
+        "sha256": "04216f14143156cfea9d4a5088198f5d6ad4f12c16955111aecadbd246cef71e"
+      },
+      "evidence": "Serialized source/installed fields verified in TRAINING_MINING/TRAINING_GATHERING audits."
+    },
+    "19": {
+      "stamina_cost": 4.0,
+      "source": {
+        "path": "Assets/Resources/Prefab/Item/Equip/Weapon/Hoe/wood_hoe.prefab",
+        "sha256": "72410f7b7daf762d076347d9e950b76c81abbacc313a3117980929d7a00583e4"
+      },
+      "evidence": "Serialized wood_hoe PEDigTool11466528; see SANDBOX_PICKAXE audit."
+    },
+    "26": {
+      "stamina_cost": 4.0,
+      "source": {
+        "path": "Assets/Resources/Prefab/Item/Equip/Weapon/Ax/wood_ax.prefab",
+        "sha256": "58c24d9dc708f8b9a15363dc8b9156457cb979f8cdc82520366d0ea7e301b072"
+      },
+      "evidence": "Serialized wood_ax PEAxe11484812; see SANDBOX_ACTIONS audit."
+    },
+    "1527": {
+      "stamina_cost": 4.0,
+      "source": {
+        "path": "Assets/Resources/Prefab/Item/Equip/Weapon/Ax/safety_axe.prefab",
+        "sha256": "5517725a940cd8e644fe133dfa9bbaf39c826ce0f114af2e3e2e1816e9aa5a58"
+      },
+      "evidence": "Serialized source/installed fields verified in TRAINING_MINING/TRAINING_GATHERING audits."
+    }
+  },
+  "source_database": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_tool_defaults": [
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PEDigTool.cs",
+      "sha256": "d8a3131cf215bce1b8def90c1ea775e8357144198f78b737150384d3437f72e3"
+    },
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PEAxe.cs",
+      "sha256": "491eafd33307167355530f59ae6aa28f5e013f8fe062bd56ecc7a643f758317b"
+    }
+  ],
+  "source_localization": {
+    "path": "i18n.db",
+    "sha256": "965648c34c5767aeeba8187c121ba128a24e5915eb532d18f666371e24f40299"
+  },
+  "duplicate_localization_ids": "Last row by SQLite rowid wins, matching legacy dictionary assignment.",
+  "localization_order": [
+    "external English (when present)",
+    "embedded English",
+    "PrototypeItem._engName"
+  ],
+  "source_counts": {
+    "valid_items": 1743,
+    "skipped_item_metadata": 1,
+    "valid_recipes": 589,
+    "skipped_recipe_metadata": 0,
+    "embedded_unique_translations": 12990,
+    "external_unique_translations": 12990,
+    "construction_materials": 52,
+    "terrain_resources": 128
+  },
+  "selected_item_ids": [
+    1,
+    2,
+    12,
+    19,
+    20,
+    26,
+    33,
+    34,
+    43,
+    49,
+    50,
+    70,
+    73,
+    228,
+    229,
+    234,
+    235,
+    238,
+    239,
+    241,
+    268,
+    269,
+    270,
+    271,
+    272,
+    273,
+    274,
+    275,
+    276,
+    277,
+    278,
+    279,
+    280,
+    281,
+    282,
+    308,
+    310,
+    406,
+    412,
+    418,
+    424,
+    433,
+    510,
+    512,
+    519,
+    552,
+    612,
+    916,
+    937,
+    973,
+    974,
+    975,
+    980,
+    982,
+    983,
+    984,
+    987,
+    989,
+    1001,
+    1003,
+    1005,
+    1006,
+    1008,
+    1011,
+    1017,
+    1038,
+    1527,
+    1550,
+    1551,
+    1578,
+    1579,
+    1583
+  ],
+  "selected_recipe_ids": [
+    1,
+    7,
+    8,
+    19,
+    20,
+    58,
+    152,
+    13,
+    28,
+    105,
+    57,
+    296,
+    200,
+    107,
+    114,
+    42,
+    147,
+    207,
+    272,
+    522,
+    192
+  ],
+  "player_defaults": {
+    "stamina_max": 100.0,
+    "stamina_recover_speed": 40.0,
+    "stamina_recover_delay": 0.0,
+    "stamina_reduce_percent": 1.0,
+    "resource_range": 0.49,
+    "resource_damage": 0.0,
+    "attack": 10.0,
+    "cut_damage": 0.0,
+    "cut_bonus": 0.0,
+    "hp": 500.0,
+    "hp_max": 500.0
+  },
+  "terrain_material_items": [
+    -1,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    278,
+    278,
+    270,
+    268,
+    278,
+    278,
+    268,
+    280,
+    268,
+    268,
+    269,
+    268,
+    269,
+    270,
+    269,
+    270,
+    268,
+    270,
+    268,
+    269,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    268,
+    280,
+    268,
+    280,
+    269,
+    269,
+    269,
+    280,
+    280,
+    270,
+    268,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    270,
+    269,
+    269,
+    269,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1
+  ],
+  "terrain_material_durability": [
+    0.0,
+    0.21167,
+    0.20159,
+    0.20159,
+    0.20159,
+    0.20159,
+    0.20159,
+    0.20159,
+    0.20159,
+    0.20159,
+    0.21897,
+    0.21897,
+    0.14111,
+    0.18955,
+    0.21897,
+    0.21897,
+    0.18955,
+    0.15875,
+    0.20159,
+    0.20159,
+    0.07938,
+    0.18955,
+    0.127,
+    0.14111,
+    0.127,
+    0.14111,
+    0.18955,
+    0.14111,
+    0.15875,
+    0.127,
+    0.15875,
+    0.15875,
+    0.15875,
+    0.20159,
+    0.20159,
+    0.21167,
+    0.20159,
+    0.20159,
+    0.21167,
+    0.15875,
+    0.18955,
+    0.15875,
+    0.07938,
+    0.07938,
+    0.07938,
+    0.15875,
+    0.15875,
+    0.14111,
+    0.18955,
+    0.0508,
+    0.07056,
+    0.0635,
+    0.05644,
+    0.07471,
+    0.02352,
+    255.0,
+    0.04233,
+    0.06865,
+    0.03629,
+    0.06865,
+    0.17639,
+    255.0,
+    0.1016,
+    0.20159,
+    255.0,
+    0.14111,
+    0.127,
+    0.127,
+    0.127,
+    0.127,
+    0.127,
+    0.18955,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    255.0,
+    0.00159,
+    255.0,
+    255.0,
+    0.00151,
+    0.08194,
+    0.0019,
+    0.00169,
+    0.16282,
+    0.00353,
+    0.00423,
+    0.00176,
+    0.00198,
+    0.00227,
+    0.0508,
+    0.08194,
+    0.11239,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "terrain_resources": {
+    "1": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;;"
+    },
+    "2": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "3": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "4": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "5": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "6": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "7": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "8": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "9": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "10": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 278,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "278,100;0.1,992,30,269,60;"
+    },
+    "11": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 278,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "278,100;0.1,992,30,269,60;"
+    },
+    "12": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;0.2,273,75,273,90,271,100;"
+    },
+    "13": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "14": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 278,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "278,100;0.1,992,30,269,60;"
+    },
+    "15": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 278,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "278,100;0.1,992,30,269,60;"
+    },
+    "16": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "17": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 280,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "280,100;0.03,273,66.6,271,100;"
+    },
+    "18": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "19": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;;"
+    },
+    "20": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "21": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "22": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "23": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;0.2,273,75,273,90,271,100;"
+    },
+    "24": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "25": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;0.2,273,75,273,90,271,100;"
+    },
+    "26": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "27": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;0.2,273,75,273,90,271,100;"
+    },
+    "28": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "29": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "30": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.06,280,100;"
+    },
+    "31": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.06,280,100;"
+    },
+    "32": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "33": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "34": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "35": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;;"
+    },
+    "36": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "37": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.13,982,57.7,990,73.1,280,100;"
+    },
+    "38": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;;"
+    },
+    "39": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 280,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "280,100;0.03,273,66.6,271,100;"
+    },
+    "40": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "41": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 280,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "280,100;0.03,273,66.6,271,100;"
+    },
+    "42": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;;"
+    },
+    "43": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;;"
+    },
+    "44": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;;"
+    },
+    "45": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 280,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "280,100;0.03,273,66.6,271,100;"
+    },
+    "46": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 280,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "280,100;0.03,273,66.6,271,100;"
+    },
+    "47": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;0.2,273,75,273,90,271,100;"
+    },
+    "48": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "49": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 275,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "275,100;;"
+    },
+    "50": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 273,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "273,100;0.15,988,100;"
+    },
+    "51": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 271,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "271,100;;"
+    },
+    "52": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 274,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "274,100;;"
+    },
+    "53": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 1578,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "1578,100;;"
+    },
+    "54": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 281,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "281,100;;"
+    },
+    "55": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "56": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 277,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "277,100;;"
+    },
+    "57": {
+      "fixed_count": 0.0,
+      "self_count": 4.0,
+      "drops": [
+        {
+          "item_id": 989,
+          "threshold": 70.0
+        },
+        {
+          "item_id": 271,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "989,70,271,100;;"
+    },
+    "58": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 276,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "276,100;;"
+    },
+    "59": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 989,
+          "threshold": 70.0
+        },
+        {
+          "item_id": 271,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "989,70,271,100;;"
+    },
+    "60": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 984,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "984,100;;"
+    },
+    "61": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "62": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 983,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "983,100;0.06,990,100;"
+    },
+    "63": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;;"
+    },
+    "64": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "65": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;0.2,273,75,273,90,271,100;"
+    },
+    "66": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "67": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "68": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "69": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "70": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;0.25,280,60,992,80,273,88,271,100;"
+    },
+    "71": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;0.4,982,15,990,22.5,280,100;"
+    },
+    "72": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "73": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "74": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "75": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "76": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "77": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "78": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "79": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "80": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "81": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "82": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "83": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "84": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "85": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "86": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "87": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "88": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "89": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "90": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "91": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "92": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "93": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "94": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "95": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "96": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "97": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "98": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "99": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "100": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "101": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "102": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "103": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "104": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "105": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "106": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "107": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "108": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "109": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "110": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "111": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "112": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "113": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 276,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "276,100;;"
+    },
+    "114": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "115": {
+      "fixed_count": 0.0,
+      "self_count": 2.0,
+      "drops": [],
+      "original_production": "0;;"
+    },
+    "116": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 281,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "281,100;;"
+    },
+    "117": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 282,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "282,100;;"
+    },
+    "118": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 274,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "274,100;;"
+    },
+    "119": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 275,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "275,100;;"
+    },
+    "120": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 278,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "278,100;;"
+    },
+    "121": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 269,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "269,100;;"
+    },
+    "122": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 270,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "270,100;;"
+    },
+    "123": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 272,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "272,100;;"
+    },
+    "124": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 271,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "271,100;;"
+    },
+    "125": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 273,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "273,100;;"
+    },
+    "126": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 280,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "280,100;;"
+    },
+    "127": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 279,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "279,100;;"
+    },
+    "128": {
+      "fixed_count": 1.0,
+      "self_count": 0.0,
+      "drops": [
+        {
+          "item_id": 268,
+          "threshold": 100.0
+        }
+      ],
+      "original_production": "268,100;;"
+    }
+  },
+  "stat_sources": {
+    "item_stats": "PrototypeItem columns; zero resource stats are preserved, not replaced with attack.",
+    "tool_kind": "PrototypeItem._typeId: 11 shovel, 12 pickaxe, 13 axe (itemtype localization).",
+    "stamina_cost": "Verified serialized overrides12/19/26/1527=4; other selected tools retain PEDigTool/PEAxe class default5 pending prefab audit.",
+    "player_defaults": "initProp row id=1; equipment buffs and skill modifiers are not evaluated here.",
+    "terrain_material_items": "buildblock.matID -> itemID; placement material mapping, not complete resource drop probabilities.",
+    "terrain_material_durability": "resource.ID -> durability; NaturalRes.GetTerrainResData matches ID directly.",
+    "terrain_resources": "resource first production segment cumulative primary thresholds plus fixed_num/self_num. Extra and special drops remain in manifest original_production and are not implemented by this catalog.",
+    "cut_damage": "PrototypeItem.CutDamage and CutBouns; original tree resource duration/scale is applied separately."
+  },
+  "items": [
+    {
+      "id": 1,
+      "name": "Wood Sword",
+      "stack_limit": 1,
+      "item_type": 9,
+      "durability_max": 2369,
+      "attack": 10.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 16,
+      "icons": [
+        "sword_wood",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 2,
+      "name": "Stone Sword",
+      "stack_limit": 1,
+      "item_type": 9,
+      "durability_max": 2859,
+      "attack": 17.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 16,
+      "icons": [
+        "sword_stone",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 12,
+      "name": "Wood Shovel",
+      "stack_limit": 1,
+      "item_type": 11,
+      "durability_max": 3553,
+      "attack": 23.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 4.0,
+      "tool_kind": "PE_TOOL_SHOVEL",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 528,
+      "icons": [
+        "shovel_wood",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 19,
+      "name": "Wood Pickaxe",
+      "stack_limit": 1,
+      "item_type": 12,
+      "durability_max": 3553,
+      "attack": 65.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 4.0,
+      "tool_kind": "PE_TOOL_PICKAXE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 528,
+      "icons": [
+        "hoe_wood",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 20,
+      "name": "Stone Pickaxe",
+      "stack_limit": 1,
+      "item_type": 12,
+      "durability_max": 4289,
+      "attack": 84.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 5.0,
+      "tool_kind": "PE_TOOL_PICKAXE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 528,
+      "icons": [
+        "hoe_stone",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 26,
+      "name": "Wood Axe",
+      "stack_limit": 1,
+      "item_type": 13,
+      "durability_max": 3553,
+      "attack": 46.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 4.0,
+      "tool_kind": "PE_TOOL_AXE",
+      "cut_damage": 46.0,
+      "cut_bonus": 0.01,
+      "tab": 1,
+      "equip_position": 16,
+      "icons": [
+        "ax_wood",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 33,
+      "name": "Knife",
+      "stack_limit": 1,
+      "item_type": 9,
+      "durability_max": 100,
+      "attack": 9.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 16,
+      "icons": [
+        "ax_knife",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 34,
+      "name": "Wood Shield",
+      "stack_limit": 1,
+      "item_type": 14,
+      "durability_max": 4312,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.1,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 512,
+      "icons": [
+        "shield_wood",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 43,
+      "name": "Wood Bow",
+      "stack_limit": 1,
+      "item_type": 10,
+      "durability_max": 3288,
+      "attack": 12.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 5.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 528,
+      "icons": [
+        "bow_wooden",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 49,
+      "name": "Arrow",
+      "stack_limit": 9999,
+      "item_type": 15,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "projectile_arrow",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 50,
+      "name": "Bullet",
+      "stack_limit": 9999,
+      "item_type": 15,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "projectile_bullet",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 70,
+      "name": "Water Pitcher",
+      "stack_limit": 1,
+      "item_type": 16,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 16,
+      "icons": [
+        "tool_water_pitcher",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 73,
+      "name": "Headlamp",
+      "stack_limit": 1,
+      "item_type": 16,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 1,
+      "icons": [
+        "tool_headlamp",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 228,
+      "name": "Battery Pack Type 01",
+      "stack_limit": 1,
+      "item_type": 16,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 8,
+      "icons": [
+        "battery_001",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 229,
+      "name": "Meat",
+      "stack_limit": 9999,
+      "item_type": 27,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_meat",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 234,
+      "name": "Cycas",
+      "stack_limit": 999,
+      "item_type": 35,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "herb_cycas",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 235,
+      "name": "Tulip",
+      "stack_limit": 999,
+      "item_type": 35,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "herb_tulip",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 238,
+      "name": "Shade Weed",
+      "stack_limit": 999,
+      "item_type": 35,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "herb_grass_herb_06",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 239,
+      "name": "Maria Sunflower",
+      "stack_limit": 999,
+      "item_type": 35,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "herb_maria_sunflower",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 241,
+      "name": "Lotus",
+      "stack_limit": 999,
+      "item_type": 35,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "herb_lotus",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 268,
+      "name": "Dirt Block",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_soil",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 269,
+      "name": "Marble",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_marble",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 270,
+      "name": "Limestone",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_limestone",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 271,
+      "name": "Iron",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_iron",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 272,
+      "name": "Steel",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_steel",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 273,
+      "name": "Copper",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_copper",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 274,
+      "name": "Silver",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_silver",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 275,
+      "name": "Gold",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_gold",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 276,
+      "name": "Aluminum",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_aluminum",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 277,
+      "name": "Titanium",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_titanium",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 278,
+      "name": "Sand",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_sand",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 279,
+      "name": "Wood",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_wood",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 280,
+      "name": "Stone",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_stone",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 281,
+      "name": "Diamond",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_diamond",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 282,
+      "name": "Glass Small",
+      "stack_limit": 9999,
+      "item_type": 37,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "build_glass",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 308,
+      "name": "Wood Fence",
+      "stack_limit": 1,
+      "item_type": 31,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "furniture_0026",
+        "leftup_putdown",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 310,
+      "name": "Wood Ladder",
+      "stack_limit": 1,
+      "item_type": 31,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "furniture_0028",
+        "leftup_putdown",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 406,
+      "name": "Wood Shovel Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "shovel_wood",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        1
+      ]
+    },
+    {
+      "id": 412,
+      "name": "Wood Pickaxe Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "hoe_wood",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        7
+      ]
+    },
+    {
+      "id": 418,
+      "name": "Wood Axe Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "ax_wood",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        13
+      ]
+    },
+    {
+      "id": 424,
+      "name": "Wood Sword Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "sword_wood",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        19
+      ]
+    },
+    {
+      "id": 433,
+      "name": "Wood Shield Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "shield_wood",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        28
+      ]
+    },
+    {
+      "id": 510,
+      "name": "Bullet Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "projectile_bullet",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        105,
+        57,
+        296,
+        200
+      ]
+    },
+    {
+      "id": 512,
+      "name": "Arrow Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "projectile_arrow",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        107
+      ]
+    },
+    {
+      "id": 519,
+      "name": "Revival Shot Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "drug_revivemax",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        114,
+        42
+      ]
+    },
+    {
+      "id": 552,
+      "name": "Herbal Juice Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "drug_hot01",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        147
+      ]
+    },
+    {
+      "id": 612,
+      "name": "Wood Bow Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "bow_wooden",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        207,
+        272
+      ]
+    },
+    {
+      "id": 916,
+      "name": "Herbal Juice",
+      "stack_limit": 100,
+      "item_type": 26,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 20150023,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "drug_hot01",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 937,
+      "name": "Revival Shot",
+      "stack_limit": 999,
+      "item_type": 26,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 20150031,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "drug_revivemax",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 973,
+      "name": "Scanner App Update",
+      "stack_limit": 1,
+      "item_type": 27,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "mineupdate_Lv1",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_SCAN",
+      "learn_ids": [
+        2,
+        3
+      ]
+    },
+    {
+      "id": 974,
+      "name": "Scanner App Update",
+      "stack_limit": 1,
+      "item_type": 27,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "mineupdate_Lv2",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_SCAN",
+      "learn_ids": [
+        4,
+        6,
+        8
+      ]
+    },
+    {
+      "id": 975,
+      "name": "Scanner App Update",
+      "stack_limit": 1,
+      "item_type": 27,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "mineupdate_Lv3",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_SCAN",
+      "learn_ids": [
+        1,
+        5,
+        7
+      ]
+    },
+    {
+      "id": 980,
+      "name": "Simple Plastic",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_plastic",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 982,
+      "name": "Sulfur",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_S",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 983,
+      "name": "Coal",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_coal",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 984,
+      "name": "Petroleum",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_petroleum",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 987,
+      "name": "Gunpowder",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_dynamite",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 989,
+      "name": "Zinc",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_Zn",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1001,
+      "name": "Charcoal",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_charcoal",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1003,
+      "name": "Water",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_water",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1005,
+      "name": "Bowstring",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_bowstring",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1006,
+      "name": "Plant Fiber",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_fiber",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1008,
+      "name": "Animal Skin",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_leather",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1011,
+      "name": "Animal Fat",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_animal_fat",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1017,
+      "name": "Resin",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_resin",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1038,
+      "name": "Pigment",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_pigment",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1527,
+      "name": "Safety Axe",
+      "stack_limit": 1,
+      "item_type": 13,
+      "durability_max": 100,
+      "attack": 28.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 4.0,
+      "tool_kind": "PE_TOOL_AXE",
+      "cut_damage": 28.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 16,
+      "icons": [
+        "safety_axe",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1550,
+      "name": "Sleeping Bag",
+      "stack_limit": 1,
+      "item_type": 34,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "Sleeping_bag",
+        "leftup_putdown",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1551,
+      "name": "Sleeping Bag Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "Sleeping_bag",
+        "leftup_putdown",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        522,
+        192
+      ]
+    },
+    {
+      "id": 1578,
+      "name": "Lithium",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_lithium",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1579,
+      "name": "Scanner App Update",
+      "stack_limit": 1,
+      "item_type": 27,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "mineupdate_Lv4",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_SCAN",
+      "learn_ids": [
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "id": 1583,
+      "name": "Dye",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_dye",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    }
+  ],
+  "recipes": [
+    {
+      "id": 1,
+      "output_id": 12,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "output_id": 19,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "output_id": 20,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 280,
+          "count": 6
+        },
+        {
+          "item_id": 279,
+          "count": 6
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "output_id": 1,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "output_id": 2,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 280,
+          "count": 12
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "output_id": 310,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 152,
+      "output_id": 308,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "output_id": 26,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "output_id": 34,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 12
+        }
+      ]
+    },
+    {
+      "id": 105,
+      "output_id": 50,
+      "output_count": 7,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 273,
+          "count": 1
+        },
+        {
+          "item_id": 987,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "output_id": 987,
+      "output_count": 2,
+      "seconds": 0.2,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 982,
+          "count": 1
+        },
+        {
+          "item_id": 1001,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 296,
+      "output_id": 1001,
+      "output_count": 4,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 4
+        },
+        {
+          "item_id": 1011,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 200,
+      "output_id": 1011,
+      "output_count": 1,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 229,
+          "count": 12
+        }
+      ]
+    },
+    {
+      "id": 107,
+      "output_id": 49,
+      "output_count": 4,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 114,
+      "output_id": 937,
+      "output_count": 1,
+      "seconds": 1.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 980,
+          "count": 1
+        },
+        {
+          "item_id": 239,
+          "count": 20
+        },
+        {
+          "item_id": 238,
+          "count": 20
+        },
+        {
+          "item_id": 234,
+          "count": 20
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "output_id": 980,
+      "output_count": 1,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 1017,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 147,
+      "output_id": 916,
+      "output_count": 1,
+      "seconds": 1.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 235,
+          "count": 1
+        },
+        {
+          "item_id": 241,
+          "count": 1
+        },
+        {
+          "item_id": 238,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 207,
+      "output_id": 43,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 279,
+          "count": 10
+        },
+        {
+          "item_id": 1005,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 272,
+      "output_id": 1005,
+      "output_count": 1,
+      "seconds": 1.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 1006,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "id": 522,
+      "output_id": 1550,
+      "output_count": 1,
+      "seconds": 3.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 1008,
+          "count": 1
+        },
+        {
+          "item_id": 1038,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 192,
+      "output_id": 1038,
+      "output_count": 10,
+      "seconds": 0.2,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 1583,
+          "count": 1
+        },
+        {
+          "item_id": 1003,
+          "count": 5
+        }
+      ]
+    }
+  ],
+  "asset_terms": "Original repository README.md; original data remains subject to its terms."
+}

@@ -1,0 +1,138 @@
+{
+  "rebuild-mine-fixtures.log": {
+    "bytes": 4056,
+    "sha256": "0635ca3b3b748e63e26588467b22e88d5fef8a0c3e9a2f590e55cd02b78145c6"
+  },
+  "rebuild-mine-dig.log": {
+    "bytes": 193,
+    "sha256": "a14aff8f5d7a038b4437d71eb6d7a0265f24fa796675871ba6318e3720016f8c"
+  },
+  "rebuild-mine-dig-before.png": {
+    "bytes": 212352,
+    "sha256": "a8251c38c6a33e6ea86e068a4424232c71fafadc48a705dcd9685643f62efde9"
+  },
+  "rebuild-mine-dig-action.png": {
+    "bytes": 213572,
+    "sha256": "ee16f4ae6b4dcd9cf6aea5ab64eedd5ef231a38fc829f4221401fdd9014ad0de"
+  },
+  "rebuild-mine-dig-after.png": {
+    "bytes": 221449,
+    "sha256": "4218cdd04378926d7ba18dd46b8f4e095b0499f478b5f31e46acec3788e851f5"
+  },
+  "rebuild-mine-dig-state.txt": {
+    "bytes": 2439,
+    "sha256": "7aaa05ab9b54e82330bec6ac8a4dea48f0d33c7dd66d1a2f5b31154f23b4b7a9"
+  },
+  "rebuild-mine-mine.log": {
+    "bytes": 193,
+    "sha256": "7a9a412b2959a7aa8ec6f4ff6820fa83bf8383b08b5761e70d36c1ad5f3ddbe7"
+  },
+  "rebuild-mine-mine-before.png": {
+    "bytes": 211107,
+    "sha256": "7d96046f7065a43c112e638e45b9961082e589898dad5cfd3b0e713b39c10126"
+  },
+  "rebuild-mine-mine-action.png": {
+    "bytes": 218364,
+    "sha256": "fca532bf3334c26dd78289dbd1ec1e06d46608561be092c50a65481fd2317887"
+  },
+  "rebuild-mine-mine-after.png": {
+    "bytes": 220334,
+    "sha256": "0cf867b8e1352e7a19319dd4e4b5865e055a2c4cd0925c408a2841ac230977b7"
+  },
+  "rebuild-mine-mine-state.txt": {
+    "bytes": 2442,
+    "sha256": "3ddc4b6dbac263410395e950eb93d10965265b06120933bf1907c9526bf415f2"
+  },
+  "rebuild-mine-fell.log": {
+    "bytes": 193,
+    "sha256": "591c413c1f5ec748a77d9401967c361c5a6b1d0fb92437323029918dab4a833d"
+  },
+  "rebuild-mine-fell-before.png": {
+    "bytes": 414502,
+    "sha256": "b156d0fe2596c9aab733c344b6e3253c7cb115b012ed481d11f62c9e560e9f0a"
+  },
+  "rebuild-mine-fell-action.png": {
+    "bytes": 416090,
+    "sha256": "fa418ac1289169a1f1c1aac3cbd5e5fe5a6c32eaca7854ea1fdd94de5ae41156"
+  },
+  "rebuild-mine-fell-after.png": {
+    "bytes": 378648,
+    "sha256": "5e6fd16dc30d04b4ad7bc258d991797a2efc5f08b7d7c415ffc68a5a13aa5446"
+  },
+  "rebuild-mine-fell-state.txt": {
+    "bytes": 2440,
+    "sha256": "cd75993e7316002dd739eeb8901eed4855689c4d78189fbac06b7a7a42a17d5c"
+  },
+  "rebuild-mine-result.json": {
+    "bytes": 3114,
+    "sha256": "8697eae7b00658c4b1f00446b57277dba60fc3a263a50c891366f874749ddb05"
+  },
+  "rebuild-mine-close-close.log": {
+    "bytes": 193,
+    "sha256": "1aeb5ca90a9f623eb1ca8ad1706ff9ffc5bce008a7c92de3190f93d9b656af63"
+  },
+  "rebuild-mine-close-stowed-close.png": {
+    "bytes": 164737,
+    "sha256": "ca04ea08966da6cedcef5680402865516df16407d9434cfd70e3cd203a891558"
+  },
+  "rebuild-mine-close-mine-raised-close.png": {
+    "bytes": 161037,
+    "sha256": "bad066986baf888b66fd01a1976ec273c060ca8405b2d18c0397a374f2902a57"
+  },
+  "rebuild-mine-close-mine-impact-close.png": {
+    "bytes": 175831,
+    "sha256": "438c0ec0286b365a7dd54aebd37d52e0b077074c8d8d95c3a4ba0ca0bcfb623e"
+  },
+  "rebuild-mine-close-panel-cancel.log": {
+    "bytes": 193,
+    "sha256": "a018f6b83e1873a6b090e672d438f1b310bb73fc2bd40c4dd00bb71feb28f671"
+  },
+  "rebuild-mine-close-cancelled-by-character.png": {
+    "bytes": 271873,
+    "sha256": "b52b8a49a136895e98418eccc2521f52d05dd0ab0b1387f14c3dbe0dd13a4b2d"
+  },
+  "rebuild-mine-close-result.json": {
+    "bytes": 815,
+    "sha256": "c0242d83b6fef58b613671f175aa3bc0bb5cff4f443603cabeeacd692e033760"
+  },
+  "rebuild-mine-final-tests.log": {
+    "bytes": 13974,
+    "sha256": "bc85714e1b366744f2982ac1f5d1bb3b9e5217ac6a6740c4cb3e92f9882a7a7a"
+  },
+  "rebuild-mine-cli.log": {
+    "bytes": 287,
+    "sha256": "cd69a7ec5daa96425371420f83df9eb038214e59ed116261164ccd57e3ee432d"
+  },
+  "rebuild-mine-physical.log": {
+    "bytes": 926,
+    "sha256": "b7f4854fa78d567f42d1debe57daf644bbad5d10c5a7b4f331e91e825b90fbc1"
+  },
+  "rebuild-mine-close-physical.log": {
+    "bytes": 424,
+    "sha256": "c7e7d4c8f743300fa5e9f037c7316fba35d9b22045f645dd34c9a1074a77f18b"
+  },
+  "rebuild-mine-original-after-capture.png": {
+    "bytes": 897190,
+    "sha256": "555a4dfd2790a385c2c4cfe620fd545325ffa1154f88710da3f6764d4145313c"
+  },
+  "mine-capture-report.json": {
+    "bytes": 92177,
+    "sha256": "f6e531bc6421595c40fef8e423b5a91bd348fae614049aec28f3d6e535ff1a7f"
+  },
+  "mine-capture-exit.json": {
+    "bytes": 239,
+    "sha256": "281221fb434b6875ea077a210824bbe9f4e386754eb7ec9a4ae6e5465ff6c1c9"
+  },
+  "mine-session.json": {
+    "bytes": 1175,
+    "sha256": "ca841cefe342ee8b5082d0b911643041adf64763381948e8344666b59e9a915a"
+  },
+  "rebuild-mine-final-physical.log": {
+    "bytes": 301,
+    "sha256": "618b191a51a2289f1ae7daec9589a6c066d304a5eca962c999155098d420e56f"
+  },
+  "rebuild-mine-final-result.json": {
+    "bytes": 1038,
+    "sha256": "3b73ddeaec7009070bca033bc5b84639fecf9b6c9f38cb58d187aa125bdd4635"
+  }
+}

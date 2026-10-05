@@ -1,0 +1,305 @@
+/* Headless real-game UI routing regressions; no raylib/window calls. */
+#include "adventure_test_helpers.h"
+#include "pe_sandbox_ui.h"
+#include <assert.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+static PeSandboxUIInput input(void) {
+    return (PeSandboxUIInput){.focused=true,.mouse_x=640,.mouse_y=350,.quickslot=-1};
+}
+static PeSandboxUIInput click(PeTrainingUIRect r,bool right) {
+    PeSandboxUIInput i=input();i.mouse_x=r.x+r.w*.5f;i.mouse_y=r.y+r.h*.5f;
+    i.left_pressed=!right;i.right_pressed=right;return i;
+}
+static int find(const PeGame *g,int id) {
+    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;
+    return -1;
+}
+static int visible(PeSandboxUI *u,const PeGame *g,int id) {
+    for(int k=0;k<PE_UI_INVENTORY_SLOTS;k++) {
+        int index=pe_sandbox_ui_inventory_slot(u,g,k);
+        if(index>=0&&g->inventory.slots[index].item_id==id)return k;
+    }
+    return -1;
+}
+int main(void) {
+    PeGame *g=calloc(1,sizeof *g);assert(g);
+    assert(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));
+    PeSandboxUI u;pe_sandbox_ui_init(&u,1280,720);
+    assert(u.selected_slot==-1&&u.batches==1);
+    PeSandboxUIInput i=input();i.inventory=true;
+    PeSandboxUIResult r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.consume_world&&r.cursor_visible&&u.inventory_open&&!r.paused);
+    /* Source starter scanner updates are not recipes. Use through UI only. */
+    int scanner=-1;
+    for(int k=0;k<PE_INVENTORY_SLOTS;k++) {
+        const PeItemDef *d=pe_item_def(g->inventory.slots[k].item_id);
+        if(d&&d->learn_kind==PE_LEARN_SCAN&&g->inventory.slots[k].count){scanner=k;break;}
+    }
+    assert(scanner>=0);int scanner_id=g->inventory.slots[scanner].item_id;
+    u.inventory_tab=pe_item_def(scanner_id)->tab;
+    int v=visible(&u,g,scanner_id);assert(v>=0);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.inventory_slots[v],true));
+    assert(r.consume_world&&g->scanner_mask&&!g->known_recipe_count);
+    assert(pe_inventory_count(&g->inventory,scanner_id)==0);
+    /* UI never grants supply items merely by opening quests or inventory. */
+    assert(!g->arrival_complete&&!g->supplies_claimed);
+    assert(pe_test_ack_welcome(g));
+    assert(pe_game_arrival_complete(g)&&pe_game_accept_supplies(g));
+    u.inventory_tab=pe_item_def(406)->tab;v=visible(&u,g,406);assert(v>=0);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.inventory_slots[v],true));
+    assert(r.consume_world&&pe_game_recipe_known(g,1)&&pe_inventory_count(&g->inventory,406)==0);
+    assert(pe_sandbox_ui_recipe_count(&u,g)==1);
+    /* Equip from filtered bag without consuming/reordering the instance. */
+    u.inventory_tab=pe_item_def(12)->tab;v=visible(&u,g,12);assert(v>=0);
+    int shovel=find(g,12);uint32_t identity=g->inventory.slots[shovel].instance_id;
+    int owned=pe_inventory_count(&g->inventory,12);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.inventory_slots[v],true));
+    assert(r.consume_world&&g->equipped_instance_id==identity&&pe_inventory_count(&g->inventory,12)==owned);
+    assert(visible(&u,g,12)==-1); /* one supplied instance is equipped */
+    pe_game_unequip(g);
+    /* Stable drag survives an inventory slot move before release. */
+    v=visible(&u,g,12);assert(v>=0);
+    pe_sandbox_ui_route(&u,g,click(u.layout.inventory_slots[v],false));assert(u.dragging);
+    int other=(shovel+1)%PE_INVENTORY_SLOTS;
+    PeSlot swap=g->inventory.slots[shovel];g->inventory.slots[shovel]=g->inventory.slots[other];g->inventory.slots[other]=swap;
+    i=click(u.layout.quickslots[0],false);i.left_pressed=false;i.left_released=true;
+    r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.consume_world&&!u.dragging&&g->quickslots[0].instance_id==identity);
+    assert(pe_inventory_count(&g->inventory,12)==owned);
+    /* Closing panel consumes its frame. A subsequent hotkey selects that instance. */
+    i=input();i.escape=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.cursor_visible);
+    i=input();i.quickslot=0;r=pe_sandbox_ui_route(&u,g,i);assert(g->equipped_instance_id==identity);
+    assert(r.consume_world);
+    /* Original quickbar mouse semantics: right uses; left drags/swaps shortcuts. */
+    int early_juice=find(g,916);assert(early_juice>=0);
+    assert(pe_game_quickslot_assign(g,1,early_juice));
+    i=input();i.tab=true;pe_sandbox_ui_route(&u,g,i);
+    int before_juice=pe_inventory_count(&g->inventory,916);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.quickslots[1],true));
+    assert(r.consume_world&&pe_inventory_count(&g->inventory,916)==before_juice-1);
+    pe_sandbox_ui_route(&u,g,click(u.layout.quickslots[0],false));assert(u.dragging);
+    i=click(u.layout.quickslots[1],false);i.left_pressed=false;i.left_released=true;
+    pe_sandbox_ui_route(&u,g,i);
+    assert(g->quickslots[1].instance_id==identity&&g->quickslots[0].item_id==916);
+    assert(pe_inventory_count(&g->inventory,12)==owned);
+    i=input();i.tab=true;pe_sandbox_ui_route(&u,g,i);
+    /* Pause blocks quickslot actions, offers save/load/menu as requests only. */
+    i=input();i.escape=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.paused&&r.consume_world);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,1),false));assert(r.save&&r.paused&&!r.load);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,2),false));assert(r.load&&r.paused);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,3),false));assert(r.return_main&&r.consume_world);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,0),false));assert(!r.paused&&r.consume_world);
+    /* Search only learned recipes; bounded quantity/craft routes real transactions. */
+    i=input();i.replicator=true;r=pe_sandbox_ui_route(&u,g,i);assert(u.replicator_open&&r.consume_world);
+    pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_search(&u),false));assert(u.search_focus);
+    i=input();i.typed="SHOVEL";pe_sandbox_ui_route(&u,g,i);assert(pe_sandbox_ui_recipe_count(&u,g)==1);
+    pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_recipe_row(&u,0),false));assert(u.recipe_id==1&&!u.search_focus);
+    pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_quantity(&u,1),false));assert(u.batches==2);
+    pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_quantity(&u,2),false));assert(u.batches==1);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.replicator_craft,false));assert(r.consume_world&&g->craft.recipe_id==1);
+    pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_cancel_button(&u),false));assert(!g->craft.recipe_id);
+    /* A closed search cannot retain keyboard capture when opening another panel. */
+    i=input();i.escape=true;pe_sandbox_ui_route(&u,g,i);assert(!u.search_focus&&!u.replicator_open);
+    /* Inventory overlays right quickslots: clicks must not fall through chrome. */
+    pe_game_unequip(g);int juice=find(g,916);assert(juice>=0);
+    assert(pe_game_quickslot_assign(g,5,juice));int juices=pe_inventory_count(&g->inventory,916);
+    i=input();i.inventory=true;pe_sandbox_ui_route(&u,g,i);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.quickslots[5],false));
+    assert(r.consume_world&&pe_inventory_count(&g->inventory,916)==juices);
+    /* Drag cancellation outside UI conserves all items and does not touch world. */
+    u.inventory_tab=pe_item_def(916)->tab;v=visible(&u,g,916);assert(v>=0);
+    pe_sandbox_ui_route(&u,g,click(u.layout.inventory_slots[v],false));assert(u.dragging);
+    i=input();i.mouse_x=30;i.mouse_y=30;i.left_released=true;r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.consume_world&&!u.dragging&&pe_inventory_count(&g->inventory,916)==juices);
+    /* No input actions from an unfocused or nonfinite pointer event. */
+    i=input();i.focused=false;i.escape=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&u.inventory_open);
+    i=input();i.mouse_x=NAN;i.inventory=true;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&u.inventory_open);
+    pe_sandbox_ui_resize(&u,1920,1080);assert(fabsf(u.layout.scale-1.5f)<.001f);
+    i=input();i.escape=true;pe_sandbox_ui_route(&u,g,i);i=input();r=pe_sandbox_ui_route(&u,g,i);assert(!r.consume_world);
+    /* Source tab0 furniture still selects the host placement item. Selection
+       must neither consume its instance nor turn unrelated tab0 items into
+       build materials. Exercise both hotkey and original right-click routes. */
+    pe_game_init(g,91);pe_sandbox_ui_init(&u,1280,720);
+    assert(pe_item_def(PE_ITEM_FENCE)->tab==0&&pe_item_def(PE_ITEM_LADDER)->tab==0);
+    assert(pe_inventory_add(&g->inventory,PE_ITEM_FENCE,1));
+    assert(pe_inventory_add(&g->inventory,PE_ITEM_LADDER,1));
+    assert(pe_inventory_add(&g->inventory,PE_ITEM_WOOD,4));
+    assert(pe_inventory_add(&g->inventory,916,2));
+    const int placeables[]={PE_ITEM_FENCE,PE_ITEM_LADDER,PE_ITEM_WOOD};
+    for(int k=0;k<3;k++) {
+        int owned_before=pe_inventory_count(&g->inventory,placeables[k]);
+        assert(pe_game_quickslot_assign(g,k,find(g,placeables[k])));
+        i=input();i.quickslot=k;r=pe_sandbox_ui_route(&u,g,i);
+        assert(r.consume_world&&r.selected_item==placeables[k]&&!g->equipped_instance_id);
+        assert(pe_inventory_count(&g->inventory,placeables[k])==owned_before);
+    }
+    u.free_cursor=true;
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.quickslots[1],true));
+    assert(r.selected_item==PE_ITEM_LADDER&&r.consume_world&&pe_inventory_count(&g->inventory,PE_ITEM_LADDER)==1);
+    assert(pe_game_quickslot_assign(g,3,find(g,916)));
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.quickslots[3],true));
+    assert(!r.selected_item&&pe_inventory_count(&g->inventory,916)==1);
+    assert(pe_inventory_remove(&g->inventory,PE_ITEM_FENCE,1));
+    i=input();i.quickslot=0;r=pe_sandbox_ui_route(&u,g,i);assert(!r.selected_item);
+    /* Construction has a bounded independent palette, never ordinary item
+       shortcuts. A inherited normal-mode cursor flag must not block canvas. */
+    pe_sandbox_ui_init(&u,1280,720);u.building=true;u.free_cursor=true;
+    PeInventory inventory_before=g->inventory;
+    PeQuickslot shortcuts_before[PE_QUICKSLOTS];memcpy(shortcuts_before,g->quickslots,sizeof shortcuts_before);
+    uint32_t equipped_before=g->equipped_instance_id;
+    i=input();i.left_pressed=true;r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.cursor_visible&&!r.consume_world&&!r.selected_item&&!r.toggle_build);
+    const int build_items[]={0,PE_ITEM_DIRT,PE_ITEM_STONE,PE_ITEM_WOOD,0,PE_ITEM_FENCE,PE_ITEM_LADDER};
+    for(int key=0;key<9;key++) {
+        i=input();i.quickslot=key;r=pe_sandbox_ui_route(&u,g,i);
+        assert(r.consume_world&&r.selected_item==(key<7?build_items[key]:0));
+        assert(r.build_shape==(key==0?PE_B45_CUBE:key==4?PE_B45_RAMP:0));
+        r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_build_slot(&u,key),false));
+        assert(r.consume_world&&r.selected_item==(key<7?build_items[key]:0));
+        assert(r.build_shape==(key==0?PE_B45_CUBE:key==4?PE_B45_RAMP:0));
+    }
+    assert(!memcmp(&inventory_before,&g->inventory,sizeof inventory_before));
+    assert(!memcmp(shortcuts_before,g->quickslots,sizeof shortcuts_before));
+    assert(equipped_before==g->equipped_instance_id);
+    /* Selecting a voxel shape after furniture must restore a voxel material,
+       otherwise the host would continue placing fence/ladder despite the icon. */
+    for(int furniture=0;furniture<2;furniture++) {
+        u.build_item=furniture?PE_ITEM_LADDER:PE_ITEM_FENCE;
+        i=input();i.quickslot=furniture?4:0;r=pe_sandbox_ui_route(&u,g,i);
+        assert(r.selected_item==PE_ITEM_WOOD&&r.build_shape==(furniture?PE_B45_RAMP:PE_B45_CUBE));
+        r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_build_tool(&u,1),false));
+        assert(r.selected_item==PE_ITEM_WOOD&&r.build_shape==PE_B45_RAMP);
+    }
+    u.build_item=PE_ITEM_STONE;i=input();i.quickslot=0;r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.build_shape==PE_B45_CUBE&&!r.selected_item); /* preserve valid material */
+    u.build_item=PE_ITEM_WOOD;
+    /* Chrome gaps, disabled buttons and right clicks own the pointer too. */
+    i=click(pe_sandbox_ui_build_toolbar(&u),false);i.mouse_x=340;i.mouse_y=654;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.selected_item&&!r.build_shape);
+    for(int tool=0;tool<8;tool++) {
+        r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_build_tool(&u,tool),false));
+        assert(r.consume_world);
+        assert(r.selected_item==(tool==0?PE_ITEM_DIRT:0));
+        assert(r.build_shape==(tool==1?PE_B45_RAMP:0));
+        assert(r.build_brush==(tool==2?1:tool==3?4:0));
+        assert(r.rotate_build==(tool==4)&&r.toggle_build==(tool==7));
+        assert(!r.save&&!r.load); /* unavailable source creation commands */
+    }
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_build_slot(&u,3),true));
+    assert(r.consume_world&&!r.selected_item&&!r.build_shape);
+    /* Panels/pause own both number keys and the frame that dismisses them. */
+    for(int modal=0;modal<6;modal++) {
+        bool *state=modal==0?&u.inventory_open:modal==1?&u.character_open:modal==2?&u.missions_open:
+                    modal==3?&u.replicator_open:modal==4?&u.menu_open:&u.paused;
+        *state=true;i=input();i.quickslot=3;
+        r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.selected_item&&!r.build_shape);
+        i=click(pe_sandbox_ui_build_slot(&u,3),false);i.escape=true;i.quickslot=3;
+        r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.selected_item&&!r.build_shape&&!*state);
+    }
+    u.inventory_open=true;i=click(pe_sandbox_ui_build_slot(&u,3),false);i.inventory=true;i.quickslot=3;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.selected_item&&!u.inventory_open);
+    /* Inventory drag cannot assign a hidden normal quickbar in build mode. */
+    u.dragging=true;u.drag_item=916;u.drag_instance=0;u.drag_quickslot=-1;
+    i=click(u.layout.quickslots[2],false);i.left_pressed=false;i.left_released=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!u.dragging);
+    assert(!memcmp(shortcuts_before,g->quickslots,sizeof shortcuts_before));
+    for(int size=0;size<2;size++) {
+        pe_sandbox_ui_resize(&u,size?1920:1000,size?1080:700);
+        r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_build_slot(&u,4),false));
+        assert(r.consume_world&&r.build_shape==PE_B45_RAMP);
+        i=input();i.mouse_x=u.layout.width/2;i.mouse_y=u.layout.height/2;
+        r=pe_sandbox_ui_route(&u,g,i);assert(!r.consume_world);
+    }
+    /* The supplier offer and source pages are modal and grant only at final ACK.
+       Closing/advancing frames cannot use shortcuts, save/load, or place. */
+    assert(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));
+    pe_sandbox_ui_init(&u,1280,720);
+    assert(pe_sandbox_ui_open_supplier(&u,g,20016,true));
+    assert(!pe_adventure_dialogue_current(&u.dialogue,g));
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));
+    assert(r.consume_world&&!r.npc_interaction&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!g->arrival_complete);
+    assert(pe_test_ack_welcome(g));
+    assert(pe_game_arrival_complete(g));
+    assert(!pe_sandbox_ui_open_supplier(&u,g,20016,false));
+    assert(pe_sandbox_ui_open_supplier(&u,g,20016,true));
+    i=input();i.inventory=i.character=i.save=i.load=true;i.quickslot=0;
+    r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.consume_world&&r.cursor_visible&&!r.save&&!r.load&&!u.inventory_open&&!u.character_open&&!g->supplies_claimed);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));
+    assert(r.consume_world&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_TALK);
+    assert(pe_adventure_dialogue_current(&u.dialogue,g)->talk_id==4090);
+    i=input();i.advance=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!g->supplies_claimed);
+    i=input();i.escape=true;i.quickslot=0;
+    r=pe_sandbox_ui_route(&u,g,i);
+    assert(r.consume_world&&!r.paused&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!g->supplies_claimed);
+    assert(pe_sandbox_ui_open_supplier(&u,g,20016,true));
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));
+    for(int page=0;page<5;page++) {
+        assert(pe_adventure_dialogue_current(&u.dialogue,g)->talk_id==4090+page);
+        assert(!g->supplies_claimed);
+        i=click(u.layout.dialogue_next,false);i.quickslot=0;i.save=true;
+        r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save);
+    }
+    assert(g->supplies_claimed&&pe_inventory_count(&g->inventory,19)==1&&!g->known_recipe_count);
+    assert(u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE);
+    assert(pe_sandbox_ui_open_supplier(&u,g,20016,true));
+    assert(!pe_adventure_dialogue_current(&u.dialogue,g));
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_supplier_choice(&u,0),false));
+    assert(r.consume_world&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&pe_inventory_count(&g->inventory,19)==1);
+    pe_sandbox_ui_init(&u,1280,720);u.free_cursor=true;
+    i=input();i.mouse_x=640;i.mouse_y=360;i.right_pressed=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&r.npc_interaction);
+    i.mouse_x=u.layout.hud.x+2;i.mouse_y=u.layout.hud.y+2;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.npc_interaction);
+    i=input();i.mouse_x=640;i.mouse_y=360;i.inventory=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(!r.npc_interaction&&u.inventory_open);
+    r=pe_sandbox_ui_route(&u,g,i);assert(!r.npc_interaction&&!u.inventory_open);
+    i.inventory=false;i.focused=false;
+    r=pe_sandbox_ui_route(&u,g,i);assert(!r.npc_interaction);
+    /* Welcome ACKs persist while Escape only closes the current page. Modal
+       world/save/quickslot suppression applies to every source welcome page. */
+    assert(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));pe_sandbox_ui_init(&u,1280,720);
+    PeInventory welcome_inventory=g->inventory;
+    assert(!pe_sandbox_ui_open_welcome(&u,g,20008,false));
+    assert(pe_sandbox_ui_open_welcome(&u,g,20008,true));
+    for(unsigned page=0;page<PE_ADVENTURE_WELCOME_PAGES;page++){
+        assert(pe_adventure_dialogue_current(&u.dialogue,g)->talk_id==(page?4080+(int)page:1949));
+        i=input();i.escape=true;i.save=true;i.quickslot=0;
+        r=pe_sandbox_ui_route(&u,g,i);
+        assert(r.consume_world&&!r.save&&!r.paused&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE);
+        assert(g->welcome_page==page&&!g->adventure_mission);
+        assert(pe_sandbox_ui_open_welcome(&u,g,20008,true));
+        i=input();i.inventory=i.character=i.save=i.load=true;i.quickslot=0;
+        r=pe_sandbox_ui_route(&u,g,i);
+        assert(r.consume_world&&!r.save&&!r.load&&!u.inventory_open&&!u.character_open);
+        i=click(u.layout.dialogue_next,false);i.save=true;i.quickslot=0;
+        r=pe_sandbox_ui_route(&u,g,i);
+        assert(r.consume_world&&!r.save&&g->welcome_page==page+1);
+        assert(!g->arrival_complete&&!g->supplies_claimed&&!memcmp(&g->inventory,&welcome_inventory,sizeof welcome_inventory));
+    }
+    assert(g->adventure_mission==PE_ADVENTURE_ARRIVAL&&u.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE);
+    /* Title dragging stays presentation-only; close/item hit targets move
+       together, release is consumed, and covered character controls stay inert. */
+    pe_sandbox_ui_init(&u,1280,720);u.inventory_open=true;u.character_open=true;
+    PeInventory before_drag=g->inventory;
+    i=input();i.mouse_x=u.layout.inventory.x+80;i.mouse_y=u.layout.inventory.y+24;i.left_pressed=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&u.windows.dragging==PE_UI_WINDOW_INVENTORY+1&&!u.dragging);
+    i.left_pressed=false;i.mouse_x=130;i.mouse_y=124;i.quickslot=0;i.save=true;i.character=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!r.save&&u.character_open&&!u.dragging);
+    assert(u.layout.inventory.x==50&&u.layout.inventory.y==100);
+    i.quickslot=-1;i.save=i.character=false;i.left_released=true;
+    r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!u.windows.dragging);
+    assert(!memcmp(&g->inventory,&before_drag,sizeof before_drag));
+    pe_sandbox_ui_resize(&u,1000,700);
+    assert(u.layout.inventory.x>=0&&u.layout.inventory.x+u.layout.inventory.w<=1000);
+    r=pe_sandbox_ui_route(&u,g,click(u.layout.inventory_close,false));assert(r.consume_world&&!u.inventory_open);
+    u.inventory_open=true;i=input();i.mouse_x=u.layout.inventory.x+50;i.mouse_y=u.layout.inventory.y+20;i.left_pressed=true;
+    pe_sandbox_ui_route(&u,g,i);assert(u.windows.dragging);
+    i.focused=false;r=pe_sandbox_ui_route(&u,g,i);assert(r.consume_world&&!u.windows.dragging);
+    free(g);puts("sandbox UI: inventory, crafting, quickslots, welcome/supplier dialogue and modal ownership passed");return 0;
+}

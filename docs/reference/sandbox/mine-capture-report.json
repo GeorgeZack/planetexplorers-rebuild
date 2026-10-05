@@ -1,0 +1,3549 @@
+{
+  "schema": 1,
+  "header": {
+    "type": "header",
+    "schema": "pe-animator-bake-1",
+    "unity": "5.2.4f1",
+    "matrixOrder": "row-major",
+    "coordinateSpace": "isolated-animator-model-local",
+    "sampleRate": 30,
+    "sampleCountPolicy": "ceil-f64-product-terminal-length",
+    "cleanupPolicy": "retain-inactive-per-clip-until-process-exit",
+    "maxRetainedGraphs": 10,
+    "postCleanupUpdates": 120,
+    "maxBytes": 268435456,
+    "maxSamples": 3600,
+    "fireEvents": false,
+    "controllerAttached": false,
+    "applyRootMotion": false
+  },
+  "skeleton": {
+    "type": "skeleton",
+    "gender": "Female",
+    "sourceModelPath": "EntityRoot/Tutorial_20000/FemaleModel(Clone)/Model",
+    "sourceAnimatorPath": "EntityRoot/Tutorial_20000/FemaleModel(Clone)/Model",
+    "sourceAnimatorId": -247922,
+    "sourceController": "FemaleAnimator2",
+    "avatar": "FemaleAvatar",
+    "avatarId": 13812,
+    "initialPose": "copied live local TRS; fresh pure clone per clip",
+    "cloneIdsDescribeFirstClip": true,
+    "plannedSamples": 91,
+    "nodes": [
+      {
+        "path": "",
+        "sourceId": -247920,
+        "cloneId": -249648,
+        "parent": -1,
+        "initialLocal": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01",
+        "sourceId": -247948,
+        "cloneId": -249652,
+        "parent": 0,
+        "initialLocal": [
+          1.31130219e-06,
+          -0.99999994,
+          -1.1920929e-07,
+          0,
+          0.122250348,
+          0,
+          0.992499352,
+          0.900593042,
+          -0.9924993,
+          -1.34110439e-06,
+          0.122250319,
+          -0.0137138367,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis",
+        "sourceId": -247952,
+        "cloneId": -249656,
+        "parent": 1,
+        "initialLocal": [
+          -0.0188599825,
+          -0.9755992,
+          -0.218747854,
+          -0.014363423,
+          0.009501934,
+          -0.218951941,
+          0.97568953,
+          -6.486942e-05,
+          -0.9997771,
+          0.01632291,
+          0.0133993626,
+          0.0006149439,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine",
+        "sourceId": -247956,
+        "cloneId": -249660,
+        "parent": 2,
+        "initialLocal": [
+          0.9999392,
+          0.0110382559,
+          1.45335321e-06,
+          -0.059358675,
+          -0.0110382559,
+          0.9999392,
+          4.13456473e-06,
+          -0.00309825339,
+          -1.40762643e-06,
+          -4.150356e-06,
+          1,
+          9.685755e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh",
+        "sourceId": -247960,
+        "cloneId": -249664,
+        "parent": 3,
+        "initialLocal": [
+          -0.9704739,
+          -0.240233511,
+          0.02164097,
+          0.0593208969,
+          -0.233615652,
+          0.958473563,
+          0.16356045,
+          0.00375280739,
+          -0.0600349978,
+          0.153675452,
+          -0.986295938,
+          0.08175078,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf",
+        "sourceId": -247964,
+        "cloneId": -249668,
+        "parent": 4,
+        "initialLocal": [
+          0.947984636,
+          -0.3174244,
+          0.0238141436,
+          -0.39029488,
+          0.317003816,
+          0.9482169,
+          0.0198374949,
+          -3.27825575e-07,
+          -0.0288778786,
+          -0.0112564657,
+          0.9995196,
+          9.23872e-07,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot",
+        "sourceId": -247972,
+        "cloneId": -249672,
+        "parent": 5,
+        "initialLocal": [
+          0.9780334,
+          0.208319634,
+          -0.007305033,
+          -0.459394038,
+          -0.2079905,
+          0.9776086,
+          0.0319546461,
+          0,
+          0.0137982424,
+          -0.0297333356,
+          0.9994626,
+          1.50782231e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0",
+        "sourceId": -247976,
+        "cloneId": -249676,
+        "parent": 6,
+        "initialLocal": [
+          -0.09910096,
+          0.994915366,
+          0.0179539844,
+          -0.0572806448,
+          -0.9950677,
+          -0.09916389,
+          0.00265031634,
+          0.115969241,
+          0.004417229,
+          -0.017602779,
+          0.9998353,
+          2.98023224e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0/Bip01 L Toe0Nub",
+        "sourceId": -247980,
+        "cloneId": -249680,
+        "parent": 7,
+        "initialLocal": [
+          1.00000012,
+          4.879317e-17,
+          -1.9776051e-08,
+          -0.0605683,
+          -1.224647e-16,
+          1.00000012,
+          -3.7252903e-09,
+          -2.899999e-10,
+          -1.9776051e-08,
+          -3.7252903e-09,
+          -1.00000012,
+          1.70205148e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh",
+        "sourceId": -247984,
+        "cloneId": -249684,
+        "parent": 3,
+        "initialLocal": [
+          -0.959054232,
+          -0.2832216,
+          0.00076465006,
+          0.05932082,
+          -0.283202678,
+          0.959015,
+          0.00929383747,
+          0.00375375035,
+          -0.00336552667,
+          0.008696741,
+          -0.9999566,
+          -0.08175077,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf",
+        "sourceId": -247988,
+        "cloneId": -249688,
+        "parent": 9,
+        "initialLocal": [
+          0.939345658,
+          -0.341893166,
+          0.0271857418,
+          -0.389523685,
+          0.3427345,
+          0.9386921,
+          -0.0372892171,
+          1.49011626e-07,
+          -0.0127701145,
+          0.04434495,
+          0.9989347,
+          -5.21540642e-07,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot",
+        "sourceId": -247996,
+        "cloneId": -249692,
+        "parent": 10,
+        "initialLocal": [
+          0.98192966,
+          0.185433447,
+          -0.03779625,
+          -0.4584864,
+          -0.1892454,
+          0.961565435,
+          -0.1989424,
+          3.00968637e-08,
+          -0.00054699555,
+          0.202500165,
+          0.9792822,
+          -1.50484318e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0",
+        "sourceId": -248000,
+        "cloneId": -249696,
+        "parent": 11,
+        "initialLocal": [
+          5.06639526e-06,
+          1.00000024,
+          8.97750169e-07,
+          -0.05728066,
+          -1.00000024,
+          5.06639526e-06,
+          2.03153064e-07,
+          0.115969256,
+          2.031484e-07,
+          -8.977512e-07,
+          1.00000012,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0/Bip01 R Toe0Nub",
+        "sourceId": -248004,
+        "cloneId": -249700,
+        "parent": 12,
+        "initialLocal": [
+          1.00000012,
+          -4.6566126e-10,
+          6.98491842e-09,
+          -0.0605682842,
+          4.6566126e-10,
+          1.00000012,
+          -3.72528985e-09,
+          -9.8483e-10,
+          -6.98491931e-09,
+          3.7252903e-09,
+          1,
+          -1.575742e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1",
+        "sourceId": -248008,
+        "cloneId": -249704,
+        "parent": 2,
+        "initialLocal": [
+          0.999291241,
+          -0.0376471281,
+          1.23251766e-06,
+          -0.08360849,
+          0.0376471281,
+          0.999291241,
+          4.196273e-06,
+          -0.00291211181,
+          -1.38962162e-06,
+          -4.146898e-06,
+          1,
+          1.1920929e-07,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2",
+        "sourceId": -248012,
+        "cloneId": -249708,
+        "parent": 14,
+        "initialLocal": [
+          0.9983592,
+          -0.01268414,
+          -0.05583886,
+          -0.102555096,
+          0.009266365,
+          0.9980919,
+          -0.06104667,
+          -8.626283e-05,
+          0.05650664,
+          0.060429085,
+          0.9965718,
+          -1.86264515e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3",
+        "sourceId": -248016,
+        "cloneId": -249712,
+        "parent": 15,
+        "initialLocal": [
+          0.994721949,
+          -0.09802343,
+          0.0303302221,
+          -0.108515933,
+          0.100023955,
+          0.9922623,
+          -0.07355951,
+          -0.000123928679,
+          -0.0228849817,
+          0.07620501,
+          0.9968295,
+          -1.29872933e-06,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle",
+        "sourceId": -248020,
+        "cloneId": -249716,
+        "parent": 16,
+        "initialLocal": [
+          -0.196114212,
+          0.027913427,
+          -0.98018384,
+          -0.158016324,
+          0.0503268,
+          -0.9979907,
+          -0.0384898819,
+          -0.0364971347,
+          -0.9792888,
+          -0.0568779223,
+          0.194315538,
+          0.04797304,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm",
+        "sourceId": -248024,
+        "cloneId": -249720,
+        "parent": 17,
+        "initialLocal": [
+          0.4114134,
+          -0.153362736,
+          -0.8984535,
+          -0.07880604,
+          -0.07610441,
+          0.9765197,
+          -0.20153752,
+          4.22820449e-07,
+          0.9082658,
+          0.151291534,
+          0.390081733,
+          -4.656613e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm",
+        "sourceId": -248028,
+        "cloneId": -249724,
+        "parent": 18,
+        "initialLocal": [
+          0.9905159,
+          -0.134345487,
+          -0.0288022365,
+          -0.258181721,
+          0.136508033,
+          0.9860569,
+          0.09516711,
+          3.49245965e-08,
+          0.0156153785,
+          -0.09819626,
+          0.99504447,
+          9.26665962e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand",
+        "sourceId": -248036,
+        "cloneId": -249728,
+        "parent": 19,
+        "initialLocal": [
+          0.9745307,
+          -0.111945756,
+          0.194314331,
+          -0.254231751,
+          -0.197320938,
+          -0.0163278617,
+          0.980203152,
+          -5.54137074e-08,
+          -0.10655681,
+          -0.9935806,
+          -0.0380013,
+          -5.308539e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0",
+        "sourceId": -248040,
+        "cloneId": -249732,
+        "parent": 20,
+        "initialLocal": [
+          0.785775,
+          -0.182570308,
+          -0.59095335,
+          -0.0254819524,
+          -0.385012567,
+          0.6033826,
+          -0.6983517,
+          0.0195681434,
+          0.484069169,
+          0.7762717,
+          0.403831184,
+          -0.031420134,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01",
+        "sourceId": -248044,
+        "cloneId": -249736,
+        "parent": 21,
+        "initialLocal": [
+          0.9409481,
+          0.181115836,
+          0.2860314,
+          -0.03940289,
+          -0.181758136,
+          0.983037,
+          -0.024538083,
+          2.70083635e-08,
+          -0.285623729,
+          -0.028899461,
+          0.957906,
+          -2.60770339e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01/Bip01 L Finger0Nub",
+        "sourceId": -248048,
+        "cloneId": -249740,
+        "parent": 22,
+        "initialLocal": [
+          0.9231226,
+          0.260187656,
+          0.2831026,
+          -0.0318670422,
+          -0.257416874,
+          0.9651255,
+          -0.04763792,
+          1.13155728e-07,
+          -0.285624355,
+          -0.0288997479,
+          0.9579058,
+          -2.1420421e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1",
+        "sourceId": -248052,
+        "cloneId": -249744,
+        "parent": 20,
+        "initialLocal": [
+          0.6143026,
+          0.767116,
+          -0.184839562,
+          -0.07057142,
+          -0.760136068,
+          0.6381644,
+          0.1222281,
+          0.000877341838,
+          0.211721167,
+          0.06541816,
+          0.975138247,
+          -0.018098969,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11",
+        "sourceId": -248056,
+        "cloneId": -249748,
+        "parent": 24,
+        "initialLocal": [
+          0.84393245,
+          0.5161763,
+          0.146082714,
+          -0.03620475,
+          -0.531463146,
+          0.8415335,
+          0.09679099,
+          5.285257e-08,
+          -0.07297226,
+          -0.159322634,
+          0.9845261,
+          -1.39698408e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11/Bip01 L Finger1Nub",
+        "sourceId": -248060,
+        "cloneId": -249752,
+        "parent": 25,
+        "initialLocal": [
+          0.8131927,
+          0.5590738,
+          0.161722228,
+          -0.04562102,
+          -0.576628447,
+          0.8116113,
+          0.09373788,
+          1.11758723e-07,
+          -0.0788492,
+          -0.169480592,
+          0.98237437,
+          2.88710051e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2",
+        "sourceId": -248064,
+        "cloneId": -249756,
+        "parent": 20,
+        "initialLocal": [
+          0.8004787,
+          0.5312699,
+          0.2774644,
+          -0.07153987,
+          -0.5919283,
+          0.7734213,
+          0.226805389,
+          0.004481724,
+          -0.09410199,
+          -0.345791817,
+          0.933580756,
+          0.0140614351,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21",
+        "sourceId": -248068,
+        "cloneId": -249760,
+        "parent": 27,
+        "initialLocal": [
+          0.766828656,
+          0.553268135,
+          0.325373858,
+          -0.0382308,
+          -0.5860027,
+          0.8103027,
+          0.0032242015,
+          5.052425e-08,
+          -0.261867464,
+          -0.193142354,
+          0.945579946,
+          2.60770356e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21/Bip01 L Finger2Nub",
+        "sourceId": -248072,
+        "cloneId": -249764,
+        "parent": 28,
+        "initialLocal": [
+          0.8104123,
+          0.4880349,
+          0.324120164,
+          -0.0524804927,
+          -0.524077356,
+          0.851186156,
+          0.0287244357,
+          -6.612391e-08,
+          -0.26186803,
+          -0.193142638,
+          0.9455799,
+          1.11758727e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/mountOff",
+        "sourceId": -248076,
+        "cloneId": -249768,
+        "parent": 20,
+        "initialLocal": [
+          0.994932652,
+          0.08895504,
+          -0.0468539819,
+          -0.06319,
+          0.07983068,
+          -0.982258737,
+          -0.169690415,
+          0.0245562736,
+          -0.06111753,
+          0.1650902,
+          -0.984383,
+          0.001828022,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bone L Forearm",
+        "sourceId": -248080,
+        "cloneId": -249772,
+        "parent": 19,
+        "initialLocal": [
+          1.00000036,
+          3.858753e-07,
+          3.02336957e-07,
+          2.28881831e-07,
+          -2.0113292e-07,
+          -0.23947376,
+          0.970903,
+          -2.86102289e-08,
+          4.47049246e-07,
+          -0.9709031,
+          -0.23947373,
+          7.62939436e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/mountShied",
+        "sourceId": -248086,
+        "cloneId": -249776,
+        "parent": 19,
+        "initialLocal": [
+          -0.993932962,
+          0.10496144,
+          -0.0328819826,
+          -0.198485911,
+          0.0321546532,
+          -0.00861477852,
+          -0.999445856,
+          0.002285309,
+          -0.105186589,
+          -0.994438946,
+          0.005187512,
+          0.04143318,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck",
+        "sourceId": -248090,
+        "cloneId": -249780,
+        "parent": 16,
+        "initialLocal": [
+          0.985428751,
+          0.169941381,
+          -0.007094091,
+          -0.197472483,
+          -0.169958457,
+          0.985449553,
+          -0.001874778,
+          -0.0233922172,
+          0.006672267,
+          0.00305316085,
+          0.999973059,
+          -1.4901163e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head",
+        "sourceId": -248094,
+        "cloneId": -249784,
+        "parent": 33,
+        "initialLocal": [
+          0.995185852,
+          -0.09674316,
+          0.0156865939,
+          -0.06741989,
+          0.09772106,
+          0.9917034,
+          -0.08351775,
+          -2.23517436e-08,
+          -0.00747667858,
+          0.0846485943,
+          0.996382833,
+          -1.86264537e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 HeadNub",
+        "sourceId": -248102,
+        "cloneId": -249788,
+        "parent": 34,
+        "initialLocal": [
+          1.00000012,
+          5.820766e-11,
+          -3.08738622e-24,
+          -0.173639655,
+          -5.820766e-11,
+          1.00000012,
+          -5.30408982e-14,
+          -1.97575942e-10,
+          0,
+          5.3040905e-14,
+          1,
+          -1.97540817e-10,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 Mouth",
+        "sourceId": -248106,
+        "cloneId": -249792,
+        "parent": 34,
+        "initialLocal": [
+          -0.3267002,
+          0.945127964,
+          6.6607613e-06,
+          -0.0343817063,
+          -0.945127964,
+          -0.3267002,
+          -4.862038e-07,
+          0.0212059151,
+          1.716548e-06,
+          -6.45411455e-06,
+          1,
+          -5.587936e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 Mouth/Bip01 Ponytail1Nub",
+        "sourceId": -248110,
+        "cloneId": -249796,
+        "parent": 36,
+        "initialLocal": [
+          0.000796258566,
+          -0.9999998,
+          -2.20848051e-09,
+          -0.101145059,
+          -0.9999998,
+          -0.000796318171,
+          2.77359914e-06,
+          1.10247716e-12,
+          -2.77360027e-06,
+          -1.13686851e-13,
+          -1,
+          -1.98915728e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone Eyelid",
+        "sourceId": -248114,
+        "cloneId": -249800,
+        "parent": 34,
+        "initialLocal": [
+          0.416572779,
+          -0.909102738,
+          1.018626e-07,
+          -0.08368547,
+          -0.909102738,
+          -0.416573018,
+          8.6270785e-07,
+          0.08023183,
+          -7.418567e-07,
+          -4.51984135e-07,
+          -1.00000036,
+          -7.45058149e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone L Eyeball",
+        "sourceId": -248118,
+        "cloneId": -249804,
+        "parent": 34,
+        "initialLocal": [
+          0.02758729,
+          -0.99962,
+          -2.488796e-07,
+          -0.0837776139,
+          -0.9996193,
+          -0.0275873113,
+          -1.72612954e-06,
+          0.0801199,
+          -1.71860643e-06,
+          -2.96404266e-07,
+          1,
+          0.03629028,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone R Eyeball",
+        "sourceId": -248122,
+        "cloneId": -249808,
+        "parent": 34,
+        "initialLocal": [
+          0.0275874138,
+          -0.9996201,
+          1.22863469e-06,
+          -0.0837774649,
+          -0.9996195,
+          -0.027587669,
+          1.94206723e-06,
+          0.0801197439,
+          -1.90743253e-06,
+          -1.2817444e-06,
+          -1.00000048,
+          -0.0362928845,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle",
+        "sourceId": -248126,
+        "cloneId": -249812,
+        "parent": 16,
+        "initialLocal": [
+          -0.200478345,
+          0.022636516,
+          0.9794366,
+          -0.158016339,
+          0.08441799,
+          -0.9956156,
+          0.0402897559,
+          -0.03649688,
+          0.9760544,
+          0.09075929,
+          0.197688609,
+          -0.04797325,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm",
+        "sourceId": -248130,
+        "cloneId": -249816,
+        "parent": 41,
+        "initialLocal": [
+          0.398169756,
+          -0.0564746261,
+          0.9155716,
+          -0.07880734,
+          -0.0313650928,
+          0.996681154,
+          0.07511792,
+          -1.94646418e-07,
+          -0.916775167,
+          -0.0586266741,
+          0.39507702,
+          -9.37841833e-07,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm",
+        "sourceId": -248134,
+        "cloneId": -249820,
+        "parent": 42,
+        "initialLocal": [
+          0.9785797,
+          -0.204555556,
+          0.02322143,
+          -0.258181751,
+          0.204978913,
+          0.9786084,
+          -0.01758443,
+          1.67638081e-08,
+          -0.0191276986,
+          0.0219676681,
+          0.9995756,
+          3.49246e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand",
+        "sourceId": -248142,
+        "cloneId": -249824,
+        "parent": 43,
+        "initialLocal": [
+          0.980398238,
+          0.114463523,
+          -0.160366312,
+          -0.25423187,
+          -0.179649025,
+          0.185111,
+          -0.966157556,
+          2.793968e-08,
+          -0.08090416,
+          0.976029,
+          0.202045724,
+          -3.53902649e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0",
+        "sourceId": -248146,
+        "cloneId": -249828,
+        "parent": 44,
+        "initialLocal": [
+          0.785774767,
+          -0.182568461,
+          0.590954,
+          -0.0254819561,
+          -0.3850136,
+          0.6033833,
+          0.69835037,
+          0.0195681471,
+          -0.484068424,
+          -0.776271462,
+          0.4038322,
+          0.0314200856,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01",
+        "sourceId": -248150,
+        "cloneId": -249832,
+        "parent": 45,
+        "initialLocal": [
+          0.9409479,
+          0.1811168,
+          -0.2860315,
+          -0.0394028574,
+          -0.181759283,
+          0.983036757,
+          0.024537649,
+          -1.07102087e-08,
+          0.285623729,
+          0.0289002247,
+          0.957906,
+          3.7252903e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01/Bip01 R Finger0Nub",
+        "sourceId": -248154,
+        "cloneId": -249836,
+        "parent": 46,
+        "initialLocal": [
+          0.9231229,
+          0.260187477,
+          0.2831029,
+          -0.0318669938,
+          -0.257416874,
+          0.9651258,
+          -0.0476372167,
+          7.823109e-08,
+          0.2856244,
+          0.02890046,
+          -0.957905769,
+          -3.53902578e-08,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1",
+        "sourceId": -248158,
+        "cloneId": -249840,
+        "parent": 44,
+        "initialLocal": [
+          0.8259495,
+          0.534066856,
+          0.180499092,
+          -0.07057137,
+          -0.523229361,
+          0.845421553,
+          -0.107206859,
+          0.0008773925,
+          -0.2098535,
+          -0.005894958,
+          0.977715,
+          0.0180989411,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11",
+        "sourceId": -248162,
+        "cloneId": -249844,
+        "parent": 48,
+        "initialLocal": [
+          0.941301942,
+          0.3209116,
+          -0.104720719,
+          -0.036204692,
+          -0.332093716,
+          0.9359868,
+          -0.116800793,
+          -3.259629e-08,
+          0.060534507,
+          0.14472191,
+          0.987618864,
+          6.98492e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11/Bip01 R Finger1Nub",
+        "sourceId": -248166,
+        "cloneId": -249848,
+        "parent": 49,
+        "initialLocal": [
+          0.813193,
+          0.559073269,
+          0.161722139,
+          -0.04562102,
+          -0.5766281,
+          0.8116112,
+          0.09374037,
+          1.30385169e-08,
+          0.07884777,
+          0.169482559,
+          -0.982373953,
+          -1.86264559e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2",
+        "sourceId": -248170,
+        "cloneId": -249852,
+        "parent": 44,
+        "initialLocal": [
+          0.723849952,
+          0.6794321,
+          -0.120055936,
+          -0.07153995,
+          -0.6700569,
+          0.650757551,
+          -0.357125551,
+          0.00448165368,
+          -0.164515212,
+          0.338949621,
+          0.926308751,
+          -0.0140614491,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21",
+        "sourceId": -248174,
+        "cloneId": -249856,
+        "parent": 51,
+        "initialLocal": [
+          0.848003149,
+          0.456457645,
+          -0.269326925,
+          -0.0382308178,
+          -0.483490556,
+          0.8744193,
+          -0.0403455161,
+          -7.450579e-09,
+          0.217088625,
+          0.164430127,
+          0.9622033,
+          6.05359762e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21/Bip01 R Finger2Nub",
+        "sourceId": -248178,
+        "cloneId": -249860,
+        "parent": 52,
+        "initialLocal": [
+          0.81041193,
+          0.488035381,
+          0.32412,
+          -0.05248046,
+          -0.5240776,
+          0.8511859,
+          0.0287235528,
+          -2.235174e-08,
+          0.2618683,
+          0.193141937,
+          -0.9455798,
+          5.58793634e-09,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/mountMain",
+        "sourceId": -248182,
+        "cloneId": -249864,
+        "parent": 44,
+        "initialLocal": [
+          0.9926226,
+          -0.00468848133,
+          -0.121149912,
+          -0.05239666,
+          -0.003563583,
+          0.99769187,
+          -0.0678081661,
+          0.0338526145,
+          0.121188179,
+          0.06773969,
+          0.9903153,
+          0.000451354979,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/mountMain/Gloves(Clone)",
+        "sourceId": -249322,
+        "cloneId": -249868,
+        "parent": 54,
+        "initialLocal": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bone R Forearm",
+        "sourceId": -248186,
+        "cloneId": -249872,
+        "parent": 43,
+        "initialLocal": [
+          0.99999994,
+          -1.79316984e-07,
+          -5.09843545e-09,
+          -7.62939436e-08,
+          1.49072985e-08,
+          0.111389369,
+          -0.9937769,
+          1.90734859e-08,
+          1.78768929e-07,
+          0.993777156,
+          0.111389339,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bow",
+        "sourceId": -248192,
+        "cloneId": -249876,
+        "parent": 16,
+        "initialLocal": [
+          -0.5821003,
+          0.03259658,
+          0.8124639,
+          0.05395149,
+          0.0362379849,
+          0.9992433,
+          -0.0141271809,
+          -0.1551455,
+          -0.8123106,
+          0.021218596,
+          -0.5828404,
+          0.0818956,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bow_box",
+        "sourceId": -248196,
+        "cloneId": -249880,
+        "parent": 16,
+        "initialLocal": [
+          -0.0198640842,
+          -0.9958861,
+          0.08841076,
+          -0.0475661457,
+          0.03000066,
+          0.08779467,
+          0.995686948,
+          -0.06647522,
+          -0.9993526,
+          0.022430839,
+          0.02813328,
+          -0.025578307,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Long_Gun",
+        "sourceId": -248200,
+        "cloneId": -249884,
+        "parent": 16,
+        "initialLocal": [
+          -0.860272,
+          -0.2199511,
+          -0.459949821,
+          -0.172117457,
+          0.173592567,
+          -0.9746158,
+          0.141387016,
+          -0.131426841,
+          -0.4793724,
+          0.04178745,
+          0.8766165,
+          -0.166352376,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/mountBack",
+        "sourceId": -248204,
+        "cloneId": -249888,
+        "parent": 16,
+        "initialLocal": [
+          0.510853052,
+          0.17337051,
+          0.842004955,
+          -0.338723749,
+          -0.05412425,
+          0.9839967,
+          -0.169769138,
+          -0.07620308,
+          -0.857962966,
+          0.0411542021,
+          0.512061,
+          -0.212618887,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/mountWaist",
+        "sourceId": -248208,
+        "cloneId": -249892,
+        "parent": 15,
+        "initialLocal": [
+          -0.930593133,
+          -0.133819416,
+          0.340718746,
+          0.03,
+          0.172987059,
+          -0.9810605,
+          0.08715576,
+          -0.13,
+          0.3226025,
+          0.140046462,
+          0.936116755,
+          -0.13,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Bow",
+        "sourceId": -248212,
+        "cloneId": -249896,
+        "parent": 2,
+        "initialLocal": [
+          -0.0531083532,
+          -0.01997599,
+          0.9983895,
+          -0.5036171,
+          0.978754759,
+          0.197238147,
+          0.0560101755,
+          -0.06680649,
+          -0.198039487,
+          0.980152249,
+          0.009076479,
+          -0.163497031,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Bow/bow   Dummy ",
+        "sourceId": -248216,
+        "cloneId": -249900,
+        "parent": 62,
+        "initialLocal": [
+          -0.9918188,
+          -0.126791179,
+          0.0148628345,
+          0.777496934,
+          -0.127431557,
+          0.990267932,
+          -0.05595472,
+          0.0381467156,
+          -0.00762362033,
+          -0.0573908538,
+          -0.9983237,
+          0.106771387,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Bow/bow   Dummy /bow  L Hand",
+        "sourceId": -248220,
+        "cloneId": -249904,
+        "parent": 63,
+        "initialLocal": [
+          0.994933069,
+          0.07983101,
+          -0.0611163937,
+          0.0610211939,
+          0.08895513,
+          -0.9822593,
+          0.165090337,
+          0.0294400584,
+          -0.04685278,
+          -0.16969046,
+          -0.984383464,
+          0.00300582871,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Bow/bow   Dummy /bow  R Hand ",
+        "sourceId": -248224,
+        "cloneId": -249908,
+        "parent": 63,
+        "initialLocal": [
+          0.9624783,
+          -0.265843183,
+          0.05443716,
+          0.721942365,
+          0.213627622,
+          0.8660085,
+          0.452096969,
+          0.000176925649,
+          -0.167330086,
+          -0.423503876,
+          0.890306056,
+          0.0641268939,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Long_Gun",
+        "sourceId": -248228,
+        "cloneId": -249912,
+        "parent": 2,
+        "initialLocal": [
+          -0.0138767976,
+          -0.0740015358,
+          -0.997161746,
+          -0.495706618,
+          -0.992028236,
+          0.125938684,
+          0.004458964,
+          -0.222420663,
+          0.125251427,
+          0.989274442,
+          -0.07515931,
+          -0.126453251,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Long_Gun/ Dummy Long_Gun",
+        "sourceId": -248232,
+        "cloneId": -249916,
+        "parent": 66,
+        "initialLocal": [
+          0.9985272,
+          0.0102142273,
+          0.0532875061,
+          -0.4166993,
+          -0.0108072339,
+          0.9998823,
+          0.0108520407,
+          -0.01292365,
+          -0.0531704165,
+          -0.0114119407,
+          0.9985204,
+          0.0204653926,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Long_Gun/ Dummy Long_Gun/ Long_Gun  L Hand",
+        "sourceId": -248236,
+        "cloneId": -249920,
+        "parent": 67,
+        "initialLocal": [
+          0.7015469,
+          0.395546526,
+          0.592769265,
+          -0.155165046,
+          0.711748958,
+          -0.347710937,
+          -0.61033684,
+          -0.05948546,
+          -0.0353043266,
+          0.8500827,
+          -0.525464833,
+          -0.08325363,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Bone  Long_Gun/ Dummy Long_Gun/ Long_Gun R Hand",
+        "sourceId": -248240,
+        "cloneId": -249924,
+        "parent": 67,
+        "initialLocal": [
+          0.9975893,
+          -0.0152353765,
+          0.0677102655,
+          0.0963583,
+          0.009763845,
+          0.996714,
+          0.08041625,
+          -0.1271959,
+          -0.06871293,
+          -0.07956125,
+          0.994459152,
+          -0.0655534342,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Doublesword1",
+        "sourceId": -248244,
+        "cloneId": -249928,
+        "parent": 2,
+        "initialLocal": [
+          -0.5709033,
+          0.181127757,
+          -0.8007888,
+          -0.09400004,
+          -0.820969462,
+          -0.115380049,
+          0.5591931,
+          0.06499998,
+          0.00889051,
+          0.97666806,
+          0.21457088,
+          -0.161999956,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Doublesword2",
+        "sourceId": -248248,
+        "cloneId": -249932,
+        "parent": 2,
+        "initialLocal": [
+          -0.4988619,
+          -0.3314726,
+          -0.8007889,
+          -0.0899999961,
+          -0.820969343,
+          -0.11537981,
+          0.5591931,
+          0.0649999753,
+          -0.277752042,
+          0.9363832,
+          -0.214570284,
+          0.161999986,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Pistol",
+        "sourceId": -248252,
+        "cloneId": -249936,
+        "parent": 2,
+        "initialLocal": [
+          -0.9297544,
+          0.156583086,
+          -0.333224535,
+          -0.03719078,
+          -0.356265873,
+          -0.154238448,
+          0.921566844,
+          -0.00465051644,
+          0.09290573,
+          0.975547135,
+          0.1991891,
+          -0.18636103,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Pistol  2",
+        "sourceId": -248256,
+        "cloneId": -249940,
+        "parent": 2,
+        "initialLocal": [
+          -0.001962304,
+          -0.06250218,
+          -0.9980428,
+          -0.459055632,
+          -0.9912554,
+          0.131806687,
+          -0.00630539563,
+          -0.0786073059,
+          0.131942779,
+          0.989303648,
+          -0.0622142479,
+          -0.000275268569,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Pistol  2/ Dummy Pistol",
+        "sourceId": -248260,
+        "cloneId": -249944,
+        "parent": 73,
+        "initialLocal": [
+          0.999288261,
+          -0.0149476966,
+          0.03462175,
+          -0.5586311,
+          0.0161890071,
+          0.999225438,
+          -0.0358551219,
+          0.00510429358,
+          -0.03405899,
+          0.03639011,
+          0.9987567,
+          0.03584305,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Pistol  2/ Dummy Pistol/Pistol  L Hand",
+        "sourceId": -248264,
+        "cloneId": -249948,
+        "parent": 74,
+        "initialLocal": [
+          0.980365634,
+          0.121165745,
+          0.1555742,
+          0.0696295947,
+          0.167696953,
+          -0.9273524,
+          -0.334508777,
+          0.0308264252,
+          0.103741035,
+          0.354029834,
+          -0.929463446,
+          -0.02202011,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "Bip01/Bip01 Pelvis/Pistol  2/ Dummy Pistol/Pistol  R Hand",
+        "sourceId": -248268,
+        "cloneId": -249952,
+        "parent": 74,
+        "initialLocal": [
+          0.992623866,
+          -0.0035641056,
+          0.121189237,
+          0.05201969,
+          -0.004687895,
+          0.997692466,
+          0.06773864,
+          -0.0343022048,
+          -0.12115103,
+          -0.06780705,
+          0.9903158,
+          -0.00450119,
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      {
+        "path": "CamTarget",
+        "sourceId": -248272,
+        "cloneId": -249956,
+        "parent": 0,
+        "initialLocal": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          1.5,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    ],
+    "humanBones": {
+      "Hips": 2,
+      "LeftUpperLeg": 4,
+      "RightUpperLeg": 9,
+      "LeftLowerLeg": 5,
+      "RightLowerLeg": 10,
+      "LeftFoot": 6,
+      "RightFoot": 11,
+      "Spine": 15,
+      "Chest": 16,
+      "Neck": 33,
+      "Head": 34,
+      "LeftShoulder": 17,
+      "RightShoulder": 41,
+      "LeftUpperArm": 18,
+      "RightUpperArm": 42,
+      "LeftLowerArm": 19,
+      "RightLowerArm": 43,
+      "LeftHand": 20,
+      "RightHand": 44,
+      "LeftToes": 7,
+      "RightToes": 12,
+      "LeftEye": 38,
+      "Jaw": 36,
+      "LeftThumbProximal": 21,
+      "LeftThumbIntermediate": 22,
+      "LeftThumbDistal": 23,
+      "LeftIndexProximal": 24,
+      "LeftIndexIntermediate": 25,
+      "LeftIndexDistal": 26,
+      "LeftRingProximal": 27,
+      "LeftRingIntermediate": 28,
+      "LeftRingDistal": 29,
+      "RightThumbProximal": 45,
+      "RightThumbIntermediate": 46,
+      "RightThumbDistal": 47,
+      "RightIndexProximal": 48,
+      "RightIndexIntermediate": 49,
+      "RightIndexDistal": 50,
+      "RightRingProximal": 51,
+      "RightRingIntermediate": 52,
+      "RightRingDistal": 53
+    }
+  },
+  "rig_mapping": {
+    "bones": {
+      "Bip01 Pelvis": {
+        "index": 2,
+        "relative_path": "Bip01/Bip01 Pelvis"
+      },
+      "Bip01 Spine1": {
+        "index": 14,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1"
+      },
+      "Bip01 Spine2": {
+        "index": 15,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2"
+      },
+      "Bip01 Spine3": {
+        "index": 16,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3"
+      },
+      "Bip01 L Clavicle": {
+        "index": 17,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle"
+      },
+      "Bip01 Neck": {
+        "index": 33,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck"
+      },
+      "Bip01 L UpperArm": {
+        "index": 18,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm"
+      },
+      "Bip01 Head": {
+        "index": 34,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head"
+      },
+      "Bip01 R Clavicle": {
+        "index": 41,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle"
+      },
+      "Bip01 R UpperArm": {
+        "index": 42,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm"
+      },
+      "Bip01 Mouth": {
+        "index": 36,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 Mouth"
+      },
+      "Bip01 L Forearm": {
+        "index": 19,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm"
+      },
+      "Bone L Forearm": {
+        "index": 31,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bone L Forearm"
+      },
+      "Bip01 L Hand": {
+        "index": 20,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand"
+      },
+      "Bip01 R Forearm": {
+        "index": 43,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm"
+      },
+      "Bone R Forearm": {
+        "index": 56,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bone R Forearm"
+      },
+      "Bip01 R Hand": {
+        "index": 44,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand"
+      },
+      "Bip01 L Thigh": {
+        "index": 4,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh"
+      },
+      "Bip01 R Thigh": {
+        "index": 9,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh"
+      },
+      "Bip01 L Foot": {
+        "index": 6,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot"
+      },
+      "Bip01 L Calf": {
+        "index": 5,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf"
+      },
+      "Bip01 R Calf": {
+        "index": 10,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf"
+      },
+      "Bip01 R Foot": {
+        "index": 11,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot"
+      },
+      "Bip01 L Finger0": {
+        "index": 21,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0"
+      },
+      "Bip01 L Finger1": {
+        "index": 24,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1"
+      },
+      "Bip01 L Finger2": {
+        "index": 27,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2"
+      },
+      "Bip01 L Finger21": {
+        "index": 28,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21"
+      },
+      "Bip01 L Finger11": {
+        "index": 25,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11"
+      },
+      "Bip01 L Finger01": {
+        "index": 22,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01"
+      },
+      "Bip01 R Finger0": {
+        "index": 45,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0"
+      },
+      "Bip01 R Finger1": {
+        "index": 48,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1"
+      },
+      "Bip01 R Finger2": {
+        "index": 51,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2"
+      },
+      "Bip01 R Finger21": {
+        "index": 52,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21"
+      },
+      "Bip01 R Finger01": {
+        "index": 46,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01"
+      },
+      "Bip01 R Finger11": {
+        "index": 49,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11"
+      },
+      "Bip01 L Toe0": {
+        "index": 7,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0"
+      },
+      "Bip01 L Toe0Nub": {
+        "index": 8,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0/Bip01 L Toe0Nub"
+      },
+      "Bip01 R Toe0": {
+        "index": 12,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0"
+      },
+      "Bip01 R Toe0Nub": {
+        "index": 13,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0/Bip01 R Toe0Nub"
+      },
+      "Bone Eyelid": {
+        "index": 38,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone Eyelid"
+      },
+      "Bone L Eyeball": {
+        "index": 39,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone L Eyeball"
+      },
+      "Bone R Eyeball": {
+        "index": 40,
+        "relative_path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone R Eyeball"
+      }
+    },
+    "missing_bones": [],
+    "avatar": "FemaleAvatar"
+  },
+  "complete": true,
+  "samples": 91,
+  "clips": [
+    {
+      "type": "clip",
+      "index": 0,
+      "name": "Mine1",
+      "sourcePathId": 221,
+      "runtimeId": 14874,
+      "length": 0.699996948,
+      "sourceFrameRate": 30,
+      "samples": 22,
+      "cloneIds": [
+        -249648,
+        -249652,
+        -249656,
+        -249660,
+        -249664,
+        -249668,
+        -249672,
+        -249676,
+        -249680,
+        -249684,
+        -249688,
+        -249692,
+        -249696,
+        -249700,
+        -249704,
+        -249708,
+        -249712,
+        -249716,
+        -249720,
+        -249724,
+        -249728,
+        -249732,
+        -249736,
+        -249740,
+        -249744,
+        -249748,
+        -249752,
+        -249756,
+        -249760,
+        -249764,
+        -249768,
+        -249772,
+        -249776,
+        -249780,
+        -249784,
+        -249788,
+        -249792,
+        -249796,
+        -249800,
+        -249804,
+        -249808,
+        -249812,
+        -249816,
+        -249820,
+        -249824,
+        -249828,
+        -249832,
+        -249836,
+        -249840,
+        -249844,
+        -249848,
+        -249852,
+        -249856,
+        -249860,
+        -249864,
+        -249868,
+        -249872,
+        -249876,
+        -249880,
+        -249884,
+        -249888,
+        -249892,
+        -249896,
+        -249900,
+        -249904,
+        -249908,
+        -249912,
+        -249916,
+        -249920,
+        -249924,
+        -249928,
+        -249932,
+        -249936,
+        -249940,
+        -249944,
+        -249948,
+        -249952,
+        -249956
+      ],
+      "isLooping": false,
+      "events": [],
+      "sample_count_arithmetic": "both agree",
+      "runtime_length_f32": 0.6999969482421875,
+      "maximum_bone_matrix_change": 1.204104656,
+      "changing_bones": 42,
+      "maximum_bone_position_change_m": 0.5975138168695318,
+      "bone_matrix_change": {
+        "Bip01 Pelvis": 0.7606953820000001,
+        "Bip01 Spine1": 0.7606937756000001,
+        "Bip01 Spine2": 0.8077209719999999,
+        "Bip01 Spine3": 0.8409743309000001,
+        "Bip01 L Clavicle": 0.7925936506,
+        "Bip01 Neck": 0.8431212509,
+        "Bip01 L UpperArm": 1.033656165,
+        "Bip01 Head": 0.28540466329999997,
+        "Bip01 R Clavicle": 0.793938118,
+        "Bip01 R UpperArm": 0.8376683473400001,
+        "Bip01 Mouth": 0.26028837439999997,
+        "Bip01 L Forearm": 0.75365633,
+        "Bone L Forearm": 0.8251087943,
+        "Bip01 L Hand": 1.004863721,
+        "Bip01 R Forearm": 0.850688845,
+        "Bone R Forearm": 0.817703356,
+        "Bip01 R Hand": 0.871811703,
+        "Bip01 L Thigh": 0.7338748147999999,
+        "Bip01 R Thigh": 0.6666918000000001,
+        "Bip01 L Foot": 0.5782070019000001,
+        "Bip01 L Calf": 0.4904883111,
+        "Bip01 R Calf": 0.39477684400000007,
+        "Bip01 R Foot": 0.012176729999999997,
+        "Bip01 L Finger0": 1.052941293,
+        "Bip01 L Finger1": 0.94182241,
+        "Bip01 L Finger2": 0.977784789,
+        "Bip01 L Finger21": 1.1890054170000002,
+        "Bip01 L Finger11": 0.96941552572,
+        "Bip01 L Finger01": 1.059240401,
+        "Bip01 R Finger0": 1.204104656,
+        "Bip01 R Finger1": 0.870862633,
+        "Bip01 R Finger2": 1.147988081,
+        "Bip01 R Finger21": 0.8921982347999999,
+        "Bip01 R Finger01": 1.203976631,
+        "Bip01 R Finger11": 0.9310948536,
+        "Bip01 L Toe0": 0.5739926623999999,
+        "Bip01 L Toe0Nub": 0.572311565,
+        "Bip01 R Toe0": 0.012115934199999998,
+        "Bip01 R Toe0Nub": 0.012047231000000005,
+        "Bone Eyelid": 0.286116071,
+        "Bone L Eyeball": 0.2870609,
+        "Bone R Eyeball": 0.28706093064
+      },
+      "bone_position_change_m": {
+        "Bip01 Pelvis": 0.2544686257928306,
+        "Bip01 Spine1": 0.25491964721449617,
+        "Bip01 Spine2": 0.257342256213317,
+        "Bip01 Spine3": 0.24979184605597188,
+        "Bip01 L Clavicle": 0.29509091017401273,
+        "Bip01 Neck": 0.27583555341657817,
+        "Bip01 L UpperArm": 0.33982498189076893,
+        "Bip01 Head": 0.29368649852633594,
+        "Bip01 R Clavicle": 0.2517679605947721,
+        "Bip01 R UpperArm": 0.251899098646811,
+        "Bip01 Mouth": 0.3003021342996476,
+        "Bip01 L Forearm": 0.43407098407672334,
+        "Bone L Forearm": 0.4340711112644879,
+        "Bip01 L Hand": 0.4527814966936094,
+        "Bip01 R Forearm": 0.30717831554564423,
+        "Bone R Forearm": 0.30717829222293813,
+        "Bip01 R Hand": 0.20154660868015353,
+        "Bip01 L Thigh": 0.2889798667347576,
+        "Bip01 R Thigh": 0.23719032386016597,
+        "Bip01 L Foot": 0.5975138168695318,
+        "Bip01 L Calf": 0.490864499236251,
+        "Bip01 R Calf": 0.19396732869370156,
+        "Bip01 R Foot": 0.015494415385314484,
+        "Bip01 L Finger0": 0.5068411057464053,
+        "Bip01 L Finger1": 0.5143139307056429,
+        "Bip01 L Finger2": 0.4810632946886819,
+        "Bip01 L Finger21": 0.5039128496715578,
+        "Bip01 L Finger11": 0.5351185646219927,
+        "Bip01 L Finger01": 0.5490498984779135,
+        "Bip01 R Finger0": 0.17568303502061047,
+        "Bip01 R Finger1": 0.22014505703973805,
+        "Bip01 R Finger2": 0.24324122781296023,
+        "Bip01 R Finger21": 0.21443512882033786,
+        "Bip01 R Finger01": 0.16974801907553316,
+        "Bip01 R Finger11": 0.19397558074560375,
+        "Bip01 L Toe0": 0.5870558414773664,
+        "Bip01 L Toe0Nub": 0.5823775994514895,
+        "Bip01 R Toe0": 0.015667949424788923,
+        "Bip01 R Toe0Nub": 0.01569741739421879,
+        "Bone Eyelid": 0.3117405452139643,
+        "Bone L Eyeball": 0.31490405365318,
+        "Bone R Eyeball": 0.30863742708976444
+      },
+      "bone_position_bounds": {
+        "min": [
+          -0.292362869,
+          0.004055653,
+          -0.171435982
+        ],
+        "max": [
+          0.228700966,
+          1.53842568,
+          0.728372931
+        ]
+      },
+      "first_bone_positions": {
+        "Bip01 Pelvis": [
+          -1.03051016e-05,
+          0.8992708,
+          0.0004033232
+        ],
+        "Bip01 Spine1": [
+          -0.00123844692,
+          0.982752144,
+          0.00571504747
+        ],
+        "Bip01 Spine2": [
+          -0.00276840455,
+          1.08511221,
+          0.0118505107
+        ],
+        "Bip01 Spine3": [
+          -0.0009893929,
+          1.19345975,
+          0.0176257417
+        ],
+        "Bip01 L Clavicle": [
+          -0.0576472878,
+          1.3476212,
+          -0.0227074027
+        ],
+        "Bip01 Neck": [
+          -0.0113279633,
+          1.38977218,
+          -0.0123267435
+        ],
+        "Bip01 L UpperArm": [
+          -0.135101736,
+          1.33311343,
+          -0.0217180289
+        ],
+        "Bip01 Head": [
+          -0.013826306,
+          1.456512,
+          -0.003107193
+        ],
+        "Bip01 R Clavicle": [
+          0.0381470844,
+          1.35224009,
+          -0.0254992843
+        ],
+        "Bip01 R UpperArm": [
+          0.115385026,
+          1.341753,
+          -0.0371169522
+        ],
+        "Bip01 Mouth": [
+          -0.0132238707,
+          1.49016988,
+          0.0192215256
+        ],
+        "Bip01 L Forearm": [
+          -0.292142481,
+          1.12818575,
+          -0.0225430317
+        ],
+        "Bone L Forearm": [
+          -0.2921426,
+          1.12818575,
+          -0.0225432348
+        ],
+        "Bip01 L Hand": [
+          -0.23452501,
+          1.16171658,
+          0.222792909
+        ],
+        "Bip01 R Forearm": [
+          0.224239528,
+          1.10855758,
+          -0.05781632
+        ],
+        "Bone R Forearm": [
+          0.224239528,
+          1.10855746,
+          -0.05781627
+        ],
+        "Bip01 R Hand": [
+          0.180072457,
+          0.9442033,
+          0.131050915
+        ],
+        "Bip01 L Thigh": [
+          -0.08157994,
+          0.897739351,
+          0.00561210373
+        ],
+        "Bip01 R Thigh": [
+          0.08155935,
+          0.900802255,
+          -0.004805436
+        ],
+        "Bip01 L Foot": [
+          -0.09117175,
+          0.06049055,
+          -0.0205421019
+        ],
+        "Bip01 L Calf": [
+          -0.08958914,
+          0.5124687,
+          0.0222230349
+        ],
+        "Bip01 R Calf": [
+          0.0937178,
+          0.5161656,
+          0.02127917
+        ],
+        "Bip01 R Foot": [
+          0.09277745,
+          0.0653787255,
+          -0.03262835
+        ],
+        "Bip01 L Finger0": [
+          -0.23743239,
+          1.20293045,
+          0.240468591
+        ],
+        "Bip01 L Finger1": [
+          -0.223129928,
+          1.19246352,
+          0.2878579
+        ],
+        "Bip01 L Finger2": [
+          -0.197053671,
+          1.17359507,
+          0.2843605
+        ],
+        "Bip01 L Finger21": [
+          -0.170679525,
+          1.19469976,
+          0.302265584
+        ],
+        "Bip01 L Finger11": [
+          -0.201511219,
+          1.22109282,
+          0.292734146
+        ],
+        "Bip01 L Finger01": [
+          -0.23196198,
+          1.2341826,
+          0.263834447
+        ],
+        "Bip01 R Finger0": [
+          0.135961443,
+          0.942610145,
+          0.139485687
+        ],
+        "Bip01 R Finger1": [
+          0.13692382,
+          0.916521966,
+          0.182825431
+        ],
+        "Bip01 R Finger2": [
+          0.157447278,
+          0.892158747,
+          0.177042663
+        ],
+        "Bip01 R Finger21": [
+          0.135271549,
+          0.872323155,
+          0.1530347
+        ],
+        "Bip01 R Finger01": [
+          0.100811973,
+          0.931416035,
+          0.153334588
+        ],
+        "Bip01 R Finger11": [
+          0.109316066,
+          0.8989014,
+          0.1673947
+        ],
+        "Bip01 L Toe0": [
+          -0.0903932,
+          0.004055653,
+          0.0958384946
+        ],
+        "Bip01 L Toe0Nub": [
+          -0.08975492,
+          0.0104836542,
+          0.156061366
+        ],
+        "Bip01 R Toe0": [
+          0.145917416,
+          0.009905349,
+          0.0714331642
+        ],
+        "Bip01 R Toe0Nub": [
+          0.172598988,
+          0.0108300718,
+          0.125800043
+        ],
+        "Bone Eyelid": [
+          -0.0126005644,
+          1.53749645,
+          0.07984113
+        ],
+        "Bone L Eyeball": [
+          -0.04887719,
+          1.53842568,
+          0.07945464
+        ],
+        "Bone R Eyeball": [
+          0.02368471,
+          1.53675842,
+          0.08000981
+        ]
+      }
+    },
+    {
+      "type": "clip",
+      "index": 1,
+      "name": "Mine2",
+      "sourcePathId": 228,
+      "runtimeId": 14876,
+      "length": 1.33333588,
+      "sourceFrameRate": 30,
+      "samples": 42,
+      "cloneIds": [
+        -249986,
+        -249990,
+        -249994,
+        -249998,
+        -250002,
+        -250006,
+        -250010,
+        -250014,
+        -250018,
+        -250022,
+        -250026,
+        -250030,
+        -250034,
+        -250038,
+        -250042,
+        -250046,
+        -250050,
+        -250054,
+        -250058,
+        -250062,
+        -250066,
+        -250070,
+        -250074,
+        -250078,
+        -250082,
+        -250086,
+        -250090,
+        -250094,
+        -250098,
+        -250102,
+        -250106,
+        -250110,
+        -250114,
+        -250118,
+        -250122,
+        -250126,
+        -250130,
+        -250134,
+        -250138,
+        -250142,
+        -250146,
+        -250150,
+        -250154,
+        -250158,
+        -250162,
+        -250166,
+        -250170,
+        -250174,
+        -250178,
+        -250182,
+        -250186,
+        -250190,
+        -250194,
+        -250198,
+        -250202,
+        -250206,
+        -250210,
+        -250214,
+        -250218,
+        -250222,
+        -250226,
+        -250230,
+        -250234,
+        -250238,
+        -250242,
+        -250246,
+        -250250,
+        -250254,
+        -250258,
+        -250262,
+        -250266,
+        -250270,
+        -250274,
+        -250278,
+        -250282,
+        -250286,
+        -250290,
+        -250294
+      ],
+      "isLooping": true,
+      "events": [
+        {
+          "time": 0.1645284,
+          "function": "AnimEvent",
+          "stringParameter": "ChangeTarget"
+        },
+        {
+          "time": 0.8383009,
+          "function": "AnimEvent",
+          "stringParameter": "DigTerrain"
+        }
+      ],
+      "sample_count_arithmetic": "both agree",
+      "runtime_length_f32": 1.3333358764648438,
+      "maximum_bone_matrix_change": 1.95517755,
+      "changing_bones": 42,
+      "maximum_bone_position_change_m": 0.9475041308983054,
+      "bone_matrix_change": {
+        "Bip01 Pelvis": 0.439954847,
+        "Bip01 Spine1": 0.440970112,
+        "Bip01 Spine2": 0.6383559,
+        "Bip01 Spine3": 1.052100337,
+        "Bip01 L Clavicle": 1.046282202,
+        "Bip01 Neck": 1.0945513249999999,
+        "Bip01 L UpperArm": 1.8382492529999999,
+        "Bip01 Head": 0.8005413,
+        "Bip01 R Clavicle": 1.15947817,
+        "Bip01 R UpperArm": 1.8457664,
+        "Bip01 Mouth": 0.7766669780000001,
+        "Bip01 L Forearm": 1.550791866,
+        "Bone L Forearm": 1.640692294,
+        "Bip01 L Hand": 1.95517755,
+        "Bip01 R Forearm": 1.7075031360000001,
+        "Bone R Forearm": 1.744408864,
+        "Bip01 R Hand": 1.940463738,
+        "Bip01 L Thigh": 0.557835709,
+        "Bip01 R Thigh": 0.45890832,
+        "Bip01 L Foot": 0.019801079999999915,
+        "Bip01 L Calf": 0.6806978,
+        "Bip01 R Calf": 0.41493349999999996,
+        "Bip01 R Foot": 0.011716768100000004,
+        "Bip01 L Finger0": 1.8007571,
+        "Bip01 L Finger1": 1.926983151,
+        "Bip01 L Finger2": 1.8451433179999999,
+        "Bip01 L Finger21": 1.7512612,
+        "Bip01 L Finger11": 1.9384041,
+        "Bip01 L Finger01": 1.5701485869999998,
+        "Bip01 R Finger0": 1.6182838080000002,
+        "Bip01 R Finger1": 1.851643437,
+        "Bip01 R Finger2": 1.817034859,
+        "Bip01 R Finger21": 1.868814,
+        "Bip01 R Finger01": 1.8436377,
+        "Bip01 R Finger11": 1.9394458,
+        "Bip01 L Toe0": 0.01957173499999998,
+        "Bip01 L Toe0Nub": 0.019615154999999995,
+        "Bip01 R Toe0": 0.011740427800000001,
+        "Bip01 R Toe0Nub": 0.011736363,
+        "Bone Eyelid": 0.7022051960000001,
+        "Bone L Eyeball": 0.798543054,
+        "Bone R Eyeball": 0.798543155
+      },
+      "bone_position_change_m": {
+        "Bip01 Pelvis": 0.36598556227392715,
+        "Bip01 Spine1": 0.3891426716554553,
+        "Bip01 Spine2": 0.418335650530951,
+        "Bip01 Spine3": 0.4223304133568714,
+        "Bip01 L Clavicle": 0.3998780011829217,
+        "Bip01 Neck": 0.3973821659150504,
+        "Bip01 L UpperArm": 0.39736746346780166,
+        "Bip01 Head": 0.388120668925114,
+        "Bip01 R Clavicle": 0.4064612909767164,
+        "Bip01 R UpperArm": 0.4140905690421197,
+        "Bip01 Mouth": 0.38676863945676715,
+        "Bip01 L Forearm": 0.5386819386210864,
+        "Bone L Forearm": 0.5386817827198561,
+        "Bip01 L Hand": 0.8496926720105098,
+        "Bip01 R Forearm": 0.7907944394500426,
+        "Bone R Forearm": 0.7907944044143097,
+        "Bip01 R Hand": 0.8250081021352544,
+        "Bip01 L Thigh": 0.37796263939613456,
+        "Bip01 R Thigh": 0.3551200626400328,
+        "Bip01 L Foot": 0.02216169630541428,
+        "Bip01 L Calf": 0.3525685332659921,
+        "Bip01 R Calf": 0.2603932654324679,
+        "Bip01 R Foot": 0.012491264899565237,
+        "Bip01 L Finger0": 0.8892741487721508,
+        "Bip01 L Finger1": 0.9475041308983054,
+        "Bip01 L Finger2": 0.9145565581242586,
+        "Bip01 L Finger21": 0.9211292254805397,
+        "Bip01 L Finger11": 0.9388554801137161,
+        "Bip01 L Finger01": 0.9279603168674507,
+        "Bip01 R Finger0": 0.8229197399380112,
+        "Bip01 R Finger1": 0.8713785637395355,
+        "Bip01 R Finger2": 0.9011232882999395,
+        "Bip01 R Finger21": 0.8996243754124539,
+        "Bip01 R Finger01": 0.8265868208527467,
+        "Bip01 R Finger11": 0.8800130264506818,
+        "Bip01 L Toe0": 0.021605408116300167,
+        "Bip01 L Toe0Nub": 0.021596396663646055,
+        "Bip01 R Toe0": 0.0125887911634721,
+        "Bip01 R Toe0Nub": 0.012621567351070324,
+        "Bone Eyelid": 0.38445484737216584,
+        "Bone L Eyeball": 0.3839766498633705,
+        "Bone R Eyeball": 0.3849303154999322
+      },
+      "bone_position_bounds": {
+        "min": [
+          -0.2546895,
+          0.00346244313,
+          -0.17163372
+        ],
+        "max": [
+          0.2476657,
+          1.74219453,
+          0.955470264
+        ]
+      },
+      "first_bone_positions": {
+        "Bip01 Pelvis": [
+          -0.12280003,
+          0.7627795,
+          0.1742895
+        ],
+        "Bip01 Spine1": [
+          -0.137297273,
+          0.845005333,
+          0.16903545
+        ],
+        "Bip01 Spine2": [
+          -0.1553734,
+          0.9457354,
+          0.162382066
+        ],
+        "Bip01 Spine3": [
+          -0.130277053,
+          1.05068278,
+          0.17386876
+        ],
+        "Bip01 L Clavicle": [
+          -0.122912295,
+          1.21262932,
+          0.2220529
+        ],
+        "Bip01 Neck": [
+          -0.0742255449,
+          1.24057,
+          0.19240731
+        ],
+        "Bip01 L UpperArm": [
+          -0.16802606,
+          1.20016193,
+          0.285456
+        ],
+        "Bip01 Head": [
+          -0.0361445844,
+          1.29326665,
+          0.210249573
+        ],
+        "Bip01 R Clavicle": [
+          -0.0758823752,
+          1.20689237,
+          0.1386205
+        ],
+        "Bip01 R UpperArm": [
+          -0.0552373379,
+          1.189795,
+          0.0645117238
+        ],
+        "Bip01 Mouth": [
+          -0.0279008448,
+          1.318685,
+          0.240543738
+        ],
+        "Bip01 L Forearm": [
+          -0.254689276,
+          0.9752079,
+          0.377884269
+        ],
+        "Bone L Forearm": [
+          -0.2546895,
+          0.975208,
+          0.3778843
+        ],
+        "Bip01 L Hand": [
+          -0.0211650729,
+          0.8968871,
+          0.440861017
+        ],
+        "Bip01 R Forearm": [
+          -0.0596928336,
+          1.08551991,
+          -0.17163372
+        ],
+        "Bone R Forearm": [
+          -0.0596928,
+          1.08551979,
+          -0.171633691
+        ],
+        "Bip01 R Hand": [
+          0.05545303,
+          0.9152776,
+          -0.0219911337
+        ],
+        "Bip01 L Thigh": [
+          -0.168976232,
+          0.7589417,
+          0.241640151
+        ],
+        "Bip01 R Thigh": [
+          -0.07662382,
+          0.7666173,
+          0.106938817
+        ],
+        "Bip01 L Foot": [
+          -0.238684416,
+          0.0660412,
+          0.54386425
+        ],
+        "Bip01 L Calf": [
+          -0.09224927,
+          0.4945805,
+          0.5118248
+        ],
+        "Bip01 R Calf": [
+          0.157001555,
+          0.465056866,
+          0.163982689
+        ],
+        "Bip01 R Foot": [
+          0.08410399,
+          0.06834009,
+          -0.0443855822
+        ],
+        "Bip01 L Finger0": [
+          0.009937236,
+          0.895933568,
+          0.4732833
+        ],
+        "Bip01 L Finger1": [
+          0.0248804279,
+          0.8478058,
+          0.468780547
+        ],
+        "Bip01 L Finger2": [
+          0.0285544582,
+          0.843520045,
+          0.436900228
+        ],
+        "Bip01 L Finger21": [
+          0.06562236,
+          0.834301353,
+          0.435294
+        ],
+        "Bip01 L Finger11": [
+          0.0588885769,
+          0.857555568,
+          0.476472884
+        ],
+        "Bip01 L Finger01": [
+          0.041330412,
+          0.885827363,
+          0.494845331
+        ],
+        "Bip01 R Finger0": [
+          0.03475505,
+          0.8948989,
+          0.0122983158
+        ],
+        "Bip01 R Finger1": [
+          0.0513336547,
+          0.847676933,
+          0.00487599336
+        ],
+        "Bip01 R Finger2": [
+          0.0476623327,
+          0.8428154,
+          -0.026921913
+        ],
+        "Bip01 R Finger21": [
+          0.0114946589,
+          0.838441,
+          -0.0153305158
+        ],
+        "Bip01 R Finger01": [
+          0.0181868915,
+          0.867327,
+          0.0350550935
+        ],
+        "Bip01 R Finger11": [
+          0.02198746,
+          0.8335782,
+          0.0207129344
+        ],
+        "Bip01 L Toe0": [
+          -0.2103712,
+          0.008240849,
+          0.656058
+        ],
+        "Bip01 L Toe0Nub": [
+          -0.194959834,
+          0.006707892,
+          0.7146128
+        ],
+        "Bip01 R Toe0": [
+          0.136913314,
+          0.0127405524,
+          0.0597769022
+        ],
+        "Bip01 R Toe0Nub": [
+          0.163409442,
+          0.0135987941,
+          0.114235491
+        ],
+        "Bone Eyelid": [
+          -0.0137291346,
+          1.346034,
+          0.3110144
+        ],
+        "Bone L Eyeball": [
+          -0.0492314845,
+          1.35174823,
+          0.3159071
+        ],
+        "Bone R Eyeball": [
+          0.0217921734,
+          1.340563,
+          0.305964768
+        ]
+      }
+    },
+    {
+      "type": "clip",
+      "index": 2,
+      "name": "Mine3",
+      "sourcePathId": 237,
+      "runtimeId": 14878,
+      "length": 0.8333359,
+      "sourceFrameRate": 30,
+      "samples": 27,
+      "cloneIds": [
+        -250336,
+        -250340,
+        -250344,
+        -250348,
+        -250352,
+        -250356,
+        -250360,
+        -250364,
+        -250368,
+        -250372,
+        -250376,
+        -250380,
+        -250384,
+        -250388,
+        -250392,
+        -250396,
+        -250400,
+        -250404,
+        -250408,
+        -250412,
+        -250416,
+        -250420,
+        -250424,
+        -250428,
+        -250432,
+        -250436,
+        -250440,
+        -250444,
+        -250448,
+        -250452,
+        -250456,
+        -250460,
+        -250464,
+        -250468,
+        -250472,
+        -250476,
+        -250480,
+        -250484,
+        -250488,
+        -250492,
+        -250496,
+        -250500,
+        -250504,
+        -250508,
+        -250512,
+        -250516,
+        -250520,
+        -250524,
+        -250528,
+        -250532,
+        -250536,
+        -250540,
+        -250544,
+        -250548,
+        -250552,
+        -250556,
+        -250560,
+        -250564,
+        -250568,
+        -250572,
+        -250576,
+        -250580,
+        -250584,
+        -250588,
+        -250592,
+        -250596,
+        -250600,
+        -250604,
+        -250608,
+        -250612,
+        -250616,
+        -250620,
+        -250624,
+        -250628,
+        -250632,
+        -250636,
+        -250640,
+        -250644
+      ],
+      "isLooping": false,
+      "events": [],
+      "sample_count_arithmetic": "both agree",
+      "runtime_length_f32": 0.8333358764648438,
+      "maximum_bone_matrix_change": 1.184257805,
+      "changing_bones": 42,
+      "maximum_bone_position_change_m": 0.5845473613900024,
+      "bone_matrix_change": {
+        "Bip01 Pelvis": 0.76201564,
+        "Bip01 Spine1": 0.7620140464,
+        "Bip01 Spine2": 0.80901444,
+        "Bip01 Spine3": 0.84203124,
+        "Bip01 L Clavicle": 0.793211868,
+        "Bip01 Neck": 0.8441783969,
+        "Bip01 L UpperArm": 1.00045643,
+        "Bip01 Head": 0.285738687,
+        "Bip01 R Clavicle": 0.7939267160000001,
+        "Bip01 R UpperArm": 0.83794138148,
+        "Bip01 Mouth": 0.249173194,
+        "Bip01 L Forearm": 0.7242768709999999,
+        "Bone L Forearm": 0.7815250569000001,
+        "Bip01 L Hand": 1.004063275,
+        "Bip01 R Forearm": 0.83362344,
+        "Bone R Forearm": 0.806714266,
+        "Bip01 R Hand": 0.8686682729999999,
+        "Bip01 L Thigh": 0.67360374,
+        "Bip01 R Thigh": 0.66749245,
+        "Bip01 L Foot": 0.5653917179,
+        "Bip01 L Calf": 0.49056170090000006,
+        "Bip01 R Calf": 0.348969207,
+        "Bip01 R Foot": 0.0164079368,
+        "Bip01 L Finger0": 1.048096718,
+        "Bip01 L Finger1": 0.93244501243,
+        "Bip01 L Finger2": 0.945259767,
+        "Bip01 L Finger21": 1.157852227,
+        "Bip01 L Finger11": 0.96087925359,
+        "Bip01 L Finger01": 1.058645695,
+        "Bip01 R Finger0": 1.177986413,
+        "Bip01 R Finger1": 0.864915079,
+        "Bip01 R Finger2": 1.130648374,
+        "Bip01 R Finger21": 0.8894412223,
+        "Bip01 R Finger01": 1.184257805,
+        "Bip01 R Finger11": 0.9228050189,
+        "Bip01 L Toe0": 0.56124692,
+        "Bip01 L Toe0Nub": 0.5595755600000001,
+        "Bip01 R Toe0": 0.016440650000000008,
+        "Bip01 R Toe0Nub": 0.016449957999999987,
+        "Bone Eyelid": 0.286397162,
+        "Bone L Eyeball": 0.28739333974,
+        "Bone R Eyeball": 0.287393373
+      },
+      "bone_position_change_m": {
+        "Bip01 Pelvis": 0.25488425245361207,
+        "Bip01 Spine1": 0.25533487095640406,
+        "Bip01 Spine2": 0.25772488570632945,
+        "Bip01 Spine3": 0.2501467085618172,
+        "Bip01 L Clavicle": 0.28899869911307435,
+        "Bip01 Neck": 0.26320002753279387,
+        "Bip01 L UpperArm": 0.3382068419651695,
+        "Bip01 Head": 0.27185148656007,
+        "Bip01 R Clavicle": 0.24927007408436094,
+        "Bip01 R UpperArm": 0.25223842113182926,
+        "Bip01 Mouth": 0.28268371598445075,
+        "Bip01 L Forearm": 0.43226511935930706,
+        "Bone L Forearm": 0.4322653085774084,
+        "Bip01 L Hand": 0.4067359567871367,
+        "Bip01 R Forearm": 0.30750092031229836,
+        "Bone R Forearm": 0.30750089399068553,
+        "Bip01 R Hand": 0.20016178028724307,
+        "Bip01 L Thigh": 0.2894250112102541,
+        "Bip01 R Thigh": 0.23763166980581144,
+        "Bip01 L Foot": 0.5845473613900024,
+        "Bip01 L Calf": 0.49101480641987366,
+        "Bip01 R Calf": 0.1644760748177537,
+        "Bip01 R Foot": 0.018606529260467772,
+        "Bip01 L Finger0": 0.46060964313699704,
+        "Bip01 L Finger1": 0.4645781464777926,
+        "Bip01 L Finger2": 0.4310269302986057,
+        "Bip01 L Finger21": 0.454194133240833,
+        "Bip01 L Finger11": 0.4864455351889157,
+        "Bip01 L Finger01": 0.5022060098677106,
+        "Bip01 R Finger0": 0.17050138480683924,
+        "Bip01 R Finger1": 0.21045065579712885,
+        "Bip01 R Finger2": 0.23779196322830692,
+        "Bip01 R Finger21": 0.21243613199826586,
+        "Bip01 R Finger01": 0.16292285478039756,
+        "Bip01 R Finger11": 0.18417228017873577,
+        "Bip01 L Toe0": 0.5741731142841063,
+        "Bip01 L Toe0Nub": 0.5696179113060879,
+        "Bip01 R Toe0": 0.01863007662067717,
+        "Bip01 R Toe0Nub": 0.018622429637857197,
+        "Bone Eyelid": 0.3026026984821781,
+        "Bone L Eyeball": 0.3037094783832081,
+        "Bone R Eyeball": 0.30167698071108673
+      },
+      "bone_position_bounds": {
+        "min": [
+          -0.29212147,
+          0.00275776163,
+          -0.172666311
+        ],
+        "max": [
+          0.233583391,
+          1.539195,
+          0.7160691
+        ]
+      },
+      "first_bone_positions": {
+        "Bip01 Pelvis": [
+          -0.122514971,
+          0.760129869,
+          0.174649552
+        ],
+        "Bip01 Spine1": [
+          -0.136997744,
+          0.84236294,
+          0.169469342
+        ],
+        "Bip01 Spine2": [
+          -0.155056745,
+          0.943102062,
+          0.162907287
+        ],
+        "Bip01 Spine3": [
+          -0.129961759,
+          1.04806,
+          0.174298987
+        ],
+        "Bip01 L Clavicle": [
+          -0.122434258,
+          1.20999932,
+          0.222482428
+        ],
+        "Bip01 Neck": [
+          -0.0738209561,
+          1.23793328,
+          0.192710221
+        ],
+        "Bip01 L UpperArm": [
+          -0.167336017,
+          1.19749856,
+          0.286029339
+        ],
+        "Bip01 Head": [
+          -0.03568139,
+          1.29061985,
+          0.210456952
+        ],
+        "Bip01 R Clavicle": [
+          -0.0756285,
+          1.20426238,
+          0.138924062
+        ],
+        "Bip01 R UpperArm": [
+          -0.0551830754,
+          1.187173,
+          0.06475813
+        ],
+        "Bip01 Mouth": [
+          -0.0273611285,
+          1.316021,
+          0.24074474
+        ],
+        "Bip01 L Forearm": [
+          -0.253667563,
+          0.972492337,
+          0.3786413
+        ],
+        "Bone L Forearm": [
+          -0.2536678,
+          0.9724924,
+          0.378641337
+        ],
+        "Bip01 L Hand": [
+          -0.0199240446,
+          0.8941562,
+          0.440780729
+        ],
+        "Bip01 R Forearm": [
+          -0.0602854751,
+          1.08293962,
+          -0.171392649
+        ],
+        "Bone R Forearm": [
+          -0.06028544,
+          1.08293951,
+          -0.17139262
+        ],
+        "Bip01 R Hand": [
+          0.0552221723,
+          0.9126477,
+          -0.02208586
+        ],
+        "Bip01 L Thigh": [
+          -0.168508321,
+          0.7562801,
+          0.242124528
+        ],
+        "Bip01 R Thigh": [
+          -0.07652158,
+          0.763979733,
+          0.107174575
+        ],
+        "Bip01 L Foot": [
+          -0.239446491,
+          0.06410101,
+          0.5448229
+        ],
+        "Bip01 L Calf": [
+          -0.0919809,
+          0.492282,
+          0.512720346
+        ],
+        "Bip01 R Calf": [
+          0.157022238,
+          0.462236345,
+          0.163581371
+        ],
+        "Bip01 R Foot": [
+          0.08244663,
+          0.06604001,
+          -0.0451827645
+        ],
+        "Bip01 L Finger0": [
+          0.0113292374,
+          0.893280268,
+          0.473059744
+        ],
+        "Bip01 L Finger1": [
+          0.02620548,
+          0.8451234,
+          0.4686469
+        ],
+        "Bip01 L Finger2": [
+          0.029725749,
+          0.8407284,
+          0.436764121
+        ],
+        "Bip01 L Finger21": [
+          0.066776976,
+          0.8314687,
+          0.435014665
+        ],
+        "Bip01 L Finger11": [
+          0.0602572,
+          0.854863167,
+          0.476157218
+        ],
+        "Bip01 L Finger01": [
+          0.0428137146,
+          0.8832154,
+          0.49450773
+        ],
+        "Bip01 R Finger0": [
+          0.0345491767,
+          0.8922854,
+          0.012228407
+        ],
+        "Bip01 R Finger1": [
+          0.05102182,
+          0.8450365,
+          0.004742127
+        ],
+        "Bip01 R Finger2": [
+          0.04728117,
+          0.840204239,
+          -0.0270521641
+        ],
+        "Bip01 R Finger21": [
+          0.0111235455,
+          0.83590585,
+          -0.0154011119
+        ],
+        "Bip01 R Finger01": [
+          0.0179702621,
+          0.864729941,
+          0.03499726
+        ],
+        "Bip01 R Finger11": [
+          0.0216770247,
+          0.8309799,
+          0.020619005
+        ],
+        "Bip01 L Toe0": [
+          -0.211231858,
+          0.006228972,
+          0.6570045
+        ],
+        "Bip01 L Toe0Nub": [
+          -0.195859328,
+          0.00465830648,
+          0.7155685
+        ],
+        "Bip01 R Toe0": [
+          0.135542423,
+          0.0104699023,
+          0.0588497
+        ],
+        "Bip01 R Toe0Nub": [
+          0.162240013,
+          0.0113453912,
+          0.113209531
+        ],
+        "Bone Eyelid": [
+          -0.013020061,
+          1.343331,
+          0.3111963
+        ],
+        "Bone L Eyeball": [
+          -0.0485095233,
+          1.34905231,
+          0.316173375
+        ],
+        "Bone R Eyeball": [
+          0.0224880576,
+          1.33785284,
+          0.3060623
+        ]
+      }
+    }
+  ],
+  "maximum_hierarchy_matrix_error": 1.0496579926355665e-06,
+  "general_retargeting_validated": false,
+  "root_motion_validated": false,
+  "runtime_motion_detected": true,
+  "process_teardown_validated": false,
+  "lifetime_note": "A completed output does not establish safe graph cleanup or process exit; verify externally.",
+  "sources": [
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.jsonl",
+      "sha256": "a006463469ba00bf7768f1e5748d46437f74d9fb205848a09672ec93f62bc309"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/reference-player-starter/player-female-starter-rig.json",
+      "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/tools/analyze_reference_bake.py",
+      "sha256": "50a7061892e3d39831153abfa119af542ed1ed8f66921fe13dbb99f21176754e"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.launch.json",
+      "sha256": "16b665aa7a382f99be12e9972eb4d38f008fb23272650fc0b09e394b091f285b"
+    }
+  ],
+  "launch_provenance": {
+    "schema": "pe-animator-bake-launch-1",
+    "command": [
+      "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client.x86_64",
+      "-from-launcher",
+      "-rw",
+      "1280",
+      "-rh",
+      "720",
+      "-ql",
+      "0",
+      "-language",
+      "English",
+      "-ocl",
+      "Cpu",
+      "-userpath",
+      "/home/admin/.local/share/planet-explorers-bake-reference",
+      "-screen-fullscreen",
+      "0"
+    ],
+    "profile": "/home/admin/.local/share/planet-explorers-bake-reference",
+    "capture": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.jsonl",
+    "arm": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.arm",
+    "stop": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-mine-10.stop",
+    "seconds": 180,
+    "wait_seconds": 900,
+    "plan": {
+      "avatar": "FemaleAvatar",
+      "controller": "FemaleAnimator2",
+      "gender": "Female",
+      "sample_rate": 30,
+      "planned_samples": 91,
+      "clips": [
+        {
+          "name": "Mine1",
+          "path_id": 221,
+          "length": 0.6999969482421875,
+          "frame_rate": 30.0,
+          "loop": false,
+          "humanoid_bindings": 127,
+          "events": [],
+          "controller_state": {
+            "path": "FullBody.Dig.Mine1",
+            "clip_index": 395,
+            "speed": 1.5,
+            "transitions": [
+              {
+                "m_ConditionConstantArray": [],
+                "m_DestinationState": 10,
+                "m_FullPathID": 2659624595,
+                "m_ID": 2724487317,
+                "m_UserID": 0,
+                "m_TransitionDuration": 0.4000000059604645,
+                "m_TransitionOffset": 0.0,
+                "m_ExitTime": 0.6000000238418579,
+                "m_HasExitTime": true,
+                "m_HasFixedDuration": true,
+                "m_InterruptionSource": 0,
+                "m_OrderedInterruption": true,
+                "m_CanTransitionToSelf": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "Mine2",
+          "path_id": 228,
+          "length": 1.3333358764648438,
+          "frame_rate": 30.0,
+          "loop": true,
+          "humanoid_bindings": 127,
+          "events": [
+            {
+              "time": 0.16452839970588684,
+              "function": "AnimEvent",
+              "data": "ChangeTarget"
+            },
+            {
+              "time": 0.838300883769989,
+              "function": "AnimEvent",
+              "data": "DigTerrain"
+            }
+          ],
+          "controller_state": {
+            "path": "FullBody.Dig.Mine2",
+            "clip_index": 393,
+            "speed": 1.0,
+            "transitions": [
+              {
+                "m_ConditionConstantArray": [
+                  {
+                    "data": {
+                      "m_ConditionMode": 2,
+                      "m_EventID": 3382344877,
+                      "m_EventThreshold": 0.0,
+                      "m_ExitTime": 0.0
+                    }
+                  }
+                ],
+                "m_DestinationState": 13,
+                "m_FullPathID": 2674175800,
+                "m_ID": 1045752576,
+                "m_UserID": 0,
+                "m_TransitionDuration": 0.20000000298023224,
+                "m_TransitionOffset": 0.0,
+                "m_ExitTime": 0.800000011920929,
+                "m_HasExitTime": true,
+                "m_HasFixedDuration": true,
+                "m_InterruptionSource": 0,
+                "m_OrderedInterruption": true,
+                "m_CanTransitionToSelf": true
+              }
+            ]
+          }
+        },
+        {
+          "name": "Mine3",
+          "path_id": 237,
+          "length": 0.8333358764648438,
+          "frame_rate": 30.0,
+          "loop": false,
+          "humanoid_bindings": 127,
+          "events": [],
+          "controller_state": {
+            "path": "FullBody.Dig.Mine3",
+            "clip_index": 396,
+            "speed": 1.0,
+            "transitions": [
+              {
+                "m_ConditionConstantArray": [],
+                "m_DestinationState": 30005,
+                "m_FullPathID": 2965435670,
+                "m_ID": 3744262188,
+                "m_UserID": 0,
+                "m_TransitionDuration": 0.10000000149011612,
+                "m_TransitionOffset": 0.0,
+                "m_ExitTime": 0.8999999761581421,
+                "m_HasExitTime": true,
+                "m_HasFixedDuration": false,
+                "m_InterruptionSource": 0,
+                "m_OrderedInterruption": true,
+                "m_CanTransitionToSelf": true
+              }
+            ]
+          }
+        }
+      ],
+      "spec": "Mine1|0.699996948|30|221|0;Mine2|1.33333588|30|228|1;Mine3|0.833335876|30|237|0",
+      "asset": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/sharedassets1.assets",
+      "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+    },
+    "plan_sha256": "fdd8699522044346139d226663e364823666c76c0a70cee2c3327c4d7a976cec",
+    "assembly": "/home/admin/source/planetexplorers/rebuild/build/animator-bake/ReferenceAnimatorBake.dll",
+    "assembly_sha256": "570887dd5b7a42416d44faaddd117f6fd2a465e4b110f75ad9f9c68695440c6f",
+    "shim": "/home/admin/source/planetexplorers/rebuild/build/animator-bake/pose-shim.so",
+    "probe_source_sha256": "31f1432120e6b7086d9fd276a972ae2b50edd1d469108347d03c599db779e5d7",
+    "unity_engine_sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b"
+  },
+  "export_dir": "/home/admin/source/planetexplorers/rebuild/build/animator-bake/player-female-mine"
+}

@@ -1,0 +1,8 @@
+{
+  "source": "Assets/Terrain/Voxelform2/Voxelform/Source/Scripts/Voxel/MarchingCubes/Cpu/MarchingCubesSW_Tables.cs",
+  "sha256": "a5537ee5d8180df88377e8f63fa196390dce987d511dfcc04edb355f6828167d",
+  "cases": 256,
+  "iso_threshold": 128,
+  "case_bit": "corner volume < 128",
+  "max_triangles_per_cell": 5
+}

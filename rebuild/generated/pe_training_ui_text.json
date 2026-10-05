@@ -1,0 +1,446 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "localization": {
+    "path": "i18n.db",
+    "sha256": "965648c34c5767aeeba8187c121ba128a24e5915eb532d18f666371e24f40299"
+  },
+  "source_expansion": "Assets/Scripts/Mission/MissionScript/MissionManager.cs:2186-2575",
+  "missions": [
+    {
+      "mission_id": 739,
+      "mission_type": 1,
+      "title_id": 3102667,
+      "description_id": 3102668,
+      "title": "Camera",
+      "description": "Camera tutorial.",
+      "objective_first": 0,
+      "objective_count": 2
+    },
+    {
+      "mission_id": 747,
+      "mission_type": 2,
+      "title_id": 8000115,
+      "description_id": 3102505,
+      "title": "Move",
+      "description": "Move tutorial.",
+      "objective_first": 2,
+      "objective_count": 4
+    },
+    {
+      "mission_id": 718,
+      "mission_type": 2,
+      "title_id": 0,
+      "description_id": 0,
+      "title": "",
+      "description": "",
+      "objective_first": 6,
+      "objective_count": 0
+    },
+    {
+      "mission_id": 740,
+      "mission_type": 2,
+      "title_id": 8000115,
+      "description_id": 3102505,
+      "title": "Move",
+      "description": "Move tutorial.",
+      "objective_first": 6,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 741,
+      "mission_type": 2,
+      "title_id": 3100274,
+      "description_id": 3102506,
+      "title": "Interaction",
+      "description": "Interaction tutorial.",
+      "objective_first": 7,
+      "objective_count": 2
+    },
+    {
+      "mission_id": 742,
+      "mission_type": 1,
+      "title_id": 8000115,
+      "description_id": 3102505,
+      "title": "Move",
+      "description": "Move tutorial.",
+      "objective_first": 9,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 743,
+      "mission_type": 2,
+      "title_id": 10027,
+      "description_id": 3102507,
+      "title": "Items",
+      "description": "Items tutorial.",
+      "objective_first": 10,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 744,
+      "mission_type": 2,
+      "title_id": 10027,
+      "description_id": 3102507,
+      "title": "Items",
+      "description": "Items tutorial.",
+      "objective_first": 11,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 749,
+      "mission_type": 2,
+      "title_id": 10027,
+      "description_id": 3102507,
+      "title": "Items",
+      "description": "Items tutorial.",
+      "objective_first": 12,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 745,
+      "mission_type": 2,
+      "title_id": 3100275,
+      "description_id": 3102508,
+      "title": "Combat",
+      "description": "Combat tutorial.",
+      "objective_first": 13,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 746,
+      "mission_type": 2,
+      "title_id": 3100275,
+      "description_id": 3102508,
+      "title": "Combat",
+      "description": "Combat tutorial.",
+      "objective_first": 14,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 719,
+      "mission_type": 2,
+      "title_id": 3100226,
+      "description_id": 3102503,
+      "title": "Gathering and Foraging",
+      "description": "Gathering and foraging tutorial.",
+      "objective_first": 15,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 748,
+      "mission_type": 2,
+      "title_id": 3100226,
+      "description_id": 3102503,
+      "title": "Gathering and Foraging",
+      "description": "Gathering and foraging tutorial.",
+      "objective_first": 16,
+      "objective_count": 2
+    },
+    {
+      "mission_id": 757,
+      "mission_type": 2,
+      "title_id": 3100227,
+      "description_id": 3102504,
+      "title": "Replicator",
+      "description": "Replicator tutorial.",
+      "objective_first": 18,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 721,
+      "mission_type": 2,
+      "title_id": 3100227,
+      "description_id": 3102504,
+      "title": "Replicator",
+      "description": "Replicator tutorial.",
+      "objective_first": 19,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 751,
+      "mission_type": 2,
+      "title_id": 3100228,
+      "description_id": 3102509,
+      "title": "Digging and Building",
+      "description": "Digging and Building tutorial.",
+      "objective_first": 20,
+      "objective_count": 2
+    },
+    {
+      "mission_id": 752,
+      "mission_type": 2,
+      "title_id": 3100228,
+      "description_id": 3102509,
+      "title": "Digging and Building",
+      "description": "Digging and Building tutorial.",
+      "objective_first": 22,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 753,
+      "mission_type": 2,
+      "title_id": 3100228,
+      "description_id": 3102509,
+      "title": "Digging and Building",
+      "description": "Digging and Building tutorial.",
+      "objective_first": 23,
+      "objective_count": 1
+    },
+    {
+      "mission_id": 756,
+      "mission_type": 2,
+      "title_id": 10002,
+      "description_id": 3102510,
+      "title": "Create",
+      "description": "Create tutorial.",
+      "objective_first": 24,
+      "objective_count": 0
+    }
+  ],
+  "objectives": [
+    {
+      "target_id": 4114,
+      "description_id": 3102669,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Press F5 to toggle to Control Mode",
+      "source_template": "Press F5 to toggle to Control Mode",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4115,
+      "description_id": 3102670,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Press F5 again to switch to First Person Mode",
+      "source_template": "Press F5 again to switch to First Person Mode",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4116,
+      "description_id": 3102671,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "W/S/A/D - Move",
+      "source_template": "W/S/A/D - Move",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4117,
+      "description_id": 3102672,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Space - Jump",
+      "source_template": "Space - Jump",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4118,
+      "description_id": 3102673,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Shift + W/S/A/D - Dash",
+      "source_template": "Shift + W/S/A/D - Dash",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4119,
+      "description_id": 3102674,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Middle Mouse – Auto-run",
+      "source_template": "Middle Mouse – Auto-run",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4071,
+      "description_id": 3100276,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Move to the marker on the map!",
+      "source_template": "Move to the marker on the map!",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4121,
+      "description_id": 3100387,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Open the boxkit",
+      "source_template": "Open the boxkit",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 2091,
+      "description_id": 3100277,
+      "kind": 2,
+      "item_id": 916,
+      "max_count": 5,
+      "text": "Acquire 5 units of Herbal Juice",
+      "source_template": "Acquire \"itemnum%\" units of \"itemid%\"",
+      "source_table": "Quest_LootItem"
+    },
+    {
+      "target_id": 4072,
+      "description_id": 3100278,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Go back and talk with Andy",
+      "source_template": "Go back and talk with Andy",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4102,
+      "description_id": 3100279,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Open your inventory",
+      "source_template": "Open your inventory",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4103,
+      "description_id": 3100280,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Move the item in your inventory to the quickbar",
+      "source_template": "Move the item in your inventory to the quickbar",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 5018,
+      "description_id": 3100385,
+      "kind": 5,
+      "item_id": 916,
+      "max_count": 1,
+      "text": "Use a herbal juice",
+      "source_template": "Use a herbal juice",
+      "source_table": "Quest_UseItem"
+    },
+    {
+      "target_id": 4104,
+      "description_id": 3100281,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Equip the weapon in your inventory",
+      "source_template": "Equip the weapon in your inventory",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 1025,
+      "description_id": 3102200,
+      "kind": 1,
+      "item_id": 13,
+      "max_count": 1,
+      "text": "Kill 1 lepus hares",
+      "source_template": "Kill \"monsternum%\" \"monsterid%\"s",
+      "source_table": "Quest_KillMonster"
+    },
+    {
+      "target_id": 4066,
+      "description_id": 3100282,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Gather all the simulated herbs",
+      "source_template": "Gather all the simulated herbs",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4122,
+      "description_id": 3100388,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Equip the safety axe in your inventory",
+      "source_template": "Equip the safety axe in your inventory",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 2093,
+      "description_id": 3100283,
+      "kind": 2,
+      "item_id": 279,
+      "max_count": 1,
+      "text": "Cut down a simulated tree",
+      "source_template": "Cut down a simulated tree",
+      "source_table": "Quest_LootItem"
+    },
+    {
+      "target_id": 5023,
+      "description_id": 3102511,
+      "kind": 5,
+      "item_id": 406,
+      "max_count": 1,
+      "text": "Transfer the script into the replicator",
+      "source_template": "Transfer the script into the replicator",
+      "source_table": "Quest_UseItem"
+    },
+    {
+      "target_id": 2089,
+      "description_id": 3100284,
+      "kind": 2,
+      "item_id": 12,
+      "max_count": 1,
+      "text": "Create a Wood Shovel with the Replicator",
+      "source_template": "Create a \"itemid%\" with the Replicator",
+      "source_table": "Quest_LootItem"
+    },
+    {
+      "target_id": 4123,
+      "description_id": 3100389,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Equip the shovel in your inventory",
+      "source_template": "Equip the shovel in your inventory",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 2032,
+      "description_id": 3100285,
+      "kind": 2,
+      "item_id": 268,
+      "max_count": 5,
+      "text": "Dig up 5 units of Dirt Block",
+      "source_template": "Dig up \"itemnum%\" units of \"itemid%\"",
+      "source_table": "Quest_LootItem"
+    },
+    {
+      "target_id": 4105,
+      "description_id": 3100286,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Enter the build mode by pressing B",
+      "source_template": "Enter the build mode by pressing B",
+      "source_table": "Quest_EnterArea"
+    },
+    {
+      "target_id": 4106,
+      "description_id": 3100287,
+      "kind": 4,
+      "item_id": 0,
+      "max_count": 0,
+      "text": "Build two walls to cover up all the lights",
+      "source_template": "Build two walls to cover up all the lights",
+      "source_table": "Quest_EnterArea"
+    }
+  ]
+}

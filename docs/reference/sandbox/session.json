@@ -1,0 +1,413 @@
+{
+  "date": "2026-10-03",
+  "timezone": "US/Central",
+  "reference": "Steam-installed native Planet Explorers V1.1.4, Unity 5.2.4f1",
+  "profile": "/home/admin/.local/share/planet-explorers-sandbox-reference",
+  "launch": "TMPDIR=/home/admin/.local/share/planet-explorers-sandbox-reference/tmp python3 rebuild/tools/launch_reference.py --user-data /home/admin/.local/share/planet-explorers-sandbox-reference",
+  "pid": 1683328,
+  "quit": "Ordinary Quit Game and confirmation; PID absent; launcher exit143",
+  "modes": {
+    "Adventure": {
+      "character": "audit",
+      "difficulty": "Normal",
+      "slot": 1,
+      "reload_observed": true,
+      "skill_tree": false,
+      "all_scripts": false
+    },
+    "Build": {
+      "character": "buildaudit",
+      "slot": 2,
+      "reload_observed": false
+    }
+  },
+  "generation": {
+    "seed_text": "Planet Maria",
+    "biome": "Grassland",
+    "climate": "Dry",
+    "height_m": 128,
+    "map_km": 2,
+    "ais": 3,
+    "river_density": 25,
+    "river_width": 10,
+    "plain_height": 15,
+    "flatness": 25,
+    "bridge_max_height": 0
+  },
+  "saves": {
+    "save0": {
+      "MainAdventure/block45.arc": {
+        "bytes": 50,
+        "sha256": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21"
+      },
+      "MainAdventure/index.arc": {
+        "bytes": 838,
+        "sha256": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae"
+      },
+      "MainAdventure/voxel.arc": {
+        "bytes": 85810,
+        "sha256": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4"
+      },
+      "MainAdventure/water.arc": {
+        "bytes": 40,
+        "sha256": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b"
+      },
+      "MainAdventure/world.arc": {
+        "bytes": 2902,
+        "sha256": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6"
+      },
+      "index.arc": {
+        "bytes": 935,
+        "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+      },
+      "world.arc": {
+        "bytes": 1264562,
+        "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+      }
+    },
+    "save1": {
+      "index.arc": {
+        "bytes": 749,
+        "sha256": "894e1c7256c4a3270cf1aa2b0188b69309e25d17dfc2e452ff9aab13eecba643"
+      },
+      "main/block45.arc": {
+        "bytes": 50,
+        "sha256": "8c94cd0106669a9d3691937e1d31fe91faa96e7f3a29c9c27b9fc2185dc88f21"
+      },
+      "main/index.arc": {
+        "bytes": 580,
+        "sha256": "6189624b593cb2ecb067707d8e8caf67e2c14e99caa2b0b0d531f5937ad6b919"
+      },
+      "main/voxel.arc": {
+        "bytes": 36,
+        "sha256": "5a5eaa3ad895565efb1de18c17d1471c7778354cbdea6cf8e6a7395649f26ea9"
+      },
+      "main/water.arc": {
+        "bytes": 40,
+        "sha256": "c305510265765544bb01740a74957f8d7fffbe96ab9519066eabef328338ed94"
+      },
+      "main/world.arc": {
+        "bytes": 303,
+        "sha256": "01845c58c261158d6a0f893996f2ceb7d98bd8073cda8bb5d70bd7a6d51c6b9b"
+      },
+      "world.arc": {
+        "bytes": 1462478,
+        "sha256": "d3c472e6fd383f50053eaa98afb94ac416120e359dfa8927e8815c6484a27fd6"
+      }
+    }
+  },
+  "captures": {
+    "original-adventure-config.png": {
+      "bytes": 668656,
+      "sha256": "aea323ee0ac1e14ba52ca23239627628cf9921080da78050f04eb37509d9bc50"
+    },
+    "original-adventure-setup.png": {
+      "bytes": 478935,
+      "sha256": "cdcf5b7ea421ca2ef83d509e7aff4114e75c653d84c260a54c5528fe3c81add5"
+    },
+    "original-after-building-inventory.png": {
+      "bytes": 938480,
+      "sha256": "66b16037755b8940ae2a153f5c9654a6f1986c857d6601325a34eaf1a031b9a4"
+    },
+    "original-arrival-mission.png": {
+      "bytes": 730771,
+      "sha256": "5fafa0c0cd25681ba3438c04e5804c2670ea76b6ca20934f2e90cb1239326a22"
+    },
+    "original-between-modes.png": {
+      "bytes": 456798,
+      "sha256": "3e5c2991ba6eb29fb078b49d2d60483ae4c6f82731adf706ebe43312df83f4f2"
+    },
+    "original-build-after-placement-resources.png": {
+      "bytes": 1265028,
+      "sha256": "a9f4147f5bda5baa74959ee3d0267acd58f6abd8b2994813713acd26e448acae"
+    },
+    "original-build-character.png": {
+      "bytes": 1123001,
+      "sha256": "0075b16c7125297dd17befaafcd0633d0ff8011b0cc6c9ff8dfd9ba9733a25d9"
+    },
+    "original-build-entry.png": {
+      "bytes": 1166304,
+      "sha256": "14cc211fad3586973b04a2315e68ad55d55d8f981607b16525ade8046d0feb76"
+    },
+    "original-build-exit-menu.png": {
+      "bytes": 1240064,
+      "sha256": "a09c47af8cb2f70c7d601bfb5833c63a48cd60b46842a1679b1f49d07da9c2c4"
+    },
+    "original-build-mode-placed.png": {
+      "bytes": 1256496,
+      "sha256": "67b522ff012a706d072f175751d98c4e56e97debad207838ea7fd873a62f8a24"
+    },
+    "original-build-mode-ui.png": {
+      "bytes": 1254251,
+      "sha256": "18baaf22d40ef2956cd9078c360d67e94bdb6f4db332d19c591a063f04fc3446"
+    },
+    "original-build-placement.png": {
+      "bytes": 1169775,
+      "sha256": "585cff59373903a34ebfc889e438c711f5d8391d2ec42a9c9044d2ed7991b05e"
+    },
+    "original-build-recipes.png": {
+      "bytes": 1098407,
+      "sha256": "548cf95402c8c4f2cf1af35e82ef5adac9cefe14937ece8f246d5647732bc81a"
+    },
+    "original-build-save-slots.png": {
+      "bytes": 1080964,
+      "sha256": "5df6cd51a44b80546982cd183edc4333a3f37e4980357e8cc0bfc57e92bdbba9"
+    },
+    "original-build-saved-slot2.png": {
+      "bytes": 1088930,
+      "sha256": "d16fd88b2e5bd1b48d7406804a12350b929791ebc6da1674543f6f0d623582c4"
+    },
+    "original-build-setup.png": {
+      "bytes": 751421,
+      "sha256": "3d3860b795ca07e19407cf52cf6c4c312dd0828c7bd695a596c0c808a128d5ac"
+    },
+    "original-build-spawn.png": {
+      "bytes": 1260839,
+      "sha256": "7362fa94fb744b59d595b914761ca47fd1731bb9ea1db7be74f6014d843f524e"
+    },
+    "original-build-starting-items.png": {
+      "bytes": 1250225,
+      "sha256": "6477d1cf64006b45f93a50fb26e7b194f4f45b1e2fb0fe0c8fdebaab9d7ee80f"
+    },
+    "original-build-starting-resources.png": {
+      "bytes": 1263730,
+      "sha256": "e342999b63d1913714844eb04788209d355b8168205240b3989d84320eb91520"
+    },
+    "original-build-world-config-selected.png": {
+      "bytes": 937486,
+      "sha256": "882dac6438a84884459361dd1aebbeb1f65265a0b9043106324a08fc05506b55"
+    },
+    "original-build-world-config.png": {
+      "bytes": 937830,
+      "sha256": "96ca51aea3aa29ec519cfb58e5ce60060b99ebf5bfb71edba5cf2de3d8db68aa"
+    },
+    "original-built-block.png": {
+      "bytes": 1166094,
+      "sha256": "1548d2dbb8d07dec0da220c61fb17bcf115a676ad37ae1a893a170016036df92"
+    },
+    "original-character-create.png": {
+      "bytes": 1047841,
+      "sha256": "dd7d21919ea7abfb9c3cca60e3cbb713b68e9e5ab18e34728dc2834a6b74a61f"
+    },
+    "original-character-stats.png": {
+      "bytes": 844010,
+      "sha256": "6e54c31fac1bb96cf676f73eab7f90fb57d47b3144df908ca26f9b5b90bc01d6"
+    },
+    "original-dig-attempt.png": {
+      "bytes": 1060548,
+      "sha256": "85b62899aa2dbbbd3925772d27569f2cdd4aca062bb15f3e1087995a0cf693cb"
+    },
+    "original-dig-before.png": {
+      "bytes": 1131908,
+      "sha256": "de1561bdc938b1f20eeed20e77d7fdb3bf13389bb27a56372fe6c17ce93289e7"
+    },
+    "original-dig-one.png": {
+      "bytes": 1018882,
+      "sha256": "db8a86a7875f681b58a1f81363fcb849669694dad767d6177b8a329c8f586a73"
+    },
+    "original-dig-removal.png": {
+      "bytes": 1012824,
+      "sha256": "05608125aa7741b2fd26ec8f1d5b97e79ad07161dee8564a23302dd6fb7dc1be"
+    },
+    "original-dig-target.png": {
+      "bytes": 1182301,
+      "sha256": "e9fa3dc7cb82dd803cd0a901e8e48cdbd0674473e2ea8146ae41973c40d98841"
+    },
+    "original-eitai-interact.png": {
+      "bytes": 929378,
+      "sha256": "05e971fc12242bd829873c1b30a865b3ea00ddd88e2fdedf7e61039a828b33fc"
+    },
+    "original-eitai-next.png": {
+      "bytes": 1104994,
+      "sha256": "82a052cde0208dadc34332cf39f5dfe55fea50a87175cfd47c2084b50d15f882"
+    },
+    "original-eitai-shops.png": {
+      "bytes": 1121902,
+      "sha256": "364a69ebcb21b3a097e6fb54f211d34cfe235c1c6792f20f5155be483b5fb9cd"
+    },
+    "original-eitai-supplies.png": {
+      "bytes": 1101840,
+      "sha256": "c9b88e23df6256f18281af60eaacfe32b9ea1f2997653e17505f13d24e766ef6"
+    },
+    "original-eitai-travel.png": {
+      "bytes": 1107302,
+      "sha256": "3477d1b55fc311db3c3469bd4d4b909e2a71a9dbfffefbdbaeb01ad55788d729"
+    },
+    "original-gathered-blocks.png": {
+      "bytes": 921520,
+      "sha256": "9e658d74e89888eb956a9d23150e4cb48c8fd0985c2161e6e79cc70f88b22127"
+    },
+    "original-gathered-resources.png": {
+      "bytes": 936852,
+      "sha256": "c8c8c799c1d6e659327cf9c251652c1fce4b4c04d63a4f6a56d18db50ff9c5c0"
+    },
+    "original-learn-script.png": {
+      "bytes": 862687,
+      "sha256": "392ed7d6bf286307ddd041edbc8ddc38eb59f06a395bed985c7337b0e3b419f0"
+    },
+    "original-learned-shovel.png": {
+      "bytes": 1046485,
+      "sha256": "a2207a81e227c8c5f280167cce0241f40501a4412412625ad42c3f1cb3ee3537"
+    },
+    "original-load-slot1.png": {
+      "bytes": 1012457,
+      "sha256": "67c42d3a8c5946a94bf71c4def160977ef36af1cfc01ffe0164c5036d61b1823"
+    },
+    "original-main-menu.png": {
+      "bytes": 504727,
+      "sha256": "2fcb6e426563a099e920e72d97a515fb27c9c48569b2098de80540b02c01d2cb"
+    },
+    "original-mode-select.png": {
+      "bytes": 498732,
+      "sha256": "6846dc6e0c9e0cc629823d0a23eeeb85aceb3dc197808aa3aa9686a086b5990c"
+    },
+    "original-quit-prompt.png": {
+      "bytes": 1210806,
+      "sha256": "309b98e2a26da711913058e10c46eb4a732947c91fc9b05880a79d5c7975ed56"
+    },
+    "original-reload-prompt.png": {
+      "bytes": 24067,
+      "sha256": "42d5dedda3eb65f3a67c43506b0d2e367268593436aa8d72db85612910432ad4"
+    },
+    "original-reloaded-construction.png": {
+      "bytes": 1221701,
+      "sha256": "90700517a9b50e2439b923854fc52dc18dadab54da2396b8e33d520d6a7d990a"
+    },
+    "original-reloaded-recipe.png": {
+      "bytes": 846842,
+      "sha256": "895d66c980450738d014aa558cd4aea2dcdc996f071a26c272aa1f778a887b2b"
+    },
+    "original-reloaded-resources.png": {
+      "bytes": 743677,
+      "sha256": "28c3c009fdd12e36d74b6d0e0b81db19b0354e59489c746c69db1127cdc611b9"
+    },
+    "original-reloaded-world.png": {
+      "bytes": 798938,
+      "sha256": "4d1026cd102ba1fd8020f0beac0722fabf02f9bcadea3ed549c2be5ad89b6524"
+    },
+    "original-replicator-before-learning.png": {
+      "bytes": 956162,
+      "sha256": "30f03068532b897879e6f8985fbe29456f36886ef102e05c12e8e064dfeac648"
+    },
+    "original-return-menu-prompt.png": {
+      "bytes": 866859,
+      "sha256": "d43dd50aa033ac34bb7ed88c69c722fd56876ce9a9d26682e854d287db5071f8"
+    },
+    "original-save-menu.png": {
+      "bytes": 1046056,
+      "sha256": "7669d017d9f6dc3b4c4790d6dbcfec7b045c84411876602b8b28f70aae172040"
+    },
+    "original-save-slots.png": {
+      "bytes": 991286,
+      "sha256": "aa4ea99821c61e4a4725483976df045d4ab77b5eaab420a117b73ab33f62c77a"
+    },
+    "original-saved-slot1.png": {
+      "bytes": 999528,
+      "sha256": "79dd72b9cbf9826582fe64716ab4b0a7462a227661278bd094d349fc2cb035da"
+    },
+    "original-settlement-explore.png": {
+      "bytes": 1080193,
+      "sha256": "60d4f760d9dd7337a7ba4eca27229f02c0ac49ec2c572a54bac5698a0fee0472"
+    },
+    "original-shovel-crafted.png": {
+      "bytes": 1057002,
+      "sha256": "6297b07d95c8d5748577518975b2a3dd59781bd911a1ba15189360b6475a41e5"
+    },
+    "original-shovel-crafting.png": {
+      "bytes": 1064462,
+      "sha256": "8b073a817aa3d9fd33ae1bfe1995a0a68f0c47c39ede4a172af4e53664e1f512"
+    },
+    "original-shovel-drawn.png": {
+      "bytes": 1167351,
+      "sha256": "62f94c0a6c2b677bd2ef9dc690d8c91df9e0a2b6e3702b23cf890218db4dac9f"
+    },
+    "original-shovel-equipped.png": {
+      "bytes": 959344,
+      "sha256": "cd504b6a344071d8a2b9d777d9326744619500af9e56cfc5dbefaaff3729a670"
+    },
+    "original-shovel-recipe.png": {
+      "bytes": 1063007,
+      "sha256": "1dd0a58907bc5d5b95b3f95db71b58e5e4607021da68de9839fda229a8d2fff3"
+    },
+    "original-spawn.png": {
+      "bytes": 1008502,
+      "sha256": "c82dc3fb56ba7e90631e5f41fdc6006b7a98cdda04b78bb176e48c1a2cf8beac"
+    },
+    "original-starter-script.png": {
+      "bytes": 960349,
+      "sha256": "d75b44c2f550789271d59b988be888ac38152b791bde3cd1e82c0fec012059d8"
+    },
+    "original-starting-armor-bag.png": {
+      "bytes": 958292,
+      "sha256": "637dd6e91196bc2ba0d0dda88b5e442d159d28a6464d1a8e57d3b2365b6fad00"
+    },
+    "original-starting-equipment-bag.png": {
+      "bytes": 981849,
+      "sha256": "9c5f5ffd3709f9fd5567eb991928b8157f52b0ab59f091591f410100d44c3e1a"
+    },
+    "original-starting-inventory.png": {
+      "bytes": 977441,
+      "sha256": "53838ee1cb75bd6de518330e9e0dd9c807df08a8b8529464096ffd5f89e71744"
+    },
+    "original-starting-resources.png": {
+      "bytes": 968876,
+      "sha256": "ab60cc50fa2238862bc6e3b0184510740b8d8ba01ed00999571d4eca3fc5167c"
+    },
+    "original-startup-temp-error.png": {
+      "bytes": 105656,
+      "sha256": "f74c0d57f014e7fd871a272078ef7f88f85cdf2472619d7d227e84e5fff206d6"
+    },
+    "original-supplied-scripts.png": {
+      "bytes": 1080754,
+      "sha256": "7b5a7e8ad581957342535a867e12f18f497a0a568f8f7470c4d3f5347d1c19c5"
+    },
+    "original-supplies-accept.png": {
+      "bytes": 1116549,
+      "sha256": "eb569e5e93c6a68ec49bd3a287d44fd48533d2312ec63b4bc9a825f9a5d7065c"
+    },
+    "original-tools-after-crafting.png": {
+      "bytes": 1062131,
+      "sha256": "7c17acff6fd06b4f09f91073295c7cd7f9bf78c7de644b8d2a782ec83de472f5"
+    },
+    "original-welcome-colonists.png": {
+      "bytes": 1042411,
+      "sha256": "ab5a82916f46d2bc78118897f398da234656bbeae01ac454f58fc5d5b5c21667"
+    },
+    "original-welcome-finished.png": {
+      "bytes": 1046469,
+      "sha256": "3f4f8dbb471cacb338a22ae2b683c83d53917519f28a99be90a5b5b6ce25c4af"
+    },
+    "original-welcome-next.png": {
+      "bytes": 1038303,
+      "sha256": "afac5d79352b258d90b62e7f5ccfc4055414551b00a77c509845d9ce827f9561"
+    },
+    "original-welcome-planet.png": {
+      "bytes": 1060376,
+      "sha256": "e7621dbc90b1544d1bf68f8cfa887383abc170d1376e8da634d3225deb667a85"
+    },
+    "original-welcome-resources.png": {
+      "bytes": 1045172,
+      "sha256": "3cf3cffc743b672f230575f36d0b4b55969882b9df055a354363135358137430"
+    },
+    "original-welcome-settlement.png": {
+      "bytes": 1077834,
+      "sha256": "7f8c2f6edea0934af9455fccd5c75d8e3923d9393c610e28b050cf4f5eea570f"
+    },
+    "original-world-config-selected.png": {
+      "bytes": 941861,
+      "sha256": "fcd4f89b0c4a7f8b80a281b5aaecb8894b02b70d7c98b766c26991d4b66d990d"
+    },
+    "original-world-config.png": {
+      "bytes": 941943,
+      "sha256": "0ea3b41f96cd346aacc49cd204bbd9661d817011b8717451a8dfe599f39c6b1f"
+    },
+    "original-world-loading.png": {
+      "bytes": 25494,
+      "sha256": "77a50e12e8b13f13805484ce4a45061349befa96b1c99cf1d1e9d45da8ece777"
+    },
+    "original-world-map.png": {
+      "bytes": 25323,
+      "sha256": "3f4099147b87d62b9ee3e5832888611b1c01628157102ca90f7468d59c524c19"
+    }
+  }
+}

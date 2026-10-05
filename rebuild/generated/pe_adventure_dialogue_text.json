@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "localization": {
+    "path": "i18n.db",
+    "sha256": "965648c34c5767aeeba8187c121ba128a24e5915eb532d18f666371e24f40299"
+  },
+  "scope": "Transient source menu/pages; generated role bindings; existing PeGame owns grants.",
+  "arrival_target": {
+    "id": 4502,
+    "role": 2,
+    "radius": 5,
+    "strict": true,
+    "axes": "XZ",
+    "truncate_target_to_integer": true,
+    "not_for_dungeon": true
+  },
+  "acceptance": "UINPCTalk.MatchTalkInfo attaches trigger only to final page; OnClose dispatches TakeMissionType_Get.",
+  "lines": [
+    {
+      "talk_id": 1949,
+      "localization_id": 3001949,
+      "npc_id": 0,
+      "speaker": 1,
+      "text": "How do you do, welcome to \"seedname%\"! Let me represent all the first wave colonists in welcoming you here. In fact, you're one of the first second wave colonists to arrive."
+    },
+    {
+      "talk_id": 4081,
+      "localization_id": 3004081,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "How many first wave colonists are there?"
+    },
+    {
+      "talk_id": 4082,
+      "localization_id": 3004082,
+      "npc_id": -9900,
+      "speaker": 1,
+      "text": "We came in several ships, and we've spread out across the planet over the years. So I don't have an exact count, but there are many of us here now."
+    },
+    {
+      "talk_id": 4083,
+      "localization_id": 3004083,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "Can you tell me more about this planet?"
+    },
+    {
+      "talk_id": 4084,
+      "localization_id": 3004084,
+      "npc_id": -9900,
+      "speaker": 1,
+      "text": "Well, we're in a complicated situation. There are native sentient species on this planet, and we've had run in with them on multiple occasions. We don't really communicate that much so we're always afraid that we can start a shooting war at any time. We've also had human break off into their own country. Overall though, it's been fairly peaceful, and for that, we're thankful."
+    },
+    {
+      "talk_id": 4085,
+      "localization_id": 3004085,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "How rich are the resources of this planet?"
+    },
+    {
+      "talk_id": 4086,
+      "localization_id": 3004086,
+      "npc_id": -9900,
+      "speaker": 1,
+      "text": "This planet is high in the amount resources. Pretty much anything we need are in an abundant amount."
+    },
+    {
+      "talk_id": 4087,
+      "localization_id": 3004087,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "So now that I'm here, where's my settlement?"
+    },
+    {
+      "talk_id": 4088,
+      "localization_id": 3004088,
+      "npc_id": -9900,
+      "speaker": 1,
+      "text": "Ahaha, getting straight to the point. It's our job to provide a settlement for the second wave colonists per the Colonial Charter. But, due to the natives around here, we're afraid to spread out too much. We've plotted three areas for you to build your own colony, and we'll give you as much help as we can. But you'll need to go there and build your own. Have a talk with \"AdvNPC%\"002 about the supplies we've gathered for you."
+    },
+    {
+      "talk_id": 4089,
+      "localization_id": 3004089,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "\"AdvNPC%\"001 said something about supplies?"
+    },
+    {
+      "talk_id": 4090,
+      "localization_id": 3004090,
+      "npc_id": -9899,
+      "speaker": 2,
+      "text": "Oh yeah, we're still waitin' for some scripts from \"Town%\"004, wonder why they ain't here yet, we put in the order over a week ago. If you ain't too busy, why don't cha go check it out?"
+    },
+    {
+      "talk_id": 4091,
+      "localization_id": 3004091,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "You want me to just walk there?"
+    },
+    {
+      "talk_id": 4092,
+      "localization_id": 3004092,
+      "npc_id": -9899,
+      "speaker": 2,
+      "text": "We're actually short on a lot of supplies right now. But I can at least give you a starter pack. I'd suggest you take some folks with you, just to be safe, ya never know around these parts."
+    },
+    {
+      "talk_id": 4093,
+      "localization_id": 3004093,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "Thanks. But I think I'll need a lot more scripts for everything from food to tools."
+    },
+    {
+      "talk_id": 4094,
+      "localization_id": 3004094,
+      "npc_id": -9899,
+      "speaker": 2,
+      "text": "Well! Don't we all? You'll have to work for 'em, yeah? Other people will give you odd jobs and such in which you can earn scripts and items. There are also old alien ruins and caves spread about the land that you can look around. Rumor has it the toughest of these offer some real bonafide treasure. I ain't tried none, too chicken, haha!"
+    }
+  ],
+  "missions": [
+    {
+      "id": 9031,
+      "title": "Arrival",
+      "description": "Ask \"AdvNPC%\"002 for the supplies.",
+      "objective": "Talk to \"AdvNPC%\"002",
+      "target_id": 4502
+    },
+    {
+      "id": 9032,
+      "title": "The Delayed Supplies",
+      "description": "Go to \"Town%\"004 and find out why the supplies has been delayed.",
+      "objective": "Go to \"Town%\"004",
+      "target_id": 4503
+    }
+  ]
+}

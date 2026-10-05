@@ -1,0 +1,257 @@
+make: Entering directory '/home/admin/source/planetexplorers/rebuild'
+./build/test_ui_assets build/reference-assets/ui
+UI manifest, atlas coordinates, GPU ownership stubs and malformed-input tests passed
+cc -Isrc -DPE_SOURCE_ROOT=\"/home/admin/source/planetexplorers\"  -O2 -g -std=c11 -Wall -Wextra -Wpedantic  tests/test_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c -o build/test_sandbox_ui -llz4 -lm
+./build/test_sandbox_ui
+sandbox UI: routed real inventory, progression, crafting, quickslots, modal ownership passed
+cc -Isrc -DPE_SOURCE_ROOT=\"/home/admin/source/planetexplorers\" -O2 -g -std=c11 -Wall -Wextra -Wpedantic  tests/test_sandbox_actor.c src/pe_sandbox_actor.c src/pe_player_locomotion.c -o build/test_sandbox_actor -lm
+./build/test_sandbox_actor
+Sandbox actor pose rendering failed
+sandbox actor: exact source tool groups, shared action clocks, instance binding, pause/cancel and cleanup passed
+./build/test_sandbox_world_view
+Sandbox world view ownership, depletion, source placement and triangle ray tests passed
+./build/test_sandbox_camera
+sandbox camera: Unity5.2 oracle, smoothing, bounds, modal/pause gates and tree-excluding mask passed
+./build/test_core
+Block45 source geometry, collisions, rotations and costs: OK
+Training original-room floor, capsule and initial lessons: OK
+Training NPC 9004 settled root 27.000000 1.474127 17.500000 yaw 0
+Training NPC 9005 settled root 32.000000 1.855870 6.500000 yaw 0
+Training NPC 9006 settled root 58.000000 1.891949 12.500000 yaw 0
+Training NPC 9009 settled root 10.000000 1.500408 3.500000 yaw 0
+Training NPC 9020 settled root 2.500000 1.535432 6.000000 yaw 0
+Training NPC 9031 settled root -27.000000 9.939374 20.500000 yaw 0
+Training NPC 9041 settled root 32.000000 1.823208 12.000000 yaw 275
+Training NPC 9047 settled root 27.500000 8.346012 2.000000 yaw 0
+Training NPC 9049 settled root 37.000000 1.870197 5.500000 yaw 0
+Core tests: PASS (0 failures)
+python3 tests/test_content.py
+............
+----------------------------------------------------------------------
+Ran 12 tests in 3.713s
+
+OK
+python3 tests/test_reference_launcher.py
+............
+----------------------------------------------------------------------
+Ran 12 tests in 1.779s
+
+OK
+python3 tests/test_reference_input.py
+..Reference input failed: Click coordinates must be inside the original client.
+Reference input failed: Click coordinates must be inside the original client.
+Reference input failed: Click coordinates must be inside the original client.
+.Reference input failed: Click coordinates must be inside the original client.
+........
+----------------------------------------------------------------------
+Ran 11 tests in 0.019s
+
+OK
+python3 tests/test_reference_assets.py
+....sss
+----------------------------------------------------------------------
+Ran 7 tests in 0.003s
+
+OK (skipped=3)
+python3 tests/test_reference_actor.py
+...ss
+----------------------------------------------------------------------
+Ran 5 tests in 0.001s
+
+OK (skipped=2)
+python3 tests/test_reference_hitboxes.py
+.....s
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK (skipped=1)
+python3 tests/test_reference_knife_collision.py
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.013s
+
+OK
+python3 tests/test_reference_player.py
+ss.....
+----------------------------------------------------------------------
+Ran 7 tests in 0.144s
+
+OK (skipped=2)
+python3 tests/test_reference_pose.py
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.223s
+
+OK
+python3 tests/test_reference_animator_bake.py
+..Animator bake: Existing LD_PRELOAD is set; use a clean launch environment
+.Offline bake probe built: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpyjvtf9di/bake.dll
+Plan: 1 clips, 61 samples at 30 Hz.
+No game launched or profile settings changed.
+Isolated profile: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp9xnq74si/profile
+Bake output: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp9xnq74si/profile/pose-captures/test.jsonl
+Enter the tutorial with a female player; create to arm: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp9xnq74si/profile/pose-captures/test.arm
+Create to stop: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp9xnq74si/profile/pose-captures/test.stop
+Animator bake: Exit record already exists; choose a fresh capture path
+.Isolated profile: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp3ct0pigi/profile
+Bake output: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp3ct0pigi/profile/pose-captures/20261005T125501Z-c03bea23.jsonl
+Enter the tutorial with a female player; create to arm: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp3ct0pigi/profile/pose-captures/20261005T125501Z-c03bea23.arm
+Create to stop: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmp3ct0pigi/profile/pose-captures/20261005T125501Z-c03bea23.stop
+........
+----------------------------------------------------------------------
+Ran 12 tests in 0.028s
+
+OK
+python3 tests/test_reference_bake_analysis.py
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.257s
+
+OK
+python3 tests/test_baked_knife.py
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.526s
+
+OK
+python3 tests/test_sandbox_world_assets.py
+sss..s
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK (skipped=4)
+python3 tests/test_baked_axe.py
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.278s
+
+OK
+python3 tests/test_baked_shovel.py
+......
+----------------------------------------------------------------------
+Ran 6 tests in 0.570s
+
+OK
+python3 tests/test_player_defence.py
+..ss
+----------------------------------------------------------------------
+Ran 4 tests in 0.000s
+
+OK (skipped=2)
+python3 tests/test_reference_pose_analysis.py
+...........
+----------------------------------------------------------------------
+Ran 11 tests in 0.288s
+
+OK
+python3 tests/test_training_gathering_export.py
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.006s
+
+OK
+python3 tests/test_training_gathering_assets.py
+.....
+----------------------------------------------------------------------
+Ran 5 tests in 0.044s
+
+OK
+python3 tests/test_training_terrain_export.py
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.024s
+
+OK
+python3 tests/test_training_build_assets.py
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.013s
+
+OK
+python3 tests/test_training_receiver_source.py
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.105s
+
+OK
+python3 tests/test_training_npcs.py
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.646s
+
+OK
+python3 tests/test_training_ui_assets.py
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.057s
+
+OK
+python3 tests/test_training_ui_effects.py
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.146s
+
+OK
+python3 tests/test_training_ui_text.py
+......
+----------------------------------------------------------------------
+Ran 6 tests in 1.513s
+
+OK
+python3 tests/test_training_ui_input.py
+..
+----------------------------------------------------------------------
+Ran 2 tests in 6.538s
+
+OK
+python3 tests/test_training_npc_analysis.py
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+Validated 3 samples / 1 clips; motion detected=True; missing bones=0
+.Bake analysis: Closed successful bake end record required
+.
+----------------------------------------------------------------------
+Ran 2 tests in 1.024s
+
+OK
+python3 tests/test_reference_npc_bake.py
+...NPC bake: NPC capture/provenance already exists; choose fresh basename
+.NPC sampler built: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmppln5hm88/sampler.dll; nine clips, 603 samples. No game launched or profile modified.
+NPC outputs:
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9004.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9005.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9006.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9009.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9020.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9031.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9041.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9047.jsonl
+/home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.npc-9049.jsonl
+Enter tutorial; create arm file: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.arm
+Stop file: /home/admin/source/planetexplorers/rebuild/build/compiler-tmp/tmpqhj9m0v4/profile/poses/npcs.stop
+...
+----------------------------------------------------------------------
+Ran 7 tests in 0.030s
+
+OK
+python3 tools/export_content.py --check
+Generated content matches source databases.
+python3 tools/export_mc_tables.py --check
+Marching-cubes source tables verified.
+python3 tools/export_training_terrain.py --check
+Training mound726 and building anchors32 source samples: verified
+python3 tools/export_training_ui_text.py --check
+Tutorial UI text checked
+python3 tests/test_cli.py
+.......................
+----------------------------------------------------------------------
+Ran 23 tests in 0.103s
+
+OK
+make: Leaving directory '/home/admin/source/planetexplorers/rebuild'

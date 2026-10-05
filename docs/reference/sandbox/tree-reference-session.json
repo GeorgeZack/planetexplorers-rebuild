@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-05",
+  "timezone": "US/Central",
+  "reference": "Steam-installed native Planet Explorers V1.1.4, Unity 5.2.4f1",
+  "profile": "/home/admin/.local/share/planet-explorers-tree-reference-20261005",
+  "copied_from": "/home/admin/.local/share/planet-explorers-sandbox-reference",
+  "original_checkpoints_unchanged": true,
+  "checked_archives": 14,
+  "mode": "Single Player Adventure Normal; copied manual slot1 audit",
+  "controls": "F5 cycled first-person to third-person free then MMO locked; W approached nearby tree; a further W2s left displayed P603,295 unchanged",
+  "observation": "Avatar remained at trunk during held forward movement. Qualitative obstruction only; no measured collider radius, hidden species ID or original felling outcome.",
+  "quit": "Normal Quit Game and affirmative unsaved-progress confirmation; PID749074 absent after exit.",
+  "captures": {
+    "original-tree-contact.png": {
+      "bytes": 1307864,
+      "sha256": "4d89cbf67e76a257599a887c2f8d1dcaab2150eba58e5b6e6679a101848ef1f2"
+    },
+    "original-tree-held.png": {
+      "bytes": 1291859,
+      "sha256": "3623acf4a3ff984ec914f781a249ba53e322816ceac4c0b2ad70a31ca6203796"
+    },
+    "original-tree-quit.png": {
+      "bytes": 1299697,
+      "sha256": "06f444a1bd35b0355da88bf5b31affa6c54fe801e433848d8a582414e1f16c40"
+    }
+  }
+}

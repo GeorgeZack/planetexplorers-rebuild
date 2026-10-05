@@ -1,0 +1,8 @@
+make: Entering directory '/home/admin/source/planetexplorers/rebuild'
+python3 tests/test_cli.py
+.......................
+----------------------------------------------------------------------
+Ran 23 tests in 0.119s
+
+OK
+make: Leaving directory '/home/admin/source/planetexplorers/rebuild'

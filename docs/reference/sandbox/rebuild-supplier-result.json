@@ -1,0 +1,153 @@
+{
+  "passed": true,
+  "states": [
+    {
+      "stage": "initial",
+      "fields": {
+        "mode": "1",
+        "mission": "9031",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(34.985554,12.074747,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/supplier-playtest/fixture.pesave mode=1 mission=9031 arrival=0 supplies=0 known=0 wood=200 meat=400 juice=10 shovels=0 pickaxes=0 axes=0 script406=0 position=(34.985554,12.074747,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200\n"
+    },
+    {
+      "stage": "arrival-only",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "arrival": "1",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/supplier-playtest/supplier-result.pesave mode=1 mission=9032 arrival=1 supplies=0 known=0 wood=200 meat=400 juice=10 shovels=0 pickaxes=0 axes=0 script406=0 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200\n"
+    },
+    {
+      "stage": "cancelled",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "arrival": "1",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/supplier-playtest/supplier-result.pesave mode=1 mission=9032 arrival=1 supplies=0 known=0 wood=200 meat=400 juice=10 shovels=0 pickaxes=0 axes=0 script406=0 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200\n"
+    },
+    {
+      "stage": "accepted",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "arrival": "1",
+        "supplies": "1",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "1",
+        "pickaxes": "1",
+        "axes": "1",
+        "script406": "1",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/supplier-playtest/supplier-result.pesave mode=1 mission=9032 arrival=1 supplies=1 known=0 wood=200 meat=400 juice=10 shovels=1 pickaxes=1 axes=1 script406=1 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n"
+    },
+    {
+      "stage": "reopened",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "arrival": "1",
+        "supplies": "1",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "1",
+        "pickaxes": "1",
+        "axes": "1",
+        "script406": "1",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/supplier-playtest/supplier-result.pesave mode=1 mission=9032 arrival=1 supplies=1 known=0 wood=200 meat=400 juice=10 shovels=1 pickaxes=1 axes=1 script406=1 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n"
+    },
+    {
+      "stage": "reloaded",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "arrival": "1",
+        "supplies": "1",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "1",
+        "pickaxes": "1",
+        "axes": "1",
+        "script406": "1",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/supplier-playtest/supplier-result.pesave mode=1 mission=9032 arrival=1 supplies=1 known=0 wood=200 meat=400 juice=10 shovels=1 pickaxes=1 axes=1 script406=1 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n"
+    }
+  ],
+  "log": "rebuild/build/supplier-playtest/supplier.log",
+  "captures": {
+    "rebuild-supplier-arrival.png": "5dbb905015e219f26779fd395857e179a95a6f8301912c5807c0475e2684c928",
+    "rebuild-supplier-menu.png": "cd780bf9b5606226b6d9b2e93460fbfe529ca9cd1d886491b3bcaf369d73c736",
+    "rebuild-supplier-mouse-menu.png": "df75839a22317c60e065c0e3d036626206b4a3d9953c4f2693374a5185e51cdc",
+    "rebuild-supplier-promise.png": "dcf8c729e954c306813921856e63c07537b8003a30cf0ca186d922f5643a1bac",
+    "rebuild-supplier-page-4090.png": "1569602cae62558f62e429530bfd488a25bd285f066b633594b9b292f81aa88d",
+    "rebuild-supplier-page-4091.png": "c150a1d0824c5c727e7122d3f1e397e04c81bc4c2cefb9d1f65de8d7cc18d856",
+    "rebuild-supplier-page-4092.png": "57f5d28a9866ec2082a8edcdfea82c9c9dd163584c575f79727bd60ef962665f",
+    "rebuild-supplier-page-4093.png": "0e3385ce84177820a3ac8db7540a37377b52c17f4413c7dd0b3625cea6e25bc6",
+    "rebuild-supplier-page-4094.png": "8d18ff6a096fb4ea5f5cd0e622b00383f58267b29af60d112b589a4b35c612cd",
+    "rebuild-supplier-accepted.png": "cf7a55d1a908c1e25be48f84a43ef1070991d05514dcc93f797f4cb6754d7d4d",
+    "rebuild-supplier-claimed-menu.png": "b0cd846f5683f73e90106f872533680f36008bfae75b498ffabea544615d2c30",
+    "rebuild-supplier-reloaded-menu.png": "0494bd307a77fc62bc638b34f91b43e11f33c0ba9909e0fd3c49557fb8c29f02"
+  },
+  "evidence": "C rebuild physical input; original source/archive recovery, no new Steam playtest"
+}

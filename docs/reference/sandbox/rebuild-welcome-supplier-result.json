@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "states": [
+    {
+      "stage": "initial",
+      "fields": {
+        "mode": "1",
+        "mission": "9031",
+        "welcome_page": "9",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(34.985554,12.074747,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/welcome-supplier-regression-final/fixture.pesave mode=1 mission=9031 welcome_page=9 arrival=0 supplies=0 known=0 wood=200 meat=400 juice=10 shovels=0 pickaxes=0 axes=0 script406=0 position=(34.985554,12.074747,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200\n"
+    },
+    {
+      "stage": "arrival-only",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "welcome_page": "9",
+        "arrival": "1",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/welcome-supplier-regression-final/supplier-result.pesave mode=1 mission=9032 welcome_page=9 arrival=1 supplies=0 known=0 wood=200 meat=400 juice=10 shovels=0 pickaxes=0 axes=0 script406=0 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200\n"
+    },
+    {
+      "stage": "cancelled",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "welcome_page": "9",
+        "arrival": "1",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/welcome-supplier-regression-final/supplier-result.pesave mode=1 mission=9032 welcome_page=9 arrival=1 supplies=0 known=0 wood=200 meat=400 juice=10 shovels=0 pickaxes=0 axes=0 script406=0 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200\n"
+    },
+    {
+      "stage": "accepted",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "welcome_page": "9",
+        "arrival": "1",
+        "supplies": "1",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "1",
+        "pickaxes": "1",
+        "axes": "1",
+        "script406": "1",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/welcome-supplier-regression-final/supplier-result.pesave mode=1 mission=9032 welcome_page=9 arrival=1 supplies=1 known=0 wood=200 meat=400 juice=10 shovels=1 pickaxes=1 axes=1 script406=1 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n"
+    },
+    {
+      "stage": "reopened",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "welcome_page": "9",
+        "arrival": "1",
+        "supplies": "1",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "1",
+        "pickaxes": "1",
+        "axes": "1",
+        "script406": "1",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/welcome-supplier-regression-final/supplier-result.pesave mode=1 mission=9032 welcome_page=9 arrival=1 supplies=1 known=0 wood=200 meat=400 juice=10 shovels=1 pickaxes=1 axes=1 script406=1 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n"
+    },
+    {
+      "stage": "reloaded",
+      "fields": {
+        "mode": "1",
+        "mission": "9032",
+        "welcome_page": "9",
+        "arrival": "1",
+        "supplies": "1",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "1",
+        "pickaxes": "1",
+        "axes": "1",
+        "script406": "1",
+        "position": "(34.985554,12.074736,27.294052)",
+        "yaw": "-1.47262132",
+        "pitch": "-0.28000000",
+        "grounded": "1"
+      },
+      "text": "/home/admin/source/planetexplorers/rebuild/build/welcome-supplier-regression-final/supplier-result.pesave mode=1 mission=9032 welcome_page=9 arrival=1 supplies=1 known=0 wood=200 meat=400 juice=10 shovels=1 pickaxes=1 axes=1 script406=1 position=(34.985554,12.074736,27.294052) yaw=-1.47262132 pitch=-0.28000000 grounded=1\n  inventory: 33x1 1527x1 73x1 70x1 973x1 974x1 975x1 1579x1 916x10 228x1 937x10 229x400 279x200 12x1 19x1 26x1 1x1 34x1 43x1 552x1 512x1 519x1 1550x1 1551x1 406x1 412x1 418x1 424x1 433x1 510x1 612x1\n"
+    }
+  ],
+  "log": "rebuild/build/welcome-supplier-regression-final/supplier.log"
+}

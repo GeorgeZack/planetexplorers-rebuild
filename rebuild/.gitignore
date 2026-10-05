@@ -1,0 +1,4 @@
+/build/
+*.pesave
+*.pesave.tmp
+__pycache__/

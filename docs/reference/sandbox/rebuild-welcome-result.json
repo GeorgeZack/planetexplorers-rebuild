@@ -1,0 +1,116 @@
+{
+  "passed": true,
+  "states": [
+    {
+      "stage": "cancelled",
+      "fields": {
+        "mode": "1",
+        "mission": "0",
+        "welcome_page": "3",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(28.870853,10.425848,37.870819)",
+        "yaw": "-0.29452431",
+        "pitch": "0.00000000",
+        "grounded": "1"
+      }
+    },
+    {
+      "stage": "before-final-ack",
+      "fields": {
+        "mode": "1",
+        "mission": "0",
+        "welcome_page": "8",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(28.870853,10.425848,37.870819)",
+        "yaw": "-0.29452431",
+        "pitch": "0.00000000",
+        "grounded": "1"
+      }
+    },
+    {
+      "stage": "accepted",
+      "fields": {
+        "mode": "1",
+        "mission": "9031",
+        "welcome_page": "9",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(28.870853,10.425848,37.870819)",
+        "yaw": "-0.29452431",
+        "pitch": "0.00000000",
+        "grounded": "1"
+      }
+    },
+    {
+      "stage": "reopened",
+      "fields": {
+        "mode": "1",
+        "mission": "9031",
+        "welcome_page": "9",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(28.870853,10.425848,37.870819)",
+        "yaw": "-0.29452431",
+        "pitch": "0.00000000",
+        "grounded": "1"
+      }
+    },
+    {
+      "stage": "reloaded",
+      "fields": {
+        "mode": "1",
+        "mission": "9031",
+        "welcome_page": "9",
+        "arrival": "0",
+        "supplies": "0",
+        "known": "0",
+        "wood": "200",
+        "meat": "400",
+        "juice": "10",
+        "shovels": "0",
+        "pickaxes": "0",
+        "axes": "0",
+        "script406": "0",
+        "position": "(28.870853,10.425848,37.870819)",
+        "yaw": "-0.29452431",
+        "pitch": "0.00000000",
+        "grounded": "1"
+      }
+    }
+  ],
+  "log": "rebuild/build/welcome-playtest/welcome.log"
+}

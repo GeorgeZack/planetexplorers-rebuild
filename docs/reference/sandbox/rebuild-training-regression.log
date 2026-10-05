@@ -1,0 +1,43 @@
+Training contact: frame 960 stage 0 clip 0.137000 damage 7.520828 HP 212.000000 -> 204.479172 died 0
+Training contact: frame 978 stage 1 clip 0.228333 damage 7.520828 HP 204.479172 -> 196.958344 died 0
+Training contact: frame 998 stage 2 clip 0.205500 damage 7.520828 HP 196.958344 -> 189.437515 died 0
+Training contact: frame 1038 stage 0 clip 0.137000 damage 7.520828 HP 189.437515 -> 181.916687 died 0
+Training contact: frame 1056 stage 1 clip 0.228333 damage 7.520828 HP 181.916687 -> 174.395859 died 0
+Training contact: frame 1077 stage 2 clip 0.228333 damage 7.520828 HP 174.395859 -> 166.875031 died 0
+Training contact: frame 1116 stage 0 clip 0.137000 damage 7.520828 HP 166.875031 -> 159.354202 died 0
+Training contact: frame 1135 stage 1 clip 0.226050 damage 7.520828 HP 159.354202 -> 151.833374 died 0
+Training contact: frame 1158 stage 2 clip 0.226050 damage 7.520828 HP 151.833374 -> 144.312546 died 0
+Training contact: frame 1173 stage 3 clip 0.102750 damage 7.520828 HP 144.312546 -> 136.791718 died 0
+Training contact: frame 1212 stage 0 clip 0.123300 damage 7.520828 HP 136.791718 -> 129.270889 died 0
+Training contact: frame 1553 stage 0 clip 0.137000 damage 15.041664 HP 129.270889 -> 114.229225 died 0
+Training contact: frame 1569 stage 1 clip 0.182667 damage 7.520836 HP 114.229225 -> 106.708389 died 0
+Training contact: frame 1591 stage 2 clip 0.205500 damage 7.520836 HP 106.708389 -> 99.187553 died 0
+Training contact: frame 1605 stage 3 clip 0.091333 damage 7.520836 HP 99.187553 -> 91.666718 died 0
+Training contact: frame 1631 stage 0 clip 0.137000 damage 15.041664 HP 91.666718 -> 76.625053 died 0
+Training contact: frame 1647 stage 1 clip 0.182667 damage 7.520836 HP 76.625053 -> 69.104218 died 0
+Training contact: frame 1669 stage 2 clip 0.205500 damage 7.520832 HP 69.104218 -> 61.583385 died 0
+Training contact: frame 1683 stage 3 clip 0.091333 damage 7.520832 HP 61.583385 -> 54.062553 died 0
+Training contact: frame 1709 stage 0 clip 0.137000 damage 15.041668 HP 54.062553 -> 39.020885 died 0
+Training contact: frame 1728 stage 1 clip 0.226050 damage 15.041668 HP 39.020885 -> 23.979218 died 0
+Training contact: frame 1751 stage 2 clip 0.226050 damage 7.520834 HP 23.979218 -> 16.458384 died 0
+Training contact: frame 1766 stage 3 clip 0.102750 damage 7.520834 HP 16.458384 -> 8.937550 died 0
+Training contact: frame 1797 stage 0 clip 0.143850 damage 8.937550 HP 8.937550 -> 0.000000 died 1
+Training dig: frame 3857 sample 17,6,20 removed 1 dirt 2 mission 751
+Training dig: frame 3937 sample 17,6,21 removed 0 dirt 2 mission 751
+Training dig: frame 4017 sample 17,6,21 removed 1 dirt 4 mission 751
+Training dig: frame 4097 sample 17,6,22 removed 0 dirt 4 mission 751
+Training dig: frame 4177 sample 17,6,22 removed 1 dirt 9006 mission 752
+Training building complete: 19 added, 1 removed, dirt 8987, score 50
+Training room: 15000 frames, mission 756, camera mask 3, movement mask 15, position 9.879 1.479 12.503
+Training visuals: recovered diffuse room textures; recovered starter character with six locomotion clips.
+Training locomotion: clip NormalIdle, seconds 0.499, exercised mask 63; discrete selection, sprint uses run fallback.
+Training items: Herbal Juice 9; kit transferred 1; Andy reached 1
+Training NPCs: 9 of 9 recovered characters, idle clock 250.000
+Training hare: mode 1, position 1.449 1.940 18.637, decisions 1
+Training equipment: knife owned 1, equipped 0; HP 500 / 500
+Training gathering: 5 herbs depleted, axe 1, ledger mission 752
+Training crafting: wood 11, script 0, shovel 2, formula 1, axe equipped 0
+Training mining: 5 swings, 3 removals, dirt 8987, shovel 0, durability 3528/3553, triangles 0
+Training building: 19 added, 1 removed, score 50, cells 0
+Training melee: 8 starts, 24 contacts, hare HP 0.000 / 212.000
+Training result: PASS
