@@ -345,3 +345,10 @@ Before claiming hunt difficulty parity, implement the supplied [Wood Sword1 and 
 The subsequent sword/shield foundation has recovered ten Sword leaves and staged matching modern attachments; exact ownership, v15 persistence and incoming-hit shield arithmetic pass focused tests. Normal equipment activation remains gated on missing backward Sword leaves and qualified masked block composition, followed by shared body/attachment/defence host integration and physical checks. See [pose group](STARTER_SWORD_POSE_GROUP.md), [shield ownership](SHIELD_OWNERSHIP.md) and [capture gate](SHIELD_LAYER_CAPTURE.md).
 
 The latest isolated capture now supplies SwordWB441/SwordRB708: fresh unified03 stages33 matching body/equipment clocks and42 defence clips with preserved prior payloads. Focused optimized and sanitizer asset checks pass. The manual original recording supplies useful masked block/attack-restoration evidence, but authored looping block exports and runtime host integration remain next; backward recovery is no longer the immediate missing-capture gate.
+
+
+## October6 — source-first combat corrections
+
+The [source-first audit](SOURCE_FIRST_REBUILD.md) now has three implemented corrections: low-health recovery, stamina/comfort cadence, and [historical melee capsule sampling](MELEE_CAPSULE_HISTORY.md). The latest capsule increment uses offline-qualified player/hare centers and shared transient histories, with no new game launch. Full optimized core, focused sanitizer/leak, host integration, content/exporter and CLI checks pass as scoped in [PLAYTEST](../PLAYTEST.md). The source numerical oracle agrees across4,103 bounded cases; this does not establish Unity scheduling or ordinary combat parity.
+
+The next source-only target is sword/shield action integration and contact playback rules. Keep masked block-pose qualification separate, and retain the existing UI equipment gate until its actual presentation/defence contract is ready. A prepared user-operated recording can cover ordinary combat, recovery and partial-kill save/reload once those comparisons are useful; repeated broad exploratory play is not a prerequisite for source extraction.

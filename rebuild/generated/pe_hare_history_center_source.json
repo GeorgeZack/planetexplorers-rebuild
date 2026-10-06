@@ -1,0 +1,63 @@
+{
+  "actor_transform": -8365773678112902782,
+  "capsule": 6789482777293099034,
+  "collider_transform": 8416349922905001328,
+  "excluded_other_subtree_colliders": [
+    -6676639898669330534,
+    -5942150691530385237,
+    -5581677925788140944,
+    -5082741201395336496,
+    -4574820341462009843,
+    -4483152948696928861,
+    -3268736819679139802,
+    -2368905673238263385,
+    -2101344497280277659,
+    -2056277939155803337,
+    -873405663368420899,
+    -460973457131141793,
+    2488915591783517677,
+    2787926470306170780,
+    6686478514934414328,
+    7943347182847372198,
+    8770390260095437463,
+    9126769802188632284
+  ],
+  "excluded_triggers": [
+    2211864937985736901,
+    4751048594153301391,
+    5607235435353181042
+  ],
+  "local_center": [
+    0.0,
+    0.75,
+    0.0
+  ],
+  "model_controller": 3316048974275031591,
+  "model_transform": 3647756363348019165,
+  "schema": "pe-hare-history-center-1",
+  "scope": "Source-derived live model collider center; ragdoll is a sibling, triggers excluded. Uniform runtime scale and entity yaw apply at query time. No live measurement.",
+  "solid_colliders": [
+    6789482777293099034
+  ],
+  "source_bundle": "AssetBundles/Monster/m_lepus_hare.unity3d",
+  "source_sha256": "94409ad1bf9570048a52c42671986907e2a5ca131f55f73737e5b7d7cff76c35",
+  "sources": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "sha256": "dbf15ded3ca9803505102c1c780361ae06680c647114fe2f38022e3d277988ff"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PeTrans.cs",
+      "sha256": "6301be534046910e0f3cf27ff101ff876ad8be0fab8caed9dc6b74c46aff28cd"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PEUtil.cs",
+      "sha256": "2b9314728929e9e3796800629eb85e7ee4c5b9c6fa7f5dad7874f0ccc17d5f0e"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+      "sha256": "238d3a50ab81caa3afc338234111670637556bbd4083ef3073774e0f25b8b4f8"
+    }
+  ],
+  "view_root": 420381330858334883
+}

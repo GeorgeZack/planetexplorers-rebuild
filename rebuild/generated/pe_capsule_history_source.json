@@ -1,0 +1,47 @@
+{
+  "schema": 1,
+  "source_files": [
+    {
+      "path": "Assets/Scripts/Attack/PECapsuleTrigger.cs",
+      "sha256": "cd314c58d1a065bb679fd78cd061a5375a12289dacc5aaf7943d12da956a6f4f"
+    },
+    {
+      "path": "Assets/Scripts/ZhouXun/Voxel Creation/Scripts/WhiteCat/Common/Utility.cs",
+      "sha256": "6f1a26e849e231e1fd806de69ca0c5515ee9f1a0d479f1cf48de6fff5423e7ec"
+    }
+  ],
+  "method_guards": {
+    "trigger_update": "37d5e50b1ebd2a6dd4622f941424d5be34cc02f06fa433c0c23ec5678c73cd26",
+    "capsule_overlap": "035e2c8bff200babe1374875bc420ac5997d894242d105585f995f53a20b1f7d",
+    "history_sampling": "8a89b30554c8fa0b00d1cc9a73a411c818ea4b562cd529a0b1f64bd6ba9e9258",
+    "point_segment": "b359a8657f0d558eacddbf2e26943c82b0df18fd1e4f26dc842a05a5d47e3ffb",
+    "segment_segment": "18a8e4b0d22fa5bda63374e5ade81666b4ec4fcf95844dcabe9b7d50e183c201"
+  },
+  "unity_engine": {
+    "name": "UnityEngine.dll",
+    "sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+    "method_il": {
+      "Vector3.op_Equality": "020328e004000628d104000622fee6db2efe042a",
+      "Vector3.Normalize(Vector3)": "0228cf0400060a0622acc527374308000000020628e40400062a28d50400062a"
+    }
+  },
+  "rule": {
+    "vector_equality_squared": 9.999999439624929e-11,
+    "normalize_magnitude": 9.999999747378752e-06,
+    "point_segment_squared_cutoff": 9.999999974752427e-07,
+    "sampling_distance_factor": 0.5,
+    "strict_overlap": true,
+    "count_one_uses_previous": true,
+    "target_uses_current": true,
+    "contact_distance": 0,
+    "parent_center": "entity.centerPos"
+  },
+  "native_limits": {
+    "max_samples": 4096,
+    "max_absolute_coordinate": 1000000,
+    "max_radius": 1000000,
+    "fail_closed": true
+  },
+  "arithmetic": "Installed Mono scalar expression intermediates are wider than float; Vector3 components and assigned float locals round. Preserve WhiteCat NaN parallel fallback and strict tie order. This is not the generic double closest solver.",
+  "qualification": "Standalone original-source managed math against installed Mono/UnityEngine; no game, engine objects, graphics, input or saves. Native finite/work bounds are adapters."
+}

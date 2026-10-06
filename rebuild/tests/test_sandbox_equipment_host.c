@@ -146,6 +146,8 @@ static void old_save_and_eligibility(PeGame *g){
     g->inventory.slots[0]=saved;a.sword=true;
     CHECK(sandbox_blade_prepare(&a,"source-assets",1,&sword,&boxes,error,sizeof error));
     CHECK(asset_calls==1&&load_calls==1&&init_calls==1&&sword.ready&&sword.setup.weapon_item_id==1&&sword.setup.attack==20);
+    CHECK(sword.setup.history_enabled&&sword.setup.history_local_center.x==0&&
+        sword.setup.history_local_center.y==.875f&&sword.setup.history_local_center.z==0);
     /* Stable slot binding is reacquired from the current game after load. */
     g->inventory.slots[3]=g->inventory.slots[0];memset(&g->inventory.slots[0],0,sizeof(PeSlot));g->inventory.slots[3].instance_id=92;g->equipped_instance_id=92;
     CHECK(sandbox_action_pose(&a,g,&tool,&sword,true)&&a.pose.instance_id==92);

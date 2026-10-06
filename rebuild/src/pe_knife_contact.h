@@ -2,8 +2,9 @@
 #define PE_KNIFE_CONTACT_H
 #include "pe_combat.h"
 #include "pe_hitbox.h"
+#include "pe_capsule_history.h"
 /* Stationary skill20110011, one actual knife capsule against one host-ordered
- * target. No broadphase, swept history, target perception or mission mutation. */
+ * target. No broadphase, target perception or mission mutation. */
 typedef struct {
     uint64_t entity_id;
     PeHitboxCapsule weapon;
@@ -12,6 +13,9 @@ typedef struct {
     /* Host verifies alive attacker, held knife, action compatibility, active
      * skill guide, collision layers and all remaining source permissions. */
     bool eligible;
+    /* Optional source history, advanced once by the trigger owner. Current
+     * capsule must agree with weapon. NULL retains instantaneous callers. */
+    const PeCapsuleHistory *history;
 } PeKnifeContactAttack;
 typedef struct {
     uint64_t entity_id;
@@ -35,6 +39,8 @@ typedef struct {
     size_t defence_index;
     uint32_t defence_form,defence_material;
     PeHitboxContact contact;
+    bool historical;
+    PeCapsuleHistoryContact history_contact;
     float contact_scale,damage,applied_damage,hp_before,hp_after;
     bool died; /* Only an actual positive-to-zero HP transition. */
 } PeKnifeContactResult;

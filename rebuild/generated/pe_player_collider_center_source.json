@@ -1,0 +1,120 @@
+{
+  "actors": [
+    {
+      "collider": 13600000,
+      "height": 1.75,
+      "ignored_trigger_colliders": [
+        13613362,
+        13671984,
+        13677940,
+        13694308
+      ],
+      "interpretation": "Only Model subtree is passed to PeTrans.InitBound; sibling ragdoll/OutCollider geometry is excluded.",
+      "local_center": [
+        0.0,
+        0.875,
+        0.0
+      ],
+      "model_controller": 11429522,
+      "model_transform": 400170,
+      "nontrigger_colliders_outside_model": [
+        6500000,
+        6500002,
+        13500000,
+        13600002,
+        13600004,
+        13600006,
+        13600008,
+        13600010,
+        13600012,
+        13600014,
+        13600016
+      ],
+      "radius": 0.3700000047683716,
+      "sex": "female",
+      "view_root": 11424092
+    },
+    {
+      "collider": 13654112,
+      "height": 1.75,
+      "ignored_trigger_colliders": [
+        13617024,
+        13635410,
+        13642540,
+        13694046
+      ],
+      "interpretation": "Only Model subtree is passed to PeTrans.InitBound; sibling ragdoll/OutCollider geometry is excluded.",
+      "local_center": [
+        0.0,
+        0.875,
+        0.0
+      ],
+      "model_controller": 11420780,
+      "model_transform": 455538,
+      "nontrigger_colliders_outside_model": [
+        6539754,
+        6564970,
+        13542308,
+        13610492,
+        13620442,
+        13625336,
+        13627044,
+        13653770,
+        13653884,
+        13680068,
+        13691498
+      ],
+      "radius": 0.3700000047683716,
+      "sex": "male",
+      "view_root": 11453550
+    }
+  ],
+  "limits": [
+    "Source-prefab supported living model at unit scale; no live component capture.",
+    "World center must use the actual entity position/yaw/scale.",
+    "No ragdoll, altered collider hierarchy, arbitrary scaling, or incomplete model bounds qualification."
+  ],
+  "schema": "pe-player-collider-center-1",
+  "sources": [
+    {
+      "path": "Assets/Scripts/Assist/PEUtil.cs",
+      "sha256": "2b9314728929e9e3796800629eb85e7ee4c5b9c6fa7f5dad7874f0ccc17d5f0e"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PeTrans.cs",
+      "sha256": "6301be534046910e0f3cf27ff101ff876ad8be0fab8caed9dc6b74c46aff28cd"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/PeEntityPartial.cs",
+      "sha256": "35c45dbb9703fda7fdd381e6e5ec4271e1ab92d02c6162e63794ed274edc8e27"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "sha256": "dbf15ded3ca9803505102c1c780361ae06680c647114fe2f38022e3d277988ff"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AvatarCmpt.cs",
+      "sha256": "fb640294118faa17356cc3648c59039cb9a80341c5bf0b660c0e844189097d9d"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+      "sha256": "238d3a50ab81caa3afc338234111670637556bbd4083ef3073774e0f25b8b4f8"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PEModelController.cs.meta",
+      "sha256": "ff38e2b308c1416c5ce66e3cc16172e1a3f5d5dd482931e8648b8589d99323f0"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewRoot.cs.meta",
+      "sha256": "f2161d69412565867c9e06be515f47c1c9c96b269c8fa8431c0c2582837278a8"
+    },
+    {
+      "path": "Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab",
+      "sha256": "1e518e5af9afd09d89e16a3a2dd776abd42846143ff6b40e409fdf4bb08ae441"
+    },
+    {
+      "path": "Assets/Resources/Prefab/PlayerPrefab/MaleModel.prefab",
+      "sha256": "fe19a5d5019c8f2273fe562aa536015ddecb2eae44ba2169d864c4517150ae58"
+    }
+  ]
+}

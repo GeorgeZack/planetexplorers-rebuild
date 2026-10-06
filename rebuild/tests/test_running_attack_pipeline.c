@@ -178,7 +178,7 @@ int pe_test_running_attack_pipeline(void){
     PeRootMotion *curve=pe_root_motion_load(motion,error,sizeof error);PeGame *g=calloc(1,sizeof *g);PeSandboxCollision *c=pe_sandbox_collision_create();
     CHECK(body&&knife&&boxes&&curve&&g&&c);
     if(body&&knife&&boxes&&curve&&g&&c){
-        PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=boxes,.gender=PE_COMBAT_FEMALE,.player_id=1,
+        PeSandboxMeleeSetup setup={.weapon_item_id=33,.history_enabled=true,.history_local_center={0,.875f,0},.body=body,.drawn_weapon=knife,.drawn_capsule=boxes,.gender=PE_COMBAT_FEMALE,.player_id=1,
             .attack=19,.stamina_reduce_percent=1,.running_motion_ready=true};
         scenario(g,c,setup,curve,0,false);scenario(g,c,setup,curve,0,true);
         scenario(g,c,setup,curve,1,false);scenario(g,c,setup,curve,2,false);

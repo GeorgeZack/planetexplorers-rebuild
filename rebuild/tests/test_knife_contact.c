@@ -47,6 +47,23 @@ int pe_test_knife_contact(void){
     PeKnifeContactAttack attack={.entity_id=1,.weapon={{0,0,0},{0,1,0},.3f},.attack=19,.eligible=true};
     PeKnifeContactTarget target={.entity_id=2,.actor=actor,.hitboxes=boxes,.clip=0,.scale=1,.defense=29,.hp=100,.max_hp=100,.eligible=true};
     PeCombat a=opened();PeKnifeContactResult r;
+    /* Endpoint snapshots miss on both sides; original sampled history crosses
+     * the target and retains the first defence record and guide dedupe. */
+    PeCapsuleHistory history={.previous_a={-2,0,0},.previous_b={-2,1,0},
+        .current={{2,0,0},{2,1,0},.3f}};
+    PeKnifeContactAttack swept=attack;swept.weapon=history.current;swept.history=&history;
+    CHECK(!pe_hitbox_contact(history.current,(PeHitboxCapsule){{.4f,0,0},{.4f,1,0},.25f},NULL));
+    CHECK(pe_knife_contact_resolve(&a,&swept,&target,&r)==PE_KNIFE_CONTACT_HIT);
+    CHECK(r.historical&&r.defence_index==2&&r.history_contact.sample_count==7&&r.history_contact.sample_index>0);
+    unchanged(&a,&swept,&target,PE_KNIFE_CONTACT_IGNORED);
+    a=opened();target.hp=100;history.previous_a.x=NAN;
+    unchanged(&a,&swept,&target,PE_KNIFE_CONTACT_INVALID);history.previous_a.x=-2;
+    swept.weapon.radius=.2f;unchanged(&a,&swept,&target,PE_KNIFE_CONTACT_INVALID);
+    /* Count1 tests previous endpoints, even if current would overlap. */
+    history=(PeCapsuleHistory){.previous_a={-.9f,0,0},.previous_b={-.9f,1,0},
+        .current={{-.4f,0,0},{-.4f,1,0},.3f}};swept.weapon=history.current;
+    unchanged(&a,&swept,&target,PE_KNIFE_CONTACT_MISS);
+    a=opened();target.hp=100;
     CHECK(pe_knife_contact_resolve(&a,&attack,&target,&r)==PE_KNIFE_CONTACT_HIT);
     CHECK(r.defence_index==2&&r.contact_scale==2&&fabsf(r.damage-361.0f/48*2)<.00001f&&r.target_id==2&&!r.died);
     CHECK(r.contact.axis_distance>.39f); /* Head wins although body is deeper. */
@@ -75,6 +92,7 @@ int pe_test_knife_contact(void){
     target.eligible=false;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_IGNORED);target.eligible=true;
     target.entity_id=attack.entity_id;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_IGNORED);target.entity_id=2;
     a.contact_open=false;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_IGNORED);a=opened();
+    a.variant=(PeCombatVariant)99;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_INVALID);a=opened();
     target.seconds=NAN;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_INVALID);target.seconds=0;
     target.scale=0;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_INVALID);target.scale=1;
     target.hp=NAN;unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_INVALID);target.hp=100;

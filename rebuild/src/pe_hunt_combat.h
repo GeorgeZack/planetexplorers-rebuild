@@ -15,6 +15,7 @@ typedef struct {
     PeHarePerception sensors[PE_HUNT_ENCOUNTER_COUNT];
     PeHareAttack attacks[PE_HUNT_ENCOUNTER_COUNT];
     PeHareSkill skills[PE_HUNT_ENCOUNTER_COUNT];
+    PeHareDamageHistory histories[PE_HUNT_ENCOUNTER_COUNT];
     bool hostile[PE_HUNT_ENCOUNTER_COUNT];
     double attack_seconds[PE_HUNT_ENCOUNTER_COUNT],clock;
     size_t attack_clips[PE_HARE_ATTACK_COUNT];

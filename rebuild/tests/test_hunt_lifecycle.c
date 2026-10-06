@@ -109,7 +109,7 @@ static void actual_lifecycle(void){
     CHECK(pe_game_collision_update(g,collision,error,sizeof error)&&pe_game_collision_settle(g,collision));
     CHECK(pe_adventure_hunt_step(g)&&g->hunt_state==PE_HUNT_ENCOUNTER_PENDING&&g->hunt_kills==0);
     PeHuntEncounter h={0};PeSandboxMelee melee={0};
-    PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,.player_id=1,
+    PeSandboxMeleeSetup setup={.weapon_item_id=33,.history_enabled=true,.history_local_center={0,.875f,0},.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,.player_id=1,
         .attack=pe_player_defaults.attack+pe_item_def(33)->attack,.stamina_reduce_percent=pe_player_defaults.stamina_reduce_percent};
     CHECK(pe_sandbox_melee_init(&melee,&setup));
     bool ready=pe_hunt_encounter_prepare(&h,&g->world,collision,hare,hb,g->hunt_kills,error,sizeof error);CHECK(ready);if(!ready)goto done;

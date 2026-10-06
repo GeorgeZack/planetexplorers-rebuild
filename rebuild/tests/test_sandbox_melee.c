@@ -55,7 +55,7 @@ static void actual_assets(void){
     PeHitboxes*w=pe_hitboxes_load(paths[2],knife,error,sizeof error),*d=pe_hitboxes_load(paths[4],hare,error,sizeof error);
     CHECK(body&&knife&&hare&&w&&d);
     if(body&&knife&&hare&&w&&d){
-        PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=w,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};
+        PeSandboxMeleeSetup setup={.weapon_item_id=33,.history_enabled=true,.history_local_center={0,.875f,0},.body=body,.drawn_weapon=knife,.drawn_capsule=w,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};
         PeSandboxMelee h;bool ready=pe_sandbox_melee_init(&h,&setup);CHECK(ready);
         if(ready){
             PeKnifeContactTarget t[6];targets_init(t,hare,d,212);for(unsigned i=0;i<6;i++){t[i].clip=pe_actor_find_clip(hare,"idle");t[i].position.x=100+i;}
@@ -148,7 +148,7 @@ static void actual_running_assets(void){
     char error[160];PeActor *body=pe_actor_load(paths[0],error,sizeof error),*knife=pe_actor_load(paths[1],error,sizeof error);
     PeHitboxes *boxes=knife?pe_hitboxes_load(paths[2],knife,error,sizeof error):NULL;CHECK(body&&knife&&boxes);
     if(body&&knife&&boxes){
-        PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=boxes,.gender=PE_COMBAT_FEMALE,
+        PeSandboxMeleeSetup setup={.weapon_item_id=33,.history_enabled=true,.history_local_center={0,.875f,0},.body=body,.drawn_weapon=knife,.drawn_capsule=boxes,.gender=PE_COMBAT_FEMALE,
             .player_id=1,.attack=19,.stamina_reduce_percent=1,.running_motion_ready=true};
         PeSandboxMelee h;bool ready=pe_sandbox_melee_init(&h,&setup);CHECK(ready);
         if(ready)for(unsigned combo=0;combo<2;combo++){
@@ -200,6 +200,60 @@ static void weapon_clock_tests(const PeActor *a,const PeHitboxes *w){
     CHECK(first_hit[0]==4&&first_hit[1]==5);
     CHECK(ended[1]>ended[0]);
 }
+static void history_tests(const PeActor *a,const PeHitboxes *w,const PeHitboxes *d){
+    PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=a,.drawn_weapon=a,.drawn_capsule=w,
+        .gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1,.history_enabled=true};
+    PeSandboxMelee h;CHECK(pe_sandbox_melee_init(&h,&setup));
+    PeSandboxMeleeFrame f=frame();f.player_position.x=-2;
+    PeKnifeContactTarget t[6];targets_init(t,a,d,212);float energy=100;
+    CHECK(pe_sandbox_melee_begin(&h,f.gate,&energy));PeSandboxMeleeUpdate out;
+    unsigned ticks=0;
+    while(!h.action.contact_open&&ticks++<60)CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(h.history_active&&h.history.previous_a.x==h.history.current.a.x);
+    for(unsigned i=0;i<6;i++)CHECK(t[i].hp==212);
+    /* No candidate query is necessary to advance a continuously active part. */
+    PeHitboxCapsule previous=h.history.current;
+    CHECK(pe_sandbox_melee_step(&h,&f,NULL,0,&energy,&out));
+    CHECK(h.history.previous_a.x==previous.a.x&&h.history.current.a.x!=previous.a.x);
+    /* An active displacement is sampled; all six targets use one snapshot. */
+    f.player_position.x=2;CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    for(unsigned i=0;i<6;i++){
+        CHECK(out.status[i]==PE_KNIFE_CONTACT_HIT&&out.contact[i].historical&&t[i].hp<212);
+        CHECK(out.contact[i].history_contact.sample_index==out.contact[0].history_contact.sample_index);
+    }
+    /* Dedupe rejects another damage dispatch but must not freeze the pose. */
+    previous=h.history.current;CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(h.history.previous_a.x==previous.a.x&&h.history.current.a.x!=previous.a.x);
+    for(unsigned i=0;i<6;i++)CHECK(out.status[i]==PE_KNIFE_CONTACT_IGNORED);
+    /* Eligibility-list reset alone is not a trigger activation or pose reset. */
+    h.action.target_count=0;memset(h.action.targets,0,sizeof h.action.targets);
+    previous=h.history.current;for(unsigned i=0;i<6;i++)t[i].position.x=2;
+    CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(h.history.previous_a.x==previous.a.x&&h.history.previous_a.x!=h.history.current.a.x);
+    for(unsigned i=0;i<6;i++)CHECK(out.status[i]==PE_KNIFE_CONTACT_HIT);
+    /* Invalid prior geometry cannot publish action time, stamina or contacts. */
+    h.history.current.a.x=NAN;PeSandboxMelee before=h;float before_energy=energy;
+    PeSandboxMeleeUpdate before_out=out;
+    CHECK(!pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(!memcmp(&h,&before,sizeof h)&&energy==before_energy&&!memcmp(&out,&before_out,sizeof out));
+    pe_sandbox_melee_cancel(&h);CHECK(!h.history_active);
+    /* Reopening an exact new instance at a distant pose pins the activation;
+     * it must not sweep through the stale/corrupt prior trigger window. */
+    f.gate.equipped_instance_id=f.gate.drawn_instance_id=92;f.player_position.x=50;
+    targets_init(t,a,d,212);CHECK(pe_sandbox_melee_begin(&h,f.gate,&energy));ticks=0;
+    while(!h.action.contact_open&&ticks++<60)CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(h.history_active&&h.history.previous_a.x==h.history.current.a.x);
+    for(unsigned i=0;i<6;i++)CHECK(t[i].hp==212);
+    PeCapsuleHistory frozen=h.history;ticks=0;
+    while(h.action.contact_open&&ticks++<120){
+        frozen=h.history;CHECK(pe_sandbox_melee_step(&h,&f,NULL,0,&energy,&out));
+    }
+    CHECK(!h.history_active&&!memcmp(&frozen,&h.history,sizeof frozen));
+    pe_sandbox_melee_cancel(&h);f.player_position.x=-50; /* Same instance, new window. */
+    CHECK(pe_sandbox_melee_begin(&h,f.gate,&energy));ticks=0;
+    while(!h.action.contact_open&&ticks++<60)CHECK(pe_sandbox_melee_step(&h,&f,NULL,0,&energy,&out));
+    CHECK(h.history_active&&h.history.previous_a.x==h.history.current.a.x);
+}
 int pe_test_sandbox_melee(void){
     failures=0;char path[]="/tmp/pe-sandbox-melee-XXXXXX";int fd=mkstemp(path);CHECK(fd>=0);if(fd<0)return failures;close(fd);
     PeActor*a=actor_fixture(path,2,false,false),*wrong=actor_fixture(path,1,false,false),*missing=actor_fixture(path,2,true,false);
@@ -207,6 +261,7 @@ int pe_test_sandbox_melee(void){
     PeHitboxes*w=boxes_fixture(path,a,true),*d=boxes_fixture(path,a,false);CHECK(w&&d);if(!w||!d){pe_hitboxes_free(w);pe_hitboxes_free(d);goto done;}
     PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=a,.drawn_weapon=a,.drawn_capsule=w,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};
     weapon_clock_tests(a,w);
+    history_tests(a,w,d);
     PeSandboxMelee h,before;CHECK(pe_sandbox_melee_init(&h,&setup));before=h;
     PeSandboxMeleeSetup bad=setup;bad.body=wrong;CHECK(!pe_sandbox_melee_init(&h,&bad));CHECK(!memcmp(&h,&before,sizeof h));
     bad=setup;bad.drawn_weapon=missing;CHECK(!pe_sandbox_melee_init(&h,&bad));bad=setup;bad.drawn_capsule=d;CHECK(!pe_sandbox_melee_init(&h,&bad));CHECK(!memcmp(&h,&before,sizeof h));

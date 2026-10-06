@@ -18,6 +18,8 @@ In the Adventure sandbox, equip Knife33 and draw it with a fresh world click. Ru
 
 ## Build and run
 
+Sandbox blade and hare attacks now use sampled capsule history between active poses, with source collider centers recovered offline. This changes contact opportunities in both directions; it is not a damage/stat adjustment. Numerical and headless integration checks are recorded in the [capsule-history audit](../docs/audit/MELEE_CAPSULE_HISTORY.md). The native fixed-tick schedule still differs from Unity's animation/physics ordering; physical combat acceptance remains pending.
+
 Adventure stamina now recovers in source-timed pulses. Comfort gradually decreases and increases the delay after stamina use; the Character panel shows its current value. Comfort survives saves. The raw rules and save behavior are tested headlessly; an on-screen recovery comparison remains pending. See [stamina and comfort](../docs/audit/STAMINA_RECOVERY.md).
 
 Adventure Sandbox now includes the source low-health recovery rule: below 33% HP, going at least four seconds without a hit allows periodic recovery of 1% maximum HP. Recovery stops at or above the threshold and cannot revive a dead player. This increment has source and headless coverage; an on-screen retreat/recovery check remains pending. See [recovery lifecycle and timing limits](../docs/audit/PASSIVE_RECOVERY.md).

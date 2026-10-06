@@ -24,7 +24,8 @@ static bool begin_variant(const PeSandboxMelee *h,PeSandboxMeleeGate g,PeCombatV
 static bool setup_valid(const PeSandboxMeleeSetup *s){
     return s&&s->body&&s->drawn_weapon&&s->drawn_capsule&&s->player_id&&
         pe_combat_item_animation_speed(s->weapon_item_id,100)>0&&
-        pe_combat_clip(s->gender,PE_COMBAT_THIRD_PERSON,0)&&scalar(s->attack,1000000)&&scalar(s->stamina_reduce_percent,1000);
+        pe_combat_clip(s->gender,PE_COMBAT_THIRD_PERSON,0)&&scalar(s->attack,1000000)&&scalar(s->stamina_reduce_percent,1000)&&
+        (!s->history_enabled||point(s->history_local_center,1000000));
 }
 static bool valid(const PeSandboxMelee *h){
     return h&&h->ready&&setup_valid(&h->setup)&&pe_combat_variant_clip(h->action.gender,h->action.view,h->action.variant,h->action.stage)&&
@@ -90,13 +91,13 @@ bool pe_sandbox_melee_begin(PeSandboxMelee*h,PeSandboxMeleeGate gate,float*stami
     if(!valid(h)||h->tick_pending||!gate_valid(gate)||!begin_variant(h,gate,&variant)||!stamina||!scalar(*stamina,1000000)||h->action.active)return false;
     PeSandboxMelee next=*h;float remaining=*stamina;
     if(!pe_combat_begin_variant(&next.action,next.setup.gender,PE_COMBAT_THIRD_PERSON,variant,next.setup.stamina_reduce_percent,&remaining))return false;
-    next.instance_id=gate.equipped_instance_id;*h=next;*stamina=remaining;return true;
+    next.instance_id=gate.equipped_instance_id;next.history_active=false;*h=next;*stamina=remaining;return true;
 }
 bool pe_sandbox_melee_queue(PeSandboxMelee*h,PeSandboxMeleeGate gate){
     return valid(h)&&!h->tick_pending&&gate_valid(gate)&&action_allowed(h,gate)&&h->instance_id==gate.equipped_instance_id&&pe_combat_queue_combo(&h->action);
 }
 void pe_sandbox_melee_cancel(PeSandboxMelee*h){
-    if(h&&h->ready){pe_combat_stop(&h->action);h->instance_id=0;h->tick_pending=false;
+    if(h&&h->ready){pe_combat_stop(&h->action);h->instance_id=0;h->tick_pending=false;h->history_active=false;
         h->tick_cancelled=false;h->tick_advance=PE_COMBAT_IDLE;h->tick_interval=(PeCombatInterval){0};}
 }
 bool pe_sandbox_melee_advance(PeSandboxMelee*h,PeSandboxMeleeGate gate,float*stamina){
@@ -136,14 +137,31 @@ bool pe_sandbox_melee_resolve_with_weapon(PeSandboxMelee*h,const PeSandboxMeleeF
     }
     PeKnifeContactTarget staged[PE_SANDBOX_MELEE_TARGETS];
     if(count)memcpy(staged,targets,count*sizeof *targets);
+    if(!next.action.active||!next.action.contact_open)next.history_active=false;
     if(next.action.active){
         size_t clip=next.action.variant==PE_COMBAT_RUNNING&&next.action.stage==0?next.running_weapon_clip:next.weapon_clip[next.action.stage];
         if(!pe_hitbox_pose(next.setup.drawn_capsule,next.setup.drawn_weapon,0,clip,next.action.clip_time,
                           f->player_position,f->player_yaw,f->player_scale,&result.weapon))return false;
         result.weapon_valid=true;
+        if(next.setup.history_enabled&&next.action.contact_open){
+            PeVec3 local=next.setup.history_local_center;
+            float yaw=f->player_yaw*.01745329251994329577f,s=sinf(yaw),c=cosf(yaw);
+            PeVec3 center={f->player_position.x+f->player_scale*(c*local.x+s*local.z),
+                f->player_position.y+f->player_scale*local.y,
+                f->player_position.z+f->player_scale*(-s*local.x+c*local.z)};
+            next.history=(PeCapsuleHistory){
+                .previous_a=next.history_active?next.history.current.a:result.weapon.a,
+                .previous_b=next.history_active?next.history.current.b:result.weapon.b,
+                .current=result.weapon,.parent_center=center};
+            /* Validate once even with no candidates; queries never own time. */
+            PeCapsuleHistoryContact check;
+            if(pe_capsule_history_contact(&next.history,result.weapon,&check)==PE_CAPSULE_HISTORY_INVALID)return false;
+            next.history_active=true;
+        }
         for(size_t i=0;i<count;i++){
             PeKnifeContactAttack attack={.entity_id=next.setup.player_id,.weapon=result.weapon,.attack=weapon?pe_sword_attack(&staged_weapon,base_attack):next.setup.attack,
-                .critical=f->critical[i],.eligible=f->attacker_eligible};
+                .critical=f->critical[i],.eligible=f->attacker_eligible,
+                .history=next.setup.history_enabled&&next.history_active?&next.history:NULL};
             result.status[i]=pe_knife_contact_resolve(&next.action,&attack,&staged[i],&result.contact[i]);
             if(result.status[i]==PE_KNIFE_CONTACT_INVALID)return false;
             if(weapon&&result.status[i]==PE_KNIFE_CONTACT_HIT&&!pe_sword_wear(&staged_weapon))return false;

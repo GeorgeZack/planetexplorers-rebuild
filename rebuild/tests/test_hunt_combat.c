@@ -3,6 +3,7 @@
 #include "pe_settlement.h"
 #include "../generated/pe_starter_outfit_source.h"
 #include "../generated/pe_hare_perception_source.h"
+#include "../generated/pe_player_collider_center_source.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -309,7 +310,7 @@ static void sword_wear_tests(const PeHuntCombat *initial,PeWorld*w,PeSandboxColl
     for(unsigned i=0;i<3;i++){FILE*f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"hunt sword wear: SKIP staged source Sword fixture %s\n",paths[i]);return;}fclose(f);}
     char error[160];PeActor *body=pe_actor_load(paths[0],error,sizeof error),*sword=pe_actor_load(paths[1],error,sizeof error);
     PeHitboxes *capsule=pe_hitboxes_load(paths[2],sword,error,sizeof error);CHECK(body&&sword&&capsule);if(!body||!sword||!capsule)goto done;
-    PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.weapon_item_id=1,.body=body,.drawn_weapon=sword,.drawn_capsule=capsule,
+    PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.history_enabled=true,.history_local_center={pe_player_collider_center_source[0].local_center[0],pe_player_collider_center_source[0].local_center[1],pe_player_collider_center_source[0].local_center[2]},.weapon_item_id=1,.body=body,.drawn_weapon=sword,.drawn_capsule=capsule,
         .gender=PE_COMBAT_FEMALE,.player_id=1,.attack=999,.stamina_reduce_percent=1};
     CHECK(pe_sandbox_melee_init(&blade,&setup));PeSandboxMeleeFrame f=frame(p);f.gate.equipped_item_id=1;
     float stamina=100;CHECK(pe_sandbox_melee_begin(&blade,f.gate,&stamina));
@@ -449,7 +450,7 @@ static void running_pending_tests(const PeHuntCombat *initial,PeWorld *w,PeSandb
     CHECK(body&&knife&&player&&kb&&pb);if(!body||!knife||!player||!kb||!pb)goto done;
     /* Explicit headless opt-in tests dispatch, not root-motion qualification or
      * gameplay admission. Staged source poses remain outside installed assets. */
-    PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,
+    PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.history_enabled=true,.history_local_center={pe_player_collider_center_source[0].local_center[0],pe_player_collider_center_source[0].local_center[1],pe_player_collider_center_source[0].local_center[2]},.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,
         .player_id=1,.attack=19,.stamina_reduce_percent=1,.running_motion_ready=true};
     CHECK(pe_sandbox_melee_init(&blade,&setup));PeHuntCombat h=*initial;
     h.player_actor=player;h.player_defence=pb;for(unsigned i=1;i<6;i++)h.encounter.actors[i].present=false;
@@ -487,6 +488,40 @@ static void running_pending_tests(const PeHuntCombat *initial,PeWorld *w,PeSandb
     CHECK(active_checks>200&&h.player_hits>0&&wrong_pose_differences>0);
  done:pe_hitboxes_free(kb);pe_hitboxes_free(pb);pe_actor_free(body);pe_actor_free(knife);pe_actor_free(player);
 }
+static void history_tick_tests(PeHuntCombat h,PeWorld *w,PeSandboxCollision *c,PeHuntCombatPlayer p,PeSandboxMelee blade){
+    for(unsigned i=1;i<6;i++)h.encounter.actors[i].present=false;
+    h.clock=2;CHECK(pe_hare_attack_begin(&h.attacks[0],2,true,1,0));
+    PeHareAttackEvents events;CHECK(pe_hare_attack_update(&h.attacks[0],.4,&events));h.attack_seconds[0]=.4;
+    p.position.x+=100;float hp=p.max_hp,energy=100;unsigned kills=0;bool complete=false;
+    PeSandboxMeleeFrame f=frame(p);PeSandboxMeleeUpdate update;
+    CHECK(!h.skills[0].contact_enabled); /* Animator window, no skill guide. */
+    CHECK(pe_hunt_combat_step(&h,w,c,p,&blade,&f,&hp,&energy,&kills,&update,&complete));
+    CHECK(h.histories[0].initialized&&h.histories[0].active_bones==1&&h.player_hits==0&&hp==p.max_hp);
+    static const size_t indices[]={15,16,17,18};static const unsigned joints[]={22,35,6,13};
+    for(unsigned i=0;i<4;i++){
+        CHECK(h.histories[0].parts[i].index==indices[i]);
+        CHECK(pe_hitboxes_get(h.encounter.defence,indices[i])->joint==joints[i]);
+    }
+    PeCapsuleHistory first=h.histories[0].parts[0].capsule;
+    CHECK(first.previous_a.x==first.current.a.x&&first.previous_a.y==first.current.a.y);
+    PeHare *hare=&h.encounter.actors[0].motion;
+    CHECK(fabsf(first.parent_center.y-(hare->position.y+.75f*hare->scale))<.00001f);
+    CHECK(pe_hunt_combat_step(&h,w,c,p,&blade,&f,&hp,&energy,&kills,&update,&complete));
+    PeCapsuleHistory second=h.histories[0].parts[0].capsule;
+    CHECK(!memcmp(&second.previous_a,&first.current.a,sizeof(PeVec3)));
+    CHECK(memcmp(&second.current,&first.current,sizeof first.current)!=0&&h.player_hits==0);
+    /* A bad later part after staged pose updates rolls the entire tick back. */
+    h.histories[0].parts[1].capsule.current.radius=NAN;PeHuntCombat before=h;PeSandboxMelee saved=blade;
+    PeSandboxMeleeUpdate old=update;float oldhp=hp,oldenergy=energy;unsigned oldkills=kills;bool oldcomplete=complete;
+    CHECK(!pe_hunt_combat_step(&h,w,c,p,&blade,&f,&hp,&energy,&kills,&update,&complete));
+    CHECK(!memcmp(&h,&before,sizeof h)&&!memcmp(&blade,&saved,sizeof blade)&&!memcmp(&update,&old,sizeof old));
+    CHECK(hp==oldhp&&energy==oldenergy&&kills==oldkills&&complete==oldcomplete);
+    /* Death clears even unqueryable histories; no surviving stale activation. */
+    p.alive=false;hp=0;
+    CHECK(pe_hunt_combat_step(&h,w,c,p,&blade,&f,&hp,&energy,&kills,&update,&complete));
+    PeHareDamageHistory empty={0};for(unsigned i=0;i<6;i++)CHECK(!memcmp(&h.histories[i],&empty,sizeof empty));
+    puts("hunt history: four real source parts, guide-disabled clocks, activation pin, staged rollback and death reset passed");
+}
 static void actual_assets(void){
     const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/terrain.pevx",
         PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb",
@@ -511,9 +546,9 @@ static void actual_assets(void){
         if(missing){CHECK(!pe_hunt_combat_prepare(&h,w,c,hare,hb,missing,pb,0,error,sizeof error));
             CHECK(!memcmp(&h,&saved,sizeof h)&&strstr(error,required[i]));pe_actor_free(missing);}
     }
-    PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};CHECK(pe_sandbox_melee_init(&blade,&setup));
+    PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.history_enabled=true,.history_local_center={pe_player_collider_center_source[0].local_center[0],pe_player_collider_center_source[0].local_center[1],pe_player_collider_center_source[0].local_center[2]},.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};CHECK(pe_sandbox_melee_init(&blade,&setup));
     PeHuntCombatPlayer p={.position=h.encounter.actors[0].motion.position,.radius=.5f,.height=1.8f,.max_hp=5000,.alive=true,.grounded=true,.clip=pe_actor_find_clip(player,"NormalIdle")};
-    sword_wear_tests(&h,w,c,p);shield_contact_tests(&h,w,c,p,blade);outfit_contact_tests(&h,w,c,p,blade);sense_tests(&h,w,c,buildings,p);retaliation_tests(&h,w,c,p,blade);outgoing_tests(&h,w,c,p,blade);running_pending_tests(&h,w,c,p);
+    history_tick_tests(h,w,c,p,blade);sword_wear_tests(&h,w,c,p);shield_contact_tests(&h,w,c,p,blade);outfit_contact_tests(&h,w,c,p,blade);sense_tests(&h,w,c,buildings,p);retaliation_tests(&h,w,c,p,blade);outgoing_tests(&h,w,c,p,blade);running_pending_tests(&h,w,c,p);
  done:pe_hitboxes_free(hb);pe_hitboxes_free(pb);pe_hitboxes_free(kb);pe_actor_free(hare);pe_actor_free(player);pe_actor_free(body);pe_actor_free(knife);pe_sandbox_collision_free(c);pe_world_destroy(w);free(w);
 }
 int pe_test_hunt_combat(void){

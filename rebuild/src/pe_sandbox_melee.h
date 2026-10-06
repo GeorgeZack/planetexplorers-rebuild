@@ -16,6 +16,10 @@ typedef struct {
     /* Explicit host qualification of immutable female408 root data; default
      * false keeps running disabled. Does not load or own a motion curve. */
     bool running_motion_ready;
+    /* Source-qualified entity collider-bounds center. The general helper keeps
+     * instantaneous compatibility unless the caller opts into this contract. */
+    bool history_enabled;
+    PeVec3 history_local_center;
 } PeSandboxMeleeSetup;
 typedef struct {
     bool alive,weapon_owned,grounded,third_person,action_allowed,move_requested,in_water;
@@ -39,6 +43,8 @@ typedef struct {
     bool tick_pending,tick_cancelled;
     PeCombatAdvance tick_advance;
     PeCombatInterval tick_interval;
+    PeCapsuleHistory history;
+    bool history_active; /* Trigger window, independent of skill dedupe. */
 } PeSandboxMelee;
 typedef struct {
     PeCombatAdvance advance;
@@ -89,7 +95,10 @@ bool pe_sandbox_melee_step_with_weapon(PeSandboxMelee *host,const PeSandboxMelee
  * equipment identity cancels before contact. All referenced assets are borrowed.
  * Death events occur only on positive->zero HP; caller owns persistence/death
  * dispatch and must preserve returned HP. No spawn/objective/lesson grants.
- * No swept contacts, AI, hit-stop, draw transitions or FP attacks. Running
+ * Opted-in history uses source samples at this native60Hz clock; activation
+ * pins both endpoints at the resolved pose (coalesced activation/LateUpdate
+ * adapter). Closed windows retain endpoints but retire active ownership. No
+ * AI, hit-stop, draw transitions or FP attacks. Running
  * displacement belongs to the qualified host's split path, not this wrapper;
  * running advance/step is unavailable without the explicit setup opt-in. Render
  * from action.stage/clip_time; suppress stamina recovery while action.active. */

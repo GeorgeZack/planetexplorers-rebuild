@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "../generated/pe_player_collider_center_source.h"
 #include "pe_deployable_view.h"
 #include "pe_adventure_hunt.h"
 #include "../generated/pe_torch_source.h"
@@ -345,6 +346,10 @@ static bool sandbox_blade_prepare(PeSandboxActor *actor,const char *assets,int i
     PeSandboxMeleeSetup setup={.weapon_item_id=item_id,.body=body,.drawn_weapon=weapon,.drawn_capsule=*capsule,
         .gender=PE_COMBAT_FEMALE,.player_id=1,.attack=pe_player_defaults.attack+item->attack,
         .stamina_reduce_percent=pe_player_defaults.stamina_reduce_percent};
+    setup.history_enabled=true;
+    /* Source local bounds, distinct from native movement radius/height. */
+    const float *center=pe_player_collider_center_source[setup.gender].local_center;
+    setup.history_local_center=(PeVec3){center[0],center[1],center[2]};
     return pe_sandbox_melee_init(out,&setup);
 }
 static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *defence,const PeSandboxMelee *melee,PeHuntCombatPlayer *out){

@@ -1,0 +1,92 @@
+{
+  "qualification": "Bounded standalone installed game Mono and UnityEngine managed math, not Unity scene execution or universal bit-exact equivalence. Original source methods extracted without editing original files. Selected18 golden cases committed in test_capsule_history.c. Local harness/binaries/corpus retained ignored, no originals mutated.",
+  "checks": {
+    "optimized": {
+      "command": [
+        "rebuild/build/capsule-history-audit/test"
+      ],
+      "exit_code": 0,
+      "log": "rebuild/build/capsule-history-audit/optimized.log"
+    },
+    "sanitize": {
+      "command": [
+        "rebuild/build/capsule-history-audit/test-sanitize"
+      ],
+      "exit_code": 0,
+      "log": "rebuild/build/capsule-history-audit/sanitize.log"
+    },
+    "exporter": {
+      "command": [
+        "python3",
+        "rebuild/tests/test_capsule_history_export.py"
+      ],
+      "exit_code": 0,
+      "log": "rebuild/build/capsule-history-audit/exporter.log"
+    },
+    "check": {
+      "command": [
+        "python3",
+        "rebuild/tools/export_capsule_history.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": "rebuild/build/capsule-history-audit/check.log"
+    },
+    "managed-oracle": {
+      "command": [
+        "python3",
+        "rebuild/build/capsule-history-audit/compare.py"
+      ],
+      "exit_code": 0,
+      "log": "rebuild/build/capsule-history-audit/managed-oracle.log"
+    }
+  },
+  "oracle": {
+    "cases": 4103,
+    "hits": 2714,
+    "max_abs_error": 2.3840332019631205e-07,
+    "failures": []
+  },
+  "inputs": [
+    {
+      "path": "rebuild/src/pe_capsule_history.c",
+      "sha256": "b79eccd0e80dfe7d890995ddf33f7f487363ca6114d2a19674d8930c447ae51f"
+    },
+    {
+      "path": "rebuild/src/pe_capsule_history.h",
+      "sha256": "14346cfdb357d3f9512637f14e47b0b7a2f1968b7cd715c45bd6d5b30657551c"
+    },
+    {
+      "path": "rebuild/tests/test_capsule_history.c",
+      "sha256": "3b2805277f28bcdc4f44f2e4a46d0922cedd621590d9f0ec0bbb7a38ee46b111"
+    },
+    {
+      "path": "rebuild/build/capsule-history-audit/Oracle.cs",
+      "sha256": "91a3b24913b2b46ea6efbf08c02b9483416d7a963e9c8e08351cae1b9342b160"
+    },
+    {
+      "path": "rebuild/build/capsule-history-audit/Oracle.exe",
+      "sha256": "f4f1a548054ad97d485075d2414d7ee311e4d4bc129152872da1a1eaceccd28c"
+    },
+    {
+      "path": "rebuild/build/capsule-history-audit/compare.py",
+      "sha256": "78da12b79fd3e251f7a0a32d1d86ed0e1655ed77b18881473ebf2d2de369dbd7"
+    },
+    {
+      "path": "rebuild/build/capsule-history-audit/cases.txt",
+      "sha256": "ad0a647cd38e1f21f92d709a8433d0562c79d79d44775b82c08366fe9b5efe69"
+    },
+    {
+      "path": "rebuild/build/capsule-history-audit/oracle.txt",
+      "sha256": "3b69ef32dfee9fb9a11b10100422f6dbd6b2d0e6780b02900642dc6c2fdd7d98"
+    },
+    {
+      "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/Mono/x86_64/libmono.so",
+      "sha256": "e11e7d56ffa83acdfdd2325743e29a08952308021b50a7deb05662c1c811a1b7"
+    },
+    {
+      "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/Managed/UnityEngine.dll",
+      "sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b"
+    }
+  ]
+}

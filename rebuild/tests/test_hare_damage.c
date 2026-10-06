@@ -84,10 +84,54 @@ static void blend_tests(const char *path,const PeActor *attacker,const PeHitboxe
     }
     pe_actor_free(actor);
 }
+static void history_tests(const PeActor *actor,const PeHitboxes *boxes){
+    PeHareDamagePose pose={actor,boxes,{-2,0,0},0,1};
+    PeHareAttack state=opened(0,.4);PeHareDamageHistory history={0};
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0}));
+    CHECK(history.active_bones==1&&history.parts[0].index==3&&history.parts[3].index==6);
+    CHECK(history.parts[0].capsule.previous_a.x==history.parts[0].capsule.current.a.x);
+    PeHareDamageAttack a={.entity_id=1,.pose=pose,.attack=64,.bone=1,.eligible=true,.history=&history};
+    PeHareDamageTarget t={.entity_id=2,.pose={actor,boxes,{0},0,1},.clip=PE_ACTOR_BIND_POSE,.max_hp=500,.eligible=true};
+    float hp=500;unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_MISS);
+    PeHareAttackEvents events;CHECK(pe_hare_attack_update(&state,.42,&events));pose.position.x=2;
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0}));a.pose=pose;
+    PeHareDamageAttack instant=a;instant.history=NULL;
+    unchanged(&state,&instant,&t,&hp,PE_HARE_DAMAGE_MISS);
+    PeHareDamageResult out;PeHareDamageHistory before=history;
+    CHECK(pe_hare_damage_resolve(&state,&a,&t,&hp,&out)==PE_HARE_DAMAGE_HIT&&hp<500);
+    CHECK(out.attack_index==3&&out.defence_index==1&&!memcmp(&before,&history,sizeof history));
+    /* Dedupe never advances history; the next explicit active update does. */
+    unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_IGNORED);
+    CHECK(pe_hare_attack_update(&state,.44,&events));pose.position.x=2.1f;
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){1,.75f,2}));
+    CHECK(history.parts[0].capsule.previous_a.x==2&&history.parts[0].capsule.parent_center.y==.75f);
+    a.pose=pose;a.eligible=false;unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_IGNORED);a.eligible=true;
+    /* Even ignored damage validates supplied history; bad later part is atomic. */
+    before=history;history.parts[1].capsule.previous_a.x=NAN;
+    unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_INVALID);
+    PeHareDamageHistory corrupt=history;
+    CHECK(!pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0})&&!memcmp(&history,&corrupt,sizeof history));history=before;
+    history.normalized_time-=.01;unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_INVALID);history=before;
+    history.parts[1].index++;unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_INVALID);history=before;
+    /* Inactive movement must not become a sweep on the next activation. */
+    CHECK(pe_hare_attack_update(&state,.8,&events));pose.position.x=100;
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0})&&history.active_bones==0);
+    CHECK(history.parts[0].capsule.current.a.x==2.1f);
+    pe_hare_attack_end(&state);state=opened(0,.4);state.last_melee_start=20;
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0}));
+    CHECK(history.parts[0].capsule.previous_a.x==100&&history.parts[0].capsule.current.a.x==100);
+    /* Attack2 opens each distinct forearm once, never reuses the other history. */
+    history=(PeHareDamageHistory){0};state=opened(2,.25);pose.position.x=-10;
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0}));
+    CHECK(pe_hare_attack_update(&state,.55,&events));pose.position.x=10;
+    CHECK(pe_hare_damage_history_step(&history,&state,pose,(PeVec3){0})&&history.active_bones==2);
+    CHECK(history.parts[0].capsule.current.a.x==-10&&history.parts[2].capsule.previous_a.x==10);
+}
 int pe_test_hare_damage(void){
     failures=0;char path[]="/tmp/pe-hare-damage-XXXXXX";int fd=mkstemp(path);CHECK(fd>=0);if(fd<0)return failures;close(fd);
     PeActor *actor=actor_fixture(path,false);CHECK(actor);if(!actor){unlink(path);return failures;}
     PeHitboxes *boxes=boxes_fixture(path,actor,false);CHECK(boxes);if(!boxes){pe_actor_free(actor);unlink(path);return failures;}
+    history_tests(actor,boxes);
     PeHareDamagePose pose={.actor=actor,.hitboxes=boxes,.scale=1};
     PeHareDamageAttack a={.entity_id=1,.pose=pose,.attack=64,.bone=PE_HARE_RIGHT_FOREARM,.eligible=true};
     PeHareDamageTarget t={.entity_id=2,.pose=pose,.clip=PE_ACTOR_BIND_POSE,.max_hp=500,.eligible=true};

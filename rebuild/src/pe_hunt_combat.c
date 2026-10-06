@@ -1,5 +1,6 @@
 #include "pe_hunt_combat.h"
 #include "../generated/pe_hare_perception_source.h"
+#include "../generated/pe_hare_history_center_source.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -134,6 +135,16 @@ bool pe_hunt_combat_step(PeHuntCombat*h,const PeWorld*w,const PeSandboxCollision
         }
     }
     if(!pe_hunt_encounter_step(&next.encounter,w,c,motion))return false;
+    /* Animator-active parts update even during guide delay, dedupe or misses.
+     * One fixed-tick sample precedes all contact queries; no target can advance
+     * another target's history. Fresh activation pins source setter+LateUpdate. */
+    for(unsigned i=0;i<PE_HUNT_ENCOUNTER_COUNT;i++){
+        PeHuntEncounterActor *a=&next.encounter.actors[i];
+        if(!a->present||a->hp<=0||!p.alive){next.histories[i]=(PeHareDamageHistory){0};continue;}
+        PeHareDamagePose pose={next.encounter.actor,next.encounter.defence,a->motion.position,a->motion.yaw_degrees,a->motion.scale};
+        if(!pe_hare_damage_history_step(&next.histories[i],&next.attacks[i],pose,
+            world_point(&a->motion,pe_hare_history_local_center)))return false;
+    }
     PeSandboxMeleeUpdate result;bool finished=false;
     PeSandboxMeleeFrame blade_frame=*frame;
     blade_frame.gate.alive=blade_frame.gate.alive&&p.alive;
@@ -154,7 +165,7 @@ bool pe_hunt_combat_step(PeHuntCombat*h,const PeWorld*w,const PeSandboxCollision
         for(unsigned window=0;window<def->window_count;window++)if(attack->open_windows&(1u<<window))
             for(unsigned bone=1;bone<=2;bone*=2)if(def->windows[window].bones&bone){
                 PeHareDamageAttack hit={.entity_id=a->entity_id,.pose={next.encounter.actor,next.encounter.defence,a->motion.position,a->motion.yaw_degrees,a->motion.scale},
-                    .attack=a->motion.attack,.window=window,.guide=skill->guide,.bone=bone,.eligible=life>0};
+                    .attack=a->motion.attack,.window=window,.guide=skill->guide,.bone=bone,.eligible=life>0,.history=&next.histories[i]};
                 PeHareDamageTarget target={.entity_id=1,.pose={next.player_actor,next.player_defence,p.position,p.yaw,1},
                     .clip=player_clip,.seconds=player_seconds,.defense=p.defense+pe_outfit_defense(&outfit)+pe_shield_defense(staged_shield),
                     .shield_protection=pe_shield_protection(staged_shield),
@@ -177,6 +188,7 @@ bool pe_hunt_combat_step(PeHuntCombat*h,const PeWorld*w,const PeSandboxCollision
      * immediately stops ticking because the player died or quest completed. */
     for(unsigned i=0;i<PE_HUNT_ENCOUNTER_COUNT;i++)if(life<=0||!next.encounter.actors[i].present||next.encounter.actors[i].hp<=0){
         pe_hare_attack_end(&next.attacks[i]);pe_hare_skill_cancel(&next.skills[i]);next.hostile[i]=false;
+        next.histories[i]=(PeHareDamageHistory){0};
     }
     if(life<=0)pe_sandbox_melee_cancel(&blade);
     if(p.outfit)*p.outfit=outfit;
