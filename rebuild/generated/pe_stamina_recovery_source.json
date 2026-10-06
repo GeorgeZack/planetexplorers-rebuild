@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Scripts/SkillSystem/SkBuffs.cs",
+      "sha256": "d02d2ee9311c1362047aaf9361ef7baca27d2b946cec81ef777a46209ac20be6"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkExpFuncSet.cs",
+      "sha256": "462543e6d4b61da4a9fb71a79c81dfafbdc8eaaa4cd287d66afcc0a35a878874"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntityHelper.cs",
+      "sha256": "afa0b70c1026adc9acce4c3df715b9d565b6b5d5a3485bf9732baab639de4c0a"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntityAttribsUpdater.cs",
+      "sha256": "089d2ee0a9f8cdc233c6beae9641b73169e9a757a8a3d4ecaf367be16518745c"
+    },
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "sha256": "a74c7a07590895fda1ba0769bb6a96d115e0e0bfdb4c594710b4cff3e74757a9"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAttribs.cs",
+      "sha256": "b9b7141ad740b4498fca8270b33bc15f86d19623055aacef5aa406587f44ca5d"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAttribsModifier.cs",
+      "sha256": "d47b491e102524182341f68ccf291e00d8105155ed5915d66b336e7b99ef0368"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs",
+      "sha256": "dc4854aa4b5b45adb2b64597ec81c03b6b5591627b79b5c2f9c3961405cc38eb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_HumanMove.cs",
+      "sha256": "6877037192745b662c5ecbb0763cb6733a2ca339a2b11e867560864be4c747b2"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_DigTerrain.cs",
+      "sha256": "c8c82a6d1b1d35074990585914dce7bb895c16e6ad02824476f7063d556a812a"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Fell.cs",
+      "sha256": "2086a841562e798d1487e3a8f5e8b8ccd66583dcd08d27a534147f95f13b752f"
+    }
+  ],
+  "rule": {
+    "stamina_max": 100.0,
+    "initial_stamina": 100.0,
+    "recovery_speed": 40.0,
+    "reduction_percent": 1.0,
+    "base_delay_seconds": 0.0,
+    "comfort_max": 500.0,
+    "initial_comfort": 500.0,
+    "comfort_recovery_speed": -0.1388,
+    "comfort_reduction_percent": 1.0,
+    "player_init_id": 1,
+    "stamina_buff_id": 30200052,
+    "comfort_buff_id": 30200049,
+    "delay_buff_id": 30200175,
+    "minimum_delay_seconds": 0.1,
+    "comfort_delay_scale": 2.0,
+    "stamina_interval_seconds": 1.0,
+    "comfort_interval_seconds": 5.0,
+    "delay_interval_seconds": 1.0,
+    "lifetime_seconds": -1.0
+  },
+  "initial_player": {
+    "id": "1",
+    "InitBuffList": "30200049,30200050,30200051,30200052,30200053,30200046,30200149,30200150,30200151,30200152,30200175",
+    "StaminaMax": "100",
+    "Stamina": "100",
+    "StaminaRecoverSpeed": "40",
+    "StaminaReducePercent": "1",
+    "StaminaRecoverDelay": "0",
+    "ComfortMax": "500",
+    "Comfort": "500",
+    "ComfortRecoverSpeed": "-.1388",
+    "ComfortReducePercent": "1"
+  },
+  "source_buffs": [
+    {
+      "_id": "30200052",
+      "_name": "体力值回复",
+      "_icon": "0",
+      "_desc": "2300000",
+      "_type": "65509",
+      "_priority": "0",
+      "_stackLimit": "1",
+      "_timeActive": "-1",
+      "_timeInterval": "1",
+      "_eff": "0",
+      "_effBeg": "0",
+      "_effEnd": "0",
+      "_mods": "exp,1,if(target.expFunc.InCoolingForConsumingStamina(target.sums[6])){target.raws[3]+=target.sums[5]*target.sums[4];}",
+      "_AttType": "公式"
+    },
+    {
+      "_id": "30200049",
+      "_name": "舒适度下降",
+      "_icon": "0",
+      "_desc": "2300000",
+      "_type": "65506",
+      "_priority": "0",
+      "_stackLimit": "1",
+      "_timeActive": "-1",
+      "_timeInterval": "5",
+      "_eff": "0",
+      "_effBeg": "0",
+      "_effEnd": "0",
+      "_mods": "exp,1,target.raws[8]+=target.sums[10]*target.sums[9]*5",
+      "_AttType": "公式"
+    },
+    {
+      "_id": "30200175",
+      "_name": "舒适度影响体力延迟恢复速度",
+      "_icon": "0",
+      "_desc": "2300000",
+      "_type": "65509",
+      "_priority": "0",
+      "_stackLimit": "1",
+      "_timeActive": "-1",
+      "_timeInterval": "1",
+      "_eff": "0",
+      "_effBeg": "0",
+      "_effEnd": "0",
+      "_mods": "exp,6,target.buffPostAdd=(1-target.raws[8]/target.sums[7])*2",
+      "_AttType": "公式"
+    }
+  ],
+  "semantics": {
+    "shared_lifecycle": "pe_passive_recovery_source owns the eight-frame attribute gate and delayed .5 initialization check; source guards are shared.",
+    "relevant_execution_order": [
+      30200175,
+      30200052,
+      30200049
+    ],
+    "stamina": "Each admitted evaluation adds current summed recovery_speed * reduction_percent; strict Time.time > last_consumption + max(previous summed delay,.1f).",
+    "comfort": "Each comfort evaluation adds summed recovery_speed * reduction_percent *5 to raw comfort; current/max clamp occurs during later summation.",
+    "delay": "Temporary expression keyed6; its scheduled pulse dirties6. Later ascending summation6 uses new raw comfort8 before comfort8 clamps. Assignment is idempotent across repeated temporary evaluations.",
+    "raw_summed": "Recovery reads the previous summed delay. Raw writes dirty their own attribute, not every dependent attribute. Comfort changes do not by themselves immediately recalculate delay.",
+    "load": "Raw values serialized; deserialize initially assigns sums=raw and clears dirties. Delay source raw starts0; buff phase is transient.",
+    "consumption": "Decreased summed stamina stamps Time.time; Sword, jump/step and dig/fell active updates also refresh the timestamp.",
+    "scope": "Exact starter player three-buff subset only; no general nutrition, food buffs, other clothes, revival, UI or runtime save policy is generated."
+  }
+}

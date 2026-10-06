@@ -2,7 +2,7 @@
 
 October 6, 2026. Baseline: private rebuild commit `25877e7f759538b7cd6a0358a0c71d2debbe20d4`. This audit inspects original C# code, serialized data, existing captures and the C implementation. It launches neither game. It is a prioritized parity audit, not an exhaustive verification of every Unity subsystem.
 
-Subsequent implementation: [passive recovery](PASSIVE_RECOVERY.md) now supplies the first work-order item in Adventure Sandbox, including its source eight-frame attribute gate and fresh/load lifecycle. Optimized core and focused sanitizer/host checks pass; physical recovery remains unverified. The baseline findings below remain the audit record; stamina cadence and capsule history are the next source-only corrections.
+Subsequent implementation: [passive recovery](PASSIVE_RECOVERY.md) now supplies the first work-order item in Adventure Sandbox, including its source eight-frame attribute gate and fresh/load lifecycle. Optimized core and focused sanitizer/host checks pass; physical recovery remains unverified. The subsequent [stamina/comfort increment](STAMINA_RECOVERY.md) implements the second item, with source pulse ordering and v16 comfort persistence. The baseline findings below remain the audit record; historical capsule contacts are the next source-only correction.
 
 ## Decision
 

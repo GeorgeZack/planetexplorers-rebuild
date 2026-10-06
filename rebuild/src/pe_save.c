@@ -6,6 +6,7 @@
 #include "pe_adventure_hunt.h"
 #include "pe_deployable.h"
 #include "pe_shield.h"
+#include "../generated/pe_stamina_recovery_source.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -14,7 +15,8 @@
 #include <unistd.h>
 
 #define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 15u
+#define SAVE_VERSION 16u
+_Static_assert(PE_SAVE_V16_APPEND==4,"V16 appends only raw comfort");
 _Static_assert(PE_SAVE_V15_APPEND==4,"V15 appends only the shield reference");
 _Static_assert(PE_OUTFIT_SLOTS==3&&PE_SAVE_V14_APPEND==36,"V14 has exactly three 12-byte worn records");
 /* All numbers are little-endian; floats are IEEE-754 bit patterns. No ABI structs. */
@@ -33,6 +35,7 @@ static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v
 static bool valid(const PeGame *g,bool trees,bool outfit) {
     if(outfit&&!pe_outfit_state_valid(g))return false;
     if(!pe_shield_state_valid(g))return false;
+    if(!isfinite(g->comfort)||g->comfort<0||g->comfort>pe_stamina_recovery_source.comfort_max)return false;
     if((g->mode!=PE_GAME_LEGACY&&g->mode!=PE_GAME_ADVENTURE)||
        !isfinite(g->hp)||!isfinite(g->max_hp)||g->max_hp<=0||g->max_hp>1000000||g->hp<0||g->hp>g->max_hp||
        !isfinite(g->medpack_cooldown)||g->medpack_cooldown<0||g->medpack_cooldown>10||
@@ -216,6 +219,8 @@ static void encode(Stream *s,const PeGame *g) {
     }
     /* Bag retains the exact shield item and wear; never serialize a second owner. */
     put32(s,g->shield_instance_id);
+    /* V16 retains every V15 byte; derived comfort effects and buff clocks are transient. */
+    putf(s,g->comfort);
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -328,6 +333,7 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
         w->item_id=getint(s);w->instance_id=get32(s);w->durability=getf(s);
     }
     g->shield_instance_id=version>=15?get32(s):0;
+    g->comfort=version>=16?getf(s):pe_stamina_recovery_source.initial_comfort;
 
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {

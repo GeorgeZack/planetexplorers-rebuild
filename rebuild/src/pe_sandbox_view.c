@@ -322,9 +322,13 @@ static bool sandbox_health_frame(PeAttributeClock *clock,PeGame *game,double dt,
     bool active=focused&&!paused;
     if(!pe_attribute_clock_step(&next,active?dt:0,&frame))return false;
     PePassiveRecovery recovery=game->passive_recovery;float hp=game->hp;
+    PeStaminaRecovery stamina=game->stamina_recovery;
+    PeStaminaVitals vitals={game->stamina,game->stamina_max,game->stamina_regen,game->stamina_recover_delay,game->comfort};
     if(active&&game->mode==PE_GAME_ADVENTURE&&
-       !pe_passive_recovery_frame(&recovery,frame,&hp,game->max_hp))return false;
-    *clock=next;game->passive_recovery=recovery;game->hp=hp;return true;
+       (!pe_passive_recovery_frame(&recovery,frame,&hp,game->max_hp)||
+        !pe_stamina_recovery_frame(&stamina,&game->passive_recovery,&recovery,frame,&vitals)))return false;
+    *clock=next;game->passive_recovery=recovery;game->hp=hp;
+    game->stamina_recovery=stamina;game->stamina=vitals.stamina;game->comfort=vitals.comfort;return true;
 }
 static void sandbox_health_contacts(PeGame *game,uint64_t previous_hits,uint64_t committed_hits){
     if(game&&committed_hits!=previous_hits&&game->mode==PE_GAME_ADVENTURE)

@@ -52,7 +52,7 @@ int pe_test_medicine_save(void){
     CHECK(pe_world_hash(&loaded->world)==pe_world_hash(&g->world));same_stocks(g,loaded,0,PE_TOWN_STOCK_CAPACITY);
     size_t size=0;unsigned char *original=read_save(path,&size);CHECK(original&&size>V9_APPEND+PE_SAVE_V10_APPEND);
     if(original&&size>V9_APPEND+PE_SAVE_V10_APPEND){
-        CHECK(get32(original+4)==15);size_t footer=size-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-V9_APPEND;CHECK(get32(original+footer)==PE_MEDICINE_ACTIVE);
+        CHECK(get32(original+4)==16);size_t footer=size-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-V9_APPEND;CHECK(get32(original+footer)==PE_MEDICINE_ACTIVE);
         CHECK(get32(original+footer+4)==PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY);
         /* A literal v8 prefix retains first seventeen offer clocks and Annot;
          * newly appended offers and medicine start uninitialized. */
@@ -75,7 +75,7 @@ int pe_test_medicine_save(void){
             if(mode==6){put32(bad+footer+8,0);put32(bad+footer+12,1);} /* uninitialized but nonempty */
             if(mode==7)output_size--;
             if(mode==8)bad[output_size++]=0;
-            CHECK(write_save(path,bad,output_size,15));CHECK(!pe_game_load(loaded,path,error,sizeof error));
+            CHECK(write_save(path,bad,output_size,16));CHECK(!pe_game_load(loaded,path,error,sizeof error));
             CHECK(!memcmp(snapshot,loaded,sizeof *loaded));CHECK(world_hash==pe_world_hash(&loaded->world));
         }
         free(bad);

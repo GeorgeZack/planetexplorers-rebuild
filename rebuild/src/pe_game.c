@@ -3,6 +3,7 @@
 #include "pe_sword.h"
 #include "pe_tree_collision.h"
 #include "pe_settlement.h"
+#include "../generated/pe_stamina_recovery_source.h"
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
@@ -233,6 +234,7 @@ void pe_game_init(PeGame *g, uint32_t seed) {
     g->inventory.next_instance_id=1;
     g->rng_state=seed?seed:UINT32_C(0x9e3779b9);
     g->stamina=g->stamina_max=pe_player_defaults.stamina_max;
+    g->comfort=pe_stamina_recovery_source.initial_comfort;
     g->stamina_regen=pe_player_defaults.stamina_recover_speed;
     g->stamina_recover_delay=pe_player_defaults.stamina_recover_delay;
     g->hp=pe_player_defaults.hp;g->max_hp=pe_player_defaults.hp_max;
@@ -372,6 +374,10 @@ bool pe_game_quickslot_use(PeGame *g,int quick){
     }
     return false;
 }
+void pe_game_stamina_activity(PeGame *g){
+    if(g&&g->mode==PE_GAME_ADVENTURE&&g->passive_recovery.initialized)
+        pe_stamina_recovery_consume(&g->stamina_recovery,g->passive_recovery.last_time);
+}
 static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollision *collision,const PeVec3 *motion) {
     if (!isfinite(dt) || dt<=0 || dt>0.25f) return;
     g->game_seconds+=(double)dt*12.0;
@@ -450,13 +456,18 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
     /* Move actions and active tool animations delay recovery. SkExpFuncSet
      * enforces at least .1 seconds after the last consumption/action frame. */
     float rest=dt;
+    bool stamina_locked=stamina_active||g->tool_cooldown>0;
     if(g->tool_cooldown>0){rest=fmaxf(0,dt-g->tool_cooldown);g->stamina_idle=0;}
     g->tool_cooldown=fmaxf(0,g->tool_cooldown-dt);
     if(stamina_active){rest=0;g->stamina_idle=0;}
     float delay=fmaxf(0.1f,g->stamina_recover_delay),idle_before=g->stamina_idle;
     float recovered=fmaxf(0,idle_before+rest-delay)-fmaxf(0,idle_before-delay);
     g->stamina_idle=fminf(delay+dt,idle_before+rest);
-    g->stamina=fminf(g->stamina_max,g->stamina+g->stamina_regen*fmaxf(0,recovered));
+    if(g->mode==PE_GAME_ADVENTURE){
+        /* Adventure recovery belongs to display-frame buffs, including the
+         * pre-mount/load interval. Never fall back to continuous recovery. */
+        if(stamina_locked)pe_game_stamina_activity(g);
+    }else g->stamina=fminf(g->stamina_max,g->stamina+g->stamina_regen*fmaxf(0,recovered));
     step_craft(g,dt);
     clear_spent_references(g);
 }
@@ -821,7 +832,7 @@ bool pe_game_mine(PeGame *g,PeVec3 o,PeVec3 d) {
     if(edit.capacity_blocked){say(g,"Inventory full; terrain and tool preserved.");return false;}
     for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id)
         g->inventory.slots[i].durability=fmaxf(0,g->inventory.slots[i].durability-stats.durability_cost);
-    g->stamina=fmaxf(0,g->stamina-stats.stamina_cost);g->stamina_idle=0;
+    g->stamina=fmaxf(0,g->stamina-stats.stamina_cost);g->stamina_idle=0;pe_game_stamina_activity(g);
     float speed=1;if(g->stamina<=40)speed*=0.9f;if(g->stamina<=20)speed*=0.9f;
     g->tool_cooldown=0.5f/speed; /* Temporary event pacing replaces animation. */
     if(edit.removed)say(g,"Terrain sample removed.");
@@ -874,7 +885,7 @@ bool pe_game_gather(PeGame *g) {
     if(edit.capacity_blocked){say(g,"Inventory full; tree and axe preserved.");return false;}
     for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id)
         g->inventory.slots[i].durability=fmaxf(0,g->inventory.slots[i].durability-stats.durability_cost);
-    g->stamina=fmaxf(0,g->stamina-stats.stamina_cost);g->stamina_idle=0;
+    g->stamina=fmaxf(0,g->stamina-stats.stamina_cost);g->stamina_idle=0;pe_game_stamina_activity(g);
     float speed=1;if(g->stamina<=40)speed*=0.9f;if(g->stamina<=20)speed*=0.9f;g->tool_cooldown=0.5f/speed;
     if(edit.removed)say(g,"Tree felled; remaining wood recovered.");
     else say(g,"Axe cut the tree.");

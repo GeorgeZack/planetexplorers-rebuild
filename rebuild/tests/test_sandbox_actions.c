@@ -6,6 +6,14 @@
 
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"sandbox actions:%d: %s\n",__LINE__,#c);failures++;}}while(0)
+static void recovery_frame(PeGame *g,PeAttributeClock *clock,double dt){
+    PeAttributeFrame frame;PePassiveRecovery before=g->passive_recovery;
+    CHECK(pe_attribute_clock_step(clock,dt,&frame));
+    CHECK(pe_passive_recovery_frame(&g->passive_recovery,frame,&g->hp,g->max_hp));
+    PeStaminaVitals vitals={g->stamina,g->stamina_max,g->stamina_regen,g->stamina_recover_delay,g->comfort};
+    CHECK(pe_stamina_recovery_frame(&g->stamina_recovery,&before,&g->passive_recovery,frame,&vitals));
+    g->stamina=vitals.stamina;g->comfort=vitals.comfort;
+}
 static PeSandboxActionInput input(void){
     return(PeSandboxActionInput){.enabled=true,.held=true,.tool_drawn=true,
         .ray_origin={32.1f,11.58f,32.1f},.ray_direction={0,-1,0},.camera_tree=-1,.forward_tree=-1};
@@ -189,12 +197,18 @@ static void guards(PeGame *g,PeSandboxActions *a){
     setup(g,a,1527,false);g->stamina=24;
     CHECK(tick(a,g,axe).started&&g->stamina==20&&fabsf(a->speed-1.22f*.81f)<1e-6);
     setup(g,a,12,false);PeSandboxActionInput in=input();g->stamina=0;
+    PeAttributeClock attributes={.seconds=100};recovery_frame(g,&attributes,0);
     CHECK(tick(a,g,in).started&&fabsf(a->speed-.81f)<1e-6&&g->stamina==0);
     float before=g->stamina;pe_game_step(g,(PeInput){.stamina_action=a->stamina_lock},PE_FIXED_DT);
     CHECK(g->stamina==before&&g->stamina_idle==0);
     in.enabled=false;CHECK(tick(a,g,in).finished&&a->stage==PE_SANDBOX_ACTION_IDLE);
     for(int i=0;i<6;i++)pe_game_step(g,(PeInput){0},PE_FIXED_DT);
-    CHECK(g->stamina<.001f);pe_game_step(g,(PeInput){0},PE_FIXED_DT);CHECK(g->stamina>.6f);
+    CHECK(g->stamina==0);pe_game_step(g,(PeInput){0},PE_FIXED_DT);CHECK(g->stamina==0);
+    CHECK(g->stamina_recovery.last_consumption==100);
+    /* Fixed ticks cannot recover Adventure stamina. The real shared display
+     * scheduler admits a full40 pulse only at its next eight-frame pass. */
+    for(int i=0;i<6;i++){recovery_frame(g,&attributes,1.0/60);CHECK(g->stamina==0);}
+    recovery_frame(g,&attributes,1.0/60);CHECK(g->stamina==40);
     setup(g,a,12,false);in=input();tick(a,g,in);CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,1));
     CHECK(tick(a,g,in).finished&&a->stage==PE_SANDBOX_ACTION_IDLE&&pe_game_equipped_tool(g)->durability==3553);
     setup(g,a,20,false);in=input();CHECK(tick(a,g,in).unsupported&&a->stage==PE_SANDBOX_ACTION_IDLE&&g->stamina==100);

@@ -54,6 +54,8 @@ A newly loaded entity therefore starts with lastHurt0 against the existing globa
 
 ## Native implementation checkpoint and explicit boundaries
 
+The subsequent [stamina/comfort increment](STAMINA_RECOVERY.md) shares this clock/lifecycle and advances saves to v16 solely for raw comfort. Statements below about unchanged v15 bytes describe the HP-only checkpoint.
+
 Implemented in C: [pe_passive_recovery](../../rebuild/src/pe_passive_recovery.h) separates the external attribute clock from transient entity state. It implements the eight-frame gate, float HP rule, initial/periodic evaluations, fresh remount versus loaded first mount, and death unmount. The exporter [export_passive_recovery.py](../../rebuild/tools/export_passive_recovery.py) guards the active database/source paths and generates exact metadata with provenance. General revival remains unsupported; merely assigning positive HP after death does not implicitly remount a buff.
 
 The sandbox calls its health adapter once per display frame before fixed-step movement/combat. Its process-local active-sandbox clock survives save loads and menu roundtrips. Each successful hunt transaction reports the change in committed `player_hits`; this timestamps admitted zero-damage hits as well as HP loss, without notifying on failed transactions. Every contact in one display frame uses the same validated timestamp. The notification is infallible for the already validated owner, and death unmounts immediately. The low-level standalone damage helpers remain independent of `PeGame`.

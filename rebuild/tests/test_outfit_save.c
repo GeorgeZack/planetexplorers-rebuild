@@ -57,8 +57,8 @@ int pe_test_outfit_save(void){
     CHECK(loaded->deployed_count==1&&loaded->deployed[0].instance_id==deployed&&loaded->equipped_instance_id==g->equipped_instance_id);
     CHECK(pe_outfit_defense(&loaded->outfit)==11&&loaded->medpack_cooldown==3.5f&&loaded->juice_cooldown==1.25);
     bytes=read_bytes(path,&n);CHECK(bytes&&n>PE_SAVE_V14_APPEND+16);if(!bytes||n<=PE_SAVE_V14_APPEND+16)goto done;
-    size_t footer=n-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND,counter=pe_test_save_counter_offset(g);
-    CHECK(get32(bytes+4)==15&&get32(bytes+counter)==g->inventory.next_instance_id);
+    size_t footer=n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND,counter=pe_test_save_counter_offset(g);
+    CHECK(get32(bytes+4)==16&&get32(bytes+counter)==g->inventory.next_instance_id);
     for(unsigned i=0;i<3;i++){
         CHECK(get32(bytes+footer+i*12)==(uint32_t)g->outfit.items[i].item_id);
         CHECK(get32(bytes+footer+i*12+4)==g->outfit.items[i].instance_id);
@@ -74,17 +74,17 @@ int pe_test_outfit_save(void){
     };
     for(size_t i=0;i<sizeof malformed/sizeof malformed[0];i++){
         memcpy(bad,bytes,n);put32(bad+footer+malformed[i].offset,malformed[i].value);
-        CHECK(write_bytes(path,bad,n,15));rejected(loaded,path,snapshot,hash);
+        CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);
     }
-    memcpy(bad,bytes,n);memset(bad+footer,0,36);CHECK(write_bytes(path,bad,n,15));rejected(loaded,path,snapshot,hash); /* Never repair missing v14 clothes. */
-    memcpy(bad,bytes,n);memset(bad+footer+12,0,12);CHECK(write_bytes(path,bad,n,15));rejected(loaded,path,snapshot,hash);
-    for(size_t missing=1;missing<=36;missing++){
-        memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-missing,15));rejected(loaded,path,snapshot,hash);
+    memcpy(bad,bytes,n);memset(bad+footer,0,36);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash); /* Never repair missing v14 clothes. */
+    memcpy(bad,bytes,n);memset(bad+footer+12,0,12);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);
+    for(size_t missing=1;missing<=PE_SAVE_V16_APPEND+36;missing++){
+        memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-missing,16));rejected(loaded,path,snapshot,hash);
     }
-    memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,15));rejected(loaded,path,snapshot,hash);
+    memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,16));rejected(loaded,path,snapshot,hash);
     /* Save rejection is atomic too, including references which must never be
      * allowed to point at worn-only instances. */
-    CHECK(write_bytes(path,bytes,n,15));
+    CHECK(write_bytes(path,bytes,n,16));
     PeOutfit outfit=g->outfit;
     for(unsigned i=0;i<3;i++){
         g->outfit.items[i].durability=NAN;CHECK(!pe_game_save(g,path,error,sizeof error));unchanged_file(path,bytes,n);g->outfit=outfit;
@@ -118,10 +118,10 @@ int pe_test_outfit_save(void){
     CHECK(pe_game_save(loaded,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(&migrated,&loaded->outfit,sizeof migrated));
     /* Legacy retains zero outfit and allocates nothing on old load. */
     pe_game_init(legacy,97);CHECK(pe_game_save(legacy,path,error,sizeof error));free(after);after=read_bytes(path,&after_n);CHECK(after);
-    if(after){CHECK(!memcmp(after+after_n-PE_SAVE_V15_APPEND-36,(unsigned char[36]){0},36));
-        CHECK(write_bytes(path,after,after_n-PE_SAVE_V15_APPEND-36,13)&&pe_game_load(loaded,path,error,sizeof error));
+    if(after){CHECK(!memcmp(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,(unsigned char[36]){0},36));
+        CHECK(write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,13)&&pe_game_load(loaded,path,error,sizeof error));
         CHECK(loaded->mode==PE_GAME_LEGACY&&pe_outfit_defense(&loaded->outfit)==0&&loaded->inventory.next_instance_id==legacy->inventory.next_instance_id);
-        put32(after+after_n-PE_SAVE_V15_APPEND-36,95);CHECK(write_bytes(path,after,after_n,15));
+        put32(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,95);CHECK(write_bytes(path,after,after_n,16));
         memcpy(snapshot,loaded,sizeof *loaded);hash=pe_world_hash(&loaded->world);rejected(loaded,path,snapshot,hash);
     }
  done:

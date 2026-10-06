@@ -18,7 +18,7 @@ static bool corrupt(const char *path,int mode){
     if(fseek(f,0,SEEK_END)){fclose(f);return false;}long n=ftell(f);rewind(f);
     if(n<20){fclose(f);return false;}unsigned char *p=malloc((size_t)n+1);if(!p){fclose(f);return false;}
     bool ok=fread(p,1,(size_t)n,f)==(size_t)n;fclose(f);
-    if(mode==0)put32(p+n-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-(8+16*(PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY))-(12+4+16*PE_TOWN_V8_STOCK_CAPACITY)-4,96);else if(mode==1)n--;else p[n++]=0;
+    if(mode==0)put32(p+n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-(8+16*(PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY))-(12+4+16*PE_TOWN_V8_STOCK_CAPACITY)-4,96);else if(mode==1)n--;else p[n++]=0;
     put32(p+8,(uint32_t)n-16);uint32_t sum=2166136261u;
     for(long i=16;i<n;i++){sum^=p[i];sum*=16777619u;}put32(p+12,sum);
     f=fopen(path,"wb");if(!f)ok=false;else{ok=ok&&fwrite(p,1,(size_t)n,f)==(size_t)n;if(fclose(f))ok=false;}

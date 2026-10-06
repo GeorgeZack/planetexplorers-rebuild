@@ -5,6 +5,7 @@
 #include "pe_block.h"
 #include "pe_outfit.h"
 #include "pe_passive_recovery.h"
+#include "pe_stamina_recovery.h"
 #include "pe_sandbox_collision.h"
 #define PE_INVENTORY_SLOTS 32
 #define PE_MAX_BLOCKS 256
@@ -27,6 +28,8 @@
 #define PE_SAVE_V14_APPEND 36u
 /* V15 appends only the secondary reference; bag remains the durability owner. */
 #define PE_SAVE_V15_APPEND 4u
+/* V16 appends raw Comfort only. Recovery clocks/derived delay stay transient. */
+#define PE_SAVE_V16_APPEND 4u
 typedef struct { int item_id; uint32_t instance_id; float durability; PeVec3 position; unsigned quarter_turn; } PeDeployable;
 #define PE_TOWN_V8_STOCK_CAPACITY 17
 #define PE_TOWN_STOCK_CAPACITY 284
@@ -73,6 +76,8 @@ typedef struct PeGame {
     uint32_t equipped_instance_id, rng_state;
     uint32_t shield_instance_id; /* Optional exact bag-owned Wood Shield34; no saved block flag. */
     float stamina, stamina_max, stamina_regen;
+    float comfort;
+    PeStaminaRecovery stamina_recovery;
     float stamina_recover_delay, stamina_idle, tool_cooldown;
     PeBlock blocks[PE_MAX_BLOCKS];
     int block_count;
@@ -125,6 +130,8 @@ bool pe_game_quickslot_use(PeGame *game, int quickslot);
 /* Replace only world-bound state; preserve player possessions/progression. */
 bool pe_game_set_world(PeGame *game, const PeWorld *world, PeVec3 preferred);
 void pe_game_step(PeGame *game, PeInput input, float dt);
+/* Notify only an admitted stamina debit or active cost-owning action. */
+void pe_game_stamina_activity(PeGame *game);
 /* Cache stays external to saved state. Refresh after every world/edit/load change. */
 bool pe_game_collision_update(const PeGame *game, PeSandboxCollision *collision, char *error, size_t capacity);
 /* Spawn/import recovery only, bounded upward 4m/downward 5m; no x/z relocation.

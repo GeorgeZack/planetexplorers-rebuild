@@ -1,3 +1,4 @@
+#include "../generated/pe_stamina_recovery_source.h"
 #include "pe_sandbox_ui.h"
 #include "pe_shield.h"
 #include "pe_adventure_medicine.h"
@@ -292,11 +293,12 @@ static void character(const PeSandboxUI *u,const PeGame *g) {
         char number[64];
         if(k==0)snprintf(number,sizeof number,"%.0f / %.0f",g->hp,g->max_hp);
         else if(k==1)snprintf(number,sizeof number,"%.0f / %.0f",g->stamina,g->stamina_max);
+        else if(k==3&&g->mode==PE_GAME_ADVENTURE)snprintf(number,sizeof number,"%.1f / %.0f",g->comfort,pe_stamina_recovery_source.comfort_max);
         else if(k==7)snprintf(number,sizeof number,"%.0f",pe_player_defaults.attack+(tool&&!(tool->id==1&&equipped->durability<=0)?tool->attack:0));
         else if(k==8)snprintf(number,sizeof number,"%.0f",pe_player_defaults.defense+pe_outfit_defense(&g->outfit)+(u->starter_pair_available?pe_shield_defense(shield):0));
         else snprintf(number,sizeof number,"--");
         Vector2 extent=MeasureTextEx(font(u,18,true),number,18*z,0);
-        text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||k==7||k==8?gold:dim,true);
+        text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||(k==3&&g->mode==PE_GAME_ADVENTURE)||k==7||k==8?gold:dim,true);
     }
     if(tool)wrapped(u,TextFormat("%s\nDurability %.0f / %d\nRight-click hand to unequip",tool->name,equipped->durability,tool->durability_max),rel(u,p,25,446,250,110),14,ink);
 }

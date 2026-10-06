@@ -1,0 +1,22 @@
+#ifndef PE_STAMINA_RECOVERY_H
+#define PE_STAMINA_RECOVERY_H
+#include "pe_passive_recovery.h"
+/* Same initial-buff lifecycle as HP; independent source pulse indices.
+ * Derived delay and consumption timestamp are not serialized. */
+typedef struct {
+    float last_consumption, summed_delay;
+    uint64_t stamina_ticks, comfort_ticks, delay_ticks, frame;
+    bool initialized;
+} PeStaminaRecovery;
+typedef struct {
+    float stamina, maximum, recovery_speed, base_delay, comfort;
+} PeStaminaVitals;
+/* The parent before/after snapshots are from this frame's successful passive
+ * lifecycle update. All formulas precede attribute recalculation/clamping. */
+bool pe_stamina_recovery_frame(PeStaminaRecovery *state,
+    const PePassiveRecovery *before,const PePassiveRecovery *after,
+    PeAttributeFrame frame,PeStaminaVitals *vitals);
+/* Only successful consumption or an active cost-owning action calls this.
+ * now is the validated shared display timestamp, never a fixed-tick clock. */
+void pe_stamina_recovery_consume(PeStaminaRecovery *state,float now);
+#endif
