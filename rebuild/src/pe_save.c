@@ -374,7 +374,11 @@ bool pe_game_load(PeGame *g,const char *path,char *error,size_t capacity) {
         pe_sandbox_collision_free(collision);migration_failed=!ok;
         if(ok){migration_distance=hypotf(next->player.x-previous.x,next->player.z-previous.z);ok=valid(next,true,true);}
     }
-    if(ok){pe_game_move(g,next);
+    if(ok){
+        /* Original attributes persist, but initial buffs and hurt timestamps
+         * do not. Loaded entities first mount at delayed CheckInitAttr. */
+        next->passive_recovery.loaded=true;
+        pe_game_move(g,next);
         if(migration_distance>0)snprintf(g->message,sizeof g->message,"Game loaded; moved %.2fm to clear a legacy tree overlap.",(double)migration_distance);
         else snprintf(g->message,sizeof g->message,"Game loaded.");
         err(error,capacity,"");

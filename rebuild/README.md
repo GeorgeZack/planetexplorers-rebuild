@@ -18,6 +18,8 @@ In the Adventure sandbox, equip Knife33 and draw it with a fresh world click. Ru
 
 ## Build and run
 
+Adventure Sandbox now includes the source low-health recovery rule: below 33% HP, going at least four seconds without a hit allows periodic recovery of 1% maximum HP. Recovery stops at or above the threshold and cannot revive a dead player. This increment has source and headless coverage; an on-screen retreat/recovery check remains pending. See [recovery lifecycle and timing limits](../docs/audit/PASSIVE_RECOVERY.md).
+
 Requirements: a C11 compiler, Make, pkg-config, raylib and LZ4 development files, and a graphical display/OpenGL driver. Python 3 with its standard-library SQLite module is needed for content regeneration and exporter tests. Headless core tests require LZ4 but not raylib or a display. Persistence currently uses POSIX APIs; Linux is the development platform.
 
 From the repository root:

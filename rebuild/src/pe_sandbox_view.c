@@ -313,6 +313,23 @@ static bool sandbox_blade_owned(const PeSlot *item,const PeSandboxMelee *melee){
     return def&&item->durability<=def->durability_max&&
         (item->item_id==1?item->durability>=0:item->item_id==33&&item->durability>0);
 }
+/* One active-sandbox process clock survives loads and graphics/menu round trips.
+ * Native pause/focus policy freezes scaled time; it is not the world/day clock. */
+static PeAttributeClock sandbox_attribute_clock;
+static bool sandbox_health_frame(PeAttributeClock *clock,PeGame *game,double dt,bool focused,bool paused){
+    if(!clock||!game||!isfinite(dt)||dt<0)return false;
+    PeAttributeClock next=*clock;PeAttributeFrame frame;
+    bool active=focused&&!paused;
+    if(!pe_attribute_clock_step(&next,active?dt:0,&frame))return false;
+    PePassiveRecovery recovery=game->passive_recovery;float hp=game->hp;
+    if(active&&game->mode==PE_GAME_ADVENTURE&&
+       !pe_passive_recovery_frame(&recovery,frame,&hp,game->max_hp))return false;
+    *clock=next;game->passive_recovery=recovery;game->hp=hp;return true;
+}
+static void sandbox_health_contacts(PeGame *game,uint64_t previous_hits,uint64_t committed_hits){
+    if(game&&committed_hits!=previous_hits&&game->mode==PE_GAME_ADVENTURE)
+        pe_passive_recovery_hurt(&game->passive_recovery,game->hp);
+}
 static bool sandbox_blade_prepare(PeSandboxActor *actor,const char *assets,int item_id,
         PeSandboxMelee *out,PeHitboxes **capsule,char *error,size_t capacity){
     if(!pe_sandbox_actor_hold_ready(actor,item_id))return true;
@@ -703,6 +720,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         PeVec3 eye={game->player.x,game->player.y+1.58f,game->player.z};
         PeVec3 build_direction=construction_direction(game,aim,eye);
         profile_stage(&profile,PROFILE_SIM);
+        /* Attribute Update is once per display, outside fixed-step catch-up.
+         * Contacts below notify at this same validated frame timestamp. */
+        if(!sandbox_health_frame(&sandbox_attribute_clock,game,smoke_frames?PE_FIXED_DT:dt,focused,action.paused)){
+            snprintf(error,sizeof error,"Invalid player recovery clock");result=1;break;
+        }
         if(focused&&!action.paused&&game->hp>0) {
             supplier_seconds+=smoke_frames?PE_FIXED_DT:dt;
             if(hunt.encounter.active&&!action.consume_world){
@@ -861,6 +883,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                             &game->hp,&game->stamina,&game->hunt_kills,&combat_update,&completed)){
                             snprintf(error,sizeof error,"Hunt combat transaction failed");result=1;break;
                         }
+                        sandbox_health_contacts(game,previous_player_hits,hunt.player_hits);
                         /* Opt-in, bounded observation only: no inputs or saved state.
                          * Keep per-target health available for reproducible playtests. */
                         if(combat_trace&&combat_trace_lines<4096&&

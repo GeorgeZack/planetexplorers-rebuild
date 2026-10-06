@@ -2,6 +2,8 @@
 
 October 6, 2026. Baseline: private rebuild commit `25877e7f759538b7cd6a0358a0c71d2debbe20d4`. This audit inspects original C# code, serialized data, existing captures and the C implementation. It launches neither game. It is a prioritized parity audit, not an exhaustive verification of every Unity subsystem.
 
+Subsequent implementation: [passive recovery](PASSIVE_RECOVERY.md) now supplies the first work-order item in Adventure Sandbox, including its source eight-frame attribute gate and fresh/load lifecycle. Optimized core and focused sanitizer/host checks pass; physical recovery remains unverified. The baseline findings below remain the audit record; stamina cadence and capsule history are the next source-only corrections.
+
 ## Decision
 
 Continue gameplay development from source and offline data. Reserve original-game sessions for a named unresolved engine behavior, missing generated-world state, or acceptance of an integrated feature. Most control rules, item values, transactions, progression and numerical behavior do not require another playthrough to discover.
@@ -32,7 +34,7 @@ Passing a numerical test does not prove visual fidelity. A video does not prove 
 
 Read-only inspection of `Assets/Resources/DataBase/localData.bytes` confirms that player `initProp.id=1` includes buffs30200046,30200052 and30200175. Buff30200046 conditionally adds1% maximum HP when the player has gone at least4 seconds without damage and HP/maxHP is below.33. Its interval is1 second. The C game currently lacks this passive recovery owner. This is a source-backed survival gap, not a proposed difficulty adjustment.
 
-The buff scheduler matters: source performs an initial evaluation and subsequently checks strict elapsed-time boundaries, with at most one evaluation per update. Stamina recovery is also buff-timed; its comfort-dependent delay is not equivalent to the current continuous C recovery. Implementation should recover the scheduler, hurt/consumption timestamps, death rules and save behavior together. It should not simply add an unconditional HP-per-second increment. See the combat report for the call chains and test requirements.
+The buff scheduler matters: source performs an initial evaluation and subsequently checks strict elapsed-time boundaries, with at most one periodic evaluation per global eight-rendered-frame attribute pass. The first execution can also perform its initial evaluation in that same pass; see the [completed lifecycle audit](PASSIVE_RECOVERY.md). Stamina recovery is also buff-timed; its comfort-dependent delay is not equivalent to the current continuous C recovery. Implementation should recover the scheduler, hurt/consumption timestamps, death rules and save behavior together. It should not simply add an unconditional HP-per-second increment. See the combat report for the call chains and test requirements.
 
 The same review confirms that Knife33's zero wear and the inspected player/hare zero base critical chances are source values. They are not defects to change in order to obtain four kills.
 

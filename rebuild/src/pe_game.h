@@ -4,6 +4,7 @@
 #include "pe_content.h"
 #include "pe_block.h"
 #include "pe_outfit.h"
+#include "pe_passive_recovery.h"
 #include "pe_sandbox_collision.h"
 #define PE_INVENTORY_SLOTS 32
 #define PE_MAX_BLOCKS 256
@@ -97,6 +98,7 @@ typedef struct PeGame {
     int known_recipe_count, known_recipes[PE_KNOWN_RECIPES];
     PeQuickslot quickslots[PE_QUICKSLOTS];
     float hp, max_hp;
+    PePassiveRecovery passive_recovery; /* Transient source buff phase/hurt stamp, never serialized. */
     double juice_cooldown, juice_buff_elapsed;
     float medpack_cooldown; /* Source cooldown group9; independent of juice group11. */
     unsigned juice_buff_tick;

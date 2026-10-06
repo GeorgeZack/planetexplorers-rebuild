@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Scripts/SkillSystem/SkBuffs.cs",
+      "sha256": "d02d2ee9311c1362047aaf9361ef7baca27d2b946cec81ef777a46209ac20be6"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkExpFuncSet.cs",
+      "sha256": "462543e6d4b61da4a9fb71a79c81dfafbdc8eaaa4cd287d66afcc0a35a878874"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntityHelper.cs",
+      "sha256": "afa0b70c1026adc9acce4c3df715b9d565b6b5d5a3485bf9732baab639de4c0a"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntityAttribsUpdater.cs",
+      "sha256": "089d2ee0a9f8cdc233c6beae9641b73169e9a757a8a3d4ecaf367be16518745c"
+    },
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "sha256": "a74c7a07590895fda1ba0769bb6a96d115e0e0bfdb4c594710b4cff3e74757a9"
+    }
+  ],
+  "rule": {
+    "player_init_id": 1,
+    "buff_id": 30200046,
+    "interval_seconds": 1.0,
+    "cooldown_seconds": 4.0,
+    "heal_fraction": 0.01,
+    "threshold_fraction": 0.33,
+    "lifetime_seconds": -1.0,
+    "initialization_check_delay_seconds": 0.5,
+    "attribute_frame_interval": 8
+  },
+  "source_buff": {
+    "_id": "30200046",
+    "_name": "自动回血",
+    "_icon": "0",
+    "_desc": "2300000",
+    "_type": "65300",
+    "_priority": "0",
+    "_stackLimit": "1",
+    "_timeActive": "-1",
+    "_timeInterval": "1",
+    "_eff": "0",
+    "_effBeg": "0",
+    "_effEnd": "0",
+    "_mods": "exp,1,if(target.expFunc.InCoolingForGettingHurt(4)&&target.raws[1]/target.sums[0]<0.33f){target.raws[1]+=target.sums[0]*0.01f;}",
+    "_AttType": "公式"
+  },
+  "initial_player": {
+    "id": "1",
+    "HpMax": "500",
+    "Hp": "500",
+    "InitBuffList": "30200049,30200050,30200051,30200052,30200053,30200046,30200149,30200150,30200151,30200152,30200175"
+  },
+  "scheduler": {
+    "initial_evaluation": true,
+    "interval_comparison": "strict greater than",
+    "max_overdue_ticks_per_evaluation": 1,
+    "tick_before_expiration": true,
+    "source_attribute_frame_interval": 8,
+    "clock": "Time.time",
+    "cooldown_comparison": "greater than or equal",
+    "initial_last_hurt": 0,
+    "hp_arithmetic": "source float ratio < .33f; add max_hp * .01f; no .33 cap",
+    "death": "PESkEntity.OnDeath cancels initial buffs",
+    "deferred_initial_check": "Start invokes CheckInitAttr after .5s; living activation mounts initial buffs and replaces any existing same-ID stack-limit1 instance. Fresh/load first-mount distinction depends on initial prefab/creation order; native Invoke/update ordering remains an adapter.",
+    "initialization": "PlayerProtoDb.Get selects first initProp row; loaded player restores its initial buff list"
+  },
+  "scope": "Passive HP rule only. Source cadence is provenance, not a native frame-rate or save migration policy. No stamina, general buffs, revival or runtime behavior is generated."
+}
