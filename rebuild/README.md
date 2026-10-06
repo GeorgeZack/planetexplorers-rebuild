@@ -760,3 +760,8 @@ make -C rebuild attack-playback-source-check ASSET_PYTHON="$PWD/rebuild/build/un
 ```
 
 The optional [SHA-pinned arithmetic replay](../docs/audit/UNITY5_CURVE_EVALUATOR.md) reads the installed native binary without starting its engine. Ordinary optimized core tests retain native golden values and exercise shared action-clock integration.
+
+
+### Offline humanoid rotation research
+
+`make -C rebuild humanoid-rotation-test` from the root runs the experimental C arithmetic and CPU-only channel/mapping/provenance tests. The [697-pose comparison](../docs/audit/HUMANOID_ROTATION_PROOF.md) uses existing captures, source muscle channels, exact Avatar axes and source loop-pose correction. It still reports12 unresolved limb bones and does not install gameplay assets. [Oracle instructions](../docs/audit/UNITY5_HUMAN_ROTATION.md) describe the optional SHA-pinned arithmetic replay without engine initialization.

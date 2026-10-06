@@ -29,7 +29,7 @@ $(BUILD)/planet_explorers: $(FRONTEND) src/pe_reference.h src/pe_training_view.h
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(FRONTEND) $(CORE) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 $(BUILD)/test_core: tests/adventure_test_helpers.h $(TESTS) $(CORE) $(HEADERS) | $(BUILD)
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(TESTS) $(CORE) -o $@ $(LZ4_LIBS) -lm
-test: sandbox-stamina-host-test sandbox-health-host-test sandbox-equipment-host-test hunt-consume-test training-asset-clocks-test actor-blend-test town-defense-clock-test terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
+test: humanoid-rotation-test sandbox-stamina-host-test sandbox-health-host-test sandbox-equipment-host-test hunt-consume-test training-asset-clocks-test actor-blend-test town-defense-clock-test terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
 	./$(BUILD)/test_core
 	python3 tests/test_adventure_settlement_export.py
 	python3 tests/test_adventure_settlement_assets.py
@@ -336,3 +336,11 @@ capsule-history-source-check:
 attack-playback-source-check:
 	$(ASSET_PYTHON) tools/export_attack_playback.py --check
 	$(ASSET_PYTHON) tests/test_attack_playback_export.py
+
+# Experimental offline retargeting arithmetic; not linked into runtime CORE.
+.PHONY: humanoid-rotation-test
+$(BUILD)/test_human_rotation_math: tests/test_human_rotation_math.c tools/human_rotation_math.c tools/human_rotation_math.h | $(BUILD)
+	$(CC) $(CFLAGS) tests/test_human_rotation_math.c tools/human_rotation_math.c -o $@ -lm
+humanoid-rotation-test: $(BUILD)/test_human_rotation_math
+	./$(BUILD)/test_human_rotation_math
+	python3 tests/test_humanoid_rotation_probe.py

@@ -1,0 +1,689 @@
+{
+  "schema": "pe-humanoid-local-rotation-comparison-1",
+  "total_samples": 697,
+  "local_bases_compared": 27880,
+  "mapped_nonroot_bones": 40,
+  "limb_bones": 12,
+  "nonlimb_bones": 28,
+  "scope": "Local3x3 bases only; translations/world poses, limb/goal solving and masked layers are not modeled. Nonlimb/limb partition is anatomical, not an acceptance threshold.",
+  "general_retargeting_validated": false,
+  "shield_composition_validated": false,
+  "bone_maxima": {
+    "LeftUpperLeg": {
+      "maximum_local_basis_error": 0.4678785209001438,
+      "capture": "female-clips-06",
+      "clip": "Attack9",
+      "authored_time": 0.03333333333333333,
+      "limb": true
+    },
+    "RightUpperLeg": {
+      "maximum_local_basis_error": 0.4009148994663816,
+      "capture": "female-clips-06",
+      "clip": "Attack7",
+      "authored_time": 0.13333333333333333,
+      "limb": true
+    },
+    "LeftLowerLeg": {
+      "maximum_local_basis_error": 0.4954069453260281,
+      "capture": "female-clips-06",
+      "clip": "Attack9",
+      "authored_time": 0.03333333333333333,
+      "limb": true
+    },
+    "RightLowerLeg": {
+      "maximum_local_basis_error": 0.40707670081830283,
+      "capture": "female-clips-06",
+      "clip": "Attack7",
+      "authored_time": 0,
+      "limb": true
+    },
+    "LeftFoot": {
+      "maximum_local_basis_error": 0.3254581003760965,
+      "capture": "female-clips-06",
+      "clip": "Attack6",
+      "authored_time": 0.6666666666666666,
+      "limb": true
+    },
+    "RightFoot": {
+      "maximum_local_basis_error": 0.31076344077307233,
+      "capture": "female-clips-06",
+      "clip": "Attack6",
+      "authored_time": 0.6,
+      "limb": true
+    },
+    "Spine": {
+      "maximum_local_basis_error": 1.1462924045260725e-05,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "Chest": {
+      "maximum_local_basis_error": 2.1636685187953475e-06,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "Neck": {
+      "maximum_local_basis_error": 8.083991424178956e-06,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "Head": {
+      "maximum_local_basis_error": 1.2169886752511072e-05,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "LeftShoulder": {
+      "maximum_local_basis_error": 1.1447148023924214e-06,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "RightShoulder": {
+      "maximum_local_basis_error": 1.1467822907673675e-06,
+      "capture": "female-sword-01",
+      "clip": "SwordWF",
+      "authored_time": 1.0999984741210938,
+      "limb": false
+    },
+    "LeftUpperArm": {
+      "maximum_local_basis_error": 0.8314586263532378,
+      "capture": "female-clips-06",
+      "clip": "Attack7",
+      "authored_time": 0.6666666666666666,
+      "limb": true
+    },
+    "RightUpperArm": {
+      "maximum_local_basis_error": 1.2507818148123016,
+      "capture": "female-clips-06",
+      "clip": "Attack8",
+      "authored_time": 0.2,
+      "limb": true
+    },
+    "LeftLowerArm": {
+      "maximum_local_basis_error": 1.0159448265740503,
+      "capture": "female-clips-06",
+      "clip": "Attack7",
+      "authored_time": 0.6333333333333333,
+      "limb": true
+    },
+    "RightLowerArm": {
+      "maximum_local_basis_error": 1.3540701319675792,
+      "capture": "female-clips-06",
+      "clip": "Attack6",
+      "authored_time": 0.2,
+      "limb": true
+    },
+    "LeftHand": {
+      "maximum_local_basis_error": 0.5596422688994583,
+      "capture": "female-clips-06",
+      "clip": "Attack7",
+      "authored_time": 0.6,
+      "limb": true
+    },
+    "RightHand": {
+      "maximum_local_basis_error": 0.9477631483091011,
+      "capture": "female-clips-06",
+      "clip": "Attack8",
+      "authored_time": 0.23333333333333334,
+      "limb": true
+    },
+    "LeftToes": {
+      "maximum_local_basis_error": 6.723426337590377e-06,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "RightToes": {
+      "maximum_local_basis_error": 2.4712109071900468e-05,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "LeftEye": {
+      "maximum_local_basis_error": 4.807923343896903e-07,
+      "capture": "female-clips-06",
+      "clip": "Attack6",
+      "authored_time": 0.5666666666666667,
+      "limb": false
+    },
+    "Jaw": {
+      "maximum_local_basis_error": 2.076983740550986e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalWF",
+      "authored_time": 0.5333333333333333,
+      "limb": false
+    },
+    "LeftThumbProximal": {
+      "maximum_local_basis_error": 3.461451910657942e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftThumbIntermediate": {
+      "maximum_local_basis_error": 6.600167834491799e-08,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftThumbDistal": {
+      "maximum_local_basis_error": 8.422574815369899e-08,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftIndexProximal": {
+      "maximum_local_basis_error": 5.008985702881219e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalRF",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftIndexIntermediate": {
+      "maximum_local_basis_error": 4.962418842513472e-07,
+      "capture": "female-clips-06",
+      "clip": "Attack6",
+      "authored_time": 0.1,
+      "limb": false
+    },
+    "LeftIndexDistal": {
+      "maximum_local_basis_error": 9.770611786308336e-08,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftRingProximal": {
+      "maximum_local_basis_error": 1.6220659171395369e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftRingIntermediate": {
+      "maximum_local_basis_error": 1.6037766648047125e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "LeftRingDistal": {
+      "maximum_local_basis_error": 5.829034455118176e-08,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "RightThumbProximal": {
+      "maximum_local_basis_error": 1.6717261330789768e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "RightThumbIntermediate": {
+      "maximum_local_basis_error": 1.408074939979187e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "RightThumbDistal": {
+      "maximum_local_basis_error": 3.276556602704872e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "RightIndexProximal": {
+      "maximum_local_basis_error": 2.714516909030351e-07,
+      "capture": "female-sword-01",
+      "clip": "SwordLand",
+      "authored_time": 0.7,
+      "limb": false
+    },
+    "RightIndexIntermediate": {
+      "maximum_local_basis_error": 3.0100179226888457e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalWF",
+      "authored_time": 0.1,
+      "limb": false
+    },
+    "RightIndexDistal": {
+      "maximum_local_basis_error": 1.7069570112937527e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    },
+    "RightRingProximal": {
+      "maximum_local_basis_error": 9.325984534000464e-07,
+      "capture": "female-sword-backward-02",
+      "clip": "SwordRB",
+      "authored_time": 0.6666717529296875,
+      "limb": false
+    },
+    "RightRingIntermediate": {
+      "maximum_local_basis_error": 4.30746597446241e-07,
+      "capture": "female-sword-01",
+      "clip": "SwordRunJump",
+      "authored_time": 0.43333333333333335,
+      "limb": false
+    },
+    "RightRingDistal": {
+      "maximum_local_basis_error": 2.1180932596731594e-07,
+      "capture": "female-clips-06",
+      "clip": "NormalIdle",
+      "authored_time": 0,
+      "limb": false
+    }
+  },
+  "captures": [
+    {
+      "capture": "female-clips-06",
+      "samples": 345,
+      "report_path": "rebuild/build/humanoid-proof/female-clips-06-final.json",
+      "report_sha256": "679c251a0ba377c878897053a2f69b531c56cdf4ac7e628016b945e8b12465d4",
+      "inputs": [
+        {
+          "path": "rebuild/build/reference-player-starter/player-female-starter-rig.json",
+          "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+        },
+        {
+          "path": "rebuild/build/pose-analysis/female-starter-tp-attack6-v2.json",
+          "sha256": "71cd28df8742b63348c46bc8a231c605e7ee2c89ae4a0507fa4700fa944877df"
+        },
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-clips-06.jsonl",
+          "sha256": "118ba317b73395e25557e86abeed4c3c65ea5a673ac78edadb638f4eae308bff"
+        },
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-clips-06.launch.json",
+          "sha256": "59e5700f2eae0b2b8ab915f923c0cf123c2876eb6f6e16caccc542fa896676a7"
+        },
+        {
+          "path": "rebuild/build/humanoid-proof/human_rotation_math.so",
+          "sha256": "7abeecd569b859a41fc3a5429036e2922ba0faa26117591fef2d8b2db9bf2d4e"
+        },
+        {
+          "path": "docs/reference/unity5-human-rotation-arithmetic.json",
+          "sha256": "11642e27d854cef3f3d8293b5d822c0407cfa32efd648cab65af974835de2a23"
+        },
+        {
+          "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/sharedassets1.assets",
+          "sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/probe_humanoid_rotation.py",
+          "sha256": "e01ccde2f2dbedaf3a56ff2e80d6ea0617c0a3ce739c3cddfed9db4dc5552125"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/human_rotation_math.c",
+          "sha256": "cec70ee900c0dd15426a74e9e51ec4ea8cb4e874c5eb84756c4160032cb3c036"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/human_rotation_math.h",
+          "sha256": "34c3920919645b952041837542f4682b7d0d4224df225a33919e3b45ba81fa0c"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/export_reference_player.py",
+          "sha256": "9c45c9b34067807b99a402d636ab0a9300d61deb09d16ea27e7c7563c6c0212b"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/analyze_reference_bake.py",
+          "sha256": "8f3b65aef92a46ab8115acc27f268fa0f4c4dc2f41b5e070e702b6145aa55d9f"
+        }
+      ],
+      "clips": [
+        {
+          "name": "NormalIdle",
+          "source_path_id": 684,
+          "source_object_sha256": "c39541fb90c34d13d35a42b5e46f41b8080ac319d59a01536e70e836885840eb",
+          "samples": 62,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 1.3740009880136572e-06,
+          "maximum_nonlimb_basis_error": 6.420350939784214e-07,
+          "maximum_limb_basis_error": 0.31310593384516344
+        },
+        {
+          "name": "NormalWF",
+          "source_path_id": 531,
+          "source_object_sha256": "87ec01f144613f27b3b152363c540bdd694eabe153dfdf824b6a78db2b7128d2",
+          "samples": 34,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 3.1942430164695612e-06,
+          "maximum_nonlimb_basis_error": 6.758546637897211e-07,
+          "maximum_limb_basis_error": 0.2987079155253718
+        },
+        {
+          "name": "NormalRF",
+          "source_path_id": 539,
+          "source_object_sha256": "2b0c742c3ad7f95315ae20df3ae42899d36e89e89e99fb74bf6e81a2f914826d",
+          "samples": 22,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 1.0602976319384894e-05,
+          "maximum_nonlimb_basis_error": 5.293405883621816e-07,
+          "maximum_limb_basis_error": 0.3976071818416005
+        },
+        {
+          "name": "Jump",
+          "source_path_id": 263,
+          "source_object_sha256": "6108e2007ab04ce776d753bdfb8c0f275977ff0f59f118ad1ecc0a4f32098c84",
+          "samples": 31,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.191017314887247e-07,
+          "maximum_nonlimb_basis_error": 5.191017314887247e-07,
+          "maximum_limb_basis_error": 0.7412320850120034
+        },
+        {
+          "name": "Fall",
+          "source_path_id": 500,
+          "source_object_sha256": "af3078ac1189b63e6ca9e145d418b18c4475765eb09b11563e99facc636518ca",
+          "samples": 22,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 3.06085898693631e-06,
+          "maximum_nonlimb_basis_error": 6.054027067436962e-07,
+          "maximum_limb_basis_error": 0.6792775535088077
+        },
+        {
+          "name": "Land",
+          "source_path_id": 505,
+          "source_object_sha256": "eda6a86178533c2243ffdefb970ed6b670753e85bd590d19e5b112909cff4cb5",
+          "samples": 34,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 6.068311709794827e-07,
+          "maximum_nonlimb_basis_error": 6.068311709794827e-07,
+          "maximum_limb_basis_error": 0.7441565830667773
+        },
+        {
+          "name": "Attack6",
+          "source_path_id": 231,
+          "source_object_sha256": "a1618953f5daa22cbac78961e1cc6b99d3e74bdfef4c0267214c01585e8d908f",
+          "samples": 34,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 6.480447451995275e-07,
+          "maximum_nonlimb_basis_error": 6.480447451995275e-07,
+          "maximum_limb_basis_error": 1.3540701319675792
+        },
+        {
+          "name": "Attack7",
+          "source_path_id": 240,
+          "source_object_sha256": "55d4b307a5db252920aea2d3dddb1fdef40e3f25ce1ab87f0247c3e2e76881d7",
+          "samples": 35,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.877564210887698e-07,
+          "maximum_nonlimb_basis_error": 5.877564210887698e-07,
+          "maximum_limb_basis_error": 1.0378844637811135
+        },
+        {
+          "name": "Attack8",
+          "source_path_id": 247,
+          "source_object_sha256": "4590b16dc6224441f1547ae99d92448c9acdedeb46c099ab10aa3a296488c560",
+          "samples": 40,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.052130975791158e-07,
+          "maximum_nonlimb_basis_error": 5.052130975791158e-07,
+          "maximum_limb_basis_error": 1.2507818148123016
+        },
+        {
+          "name": "Attack9",
+          "source_path_id": 254,
+          "source_object_sha256": "02b6bfe11b42bbae0f2718a9134020ed655cdba4b4e64ea9c244536320916bca",
+          "samples": 31,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 6.761848818648275e-07,
+          "maximum_nonlimb_basis_error": 6.761848818648275e-07,
+          "maximum_limb_basis_error": 1.233670603741685
+        }
+      ]
+    },
+    {
+      "capture": "female-sword-01",
+      "samples": 304,
+      "report_path": "rebuild/build/humanoid-proof/female-sword-01-final.json",
+      "report_sha256": "8eb5e99363e7043fe0e531c50ac07835a1494ac713c47bf65990aa5d66b47002",
+      "inputs": [
+        {
+          "path": "rebuild/build/reference-player-starter/player-female-starter-rig.json",
+          "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+        },
+        {
+          "path": "rebuild/build/pose-analysis/female-starter-tp-attack6-v2.json",
+          "sha256": "71cd28df8742b63348c46bc8a231c605e7ee2c89ae4a0507fa4700fa944877df"
+        },
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-01.jsonl",
+          "sha256": "4750b6514742f9c9059e01645187de0b9d2236129573645376c9b2a330f1d4b7"
+        },
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-01.launch.json",
+          "sha256": "ad8e803101b37aaa74676ee6306d35d8a0c7f9e5b17728029fa882af880bd4f1"
+        },
+        {
+          "path": "rebuild/build/humanoid-proof/human_rotation_math.so",
+          "sha256": "7abeecd569b859a41fc3a5429036e2922ba0faa26117591fef2d8b2db9bf2d4e"
+        },
+        {
+          "path": "docs/reference/unity5-human-rotation-arithmetic.json",
+          "sha256": "11642e27d854cef3f3d8293b5d822c0407cfa32efd648cab65af974835de2a23"
+        },
+        {
+          "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/sharedassets1.assets",
+          "sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/probe_humanoid_rotation.py",
+          "sha256": "e01ccde2f2dbedaf3a56ff2e80d6ea0617c0a3ce739c3cddfed9db4dc5552125"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/human_rotation_math.c",
+          "sha256": "cec70ee900c0dd15426a74e9e51ec4ea8cb4e874c5eb84756c4160032cb3c036"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/human_rotation_math.h",
+          "sha256": "34c3920919645b952041837542f4682b7d0d4224df225a33919e3b45ba81fa0c"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/export_reference_player.py",
+          "sha256": "9c45c9b34067807b99a402d636ab0a9300d61deb09d16ea27e7c7563c6c0212b"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/analyze_reference_bake.py",
+          "sha256": "8f3b65aef92a46ab8115acc27f268fa0f4c4dc2f41b5e070e702b6145aa55d9f"
+        }
+      ],
+      "clips": [
+        {
+          "name": "AttackIdle",
+          "source_path_id": 90,
+          "source_object_sha256": "de297178b4ce10e3333ee5d2481d09e69014205f1ecc136fade4c17e33cac786",
+          "samples": 54,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 0.019325051919435343,
+          "maximum_nonlimb_basis_error": 5.934030496979048e-07,
+          "maximum_limb_basis_error": 0.29404327749570214
+        },
+        {
+          "name": "SwordWF",
+          "source_path_id": 133,
+          "source_object_sha256": "63a354fc87df228fe596b9cdf82735ec80e528f4c6568bf1ca3b0b48c878e386",
+          "samples": 34,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 3.3680692861776107e-06,
+          "maximum_nonlimb_basis_error": 3.3680692861776107e-06,
+          "maximum_limb_basis_error": 0.23529202415827202
+        },
+        {
+          "name": "SwordRF",
+          "source_path_id": 435,
+          "source_object_sha256": "f56e4628aa9fe0a66b17d1a2a3e6eb2470dd5247c9fb6d3faac6ea6fcf7ea1ad",
+          "samples": 22,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 9.713989699344783e-06,
+          "maximum_nonlimb_basis_error": 5.766137201046462e-07,
+          "maximum_limb_basis_error": 0.52025209804951
+        },
+        {
+          "name": "SwordSprint",
+          "source_path_id": 113,
+          "source_object_sha256": "4fbd0551496a7159edcff04a490e08daa963f8872de022c1b6ab3202ddbeeb02",
+          "samples": 20,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 1.6727837066938617e-06,
+          "maximum_nonlimb_basis_error": 5.441328385646926e-07,
+          "maximum_limb_basis_error": 0.398785177409284
+        },
+        {
+          "name": "SwordJump",
+          "source_path_id": 756,
+          "source_object_sha256": "a79dd2d74a5b303176fabc00ce3b522afaf7f2b9a73c8d0921c43dce83906c70",
+          "samples": 33,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.644842099306047e-07,
+          "maximum_nonlimb_basis_error": 5.644842099306047e-07,
+          "maximum_limb_basis_error": 0.7364919598145272
+        },
+        {
+          "name": "SwordFall",
+          "source_path_id": 757,
+          "source_object_sha256": "820ae7679cc21ee296a1a0024a9db03c2ea30f229de7c852f8b5b9ddd7a8e552",
+          "samples": 22,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.909137680282228e-07,
+          "maximum_nonlimb_basis_error": 5.909137680282228e-07,
+          "maximum_limb_basis_error": 0.6792776151478722
+        },
+        {
+          "name": "SwordLand",
+          "source_path_id": 758,
+          "source_object_sha256": "fecb865f827989fcdbac0f5f37629d4300ff040a87b8adb8f80b90495a394eca",
+          "samples": 34,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.852535702732808e-07,
+          "maximum_nonlimb_basis_error": 5.852535702732808e-07,
+          "maximum_limb_basis_error": 0.7441583400774954
+        },
+        {
+          "name": "SwordRunJump",
+          "source_path_id": 272,
+          "source_object_sha256": "f85c2651f30311f06ec661f3c2d1a2610aab17cddcda338f450ffda235cae28f",
+          "samples": 44,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 5.66696916504128e-07,
+          "maximum_nonlimb_basis_error": 5.66696916504128e-07,
+          "maximum_limb_basis_error": 0.6546468710221067
+        },
+        {
+          "name": "SwordRunFall",
+          "source_path_id": 284,
+          "source_object_sha256": "9a4bfa6de14a31016ffc74877793a30561609a7df33b3410d970b799842a37b9",
+          "samples": 32,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 0.00012408231631866632,
+          "maximum_nonlimb_basis_error": 3.8971250237995747e-07,
+          "maximum_limb_basis_error": 0.31629573557076474
+        },
+        {
+          "name": "SwordRunLand",
+          "source_path_id": 279,
+          "source_object_sha256": "2c8a9c195c40f609486bf05fa632e3bcbc46aa4f40e3241bf375bb2a9bdc1d81",
+          "samples": 9,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 3.8545937208755987e-07,
+          "maximum_nonlimb_basis_error": 3.8545937208755987e-07,
+          "maximum_limb_basis_error": 0.29171461474280297
+        }
+      ]
+    },
+    {
+      "capture": "female-sword-backward-02",
+      "samples": 48,
+      "report_path": "rebuild/build/humanoid-proof/female-sword-backward-02-final.json",
+      "report_sha256": "a508b67405c714ad3b9151b83dcc341f0f04fdef6a232154ef248b4269195b66",
+      "inputs": [
+        {
+          "path": "rebuild/build/reference-player-starter/player-female-starter-rig.json",
+          "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+        },
+        {
+          "path": "rebuild/build/pose-analysis/female-starter-tp-attack6-v2.json",
+          "sha256": "71cd28df8742b63348c46bc8a231c605e7ee2c89ae4a0507fa4700fa944877df"
+        },
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-02.jsonl",
+          "sha256": "be5a44902b0ffc4b90cfd72727cc2e5cbd2eb0eb500da4d624e831edcba18118"
+        },
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-02.launch.json",
+          "sha256": "4c86677b0e6795e083d3c292e1d384001fcd171d49f06097b95d1d397a210380"
+        },
+        {
+          "path": "rebuild/build/humanoid-proof/human_rotation_math.so",
+          "sha256": "7abeecd569b859a41fc3a5429036e2922ba0faa26117591fef2d8b2db9bf2d4e"
+        },
+        {
+          "path": "docs/reference/unity5-human-rotation-arithmetic.json",
+          "sha256": "11642e27d854cef3f3d8293b5d822c0407cfa32efd648cab65af974835de2a23"
+        },
+        {
+          "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/sharedassets1.assets",
+          "sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/probe_humanoid_rotation.py",
+          "sha256": "e01ccde2f2dbedaf3a56ff2e80d6ea0617c0a3ce739c3cddfed9db4dc5552125"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/human_rotation_math.c",
+          "sha256": "cec70ee900c0dd15426a74e9e51ec4ea8cb4e874c5eb84756c4160032cb3c036"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/human_rotation_math.h",
+          "sha256": "34c3920919645b952041837542f4682b7d0d4224df225a33919e3b45ba81fa0c"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/export_reference_player.py",
+          "sha256": "9c45c9b34067807b99a402d636ab0a9300d61deb09d16ea27e7c7563c6c0212b"
+        },
+        {
+          "path": "/home/admin/source/planetexplorers/rebuild/tools/analyze_reference_bake.py",
+          "sha256": "8f3b65aef92a46ab8115acc27f268fa0f4c4dc2f41b5e070e702b6145aa55d9f"
+        }
+      ],
+      "clips": [
+        {
+          "name": "SwordWB",
+          "source_path_id": 441,
+          "source_object_sha256": "030ceeef7e1fcc122f32bc6b9b0097be0e2528fea493b26e27c4ef4992875d90",
+          "samples": 26,
+          "muscle_loop_correction": true,
+          "maximum_nonlimb_basis_error_before_loop": 0.20145321282740308,
+          "maximum_nonlimb_basis_error": 5.885236679104011e-07,
+          "maximum_limb_basis_error": 0.2874110963273874
+        },
+        {
+          "name": "SwordRB",
+          "source_path_id": 708,
+          "source_object_sha256": "733a9bcc0c06c117315a26bd994f5a4ad513771d109b8ba4b7045e7e1215f573",
+          "samples": 22,
+          "muscle_loop_correction": false,
+          "maximum_nonlimb_basis_error_before_loop": 2.4712109071900468e-05,
+          "maximum_nonlimb_basis_error": 2.4712109071900468e-05,
+          "maximum_limb_basis_error": 0.43319389428579236
+        }
+      ]
+    }
+  ]
+}

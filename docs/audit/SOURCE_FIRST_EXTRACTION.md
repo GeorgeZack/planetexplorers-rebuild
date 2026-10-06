@@ -213,3 +213,8 @@ assumption that this capability already exists.
 This audit changed documentation only. No source/runtime assets, samplers,
 generated tables, user saves or desktop state were modified; no new runtime or
 visual qualification is claimed.
+
+
+## Follow-up: partial humanoid computation without engine startup
+
+[The offline rotation proof](HUMANOID_ROTATION_PROOF.md) now reproduces the pinned joint arithmetic and source muscle loop correction, tested against697 previously captured poses. It narrows the remaining computation to body/goal/limb solving and later masked composition; all12 limb discrepancies remain visible in the report. No new original session was required. The prepared engine-bake route remains available if the remaining retargeter proves more costly than a bounded batch.

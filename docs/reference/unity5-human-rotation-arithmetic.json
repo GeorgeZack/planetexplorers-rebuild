@@ -1,0 +1,837 @@
+{
+  "schema": "pe-unity5-human-rotation-1",
+  "binary_sha256": "1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6",
+  "scope": "GetZYRoll arithmetic only; no full retarget qualification or engine initialization",
+  "routines": [
+    {
+      "start": "0xbaf4d6",
+      "end_exclusive": "0xbaf6d1",
+      "sha256": "028fd1ae39b9b48a693ef11c1104e463e98139fe2b3e4dcdee7ebca168abf8ab",
+      "relocations": [
+        {
+          "instruction": "0xbaf4d6",
+          "constant": "0x1684b70",
+          "constant_hex": "00000080000000800000008000000080"
+        },
+        {
+          "instruction": "0xbaf4e7",
+          "constant": "0x1684b70",
+          "constant_hex": "00000080000000800000008000000080"
+        },
+        {
+          "instruction": "0xbaf4fc",
+          "constant": "0x16fc690",
+          "constant_hex": "fb2125c2fb2125c2fb2125c2fb2125c2"
+        },
+        {
+          "instruction": "0xbaf50b",
+          "constant": "0x16fc6a0",
+          "constant_hex": "28129842281298422812984228129842"
+        },
+        {
+          "instruction": "0xbaf544",
+          "constant": "0x16fc680",
+          "constant_hex": "0000803e0000803e0000803e0000803e"
+        },
+        {
+          "instruction": "0xbaf569",
+          "constant": "0x16fc630",
+          "constant_hex": "db0f4940db0f4940db0f4940db0f4940"
+        },
+        {
+          "instruction": "0xbaf573",
+          "constant": "0x16fc640",
+          "constant_hex": "db0fc940db0fc940db0fc940db0fc940"
+        },
+        {
+          "instruction": "0xbaf580",
+          "constant": "0x168e070",
+          "constant_hex": "ffffff7fffffff7fffffff7fffffff7f"
+        },
+        {
+          "instruction": "0xbaf5ab",
+          "constant": "0x16fb450",
+          "constant_hex": "0000003f0000003f0000003f0000003f"
+        },
+        {
+          "instruction": "0xbaf5bc",
+          "constant": "0x16fc650",
+          "constant_hex": "d30fc9bfd30fc9bfd30fc9bfd30fc9bf"
+        },
+        {
+          "instruction": "0xbaf5c3",
+          "constant": "0x16fc660",
+          "constant_hex": "d30fc93fd30fc93fd30fc93fd30fc93f"
+        },
+        {
+          "instruction": "0xbaf5ca",
+          "constant": "0x16fc670",
+          "constant_hex": "83f9223e83f9223e83f9223e83f9223e"
+        },
+        {
+          "instruction": "0xbaf5db",
+          "constant": "0x16fc6b0",
+          "constant_hex": "000080be000080be000080be000080be"
+        },
+        {
+          "instruction": "0xbaf66d",
+          "constant": "0x16fb440",
+          "constant_hex": "01004040010040400100404001004040"
+        },
+        {
+          "instruction": "0xbaf67f",
+          "constant": "0x16fb430",
+          "constant_hex": "fdff7f3ffdff7f3ffdff7f3ffdff7f3f"
+        },
+        {
+          "instruction": "0xbaf689",
+          "constant": "0x16d1b50",
+          "constant_hex": "ffff7f7fffff7f7fffff7f7fffff7f7f"
+        },
+        {
+          "instruction": "0xbaf690",
+          "constant": "0x16d1ab0",
+          "constant_hex": "0000803f0000803f0000803f0000803f"
+        }
+      ]
+    },
+    {
+      "start": "0xbaf703",
+      "end_exclusive": "0xbaf734",
+      "sha256": "422b604bce4f23bfd76bb0e12535d40fe63669164ba3a5bcae99595d396b47e2",
+      "relocations": []
+    }
+  ],
+  "rigs": [
+    {
+      "name": "player-female-starter-rig.json",
+      "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff",
+      "axes": 41
+    }
+  ],
+  "clips": [
+    {
+      "name": "clip-231.json",
+      "sha256": "b325ac03eaae837b7dfbef09d5d4133c020a5fcab78f962a9dce88ac90491b17",
+      "muscles": [
+        {
+          "attribute": 42,
+          "minimum": -1.108479380607605,
+          "maximum": 0.32663947343826294
+        },
+        {
+          "attribute": 43,
+          "minimum": -0.40786346793174744,
+          "maximum": 0.28686240315437317
+        },
+        {
+          "attribute": 44,
+          "minimum": -0.6840916872024536,
+          "maximum": 0.7761298418045044
+        },
+        {
+          "attribute": 45,
+          "minimum": -0.39586278796195984,
+          "maximum": 0.1073712632060051
+        },
+        {
+          "attribute": 46,
+          "minimum": -0.21220245957374573,
+          "maximum": 0.21088387072086334
+        },
+        {
+          "attribute": 47,
+          "minimum": -0.6115540862083435,
+          "maximum": 0.6580539345741272
+        },
+        {
+          "attribute": 48,
+          "minimum": -5.12264250573935e-07,
+          "maximum": 2.561326937211561e-07
+        },
+        {
+          "attribute": 49,
+          "minimum": -1.1627879919779566e-13,
+          "maximum": 2.6822121412806155e-07
+        },
+        {
+          "attribute": 50,
+          "minimum": -5.364422008824477e-07,
+          "maximum": 2.682209867543861e-07
+        },
+        {
+          "attribute": 51,
+          "minimum": -0.18302519619464874,
+          "maximum": 0.7463808059692383
+        },
+        {
+          "attribute": 52,
+          "minimum": -0.615638017654419,
+          "maximum": 0.2549282908439636
+        },
+        {
+          "attribute": 53,
+          "minimum": -1.1242451667785645,
+          "maximum": 1.354604959487915
+        },
+        {
+          "attribute": 54,
+          "minimum": -6.830189818174404e-07,
+          "maximum": 2.2767385132738127e-07
+        },
+        {
+          "attribute": 55,
+          "minimum": 5.364400976759498e-07,
+          "maximum": 1.6093260910565732e-06
+        },
+        {
+          "attribute": 58,
+          "minimum": 1.0288363695144653,
+          "maximum": 1.0288407802581787
+        },
+        {
+          "attribute": 59,
+          "minimum": -5.690851435924404e-13,
+          "maximum": 1.0728905408541323e-06
+        },
+        {
+          "attribute": 60,
+          "minimum": -0.5110983848571777,
+          "maximum": 0.8491424918174744
+        },
+        {
+          "attribute": 61,
+          "minimum": -0.33278098702430725,
+          "maximum": 0.5741908550262451
+        },
+        {
+          "attribute": 62,
+          "minimum": -0.48192891478538513,
+          "maximum": 0.38007134199142456
+        },
+        {
+          "attribute": 63,
+          "minimum": -0.2431419938802719,
+          "maximum": 0.8401209712028503
+        },
+        {
+          "attribute": 64,
+          "minimum": -0.4163375496864319,
+          "maximum": 0.09535674750804901
+        },
+        {
+          "attribute": 65,
+          "minimum": -0.43396225571632385,
+          "maximum": 1.0925250053405762
+        },
+        {
+          "attribute": 66,
+          "minimum": -0.6270958781242371,
+          "maximum": 0.5174380540847778
+        },
+        {
+          "attribute": 67,
+          "minimum": -1.0006183385849,
+          "maximum": 0.23211094737052917
+        },
+        {
+          "attribute": 68,
+          "minimum": -0.6656058430671692,
+          "maximum": 0.7081236243247986
+        },
+        {
+          "attribute": 69,
+          "minimum": 0.15319286286830902,
+          "maximum": 1.239978313446045
+        },
+        {
+          "attribute": 70,
+          "minimum": 0.0430414155125618,
+          "maximum": 0.48622241616249084
+        },
+        {
+          "attribute": 71,
+          "minimum": -0.46042487025260925,
+          "maximum": 0.9313432574272156
+        },
+        {
+          "attribute": 72,
+          "minimum": -0.12212807685136795,
+          "maximum": 0.5167273283004761
+        },
+        {
+          "attribute": 73,
+          "minimum": -1.0890051126480103,
+          "maximum": 0.25758984684944153
+        },
+        {
+          "attribute": 74,
+          "minimum": -1.8659831285476685,
+          "maximum": 0.5372449159622192
+        },
+        {
+          "attribute": 75,
+          "minimum": -0.25455766916275024,
+          "maximum": 0.0912279486656189
+        },
+        {
+          "attribute": 76,
+          "minimum": -0.32765528559684753,
+          "maximum": 0.6985616087913513
+        },
+        {
+          "attribute": 77,
+          "minimum": -0.5025626420974731,
+          "maximum": 0.11186705529689789
+        },
+        {
+          "attribute": 78,
+          "minimum": -0.40007343888282776,
+          "maximum": 0.45615488290786743
+        },
+        {
+          "attribute": 79,
+          "minimum": -0.20711669325828552,
+          "maximum": 0.6683558821678162
+        },
+        {
+          "attribute": 80,
+          "minimum": -0.13530422747135162,
+          "maximum": 0.5201343297958374
+        },
+        {
+          "attribute": 81,
+          "minimum": -0.4264664053916931,
+          "maximum": 0.5202474594116211
+        },
+        {
+          "attribute": 82,
+          "minimum": -0.25166794657707214,
+          "maximum": -0.20633558928966522
+        },
+        {
+          "attribute": 83,
+          "minimum": 0.0905584916472435,
+          "maximum": 0.32521504163742065
+        },
+        {
+          "attribute": 84,
+          "minimum": -0.22890207171440125,
+          "maximum": -0.03441809490323067
+        },
+        {
+          "attribute": 85,
+          "minimum": -2.2767294467485044e-06,
+          "maximum": 0.8521809577941895
+        },
+        {
+          "attribute": 86,
+          "minimum": -2.0490567749220645e-06,
+          "maximum": 0.1550922393798828
+        },
+        {
+          "attribute": 87,
+          "minimum": -0.3821779489517212,
+          "maximum": 0.6423563361167908
+        },
+        {
+          "attribute": 88,
+          "minimum": -0.4412109851837158,
+          "maximum": 0.8924474120140076
+        },
+        {
+          "attribute": 89,
+          "minimum": -0.44245827198028564,
+          "maximum": 1.9504001140594482
+        },
+        {
+          "attribute": 90,
+          "minimum": -0.1888541728258133,
+          "maximum": 1.0593022108078003
+        },
+        {
+          "attribute": 91,
+          "minimum": -0.24352909624576569,
+          "maximum": 1.453234314918518
+        },
+        {
+          "attribute": 92,
+          "minimum": -0.819433331489563,
+          "maximum": -0.05548059940338135
+        },
+        {
+          "attribute": 93,
+          "minimum": -0.2889549136161804,
+          "maximum": 2.0431206226348877
+        },
+        {
+          "attribute": 98,
+          "minimum": -0.4944503903388977,
+          "maximum": 0.9267851710319519
+        },
+        {
+          "attribute": 99,
+          "minimum": -1.1714956760406494,
+          "maximum": -0.04464524984359741
+        },
+        {
+          "attribute": 100,
+          "minimum": -1.2306421995162964,
+          "maximum": 0.8322194218635559
+        },
+        {
+          "attribute": 118,
+          "minimum": -0.2317851334810257,
+          "maximum": -0.23178434371948242
+        },
+        {
+          "attribute": 119,
+          "minimum": 0.8739286065101624,
+          "maximum": 0.8739300966262817
+        },
+        {
+          "attribute": 120,
+          "minimum": -0.723315954208374,
+          "maximum": -0.7233153581619263
+        },
+        {
+          "attribute": 126,
+          "minimum": -0.740370512008667,
+          "maximum": -0.7403697967529297
+        },
+        {
+          "attribute": 127,
+          "minimum": -4.0788655281066895,
+          "maximum": -4.07886266708374
+        },
+        {
+          "attribute": 128,
+          "minimum": -0.8279702067375183,
+          "maximum": -0.8279696106910706
+        },
+        {
+          "attribute": 56,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 57,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 94,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 95,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 96,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 97,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 101,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 102,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 103,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 104,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 105,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 106,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 107,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 108,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 109,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 110,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 111,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 112,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 113,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 114,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 115,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 116,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 117,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 121,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 122,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 123,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 124,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 125,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 129,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 130,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 131,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 132,
+          "minimum": 0.0,
+          "maximum": 0.0
+        },
+        {
+          "attribute": 133,
+          "minimum": 0.0,
+          "maximum": 0.0
+        }
+      ]
+    }
+  ],
+  "muscle_grid": [
+    -16,
+    -8,
+    -4.1,
+    -2,
+    -1.5,
+    -1,
+    -0.5,
+    0,
+    0.5,
+    1,
+    1.5,
+    2,
+    4.1,
+    8,
+    16
+  ],
+  "distinct_muscle_triples": 3729,
+  "cases": 73,
+  "samples": 272217,
+  "sample_sha256": "933fc81370c0e78404f054ebd34d5241fa43bf5fe58581c261a18f8f00f9abff",
+  "maximum_native_norm_squared_error": 3.7268636532417077e-07,
+  "golden": [
+    {
+      "muscles": [
+        -1,
+        0,
+        0
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        -0.19874641299247742,
+        0.0,
+        0.0,
+        0.9800509810447693
+      ]
+    },
+    {
+      "muscles": [
+        0,
+        -1,
+        0
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.0,
+        -0.5647045969963074,
+        0.0,
+        0.8252930641174316
+      ]
+    },
+    {
+      "muscles": [
+        0,
+        0,
+        -1
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        -0.9319955110549927,
+        0.36247000098228455
+      ]
+    },
+    {
+      "muscles": [
+        0,
+        0,
+        0
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    {
+      "muscles": [
+        0,
+        0,
+        1
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.9854387640953064,
+        0.17003127932548523
+      ]
+    },
+    {
+      "muscles": [
+        0,
+        1,
+        0
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.0,
+        0.7512621283531189,
+        0.0,
+        0.6600039005279541
+      ]
+    },
+    {
+      "muscles": [
+        1,
+        0,
+        0
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.38952887058258057,
+        0.0,
+        0.0,
+        0.9210143089294434
+      ]
+    },
+    {
+      "muscles": [
+        2,
+        -2,
+        1.5
+      ],
+      "min": [
+        -0.4,
+        -1.2,
+        -2.4
+      ],
+      "max": [
+        0.8,
+        1.7,
+        2.8
+      ],
+      "sign": [
+        1,
+        1,
+        1
+      ],
+      "rotation": [
+        0.22102713584899902,
+        -0.9297980666160583,
+        0.20134669542312622,
+        0.21466746926307678
+      ]
+    }
+  ],
+  "comparison": {
+    "library_sha256": "7abeecd569b859a41fc3a5429036e2922ba0faa26117591fef2d8b2db9bf2d4e",
+    "c_source_sha256": "cec70ee900c0dd15426a74e9e51ec4ea8cb4e874c5eb84756c4160032cb3c036",
+    "c_header_sha256": "34c3920919645b952041837542f4682b7d0d4224df225a33919e3b45ba81fa0c",
+    "native_rsqrt": true,
+    "bitwise_mismatches": 0,
+    "maximum_component_error": 0.0,
+    "first_mismatches": []
+  }
+}
