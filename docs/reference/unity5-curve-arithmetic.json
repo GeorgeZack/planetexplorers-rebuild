@@ -1,0 +1,269 @@
+{
+  "schema": "pe-unity5-curve-arithmetic-1",
+  "binary_sha256": "1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6",
+  "metadata_sha256": "aee597e2e96c41fd33e6713c534e7355505675e369d863cbc730d0aa702eae63",
+  "executed": "Only copied call-free selector/coefficient/Horner routines; no ELF or engine initialization",
+  "tail": "Static-disassembly clamp dispatch, not executed native clamp code",
+  "routines": {
+    "coefficients": {
+      "virtual_start": "0x6e2a00",
+      "virtual_end_exclusive": "0x6e2b02",
+      "sha256": "f6881c43cb5d34254760d902539601114d0ec3e0ab0d51418d5ce306bb9c0f52",
+      "bytes": 258
+    },
+    "segment_selector": {
+      "virtual_start": "0x6e2b10",
+      "virtual_end_exclusive": "0x6e2c9b",
+      "sha256": "12612eba096ff308c12e52831dbd8e7f5cd291f5ccfbb8e283b8cddff7f8bee7",
+      "bytes": 395
+    },
+    "horner": {
+      "virtual_start": "0x6e3c24",
+      "virtual_end_exclusive": "0x6e3c44",
+      "sha256": "770e0f2cc67d9e256fd91ba3a70abcfa7ef044abebf87f50289992be45d36876",
+      "bytes": 32
+    }
+  },
+  "samples": 4109,
+  "sample_pairs_sha256": "73bc3b50b112716b3978a7b0eee0319cba77ea88e2b3b33000207a31090e39c4",
+  "golden": [
+    {
+      "time": 0.0,
+      "time_bits": "00000000",
+      "value": 1.0,
+      "value_bits": "3f800000",
+      "segment": 0,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 1.401298464324817e-45,
+      "time_bits": "00000001",
+      "value": 1.0,
+      "value_bits": "3f800000",
+      "segment": 0,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.0625,
+      "time_bits": "3d800000",
+      "value": 0.256567120552063,
+      "value_bits": "3e835cc4",
+      "segment": 0,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.09999998658895493,
+      "time_bits": "3dcccccb",
+      "value": 0.010000050067901611,
+      "value_bits": "3c23d740",
+      "segment": 0,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.09999999403953552,
+      "time_bits": "3dcccccc",
+      "value": 0.009999999776482582,
+      "value_bits": "3c23d70a",
+      "segment": 1,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.10000000149011612,
+      "time_bits": "3dcccccd",
+      "value": 0.009999999776482582,
+      "value_bits": "3c23d70a",
+      "segment": 1,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.125,
+      "time_bits": "3e000000",
+      "value": 0.009999999776482582,
+      "value_bits": "3c23d70a",
+      "segment": 1,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.1875,
+      "time_bits": "3e400000",
+      "value": 0.009999999776482582,
+      "value_bits": "3c23d70a",
+      "segment": 1,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.2499999850988388,
+      "time_bits": "3e7fffff",
+      "value": 0.009999999776482582,
+      "value_bits": "3c23d70a",
+      "segment": 1,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.25,
+      "time_bits": "3e800000",
+      "value": 0.009999999776482582,
+      "value_bits": "3c23d70a",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.2500000298023224,
+      "time_bits": "3e800001",
+      "value": 0.01000018510967493,
+      "value_bits": "3c23d7d1",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.3125,
+      "time_bits": "3ea00000",
+      "value": 0.35463687777519226,
+      "value_bits": "3eb592f7",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.375,
+      "time_bits": "3ec00000",
+      "value": 0.6211954951286316,
+      "value_bits": "3f1f06ab",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.4375,
+      "time_bits": "3ee00000",
+      "value": 0.8225167989730835,
+      "value_bits": "3f529076",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.5,
+      "time_bits": "3f000000",
+      "value": 0.9714418649673462,
+      "value_bits": "3f78b06a",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.5625,
+      "time_bits": "3f100000",
+      "value": 1.0808117389678955,
+      "value_bits": "3f8a580a",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.625,
+      "time_bits": "3f200000",
+      "value": 1.1634674072265625,
+      "value_bits": "3f94ec80",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.6875,
+      "time_bits": "3f300000",
+      "value": 1.2322497367858887,
+      "value_bits": "3f9dba5c",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.7499999403953552,
+      "time_bits": "3f3fffff",
+      "value": 1.2999999523162842,
+      "value_bits": "3fa66666",
+      "segment": 2,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.75,
+      "time_bits": "3f400000",
+      "value": 1.2999999523162842,
+      "value_bits": "3fa66666",
+      "segment": 3,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.7500000596046448,
+      "time_bits": "3f400001",
+      "value": 1.3000000715255737,
+      "value_bits": "3fa66667",
+      "segment": 3,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.8125,
+      "time_bits": "3f500000",
+      "value": 1.2931321859359741,
+      "value_bits": "3fa5855b",
+      "segment": 3,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.875,
+      "time_bits": "3f600000",
+      "value": 1.1851708889007568,
+      "value_bits": "3f97b3ae",
+      "segment": 3,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.9375,
+      "time_bits": "3f700000",
+      "value": 1.0596225261688232,
+      "value_bits": "3f87a1b6",
+      "segment": 3,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.9995110034942627,
+      "time_bits": "3f7fdff4",
+      "value": 0.9999892115592957,
+      "value_bits": "3f7fff4b",
+      "segment": 3,
+      "method": "original-arithmetic"
+    },
+    {
+      "time": 0.9995110630989075,
+      "time_bits": "3f7fdff5",
+      "value": 0.9999892115592957,
+      "value_bits": "3f7fff4b",
+      "segment": null,
+      "method": "static-clamp"
+    },
+    {
+      "time": 0.9995111227035522,
+      "time_bits": "3f7fdff6",
+      "value": 0.9999892115592957,
+      "value_bits": "3f7fff4b",
+      "segment": null,
+      "method": "static-clamp"
+    },
+    {
+      "time": 0.9999999403953552,
+      "time_bits": "3f7fffff",
+      "value": 0.9999892115592957,
+      "value_bits": "3f7fff4b",
+      "segment": null,
+      "method": "static-clamp"
+    },
+    {
+      "time": 1.0,
+      "time_bits": "3f800000",
+      "value": 0.9999892115592957,
+      "value_bits": "3f7fff4b",
+      "segment": null,
+      "method": "static-clamp"
+    }
+  ],
+  "comparison": {
+    "bitwise_equal": true,
+    "mismatch_count": 0,
+    "maximum_absolute_error": 0.0,
+    "first_mismatches": []
+  }
+}

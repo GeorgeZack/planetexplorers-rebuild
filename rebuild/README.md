@@ -747,3 +747,16 @@ This generates an isolated fresh Adventure fixture and tests proximity, cancella
 `python3 rebuild/tools/reference_town_defense.py` from the repository root compiles the observation-only9077 beacon probe without launching a game. The [observer contract and commands](../docs/audit/ADVENTURE_TOWN_DEFENSE_OBSERVER.md) cover an explicit isolated launch, fresh arm/stop files, bounded capture, strict wave analysis and archive preservation. It does not enable native Town Defense; creature recovery and full spawn-area coverage remain separate gates.
 
 Current save version: **PECSv15**, retaining the v14 layout plus a four-byte shield instance reference. The bag alone owns its item34 durability; older saves infer no selected shield. This is a tested equipment foundation, with normal shield use still gated pending presentation and combat integration. See [shield ownership](../docs/audit/SHIELD_OWNERSHIP.md).
+
+
+### Offline attack playback and shield action checks
+
+The sandbox now applies the recovered0.65s contact-response curve to its shared melee interval. [Playback evidence](../docs/audit/ATTACK_PLAYBACK.md) separates engine arithmetic qualification, trigger notification and skill damage; no attack pose rebake is required. [Shield action admission](../docs/audit/SHIELD_ACTION.md) is a tested headless foundation only; ordinary shield equipment remains gated pending composed poses. Save format remains PECSv16. No physical playtest of these latest changes is claimed.
+
+From the repository root, run the prefab/export checks with the installed offline UnityPy environment:
+
+```sh
+make -C rebuild attack-playback-source-check ASSET_PYTHON="$PWD/rebuild/build/unity-tools/bin/python"
+```
+
+The optional [SHA-pinned arithmetic replay](../docs/audit/UNITY5_CURVE_EVALUATOR.md) reads the installed native binary without starting its engine. Ordinary optimized core tests retain native golden values and exercise shared action-clock integration.

@@ -2,6 +2,8 @@
 
 October6, 2026; inspected checkpoint `25877e7f`. This is a read-only comparison of original C#/database behavior and the current C implementation. No game launch, desktop input, save modification, asset installation or runtime edit was performed. Earlier physical evidence remains in [PLAYTEST](../PLAYTEST.md); it is not a substitute for the source contracts below.
 
+The table below records that inspected checkpoint; subsequent recovery, stamina, capsule history and playback increments are tracked in the [current work order](SOURCE_FIRST_REBUILD.md).
+
 The immediate recommendation is to implement and test **source buff scheduling, low-health recovery, capsule history and action admission offline**, while continuing the separate shield pose qualification. These expose more concrete parity differences than another undirected hunt playthrough. None justifies changing hare HP, damage, counts or player equipment balance.
 
 Database references mean read-only rows from [localData.bytes](../../Assets/Resources/DataBase/localData.bytes), SHA256 `c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376`. Binary tables have no meaningful text line numbers; table/primary-key pairs below identify their evidence. C#/C references give inspected line numbers in prose so a later structural index can refresh navigation.
@@ -59,9 +61,9 @@ The genuinely incomplete asset dependency is the composed left-arm blocking laye
 
 **Source-derived:** `Action_Sword.cs:498–518` multiplies the ordinary weapon/stamina speed by `animScaleCurve.Evaluate(elapsed/animScaleTime)` during the contact response interval (class default duration.15s). `OnHitTrigger`, lines522–527, restarts that clock for non-self defence-trigger contact. It is called by `PEAttackTrigger.OnHit` before skill collision execution (`PEAttackTrigger.cs:285–313`), so a generic successful-HP-damage callback is not an equivalent trigger. Serialized component values, not the class default alone, must establish the installed curve/duration.
 
-**Implemented C:** `pe_sandbox_melee.c:106–112` advances using only item/stamina speed. Sword1 base1 and Knife33 base1.37, with thresholds50/20, are already distinct. No contact-response curve/clock exists.
+**Implemented C, follow-up:** [contact playback](ATTACK_PLAYBACK.md) now uses the exact serialized0.65s duration and five-key curve. Permitted trigger notifications precede skill damage/dedupe, and the shared display timestamp feeds the authoritative attack interval. The installed engine arithmetic was qualified offline; see [the evaluator audit](UNITY5_CURVE_EVALUATOR.md). The earlier absence is resolved within the bounded sandbox host; physical presentation remains unchecked.
 
-**Minimum implementation/test:** offline exporter for the exact player action component's curve keys/tangents, wrap modes and duration; reject an unresolved binding. Add contact notification/clock as a multiplier of the existing authoritative action clock. Body, blade, defence, event windows and running-root curve must consume that same resulting interval. Test miss/self-contact, repeated contact reset, duplicate guide damage suppression versus geometric contact, interval end, low stamina and rollback. Existing attack poses do not need rebaking for this numerical clock change. Final visual comparison validates the composition; it is not needed to invent curve values.
+**Original implementation target (now covered by the linked tests):** offline exporter for the exact player action component's curve keys/tangents, wrap modes and duration; reject an unresolved binding. Add contact notification/clock as a multiplier of the existing authoritative action clock. Body, blade, defence, event windows and running-root curve must consume that same resulting interval. Test miss/self-contact, repeated contact reset, duplicate guide damage suppression versus geometric contact, interval end, low stamina and rollback. Existing attack poses do not need rebaking for this numerical clock change. Final visual comparison validates the composition; it is not needed to invent curve values.
 
 ## 6. Hits currently omit source force/reaction consequences
 
@@ -96,3 +98,8 @@ The genuinely incomplete asset dependency is the composed left-arm blocking laye
 - Current fixed full-HP six-hare reload/preserved quest count, limited AI arbitration and modal combat pause remain explicit adapters in [ADVENTURE_HUNT_COMBAT](ADVENTURE_HUNT_COMBAT.md). This audit does not turn them into proven source equivalence or explain all difficulty through one missing subsystem.
 
 The next offline implementation order is the shared buff clock/health recovery, source stamina cadence, historical capsule query, then block admission/host preparation and exact contact-speed curves. Export force/reaction data alongside those changes. Use focused numerical, transition, identity and save tests before one final integrated visual check. Keep original gameplay sessions for unresolved engine-produced representations and acceptance of completed behavior, not for values already present in source.
+
+
+## Follow-up: source action admission
+
+[Shield action admission](SHIELD_ACTION.md) now has a disconnected C owner covering all56 source mask columns, relation waits, hold/release/skipped input, one-time buff effects and cancellation. This is not ordinary rendered blocking. The remaining offline animation work is bounded humanoid retargeting and masked composition against existing bakes, as recorded in the [updated work order](SOURCE_FIRST_REBUILD.md).

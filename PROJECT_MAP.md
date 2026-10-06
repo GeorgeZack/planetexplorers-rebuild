@@ -21,6 +21,8 @@ The latest running-knife increment adds grounded female third-person Knife33 sta
 | Source-first priorities and when a playtest is needed | [October6 source audit and work order](docs/audit/SOURCE_FIRST_REBUILD.md) |
 | Low-health recovery clocks, damage notification and load lifecycle | [Passive recovery](docs/audit/PASSIVE_RECOVERY.md), [core owner](rebuild/src/pe_passive_recovery.h) |
 | Melee endpoint history, source entity centers and collision sampling | [Capsule history audit](docs/audit/MELEE_CAPSULE_HISTORY.md), [numerical owner](rebuild/src/pe_capsule_history.h) |
+| Attack contact playback and offline engine curve arithmetic | [Playback](docs/audit/ATTACK_PLAYBACK.md), [numerical qualification](docs/audit/UNITY5_CURVE_EVALUATOR.md), [clock owner](rebuild/src/pe_attack_playback.h) |
+| Shield admission, action relations and cancellation | [Headless contract](docs/audit/SHIELD_ACTION.md), [action owner](rebuild/src/pe_shield_action.h); ordinary activation remains gated |
 | Stamina pulse ordering, comfort and v16 persistence | [Stamina recovery](docs/audit/STAMINA_RECOVERY.md), [core owner](rebuild/src/pe_stamina_recovery.h) |
 | What was actually tested | [Playtest record](docs/PLAYTEST.md) |
 | Help test the current build | [Hands-on movement and running-Knife checklist](docs/PLAYTEST.md#hands-on-checklist--current-movement-and-running-knife-build) |

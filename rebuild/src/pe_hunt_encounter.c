@@ -123,7 +123,8 @@ bool pe_hunt_encounter_melee_with_weapon(PeHuntEncounter*h,PeSandboxMelee*melee,
         const PeHuntEncounterActor*a=&next.actors[i];
         targets[i]=(PeKnifeContactTarget){.entity_id=a->entity_id,.actor=next.actor,.hitboxes=next.defence,
             .clip=a->clip,.seconds=a->seconds,.position=a->motion.position,.yaw=a->motion.yaw_degrees,.scale=a->motion.scale,
-            .defense=a->motion.defense,.hp=a->hp,.max_hp=a->motion.max_hp,.eligible=a->present&&eligible[i]};
+            .defense=a->motion.defense,.hp=a->hp,.max_hp=a->motion.max_hp,.eligible=a->present&&eligible[i],
+            .trigger_candidate=a->present&&a->hp>0,.trigger_can_damage=eligible[i]};
     }
     PeSandboxMeleeUpdate result;
     bool resolved=staged_melee.tick_pending?

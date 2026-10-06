@@ -5,6 +5,9 @@ static const char *attack_names[]={"Attack6","Attack7","Attack8","Attack9"};
 static bool scalar(float x,float max){return isfinite(x)&&x>=0&&x<=max;}
 static bool point(PeVec3 p,float max){return isfinite(p.x)&&isfinite(p.y)&&isfinite(p.z)&&fabsf(p.x)<=max&&fabsf(p.y)<=max&&fabsf(p.z)<=max;}
 static bool gate_valid(PeSandboxMeleeGate g){return point(g.velocity,100);}
+static bool playback_gate_valid(const PeSandboxMelee *h,PeSandboxMeleeGate g){
+    return !h->setup.playback_enabled||(isfinite(g.scaled_time)&&g.scaled_time>=0&&g.scaled_time>=h->playback.time);
+}
 static bool gate_common(const PeSandboxMelee *h,PeSandboxMeleeGate g){
     return g.alive&&g.weapon_owned&&g.grounded&&!g.in_water&&g.third_person&&g.action_allowed&&
         g.equipped_item_id==h->setup.weapon_item_id&&g.equipped_instance_id&&g.drawn_instance_id==g.equipped_instance_id;
@@ -28,7 +31,12 @@ static bool setup_valid(const PeSandboxMeleeSetup *s){
         (!s->history_enabled||point(s->history_local_center,1000000));
 }
 static bool valid(const PeSandboxMelee *h){
-    return h&&h->ready&&setup_valid(&h->setup)&&pe_combat_variant_clip(h->action.gender,h->action.view,h->action.variant,h->action.stage)&&
+    if(!h||h->effected_count>PE_COMBAT_TARGET_CAPACITY)return false;
+    for(unsigned i=0;i<h->effected_count;i++){
+        if(!h->effected[i])return false;
+        for(unsigned j=0;j<i;j++)if(h->effected[i]==h->effected[j])return false;
+    }
+    return h->ready&&setup_valid(&h->setup)&&pe_combat_variant_clip(h->action.gender,h->action.view,h->action.variant,h->action.stage)&&
         (h->action.variant!=PE_COMBAT_RUNNING||h->setup.running_motion_ready)&&h->action.target_count<=PE_COMBAT_TARGET_CAPACITY&&
         (!h->action.active||(h->instance_id&&h->action.gender==h->setup.gender&&h->action.view==PE_COMBAT_THIRD_PERSON));
 }
@@ -88,27 +96,34 @@ bool pe_sandbox_melee_init(PeSandboxMelee *h,const PeSandboxMeleeSetup *s){
 }
 bool pe_sandbox_melee_begin(PeSandboxMelee*h,PeSandboxMeleeGate gate,float*stamina){
     PeCombatVariant variant;
-    if(!valid(h)||h->tick_pending||!gate_valid(gate)||!begin_variant(h,gate,&variant)||!stamina||!scalar(*stamina,1000000)||h->action.active)return false;
+    if(!valid(h)||h->tick_pending||!gate_valid(gate)||!playback_gate_valid(h,gate)||!begin_variant(h,gate,&variant)||!stamina||!scalar(*stamina,1000000)||h->action.active)return false;
     PeSandboxMelee next=*h;float remaining=*stamina;
     if(!pe_combat_begin_variant(&next.action,next.setup.gender,PE_COMBAT_THIRD_PERSON,variant,next.setup.stamina_reduce_percent,&remaining))return false;
-    next.instance_id=gate.equipped_instance_id;next.history_active=false;*h=next;*stamina=remaining;return true;
+    next.instance_id=gate.equipped_instance_id;next.history_active=false;next.effected_count=0;*h=next;*stamina=remaining;return true;
 }
 bool pe_sandbox_melee_queue(PeSandboxMelee*h,PeSandboxMeleeGate gate){
-    return valid(h)&&!h->tick_pending&&gate_valid(gate)&&action_allowed(h,gate)&&h->instance_id==gate.equipped_instance_id&&pe_combat_queue_combo(&h->action);
+    return valid(h)&&!h->tick_pending&&gate_valid(gate)&&playback_gate_valid(h,gate)&&action_allowed(h,gate)&&h->instance_id==gate.equipped_instance_id&&pe_combat_queue_combo(&h->action);
 }
 void pe_sandbox_melee_cancel(PeSandboxMelee*h){
-    if(h&&h->ready){pe_combat_stop(&h->action);h->instance_id=0;h->tick_pending=false;h->history_active=false;
+    if(h&&h->ready){pe_combat_stop(&h->action);h->instance_id=0;h->tick_pending=false;h->history_active=false;h->effected_count=0;
         h->tick_cancelled=false;h->tick_advance=PE_COMBAT_IDLE;h->tick_interval=(PeCombatInterval){0};}
 }
 bool pe_sandbox_melee_advance(PeSandboxMelee*h,PeSandboxMeleeGate gate,float*stamina){
     if(!valid(h)||h->tick_pending||!gate_valid(gate)||!stamina||!scalar(*stamina,1000000))return false;
     PeSandboxMelee next=*h;float remaining=*stamina;next.tick_interval=(PeCombatInterval){0};next.tick_cancelled=false;
+    float animator_speed=pe_combat_item_animation_speed(next.setup.weapon_item_id,remaining);
+    if(next.setup.playback_enabled){
+        PeAttackPlaybackSample sample;float curve=1;
+        if(!pe_attack_playback_sample(&next.playback,gate.scaled_time,next.setup.weapon_item_id,remaining,&sample)||
+           (sample.curve_active&&!pe_attack_playback_curve(sample.curve_time,&curve))||
+           !pe_attack_playback_speed(sample,curve,&animator_speed))return false;
+    }
     if(next.action.active&&(!action_allowed(&next,gate)||next.instance_id!=gate.equipped_instance_id)){
         pe_sandbox_melee_cancel(&next);next.tick_cancelled=true;next.tick_advance=PE_COMBAT_ENDED;
     }else{
         /* Running is a direct TP leaf with speed1. Host qualification remains
          * explicit; this applies the same source Animator stamina multiplier. */
-        double rate=pe_combat_stationary_clip_rate(PE_COMBAT_THIRD_PERSON,pe_combat_item_animation_speed(next.setup.weapon_item_id,remaining));
+        double rate=pe_combat_stationary_clip_rate(PE_COMBAT_THIRD_PERSON,animator_speed);
         next.tick_advance=pe_combat_advance_interval(&next.action,rate*PE_SANDBOX_MELEE_DT,PE_SANDBOX_MELEE_DT,&remaining,&next.tick_interval);
         if(next.tick_advance==PE_COMBAT_INVALID)return false;
         if(!next.action.active)next.instance_id=0;
@@ -123,6 +138,7 @@ bool pe_sandbox_melee_resolve_with_weapon(PeSandboxMelee*h,const PeSandboxMeleeF
     if(!valid(h)||!h->tick_pending||!f||!out||count>PE_SANDBOX_MELEE_TARGETS||(count&&!targets)||
        !gate_valid(f->gate)||!point(f->player_position,1000000)||!isfinite(f->player_yaw)||
        !scalar(f->player_scale,1000)||f->player_scale==0)return false;
+    if(h->setup.playback_enabled&&(!h->playback.initialized||f->gate.scaled_time!=h->playback.time))return false;
     if(!weapon_valid(h,f,weapon,base_attack))return false;
     PeSlot staged_weapon=weapon?*weapon:(PeSlot){0};
     for(size_t i=0;i<count;i++){
@@ -137,7 +153,7 @@ bool pe_sandbox_melee_resolve_with_weapon(PeSandboxMelee*h,const PeSandboxMeleeF
     }
     PeKnifeContactTarget staged[PE_SANDBOX_MELEE_TARGETS];
     if(count)memcpy(staged,targets,count*sizeof *targets);
-    if(!next.action.active||!next.action.contact_open)next.history_active=false;
+    if(!next.action.active||!next.action.contact_open){next.history_active=false;next.effected_count=0;}
     if(next.action.active){
         size_t clip=next.action.variant==PE_COMBAT_RUNNING&&next.action.stage==0?next.running_weapon_clip:next.weapon_clip[next.action.stage];
         if(!pe_hitbox_pose(next.setup.drawn_capsule,next.setup.drawn_weapon,0,clip,next.action.clip_time,
@@ -162,6 +178,20 @@ bool pe_sandbox_melee_resolve_with_weapon(PeSandboxMelee*h,const PeSandboxMeleeF
             PeKnifeContactAttack attack={.entity_id=next.setup.player_id,.weapon=result.weapon,.attack=weapon?pe_sword_attack(&staged_weapon,base_attack):next.setup.attack,
                 .critical=f->critical[i],.eligible=f->attacker_eligible,
                 .history=next.setup.history_enabled&&next.history_active?&next.history:NULL};
+            if(next.setup.playback_enabled&&next.action.contact_open){
+                bool effected=false;
+                for(unsigned k=0;k<next.effected_count;k++)effected|=next.effected[k]==staged[i].entity_id;
+                if(effected||!staged[i].trigger_candidate){result.status[i]=PE_KNIFE_CONTACT_IGNORED;continue;}
+                PeKnifeContactResult geometry;
+                PeKnifeContactStatus probe=pe_knife_contact_probe(&attack,&staged[i],&geometry);
+                if(probe==PE_KNIFE_CONTACT_INVALID)return false;
+                if(probe==PE_KNIFE_CONTACT_MISS){result.status[i]=probe;continue;}
+                if(next.effected_count==PE_COMBAT_TARGET_CAPACITY)return false;
+                next.effected[next.effected_count++]=staged[i].entity_id;result.trigger_contact[i]=true;
+                if(!f->attacker_eligible||!staged[i].trigger_can_damage){result.status[i]=PE_KNIFE_CONTACT_IGNORED;continue;}
+                if(!pe_attack_playback_contact(&next.playback))return false;
+                result.playback_notified[i]=true;
+            }
             result.status[i]=pe_knife_contact_resolve(&next.action,&attack,&staged[i],&result.contact[i]);
             if(result.status[i]==PE_KNIFE_CONTACT_INVALID)return false;
             if(weapon&&result.status[i]==PE_KNIFE_CONTACT_HIT&&!pe_sword_wear(&staged_weapon))return false;

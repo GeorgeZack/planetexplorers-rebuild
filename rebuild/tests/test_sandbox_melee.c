@@ -1,5 +1,6 @@
 #define _POSIX_C_SOURCE 200809L
 #include "pe_sandbox_melee.h"
+#include "pe_running_attack_motion.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -140,6 +141,120 @@ static void running_tests(const char *path){
     CHECK(run(&h,f,t,&stamina,true,&deaths)==24&&stamina==80&&deaths==0);
  done:pe_hitboxes_free(w);pe_hitboxes_free(d);pe_actor_free(a);pe_actor_free(old);
 }
+static void actual_running_playback(PeSandboxMeleeSetup setup){
+    const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/running-motion-20261006/running-knife.perm",
+        PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb"};
+    for(unsigned i=0;i<3;i++){FILE *f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"sandbox melee playback: SKIP qualified408 root/hare fixture %s\n",paths[i]);return;}fclose(f);}
+    char error[200];PeRootMotion *curve=pe_root_motion_load(paths[0],error,sizeof error);
+    PeActor *hare=pe_actor_load(paths[1],error,sizeof error);PeHitboxes *boxes=hare?pe_hitboxes_load(paths[2],hare,error,sizeof error):NULL;
+    CHECK(curve&&hare&&boxes);if(!curve||!hare||!boxes)goto done;
+    size_t idle=pe_actor_find_clip(hare,"idle"),defence=SIZE_MAX;
+    for(size_t i=0;i<pe_hitboxes_count(boxes);i++){const PeHitboxDefinition *d=pe_hitboxes_get(boxes,i);
+        if(d->kind==PE_HITBOX_DEFENCE&&d->joint!=PE_HITBOX_DISABLED){defence=i;break;}}
+    CHECK(idle!=PE_ACTOR_BIND_POSE&&defence!=SIZE_MAX);if(idle==PE_ACTOR_BIND_POSE||defence==SIZE_MAX)goto done;
+    setup.playback_enabled=true;setup.history_enabled=true;
+    PeSandboxMeleeGate g=gate();g.velocity.z=5;g.move_requested=true;g.scaled_time=10;
+    PeHitboxCapsule target_pose;CHECK(pe_hitbox_pose(boxes,hare,defence,idle,.37,(PeVec3){0},27,1,&target_pose));
+    PeSandboxMelee measured;CHECK(pe_sandbox_melee_init(&measured,&setup));float energy=100;
+    CHECK(pe_sandbox_melee_begin(&measured,g,&energy));PeVec3 fixed_target={0},position={0},velocity=g.velocity;unsigned opening=0;
+    /* Arrange a fixed whole-hare pose from a no-target run's first open blade.
+     * Both compared actions subsequently start afresh with this same fixture;
+     * no target follows the blade. This is geometry testing, not earned combat. */
+    for(unsigned tick=1;tick<120&&measured.action.active;tick++){
+        g.scaled_time=(float)(10+tick*PE_SANDBOX_MELEE_DT);
+        CHECK(pe_sandbox_melee_advance(&measured,g,&energy));PeCombatInterval span;CHECK(pe_sandbox_melee_interval(&measured,&span));
+        CHECK(pe_running_attack_motion_request(curve,&span,velocity,0,PE_SANDBOX_MELEE_DT,&velocity));
+        position.x+=velocity.x*(float)PE_SANDBOX_MELEE_DT;position.z+=velocity.z*(float)PE_SANDBOX_MELEE_DT;
+        PeSandboxMeleeFrame f=frame();f.gate=g;f.player_position=position;PeSandboxMeleeUpdate out;
+        CHECK(pe_sandbox_melee_resolve(&measured,&f,NULL,0,&out));
+        if(measured.action.contact_open){
+            fixed_target=(PeVec3){(out.weapon.a.x+out.weapon.b.x-target_pose.a.x-target_pose.b.x)*.5f,
+                (out.weapon.a.y+out.weapon.b.y-target_pose.a.y-target_pose.b.y)*.5f,
+                (out.weapon.a.z+out.weapon.b.z-target_pose.a.z-target_pose.b.z)*.5f};opening=tick;break;
+        }
+    }
+    CHECK(opening>0);if(!opening)goto done;
+    PeSandboxMelee hosts[2];PeKnifeContactTarget targets[2];float stamina[2]={100,100};PeVec3 roots[2]={{0}},velocities[2]={{0,0,5},{0,0,5}};
+    unsigned hits[2]={0},notifications[2]={0},ended[2]={0};double final_span[2]={0};bool slowed=false,overshoot=false,recovered=false,root_changed=false,body_changed=false,weapon_changed=false;
+    g.scaled_time=10;
+    for(unsigned i=0;i<2;i++){
+        CHECK(pe_sandbox_melee_init(&hosts[i],&setup)&&pe_sandbox_melee_begin(&hosts[i],g,&stamina[i]));
+        targets[i]=(PeKnifeContactTarget){.entity_id=700,.actor=hare,.hitboxes=boxes,.clip=idle,.seconds=.37,
+            .position=fixed_target,.yaw=27,.scale=1,.defense=29,.hp=212,.max_hp=212,.eligible=true,.trigger_candidate=true,.trigger_can_damage=true};
+        if(i)targets[i].position.x+=100; /* Real miss control, same playback opt-in. */
+    }
+    float contact_stamp=0;unsigned ticks=0;
+    while((hosts[0].action.active||hosts[1].action.active)&&ticks++<240){
+        g.scaled_time=(float)(10+ticks*PE_SANDBOX_MELEE_DT);PeCombatInterval spans[2]={{0}};
+        PeVec3 deltas[2]={{0}};PeSandboxMeleeUpdate outputs[2]={{0}};
+        for(unsigned i=0;i<2;i++)if(hosts[i].action.active){
+            PeSandboxMelee *h=&hosts[i];double wall=h->action.wall_time,clip=h->action.clip_time;
+            PeAttackPlayback clock=h->playback;PeAttackPlaybackSample sample;float value=1,rate=0;
+            CHECK(pe_attack_playback_sample(&clock,g.scaled_time,33,stamina[i],&sample));
+            if(sample.curve_active)CHECK(pe_attack_playback_curve(sample.curve_time,&value));
+            CHECK(pe_attack_playback_speed(sample,value,&rate));
+            CHECK(pe_sandbox_melee_advance(h,g,&stamina[i])&&pe_sandbox_melee_interval(h,&spans[i]));
+            CHECK(spans[i].valid&&spans[i].variant==PE_COMBAT_RUNNING&&spans[i].stage==0&&spans[i].from==clip);
+            CHECK(fabs(h->action.wall_time-wall-PE_SANDBOX_MELEE_DT)<1e-12);
+            CHECK(fabs(h->action.wall_time-ticks*PE_SANDBOX_MELEE_DT)<1e-12&&h->playback.time==g.scaled_time);
+            if(h->action.active){CHECK(fabs(spans[i].to-clip-rate*PE_SANDBOX_MELEE_DT)<1e-9);CHECK(spans[i].to==h->action.clip_time);}
+            CHECK(pe_root_motion_delta(curve,spans[i].from,spans[i].to,&deltas[i]));
+            CHECK(pe_running_attack_motion_request(curve,&spans[i],velocities[i],0,PE_SANDBOX_MELEE_DT,&velocities[i]));
+            roots[i].x+=velocities[i].x*(float)PE_SANDBOX_MELEE_DT;roots[i].z+=velocities[i].z*(float)PE_SANDBOX_MELEE_DT;
+            PeSandboxMeleeFrame f=frame();f.gate=g;f.player_position=roots[i];uint64_t updates=h->action.update_index;
+            CHECK(pe_sandbox_melee_resolve(h,&f,&targets[i],1,&outputs[i]));
+            CHECK(h->action.update_index==updates&&!h->tick_pending&&h->action.wall_time==wall+PE_SANDBOX_MELEE_DT);
+            CHECK(!memcmp(&outputs[i].interval,&spans[i],sizeof spans[i]));
+            if(outputs[i].trigger_contact[0])CHECK(i==0&&ticks==opening);
+            if(outputs[i].playback_notified[0]){notifications[i]++;CHECK(i==0&&ticks==opening);contact_stamp=g.scaled_time;}
+            if(outputs[i].status[0]==PE_KNIFE_CONTACT_HIT){hits[i]++;CHECK(i==0&&ticks==opening&&targets[i].hp<212);}
+            if(h->action.active){
+                PeHitboxCapsule posed;CHECK(!strcmp(pe_combat_pose_name(&h->action),"RunSwordAttack"));
+                CHECK(pe_hitbox_pose(setup.drawn_capsule,setup.drawn_weapon,0,h->running_weapon_clip,h->action.clip_time,roots[i],0,1,&posed));
+                CHECK(outputs[i].weapon_valid&&!memcmp(&posed,&outputs[i].weapon,sizeof posed));
+            }else{ended[i]=ticks;final_span[i]=spans[i].to;}
+            if(i==0&&contact_stamp&&ticks>opening){
+                CHECK(h->playback.last_contact==contact_stamp&&!outputs[i].playback_notified[0]);
+                float base=pe_combat_item_animation_speed(33,stamina[i]);slowed|=rate<base*.1f;overshoot|=rate>base;
+                if(!sample.curve_active){CHECK(rate==base);recovered=true;}
+            }
+        }
+        if(contact_stamp&&ticks>opening&&hosts[0].action.active&&hosts[1].action.active){
+            root_changed|=fabsf(deltas[0].z-deltas[1].z)>.00001f;
+            PeHitboxCapsule a,b;CHECK(pe_hitbox_pose(setup.drawn_capsule,setup.drawn_weapon,0,hosts[0].running_weapon_clip,hosts[0].action.clip_time,(PeVec3){0},0,1,&a));
+            CHECK(pe_hitbox_pose(setup.drawn_capsule,setup.drawn_weapon,0,hosts[1].running_weapon_clip,hosts[1].action.clip_time,(PeVec3){0},0,1,&b));
+            weapon_changed|=memcmp(&a,&b,sizeof a)!=0;
+            for(size_t v=0;v<pe_actor_stats(setup.body).vertices;v+=97){PeActorVertex a,b;
+                CHECK(pe_actor_pose_vertex(setup.body,hosts[0].running_body_clip,hosts[0].action.clip_time,v,&a));
+                CHECK(pe_actor_pose_vertex(setup.body,hosts[1].running_body_clip,hosts[1].action.clip_time,v,&b));
+                body_changed|=memcmp(a.position,b.position,sizeof a.position)!=0;
+            }
+        }
+        if(ticks==opening){
+            CHECK(hosts[0].action.clip_time==hosts[1].action.clip_time); /* Contact affects the next display. */
+            /* A second fixed tick in this SAME display frame must retain the
+             * pre-contact rate; catch-up cannot trigger a fresh response phase.
+             * Exercise detached copies so the paired wall-clock run stays exact. */
+            PeSandboxMelee catchup=hosts[0],control=hosts[1];float energy_a=stamina[0],energy_b=stamina[1];
+            PeCombatInterval ca,cb;double old=catchup.action.wall_time;
+            CHECK(pe_sandbox_melee_advance(&catchup,g,&energy_a)&&pe_sandbox_melee_advance(&control,g,&energy_b));
+            CHECK(pe_sandbox_melee_interval(&catchup,&ca)&&pe_sandbox_melee_interval(&control,&cb));
+            CHECK(ca.from==cb.from&&ca.to==cb.to&&fabs(ca.to-ca.from-pe_combat_item_animation_speed(33,energy_a)*PE_SANDBOX_MELEE_DT)<1e-9);
+            CHECK(fabs(catchup.action.wall_time-old-PE_SANDBOX_MELEE_DT)<1e-12&&catchup.playback.time==g.scaled_time);
+            PeVec3 da,db;CHECK(pe_root_motion_delta(curve,ca.from,ca.to,&da)&&pe_root_motion_delta(curve,cb.from,cb.to,&db));
+            CHECK(!memcmp(&da,&db,sizeof da));
+            PeSandboxMeleeFrame f=frame();f.gate=g;f.player_position=roots[0];PeKnifeContactTarget t=targets[0];PeSandboxMeleeUpdate out;
+            CHECK(pe_sandbox_melee_resolve(&catchup,&f,&t,1,&out)&&!out.playback_notified[0]&&!out.trigger_contact[0]);
+            CHECK(t.hp==targets[0].hp&&catchup.playback.last_contact==contact_stamp);
+        }
+    }
+    CHECK(ticks<240&&hits[0]==1&&notifications[0]==1&&hits[1]==0&&notifications[1]==0&&targets[1].hp==212);
+    CHECK(slowed&&overshoot&&recovered&&root_changed&&body_changed&&weapon_changed);
+    CHECK(ended[0]>ended[1]&&stamina[0]==95&&stamina[1]==95);
+    CHECK(final_span[0]==1.1680725812911987&&final_span[1]==final_span[0]);
+    printf("sandbox melee playback: recovered408 hit at tick%u, response/miss ended%u/%u; shared root/body/blade intervals and scaled wall clocks passed\n",opening,ended[0],ended[1]);
+ done:pe_hitboxes_free(boxes);pe_actor_free(hare);pe_root_motion_free(curve);
+}
 static void actual_running_assets(void){
     const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/running-player-20261006/player/player-part-0-material-0.peac",
         PE_SOURCE_ROOT "/rebuild/build/running-player-20261006/player-knife-drawn/knife-drawn-part-0-material-0.peac",
@@ -151,6 +266,7 @@ static void actual_running_assets(void){
         PeSandboxMeleeSetup setup={.weapon_item_id=33,.history_enabled=true,.history_local_center={0,.875f,0},.body=body,.drawn_weapon=knife,.drawn_capsule=boxes,.gender=PE_COMBAT_FEMALE,
             .player_id=1,.attack=19,.stamina_reduce_percent=1,.running_motion_ready=true};
         PeSandboxMelee h;bool ready=pe_sandbox_melee_init(&h,&setup);CHECK(ready);
+        if(ready)actual_running_playback(setup);
         if(ready)for(unsigned combo=0;combo<2;combo++){
             PeSandboxMeleeGate g=gate();g.velocity.z=5;g.move_requested=true;float stamina=100;
             CHECK(pe_sandbox_melee_begin(&h,g,&stamina));PeSandboxMeleeFrame f=frame();f.gate=g;
@@ -254,6 +370,79 @@ static void history_tests(const PeActor *a,const PeHitboxes *w,const PeHitboxes 
     while(!h.action.contact_open&&ticks++<60)CHECK(pe_sandbox_melee_step(&h,&f,NULL,0,&energy,&out));
     CHECK(h.history_active&&h.history.previous_a.x==h.history.current.a.x);
 }
+static void playback_gate_tests(PeSandboxMeleeSetup setup){
+    PeSandboxMelee h;CHECK(pe_sandbox_melee_init(&h,&setup));
+    PeAttackPlaybackSample sample;CHECK(pe_attack_playback_sample(&h.playback,10,33,100,&sample));
+    PeSandboxMeleeGate g=gate();g.scaled_time=10;float energy=100;
+    const float invalid[]={NAN,INFINITY,-1,9};
+    for(unsigned i=0;i<4;i++){
+        PeSandboxMelee before=h;PeSandboxMeleeGate bad=g;bad.scaled_time=invalid[i];
+        CHECK(!pe_sandbox_melee_begin(&h,bad,&energy)&&!memcmp(&h,&before,sizeof h)&&energy==100);
+    }
+    CHECK(pe_sandbox_melee_begin(&h,g,&energy));PeSandboxMeleeFrame f=frame();f.gate=g;
+    unsigned ticks=0;PeSandboxMeleeUpdate out;
+    while(h.action.active&&!h.action.combo_window&&ticks++<200){
+        f.gate.scaled_time=(float)(10+ticks*PE_SANDBOX_MELEE_DT);
+        CHECK(pe_sandbox_melee_step(&h,&f,NULL,0,&energy,&out));
+    }
+    CHECK(h.action.combo_window&&!h.action.combo_queued&&energy==95);
+    for(unsigned i=0;i<4;i++){
+        PeSandboxMelee before=h;PeSandboxMeleeGate bad=f.gate;bad.scaled_time=i==3?f.gate.scaled_time-.01f:invalid[i];
+        CHECK(!pe_sandbox_melee_queue(&h,bad)&&!memcmp(&h,&before,sizeof h));
+    }
+    CHECK(pe_sandbox_melee_queue(&h,f.gate)&&h.action.combo_queued&&energy==95);
+}
+static void playback_tests(const PeActor *a,const PeHitboxes *w,const PeHitboxes *d){
+    PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=a,.drawn_weapon=a,.drawn_capsule=w,
+        .gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1,
+        .history_enabled=true,.playback_enabled=true};
+    playback_gate_tests(setup);
+    PeSandboxMelee h;CHECK(pe_sandbox_melee_init(&h,&setup));PeSandboxMeleeFrame f=frame();
+    f.gate.scaled_time=10;float energy=100;PeKnifeContactTarget t[6];targets_init(t,a,d,212);
+    for(unsigned i=0;i<6;i++)t[i].trigger_candidate=t[i].trigger_can_damage=true;
+    t[1].eligible=false;t[2].trigger_can_damage=false;t[4].position.x=100;
+    CHECK(pe_sandbox_melee_begin(&h,f.gate,&energy));h.action.targets[0]=t[3].entity_id;h.action.target_count=1;
+    PeSandboxMeleeUpdate out;unsigned ticks=0;
+    while(!h.action.contact_open&&ticks++<100){f.gate.scaled_time+=1.f/60;CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));}
+    CHECK(h.action.contact_open&&h.effected_count==5&&h.playback.last_contact==f.gate.scaled_time);
+    for(unsigned i=0;i<6;i++){
+        CHECK(out.trigger_contact[i]==(i!=4));CHECK(out.playback_notified[i]==(i!=2&&i!=4));
+        CHECK((out.status[i]==PE_KNIFE_CONTACT_HIT)==(i==0||i==5));
+    }
+    CHECK(t[1].hp==212&&t[2].hp==212&&t[3].hp==212);
+    float stamp=h.playback.last_contact,life=t[0].hp;
+    /* Skill-list reset/permission changes do not reset the trigger's effected list. */
+    h.action.target_count=0;memset(h.action.targets,0,sizeof h.action.targets);
+    t[1].eligible=true;t[2].trigger_can_damage=true;f.gate.scaled_time+=.1f;
+    double old_clip=h.action.clip_time,old_wall=h.action.wall_time;
+    PeAttackPlayback clock=h.playback;PeAttackPlaybackSample sample;float curve,rate;
+    CHECK(pe_attack_playback_sample(&clock,f.gate.scaled_time,33,energy,&sample));
+    CHECK(pe_attack_playback_curve(sample.curve_time,&curve)&&pe_attack_playback_speed(sample,curve,&rate));
+    CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(h.playback.last_contact==stamp&&t[0].hp==life&&t[1].hp==212&&t[2].hp==212);
+    CHECK(fabs(h.action.clip_time-old_clip-rate*PE_SANDBOX_MELEE_DT)<1e-8);
+    CHECK(fabs(h.action.wall_time-old_wall-PE_SANDBOX_MELEE_DT)<1e-8);
+    for(unsigned i=0;i<6;i++)CHECK(!out.trigger_contact[i]&&!out.playback_notified[i]);
+    t[4].position.x=0;f.gate.scaled_time+=1.f/60;
+    CHECK(pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(out.playback_notified[4]&&h.playback.last_contact==f.gate.scaled_time&&h.effected_count==6);
+    /* Native capacity failure after the first prospective new contact must
+     * roll back the earlier notification, damage, clock and stamina together. */
+    h.effected_count=PE_COMBAT_TARGET_CAPACITY-1;
+    for(unsigned i=0;i<h.effected_count;i++)h.effected[i]=1000+i;
+    h.action.target_count=0;memset(h.action.targets,0,sizeof h.action.targets);
+    PeSandboxMelee before=h;PeKnifeContactTarget saved[6];memcpy(saved,t,sizeof t);
+    PeSandboxMeleeUpdate saved_out=out;float saved_energy=energy;f.gate.scaled_time+=1.f/60;
+    CHECK(!pe_sandbox_melee_step(&h,&f,t,6,&energy,&out));
+    CHECK(!memcmp(&h,&before,sizeof h)&&!memcmp(t,saved,sizeof t)&&
+        !memcmp(&out,&saved_out,sizeof out)&&energy==saved_energy);
+    stamp=h.playback.last_contact;pe_sandbox_melee_cancel(&h);
+    CHECK(h.playback.last_contact==stamp&&h.effected_count==0);
+    f.gate.equipped_instance_id=f.gate.drawn_instance_id=92;
+    CHECK(pe_sandbox_melee_begin(&h,f.gate,&energy));
+    CHECK(pe_sandbox_melee_step(&h,&f,NULL,0,&energy,&out)&&h.playback.last_contact==stamp);
+    CHECK(h.action.clip_time<pe_combat_animation_speed(energy)*PE_SANDBOX_MELEE_DT);
+}
 int pe_test_sandbox_melee(void){
     failures=0;char path[]="/tmp/pe-sandbox-melee-XXXXXX";int fd=mkstemp(path);CHECK(fd>=0);if(fd<0)return failures;close(fd);
     PeActor*a=actor_fixture(path,2,false,false),*wrong=actor_fixture(path,1,false,false),*missing=actor_fixture(path,2,true,false);
@@ -262,6 +451,7 @@ int pe_test_sandbox_melee(void){
     PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=a,.drawn_weapon=a,.drawn_capsule=w,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};
     weapon_clock_tests(a,w);
     history_tests(a,w,d);
+    playback_tests(a,w,d);
     PeSandboxMelee h,before;CHECK(pe_sandbox_melee_init(&h,&setup));before=h;
     PeSandboxMeleeSetup bad=setup;bad.body=wrong;CHECK(!pe_sandbox_melee_init(&h,&bad));CHECK(!memcmp(&h,&before,sizeof h));
     bad=setup;bad.drawn_weapon=missing;CHECK(!pe_sandbox_melee_init(&h,&bad));bad=setup;bad.drawn_capsule=d;CHECK(!pe_sandbox_melee_init(&h,&bad));CHECK(!memcmp(&h,&before,sizeof h));

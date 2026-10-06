@@ -28,11 +28,13 @@ typedef struct {
     float defense,hp,max_hp;
     bool shield_block;
     float shield_protection;
-    /* Host combines defence-trigger activity, skill target restriction,
-     * reputation/faction/DamageID checks and external collision eligibility.
-     * This includes source trigger-dispatch/effected-trigger bookkeeping,
-     * which is distinct from PeCombat's successful skill-guide hit list. */
+    /* Host supplies the skill-damage eligibility gate. Source trigger
+     * dispatch/effected bookkeeping is separate and uses the fields below;
+     * the damage resolver owns only successful skill-guide deduplication. */
     bool eligible;
+    /* Separate source trigger dispatch from skill eligibility. Used by the
+     * opted-in sandbox playback owner, not by the damage resolver itself. */
+    bool trigger_candidate,trigger_can_damage;
 } PeKnifeContactTarget;
 typedef struct {
     uint64_t target_id;
@@ -50,6 +52,12 @@ typedef enum {
     PE_KNIFE_CONTACT_MISS,
     PE_KNIFE_CONTACT_HIT
 } PeKnifeContactStatus;
+/* Read-only PEAttackTrigger narrowphase, before skill eligibility/dedupe. HIT
+ * means geometric overlap only: damage/HP/death fields are zero. Caller owns
+ * trigger activity, self exclusion, effected-trigger lists and CanDamage.
+ * INVALID/MISS preserve result. Every enabled defence pose is validated. */
+PeKnifeContactStatus pe_knife_contact_probe(const PeKnifeContactAttack *attack,
+    const PeKnifeContactTarget *target,PeKnifeContactResult *result);
 /* Result required. INVALID/IGNORED/MISS leave action, target and result exactly
  * unchanged. HIT changes only target.hp, action's dedupe list and result.
  * Disabled/attack PEHB records are skipped. First overlapping enabled defence

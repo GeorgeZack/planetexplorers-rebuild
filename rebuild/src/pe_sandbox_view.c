@@ -346,11 +346,16 @@ static bool sandbox_blade_prepare(PeSandboxActor *actor,const char *assets,int i
     PeSandboxMeleeSetup setup={.weapon_item_id=item_id,.body=body,.drawn_weapon=weapon,.drawn_capsule=*capsule,
         .gender=PE_COMBAT_FEMALE,.player_id=1,.attack=pe_player_defaults.attack+item->attack,
         .stamina_reduce_percent=pe_player_defaults.stamina_reduce_percent};
-    setup.history_enabled=true;
+    setup.history_enabled=true;setup.playback_enabled=true;
     /* Source local bounds, distinct from native movement radius/height. */
     const float *center=pe_player_collider_center_source[setup.gender].local_center;
     setup.history_local_center=(PeVec3){center[0],center[1],center[2]};
     return pe_sandbox_melee_init(out,&setup);
+}
+static void sandbox_blade_rebind(PeSandboxMelee *blade,const PeSandboxMelee *model){
+    /* Source reuses the character's Sword action when equipment changes. */
+    PeAttackPlayback playback=blade->playback;
+    pe_sandbox_melee_cancel(blade);*blade=*model;blade->playback=playback;
 }
 static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *defence,const PeSandboxMelee *melee,PeHuntCombatPlayer *out){
     if(!pe_outfit_state_valid(game))return false;
@@ -571,7 +576,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(action.load) {
             loaded=pe_game_load(game,save_path,error,sizeof error);
-            if(loaded){pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
+            if(loaded){melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
@@ -632,7 +637,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         bool right_click=action_input&&camera_control.right_click;
         const PeSlot *equipped=pe_game_equipped_tool(game);
         uint32_t current_instance=equipped?equipped->instance_id:0;
-        if(current_instance!=tool_instance){attack_pending=false;pe_sandbox_melee_cancel(&melee);melee=blade_templates[equipped&&equipped->item_id==1&&blade_templates[1].ready?1:0];placing_torch=false;tool_instance=current_instance;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);}
+        if(current_instance!=tool_instance){attack_pending=false;sandbox_blade_rebind(&melee,&blade_templates[equipped&&equipped->item_id==1&&blade_templates[1].ready?1:0]);placing_torch=false;tool_instance=current_instance;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);}
         bool torch_tool=equipped&&equipped->item_id==PE_TORCH_ITEM;
         bool knife_tool=equipped&&(equipped->item_id==33||equipped->item_id==1);
         bool knife_ready=knife_tool&&sandbox_blade_owned(equipped,&melee)&&game->mode==PE_GAME_ADVENTURE&&
@@ -810,7 +815,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     .move_requested=fabsf(input.move_x)+fabsf(input.move_z)>.001f||jump_pending,
                     .equipped_item_id=knife_item?knife_item->item_id:0,
                     .equipped_instance_id=knife_item?knife_item->instance_id:0,
-                    .drawn_instance_id=tool_drawn&&owns_knife?knife_item->instance_id:0,.velocity=game->velocity};
+                    .drawn_instance_id=tool_drawn&&owns_knife?knife_item->instance_id:0,.velocity=game->velocity,
+                    .scaled_time=(float)sandbox_attribute_clock.seconds};
                 if(attack_pending&&melee.ready){
                     if(melee.action.active)pe_sandbox_melee_queue(&melee,melee_gate);
                     else if(pe_sandbox_melee_begin(&melee,melee_gate,&game->stamina)){pe_sandbox_actor_face_camera(actor,game);melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;}

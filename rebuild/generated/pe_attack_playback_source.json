@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "source_files": [
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs",
+      "sha256": "dc4854aa4b5b45adb2b64597ec81c03b6b5591627b79b5c2f9c3961405cc38eb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs",
+      "sha256": "457e76b2e674a076705d784a0b25ae2a56d84434f1227dcee1822054a6acfc9c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs.meta",
+      "sha256": "0d7f8c3ff2674f40ece69d8d02ee49df70dcaa0ef9d2c272b87eb2030000b224"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+      "sha256": "238d3a50ab81caa3afc338234111670637556bbd4083ef3073774e0f25b8b4f8"
+    },
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    }
+  ],
+  "binding": {
+    "component_path_id": 11400022,
+    "game_object_path_id": 100000,
+    "script_guid": "1b103bb6c9638b34b91defa0608b39e1",
+    "action_field": "m_SwordAttack",
+    "duration_seconds": 0.6499999761581421,
+    "curve": {
+      "m_Curve": [
+        {
+          "time": 0.0,
+          "value": 1.0,
+          "inSlope": -7.586142539978027,
+          "outSlope": -7.586142539978027,
+          "tangentMode": 0
+        },
+        {
+          "time": 0.09999999403953552,
+          "value": 0.009999999776482582,
+          "inSlope": 0.0,
+          "outSlope": -0.0,
+          "tangentMode": 17
+        },
+        {
+          "time": 0.25,
+          "value": 0.009999999776482582,
+          "inSlope": 0.0,
+          "outSlope": 6.207302093505859,
+          "tangentMode": 5
+        },
+        {
+          "time": 0.75,
+          "value": 1.2999999523162842,
+          "inSlope": 1.1442314386367798,
+          "outSlope": 1.1442314386367798,
+          "tangentMode": 0
+        },
+        {
+          "time": 0.9995110630989075,
+          "value": 0.9999892115592957,
+          "inSlope": 0.0,
+          "outSlope": 0.0,
+          "tangentMode": 0
+        }
+      ],
+      "m_PreInfinity": 2,
+      "m_PostInfinity": 2
+    },
+    "serialized_use_stamina": 0
+  },
+  "source_method_guards": {
+    "playback_formula": "e339d530cf759f8bf7f7fe0dad928cb88582aeb8ee89a92d0a66601908182fa4",
+    "contact_stamp": "da53e74104d39211fca308fe15bb5022f4d880f480f34ed7d2baea2e4780fa33",
+    "action_update_order": "6c73f8cf99cf79294275cce6db44335f4e4aebf98dee562a1d004f1d3e36da44",
+    "trigger_before_skill": "f20b6c9f183872850aecbe2c92680b805581ffab366ee03d94da557ce842757d",
+    "player_creation": "428c45f261426f1b68146920dc107c17786f10ba7c0d44af7b8543e2bc3c9adc"
+  },
+  "engine_api": {
+    "unity_engine_sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+    "method": "UnityEngine.AnimationCurve.Evaluate(single)",
+    "implementation_flags": 4096,
+    "managed_body": false,
+    "evaluated": false
+  },
+  "interpolation_evidence": {
+    "audit": "docs/audit/UNITY5_CURVE_EVALUATOR.md",
+    "result": "docs/reference/unity5-curve-arithmetic.json",
+    "tool": "rebuild/tools/qualify_unity5_curve_arithmetic.py",
+    "binary_sha256": "1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6",
+    "compared_points": 4109,
+    "exact_float_matches": 4109,
+    "scope": "Separate isolated replay of call-free native selector/coefficient/Horner instructions on Linux x86-64; static-disassembly clamp dispatch. No initialized engine or gameplay execution."
+  },
+  "rule": {
+    "low_stamina_factor": 0.9,
+    "minimum_base_speed": 0.5,
+    "maximum_base_speed": 1.5,
+    "elapsed": "float(Time.time - animScaleStartTime)",
+    "curve_parameter": "elapsed / duration_seconds",
+    "response_active": "elapsed < duration_seconds",
+    "clamp_before_curve": true,
+    "clamp_after_curve": false,
+    "resets_on": "eligible non-self defence-trigger contact before skill CollisionCheck",
+    "action_start_resets": false,
+    "combo_resets": false,
+    "action_end_resets": false,
+    "initial_timestamp": 0,
+    "clock": "Unity process Time.time; not authored clip time"
+  },
+  "qualification": {
+    "serialized_keys": "Source prefab exact key values, tangents and raw infinity codes recovered.",
+    "installed_verification": "Use --game to require modern ResourceManager runtime payload agreement.",
+    "interpolation": "Separate pinned native-binary disassembly and isolated arithmetic replay qualify finite unweighted cubic Hermite operation order and start-inclusive/end-exclusive segment selection; this exporter does not run that qualification.",
+    "engine_evaluate": "Installed UnityEngine.AnimationCurve.Evaluate has internal-call implementation flag0x1000; no managed body.",
+    "infinity": "Separate raw-deserializer and evaluator disassembly establishes serialized infinity2 clamps. It must not be cast to public WrapMode2, which means loop.",
+    "tail": "At normalized time>=0.999511063, clamp to stored last value0.999989212. Source action independently uses base speed once elapsed>=duration. Tail dispatch is statically qualified, not executed by the arithmetic replay.",
+    "startup": "Timestamp default0 permits response during first duration of process even without contact; native epoch ownership must be explicit."
+  }
+}

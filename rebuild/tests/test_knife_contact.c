@@ -47,6 +47,13 @@ int pe_test_knife_contact(void){
     PeKnifeContactAttack attack={.entity_id=1,.weapon={{0,0,0},{0,1,0},.3f},.attack=19,.eligible=true};
     PeKnifeContactTarget target={.entity_id=2,.actor=actor,.hitboxes=boxes,.clip=0,.scale=1,.defense=29,.hp=100,.max_hp=100,.eligible=true};
     PeCombat a=opened();PeKnifeContactResult r;
+    /* Geometry dispatch precedes both permissions and skill/HP decisions. */
+    attack.eligible=false;target.eligible=false;PeKnifeContactTarget old_target=target;
+    CHECK(pe_knife_contact_probe(&attack,&target,&r)==PE_KNIFE_CONTACT_HIT);
+    CHECK(r.defence_index==2&&r.damage==0&&r.hp_before==0&&!r.died&&
+        !memcmp(&target,&old_target,sizeof target));
+    unchanged(&a,&attack,&target,PE_KNIFE_CONTACT_IGNORED);
+    attack.eligible=true;target.eligible=true;
     /* Endpoint snapshots miss on both sides; original sampled history crosses
      * the target and retains the first defence record and guide dedupe. */
     PeCapsuleHistory history={.previous_a={-2,0,0},.previous_b={-2,1,0},

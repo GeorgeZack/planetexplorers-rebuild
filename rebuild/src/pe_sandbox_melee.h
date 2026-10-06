@@ -2,6 +2,7 @@
 #define PE_SANDBOX_MELEE_H
 #include "pe_knife_contact.h"
 #include "pe_sword.h"
+#include "pe_attack_playback.h"
 #define PE_SANDBOX_MELEE_TARGETS 6u
 #define PE_SANDBOX_MELEE_DT (1.0/60.0)
 /* Authored mountMain Attack6..9 assets, borrowed for the host lifetime. PEAC
@@ -20,12 +21,14 @@ typedef struct {
      * instantaneous compatibility unless the caller opts into this contract. */
     bool history_enabled;
     PeVec3 history_local_center;
+    bool playback_enabled;
 } PeSandboxMeleeSetup;
 typedef struct {
     bool alive,weapon_owned,grounded,third_person,action_allowed,move_requested,in_water;
     int equipped_item_id;
     uint32_t equipped_instance_id,drawn_instance_id;
     PeVec3 velocity;
+    float scaled_time; /* Shared display Time.time for opted-in playback. */
 } PeSandboxMeleeGate;
 typedef struct {
     PeSandboxMeleeGate gate;
@@ -45,6 +48,9 @@ typedef struct {
     PeCombatInterval tick_interval;
     PeCapsuleHistory history;
     bool history_active; /* Trigger window, independent of skill dedupe. */
+    PeAttackPlayback playback; /* Character action lifetime, survives cancel. */
+    unsigned effected_count;
+    uint64_t effected[PE_COMBAT_TARGET_CAPACITY]; /* One trigger per offered entity. */
 } PeSandboxMelee;
 typedef struct {
     PeCombatAdvance advance;
@@ -54,6 +60,7 @@ typedef struct {
     size_t target_count;
     PeKnifeContactStatus status[PE_SANDBOX_MELEE_TARGETS];
     PeKnifeContactResult contact[PE_SANDBOX_MELEE_TARGETS];
+    bool trigger_contact[PE_SANDBOX_MELEE_TARGETS],playback_notified[PE_SANDBOX_MELEE_TARGETS];
 } PeSandboxMeleeUpdate;
 /* Four identical body/tool clip clocks, source event coverage, one enabled
  * right-hand attack capsule. Atomic failure, no allocation or asset ownership. */
@@ -97,8 +104,10 @@ bool pe_sandbox_melee_step_with_weapon(PeSandboxMelee *host,const PeSandboxMelee
  * dispatch and must preserve returned HP. No spawn/objective/lesson grants.
  * Opted-in history uses source samples at this native60Hz clock; activation
  * pins both endpoints at the resolved pose (coalesced activation/LateUpdate
- * adapter). Closed windows retain endpoints but retire active ownership. No
- * AI, hit-stop, draw transitions or FP attacks. Running
+ * adapter). Closed windows retain endpoints but retire active ownership.
+ * Opted-in playback uses the shared display timestamp and a separate effected
+ * trigger list; permitted geometric notifications precede skill damage/dedupe.
+ * No AI, draw transitions or FP attacks. Running
  * displacement belongs to the qualified host's split path, not this wrapper;
  * running advance/step is unavailable without the explicit setup opt-in. Render
  * from action.stage/clip_time; suppress stamina recovery while action.active. */

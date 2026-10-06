@@ -68,6 +68,7 @@ PeHitboxes *pe_hitboxes_load(const char *path,const PeActor *a,char *error,size_
     return (PeHitboxes*)&box_identity;
 }
 bool pe_sandbox_melee_init(PeSandboxMelee *out,const PeSandboxMeleeSetup *setup){init_calls++;*out=(PeSandboxMelee){.ready=true,.setup=*setup};pe_combat_init(&out->action);return true;}
+void pe_sandbox_melee_cancel(PeSandboxMelee *h){pe_combat_stop(&h->action);h->instance_id=0;h->tick_pending=false;h->effected_count=0;}
 static void reset_callbacks(PeSandboxActor *a){a->action_calls=a->melee_calls=a->ground_calls=a->order_count=0;a->order[0]=0;}
 static void sword_poses(PeGame *g){
     PeSandboxActor a={.sword=true,.knife=true,.ground=true};PeSandboxActions tool;pe_sandbox_actions_init(&tool,false);
@@ -146,8 +147,12 @@ static void old_save_and_eligibility(PeGame *g){
     g->inventory.slots[0]=saved;a.sword=true;
     CHECK(sandbox_blade_prepare(&a,"source-assets",1,&sword,&boxes,error,sizeof error));
     CHECK(asset_calls==1&&load_calls==1&&init_calls==1&&sword.ready&&sword.setup.weapon_item_id==1&&sword.setup.attack==20);
-    CHECK(sword.setup.history_enabled&&sword.setup.history_local_center.x==0&&
+    CHECK(sword.setup.history_enabled&&sword.setup.playback_enabled&&sword.setup.history_local_center.x==0&&
         sword.setup.history_local_center.y==.875f&&sword.setup.history_local_center.z==0);
+    knife.playback=(PeAttackPlayback){.last_contact=99,.time=99.1f,.initialized=true};
+    PeAttackPlayback character_clock=knife.playback;
+    sandbox_blade_rebind(&knife,&sword);
+    CHECK(knife.setup.weapon_item_id==1&&!memcmp(&knife.playback,&character_clock,sizeof character_clock));
     /* Stable slot binding is reacquired from the current game after load. */
     g->inventory.slots[3]=g->inventory.slots[0];memset(&g->inventory.slots[0],0,sizeof(PeSlot));g->inventory.slots[3].instance_id=92;g->equipped_instance_id=92;
     CHECK(sandbox_action_pose(&a,g,&tool,&sword,true)&&a.pose.instance_id==92);
