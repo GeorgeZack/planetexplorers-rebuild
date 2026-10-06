@@ -1,4 +1,5 @@
 """Read-only source export checks; no graphics or game process."""
+from contextlib import closing
 import json
 from pathlib import Path
 import sqlite3
@@ -21,19 +22,27 @@ class AdventureDialogueExportTests(unittest.TestCase):
         self.assertIn('"AdvNPC%"002',lines[4088]['text'])
         self.assertIn('"Town%"004',lines[4090]['text']);self.assertIn('"AdvNPC%"001',lines[4089]['text'])
         self.assertEqual([lines[i]['speaker'] for i in range(4097,4101)],[0,0,0,3])
+        self.assertEqual([lines[i]['speaker'] for i in (4105,4106)],[0,3])
+        self.assertTrue(all(lines[i]['text'] for i in (4105,4106)))
         self.assertEqual(next(m for m in data['missions'] if m['id']==9072)['title'],'Herb Collecting')
+        returned=next(m for m in data['missions'] if m['id']==9127)
+        self.assertEqual(returned['title'],'Bug Hunt');self.assertEqual(returned['target_id'],4525)
+        self.assertEqual(returned['description'],'Return to town and report in.')
         self.assertEqual(data['arrival_target']['radius'],5)
         self.assertTrue(data['arrival_target']['truncate_target_to_integer'])
     def changed(self,sql):
         with tempfile.TemporaryDirectory() as directory:
             path=Path(directory)/'source.db'
-            with sqlite3.connect(exporter.DEFAULT_DATABASE.resolve().as_uri()+'?mode=ro',uri=True) as source,sqlite3.connect(path) as output:
+            with closing(sqlite3.connect(exporter.DEFAULT_DATABASE.resolve().as_uri()+'?mode=ro',uri=True)) as source,closing(sqlite3.connect(path)) as output:
                 source.backup(output);output.execute(sql);output.commit()
             with self.assertRaises(ValueError):exporter.build_outputs(path,None)
     def test_reject_changed_sequence(self):self.changed("UPDATE AdRandomQuest_List SET TalkOP='4094,4090' WHERE ID='9032'")
     def test_reject_changed_welcome_chain(self):self.changed("UPDATE AdRandomQuest_List SET NextQuest='9030' WHERE ID='9028'")
     def test_reject_changed_medicine_choice(self):self.changed("UPDATE AdRandomQuest_List SET player_talk='4098,4099' WHERE ID='9072'")
     def test_reject_changed_medicine_target(self):self.changed("UPDATE AdQuest_LootItem SET ItemNum='4' WHERE TargetID='2531'")
+    def test_reject_changed_hunt_return(self):self.changed("UPDATE AdRandomQuest_List SET TargetIDList='4524' WHERE ID='9127'")
+    def test_reject_changed_hunt_return_pages(self):self.changed("UPDATE AdRandomQuest_List SET TalkED='4106,4105' WHERE ID='9127'")
+    def test_reject_changed_hunt_continuation(self):self.changed("UPDATE AdRandomQuest_List SET NextQuest='9074' WHERE ID='9127'")
     def test_reject_wrong_speaker(self):self.changed("UPDATE Scenario SET npc_id='9041' WHERE talk_id='4090'")
     def test_reject_missing_english(self):self.changed("UPDATE Translation SET English='' WHERE ID='3004094'")
 

@@ -24,7 +24,7 @@ int pe_test_town_interaction(void){
     g->game_seconds+=.01;CHECK(pe_town_shop_open(g,20002));CHECK(pe_town_shop_stock(g,20002,1184)==3);
     /* Nonempty rows reset timestamps on opening even before refresh interval. */
     CHECK(g->town_stock[4].create_time==g->game_seconds);
-    g->money=100000;memset(&g->inventory,0,sizeof g->inventory);g->inventory.next_instance_id=1;
+    g->money=100000;memset(g->inventory.slots,0,sizeof g->inventory.slots);
     CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_SLOTS));inv=g->inventory;money=g->money;
     CHECK(!pe_town_shop_buy(g,20002,1184,1));CHECK(g->money==money&&pe_town_shop_stock(g,20002,1184)==3&&!memcmp(&inv,&g->inventory,sizeof inv));
     g->town_stock[0].remaining=4;CHECK(!pe_town_state_valid(g));g->town_stock[0].remaining=3;
@@ -36,7 +36,7 @@ int pe_test_town_interaction(void){
     CHECK(!pe_town_shop_count(20018)&&!pe_town_shop_count(20019)&&!pe_town_shop_count(20027));
     CHECK(pe_town_shop_offer_at(16)->entity_id==20011&&pe_town_shop_offer_at(17)->entity_id==20028);
     CHECK(!pe_town_shop_offer_at(PE_TOWN_STOCK_CAPACITY));
-    memset(&g->inventory,0,sizeof g->inventory);g->inventory.next_instance_id=1;g->money=1000;
+    memset(g->inventory.slots,0,sizeof g->inventory.slots);g->money=1000;
     CHECK(pe_town_shop_open(g,20028));
     const int stores[]={212,208,214,211,206},items[]={239,235,241,238,233};
     const unsigned counts[]={5,10,10,5,5};
@@ -53,7 +53,7 @@ int pe_test_town_interaction(void){
     CHECK(script>=0&&pe_game_use_slot(g,script));CHECK(!pe_inventory_count(&g->inventory,877));
     CHECK(pe_game_recipe_known(g,337)&&pe_game_recipe_known(g,388)&&pe_game_recipe_known(g,390));
     CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));
-    memset(&g->inventory,0,sizeof g->inventory);g->inventory.next_instance_id=1;CHECK(pe_game_accept_supplies(g));
+    memset(g->inventory.slots,0,sizeof g->inventory.slots);CHECK(pe_game_accept_supplies(g));
     g->world.source=1;g->world.origin_x=-300;g->world.origin_y=16;g->world.origin_z=100;
     g->player=(PeVec3){31,9,34};CHECK(!pe_adventure_annot_step(g));g->player.x=30.99f;g->player.y=-16.01f;CHECK(!pe_adventure_annot_step(g));g->player.y=9;
     g->supplies_claimed=false;CHECK(!pe_adventure_annot_step(g));g->supplies_claimed=true;

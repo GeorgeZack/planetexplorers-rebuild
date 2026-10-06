@@ -1,0 +1,322 @@
+{
+  "schema": 1,
+  "evidence": "Both observations closed before the later physical return. No completion, reward or ending-dialogue transition was captured.",
+  "captures": [
+    {
+      "schema": 1,
+      "evidence": "Closed original end-of-frame field observations; no native behavior implied.",
+      "capture": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/hunt-return-01.jsonl",
+      "capture_sha256": "dce575c795bb92bcdeb0d1eb22a74079a40946c750731f11ee3fb1c24faaceb5",
+      "header": {
+        "type": "header",
+        "schema": 1,
+        "kind": "observed-original-hunt-return",
+        "mission": 9127,
+        "target": 4525,
+        "phase": "WaitForEndOfFrame",
+        "unity": "5.2.4f1",
+        "probeSourceSha256": "f38d06949c4b9b2f438f339b84004b825569209a8d2673a38bbde8dbf7b0adf2",
+        "maxFrames": 3600,
+        "maxBytes": 16777216
+      },
+      "end": {
+        "type": "end",
+        "reason": "time-limit",
+        "frames": 2528
+      },
+      "frames": 2528,
+      "source_target_xyz": [
+        -266,
+        25,
+        136
+      ],
+      "first_active": {
+        "sample": 0,
+        "frame": 15645,
+        "time": 209.470032,
+        "realtime": 219.053925,
+        "player": {
+          "id": 20000,
+          "position": [
+            -284,
+            22.4980373,
+            134
+          ]
+        },
+        "target_xz_distance_squared": 328,
+        "missions": {
+          "9127": {
+            "active": true,
+            "completed": 0
+          },
+          "9077": {
+            "active": false,
+            "completed": 0
+          }
+        },
+        "inventory": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        },
+        "missionInventory": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        },
+        "talk": {
+          "active": false,
+          "playing": false,
+          "canClose": true,
+          "mode": 0,
+          "index": 0,
+          "selectionMission": 0,
+          "npcEntity": null,
+          "currentId": null,
+          "pages": []
+        }
+      },
+      "completion_transition": null,
+      "four_reward_gain_transition": null,
+      "first_visible_talk": {},
+      "initial_player_inventory": {
+        "sample": 0,
+        "counts": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        }
+      },
+      "final_player_inventory": {
+        "sample": 2527,
+        "counts": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        }
+      },
+      "state_transitions": [
+        {
+          "before": null,
+          "after": {
+            "sample": 0,
+            "frame": 15645,
+            "time": 209.470032,
+            "realtime": 219.053925,
+            "player": {
+              "id": 20000,
+              "position": [
+                -284,
+                22.4980373,
+                134
+              ]
+            },
+            "target_xz_distance_squared": 328,
+            "missions": {
+              "9127": {
+                "active": true,
+                "completed": 0
+              },
+              "9077": {
+                "active": false,
+                "completed": 0
+              }
+            },
+            "inventory": {
+              "592": 0,
+              "593": 0,
+              "594": 0,
+              "595": 0
+            },
+            "missionInventory": {
+              "592": 0,
+              "593": 0,
+              "594": 0,
+              "595": 0
+            },
+            "talk": {
+              "active": false,
+              "playing": false,
+              "canClose": true,
+              "mode": 0,
+              "index": 0,
+              "selectionMission": 0,
+              "npcEntity": null,
+              "currentId": null,
+              "pages": []
+            }
+          }
+        }
+      ],
+      "limitations": [
+        "Events between two frame samples are not ordered within that interval.",
+        "Displayed talk means NPC talk object active with its indexed talk ID; text, player choice and acknowledgments require operator evidence.",
+        "Inventory deltas do not independently prove causal reward origin; correlate mission transitions and operator inputs.",
+        "Null player/package/mission/UI fields mean unavailable, never synthesized empty state.",
+        "Target coordinate is the archived source4525 reference, not a reconstructed live mission target."
+      ]
+    },
+    {
+      "schema": 1,
+      "evidence": "Closed original end-of-frame field observations; no native behavior implied.",
+      "capture": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/hunt-return-02.jsonl",
+      "capture_sha256": "9d3f14cb51563f439564fea6b3bc1e2140590ce3f7372b017e7896766e9422e2",
+      "header": {
+        "type": "header",
+        "schema": 1,
+        "kind": "observed-original-hunt-return",
+        "mission": 9127,
+        "target": 4525,
+        "phase": "WaitForEndOfFrame",
+        "unity": "5.2.4f1",
+        "probeSourceSha256": "f38d06949c4b9b2f438f339b84004b825569209a8d2673a38bbde8dbf7b0adf2",
+        "maxFrames": 3600,
+        "maxBytes": 16777216
+      },
+      "end": {
+        "type": "end",
+        "reason": "time-limit",
+        "frames": 2746
+      },
+      "frames": 2746,
+      "source_target_xyz": [
+        -266,
+        25,
+        136
+      ],
+      "first_active": {
+        "sample": 0,
+        "frame": 9490,
+        "time": 113.773819,
+        "realtime": 123.617493,
+        "player": {
+          "id": 20000,
+          "position": [
+            -284,
+            22.4980373,
+            134
+          ]
+        },
+        "target_xz_distance_squared": 328,
+        "missions": {
+          "9127": {
+            "active": true,
+            "completed": 0
+          },
+          "9077": {
+            "active": false,
+            "completed": 0
+          }
+        },
+        "inventory": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        },
+        "missionInventory": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        },
+        "talk": {
+          "active": false,
+          "playing": false,
+          "canClose": true,
+          "mode": 0,
+          "index": 0,
+          "selectionMission": 0,
+          "npcEntity": null,
+          "currentId": null,
+          "pages": []
+        }
+      },
+      "completion_transition": null,
+      "four_reward_gain_transition": null,
+      "first_visible_talk": {},
+      "initial_player_inventory": {
+        "sample": 0,
+        "counts": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        }
+      },
+      "final_player_inventory": {
+        "sample": 2745,
+        "counts": {
+          "592": 0,
+          "593": 0,
+          "594": 0,
+          "595": 0
+        }
+      },
+      "state_transitions": [
+        {
+          "before": null,
+          "after": {
+            "sample": 0,
+            "frame": 9490,
+            "time": 113.773819,
+            "realtime": 123.617493,
+            "player": {
+              "id": 20000,
+              "position": [
+                -284,
+                22.4980373,
+                134
+              ]
+            },
+            "target_xz_distance_squared": 328,
+            "missions": {
+              "9127": {
+                "active": true,
+                "completed": 0
+              },
+              "9077": {
+                "active": false,
+                "completed": 0
+              }
+            },
+            "inventory": {
+              "592": 0,
+              "593": 0,
+              "594": 0,
+              "595": 0
+            },
+            "missionInventory": {
+              "592": 0,
+              "593": 0,
+              "594": 0,
+              "595": 0
+            },
+            "talk": {
+              "active": false,
+              "playing": false,
+              "canClose": true,
+              "mode": 0,
+              "index": 0,
+              "selectionMission": 0,
+              "npcEntity": null,
+              "currentId": null,
+              "pages": []
+            }
+          }
+        }
+      ],
+      "limitations": [
+        "Events between two frame samples are not ordered within that interval.",
+        "Displayed talk means NPC talk object active with its indexed talk ID; text, player choice and acknowledgments require operator evidence.",
+        "Inventory deltas do not independently prove causal reward origin; correlate mission transitions and operator inputs.",
+        "Null player/package/mission/UI fields mean unavailable, never synthesized empty state.",
+        "Target coordinate is the archived source4525 reference, not a reconstructed live mission target."
+      ]
+    }
+  ]
+}

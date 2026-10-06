@@ -51,6 +51,12 @@ PeSceneHit pe_sandbox_collision_sweep_geometry(const PeSandboxCollision *collisi
  * adapter, with current furniture boxes retaining their existing approximation. */
 PeSceneHit pe_sandbox_collision_ray_geometry(const PeSandboxCollision *collision,
     PeVec3 origin,PeVec3 direction,float range);
+/* Perception obstruction geometry: nearest existing geometry-ray hit OR live
+ * source tree capsule hit. Exact finite tree ray, no radius inflation; interior
+ * tree origins do not select exits. Excludes NPCs/synthetic crop planes. Uses
+ * the last successful snapshot. The camera geometry ray remains tree-free. */
+PeSceneHit pe_sandbox_collision_ray_perception(const PeSandboxCollision *collision,
+    PeVec3 origin,PeVec3 direction,float range);
 PeSceneHit pe_sandbox_collision_support(const PeSandboxCollision *collision,PeVec3 feet,float radius,float height,float drop,float minimum_normal_y);
 /* Spawn/import recovery only: search upward in .25m increments, then settle on
  * walkable support. No horizontal relocation. max_lift[0,4], max_drop(0,5].

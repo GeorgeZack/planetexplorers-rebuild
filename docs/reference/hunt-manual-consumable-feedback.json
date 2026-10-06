@@ -1,0 +1,41 @@
+{
+  "recorded_utc": "2026-10-06T19:25:10.404986+00:00",
+  "kind": "partial native event-log snapshot during user manual test",
+  "limitations": [
+    "Session remains open; no exit result.",
+    "Counters are contacts across all hares, not kills or isolated running-stage hits.",
+    "Clock excludes modal suspension; not wall time."
+  ],
+  "attempts": [
+    {
+      "events": 20,
+      "last": {
+        "frame": 32875.0,
+        "clock": 7.0,
+        "hp": 0.0,
+        "kills": 0.0,
+        "outgoing": 23.0,
+        "incoming": 7.0
+      },
+      "died": true
+    },
+    {
+      "events": 33,
+      "last": {
+        "frame": 38817.0,
+        "clock": 20.583333,
+        "hp": 0.0,
+        "kills": 0.0,
+        "outgoing": 39.0,
+        "incoming": 12.0
+      },
+      "died": true
+    }
+  ],
+  "user_feedback": [
+    "Healing/juice briefly stops player and NPCs.",
+    "Combat difficult; compare original progression and equipment before tuning."
+  ],
+  "local_log": "rebuild/build/hunt-qol-20261006/manual-before-consumable-fix.log",
+  "interpretation": "Both observed attempts ended at zero earned kills. This is native manual feedback, not a matched original difficulty comparison."
+}

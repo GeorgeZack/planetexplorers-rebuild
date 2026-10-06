@@ -3,6 +3,9 @@
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
 #include "pe_adventure_medicine.h"
+#include "pe_adventure_hunt.h"
+#include "pe_deployable.h"
+#include "pe_shield.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -11,7 +14,9 @@
 #include <unistd.h>
 
 #define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 9u
+#define SAVE_VERSION 15u
+_Static_assert(PE_SAVE_V15_APPEND==4,"V15 appends only the shield reference");
+_Static_assert(PE_OUTFIT_SLOTS==3&&PE_SAVE_V14_APPEND==36,"V14 has exactly three 12-byte worn records");
 /* All numbers are little-endian; floats are IEEE-754 bit patterns. No ABI structs. */
 typedef struct { unsigned char *p;size_t pos,size;bool ok; } Stream;
 static void put32(Stream *s,uint32_t v) { if(s->pos+4>s->size){s->ok=false;return;} for(int i=0;i<4;i++)s->p[s->pos++]=(unsigned char)(v>>(i*8)); }
@@ -25,9 +30,12 @@ static PeVec3 getvec(Stream *s) {PeVec3 v;v.x=getf(s);v.y=getf(s);v.z=getf(s);re
 static uint32_t checksum(const unsigned char *p,size_t n) {uint32_t h=2166136261u;for(size_t i=0;i<n;i++){h^=p[i];h*=16777619u;}return h;}
 static void err(char *out,size_t cap,const char *msg) {if(out&&cap)snprintf(out,cap,"%s",msg);}
 static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
-static bool valid(const PeGame *g,bool trees) {
+static bool valid(const PeGame *g,bool trees,bool outfit) {
+    if(outfit&&!pe_outfit_state_valid(g))return false;
+    if(!pe_shield_state_valid(g))return false;
     if((g->mode!=PE_GAME_LEGACY&&g->mode!=PE_GAME_ADVENTURE)||
        !isfinite(g->hp)||!isfinite(g->max_hp)||g->max_hp<=0||g->max_hp>1000000||g->hp<0||g->hp>g->max_hp||
+       !isfinite(g->medpack_cooldown)||g->medpack_cooldown<0||g->medpack_cooldown>10||
        !isfinite(g->juice_cooldown)||g->juice_cooldown<0||g->juice_cooldown>10||
        !isfinite(g->juice_buff_elapsed)||g->juice_buff_elapsed<0||g->juice_buff_elapsed>10.251||
        g->juice_buff_tick>12||g->scanner_mask&~UINT32_C(0xffe)||
@@ -62,7 +70,7 @@ static bool valid(const PeGame *g,bool trees) {
        fabsf(g->velocity.x)>1000||fabsf(g->velocity.y)>1000||fabsf(g->velocity.z)>1000||
        g->block_count<0||g->block_count>PE_MAX_BLOCKS||g->tree_count<0||g->tree_count>PE_MAX_TREES||
        g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS) return false;
-    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g)||!pe_adventure_medicine_state_valid(g))return false;
+    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g)||!pe_adventure_medicine_state_valid(g)||!pe_adventure_hunt_state_valid(g)||!pe_deployable_state_valid(g))return false;
     if(g->world.source==0)for(size_t i=0;i<pe_world_voxel_count(&g->world);i++)if(pe_world_data_const(&g->world)[i].material>PE_MAT_GRASS)return false;
     if(!g->inventory.next_instance_id||!g->rng_state||
        !isfinite(g->stamina)||!isfinite(g->stamina_max)||!isfinite(g->stamina_regen)||
@@ -189,6 +197,25 @@ static void encode(Stream *s,const PeGame *g) {
     for(int i=PE_TOWN_V8_STOCK_CAPACITY;i<PE_TOWN_STOCK_CAPACITY;i++){
         put32(s,g->town_stock[i].initialized?1u:0u);put32(s,g->town_stock[i].remaining);putd(s,g->town_stock[i].create_time);
     }
+    /* V10 preserves every V9 byte, then stores hunt progression and deployed instances. */
+    put32(s,g->hunt_state);putf(s,g->hunt_destination.x);putf(s,g->hunt_destination.y);putf(s,g->hunt_destination.z);
+    put32(s,g->deployed_count);
+    for(unsigned i=0;i<PE_MAX_DEPLOYABLES;i++){
+        const PeDeployable *d=&g->deployed[i];put32(s,(uint32_t)d->item_id);put32(s,d->instance_id);putf(s,d->durability);
+        putf(s,d->position.x);putf(s,d->position.y);putf(s,d->position.z);put32(s,d->quarter_turn);
+    }
+    /* V11 preserves the literal V10 payload and appends only quest death credit. */
+    put32(s,g->hunt_kills);
+    /* V12 retains exactly V11's bytes; only new hunt-state values are enabled. */
+    /* V13 appends the independent group9 Med Pack cooldown, never the juice clock. */
+    putf(s,g->medpack_cooldown);
+    /* V14 preserves the literal V13 payload, then three fixed worn instances. */
+    for(unsigned i=0;i<3;i++){
+        const PeWornItem *w=&g->outfit.items[i];
+        put32(s,(uint32_t)w->item_id);put32(s,w->instance_id);putf(s,w->durability);
+    }
+    /* Bag retains the exact shield item and wear; never serialize a second owner. */
+    put32(s,g->shield_instance_id);
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -284,10 +311,28 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
             g->town_stock[i].initialized=initialized!=0;g->town_stock[i].remaining=get32(s);g->town_stock[i].create_time=getd(s);
         }
     }
+    if(version>=10){
+        g->hunt_state=get32(s);g->hunt_destination=(PeVec3){getf(s),getf(s),getf(s)};
+        g->deployed_count=get32(s);if(g->deployed_count>PE_MAX_DEPLOYABLES){s->ok=false;return;}
+        for(unsigned i=0;i<PE_MAX_DEPLOYABLES;i++){
+            PeDeployable *d=&g->deployed[i];d->item_id=getint(s);d->instance_id=get32(s);d->durability=getf(s);
+            d->position=(PeVec3){getf(s),getf(s),getf(s)};d->quarter_turn=get32(s);
+        }
+    }
+    if(version>=11)g->hunt_kills=get32(s);
+    else if(g->hunt_state>PE_HUNT_ENCOUNTER_PENDING)s->ok=false;
+    if(version<12&&g->hunt_state>PE_HUNT_RETURN_PENDING)s->ok=false;
+    g->medpack_cooldown=version>=13?getf(s):0;
+    if(version>=14)for(unsigned i=0;i<3;i++){
+        PeWornItem *w=&g->outfit.items[i];
+        w->item_id=getint(s);w->instance_id=get32(s);w->durability=getf(s);
+    }
+    g->shield_instance_id=version>=15?get32(s):0;
+
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");
-    if(!g||!path||!path[0]||!valid(g,true)){err(error,capacity,"Invalid save path or game state.");return false;}
+    if(!g||!path||!path[0]||!valid(g,true,true)){err(error,capacity,"Invalid save path or game state.");return false;}
     size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+32768u;
     unsigned char *data=malloc(buffer_size);
     if(!data){err(error,capacity,"Out of memory.");return false;}
@@ -317,13 +362,17 @@ bool pe_game_load(PeGame *g,const char *path,char *error,size_t capacity) {
         ok=memcmp(data,"PECS",4)==0&&(version>=1&&version<=SAVE_VERSION)&&payload==size-16&&sum==checksum(data+16,size-16);
     }
     bool migration_failed=false;float migration_distance=0;
-    if(ok){Stream s={data,16,size,true};decode(&s,next,version);ok=s.ok&&s.pos==size&&valid(next,version!=4);}
+    if(ok){Stream s={data,16,size,true};decode(&s,next,version);ok=s.ok&&s.pos==size&&valid(next,version!=4,version>=14);
+        /* Old native actors displayed these clothes without owning their wear.
+         * Validate every existing field first: allocating new IDs must never
+         * launder a malformed counter, alias, inventory or collision state. */
+        if(ok&&version<14)ok=pe_outfit_init(next)&&pe_outfit_state_valid(next);}
     if(ok&&version==4&&next->mode==PE_GAME_ADVENTURE){
         PeVec3 previous=next->player;
         PeSandboxCollision *collision=pe_sandbox_collision_create();
         ok=collision&&pe_game_collision_update(next,collision,NULL,0)&&pe_game_collision_recover_trees(next,collision);
         pe_sandbox_collision_free(collision);migration_failed=!ok;
-        if(ok){migration_distance=hypotf(next->player.x-previous.x,next->player.z-previous.z);ok=valid(next,true);}
+        if(ok){migration_distance=hypotf(next->player.x-previous.x,next->player.z-previous.z);ok=valid(next,true,true);}
     }
     if(ok){pe_game_move(g,next);
         if(migration_distance>0)snprintf(g->message,sizeof g->message,"Game loaded; moved %.2fm to clear a legacy tree overlap.",(double)migration_distance);

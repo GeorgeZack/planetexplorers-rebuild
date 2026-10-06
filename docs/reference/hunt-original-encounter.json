@@ -1,0 +1,329 @@
+{
+  "schema": 1,
+  "evidence": "Read-only original archive decode; no native quest installed.",
+  "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save5",
+  "archive_guid": "b89f70b1bc90bf49ab355914b736a48e",
+  "input_sha256": {
+    "MainAdventure/block45.arc": "900997c66c22a29d3257146499c235909830c63194792c5e5934284d3714ffeb",
+    "MainAdventure/index.arc": "3f5751342727cb54c4ac66af534022ff597364c7506297c07937bd44ad8d6aab",
+    "MainAdventure/voxel.arc": "802c730c0570db86e337d719d807a067693264fd3179b9c86a80004fc9b59526",
+    "MainAdventure/water.arc": "3e35f916b8d5f299c7fe5ccfdf2e6233f12538f437b5aa29e96c47cbe1d6c5b1",
+    "MainAdventure/world.arc": "490c4d1a3eff0bad13d6dc860dc5ae3e19c6bc31c831d532db2e46c511587acf",
+    "index.arc": "72765d1d2e7b762be4625b300f2e653400a171603525c474f6b42bc04bddee3c",
+    "world.arc": "c35bc1f8d62631818b3d6742bbb7fd1cc37a6bdf8a8cd4cf077f277bab13d6a3"
+  },
+  "archives_unchanged": true,
+  "active_missions": {
+    "9126": [
+      [
+        "STEP",
+        "0"
+      ],
+      [
+        "MONSTER0",
+        "13_0"
+      ]
+    ]
+  },
+  "completed_missions": {
+    "9027": 1,
+    "9028": 1,
+    "9029": 1,
+    "9030": 1,
+    "9031": 1,
+    "9032": 1,
+    "9072": 1,
+    "9075": 1
+  },
+  "top_mission_prefix_decoded_bytes": 185,
+  "random_missions": {
+    "9126": {
+      "record_offset": 4,
+      "name": "Bug Hunt",
+      "npc": 20018,
+      "reply_npc": 20018,
+      "type": 1,
+      "max_count": 1,
+      "description": "Kill the animals causing problems near \"Town%\"004.",
+      "targets": [
+        {
+          "id": 1518,
+          "kind": 0
+        }
+      ],
+      "player_talk": [
+        0,
+        0
+      ],
+      "items": {
+        "get_demand": [],
+        "get_delete": [],
+        "get_mission": [],
+        "reward": [],
+        "selection_reward": [],
+        "complete_remove": []
+      },
+      "opening_talk": [],
+      "opening_quests": [],
+      "ongoing_talk": [],
+      "ongoing_quests": [],
+      "ending_talk": [],
+      "ending_quests": [
+        9127
+      ]
+    }
+  },
+  "hunt_target": null,
+  "limitations": [
+    "Offsets are relative to ArchiveKeyAdRMRepository record, not whole archive file.",
+    "Bounds checks do not establish traversability, support, collision or complete spawn-area coverage.",
+    "No target is inferred if original9075 is not active.",
+    "Saved player position is after visible arrival, not an exact threshold-crossing timestamp.",
+    "No exact six-agent count, spawn center, individual positions, HP, combat or reload behavior is established.",
+    "SceneEntityPosAgent implements ISceneObjAgent, not ISceneSerializableObjAgent; SceneMan exports only serializable agents. Source indicates mission agents are transient, but their reload behavior still needs observation."
+  ],
+  "player": {
+    "entity_id": 20000,
+    "source_position": [
+      -336.99383544921875,
+      20.71434211730957,
+      227.88311767578125
+    ],
+    "source_rotation_xyzw": [
+      0.0,
+      -0.2175404280424118,
+      0.0,
+      0.9760513305664062
+    ],
+    "distance_xz_from_saved_4524": 13.051071677848475
+  },
+  "previous_manual_slot5": {
+    "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save4",
+    "all_archived_hashes_unchanged": true,
+    "baseline_evidence": "docs/reference/hunt-original-save.json"
+  },
+  "decoded_creature_records": [
+    {
+      "entity_id": 20001,
+      "prototype_type": 5,
+      "prototype_id": 163
+    },
+    {
+      "entity_id": 20002,
+      "prototype_type": 1,
+      "prototype_id": 141
+    },
+    {
+      "entity_id": 20003,
+      "prototype_type": 5,
+      "prototype_id": 164
+    },
+    {
+      "entity_id": 20004,
+      "prototype_type": 5,
+      "prototype_id": 162
+    },
+    {
+      "entity_id": 20005,
+      "prototype_type": 5,
+      "prototype_id": 161
+    },
+    {
+      "entity_id": 20006,
+      "prototype_type": 5,
+      "prototype_id": 145
+    },
+    {
+      "entity_id": 20007,
+      "prototype_type": 5,
+      "prototype_id": 146
+    },
+    {
+      "entity_id": 20008,
+      "prototype_type": 1,
+      "prototype_id": 17
+    },
+    {
+      "entity_id": 20009,
+      "prototype_type": 1,
+      "prototype_id": 101
+    },
+    {
+      "entity_id": 20010,
+      "prototype_type": 1,
+      "prototype_id": 106
+    },
+    {
+      "entity_id": 20011,
+      "prototype_type": 1,
+      "prototype_id": 151
+    },
+    {
+      "entity_id": 20012,
+      "prototype_type": 1,
+      "prototype_id": 111
+    },
+    {
+      "entity_id": 20013,
+      "prototype_type": 1,
+      "prototype_id": 126
+    },
+    {
+      "entity_id": 19999,
+      "prototype_type": 2,
+      "prototype_id": 68
+    },
+    {
+      "entity_id": 19998,
+      "prototype_type": 2,
+      "prototype_id": 69
+    },
+    {
+      "entity_id": 19997,
+      "prototype_type": 2,
+      "prototype_id": 70
+    },
+    {
+      "entity_id": 20014,
+      "prototype_type": 1,
+      "prototype_id": 146
+    },
+    {
+      "entity_id": 20015,
+      "prototype_type": 1,
+      "prototype_id": 136
+    },
+    {
+      "entity_id": 20016,
+      "prototype_type": 1,
+      "prototype_id": 22
+    },
+    {
+      "entity_id": 20017,
+      "prototype_type": 1,
+      "prototype_id": 23
+    },
+    {
+      "entity_id": 20018,
+      "prototype_type": 1,
+      "prototype_id": 24
+    },
+    {
+      "entity_id": 20019,
+      "prototype_type": 1,
+      "prototype_id": 25
+    },
+    {
+      "entity_id": 20020,
+      "prototype_type": 1,
+      "prototype_id": 119
+    },
+    {
+      "entity_id": 20021,
+      "prototype_type": 5,
+      "prototype_id": 137
+    },
+    {
+      "entity_id": 20022,
+      "prototype_type": 5,
+      "prototype_id": 137
+    },
+    {
+      "entity_id": 20023,
+      "prototype_type": 5,
+      "prototype_id": 136
+    },
+    {
+      "entity_id": 20024,
+      "prototype_type": 5,
+      "prototype_id": 138
+    },
+    {
+      "entity_id": 20025,
+      "prototype_type": 5,
+      "prototype_id": 137
+    },
+    {
+      "entity_id": 20026,
+      "prototype_type": 5,
+      "prototype_id": 138
+    },
+    {
+      "entity_id": 20027,
+      "prototype_type": 1,
+      "prototype_id": 123
+    },
+    {
+      "entity_id": 20028,
+      "prototype_type": 1,
+      "prototype_id": 153
+    },
+    {
+      "entity_id": 20029,
+      "prototype_type": 1,
+      "prototype_id": 103
+    },
+    {
+      "entity_id": 20030,
+      "prototype_type": 1,
+      "prototype_id": 113
+    },
+    {
+      "entity_id": 20031,
+      "prototype_type": 1,
+      "prototype_id": 158
+    },
+    {
+      "entity_id": 20032,
+      "prototype_type": 1,
+      "prototype_id": 163
+    },
+    {
+      "entity_id": 20033,
+      "prototype_type": 1,
+      "prototype_id": 143
+    },
+    {
+      "entity_id": 20034,
+      "prototype_type": 1,
+      "prototype_id": 133
+    },
+    {
+      "entity_id": 20035,
+      "prototype_type": 1,
+      "prototype_id": 173
+    },
+    {
+      "entity_id": 20036,
+      "prototype_type": 1,
+      "prototype_id": 108
+    },
+    {
+      "entity_id": 20037,
+      "prototype_type": 1,
+      "prototype_id": 148
+    },
+    {
+      "entity_id": 20038,
+      "prototype_type": 1,
+      "prototype_id": 118
+    }
+  ],
+  "recorded_prototype13_entities_in_decoded_creature_record": [],
+  "encounter_spawn_data": {
+    "saved_quest_target": {
+      "id": 1518,
+      "kind": 0
+    },
+    "center": null,
+    "agent_ids": null,
+    "reason": "Decoded AdRM target1518 contains only ID/kind; no center or agent IDs. Decoded ArchiveKeyCreature has no monster prototype13. Other archive sections were not exhaustively decoded; absence here does not establish missing live actors or their positions."
+  },
+  "source_sha256": {
+    "Assets/Scripts/Scene/SceneEntityMissionPointMonsterKill.cs": "0f2c014ec0c680c06134100cbbc3d46919d17685de0f92405d61395e9abedc9f",
+    "Assets/Scripts/Scene/SceneEntityPosAgent.cs": "14b83de45503a6358eba3bbea5f73d76462bcee14ed2f74da882a01e6017b1db",
+    "Assets/Scripts/Scene/SceneMan.cs": "de26fcaa669fc38fa1d4e06a6c770cea64de86180d536684c9bc20b300bc2ec5",
+    "Assets/Scripts/Scene/MonsterEntityCreator.cs": "f7773406c9a521abe6a42e99fe12d415e0b8699a8735877349df47e7d97eb73e",
+    "Assets/Scripts/Mission/PlayerMission.cs": "11ba6d3f1e1c7627a0d114febd2256d4482dc498010157cfd40437d957397c35"
+  }
+}

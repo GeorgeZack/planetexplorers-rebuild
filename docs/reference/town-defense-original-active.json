@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "evidence": "Read-only original archive decode; no native quest installed.",
+  "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save7",
+  "archive_guid": "4401477d4676214eae94539174e5993b",
+  "input_sha256": {
+    "MainAdventure/block45.arc": "6f85fee70c10c635564b457c4e6ff79e1c5ee20d08f865d7d531590205717fdb",
+    "MainAdventure/index.arc": "5f42342dae2c4c044ef80a2974a572999abed5b7e2bd9a76108ed6c9eca2e3b6",
+    "MainAdventure/voxel.arc": "802394439f1c6455c574d1086161405aa9cbaa109ffc9db6b9e73eb011ed0620",
+    "MainAdventure/water.arc": "3250c2adba18c60f8fc0ad2e692a594aaa2a4f78f62a8ff5ab80d6fc7cdf851e",
+    "MainAdventure/world.arc": "121264558f2651b10a256207211674afc963da377eb536050e5286f39651ba60",
+    "index.arc": "c1cedd99f082d6b751bd768d7b09aa60edc3be0e7406ebd49c3068f22b6c64d2",
+    "world.arc": "097ccaa531d54c31306367904ffdbd05d342454b5b6990020ff10a54fb4a753d"
+  },
+  "archives_unchanged": true,
+  "active_missions": {
+    "9077": [
+      [
+        "STEP",
+        "0"
+      ],
+      [
+        "TDMONS0",
+        "0_0_0_0_0"
+      ]
+    ]
+  },
+  "completed_missions": {
+    "9027": 1,
+    "9028": 1,
+    "9029": 1,
+    "9030": 1,
+    "9031": 1,
+    "9032": 1,
+    "9072": 1,
+    "9075": 1,
+    "9126": 1,
+    "9127": 1
+  },
+  "top_mission_prefix_decoded_bytes": 205,
+  "random_missions": {
+    "9077": {
+      "record_offset": 4,
+      "name": "Attack of the Killer Animals",
+      "npc": 20018,
+      "reply_npc": 20018,
+      "type": 1,
+      "max_count": 1,
+      "description": "Help people in \"Town%\"004 fight back against the animals.",
+      "targets": [
+        {
+          "id": 7507,
+          "kind": 6,
+          "present": true,
+          "npcs": [
+            20018
+          ],
+          "position_record_offset": 135,
+          "position": [
+            -284.0,
+            27.0,
+            134.0
+          ]
+        }
+      ],
+      "player_talk": [
+        3164,
+        0
+      ],
+      "items": {
+        "get_demand": [],
+        "get_delete": [],
+        "get_mission": [],
+        "reward": [],
+        "selection_reward": [],
+        "complete_remove": []
+      },
+      "opening_talk": [
+        4107,
+        4108,
+        4109,
+        4110
+      ],
+      "opening_quests": [],
+      "ongoing_talk": [],
+      "ongoing_quests": [],
+      "ending_talk": [],
+      "ending_quests": []
+    }
+  },
+  "hunt_target": null,
+  "limitations": [
+    "Offsets are relative to ArchiveKeyAdRMRepository record, not whole archive file.",
+    "Bounds checks do not establish traversability, support, collision or complete spawn-area coverage.",
+    "No target is inferred if original9075 is not active."
+  ]
+}

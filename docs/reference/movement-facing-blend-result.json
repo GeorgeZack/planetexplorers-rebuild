@@ -1,0 +1,172 @@
+{
+  "schema": "pe-native-movement-facing-blend-observation-1",
+  "date": "2026-10-06",
+  "native_pid": 1759253,
+  "native_exit_code": 0,
+  "scope": "C rebuild physical input and recorded presentation; no new original Unity movement observation",
+  "sandbox": {
+    "fixture": "Previously staged hunt-return UI checkpoint; preexisting Knife33 and four kills are prerequisites, not earned in this run",
+    "inputs": [
+      "Free third person A/D/S running, stop after each direction",
+      "Z walking and A/D/S",
+      "Captured third person A/D/S run and walk",
+      "One supported stationary Knife swing stage",
+      "Pause -> Main menu"
+    ],
+    "observed": "Free-mode body turns toward travel and retains heading at stop; recordings show intermediate movement poses",
+    "frames": 11465,
+    "final_camera_mode": 1,
+    "locomotion_mask": 4037,
+    "knife_swing_stages": 1,
+    "outgoing_contacts": 0,
+    "incoming_contacts": 0,
+    "tool_swings": 0,
+    "resource_changes": 0
+  },
+  "tutorial": {
+    "inputs": [
+      "Acknowledge starting replies and press F5 for captured third person",
+      "D/A direction reversals",
+      "Z walking and A/D/S/W",
+      "Return through main menu and quit application"
+    ],
+    "frames": 3461,
+    "mission": 739,
+    "camera_mask": 1,
+    "locomotion_mask": 4039,
+    "knife_owned": false,
+    "knife_equipped": false,
+    "melee_starts": 0,
+    "melee_contacts": 0,
+    "mining_swings": 0,
+    "observed": "Recorded direction changes show gradual intermediate poses",
+    "camera_mode": "Captured third person after starting replies and F5"
+  },
+  "published_images": [
+    {
+      "path": "docs/reference/movement-free-stopped-facing.png",
+      "sha256": "282c2f485dbb1d093bba38add5430017768c6345ce7caeac22d76f3ff4e6bfd2",
+      "source": "rebuild/build/movement-free-s.png",
+      "observation": "Free-mode body heading retained after S movement stopped"
+    },
+    {
+      "path": "docs/reference/movement-tutorial-transition-grid.png",
+      "sha256": "b1149ccae68bffb2caf856b5c861618d2cb1a315192dfa02e5b1f842efe819dc",
+      "source": "rebuild/build/movement-training-transition-grid.png",
+      "observation": "Twelve chronological frames sampled at 30Hz from 1.6 to approximately 2.0 seconds"
+    }
+  ],
+  "local_recordings": [
+    {
+      "path": "rebuild/build/movement-free-cpu.mp4",
+      "sha256": "52c6a39eb9c7bdf669b369c915f39234f577e5f0e0853531960becad5a62dc29",
+      "frames": 328,
+      "duration_seconds": 10.933332,
+      "fps": 30,
+      "resolution": [
+        1280,
+        720
+      ],
+      "recorder_exit_code": 0
+    },
+    {
+      "path": "rebuild/build/movement-training.mp4",
+      "sha256": "4bb2093148515eaa43c4ea442e160de714d8c984c6f4100ddc8edc1aabefeefc",
+      "frames": 234,
+      "duration_seconds": 7.800005,
+      "fps": 30,
+      "resolution": [
+        1280,
+        720
+      ],
+      "recorder_exit_code": 0
+    }
+  ],
+  "local_grids": [
+    {
+      "path": "rebuild/build/movement-transition-grid.png",
+      "sha256": "fb14cea1115e2e5c8ce32c07f8ecd6c7b6316e433adc659c9878f0f670481c47",
+      "frames": 12,
+      "start_seconds": 2.0,
+      "end_seconds_approx": 2.4
+    },
+    {
+      "path": "rebuild/build/movement-training-transition-grid.png",
+      "sha256": "b1149ccae68bffb2caf856b5c861618d2cb1a315192dfa02e5b1f842efe819dc",
+      "frames": 12,
+      "start_seconds": 1.6,
+      "end_seconds_approx": 2.0
+    }
+  ],
+  "validation": {
+    "optimized_build_and_tests": "pass, exit0",
+    "optional_python_skips": 19,
+    "asan_ubsan": "pass, exit0, detect_leaks=1",
+    "new_full_15000_frame_tutorial": {
+      "result": "PASS",
+      "exit_code": 0,
+      "frames": 15000,
+      "mission": 756,
+      "camera_mask": 3,
+      "locomotion_mask": 3647,
+      "npcs": 9,
+      "construction_added": 19,
+      "construction_removed": 1,
+      "construction_score": 50,
+      "melee_starts": 8,
+      "melee_contacts": 24,
+      "hare_hp": 0
+    }
+  },
+  "logs": [
+    {
+      "path": "rebuild/build/movement-physical.log",
+      "sha256": "8865d44fb0db9fb9a15deaed046b9813b01663f82bfcca75c3dc11823d4bb50b"
+    },
+    {
+      "path": "rebuild/build/movement-physical.exit",
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "rebuild/build/movement-verification.log",
+      "sha256": "4a3e6292c8744179c6b882962e243d71b51e3a54c24d63523dfc52710df321c1"
+    },
+    {
+      "path": "rebuild/build/movement-verification.exit",
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "rebuild/build/movement-sanitize.log",
+      "sha256": "bc5ff4feddc1aceacf2578ddf375f89ed89c76a150a411de4e245f4a8a521d96"
+    },
+    {
+      "path": "rebuild/build/movement-sanitize.exit",
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "rebuild/build/movement-record-cpu.log",
+      "sha256": "cbd6f480e3b4beb5b6c7a648f28405be69fe92a52183c632296e64a95f5dfd66"
+    },
+    {
+      "path": "rebuild/build/movement-training-record.log",
+      "sha256": "f5d82ae119ec833bb26ea72825750b5b13114d2b629d82cb93aba550927b9305"
+    },
+    {
+      "path": "rebuild/build/movement-training-smoke.log",
+      "sha256": "da5f66df1a82a142bb7718046fc14a1219d4f51b58da9f7bea3f748b7da28a45"
+    },
+    {
+      "path": "rebuild/build/movement-training-smoke.exit",
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    }
+  ],
+  "limitations": [
+    "Recorded interpolation is a bounded native presentation adapter, not proof of the Unity Animator graph, source blend curves or exact timing parity.",
+    "Camera framing was affected by automation pointer warping; captures are not camera-quality acceptance.",
+    "No combat kills or partial combat reload were established; the sandbox four-kill fixture was staged.",
+    "Stationary Knife stage had no contacts; moving Knife attacks remain disabled.",
+    "Initial GPU recording failed with exit54 and is excluded; accepted videos use CPU encoding.",
+    "Optional skipped fixtures are not passes.",
+    "Tutorial physical movement checks used captured mode only; tutorial free-mode facing was not manually verified in this run."
+  ]
+}

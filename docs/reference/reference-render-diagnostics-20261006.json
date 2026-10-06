@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "kind": "original-reference-render-diagnostic-comparison",
+  "date_local": "2026-10-06",
+  "timezone": "US/Central",
+  "failed_diagnostic": {
+    "pid": 1319444,
+    "faulting_tid": 1319477,
+    "coredump_event_time_local": "2026-10-06 08:23:35 CDT",
+    "environment": {
+      "__GL_WRITE_TEXT_SECTION": "0"
+    },
+    "environment_evidence": "Operator launch record and retained retry-reference.sh; not independently recovered from core environment",
+    "final_signal": "SIGABRT",
+    "underlying_signal": "SIGSEGV reported in retained Mono native crash log",
+    "fault_pc": "0x41bead86",
+    "fault_instruction": "mov (%rsi),%edi",
+    "registers_at_fault_frame": {
+      "rax": "0x754737595108",
+      "rbx": "0x40e2c000",
+      "rcx": "0x0",
+      "rdx": "0x7547199e8302",
+      "rsi": "0xc",
+      "rdi": "0x0",
+      "rbp": "0x41840c3d",
+      "rsp": "0x754799b3b318",
+      "r8": "0x404",
+      "r9": "0x0",
+      "r10": "0x40ea9d20",
+      "r11": "0x7547199ea23e",
+      "r12": "0x754790019d40",
+      "r13": "0x0",
+      "r14": "0x0",
+      "r15": "0x7547199e8300",
+      "rip": "0x41bead86"
+    },
+    "fault_mapping": {
+      "name": "/memfd:/.glXXXXXX (deleted)",
+      "start": "0x41bea000",
+      "end_exclusive": "0x41bec000"
+    },
+    "caller_library": "/usr/lib/libnvidia-glcore.so.580.178.04",
+    "caller_offsets_frames_7_through_11": [
+      "0xb5aa2b",
+      "0xc78545",
+      "0xc785fe",
+      "0xc7865c",
+      "0xc799aa"
+    ],
+    "main_thread": "TID1319444 waits in libc synchronization reached from native executable; symbol names unresolved",
+    "thread_backtraces_examined": 43,
+    "inference": "Invalid near-null memory read in generated graphics code called from NVIDIA glcore; exact driver-versus-game defect remains unresolved",
+    "result": "The process-scoped executable-memory diagnostic did not prevent recurrence; generated .gl mappings were still present",
+    "resource_check": {
+      "journal_interval_local": "2026-10-06 08:20:00 through 08:26:00",
+      "journal_pattern": "oom|Out of memory|Killed process|segfault",
+      "matching_entries": 0,
+      "later_available_memory_GiB": 4.2,
+      "later_free_swap_GiB": 12,
+      "limit": "Memory snapshot was after the crash; journal shows no OOM-kill evidence in the inspected interval"
+    },
+    "core_handling": "System core preserved; extracted copy in random private build temporary directory removed in finally cleanup; gdb exit0"
+  },
+  "comparison": {
+    "prior_report": "user-playtest-crash-20261006.json",
+    "prior_pid": 1292077,
+    "prior_pc": "0x41201b02",
+    "same_instruction": true,
+    "same_rsi": "0xc",
+    "prior_caller_offsets_frames_7_through_11": [
+      "0xb5aa2b",
+      "0xc78545",
+      "0xc785fe",
+      "0xc7865c",
+      "0xc799aa"
+    ],
+    "all_five_offsets_match": true,
+    "older_pid540553": "Prior report records the same instruction/register signature and matching driver caller offsets"
+  },
+  "single_threaded_rendering_run": {
+    "pid": 1335454,
+    "unity_argument": "-force-gfx-direct",
+    "environment_GL_WRITE_TEXT_SECTION": null,
+    "observation_source": "Root desktop operator and retained launch log; no desktop interaction by this audit",
+    "observed": [
+      "Loaded preserved manual7 and completed return/defense briefings",
+      "Saved new manual8 during defense preparation",
+      "Completed defense with no player attacks issued after opening",
+      "Saved completion as new manual9",
+      "Reloaded manual8 to active defense at0/15 with two waves and subsequently saw first wave begin",
+      "Used Quit Game and confirmation"
+    ],
+    "launcher_exit_status": 143,
+    "coredumpctl_since_local": "2026-10-06 08:30:00",
+    "new_coredumps_found": false,
+    "limit": "One successful bounded launch and reload, not a demonstrated permanent fix or verification of ordinary Steam/Proton launch; exit143 is not a zero-exit claim"
+  },
+  "local_evidence_files": [
+    {
+      "path": "rebuild/build/user-playtest-20261006/retry-no-execmem.log",
+      "sha256": "b9684befcf1b7efbfc4a63d733bfb0590cd26cf596ee33351ef1d83552cb30dd"
+    },
+    {
+      "path": "rebuild/build/user-playtest-20261006/retry-no-execmem-player.log",
+      "sha256": "93bdf06f71cc8751367fadb8d77fda35edbd1b05fba9524c0ae81961b8c40ca0"
+    },
+    {
+      "path": "rebuild/build/user-playtest-20261006/retry-no-execmem-gdb.txt",
+      "sha256": "c260bbb0e0056ac39ddaec30e90383da2360693771d53a6ea8f623d77e7dcc76"
+    },
+    {
+      "path": "rebuild/build/user-playtest-20261006/crash-gdb.txt",
+      "sha256": "a54ee1005c6467aa07818fa202d9f0e5fd37681505a804f9b39fcd08a3a8dac6"
+    },
+    {
+      "path": "rebuild/build/user-playtest-20261006/retry-reference.sh",
+      "sha256": "05405e31805ade9760199a87b607fcf7e97b8926e678fc9bffca0a69d6c21198"
+    },
+    {
+      "path": "rebuild/build/user-playtest-20261006/retry-gfx-direct-02.log",
+      "sha256": "4657c8dc34864e64de7792bc8230ca88ef32a3237378f28f4ca2724d348a6b21"
+    }
+  ],
+  "changes": "Read-only inspection; no system settings, runtime binaries, desktop state or original saves changed by this audit"
+}

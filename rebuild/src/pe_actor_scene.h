@@ -2,7 +2,7 @@
 #define PE_ACTOR_SCENE_H
 #include "pe_actor.h"
 #define PE_ACTOR_SCENE_MAX_PARTS 64u
-#define PE_ACTOR_SCENE_MAX_CLIPS 32u
+#define PE_ACTOR_SCENE_MAX_CLIPS PE_ACTOR_MAX_CLIPS
 #define PE_ACTOR_SCENE_PATH_CAPACITY 4096u
 typedef struct PeActorSceneManifest PeActorSceneManifest;
 typedef struct {
@@ -11,7 +11,7 @@ typedef struct {
 } PeActorScenePart;
 /* Headless preflight. PEAS1 + 1..64 ASCII basename pairs, no traversal or
  * duplicate actor. Every required file must be regular, every actor valid with
- * 1..32 clips with matching ordered names and exact timing/loop/terminal metadata,
+ * 1..64 clips with matching ordered names and exact timing/loop/terminal metadata,
  * every PNG envelope bounded. Arbitrary clip names are supported.
  * PNG decompression is deferred to the graphical adapter before InitWindow.
  * Retains the exact loaded actors and PNG bytes; later disk changes are ignored.

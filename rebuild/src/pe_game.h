@@ -3,6 +3,7 @@
 #include "pe_world.h"
 #include "pe_content.h"
 #include "pe_block.h"
+#include "pe_outfit.h"
 #include "pe_sandbox_collision.h"
 #define PE_INVENTORY_SLOTS 32
 #define PE_MAX_BLOCKS 256
@@ -15,6 +16,17 @@
 #define PE_FIXED_DT (1.0f / 60.0f)
 #define PE_KNOWN_RECIPES 128
 #define PE_QUICKSLOTS 9
+#define PE_MAX_DEPLOYABLES 64
+/* V10 keeps a fixed-size extension so earlier payloads remain literal prefixes. */
+#define PE_SAVE_V10_APPEND (20u + 28u * PE_MAX_DEPLOYABLES)
+#define PE_SAVE_V11_APPEND 4u
+/* V12 changes hunt-state interpretation only; the V11 payload is unchanged. */
+#define PE_SAVE_V12_APPEND 0u
+#define PE_SAVE_V13_APPEND 4u
+#define PE_SAVE_V14_APPEND 36u
+/* V15 appends only the secondary reference; bag remains the durability owner. */
+#define PE_SAVE_V15_APPEND 4u
+typedef struct { int item_id; uint32_t instance_id; float durability; PeVec3 position; unsigned quarter_turn; } PeDeployable;
 #define PE_TOWN_V8_STOCK_CAPACITY 17
 #define PE_TOWN_STOCK_CAPACITY 284
 typedef struct { bool initialized; unsigned remaining; double create_time; } PeTownStock;
@@ -46,7 +58,7 @@ typedef struct {
 } PeToolStats;
 typedef struct { float move_x, move_z; bool jump, sprint, walk, stamina_action; } PeInput;
 typedef struct { bool changed,removed,capacity_blocked; } PeResourceEdit;
-typedef struct {
+typedef struct PeGame {
     PeWorld world;
     PeVec3 player, velocity; /* player is feet position in meters */
     bool grounded;
@@ -55,8 +67,10 @@ typedef struct {
     float yaw, pitch;
     double game_seconds;
     PeInventory inventory;
+    PeOutfit outfit;
     PeCraftJob craft;
     uint32_t equipped_instance_id, rng_state;
+    uint32_t shield_instance_id; /* Optional exact bag-owned Wood Shield34; no saved block flag. */
     float stamina, stamina_max, stamina_regen;
     float stamina_recover_delay, stamina_idle, tool_cooldown;
     PeBlock blocks[PE_MAX_BLOCKS];
@@ -72,6 +86,11 @@ typedef struct {
     unsigned welcome_page; /* Next source welcome page;9 means Arrival accepted. */
     bool arrival_complete, supplies_claimed;
     unsigned medicine_state; /* 0 unaccepted, 1 active9072, 2 completed. */
+    unsigned hunt_state; /* 0 none,1 travel,2 kill,3 return,4/5 rewarded4105/4106,6 reported. */
+    unsigned hunt_kills; /* Authoritative prototype13 death credit,0..4; no transient actor HP. */
+    PeVec3 hunt_destination; /* Original source/world XYZ, not crop-local. */
+    PeDeployable deployed[PE_MAX_DEPLOYABLES];
+    unsigned deployed_count;
     bool annot_complete; /* Source discovery4503 / completed mission9032. */
     PeTownStock town_stock[PE_TOWN_STOCK_CAPACITY]; /* Stable exported offer order. */
     uint32_t money, scanner_mask;
@@ -79,6 +98,7 @@ typedef struct {
     PeQuickslot quickslots[PE_QUICKSLOTS];
     float hp, max_hp;
     double juice_cooldown, juice_buff_elapsed;
+    float medpack_cooldown; /* Source cooldown group9; independent of juice group11. */
     unsigned juice_buff_tick;
     bool juice_buff_active;
     float jump_action_elapsed; /* Transient action state, reset on reload. */
@@ -95,6 +115,8 @@ bool pe_game_arrival_complete(PeGame *game);
 bool pe_game_accept_supplies(PeGame *game);
 bool pe_game_recipe_known(const PeGame *game, int recipe_id);
 bool pe_game_use_slot(PeGame *game, int inventory_slot);
+/* Remaining supported source item cooldown; unknown items return0. */
+float pe_game_item_cooldown(const PeGame *game,int item_id);
 /* inventory_slot=-1 clears a shortcut. Assignment never consumes an item. */
 bool pe_game_quickslot_assign(PeGame *game, int quickslot, int inventory_slot);
 bool pe_game_quickslot_use(PeGame *game, int quickslot);
@@ -111,6 +133,13 @@ bool pe_game_collision_settle(PeGame *game, const PeSandboxCollision *collision)
  * failure or when already clear. Cache must match game including live trees. */
 bool pe_game_collision_recover_trees(PeGame *game, const PeSandboxCollision *collision);
 bool pe_game_step_collision(PeGame *game, PeInput input, float dt, const PeSandboxCollision *collision);
+/* One action-owned horizontal velocity request (m/s), replacing WASD/jump/sprint.
+ * Keeps vertical gravity/support and ordinary clocks, with one collision sweep.
+ * No motion accumulation: blocked displacement is consumed on this tick.
+ * The caller owns attack clocks and any source motor velocity correction.
+ * Requires finite XZ speed<=100, Y=0; invalid input leaves game unchanged. */
+bool pe_game_step_collision_motion(PeGame *game, PeInput input, float dt,
+                                  const PeSandboxCollision *collision, PeVec3 motion);
 int pe_inventory_count(const PeInventory *inventory, int item_id);
 bool pe_inventory_add(PeInventory *inventory, int item_id, int count);
 bool pe_inventory_remove(PeInventory *inventory, int item_id, int count);

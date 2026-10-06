@@ -40,6 +40,16 @@ PeSceneHit pe_sandbox_collision_ray_geometry(const PeSandboxCollision *c,PeVec3 
     }
     return best;
 }
+PeSceneHit pe_sandbox_collision_ray_perception(const PeSandboxCollision *c,PeVec3 p,PeVec3 d,float range){
+    PeSceneHit best={0};
+    if(!c||!c->ready||!finite3(p)||!finite3(d)||!isfinite(range)||range<=0)return best;
+    best=pe_sandbox_collision_ray_geometry(c,p,d,range);
+    for(size_t i=0;i<c->tree_count;i++){
+        PeSceneHit hit=pe_tree_collision_ray(&c->trees[i],p,d,range);
+        if(hit.hit&&(!best.hit||hit.distance<best.distance))best=hit;
+    }
+    return best;
+}
 static bool box_valid(const PeWorld *w,PeSandboxBox b){
     if(!finite3(b.minimum)||!finite3(b.maximum))return false;
     for(int a=0;a<3;a++)if(component(b.minimum,a)<0||component(b.maximum,a)>(a==1?pe_world_size_y(w)-1:(a==2?pe_world_depth(w)-1:pe_world_width(w)-1))||component(b.maximum,a)<=component(b.minimum,a))return false;

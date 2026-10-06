@@ -1,0 +1,63 @@
+{
+  "schema": 1,
+  "status": "incomplete-crashed-observation-not-valid-capture",
+  "pid": 540553,
+  "crashing_tid": 540567,
+  "timestamp": "2026-10-05T23:26:18-05:00",
+  "process_exit": 134,
+  "coredump_signal": "SIGABRT",
+  "preceding_mono_report": "SIGSEGV in native code",
+  "raw_capture_sha256": "60d0ba5c9b625f3003d940447c0157288405c3e73f2a75575fe265a056526497",
+  "probe_source_sha256": "326b6fd7a5348147726a277c2e55a0cb1c5ee0658cb54f8972de84a20bf47750",
+  "complete_frame_records": 18,
+  "clean_end_record": false,
+  "all_recorded_hare_skill_lists_empty": true,
+  "saved_failure_player_log_sha256": "4d5f1f9de6582f9e4c3a1fd60201fe7c1c4c7c7f7ded2350a767dd2866a0f5ca",
+  "core_findings": {
+    "thread_count": 43,
+    "main_tid": 540553,
+    "main_thread": "native synchronization, no probe frame in recovered backtrace",
+    "crash_stack": [
+      "libc abort",
+      "libmono native signal handler",
+      "signal frame",
+      "anonymous address 0x4123ee06",
+      "libnvidia-glcore.so.580.178.04+unresolved frames"
+    ],
+    "fault_instruction": "mov (%rsi),%edi",
+    "fault_rsi": "0xc",
+    "symbolization_limit": "No function identity established for anonymous code; cannot classify it as Mono JIT or attribute to an Animator getter.",
+    "extracted_core_deleted": true
+  },
+  "resource_checks": {
+    "oom_event_in_90_second_crash_window": false,
+    "memory_available_at_diagnosis_gib": 4.4,
+    "swap_free_at_diagnosis_gib": 13
+  },
+  "early_sensor_settings_diagnostic_only": [
+    {
+      "kind": "vision",
+      "path": "EntityRoot/lepus hare_2146483651/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+      "enabled": true,
+      "active": true,
+      "radius": 20,
+      "blockLayer": 2193408,
+      "angle": 60,
+      "axis": [
+        -0.5,
+        1,
+        0
+      ]
+    },
+    {
+      "kind": "hearing",
+      "path": "EntityRoot/lepus hare_2146483651/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+      "enabled": true,
+      "active": true,
+      "radius": 15,
+      "blockLayer": 2193408,
+      "ignoreBlock": false
+    }
+  ],
+  "limitations": "No completed capture, selected-enemy timing, active melee guide or collision timing established. No manual save operation performed by observer. Archive preservation checked separately by desktop operator."
+}

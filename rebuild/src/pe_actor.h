@@ -14,7 +14,10 @@ typedef struct {
     bool terminal_at_duration; /* PEAC2: final sample is at duration, not (frames-1)/fps. */
 } PeActorClip;
 typedef struct { size_t vertices, indices, joints, clips; } PeActorStats;
+#define PE_ACTOR_MAX_CLIPS 64u
 #define PE_ACTOR_BIND_POSE ((size_t)-1)
+#define PE_ACTOR_BLEND_MAX 12u
+typedef struct { size_t clip; double seconds; float weight; } PeActorBlendSample;
 
 /* Strict bounded PEAC v1/v2 loader. V1 keeps uniform frame/fps timestamps.
  * V2 has >=2 samples: interior frame/fps, final sample exactly at duration.
@@ -43,4 +46,17 @@ bool pe_actor_pose_vertex(const PeActor *actor, size_t clip, double seconds,
  * No allocation; invalid input leaves output unchanged (aliasing is allowed). */
 bool pe_actor_pose_joint_point(const PeActor *actor,size_t clip,double seconds,
                                size_t joint,const float bind_mesh_point[3],float output[3]);
+/* Bounded presentation adapter: blend already frame-skinned poses, not Unity
+ * TRS/controller blends. All entries (including zero weights) must be valid;
+ * count1..12, finite nonnegative weights, positive total normalized internally.
+ * One positive entry is exactly the existing pose. Final normals normalize,
+ * with bind-normal fallback on cancellation. No allocations; invalid arguments
+ * leave output untouched. Joint points use the identical position blend. */
+bool pe_actor_blend_valid(const PeActor *actor,const PeActorBlendSample *samples,size_t count);
+bool pe_actor_pose_blend(const PeActor *actor,const PeActorBlendSample *samples,size_t count,
+                         PeActorVertex *output,size_t capacity);
+bool pe_actor_pose_vertex_blend(const PeActor *actor,const PeActorBlendSample *samples,size_t count,
+                                size_t vertex,PeActorVertex *output);
+bool pe_actor_pose_joint_point_blend(const PeActor *actor,const PeActorBlendSample *samples,size_t count,
+                                     size_t joint,const float bind_mesh_point[3],float output[3]);
 #endif

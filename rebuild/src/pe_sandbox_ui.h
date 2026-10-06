@@ -11,15 +11,19 @@
  * in PeGame. The route API is deterministic and does not call window/GPU APIs. */
 typedef struct {
     float mouse_x, mouse_y, wheel;
+    float frame_dt; /* Display-frame elapsed time for transient modal operations. */
     bool focused, left_pressed, left_released, right_pressed;
     bool inventory, character, missions, replicator, escape, tab;
     bool save, load, backspace, advance;
     int quickslot; /* -1 means no key; otherwise 0..8. */
+    unsigned response; /* Visible conversation response1..9; zero means no key. */
     const char *typed; /* Optional UTF-8 input; search currently accepts ASCII. */
 } PeSandboxUIInput;
 typedef struct {
     bool consume_world, cursor_visible, paused;
+    bool consume_actions; /* Nonmodal HUD/use owns action presses, not movement/camera/simulation. */
     bool npc_interaction; /* Hover/click allowed even with the free cursor. */
+    bool camera_cycle_allowed; /* UI admission before the Tab-only world block; host still gates held buttons/focus. */
     bool toggle_build, save, load, return_main;
     bool rotate_build;
     int build_shape,build_brush; /* Zero means no selection request. */
@@ -39,19 +43,25 @@ typedef struct {
     bool welcome_present;
     Texture2D supplier_portrait; /* Borrowed from the NPC view. */
     Texture2D town_portrait,annot_portrait;
-    uint32_t town_entity;
+    uint32_t town_entity,deploy_entity;
     bool town_open,shop_open,shop_dragging;
+    bool deploy_get_pending;
+    uint32_t deploy_get_ticks; /* UTimer: 100,000 ticks/s, commit strictly >200,000. */
     char town_name[129],start_town_name[129];
     int shop_selection,shop_scroll;
     unsigned shop_quantity;
     float shop_offset_x,shop_offset_y,shop_grab_x,shop_grab_y;
     PeAdventureDialogue dialogue;
+    PeAdventureDialogueResult dialogue_result; /* Last modal action, for explicit failure feedback. */
     uint32_t supplier_entity;
     PeVec3 supplier_position;
     bool supplier_present;
     bool loaded, inventory_open, character_open, missions_open, replicator_open;
     bool paused, menu_open, free_cursor, search_focus;
+    bool camera_cursor; /* Free-mouse camera pointer; not a modal or Tab override. */
     bool discard_input; /* Host-cancelled modal: consume next route frame completely. */
+    bool starter_pair_available; /* Host-qualified body/weapon/block/contact group; never saved. */
+    bool hunt_encounter_available; /* Transient host readiness, reset/recompute after load; no saved progression. */
     bool building;
     int build_item,build_shape,build_rotation,build_brush;
     int inventory_tab, inventory_page, recipe_scroll, recipe_id, batches;
@@ -75,8 +85,11 @@ typedef struct {
 /* A UI-owned press remains owned until every mouse button is released. The
  * release frame is consumed too; cursor recapture may start on the next frame.
  * Kept outside PeGame so no held desktop input crosses a save/load boundary. */
-typedef struct { bool waiting_for_release; } PeSandboxPointerGate;
+typedef struct { bool waiting_for_release,actions_only; } PeSandboxPointerGate;
 bool pe_sandbox_pointer_release_gate(PeSandboxPointerGate *gate,bool ui_owned,unsigned buttons_down);
+/* Preserve action-only or full-modal press ownership through release. A real
+ * modal escalates ownership; an action-only press never freezes simulation. */
+bool pe_sandbox_pointer_route(PeSandboxPointerGate *gate,PeSandboxUIResult *result,unsigned buttons_down);
 
 void pe_sandbox_ui_init(PeSandboxUI *ui,float width,float height);
 /* Requires active GL context. asset_root contains ui/atlas.peui and effects/.
@@ -84,6 +97,11 @@ void pe_sandbox_ui_init(PeSandboxUI *ui,float width,float height);
 bool pe_sandbox_ui_load(PeSandboxUI *ui,const char *asset_root,char *error,size_t capacity);
 void pe_sandbox_ui_unload(PeSandboxUI *ui);
 void pe_sandbox_ui_resize(PeSandboxUI *ui,float width,float height);
+/* Headless quest presentation shared by HUD/mission window. Hunt availability
+ * is host-supplied; return/report uses the supported source9127 flow. */
+int pe_sandbox_ui_hunt_mission_id(const PeGame *game);
+const char *pe_sandbox_ui_mission_title(const PeGame *game);
+bool pe_sandbox_ui_hunt_goal(const PeSandboxUI *ui,const PeGame *game,char *out,size_t capacity);
 /* Host supplies only actually present, supported residents. Not saved; storage
  * must remain valid through drawing. NULL/count0 clears after load/teardown. */
 bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *ui,const PeSandboxMapNpc *markers,size_t count);
@@ -93,7 +111,8 @@ bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *ui,const PeSandboxMapNpc *m
 void pe_sandbox_ui_set_preview(PeSandboxUI *ui,PeSandboxUIPreview callback,void *context);
 PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *ui,PeGame *game,PeSandboxUIInput input);
 /* Reads one frame of raylib input, routes it, advances UI notice/effect time.
- * Host MUST apply consume_world before movement, look, attack or placement. */
+ * Host MUST apply consume_world before movement/look/simulation and
+ * consume_actions before new action presses; action-only use keeps clocks live. */
 PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *ui,PeGame *game,float dt);
 /* Call before BeginDrawing if character preview is requested. */
 void pe_sandbox_ui_prepare(PeSandboxUI *ui,const PeGame *game);
@@ -118,11 +137,14 @@ PeTrainingUIRect pe_sandbox_ui_build_slot(const PeSandboxUI *ui,int index);
 PeTrainingUIRect pe_sandbox_ui_build_tool(const PeSandboxUI *ui,int index);
 PeTrainingUIRect pe_sandbox_ui_supplier_menu(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_supplier_choice(const PeSandboxUI *ui,int index);
+/* Compact visible CHOICE order; -1 when that row is absent. Shared by draw/input. */
+int pe_sandbox_ui_dialogue_choice_index(const PeSandboxUI *ui,const PeGame *game,int row);
 PeTrainingUIRect pe_sandbox_ui_supplier_close(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_shop_panel(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_shop_row(const PeSandboxUI *ui,int row);
 PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *ui,int button); /* minus,plus,buy,back,close */
 void pe_sandbox_ui_cancel_town(PeSandboxUI *ui);
+bool pe_sandbox_ui_open_deployable(PeSandboxUI *ui,const PeGame *game,uint32_t instance_id);
 bool pe_sandbox_ui_open_town(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,const char *name,Texture2D portrait,bool eligible);
 bool pe_sandbox_ui_open_annot(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,Texture2D portrait,bool eligible);
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,bool eligible);

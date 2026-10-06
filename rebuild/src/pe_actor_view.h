@@ -25,6 +25,8 @@ void pe_actor_view_unload(PeActorView *view);
  * with V flipped so Unity bottom-origin UVs sample the same source pixels. */
 bool pe_actor_view_draw(PeActorView *view,size_t clip,double seconds,
                         Vector3 position,float yaw,float scale,Color tint);
+bool pe_actor_view_draw_blend(PeActorView *view,const PeActorBlendSample *samples,size_t count,
+                              Vector3 position,float yaw,float scale,Color tint);
 /* Standalone graphics preview; owns window/context. Nonzero return on asset,
  * screenshot, animation, or incomplete smoke failure. */
 int pe_actor_preview(const char *peac,int smoke,const char *screenshot);

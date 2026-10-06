@@ -3,11 +3,12 @@ PKG_CONFIG ?= pkg-config
 CPPFLAGS += -Isrc -DPE_SOURCE_ROOT=\"$(abspath ..)\"
 CFLAGS ?= -O2 -g
 CFLAGS += -std=c11 -Wall -Wextra -Wpedantic
-CORE = src/pe_adventure_medicine.c src/pe_town_interaction.c src/pe_settlement.c src/pe_terrain_material.c src/pe_adventure_dialogue.c src/pe_adventure_npc.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c
-HEADERS = generated/pe_adventure_population.h src/pe_town_interaction.h generated/pe_town_offers.h src/pe_settlement.h generated/pe_adventure_settlement.h src/pe_terrain_material.h src/pe_terrain_material_view.h generated/pe_terrain_materials.h src/pe_adventure_dialogue.h generated/pe_adventure_dialogue_text.h generated/pe_adventure_npc_collider.h src/pe_adventure_npc.h src/pe_adventure_npc_view.h src/pe_sandbox_camera.h src/pe_tree_collision.h generated/pe_tree_collider.h src/pe_sandbox_actions.h src/pe_sandbox_world_view.h src/pe_sandbox_collision.h src/pe_sandbox_ui.h src/pe_app_menu.h src/pe_sandbox_actor.h src/pe_sandbox_view.h src/pe_world.h src/pe_game.h src/pe_content.h generated/pe_mc_tables.h src/pe_legacy.h src/pe_block.h src/pe_tutorial.h src/pe_scene_collision.h src/pe_training.h src/pe_player_locomotion.h src/pe_training_melee.h src/pe_training_tree_hit.h src/pe_training_dig.h src/pe_training_terrain.h src/pe_training_build.h src/pe_training_receiver.h src/pe_training_npc.h src/pe_training_ui_layout.h generated/pe_training_mound.h src/pe_training_gathering.h src/pe_training_text.h src/pe_actor.h src/pe_hare.h src/pe_combat.h src/pe_knife_contact.h src/pe_hare_attack.h src/pe_hitbox.h src/pe_actor_scene.h
-FRONTEND = src/pe_terrain_material_view.c src/pe_adventure_npc_view.c src/pe_sandbox_world_view.c src/pe_app_menu.c src/pe_sandbox_view.c src/pe_sandbox_actor.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/main.c src/pe_reference.c src/pe_training_view.c src/pe_training_terrain_view.c src/pe_training_npc_view.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_shader.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_ui_assets.c src/pe_actor_view.c src/pe_actor_scene.c src/pe_actor_scene_view.c
+ASAN_OPTIONS ?= detect_leaks=1
+CORE = src/pe_sword.c src/pe_shield.c src/pe_outfit.c src/pe_running_attack_motion.c src/pe_root_motion.c src/pe_sword_targeting.c src/pe_town_defense_clock.c src/pe_hunt_combat.c src/pe_hare_skill.c src/pe_hunt_encounter.c src/pe_hare_perception.c src/pe_hare_damage.c src/pe_sandbox_melee.c src/pe_adventure_hunt.c src/pe_deployable.c src/pe_adventure_medicine.c src/pe_town_interaction.c src/pe_settlement.c src/pe_terrain_material.c src/pe_adventure_dialogue.c src/pe_adventure_npc.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c
+HEADERS = src/pe_root_motion.h src/pe_running_attack_motion.h src/pe_hare_skill.h generated/pe_hare_skill_source.h generated/pe_adventure_population.h src/pe_town_interaction.h generated/pe_town_offers.h src/pe_settlement.h generated/pe_adventure_settlement.h src/pe_terrain_material.h src/pe_terrain_material_view.h generated/pe_terrain_materials.h src/pe_adventure_dialogue.h generated/pe_adventure_dialogue_text.h generated/pe_adventure_npc_collider.h src/pe_adventure_npc.h src/pe_adventure_npc_view.h src/pe_sandbox_camera.h src/pe_tree_collision.h generated/pe_tree_collider.h src/pe_sandbox_actions.h src/pe_sandbox_world_view.h src/pe_sandbox_collision.h src/pe_sandbox_ui.h src/pe_app_menu.h src/pe_sandbox_actor.h src/pe_sandbox_view.h src/pe_world.h src/pe_game.h src/pe_content.h generated/pe_mc_tables.h src/pe_legacy.h src/pe_block.h src/pe_tutorial.h src/pe_scene_collision.h src/pe_training.h src/pe_player_locomotion.h src/pe_training_melee.h src/pe_training_tree_hit.h src/pe_training_dig.h src/pe_training_terrain.h src/pe_training_build.h src/pe_training_receiver.h src/pe_training_npc.h src/pe_training_ui_layout.h generated/pe_training_mound.h src/pe_training_gathering.h src/pe_training_text.h src/pe_actor.h src/pe_hare.h src/pe_combat.h src/pe_knife_contact.h src/pe_hare_attack.h src/pe_hitbox.h src/pe_actor_scene.h
+FRONTEND = src/pe_deployable_view.c src/pe_terrain_material_view.c src/pe_adventure_npc_view.c src/pe_sandbox_world_view.c src/pe_app_menu.c src/pe_sandbox_view.c src/pe_sandbox_actor.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/main.c src/pe_reference.c src/pe_training_view.c src/pe_training_terrain_view.c src/pe_training_npc_view.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_shader.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_ui_assets.c src/pe_actor_view.c src/pe_actor_scene.c src/pe_actor_scene_view.c
 HEADERS += $(wildcard src/*.h generated/*.h)
-TESTS = tests/test_medicine_save.c tests/test_adventure_medicine.c tests/test_adventure_population.c tests/test_town_interaction.c tests/test_settlement.c tests/test_world_depth.c tests/test_adventure_welcome.c tests/test_adventure_dialogue.c tests/test_adventure_npc.c tests/test_sandbox_actions.c tests/test_sandbox_collision.c tests/test_main.c tests/test_world.c tests/test_mesh.c tests/test_legacy.c tests/test_block.c tests/test_game.c tests/test_tutorial.c tests/test_scene_collision.c tests/test_training.c tests/test_player_locomotion.c tests/test_training_melee.c tests/test_training_tree_hit.c tests/test_training_dig.c tests/test_training_terrain.c tests/test_training_build.c tests/test_training_receiver.c tests/test_training_npc.c tests/test_training_ui_layout.c tests/test_training_gathering.c tests/test_actor.c tests/test_hare.c tests/test_combat.c tests/test_knife_contact.c tests/test_hare_attack.c tests/test_hitbox.c tests/test_actor_scene.c
+TESTS = tests/test_shield.c tests/test_shield_save.c tests/test_outfit.c tests/test_outfit_save.c tests/test_hunt_lifecycle.c tests/test_running_attack_pipeline.c tests/test_running_attack_motion.c tests/test_root_motion.c tests/test_sword_targeting.c tests/test_v13_save.c tests/test_hunt_return.c tests/test_v12_save.c tests/test_hunt_combat.c tests/test_hare_skill.c tests/test_hunt_encounter.c tests/test_hare_perception.c tests/test_v11_save.c tests/test_hare_route.c tests/test_hare_damage.c tests/test_sandbox_melee.c tests/test_v10_save.c tests/test_adventure_hunt.c tests/test_deployable.c tests/test_medicine_save.c tests/test_adventure_medicine.c tests/test_adventure_population.c tests/test_town_interaction.c tests/test_settlement.c tests/test_world_depth.c tests/test_adventure_welcome.c tests/test_adventure_dialogue.c tests/test_adventure_npc.c tests/test_sandbox_actions.c tests/test_sandbox_collision.c tests/test_main.c tests/test_world.c tests/test_mesh.c tests/test_legacy.c tests/test_block.c tests/test_game.c tests/test_tutorial.c tests/test_scene_collision.c tests/test_training.c tests/test_player_locomotion.c tests/test_training_melee.c tests/test_training_tree_hit.c tests/test_training_dig.c tests/test_training_terrain.c tests/test_training_build.c tests/test_training_receiver.c tests/test_training_npc.c tests/test_training_ui_layout.c tests/test_training_gathering.c tests/test_actor.c tests/test_hare.c tests/test_combat.c tests/test_knife_contact.c tests/test_hare_attack.c tests/test_hitbox.c tests/test_actor_scene.c
 BUILD = build
 RAYLIB_CFLAGS = $(shell $(PKG_CONFIG) --cflags raylib)
 LZ4_CFLAGS = $(shell $(PKG_CONFIG) --cflags liblz4)
@@ -28,7 +29,7 @@ $(BUILD)/planet_explorers: $(FRONTEND) src/pe_reference.h src/pe_training_view.h
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(FRONTEND) $(CORE) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 $(BUILD)/test_core: tests/adventure_test_helpers.h $(TESTS) $(CORE) $(HEADERS) | $(BUILD)
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(TESTS) $(CORE) -o $@ $(LZ4_LIBS) -lm
-test: terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
+test: sandbox-equipment-host-test hunt-consume-test training-asset-clocks-test actor-blend-test town-defense-clock-test terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
 	./$(BUILD)/test_core
 	python3 tests/test_adventure_settlement_export.py
 	python3 tests/test_adventure_settlement_assets.py
@@ -36,6 +37,30 @@ test: terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test san
 	python3 tests/test_adventure_route_export.py
 	python3 tests/test_adventure_route_assets.py
 	python3 tests/test_adventure_population.py
+	python3 tests/test_hare_skill_export.py
+	python3 tests/test_hare_perception_export.py
+	python3 tests/test_adventure_hunt_export.py
+	python3 tests/test_starter_outfit_export.py
+	python3 tests/test_starter_sword_shield_export.py
+	python3 tests/test_starter_pair_assets.py
+	python3 tests/test_starter_pair_unified.py
+	python3 tests/test_sandbox_actor_assets.py
+	python3 tests/test_shield_layer_inventory.py
+	python3 tests/test_shield_pose_analysis.py
+	python3 tests/test_shield_controller_export.py
+	python3 tests/test_shield_composition.py
+	python3 tests/test_shield_capture_numbers.py
+	python3 tests/test_shield_qualification.py
+	python3 tests/test_shield_qualification_preparation.py
+	python3 tests/test_adventure_town_defense_export.py
+	python3 tests/test_reference_hunt_encounter.py
+	python3 tests/test_reference_town_defense.py
+	python3 tests/test_creature_sampler_inventory.py
+	python3 tests/test_reference_hunt_combat.py
+	python3 tests/test_reference_hunt_return.py
+	python3 tests/test_adventure_hunt_encounter_export.py
+	python3 tests/test_baked_torch.py
+	python3 tests/test_torch_assets.py
 	python3 tests/test_adventure_medicine_export.py
 	python3 tests/test_town_interaction_export.py
 	python3 tests/test_adventure_dialogue_export.py
@@ -53,6 +78,11 @@ test: terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test san
 	python3 tests/test_reference_player.py
 	python3 tests/test_reference_pose.py
 	python3 tests/test_reference_animator_bake.py
+	python3 tests/test_directional_player.py
+	python3 tests/test_running_player.py
+	python3 tests/test_reference_root_motion.py
+	python3 tests/test_reference_running_attack.py
+	python3 tests/test_running_knife_motion_export.py
 	python3 tests/test_reference_bake_analysis.py
 	python3 tests/test_baked_knife.py
 	python3 tests/test_sandbox_world_assets.py
@@ -75,11 +105,16 @@ test: terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test san
 	python3 tests/test_reference_npc_bake.py
 sanitize: | $(BUILD)
 	$(CC) $(CPPFLAGS) -std=c11 -g -O1 -Wall -Wextra -Wpedantic -fno-omit-frame-pointer -fsanitize=address,undefined $(TESTS) $(CORE) -o $(BUILD)/test_sanitize $(LZ4_LIBS) -lm
-	ASAN_OPTIONS=detect_leaks=1 ./$(BUILD)/test_sanitize
+	ASAN_OPTIONS='$(ASAN_OPTIONS)' ./$(BUILD)/test_sanitize
 content:
 	python3 tools/export_content.py
 	python3 tools/export_mc_tables.py
 check-content:
+	python3 tools/export_hare_skill.py --check
+	python3 tools/export_adventure_hunt_encounter.py --check
+	python3 tools/export_adventure_hunt.py --check
+	python3 tools/export_starter_outfit.py --check
+	python3 tools/export_adventure_town_defense.py --check
 	python3 tools/export_adventure_medicine.py --check
 	python3 tools/export_town_interaction.py --check
 	python3 tools/export_adventure_dialogue.py --check
@@ -103,8 +138,25 @@ cli-test: all
 	python3 tests/test_cli.py
 
 .PHONY: sandbox-ui-test sandbox-actor-test menu-smoke
-$(BUILD)/test_sandbox_actor: tests/test_sandbox_actor.c src/pe_sandbox_actor.c src/pe_sandbox_actor.h src/pe_player_locomotion.c $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_actor.c src/pe_sandbox_actor.c src/pe_player_locomotion.c -o $@ -lm
+.PHONY: actor-blend-test
+.PHONY: training-asset-clocks-test
+.PHONY: sandbox-equipment-host-test
+$(BUILD)/test_sandbox_equipment_host: tests/test_sandbox_equipment_host.c src/pe_sandbox_view.c src/pe_game.c src/pe_sandbox_actions.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_equipment_host.c src/pe_game.c src/pe_sandbox_actions.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c -Wl,--gc-sections -o $@ -lm
+sandbox-equipment-host-test: $(BUILD)/test_sandbox_equipment_host
+	./$(BUILD)/test_sandbox_equipment_host
+
+$(BUILD)/test_training_asset_clocks: tests/test_training_asset_clocks.c src/pe_training_view.c $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_training_asset_clocks.c -Wl,--gc-sections -o $@ -lm
+training-asset-clocks-test: $(BUILD)/test_training_asset_clocks
+	./$(BUILD)/test_training_asset_clocks
+
+$(BUILD)/test_actor_blend_view: tests/test_actor_blend_view.c src/pe_actor.c src/pe_actor_view.c src/pe_actor_scene_view.c $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_actor_blend_view.c src/pe_actor.c src/pe_actor_view.c src/pe_actor_scene_view.c -Wl,--gc-sections -o $@ -lm
+actor-blend-test: $(BUILD)/test_actor_blend_view
+	./$(BUILD)/test_actor_blend_view
+$(BUILD)/test_sandbox_actor: tests/test_sandbox_actor.c src/pe_sandbox_actor.c src/pe_sandbox_actor.h src/pe_player_locomotion.c src/pe_combat.c $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_actor.c src/pe_sandbox_actor.c src/pe_player_locomotion.c src/pe_combat.c -o $@ -lm
 sandbox-actor-test: $(BUILD)/test_sandbox_actor
 	./$(BUILD)/test_sandbox_actor
 $(BUILD)/test_sandbox_ui: tests/test_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_sandbox_ui.h tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
@@ -206,6 +258,13 @@ terrain-material-test: $(BUILD)/test_terrain_material $(BUILD)/test_terrain_mate
 
 # Optional offline UnityPy/Pillow environment; never needed by the C runtime.
 ASSET_PYTHON ?= python3
+
+# Modern sword/shield metadata is a foundation, not enabled runtime equipment.
+# Binary source-prefab validation requires the optional UnityPy environment.
+.PHONY: starter-equipment-check
+starter-equipment-check:
+	$(ASSET_PYTHON) tools/export_starter_sword_shield.py --check
+	$(ASSET_PYTHON) tests/test_starter_sword_shield_export.py
 .PHONY: terrain-asset-test terrain-assets-check
 terrain-asset-test:
 	$(ASSET_PYTHON) tests/test_terrain_assets.py
@@ -222,3 +281,22 @@ $(BUILD)/adventure_medicine_fixture: tests/adventure_medicine_fixture.c $(CORE) 
 .PHONY: adventure-medicine-fixture
 adventure-medicine-fixture: $(BUILD)/adventure_medicine_fixture
 	./$(BUILD)/adventure_medicine_fixture --prepare $(BUILD)/annot-route-graphical-final.pesave $(BUILD)/medicine-ready.pesave > $(BUILD)/medicine-headless.json
+
+.PHONY: hare-perception-assets-check
+hare-perception-assets-check:
+	$(ASSET_PYTHON) tools/export_hare_perception.py --check
+	$(ASSET_PYTHON) tests/test_hare_perception_export.py
+
+.PHONY: town-defense-clock-test
+$(BUILD)/test_town_defense_clock: tests/test_town_defense_clock.c src/pe_town_defense_clock.c src/pe_town_defense_clock.h generated/pe_adventure_town_defense_source.h | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/test_town_defense_clock.c src/pe_town_defense_clock.c -o $@ -lm
+town-defense-clock-test: $(BUILD)/test_town_defense_clock
+	./$(BUILD)/test_town_defense_clock
+
+.PHONY: hunt-consume-test
+$(BUILD)/hunt_consume_host.inc: tests/test_hunt_consume_host.py src/pe_sandbox_view.c | $(BUILD)
+	python3 tests/test_hunt_consume_host.py --output $@
+$(BUILD)/test_hunt_consume: tests/test_hunt_consume.c $(BUILD)/hunt_consume_host.inc src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) -I$(BUILD) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_hunt_consume.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+hunt-consume-test: $(BUILD)/test_hunt_consume
+	@./$(BUILD)/test_hunt_consume; result=$$?; if [ $$result -eq 77 ]; then echo "hunt consume: asset-dependent regression SKIPPED (not passed)"; elif [ $$result -ne 0 ]; then exit $$result; fi

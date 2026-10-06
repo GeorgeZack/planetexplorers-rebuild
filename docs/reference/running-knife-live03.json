@@ -1,0 +1,1763 @@
+{
+  "schema": 1,
+  "kind": "observed-original-grounded-running-knife",
+  "date": "2026-10-06",
+  "strict_analyzer_pass": true,
+  "strict_require_running_pass": true,
+  "summary": {
+    "schema": "pe-running-attack-report-1",
+    "capture": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/female-running-live-03.jsonl",
+    "capture_sha256": "749a6288713ac86a64ab66d1ef6a29145088bd30fafae11b298c19598593b933",
+    "frames": 247,
+    "closure": "time-limit",
+    "player_id": 20000,
+    "controllers": [
+      "FemaleAnimator2"
+    ],
+    "avatars": [
+      "FemaleAvatar"
+    ],
+    "thresholds": [
+      {
+        "move": 4.5,
+        "sprint": 7
+      }
+    ],
+    "running_knife_observed_samples": 2,
+    "max_observed_game_time_gap": 0.33334400000001096,
+    "last_move_vs_animator_delta_max_error": 0,
+    "skills": [
+      {
+        "instance": 1,
+        "skill": 20110011,
+        "start_time": 399.315979,
+        "samples": 2,
+        "first_sample": 53,
+        "last_sample": 54,
+        "first_time": 399.315979,
+        "last_time": 399.649323,
+        "first_position": [
+          -280.1903,
+          22.567791,
+          122.656708
+        ],
+        "last_position": [
+          -280.750519,
+          22.599577,
+          121.681053
+        ],
+        "first_velocity": [
+          -2.10759854,
+          0.5812311,
+          -3.6684072
+        ],
+        "previous_observed_velocity": [
+          -2.4016335,
+          -3.33786e-05,
+          -4.15975046
+        ],
+        "previous_observed_time": 398.982635,
+        "first_flags": {
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": false,
+          "m_AttackInSprint": false
+        },
+        "weapon_prototypes": [
+          33
+        ],
+        "clip_names": [
+          "Attack6"
+        ],
+        "guides": [
+          1
+        ],
+        "running_clip_samples": 0,
+        "clip_clock_ranges": {
+          "FullBody/clips/Attack6": [
+            0.428125,
+            0.428125
+          ],
+          "FullBody/nextClips/Attack6": [
+            0,
+            0
+          ]
+        },
+        "transitions": [
+          {
+            "sample": 53,
+            "frame": 2012,
+            "time": 399.315979,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": []
+            },
+            "clip_clocks": []
+          },
+          {
+            "sample": 54,
+            "frame": 2013,
+            "time": 399.649323,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": [
+                "Attack6"
+              ]
+            },
+            "clip_clocks": [
+              {
+                "layer": "FullBody",
+                "branch": "clips",
+                "name": "Attack6",
+                "weight": 1,
+                "normalized_time": 0.428125,
+                "state_length": 0.778588831,
+                "state_speed": 1,
+                "speed_multiplier": 1
+              },
+              {
+                "layer": "FullBody",
+                "branch": "nextClips",
+                "name": "Attack6",
+                "weight": 1,
+                "normalized_time": 0,
+                "state_length": 0,
+                "state_speed": 0,
+                "speed_multiplier": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "instance": 2,
+        "skill": 20110012,
+        "start_time": 403.649323,
+        "samples": 1,
+        "first_sample": 66,
+        "last_sample": 66,
+        "first_time": 403.649323,
+        "last_time": 403.649323,
+        "first_position": [
+          -291.007263,
+          21.49807,
+          120.220512
+        ],
+        "last_position": [
+          -291.007263,
+          21.49807,
+          120.220512
+        ],
+        "first_velocity": [
+          -3.58021736,
+          -0.00644207,
+          2.06703973
+        ],
+        "previous_observed_velocity": [
+          -4.330127,
+          -1.05724359,
+          2.50000024
+        ],
+        "previous_observed_time": 403.315979,
+        "first_flags": {
+          "m_AttackInAir": true,
+          "m_AttackInWater": false,
+          "m_AttackInMove": false,
+          "m_AttackInSprint": false
+        },
+        "weapon_prototypes": [
+          33
+        ],
+        "clip_names": [],
+        "guides": [
+          1
+        ],
+        "running_clip_samples": 0,
+        "clip_clock_ranges": {},
+        "transitions": [
+          {
+            "sample": 66,
+            "frame": 2025,
+            "time": 403.649323,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": []
+            },
+            "clip_clocks": []
+          }
+        ]
+      },
+      {
+        "instance": 3,
+        "skill": 20110011,
+        "start_time": 432.649323,
+        "samples": 2,
+        "first_sample": 153,
+        "last_sample": 154,
+        "first_time": 432.649323,
+        "last_time": 432.982635,
+        "first_position": [
+          -286.354034,
+          21.9112511,
+          117.391258
+        ],
+        "last_position": [
+          -285.991241,
+          22.28697,
+          117.010239
+        ],
+        "first_velocity": [
+          2.33757067,
+          1.30170608,
+          -1.77933371
+        ],
+        "previous_observed_velocity": [
+          3.85683775,
+          0.3279934,
+          -2.30147481
+        ],
+        "previous_observed_time": 432.315979,
+        "first_flags": {
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": false,
+          "m_AttackInSprint": false
+        },
+        "weapon_prototypes": [
+          33
+        ],
+        "clip_names": [
+          "Attack6"
+        ],
+        "guides": [
+          1
+        ],
+        "running_clip_samples": 0,
+        "clip_clock_ranges": {
+          "FullBody/clips/Attack6": [
+            0.428125,
+            0.428125
+          ],
+          "FullBody/nextClips/Attack6": [
+            0,
+            0
+          ]
+        },
+        "transitions": [
+          {
+            "sample": 153,
+            "frame": 2112,
+            "time": 432.649323,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": []
+            },
+            "clip_clocks": []
+          },
+          {
+            "sample": 154,
+            "frame": 2113,
+            "time": 432.982635,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": [
+                "Attack6"
+              ]
+            },
+            "clip_clocks": [
+              {
+                "layer": "FullBody",
+                "branch": "clips",
+                "name": "Attack6",
+                "weight": 1,
+                "normalized_time": 0.428125,
+                "state_length": 0.778588831,
+                "state_speed": 1,
+                "speed_multiplier": 1
+              },
+              {
+                "layer": "FullBody",
+                "branch": "nextClips",
+                "name": "Attack6",
+                "weight": 1,
+                "normalized_time": 0,
+                "state_length": 0,
+                "state_speed": 0,
+                "speed_multiplier": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "instance": 4,
+        "skill": 20110014,
+        "start_time": 447.982635,
+        "samples": 3,
+        "first_sample": 199,
+        "last_sample": 201,
+        "first_time": 447.982635,
+        "last_time": 448.649323,
+        "first_position": [
+          -278.5713,
+          22.6233349,
+          125.330368
+        ],
+        "last_position": [
+          -277.5299,
+          22.49804,
+          127.141258
+        ],
+        "first_velocity": [
+          2.48843336,
+          0.0267077684,
+          4.3274436
+        ],
+        "previous_observed_velocity": [
+          2.25788331,
+          0.446985275,
+          3.77307034
+        ],
+        "previous_observed_time": 447.649323,
+        "first_flags": {
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false
+        },
+        "weapon_prototypes": [
+          33
+        ],
+        "clip_names": [
+          "RunSwordAttack"
+        ],
+        "guides": [
+          1
+        ],
+        "running_clip_samples": 2,
+        "clip_clock_ranges": {
+          "FullBody/clips/RunSwordAttack": [
+            0.249090046,
+            0.4981801
+          ],
+          "FullBody/nextClips/RunSwordAttack": [
+            0,
+            0
+          ]
+        },
+        "transitions": [
+          {
+            "sample": 199,
+            "frame": 2158,
+            "time": 447.982635,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": []
+            },
+            "clip_clocks": []
+          },
+          {
+            "sample": 200,
+            "frame": 2159,
+            "time": 448.315979,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": [
+                "RunSwordAttack"
+              ]
+            },
+            "clip_clocks": [
+              {
+                "layer": "FullBody",
+                "branch": "clips",
+                "name": "RunSwordAttack",
+                "weight": 1,
+                "normalized_time": 0.249090046,
+                "state_length": 1.33820415,
+                "state_speed": 1,
+                "speed_multiplier": 1
+              },
+              {
+                "layer": "FullBody",
+                "branch": "nextClips",
+                "name": "RunSwordAttack",
+                "weight": 1,
+                "normalized_time": 0,
+                "state_length": 0,
+                "state_speed": 0,
+                "speed_multiplier": 0
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "instance": 5,
+        "skill": 20110012,
+        "start_time": 460.649323,
+        "samples": 2,
+        "first_sample": 237,
+        "last_sample": 238,
+        "first_time": 460.649323,
+        "last_time": 460.982635,
+        "first_position": [
+          -289.76767,
+          21.9879,
+          136.461014
+        ],
+        "last_position": [
+          -291.238,
+          21.5264473,
+          137.310059
+        ],
+        "first_velocity": [
+          -4.330127,
+          -0.977637768,
+          2.50000024
+        ],
+        "previous_observed_velocity": [
+          -4.330127,
+          -0.585237741,
+          2.50000024
+        ],
+        "previous_observed_time": 460.315979,
+        "first_flags": {
+          "m_AttackInAir": true,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false
+        },
+        "weapon_prototypes": [
+          33
+        ],
+        "clip_names": [
+          "airattack0"
+        ],
+        "guides": [
+          1
+        ],
+        "running_clip_samples": 0,
+        "clip_clock_ranges": {
+          "FullBody/clips/airattack0": [
+            0.318604022,
+            0.318604022
+          ],
+          "FullBody/nextClips/airattack0": [
+            0,
+            0
+          ]
+        },
+        "transitions": [
+          {
+            "sample": 237,
+            "frame": 2196,
+            "time": 460.649323,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": []
+            },
+            "clip_clocks": []
+          },
+          {
+            "sample": 238,
+            "frame": 2197,
+            "time": 460.982635,
+            "status": {
+              "guide": 1,
+              "active": true,
+              "contact_enabled": true,
+              "combo": 0,
+              "end_action": false,
+              "clips": [
+                "airattack0"
+              ]
+            },
+            "clip_clocks": [
+              {
+                "layer": "FullBody",
+                "branch": "clips",
+                "name": "airattack0",
+                "weight": 1,
+                "normalized_time": 0.318604022,
+                "state_length": 1.04623079,
+                "state_speed": 1,
+                "speed_multiplier": 1
+              },
+              {
+                "layer": "FullBody",
+                "branch": "nextClips",
+                "name": "airattack0",
+                "weight": 1,
+                "normalized_time": 0,
+                "state_length": 0,
+                "state_speed": 0,
+                "speed_multiplier": 0
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "launch_provenance": {
+      "schema": "pe-running-attack-launch-1",
+      "command": [
+        "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client.x86_64",
+        "-force-gfx-direct",
+        "-from-launcher",
+        "-rw",
+        "1280",
+        "-rh",
+        "720",
+        "-ql",
+        "0",
+        "-language",
+        "English",
+        "-ocl",
+        "Cpu",
+        "-userpath",
+        "/home/admin/.local/share/planet-explorers-hunt-reference",
+        "-screen-fullscreen",
+        "0"
+      ],
+      "profile": "/home/admin/.local/share/planet-explorers-hunt-reference",
+      "capture": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/female-running-live-03.jsonl",
+      "arm": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/female-running-live-03.arm",
+      "stop": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/female-running-live-03.stop",
+      "frames": 7200,
+      "seconds": 120,
+      "wait_seconds": 900,
+      "assembly_sha256": "1e01b2b294ea933fdeb1a85325cfedccf3c436a0e113524a3b037a8af926edba",
+      "probe_source_sha256": "d0082e82cdbb2c52f5bc9c9c21833f834a875791abdc49c3e9f38a1b1722837b",
+      "shim_sha256": "b0c7f921a55240eac476427ddbf09b4eaa6defb0d19056703626813f16e81cb8",
+      "engine_sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+      "game_assembly_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+      "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+    },
+    "exact_selection_velocity_observed": false,
+    "exact_motor_order_observed": false,
+    "root_curve_qualified": false,
+    "note": "End-of-frame snapshots can miss short stages. Prior velocity is an observation, not the instantaneous selection velocity. No clip clock or root trajectory is inferred from wall time."
+  },
+  "renderer": {
+    "environment": {
+      "__GLX_VENDOR_LIBRARY_NAME": "mesa",
+      "LIBGL_ALWAYS_SOFTWARE": "1"
+    },
+    "environment_evidence": "Root operator launch; common launcher manifest does not currently record these inherited values",
+    "game_player_log": {
+      "version": "OpenGL4.6 Compatibility Profile Mesa26.2.2-arch1.1",
+      "renderer": "llvmpipe (LLVM22.1.8,256bits)",
+      "vendor": "Mesa"
+    },
+    "resolution": "Operator changed to800x450 before arming; launch manifest retains initial1280x720",
+    "limit": "One completed bounded software-rendering capture, not a permanent graphics fix or normal-performance result"
+  },
+  "capture_statistics": {
+    "real_span_seconds": 119.98660000000007,
+    "game_span_seconds": 82.0,
+    "mean_observed_fps": 2.0502289422318816,
+    "selected_running_skill_frames": 3,
+    "positive_weight_running_pose_frames": 2,
+    "maximum_sampled_actual_velocity": 5.178037914680203
+  },
+  "grounded_running_episode": {
+    "instance": 4,
+    "skill": 20110014,
+    "weapon_prototype": 33,
+    "thresholds": {
+      "move": 4.5,
+      "sprint": 7
+    },
+    "selected_sample": 199,
+    "first_selected_velocity_magnitude": 4.991971755051781,
+    "active_pose_samples": [
+      200,
+      201
+    ],
+    "sampled_animator_speed": 1.37,
+    "sampled_normalized_times": [
+      0.249090046,
+      0.4981801
+    ],
+    "approximate_authored_rate_between_two_pose_frames": 1.3699562094172268,
+    "rate_limit": "Two coarse samples only; normalizedTime times source duration divided by observed scaled-game-time difference. Does not resolve transitions, frame event scheduling or full live curve.",
+    "stamina_before": 100,
+    "stamina_after": 95,
+    "observations": [
+      {
+        "sample": 197,
+        "frame": 2156,
+        "time": 447.315979,
+        "realtime": 943.7328,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -280.199921,
+          22.49804,
+          122.539787
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -280.199921,
+          22.49804,
+          122.539787
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          2.44115019,
+          -3.33786e-05,
+          4.22819567
+        ],
+        "motorVelocity": [
+          2.44115019,
+          -3.33786e-05,
+          4.22819567
+        ],
+        "grounded": true,
+        "stamina": 100,
+        "lastMove": [
+          0,
+          0,
+          0
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": false,
+          "m_AttackInSprint": false,
+          "m_EndAction": true,
+          "combo": 0,
+          "direction": [
+            0.8660254,
+            0,
+            -0.50000006
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": null
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1,
+          "deltaPosition": [
+            0,
+            0,
+            0
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 0,
+          "transition": false,
+          "current": {
+            "fullPathHash": 1458450275,
+            "shortNameHash": 474258567,
+            "normalizedTime": 14.1666622,
+            "length": 1,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": true
+          },
+          "next": {
+            "fullPathHash": 0,
+            "shortNameHash": 0,
+            "normalizedTime": 0,
+            "length": 0,
+            "speed": 0,
+            "speedMultiplier": 0,
+            "loop": false
+          },
+          "clips": [],
+          "nextClips": []
+        }
+      },
+      {
+        "sample": 198,
+        "frame": 2157,
+        "time": 447.649323,
+        "realtime": 944.209656,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -279.41745,
+          22.6142559,
+          123.859055
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -279.41745,
+          22.6142559,
+          123.859055
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          2.25788331,
+          0.446985275,
+          3.77307034
+        ],
+        "motorVelocity": [
+          2.25788331,
+          0.446985275,
+          3.77307034
+        ],
+        "grounded": true,
+        "stamina": 100,
+        "lastMove": [
+          0,
+          0,
+          0
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": false,
+          "m_AttackInSprint": false,
+          "m_EndAction": true,
+          "combo": 0,
+          "direction": [
+            0.8660254,
+            0,
+            -0.50000006
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": null
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1,
+          "deltaPosition": [
+            0,
+            0,
+            0
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 0,
+          "transition": false,
+          "current": {
+            "fullPathHash": 1458450275,
+            "shortNameHash": 474258567,
+            "normalizedTime": 14.4999952,
+            "length": 1,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": true
+          },
+          "next": {
+            "fullPathHash": 0,
+            "shortNameHash": 0,
+            "normalizedTime": 0,
+            "length": 0,
+            "speed": 0,
+            "speedMultiplier": 0,
+            "loop": false
+          },
+          "clips": [],
+          "nextClips": []
+        }
+      },
+      {
+        "sample": 199,
+        "frame": 2158,
+        "time": 447.982635,
+        "realtime": 945.6962,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -278.5713,
+          22.6233349,
+          125.330368
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -278.5713,
+          22.6233349,
+          125.330368
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          2.48843336,
+          0.0267077684,
+          4.3274436
+        ],
+        "motorVelocity": [
+          2.48843336,
+          0.0267077684,
+          4.3274436
+        ],
+        "grounded": true,
+        "stamina": 95,
+        "lastMove": [
+          0,
+          0,
+          0
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false,
+          "m_EndAction": false,
+          "combo": 0,
+          "direction": [
+            0.50000006,
+            0,
+            0.8660254
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": {
+            "instance": 4,
+            "id": 20110014,
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "startTime": 447.982635,
+            "coolStat": 0
+          }
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1.37,
+          "deltaPosition": [
+            0,
+            0,
+            0
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 0,
+          "transition": true,
+          "current": {
+            "fullPathHash": 1458450275,
+            "shortNameHash": 474258567,
+            "normalizedTime": 14.9566622,
+            "length": 0.729927,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": true
+          },
+          "next": {
+            "fullPathHash": -626215526,
+            "shortNameHash": 1733761650,
+            "normalizedTime": 0,
+            "length": 1.33820415,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": false
+          },
+          "clips": [],
+          "nextClips": [
+            {
+              "name": "RunSwordAttack",
+              "id": 14368,
+              "weight": 1,
+              "length": 1.83333969
+            }
+          ]
+        }
+      },
+      {
+        "sample": 200,
+        "frame": 2159,
+        "time": 448.315979,
+        "realtime": 946.2314,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -277.975067,
+          22.5155811,
+          126.367088
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -277.975067,
+          22.5155811,
+          126.367088
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          1.846143,
+          -0.347582877,
+          3.210486
+        ],
+        "motorVelocity": [
+          1.846143,
+          -0.347582877,
+          3.210486
+        ],
+        "grounded": true,
+        "stamina": 95,
+        "lastMove": [
+          0,
+          0,
+          0
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false,
+          "m_EndAction": false,
+          "combo": 0,
+          "direction": [
+            0.50000006,
+            0,
+            0.8660254
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": {
+            "instance": 4,
+            "id": 20110014,
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "startTime": 447.982635,
+            "coolStat": 0
+          }
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1.37,
+          "deltaPosition": [
+            0,
+            0,
+            0
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 1,
+          "transition": false,
+          "current": {
+            "fullPathHash": -626215526,
+            "shortNameHash": 1733761650,
+            "normalizedTime": 0.249090046,
+            "length": 1.33820415,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": false
+          },
+          "next": {
+            "fullPathHash": 0,
+            "shortNameHash": 0,
+            "normalizedTime": 0,
+            "length": 0,
+            "speed": 0,
+            "speedMultiplier": 0,
+            "loop": false
+          },
+          "clips": [
+            {
+              "name": "RunSwordAttack",
+              "id": 14368,
+              "weight": 1,
+              "length": 1.83333969
+            }
+          ],
+          "nextClips": [
+            {
+              "name": "RunSwordAttack",
+              "id": 14368,
+              "weight": 1,
+              "length": 1.83333969
+            }
+          ]
+        }
+      },
+      {
+        "sample": 201,
+        "frame": 2160,
+        "time": 448.649323,
+        "realtime": 946.6757,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -277.5299,
+          22.49804,
+          127.141258
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -277.5299,
+          22.49804,
+          127.141258
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          1.281713,
+          -3.33786e-05,
+          2.22892833
+        ],
+        "motorVelocity": [
+          1.281713,
+          -3.33786e-05,
+          2.22892833
+        ],
+        "grounded": true,
+        "stamina": 95,
+        "lastMove": [
+          0.41454497,
+          0,
+          1.32395017
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false,
+          "m_EndAction": false,
+          "combo": 0,
+          "direction": [
+            0.50000006,
+            0,
+            0.8660254
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": {
+            "instance": 4,
+            "id": 20110014,
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "startTime": 447.982635,
+            "coolStat": 0
+          }
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1.37,
+          "deltaPosition": [
+            0.41454497,
+            0,
+            1.32395017
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 1,
+          "transition": false,
+          "current": {
+            "fullPathHash": -626215526,
+            "shortNameHash": 1733761650,
+            "normalizedTime": 0.4981801,
+            "length": 1.33820415,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": false
+          },
+          "next": {
+            "fullPathHash": 0,
+            "shortNameHash": 0,
+            "normalizedTime": 0,
+            "length": 0,
+            "speed": 0,
+            "speedMultiplier": 0,
+            "loop": false
+          },
+          "clips": [
+            {
+              "name": "RunSwordAttack",
+              "id": 14368,
+              "weight": 1,
+              "length": 1.83333969
+            }
+          ],
+          "nextClips": []
+        }
+      },
+      {
+        "sample": 202,
+        "frame": 2161,
+        "time": 448.982635,
+        "realtime": 947.1511,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -277.191,
+          22.49804,
+          127.731018
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -277.191,
+          22.49804,
+          127.731018
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          0.989429951,
+          -3.33786e-05,
+          1.72064126
+        ],
+        "motorVelocity": [
+          0.989429951,
+          -3.33786e-05,
+          1.72064126
+        ],
+        "grounded": true,
+        "stamina": 95,
+        "lastMove": [
+          0.171260461,
+          0,
+          0.141902864
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false,
+          "m_EndAction": true,
+          "combo": 0,
+          "direction": [
+            0.50000006,
+            0,
+            0.8660254
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": null
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1.37,
+          "deltaPosition": [
+            0.171260461,
+            0,
+            0.141902864
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 1,
+          "transition": true,
+          "current": {
+            "fullPathHash": -626215526,
+            "shortNameHash": 1733761650,
+            "normalizedTime": 0.7472701,
+            "length": 1.33820415,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": false
+          },
+          "next": {
+            "fullPathHash": 1458450275,
+            "shortNameHash": 474258567,
+            "normalizedTime": 0.141662329,
+            "length": 0.729927,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": true
+          },
+          "clips": [
+            {
+              "name": "RunSwordAttack",
+              "id": 14368,
+              "weight": 1,
+              "length": 1.83333969
+            }
+          ],
+          "nextClips": []
+        }
+      },
+      {
+        "sample": 203,
+        "frame": 2162,
+        "time": 449.315979,
+        "realtime": 947.6111,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -276.8278,
+          22.59676,
+          128.8606
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -276.8278,
+          22.59676,
+          128.8606
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          1.12469065,
+          0.35254997,
+          3.48277473
+        ],
+        "motorVelocity": [
+          1.12469065,
+          0.35254997,
+          3.48277473
+        ],
+        "grounded": true,
+        "stamina": 95,
+        "lastMove": [
+          0,
+          0,
+          0
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false,
+          "m_EndAction": true,
+          "combo": 0,
+          "direction": [
+            0.50000006,
+            0,
+            0.8660254
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": null
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1,
+          "deltaPosition": [
+            0,
+            0,
+            0
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 0,
+          "transition": false,
+          "current": {
+            "fullPathHash": 1458450275,
+            "shortNameHash": 474258567,
+            "normalizedTime": 0.474995673,
+            "length": 1,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": true
+          },
+          "next": {
+            "fullPathHash": 0,
+            "shortNameHash": 0,
+            "normalizedTime": 0,
+            "length": 0,
+            "speed": 0,
+            "speedMultiplier": 0,
+            "loop": false
+          },
+          "clips": [],
+          "nextClips": []
+        }
+      },
+      {
+        "sample": 204,
+        "frame": 2163,
+        "time": 449.649323,
+        "realtime": 948.082153,
+        "dt": 0.333333343,
+        "fixedDt": 0.02,
+        "position": [
+          -276.752075,
+          22.5937424,
+          129.102615
+        ],
+        "rotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "modelPosition": [
+          -276.752075,
+          22.5937424,
+          129.102615
+        ],
+        "modelRotation": [
+          0,
+          0.258819073,
+          0,
+          0.9659258
+        ],
+        "velocity": [
+          2.61156274e-34,
+          -2.527951e-35,
+          0.0001502037
+        ],
+        "motorVelocity": [
+          2.61156274e-34,
+          -2.527951e-35,
+          0.0001502037
+        ],
+        "grounded": true,
+        "stamina": 95,
+        "lastMove": [
+          0,
+          0,
+          0
+        ],
+        "lastRotation": [
+          0,
+          0,
+          0,
+          1
+        ],
+        "action": {
+          "moveThreshold": 4.5,
+          "sprintThreshold": 7,
+          "weaponPrototype": 33,
+          "firstPerson": false,
+          "useStamina": true,
+          "m_AttackInAir": false,
+          "m_AttackInWater": false,
+          "m_AttackInMove": true,
+          "m_AttackInSprint": false,
+          "m_EndAction": true,
+          "combo": 0,
+          "direction": [
+            0.50000006,
+            0,
+            0.8660254
+          ],
+          "targetDirection": [
+            0,
+            0,
+            0
+          ],
+          "skill": null
+        },
+        "animator": {
+          "controller": "FemaleAnimator2",
+          "avatar": "FemaleAvatar",
+          "speed": 1,
+          "deltaPosition": [
+            0,
+            0,
+            0
+          ],
+          "deltaRotation": [
+            0,
+            0,
+            0,
+            1
+          ],
+          "applyRootMotion": false
+        },
+        "full_body_layer": {
+          "name": "FullBody",
+          "weight": 0,
+          "transition": false,
+          "current": {
+            "fullPathHash": 1458450275,
+            "shortNameHash": 474258567,
+            "normalizedTime": 0.808329,
+            "length": 1,
+            "speed": 1,
+            "speedMultiplier": 1,
+            "loop": true
+          },
+          "next": {
+            "fullPathHash": 0,
+            "shortNameHash": 0,
+            "normalizedTime": 0,
+            "length": 0,
+            "speed": 0,
+            "speedMultiplier": 0,
+            "loop": false
+          },
+          "clips": [],
+          "nextClips": []
+        }
+      }
+    ]
+  },
+  "input_record": {
+    "path": "rebuild/build/running-attack-probe/live-03-evidence/live-03-inputs.json",
+    "events": [
+      {
+        "time": 1791310493.7247727,
+        "input": "W5s; world left hold ~0.65s at+2s"
+      },
+      {
+        "time": 1791310554.6697404,
+        "input": "s5s; world left hold ~0.65s at+2s; correct arm now present"
+      },
+      {
+        "time": 1791310560.9373357,
+        "input": "a5s; world left hold ~0.65s at+2s; correct arm now present"
+      },
+      {
+        "time": 1791310601.693023,
+        "input": "d5s drag-click+3s"
+      },
+      {
+        "time": 1791310623.5605133,
+        "input": "w5s drag-click+3s"
+      },
+      {
+        "time": 1791310641.411905,
+        "input": "a5s drag-click+4s"
+      }
+    ],
+    "arm_note": "Initial harmless .jsonl.arm filename did not match expected .arm; firstW sequence therefore uncaptured. Correct .arm later began120s observation. No source-state mutations to force branch."
+  },
+  "lifecycle": {
+    "capture_closed": "time-limit",
+    "operator_responsiveness": "After capture closure, SYSTEM menu and Quit confirmation responded; screenshots preserved. Root clicked Quit and YES, process disappeared.",
+    "process_exit": {
+      "schema": "pe-running-attack-exit-1",
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T18:20:34.321211+00:00"
+    },
+    "exit_limit": "Original ordinary UI quit produced\u22129/signal9, matching established self-kill exit pattern; not exit0."
+  },
+  "scope": {
+    "observed": [
+      "Installed live thresholds4.5/7",
+      "Exact heldKnife33 and active20110014 with grounded third-person moving branch flags",
+      "FemaleAnimator2/FemaleAvatar and positive-weight RunSwordAttack current state",
+      "Animator speed1.37 and stamina100to95 across selected attack"
+    ],
+    "not_established": [
+      "Instantaneous velocity at original ApplySkill call",
+      "Exact root/motor update ordering or per-frame12m/s correction",
+      "Full-resolution live displacement curve or transition blending",
+      "Precise hit-guide/event opening and closure",
+      "Native running attack or contact parity"
+    ]
+  },
+  "preserved_files": [
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/Player.log",
+      "sha256": "ae42c0ad53104c94ff1957d98fd470c6bd9182084d88e57f22297f77cddb4a52",
+      "bytes": 55935
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/female-running-live-03.arm",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/female-running-live-03.jsonl",
+      "sha256": "749a6288713ac86a64ab66d1ef6a29145088bd30fafae11b298c19598593b933",
+      "bytes": 896966
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/female-running-live-03.jsonl.arm",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/female-running-live-03.launch.json",
+      "sha256": "17cb12697479462f487ea4de81a0125f421e99f8cee2ae3720d66371a5115a9d",
+      "bytes": 1439
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/live-03-inputs.json",
+      "sha256": "81f68d3b68f8ae205bcbb23bd3ca115b0a16b66fe2aa299c132c767753032c8c",
+      "bytes": 542
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/live-03-launch.log",
+      "sha256": "7e381938351109eedda5e312a3ef1c752df3cae5dfc49a5038a3a31d32cb4ccf",
+      "bytes": 973
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/live-03-report.json",
+      "sha256": "23d98f687d68e9ce9084234542f8c8e9f35fb93c03bd516617f93ea55edc5871",
+      "bytes": 14071
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/female-running-live-03.exit.json",
+      "sha256": "029ac157535bf5ba114edbdc1a098a96867f75fb7195abd32d69b122ab9a4639",
+      "bytes": 131
+    },
+    {
+      "path": "docs/reference/running-knife-live03-responsive.png",
+      "bytes": 1005865,
+      "sha256": "049c80c0e7239ffa5e25c0a60a2a925b3257fc59bbc882cddb1b73b1f17e8c0d"
+    },
+    {
+      "path": "docs/reference/running-knife-live03-quit.png",
+      "bytes": 997154,
+      "sha256": "a6105b8a402398a146fae5efe0ceb0d3732f011a691fb04da152bb9dd154a3d4"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/Player-final.log",
+      "bytes": 56771,
+      "sha256": "26fec2eb73e6462c5cf9b3840c4849e64f65fac0ded61776439b836f8b587ccb"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-03-evidence/save-hashes-after.json",
+      "bytes": 6213,
+      "sha256": "0b9c55d6c0465c584246be855e6096caf5adffddae16a181cc5509a41ce3a21c"
+    }
+  ],
+  "saved_archives": {
+    "baseline": "rebuild/build/running-attack-user-20261006-122231/save-hashes-before.json",
+    "baseline_sha256": "92876e5633729d08e4e3481f731e09ecfefb88353e33a4fb2e9c1942099e499c",
+    "files_checked": 63,
+    "changed_files": [],
+    "all_unchanged": true,
+    "scope": "Existing63baseline manual-checkpoint files only; no claim about volatile autosave/profile preferences"
+  }
+}

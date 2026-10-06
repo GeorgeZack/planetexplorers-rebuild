@@ -122,6 +122,28 @@ class BakeAnalysisTests(unittest.TestCase):
             next(r for r in rows if r['type']=='clip' and r['index']==1)['cloneIds']=[101,102]
             with self.assertRaises(ValueError):self.run_analysis(rows,rig,Path(d))
 
+    def test_new_retention_bound_accepts32_and_rejects33_or_old_limit(self):
+        base,rig=bake_fixture();rows=copy.deepcopy(base[:2])
+        rows[0].update(cleanupPolicy='retain-inactive-per-clip-until-process-exit',maxRetainedGraphs=32)
+        rows[1]['plannedSamples']=96
+        for index in range(32):
+            block=copy.deepcopy(base[2:-1]);block[0].update(index=index,name='Clip'+str(index),cloneIds=[101+index*2,102+index*2])
+            for row in block[1:]:
+                row['clip']=index
+                if row['type']=='pose':row['frame']+=index*100;row['realtime']+=index*10
+            rows.extend(block)
+        rows.append(dict(type='end',reason='complete',samples=96))
+        with tempfile.TemporaryDirectory() as d:
+            root=Path(d);report,_=self.run_analysis(rows,rig,root)
+            self.assertEqual(len(report['clips']),32)
+            rows[0]['maxRetainedGraphs']=10
+            with self.assertRaises(ValueError):self.run_analysis(rows,rig,root)
+            rows[0]['maxRetainedGraphs']=33
+            with self.assertRaises(ValueError):self.run_analysis(rows,rig,root)
+            rows[0]['maxRetainedGraphs']=32
+            rows.insert(-1,dict(base[2],index=32,name='Overflow',cloneIds=[1001,1002]))
+            with self.assertRaises(ValueError):self.run_analysis(rows,rig,root)
+
     def test_observed_pose_comparison_preserves_errors_and_filters_transitions(self):
         rows,rig=bake_fixture();observed,_=fixture()
         for row in observed:
@@ -176,7 +198,7 @@ class BakeAnalysisTests(unittest.TestCase):
         rows,rig=bake_fixture()
         with tempfile.TemporaryDirectory() as d:
             root=Path(d);report,samples=self.run_analysis(rows,rig,root,True);sources=[]
-            for name in ('Attack6','NormalIdle'):
+            for name in ('Attack6','NormalIdle')+tuple('Clip'+str(i) for i in range(30)):
                 out=root/name;out.mkdir();clip=dict(report['clips'][0],name=name)
                 sources.append((out,bake.export_clip(out,rig,root/'rig.json',samples['Attack6'],report,clip)))
             bake.combine_clips(root/'all',sources)
@@ -185,7 +207,7 @@ class BakeAnalysisTests(unittest.TestCase):
 int main(int argc,char **argv){
  char error[256];if(argc!=2)return 1;
  PeActorSceneManifest *s=pe_actor_scene_manifest_load(argv[1],error,sizeof error);if(!s)return 2;
- int ok=pe_actor_scene_clip_count(s)==2 && !strcmp(pe_actor_scene_clip_at(s,1)->name,"NormalIdle");
+ int ok=pe_actor_scene_clip_count(s)==32 && !strcmp(pe_actor_scene_clip_at(s,1)->name,"NormalIdle") && !strcmp(pe_actor_scene_clip_at(s,31)->name,"Clip29");
  pe_actor_scene_manifest_free(s);return ok?0:3;
 }
 ''')

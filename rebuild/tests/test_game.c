@@ -105,6 +105,39 @@ static void movement_stamina_tests(PeGame *g){
     advance(g,0.05f);CHECK(g->stamina==0);
     advance(g,0.15f);CHECK(g->stamina>3.9f&&g->stamina<4.8f);
 }
+static void action_motion_tests(PeGame *g){
+    PeSandboxCollision *c=pe_sandbox_collision_create();char error[160];
+    unsigned char *before=malloc(sizeof *g);CHECK(c&&before);
+    if(!c||!before){pe_sandbox_collision_free(c);free(before);return;}
+    flat(g);CHECK(pe_game_collision_update(g,c,error,sizeof error));CHECK(pe_game_collision_settle(g,c));
+    g->stamina=30;g->medpack_cooldown=5;
+    PeVec3 start=g->player;double clock=g->game_seconds;
+    PeInput held={.move_x=-1,.move_z=1,.jump=true,.sprint=true};
+    for(int i=0;i<60;i++)CHECK(pe_game_step_collision_motion(g,held,PE_FIXED_DT,c,(PeVec3){3,0,0}));
+    CHECK(fabsf(g->player.x-start.x-3)<.01f&&fabsf(g->player.z-start.z)<.001f);
+    CHECK(g->grounded&&!g->jumping&&!g->sprinting&&g->stamina==30);
+    CHECK(fabs(g->game_seconds-clock-12)<.001&&fabsf(g->medpack_cooldown-4)<.001f);
+    memcpy(before,g,sizeof *g);
+    PeVec3 invalid[]={{NAN,0,0},{0,1,0},{101,0,0},{0,0,INFINITY}};
+    for(size_t i=0;i<sizeof invalid/sizeof *invalid;i++){
+        CHECK(!pe_game_step_collision_motion(g,held,PE_FIXED_DT,c,invalid[i]));CHECK(!memcmp(before,g,sizeof *g));
+    }
+    g->velocity.y=-1000;memcpy(before,g,sizeof *g);
+    CHECK(!pe_game_step_collision_motion(g,held,PE_FIXED_DT,c,(PeVec3){0}));CHECK(!memcmp(before,g,sizeof *g));
+    g->player=(PeVec3){32,10,32};g->velocity=(PeVec3){0};CHECK(pe_game_collision_settle(g,c));
+    g->blocks[0]=(PeBlock){33,9,32,PE_ITEM_FENCE};g->block_count=1;
+    CHECK(pe_game_collision_update(g,c,error,sizeof error));
+    for(int i=0;i<60;i++)CHECK(pe_game_step_collision_motion(g,held,PE_FIXED_DT,c,(PeVec3){12,0,0}));
+    CHECK(g->player.x>32.65f&&g->player.x<32.71f);
+    CHECK(!pe_sandbox_collision_overlap(c,g->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT));
+    start=g->player;g->block_count=0;CHECK(pe_game_collision_update(g,c,error,sizeof error));
+    CHECK(pe_game_step_collision_motion(g,held,PE_FIXED_DT,c,(PeVec3){0}));
+    CHECK(fabsf(g->player.x-start.x)<.001f); /* No retained blocked displacement or WASD addition. */
+    g->player.y=20;g->velocity.y=0;start=g->player;
+    CHECK(pe_game_step_collision_motion(g,held,.1f,c,(PeVec3){2,0,0}));
+    CHECK(fabsf(g->player.x-start.x-.2f)<.001f&&g->player.y<start.y&&g->velocity.y<0);
+    pe_sandbox_collision_free(c);free(before);
+}
 static void collision_game_tests(PeGame *g){
     PeSandboxCollision *collision=pe_sandbox_collision_create();PeGame *before=malloc(sizeof *before);char error[160];
     CHECK(collision&&before);if(!collision||!before){pe_sandbox_collision_free(collision);free(before);return;}
@@ -617,7 +650,7 @@ static void furniture_shortcut_tests(PeGame *g){
     char path[]="/tmp/pe-furniture-shortcut-XXXXXX",error[200];int fd=mkstemp(path);
     CHECK(fd>=0);if(fd<0)return;close(fd);
     PeGame *loaded=calloc(1,sizeof *loaded);CHECK(loaded!=NULL);if(!loaded){unlink(path);return;}
-    flat(g);settle(g);g->mode=PE_GAME_ADVENTURE;CHECK(pe_test_ack_welcome(g));
+    flat(g);settle(g);g->mode=PE_GAME_ADVENTURE;CHECK(pe_outfit_init(g));CHECK(pe_test_ack_welcome(g));
     CHECK(pe_inventory_add(&g->inventory,PE_ITEM_FENCE,2));CHECK(pe_inventory_add(&g->inventory,PE_ITEM_LADDER,1));
     CHECK(pe_game_quickslot_assign(g,0,0));CHECK(pe_game_quickslot_assign(g,1,1));CHECK(pe_game_quickslot_assign(g,2,2));
     uint32_t other_fence=g->quickslots[1].instance_id;
@@ -691,7 +724,7 @@ static void tree_save_migration_tests(PeGame *g){
     CHECK(fd>=0);if(fd<0)return;close(fd);
     PeGame *before=malloc(sizeof *before),*loaded=calloc(1,sizeof *loaded);
     CHECK(before&&loaded);if(!before||!loaded){free(before);free(loaded);unlink(path);return;}
-    flat(g);g->world.depth=PE_WORLD_Z;g->mode=PE_GAME_ADVENTURE;CHECK(pe_test_ack_welcome(g));
+    flat(g);g->world.depth=PE_WORLD_Z;g->mode=PE_GAME_ADVENTURE;CHECK(pe_outfit_init(g));CHECK(pe_test_ack_welcome(g));
     g->tree_count=1;g->trees[0]=(PeTree){{40.6f,9.5f,40.7f},8,255};
     g->player=(PeVec3){44,10.05f,40.5f};g->velocity=(PeVec3){0,-1,0};g->grounded=false;
     *before=*g;
@@ -704,7 +737,8 @@ static void tree_save_migration_tests(PeGame *g){
     CHECK(hypotf(loaded->player.x-40.5f,loaded->player.z-40.5f)<=3.001f);
     CHECK(memcmp(&loaded->world,&g->world,sizeof g->world)==0&&loaded->tree_count==1&&
         memcmp(loaded->trees,g->trees,sizeof g->trees[0])==0);
-    CHECK(memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)==0);
+    CHECK(memcmp(loaded->inventory.slots,g->inventory.slots,sizeof g->inventory.slots)==0);
+    CHECK(loaded->inventory.next_instance_id==g->inventory.next_instance_id+PE_OUTFIT_SLOTS);
     CHECK(pe_game_save(loaded,path,error,sizeof error));CHECK(pe_game_load(loaded,path,error,sizeof error));
     PeSandboxCollision *collision=pe_sandbox_collision_create();CHECK(collision!=NULL);
     if(collision){CHECK(pe_game_collision_update(loaded,collision,error,sizeof error));
@@ -740,7 +774,55 @@ static void tree_save_migration_tests(PeGame *g){
     CHECK(pe_game_save(g,path,error,sizeof error));CHECK(pe_game_load(loaded,path,error,sizeof error));CHECK(loaded->mode==PE_GAME_LEGACY);
     pe_sandbox_collision_free(collision);free(before);free(loaded);unlink(path);
 }
+static void medpack_tests(PeGame *g){
+    CHECK(pe_game_init_mode(g,81,PE_GAME_ADVENTURE));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
+    g->hp=100;CHECK(pe_inventory_add(&g->inventory,925,3)&&pe_inventory_add(&g->inventory,916,2));
+    CHECK(pe_game_quickslot_assign(g,0,find_slot(g,925))&&pe_game_quickslot_assign(g,1,find_slot(g,925)));
+    CHECK(pe_game_quickslot_assign(g,2,find_slot(g,916)));
+    CHECK(pe_game_quickslot_use(g,0)&&g->hp==450&&g->medpack_cooldown==10&&pe_inventory_count(&g->inventory,925)==2);
+    PeInventory before=g->inventory;
+    CHECK(!pe_game_quickslot_use(g,1)&&!memcmp(&before,&g->inventory,sizeof before)); /* Alias shares timer. */
+    CHECK(pe_game_item_cooldown(g,925)==10&&pe_game_item_cooldown(g,916)==0&&pe_game_item_cooldown(g,917)==0&&pe_game_item_cooldown(NULL,925)==0);
+    for(int tick=0;tick<30;tick++)pe_game_step(g,(PeInput){0},PE_FIXED_DT);
+    float med=g->medpack_cooldown;CHECK(med>9.49f&&med<9.51f);
+    CHECK(pe_game_quickslot_use(g,2)&&g->hp==480&&g->juice_buff_active&&g->juice_cooldown==10&&g->medpack_cooldown==med);
+    for(int tick=30;tick<599;tick++)pe_game_step(g,(PeInput){0},PE_FIXED_DT);
+    CHECK(g->medpack_cooldown>0&&!pe_game_quickslot_use(g,1));
+    pe_game_step(g,(PeInput){0},PE_FIXED_DT);CHECK(g->medpack_cooldown==0);
+    double juice_cd=g->juice_cooldown,juice_elapsed=g->juice_buff_elapsed;unsigned juice_tick=g->juice_buff_tick;
+    CHECK(juice_cd>.49&&juice_cd<.51&&g->juice_buff_active);
+    g->hp=490;CHECK(pe_game_quickslot_use(g,1)&&g->hp==500&&pe_inventory_count(&g->inventory,925)==1);
+    CHECK(g->juice_cooldown==juice_cd&&g->juice_buff_elapsed==juice_elapsed&&g->juice_buff_tick==juice_tick&&g->juice_buff_active);
+    med=g->medpack_cooldown;pe_game_step(g,(PeInput){0},0);pe_game_step(g,(PeInput){0},-.1f);pe_game_step(g,(PeInput){0},1);
+    CHECK(g->medpack_cooldown==med); /* Paused/not-stepped and invalid clock deltas do not advance. */
+    for(int tick=0;tick<40;tick++)pe_game_step(g,(PeInput){0},.25f);
+    CHECK(g->medpack_cooldown==0&&g->hp==500&&pe_game_use_slot(g,find_slot(g,925))); /* Source permits full-HP use. */
+    CHECK(pe_inventory_count(&g->inventory,925)==0&&g->quickslots[0].item_id==925&&!pe_game_quickslot_use(g,0));
+    CHECK(pe_inventory_add(&g->inventory,925,1));before=g->inventory;g->medpack_cooldown=0;g->hp=0;
+    CHECK(!pe_game_quickslot_use(g,0)&&g->hp==0&&!memcmp(&before,&g->inventory,sizeof before));
+    g->hp=100;g->max_hp=NAN;CHECK(!pe_game_quickslot_use(g,0)&&!memcmp(&before,&g->inventory,sizeof before));
+    g->max_hp=500;g->medpack_cooldown=NAN;CHECK(!pe_game_quickslot_use(g,0)&&!memcmp(&before,&g->inventory,sizeof before));
+    g->medpack_cooldown=-1;CHECK(!pe_game_quickslot_use(g,0)&&!memcmp(&before,&g->inventory,sizeof before));g->medpack_cooldown=0;
+}
+static void broken_sword_tests(void){
+    PeGame *g=calloc(1,sizeof *g);CHECK(g!=NULL);if(!g)return;
+    CHECK(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));
+    CHECK(pe_inventory_add(&g->inventory,1,1));int slot=find_slot(g,1);CHECK(slot>=0);
+    if(slot>=0){
+        g->inventory.slots[slot].durability=0;
+        uint32_t id=g->inventory.slots[slot].instance_id;PeInventory before=g->inventory;
+        CHECK(pe_game_equip_slot(g,slot)&&g->equipped_instance_id==id);
+        CHECK(!memcmp(&before,&g->inventory,sizeof before));
+        PeToolStats stats;CHECK(pe_game_tool_stats(g,&stats)&&stats.attack==pe_player_defaults.attack);
+        pe_game_unequip(g);CHECK(pe_game_quickslot_assign(g,0,slot)&&pe_game_quickslot_use(g,0));
+        CHECK(g->equipped_instance_id==id&&g->inventory.slots[slot].durability==0);
+        pe_game_unequip(g);g->inventory.slots[slot].durability=NAN;
+        CHECK(!pe_game_equip_slot(g,slot)&&!g->equipped_instance_id);
+    }
+    pe_game_destroy(g);free(g);
+}
 int pe_test_game(void){
     failures=0;PeGame *g=malloc(sizeof *g);if(!g)return 1;
-    inventory_tests();movement_tests(g);movement_stamina_tests(g);collision_game_tests(g);craft_tests(g);pending_craft_tests(g);interaction_tests(g);ceiling_mining_test(g);dig_indicator_game_tests(g);instance_tool_tests(g);block_game_tests(g);placement_surface_tests(g);placement_preview_tests(g);imported_world_tests(g);save_tests(g);save_v2_tests(g);save_v3_tests(g);adventure_tests(g);furniture_shortcut_tests(g);adventure_health_tests(g);adventure_save_tests(g);tree_save_migration_tests(g);free(g);return failures;
+    inventory_tests();broken_sword_tests();movement_tests(g);movement_stamina_tests(g);action_motion_tests(g);collision_game_tests(g);craft_tests(g);pending_craft_tests(g);interaction_tests(g);ceiling_mining_test(g);dig_indicator_game_tests(g);instance_tool_tests(g);block_game_tests(g);placement_surface_tests(g);placement_preview_tests(g);imported_world_tests(g);save_tests(g);save_v2_tests(g);save_v3_tests(g);adventure_tests(g);furniture_shortcut_tests(g);adventure_health_tests(g);adventure_save_tests(g);tree_save_migration_tests(g);medpack_tests(g);free(g);return failures;
 }

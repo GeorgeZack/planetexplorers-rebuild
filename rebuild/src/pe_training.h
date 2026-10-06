@@ -68,6 +68,10 @@ void pe_training_step(PeTraining *training, const PeSceneCollision *scene,
  * skip another line. Source walking is allowed; a view may pause its modal UI. */
 int pe_training_dialogue(const PeTraining *training);
 bool pe_training_advance_dialogue(PeTraining *training, int expected_talk_id);
+/* Presentation routing: response1 selects the sole visible Continue; zero or
+ * absent rows do nothing. Returns modal ownership even on the closing frame,
+ * so this input must never also use a quickslot/build/action. Host gates focus. */
+bool pe_training_dialogue_response(PeTraining *training,unsigned response,bool advance);
 /* Kit at (7,1.5,12), inclusive 10m. Transfer the authored whole 916x5 stack
  * once, only after opening and acknowledging its introduction. */
 bool pe_training_interact_kit(PeTraining *training);

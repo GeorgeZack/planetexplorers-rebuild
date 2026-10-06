@@ -22,6 +22,9 @@ DEFAULT_OUTPUT = ROOT / 'rebuild/generated'
 RECIPE_IDS = (1, 7, 8, 19, 20, 58, 152, 13)
 ANNOT_VENDOR_PROTOTYPES = (153, 158, 163, 143, 148)
 RESOURCE_IDS = (268, 271, 273, 279, 280)
+# Catalog presentation only. Equipment identity/defense/wear are owned by the
+# separate guarded export_starter_outfit contract, not generic bag equip logic.
+STARTER_OUTFIT_CATALOG_IDS = (95, 131, 192)
 TOOL_SOURCES = (ROOT / 'Assets/Scripts/Items/PEEquipment/PEDigTool.cs',
                 ROOT / 'Assets/Scripts/Items/PEEquipment/PEAxe.cs')
 TOOL_OVERRIDES = {12: (4.0, 'Assets/Resources/Prefab/Item/Equip/Weapon/Spade/wood_spade.prefab'),
@@ -152,6 +155,10 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         for field in ('Get_MissionItem', 'RewardItem', 'CoRemoveItem'):
             medicine_grants[field] = [pairs(token, ';', 'Medicine9072 '+field)[0]
                                       for token in str(quests[9072][field]).split(',')]
+        hunt_return_rewards = [pairs(token, ';', 'Hunt9127 RewardItem')[0]
+                               for token in str(quests[9127]['RewardItem']).split(',')]
+        if hunt_return_rewards != [{'item_id': identity, 'count': 1} for identity in (592,593,594,595)]:
+            raise ValueError('Hunt9127 reward contract changed')
         stores, _ = numeric_rows(db, 'store', 'store_id')
         npc_stores, _ = numeric_rows(db, 'NPCstore', 'store_id')
         vendor_items = set()
@@ -162,10 +169,37 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
             for value in str(matching[0]['adven_single']).split(','):
                 vendor_items.add(integer(stores[integer(value, 'store ID', 1)]['item_id'], 'store item', 1))
         item_classes, _ = numeric_rows(db, 'item_class', 'id', allow_duplicates=True)
+        skills, _ = numeric_rows(db, 'skMain', '_id')
+        triggers, _ = numeric_rows(db, 'skTriggerEvent', '_id')
+        medpack_skill = skills[20150028]
+        medpack_trigger = triggers[2]
+        if (item_rows[925]['_function'] != '27' or item_rows[925]['skillId'] != '20150028'
+                or item_classes[27]['classname'] != 'Property,Consume'
+                or medpack_skill['_triggerEvents'] != '2' or medpack_skill['_cond'] != 'False'
+                or any(medpack_skill[key] != '0' for key in ('_pretimeOfPrepare','_postimeOfPrepare',
+                    '_pretimeOfMain','_timeOfMain','_postimeOfMain','_pretimeOfEnding','_postimeOfEnding'))
+                or medpack_trigger['_cond'] != 'True' or medpack_trigger['_modsCaster'] != '0'
+                or medpack_trigger['_modsTarget'] != 'mad,1,1,350'
+                or medpack_skill['_coolingTime'] != '10' or medpack_skill['_coolingTimeShared'] != '10'
+                or medpack_skill['_coolingTimeType'] != '9' or skills[20150023]['_coolingTimeType'] != '11'):
+            raise ValueError('Portable Medpack925 healing/cooldown source contract changed')
+        medpack = {'item_id':925,'skill_id':20150028,'component_class':27,'trigger_id':2,
+                   'heal':real(medpack_trigger['_modsTarget'].split(',')[3],'medpack heal'),
+                   'cooldown_seconds':real(medpack_skill['_coolingTime'],'medpack cooldown'),
+                   'cooldown_group':9,'juice_cooldown_group':11,
+                   'target_effect_id':integer(medpack_trigger['_effOnHitTarget'],'medpack effect')}
         formula_classes = {identity for identity, row in item_classes.items()
                            if 'ReplicatorFormula' in str(row['classname']).split(',')}
         selected_ids = set(RESOURCE_IDS) | {v['item_id'] for v in starter + supplies}
         selected_ids |= vendor_items | {v['item_id'] for rows in medicine_grants.values() for v in rows}
+        selected_ids |= {v['item_id'] for v in hunt_return_rewards}
+        selected_ids.update(STARTER_OUTFIT_CATALOG_IDS)
+        starter_outfit_catalog = []
+        for identity in STARTER_OUTFIT_CATALOG_IDS:
+            row = item_rows[identity]
+            component_class = integer(row['_function'], f'item {identity} component class')
+            starter_outfit_catalog.append({'item_id': identity, 'component_class': component_class,
+                'components': str(item_classes[component_class]['classname']).split(',')})
         recipe_ids = list(RECIPE_IDS)
         for identity in sorted(selected_ids):
             row = item_rows.get(identity)
@@ -211,7 +245,7 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         player_fields = {'stamina_max': 'StaminaMax', 'stamina_recover_speed': 'StaminaRecoverSpeed',
                          'stamina_recover_delay': 'StaminaRecoverDelay', 'stamina_reduce_percent': 'StaminaReducePercent',
                          'resource_range': 'ResRange', 'resource_damage': 'ResDamage', 'attack': 'Atk',
-                         'cut_damage': 'CutDamage', 'cut_bonus': 'CutBouns', 'hp': 'Hp', 'hp_max': 'HpMax'}
+                         'cut_damage': 'CutDamage', 'cut_bonus': 'CutBouns', 'hp': 'Hp', 'hp_max': 'HpMax', 'defense': 'Def'}
         player_defaults = {key: real(player_rows[1][column], f'player {column}')
                            for key, column in player_fields.items()}
         recipes = []
@@ -283,9 +317,12 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
     source = describe_source(database)
     manifest = {
         'format_version': 4,
-        'scope': 'Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.',
+        'scope': 'Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine,9127 hunt rewards, fixed female starter clothing presentation and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.',
         'adventure_starter': starter, 'adventure_supplies': supplies,
         'medicine_grants': medicine_grants, 'annot_vendor_item_ids': sorted(vendor_items),
+        'hunt_return_rewards': hunt_return_rewards,
+        'starter_outfit_catalog': starter_outfit_catalog,
+        'portable_medpack': medpack,
         'formula_component_classes': sorted(formula_classes),
         'source_tool_overrides': {str(k): {'stamina_cost': v[0], 'source': describe_source(ROOT/v[1]), 'evidence': 'Serialized wood_hoe PEDigTool11466528; see SANDBOX_PICKAXE audit.' if k == 19 else 'Serialized wood_ax PEAxe11484812; see SANDBOX_ACTIONS audit.' if k == 26 else 'Serialized source/installed fields verified in TRAINING_MINING/TRAINING_GATHERING audits.'} for k,v in TOOL_OVERRIDES.items()},
         'source_database': source,
@@ -372,6 +409,8 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
     lines += ['};', '', 'const PeTerrainResourceDef *pe_terrain_resource(int material)', '{',
               '    return pe_terrain_material_duration(material) > 0.0f ? &pe_terrain_resources[material] : NULL;',
               '}', '']
+    lines += [f'const float pe_medpack_heal = {c_float(medpack["heal"])};',
+              f'const float pe_medpack_cooldown_seconds = {c_float(medpack["cooldown_seconds"])};', '']
     return {'pe_content.c': '\n'.join(lines).encode('utf-8'),
             'content_manifest.json': (json.dumps(manifest, indent=2, ensure_ascii=False) + '\n').encode('utf-8')}
 

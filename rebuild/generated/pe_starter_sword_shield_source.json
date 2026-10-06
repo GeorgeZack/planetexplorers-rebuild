@@ -1,0 +1,994 @@
+{
+  "schema": 1,
+  "database": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "sources": [
+    {
+      "path": "Assets/Resources/Prefab/Item/Equip/Weapon/Sword/wood_sword.prefab",
+      "sha256": "f67f6aa92a29ab05b3be52690f153de888e9da0b80bbc55c05eaee1aae1a142a"
+    },
+    {
+      "path": "Assets/Resources/Prefab/Item/Equip/Armor/Shield/wood_shield.prefab",
+      "sha256": "3abc14bed6091bc2b4b56c44badf3c8c64f9932e67a1450c9cbbec3e6ab78a0e"
+    },
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PeSword.cs",
+      "sha256": "a99685dd23c227eee64f5bc22c80131d13eacb7c057cdec2aeef4b70a661879a"
+    },
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PESheild.cs",
+      "sha256": "5b6c38928132aab85ff70ec3b70475069402e5feb4c55bf39aca59501a69d2bc"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+      "sha256": "238d3a50ab81caa3afc338234111670637556bbd4083ef3073774e0f25b8b4f8"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sheild.cs",
+      "sha256": "1402e117a6cce0f59f1e691e8c6c1932c496ddc3d4fc91e7838a1e56311a2d45"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs",
+      "sha256": "dc4854aa4b5b45adb2b64597ec81c03b6b5591627b79b5c2f9c3961405cc38eb"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemObj.cs",
+      "sha256": "d7704733cafc8fdb2a8ae853e089459df6185fb1498e904f22ee3b3dbeb2e00a"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/EquipmentCmpt.cs",
+      "sha256": "860068ba3ca22e5b26c9e1f15c81177a93fffd1fbb2c4b52a45025ca34f2534e"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "sha256": "a74c7a07590895fda1ba0769bb6a96d115e0e0bfdb4c594710b4cff3e74757a9"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkExpFuncSet.cs",
+      "sha256": "462543e6d4b61da4a9fb71a79c81dfafbdc8eaaa4cd287d66afcc0a35a878874"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkCond.cs",
+      "sha256": "6fd665e17f72bf98da1836ce8b56f34e94463bd8ba435af914dcd22311b9374c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "sha256": "f6f52e21dda703433c4add331bb1d8779c989f4b6ecaf093b0373d565b975da7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    },
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PEHoldAbleEquipment.cs",
+      "sha256": "746e1f116df7051cc59c92162bc6fb9bb2fb516e54103e08934a4dae40dbe412"
+    },
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PeSword.cs.meta",
+      "sha256": "5da9530681e22dc31ad5537534cbaf1b5fec2421f4a3cb62be75202335166c81"
+    },
+    {
+      "path": "Assets/Scripts/Items/PEEquipment/PESheild.cs.meta",
+      "sha256": "88d5d450511503db98803feb9114a82a45fb1a4ed7571ecff37a12c40df64aff"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs.meta",
+      "sha256": "ba4003e362e56bb533f4a83697a1bc199eb3791ee826c55b8975f08b074d249a"
+    }
+  ],
+  "sword": {
+    "pin": "10100001",
+    "_name": "木剑",
+    "_engName": "wood sword",
+    "id": "1",
+    "_nameID": "2110038",
+    "_engExplain": "2100038",
+    "_dragnameID": "2110038",
+    "_typeId": "9",
+    "_WeaponType": "8",
+    "_setUp": "0",
+    "_modelPath": "Prefab/Item/Equip/Weapon/Sword/wood_sword",
+    "_logicPath": "0",
+    "_iconId": "sword_wood,0,0",
+    "_effectSound": "0",
+    "_placeSound": "0",
+    "_explain": "0",
+    "_bindNode": "1",
+    "_replacePos": "0",
+    "_position": "16",
+    "_property": "0",
+    "_random": "1,0.1",
+    "_repairMax": "279,4",
+    "_strengthen": "279,10",
+    "buffId": "30200087",
+    "skillId": "0",
+    "_taskId": "0",
+    "_function": "5",
+    "currency_value": "10",
+    "currency_value2": "42",
+    "_oprationType": "2",
+    "disappear_time": "-1",
+    "_durability": "2369",
+    "_repair": "1",
+    "stacking_num": "1",
+    "sex": "0",
+    "tab": "1",
+    "path": "0",
+    "bind": "0",
+    "sort": "10081",
+    "editor_path": "0",
+    "learn": "0",
+    "bundle": "0",
+    "publish": "1",
+    "category": "Melee Weapon/Sword",
+    "itemlv": "10",
+    "servericon": "sword_wood",
+    "turret_id": "0",
+    "durDec": "5",
+    "HpMax": "100",
+    "Hp": "100",
+    "StaminaMax": "0",
+    "Stamina": "0",
+    "StaminaReducePercent": "0",
+    "StaminaRecoverSpeed": "0",
+    "StaminaRecoverDelay": "0",
+    "ComfortMax": "0",
+    "Comfort": "0",
+    "ComfortReducePercent": "0",
+    "ComfortRecoverSpeed": "0",
+    "OxygenMax": "0",
+    "Oxygen": "0",
+    "OxygenReducePercent": "0",
+    "OxygenRecoverSpeed": "0",
+    "HungerMax": "0",
+    "Hunger": "0",
+    "HungerReducePercent": "0",
+    "HungerRecoverSpeed": "0",
+    "Energy": "0",
+    "EnergyMax": "0",
+    "ResDamage": "0",
+    "ResRange": "0",
+    "ResBouns": "0",
+    "AtkRange": "0",
+    "Atk": "10",
+    "CritPercent": "0",
+    "Def": "0",
+    "RigidMax": "0",
+    "Rigid": "0",
+    "RigidRecoverSpeed": "0",
+    "Shield": "0",
+    "ShieldMax": "0",
+    "ShieldMeleeProtect": "0",
+    "ShieldRigidProtect": "0",
+    "EnableShieldBlock": "0",
+    "RunSpeed": "0",
+    "WalkSpeed": "0",
+    "JumpHeight": "0",
+    "WeightUpUnderWater": "0",
+    "HitflyMax": "0",
+    "Hitfly": "0",
+    "HitflyRecoverSpeed": "0",
+    "Clean": "0",
+    "CleanRecover": "0",
+    "Food_Cereals": "0",
+    "Food_Meat": "0",
+    "Food_Bean": "0",
+    "Food_Fruit": "0",
+    "Food_Energy": "0",
+    "DebuffPercent01": "0",
+    "DebuffReduce01": "0",
+    "DebuffPercent02": "0",
+    "DebuffReduce02": "0",
+    "DebuffPercent03": "0",
+    "DebuffReduce03": "0",
+    "DebuffPercent04": "0",
+    "DebuffReduce04": "0",
+    "DebuffPercent05": "0",
+    "DebuffReduce05": "0",
+    "DebuffPercent06": "0",
+    "DebuffReduce06": "0",
+    "DebuffPercent07": "0",
+    "DebuffReduce07": "0",
+    "DebuffPercent08": "0",
+    "DebuffReduce08": "0",
+    "DebuffPercent09": "0",
+    "DebuffReduce09": "0",
+    "DebuffPercent10": "0",
+    "DebuffReduce10": "0",
+    "ThresholdWhacked": "0",
+    "ThresholdRepulsed": "0",
+    "ThresholdWentfly": "0",
+    "ThresholdKnocked": "0",
+    "Exp": "0",
+    "CutDamage": "0",
+    "CutBouns": "0",
+    "SwordMultiple": "0",
+    "ShieldMultiple": "0",
+    "AxeMultiple": "0",
+    "BowMultiple": "0",
+    "GunMultiple": "0",
+    "ForceScale": "0",
+    "AttNum": "0",
+    "ExpMax": "10000",
+    "SprintSpeed": "3",
+    "RotationSpeed": "120",
+    "VisualRadius": "50",
+    "VisualAngle": "60",
+    "ListenRadius": "30",
+    "RetreatSpeed": ".5",
+    "DefaultPlayerID": "0",
+    "CampID": "0",
+    "DeleteTime": "10",
+    "InjuredState": "0",
+    "DamageID": "0",
+    "HPRecover": "0",
+    "item_editor_type": "4",
+    "is_formula": "0"
+  },
+  "shield": {
+    "pin": "10500001",
+    "_name": "木盾",
+    "_engName": "wood shield",
+    "id": "34",
+    "_nameID": "2110140",
+    "_engExplain": "2100140",
+    "_dragnameID": "2110140",
+    "_typeId": "14",
+    "_WeaponType": "256",
+    "_setUp": "0",
+    "_modelPath": "Prefab/Item/Equip/Armor/Shield/wood_shield",
+    "_logicPath": "0",
+    "_iconId": "shield_wood,0,0",
+    "_effectSound": "0",
+    "_placeSound": "0",
+    "_explain": "0",
+    "_bindNode": "6",
+    "_replacePos": "0",
+    "_position": "512",
+    "_property": "0",
+    "_random": "2,0.1",
+    "_repairMax": "279,4",
+    "_strengthen": "279,12",
+    "buffId": "30200093",
+    "skillId": "0",
+    "_taskId": "0",
+    "_function": "18",
+    "currency_value": "12",
+    "currency_value2": "50",
+    "_oprationType": "2",
+    "disappear_time": "-1",
+    "_durability": "4312",
+    "_repair": "1",
+    "stacking_num": "1",
+    "sex": "0",
+    "tab": "1",
+    "path": "0",
+    "bind": "0",
+    "sort": "10112",
+    "editor_path": "0",
+    "learn": "0",
+    "bundle": "0",
+    "publish": "1",
+    "category": "Protection/Shield",
+    "itemlv": "5",
+    "servericon": "shield_wood",
+    "turret_id": "0",
+    "durDec": ".1",
+    "HpMax": "100",
+    "Hp": "100",
+    "StaminaMax": "0",
+    "Stamina": "0",
+    "StaminaReducePercent": "0",
+    "StaminaRecoverSpeed": "0",
+    "StaminaRecoverDelay": "0",
+    "ComfortMax": "0",
+    "Comfort": "0",
+    "ComfortReducePercent": "0",
+    "ComfortRecoverSpeed": "0",
+    "OxygenMax": "0",
+    "Oxygen": "0",
+    "OxygenReducePercent": "0",
+    "OxygenRecoverSpeed": "0",
+    "HungerMax": "0",
+    "Hunger": "0",
+    "HungerReducePercent": "0",
+    "HungerRecoverSpeed": "0",
+    "Energy": "0",
+    "EnergyMax": "0",
+    "ResDamage": "0",
+    "ResRange": "0",
+    "ResBouns": "0",
+    "AtkRange": "0",
+    "Atk": "0",
+    "CritPercent": "0",
+    "Def": "9",
+    "RigidMax": "0",
+    "Rigid": "0",
+    "RigidRecoverSpeed": "0",
+    "Shield": "0",
+    "ShieldMax": "0",
+    "ShieldMeleeProtect": ".22",
+    "ShieldRigidProtect": "0",
+    "EnableShieldBlock": "0",
+    "RunSpeed": "0",
+    "WalkSpeed": "0",
+    "JumpHeight": "0",
+    "WeightUpUnderWater": "0",
+    "HitflyMax": "0",
+    "Hitfly": "0",
+    "HitflyRecoverSpeed": "0",
+    "Clean": "0",
+    "CleanRecover": "0",
+    "Food_Cereals": "0",
+    "Food_Meat": "0",
+    "Food_Bean": "0",
+    "Food_Fruit": "0",
+    "Food_Energy": "0",
+    "DebuffPercent01": "0",
+    "DebuffReduce01": "0",
+    "DebuffPercent02": "0",
+    "DebuffReduce02": "0",
+    "DebuffPercent03": "0",
+    "DebuffReduce03": "0",
+    "DebuffPercent04": "0",
+    "DebuffReduce04": "0",
+    "DebuffPercent05": "0",
+    "DebuffReduce05": "0",
+    "DebuffPercent06": "0",
+    "DebuffReduce06": "0",
+    "DebuffPercent07": "0",
+    "DebuffReduce07": "0",
+    "DebuffPercent08": "0",
+    "DebuffReduce08": "0",
+    "DebuffPercent09": "0",
+    "DebuffReduce09": "0",
+    "DebuffPercent10": "0",
+    "DebuffReduce10": "0",
+    "ThresholdWhacked": "0",
+    "ThresholdRepulsed": "0",
+    "ThresholdWentfly": "0",
+    "ThresholdKnocked": "0",
+    "Exp": "0",
+    "CutDamage": "0",
+    "CutBouns": "0",
+    "SwordMultiple": "0",
+    "ShieldMultiple": "0",
+    "AxeMultiple": "0",
+    "BowMultiple": "0",
+    "GunMultiple": "0",
+    "ForceScale": "0",
+    "AttNum": "0",
+    "ExpMax": "10000",
+    "SprintSpeed": "3",
+    "RotationSpeed": "120",
+    "VisualRadius": "50",
+    "VisualAngle": "60",
+    "ListenRadius": "30",
+    "RetreatSpeed": ".5",
+    "DefaultPlayerID": "0",
+    "CampID": "0",
+    "DeleteTime": "10",
+    "InjuredState": "0",
+    "DamageID": "0",
+    "HPRecover": "0",
+    "item_editor_type": "9",
+    "is_formula": "0"
+  },
+  "prefabs": {
+    "bindings": {
+      "sword": {
+        "script": "Assets/Scripts/Items/PEEquipment/PeSword.cs",
+        "guid": "563fc98ffb60d2e438cc41c4ab5f0320",
+        "source_script_reference": {
+          "m_FileID": 1,
+          "m_PathID": 11500000
+        }
+      },
+      "shield": {
+        "script": "Assets/Scripts/Items/PEEquipment/PESheild.cs",
+        "guid": "5b0b18af79a95f7448b1c8d92e0c9256",
+        "source_script_reference": {
+          "m_FileID": 1,
+          "m_PathID": 11500000
+        }
+      },
+      "trigger": {
+        "script": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+        "guid": "948e2dd6bd42f9c46a1810b84924717b",
+        "source_script_reference": {
+          "m_FileID": 2,
+          "m_PathID": 11500000
+        }
+      }
+    },
+    "sword_component": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100002
+      },
+      "m_Enabled": 1,
+      "m_EditorHideFlags": 0,
+      "m_Script": {
+        "m_FileID": 1,
+        "m_PathID": 11500000
+      },
+      "m_Name": "",
+      "m_EditorClassIdentifier": "",
+      "m_EquipAnim": "",
+      "showOnVehicle": 0,
+      "m_RemoveEndAction": [
+        14
+      ],
+      "m_HandChangeAttr": {
+        "m_Layers": [],
+        "m_PutOnBone": "mountMain",
+        "m_PutOffBone": "mountBack",
+        "m_PutOnAnim": "SwordPutOn",
+        "m_PutOffAnim": "SwordPutOff",
+        "m_CamMode": {
+          "camModeIndex1st": 0,
+          "camModeIndex3rd": 0,
+          "offsetUp": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "offset": {
+            "x": 0.0,
+            "y": -0.10000000149011612,
+            "z": 0.0
+          },
+          "offsetDown": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        },
+        "m_ActiveActionType": 13,
+        "m_UnActiveActionType": 16,
+        "m_HoldActionMask": 13,
+        "m_BaseMoveStyle": 0,
+        "m_MoveStyle": 1,
+        "m_AimIKAngleRange": 40.0
+      },
+      "m_AttackMode": [
+        {
+          "type": 0,
+          "minRange": 0.0,
+          "maxRange": 1.7999999523162842,
+          "minSwitchRange": 0.0,
+          "maxSwitchRange": 3.0,
+          "minAngle": -30.0,
+          "maxAngle": 30.0,
+          "frequency": 0.5,
+          "damage": 33.0,
+          "ignoreTerrain": 0
+        }
+      ],
+      "m_AttackSkill": [
+        {
+          "m_SkillID": 20110011,
+          "m_SkillInMove": 20110014,
+          "m_SkillInSprint": 20110013,
+          "m_SkillInAir": 20110012,
+          "m_SkillInWater": 20110005
+        }
+      ],
+      "m_StaminaCost": [
+        5.0
+      ],
+      "m_Idles": [],
+      "m_AnimDownThreshold": [
+        50.0,
+        20.0
+      ],
+      "m_AnimSpeed": 1.0
+    },
+    "shield_component": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100000
+      },
+      "m_Enabled": 1,
+      "m_EditorHideFlags": 0,
+      "m_Script": {
+        "m_FileID": 1,
+        "m_PathID": 11500000
+      },
+      "m_Name": "",
+      "m_EditorClassIdentifier": "",
+      "showOnVehicle": 0,
+      "m_RemoveEndAction": []
+    },
+    "attack_trigger": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100004
+      },
+      "m_Enabled": 1,
+      "m_EditorHideFlags": 0,
+      "m_Script": {
+        "m_FileID": 2,
+        "m_PathID": 11500000
+      },
+      "m_Name": "",
+      "m_EditorClassIdentifier": "",
+      "attackLayer": {
+        "m_Bits": 34154496
+      },
+      "attackParts": [
+        {
+          "attackForm": 0,
+          "capsule": {
+            "trans": {
+              "m_FileID": 0,
+              "m_PathID": 400004
+            },
+            "radius": 0.20000000298023224,
+            "heigh": 1.7999999523162842,
+            "offset": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": -0.10000000149011612
+            },
+            "axis": 2,
+            "TestHit": 0
+          }
+        }
+      ],
+      "hitResults": [],
+      "arrowSize": 1.0,
+      "showDebugInfo": 0
+    },
+    "capsule": {
+      "trans": {
+        "m_FileID": 0,
+        "m_PathID": 400004
+      },
+      "radius": 0.20000000298023224,
+      "heigh": 1.7999999523162842,
+      "offset": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": -0.10000000149011612
+      },
+      "axis": 2,
+      "TestHit": 0
+    },
+    "broadphase_box": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100004
+      },
+      "m_Material": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_IsTrigger": true,
+      "m_Enabled": false,
+      "m_Size": {
+        "x": 0.6000000238418579,
+        "y": 0.6000000238418579,
+        "z": 2.5
+      },
+      "m_Center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 1.0
+      }
+    },
+    "shield_mesh_transform": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100002
+      },
+      "m_LocalRotation": {
+        "x": -3.248115731935286e-08,
+        "y": 0.979924738407135,
+        "z": -0.1993679404258728,
+        "w": -1.5965001409767865e-07
+      },
+      "m_LocalPosition": {
+        "x": -0.19099999964237213,
+        "y": -0.052000001072883606,
+        "z": 0.006000000052154064
+      },
+      "m_LocalScale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "m_Children": [],
+      "m_Father": {
+        "m_FileID": 0,
+        "m_PathID": 400000
+      },
+      "m_RootOrder": 0
+    }
+  },
+  "item_classes": [
+    {
+      "id": "5",
+      "classname": "Property,Strengthen,Repair,RecycleReplicate,Durability,Instantiate,EquipAttack",
+      "temp1": "剑",
+      "temp2": "装备5"
+    },
+    {
+      "id": "18",
+      "classname": "Property,Strengthen,Repair,RecycleReplicate,Durability,Instantiate,EquipDefence",
+      "temp1": "盾牌",
+      "temp2": "装备10"
+    }
+  ],
+  "buffs": [
+    {
+      "_id": "30200087",
+      "_name": "右手剑",
+      "_icon": "0",
+      "_desc": "2300000",
+      "_type": "65513",
+      "_priority": "0",
+      "_stackLimit": "1",
+      "_timeActive": "-1",
+      "_timeInterval": "0",
+      "_eff": "0",
+      "_effBeg": "0",
+      "_effEnd": "0",
+      "_mods": "exp,25,target.buffPreAdd+=caster.sums[25]*target.sums[77]",
+      "_AttType": "属性公式"
+    },
+    {
+      "_id": "30200093",
+      "_name": "盾",
+      "_icon": "0",
+      "_desc": "2300000",
+      "_type": "65514",
+      "_priority": "0",
+      "_stackLimit": "1",
+      "_timeActive": "-1",
+      "_timeInterval": "0",
+      "_eff": "0",
+      "_effBeg": "0",
+      "_effEnd": "0",
+      "_mods": "exp,27,target.buffPreAdd+=caster.sums[27]*target.sums[78];#exp,33,target.buffPreAdd+=caster.sums[33]",
+      "_AttType": "属性公式"
+    },
+    {
+      "_id": "30200177",
+      "_name": "盾防",
+      "_icon": "0",
+      "_desc": "2300000",
+      "_type": "10003",
+      "_priority": "0",
+      "_stackLimit": "1",
+      "_timeActive": "-1",
+      "_timeInterval": "0",
+      "_eff": "0",
+      "_effBeg": "0",
+      "_effEnd": "0",
+      "_mods": "exp,1,target.raws[70]=250;#exp,1,target.raws[71]=300;#exp,1,target.raws[72]=9999;#exp,1,target.raws[73]=9999",
+      "_AttType": "临时属性"
+    }
+  ],
+  "action_relations": [
+    {
+      "ActionType": "14",
+      "Name": "SwordAttack",
+      "PauseAction": "40",
+      "EndAction": "58",
+      "EndImmediately": "1,2,3,15,31",
+      "Ground": "0",
+      "InAir": "0",
+      "InWater": "0",
+      "Rotate": "0",
+      "Sprint": "0",
+      "Jump": "0",
+      "Repulsed": "2",
+      "Wentfly": "2",
+      "Knocked": "2",
+      "Death": "2",
+      "GetUp": "2",
+      "Revive": "2",
+      "Step": "2",
+      "HoldEquip": "1",
+      "SwordAttack": "0",
+      "HoldShield": "0",
+      "Halt": "0",
+      "Fall": "0",
+      "GunHold": "0",
+      "GunReload": "0",
+      "GunShoot": "0",
+      "BowHold": "0",
+      "BowShoot": "0",
+      "BowReload": "0",
+      "Sleep": "2",
+      "Eat": "0",
+      "HoldAimEquip": "0",
+      "Dig": "0",
+      "Fell": "2",
+      "Gather": "0",
+      "PickUpItem": "0",
+      "GetOnVehicle": "0",
+      "JetPack": "0",
+      "Parachute": "0",
+      "Glider": "0",
+      "Climb": "0",
+      "Build": "0",
+      "HoldFlashlight": "0",
+      "Stuned": "2",
+      "Pump": "0",
+      "Sit": "2",
+      "Operation": "0",
+      "Draw": "0",
+      "Throw": "0",
+      "Lie": "2",
+      "GetOnTrain": "2",
+      "Cutscene": "2",
+      "Whacked": "2",
+      "Cure": "2",
+      "HeavyEquipment": "0",
+      "DrillingDig": "0",
+      "Hand": "2",
+      "Leisure": "0",
+      "RopeGunShoot": "0",
+      "Abnormal": "0",
+      "Ride": "2"
+    },
+    {
+      "ActionType": "15",
+      "Name": "HoldShield",
+      "PauseAction": "40",
+      "EndAction": "12,58",
+      "EndImmediately": "2",
+      "Ground": "0",
+      "InAir": "0",
+      "InWater": "0",
+      "Rotate": "0",
+      "Sprint": "2",
+      "Jump": "0",
+      "Repulsed": "2",
+      "Wentfly": "2",
+      "Knocked": "2",
+      "Death": "2",
+      "GetUp": "2",
+      "Revive": "2",
+      "Step": "2",
+      "HoldEquip": "0",
+      "SwordAttack": "2",
+      "HoldShield": "0",
+      "Halt": "0",
+      "Fall": "0",
+      "GunHold": "0",
+      "GunReload": "0",
+      "GunShoot": "0",
+      "BowHold": "0",
+      "BowShoot": "0",
+      "BowReload": "0",
+      "Sleep": "2",
+      "Eat": "2",
+      "HoldAimEquip": "0",
+      "Dig": "0",
+      "Fell": "0",
+      "Gather": "2",
+      "PickUpItem": "2",
+      "GetOnVehicle": "2",
+      "JetPack": "0",
+      "Parachute": "0",
+      "Glider": "2",
+      "Climb": "2",
+      "Build": "2",
+      "HoldFlashlight": "0",
+      "Stuned": "2",
+      "Pump": "0",
+      "Sit": "2",
+      "Operation": "0",
+      "Draw": "0",
+      "Throw": "0",
+      "Lie": "2",
+      "GetOnTrain": "2",
+      "Cutscene": "2",
+      "Whacked": "2",
+      "Cure": "2",
+      "HeavyEquipment": "0",
+      "DrillingDig": "0",
+      "Hand": "2",
+      "Leisure": "0",
+      "RopeGunShoot": "0",
+      "Abnormal": "0",
+      "Ride": "2"
+    }
+  ],
+  "hare_trigger": {
+    "_id": "10100",
+    "_cond": "colinfo",
+    "_modsCaster": "0",
+    "_modsTarget": "exp,29,target.raws[29]=-1;#exp,1,target.expFunc.TryGetHurt(caster.sums[25]*caster.sums[25]/(target.sums[27]+caster.sums[25])*(target.sums[35]==1?(1-target.sums[33]):1)*(target.expFunc.RandIn(caster.sums[26])?2:1),0.1f)",
+    "_force": "100",
+    "_effOnHitCaster": "0",
+    "_effOnHitTarget": "57"
+  },
+  "player_defaults": {
+    "id": "1",
+    "Atk": "10",
+    "Def": "0",
+    "SwordMultiple": "1",
+    "ShieldMultiple": "1",
+    "EnableShieldBlock": "0",
+    "ShieldMeleeProtect": "0"
+  },
+  "skills": [
+    {
+      "_id": "20110011",
+      "_name": "单手剑攻击",
+      "_icon": "0",
+      "_desc": "2200000",
+      "_interruptable": "1",
+      "_coolingTime": ".2",
+      "_coolingTimeType": "1",
+      "_coolingTimeShared": "0",
+      "_pretimeOfPrepare": "0",
+      "_postimeOfPrepare": "0",
+      "_effPrepare": "1",
+      "_cond": "CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;False",
+      "_effMainOneTime": "0",
+      "_pretimeOfMain": "0;0;0;0",
+      "_timeOfMain": "6;6;6;6",
+      "_postimeOfMain": "6;6;6;6",
+      "_effMainEachTime": "8",
+      "_triggerEvents": "493;502;503;237",
+      "_pretimeOfEnding": "0",
+      "_postimeOfEnding": ".01",
+      "_effEnding": "0"
+    },
+    {
+      "_id": "20110014",
+      "_name": "单手剑攻击(跑)",
+      "_icon": "0",
+      "_desc": "2200000",
+      "_interruptable": "1",
+      "_coolingTime": ".2",
+      "_coolingTimeType": "1",
+      "_coolingTimeShared": "0",
+      "_pretimeOfPrepare": "0",
+      "_postimeOfPrepare": "0",
+      "_effPrepare": "1",
+      "_cond": "CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;False",
+      "_effMainOneTime": "0",
+      "_pretimeOfMain": "0;0;0;0",
+      "_timeOfMain": "6;6;6;6",
+      "_postimeOfMain": "6;6;6;6",
+      "_effMainEachTime": "42",
+      "_triggerEvents": "237",
+      "_pretimeOfEnding": "0",
+      "_postimeOfEnding": ".01",
+      "_effEnding": "0"
+    },
+    {
+      "_id": "20110013",
+      "_name": "单手剑攻击(冲刺)",
+      "_icon": "0",
+      "_desc": "2200000",
+      "_interruptable": "0",
+      "_coolingTime": ".2",
+      "_coolingTimeType": "1",
+      "_coolingTimeShared": "0",
+      "_pretimeOfPrepare": "0",
+      "_postimeOfPrepare": "0",
+      "_effPrepare": "1",
+      "_cond": "CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;False",
+      "_effMainOneTime": "0",
+      "_pretimeOfMain": "0;0;0;0",
+      "_timeOfMain": "6;6;6;6",
+      "_postimeOfMain": "6;6;6;6",
+      "_effMainEachTime": "41",
+      "_triggerEvents": "237",
+      "_pretimeOfEnding": "0",
+      "_postimeOfEnding": ".01",
+      "_effEnding": "0"
+    },
+    {
+      "_id": "20110012",
+      "_name": "单手剑攻击(空中)",
+      "_icon": "0",
+      "_desc": "2200000",
+      "_interruptable": "0",
+      "_coolingTime": ".2",
+      "_coolingTimeType": "1",
+      "_coolingTimeShared": "0",
+      "_pretimeOfPrepare": "0",
+      "_postimeOfPrepare": "0",
+      "_effPrepare": "1",
+      "_cond": "CondTstFunc,SwordAttack;False",
+      "_effMainOneTime": "0",
+      "_pretimeOfMain": "0;0",
+      "_timeOfMain": "6;6",
+      "_postimeOfMain": "6;6",
+      "_effMainEachTime": "40",
+      "_triggerEvents": "237",
+      "_pretimeOfEnding": "0",
+      "_postimeOfEnding": ".2",
+      "_effEnding": "0"
+    },
+    {
+      "_id": "20110005",
+      "_name": "单手剑攻击(水下)",
+      "_icon": "0",
+      "_desc": "2200000",
+      "_interruptable": "1",
+      "_coolingTime": ".2",
+      "_coolingTimeType": "1",
+      "_coolingTimeShared": "0",
+      "_pretimeOfPrepare": "0",
+      "_postimeOfPrepare": "0",
+      "_effPrepare": "1",
+      "_cond": "CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;False",
+      "_effMainOneTime": "0",
+      "_pretimeOfMain": "0;0;0",
+      "_timeOfMain": "6;6;6",
+      "_postimeOfMain": "6;6;6",
+      "_effMainEachTime": "9",
+      "_triggerEvents": "237",
+      "_pretimeOfEnding": "0",
+      "_postimeOfEnding": ".01",
+      "_effEnding": "0"
+    }
+  ],
+  "semantics": {
+    "sword_wear": "5 per successful OnHurtSb notification, not per swing; Build bypass.",
+    "shield_wear": "max(0,resolver_damage*.1) for each received hit; Build bypass.",
+    "exhausted": "Equipment property buff is refused/removed at zero durability.",
+    "block": "Holding toggles attribute35 and reaction buff30200177, without hold stamina cost.",
+    "block_eligibility": "SwordAttack ends HoldShield; HoldShield requires no SwordAttack or Sprint.",
+    "mitigation": "Only matching source damage expressions, including hare10100, apply1-attribute33 while attribute35==1.",
+    "geometry": "Shield has no physical collider. Sword capsule is event-gated, distinct from broadphase.",
+    "captures": "No Sword locomotion, masked block or draw/stow pose qualification is supplied by metadata."
+  },
+  "scope": "Source metadata only; no runtime equipment support, poses, root motion or generated assets."
+}

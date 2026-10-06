@@ -1,0 +1,97 @@
+{
+  "schema": 1,
+  "evidence": "Read-only original archive decode; no native quest installed.",
+  "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save4",
+  "archive_guid": "48f34a75f0fdd7459edebb692a0efeb2",
+  "input_sha256": {
+    "MainAdventure/block45.arc": "aa60e3bdc203049c4eb5356996b3e08cc0365cbc97b283451e1bd362b43ddaa8",
+    "MainAdventure/index.arc": "047eeddcc3a9c7765d8ceb53b1b9ce2a63a4abcd2790272d7bfd9e8b4a143662",
+    "MainAdventure/voxel.arc": "e338ece8290f21adc426ae849b7c2f5e1f061c1eab5db1dc6419943b0939ce1f",
+    "MainAdventure/water.arc": "285f3cf550ed2bf5d7f3068187b253e3e5dd16ba7dece412cf44faff25597d55",
+    "MainAdventure/world.arc": "df4f0be963563b35b0412cdd9f5275d8f4dcec614e00be1e65c0e15579e730b2",
+    "index.arc": "2668ed1d0b80a93d9c19fe25adc3785f657dac5232bbed69f85372e52d1ba2e1",
+    "world.arc": "a6d7edc6d26bf82cb27ddac7f488f67cca80c487980d20f71bae0e58a69e7d61"
+  },
+  "archives_unchanged": true,
+  "active_missions": {
+    "9075": [
+      [
+        "STEP",
+        "0"
+      ]
+    ]
+  },
+  "completed_missions": {
+    "9027": 1,
+    "9028": 1,
+    "9029": 1,
+    "9030": 1,
+    "9031": 1,
+    "9032": 1,
+    "9072": 1
+  },
+  "top_mission_prefix_decoded_bytes": 163,
+  "random_missions": {
+    "9075": {
+      "record_offset": 4,
+      "name": "Bug Hunt",
+      "npc": 20018,
+      "reply_npc": 20018,
+      "type": 1,
+      "max_count": 1,
+      "description": "Kill the animals causing problems near \"Town%\"004.",
+      "targets": [
+        {
+          "id": 4524,
+          "kind": 4,
+          "present": true,
+          "position_record_offset": 100,
+          "position": [
+            -349.0,
+            19.5,
+            233.0
+          ]
+        }
+      ],
+      "player_talk": [
+        4103,
+        0
+      ],
+      "items": {
+        "get_demand": [],
+        "get_delete": [],
+        "get_mission": [],
+        "reward": [],
+        "selection_reward": [],
+        "complete_remove": []
+      },
+      "opening_talk": [],
+      "opening_quests": [],
+      "ongoing_talk": [],
+      "ongoing_quests": [],
+      "ending_talk": [],
+      "ending_quests": [
+        9126
+      ]
+    }
+  },
+  "hunt_target": {
+    "id": 4524,
+    "kind": 4,
+    "present": true,
+    "position_record_offset": 100,
+    "position": [
+      -349.0,
+      19.5,
+      233.0
+    ],
+    "inside_installed_route_bounds": true,
+    "arrival_disk_inside_route_xz": true,
+    "twenty_one_meter_encounter_margin_inside_route_xz": true
+  },
+  "limitations": [
+    "Offsets are relative to ArchiveKeyAdRMRepository record, not whole archive file.",
+    "Bounds checks do not establish traversability, support, collision or complete spawn-area coverage.",
+    "No target is inferred if original9075 is not active."
+  ]
+}

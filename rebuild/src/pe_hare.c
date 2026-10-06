@@ -1,4 +1,5 @@
 #include "pe_hare.h"
+#include "pe_sandbox_collision.h"
 #include <math.h>
 #include <string.h>
 
@@ -18,8 +19,25 @@ static float random01(PeHare *h){
     uint64_t x=h->rng;x^=x>>12;x^=x<<25;x^=x>>27;h->rng=x;
     return(float)((x*UINT64_C(2685821657736338717))>>40)*(1.0f/16777216.0f);
 }
+static bool patrol_valid(PeHarePatrol p){return isfinite(p.minimum_radius)&&isfinite(p.maximum_radius)&&p.minimum_radius>0&&p.maximum_radius>=p.minimum_radius&&p.maximum_radius<=1000;}
+static bool queries_valid(const PeHareQueries *q){return q&&q->context&&q->overlap&&q->sweep&&q->ray;}
+static bool scene_overlap(const void *s,PeVec3 p,float r,float h){return pe_scene_capsule_overlap(s,p,r,h);}
+static PeSceneHit scene_sweep(const void *s,PeVec3 p,float r,float h,PeVec3 d){return pe_scene_capsule_sweep(s,p,r,h,d);}
+static PeSceneHit scene_ray(const void *s,PeVec3 p,PeVec3 d,float range){return pe_scene_raycast(s,p,d,range);}
+static bool sandbox_overlap(const void *s,PeVec3 p,float r,float h){return pe_sandbox_collision_overlap(s,p,r,h);}
+static PeSceneHit sandbox_sweep(const void *s,PeVec3 p,float r,float h,PeVec3 d){return pe_sandbox_collision_sweep(s,p,r,h,d);}
+static PeSceneHit sandbox_ray(const void *s,PeVec3 p,PeVec3 d,float range){return pe_sandbox_collision_ray_geometry(s,p,d,range);}
+PeHareQueries pe_hare_queries_scene(const PeSceneCollision *s){return(PeHareQueries){s,scene_overlap,scene_sweep,scene_ray,false};}
+PeHareQueries pe_hare_queries_sandbox(const PeSandboxCollision *s){return(PeHareQueries){s,sandbox_overlap,sandbox_sweep,sandbox_ray,true};}
+PeHareConfig pe_hare_tutorial_config(void){return(PeHareConfig){{15,2,12},0,{30,30,true,true}};}
+PeHareConfig pe_hare_adventure_config(PeVec3 p,float yaw){return(PeHareConfig){p,yaw,{15,30,false,false}};}
+static bool real_support(const PeHareQueries *q,PeVec3 p){
+    if(!q->require_real_support)return true;
+    PeSceneHit hit=q->ray(q->context,add(p,(PeVec3){0,.1f,0}),(PeVec3){0,-1,0},.25f);
+    return hit.hit&&hit.normal.y>=FLOOR_Y;
+}
 static bool valid(const PeHare *h){
-    return h&&h->ready&&h->rng&&vector_valid(h->position)&&vector_valid(h->spawn)&&vector_valid(h->velocity)&&vector_valid(h->patrol_goal)&&
+    return h&&h->ready&&h->rng&&patrol_valid(h->patrol)&&vector_valid(h->position)&&vector_valid(h->spawn)&&vector_valid(h->velocity)&&vector_valid(h->patrol_goal)&&
         isfinite(h->scale)&&h->scale>=.8f&&h->scale<=1.3f&&h->radius==.6f*h->scale&&h->height==1.5f*h->scale&&
         isfinite(h->yaw_degrees)&&fabsf(h->yaw_degrees)<=360&&isfinite(h->mode_age)&&h->mode_age>=0&&h->mode_age<=100000&&
         isfinite(h->mode_duration)&&h->mode_duration>=0&&h->mode_duration<=100000&&isfinite(h->stuck_seconds)&&h->stuck_seconds>=0&&h->stuck_seconds<=100000&&isfinite(h->retarget_age)&&h->retarget_age>=0&&h->retarget_age<=100000&&
@@ -30,19 +48,21 @@ static bool target_valid(const PeHareTarget *t){
         isfinite(t->height)&&t->height>=2*t->radius&&t->height<=200&&isfinite(t->yaw_degrees)&&fabsf(t->yaw_degrees)<=360&&
         (t->approach==PE_HARE_MELEE||t->approach==PE_HARE_POUNCE));
 }
-static PeSceneHit sweep(const PeHare *h,const PeSceneCollision *s,PeVec3 p,PeVec3 d){return pe_scene_capsule_sweep(s,p,h->radius,h->height,d);}
+static PeSceneHit sweep(const PeHare *h,const PeHareQueries *s,PeVec3 p,PeVec3 d){return s->sweep(s->context,p,h->radius,h->height,d);}
 static PeVec3 contact(PeVec3 p,PeVec3 d,PeSceneHit hit){return add(add(p,mul(d,hit.fraction)),mul(hit.normal,SKIN));}
-bool pe_hare_init(PeHare *h,const PeSceneCollision *s,uint64_t seed,float scale,bool easy){
-    if(!h||!s||!isfinite(scale)||(scale!=0&&(scale<.8f||scale>1.3f)))return false;
+bool pe_hare_init_query(PeHare *h,const PeHareQueries *s,const PeHareConfig *config,uint64_t seed,float scale,bool easy){
+    if(!h||!queries_valid(s)||!config||!vector_valid(config->spawn)||!isfinite(config->yaw_degrees)||fabsf(config->yaw_degrees)>360||!patrol_valid(config->patrol)||!isfinite(scale)||(scale!=0&&(scale<.8f||scale>1.3f)))return false;
     PeHare next={0};next.rng=seed?seed:UINT64_C(0x9e3779b97f4a7c15);
     next.scale=scale?scale:.8f+.5f*random01(&next);next.radius=.6f*next.scale;next.height=1.5f*next.scale;
-    next.spawn=next.position=(PeVec3){15,2,12};
+    next.spawn=next.position=config->spawn;next.yaw_degrees=config->yaw_degrees;
+    next.patrol.minimum_radius=config->patrol.minimum_radius;next.patrol.maximum_radius=config->patrol.maximum_radius;
+    next.patrol.spawn_center=config->patrol.spawn_center;next.patrol.unchecked_fallback=config->patrol.unchecked_fallback;
     next.max_hp=212*next.scale*(easy?.5f:1);next.attack=64*next.scale*(easy?.5f:1);next.defense=29*next.scale*(easy?.5f:1);
-    if(pe_scene_capsule_overlap(s,next.position,next.radius,next.height))return false;
+    if(s->overlap(s->context,next.position,next.radius,next.height))return false;
     PeVec3 down={0,-5,0};PeSceneHit ground=sweep(&next,s,next.position,down);
     if(!ground.hit||ground.normal.y<FLOOR_Y)return false;
     next.position=contact(next.position,down,ground);
-    if(pe_scene_capsule_overlap(s,next.position,next.radius,next.height))return false;
+    if(s->overlap(s->context,next.position,next.radius,next.height)||!real_support(s,next.position))return false;
     next.ready=next.grounded=true;next.mode=PE_HARE_IDLE;next.mode_duration=6+2*random01(&next);
     *h=next;return true;
 }
@@ -51,8 +71,8 @@ static PeVec3 closest(PeVec3 p,float radius,float height,float yaw,PeVec3 other)
     float x=clamp(c*d.x-s*d.z,-radius,radius),z=clamp(s*d.x+c*d.z,-radius,radius);
     return add(p,(PeVec3){c*x+s*z,clamp(d.y,0,height),-s*x+c*z});
 }
-PeHareEngagement pe_hare_engagement(const PeHare *h,const PeSceneCollision *scene,const PeHareTarget *t){
-    PeHareEngagement result={0};if(!valid(h)||!scene||!t||!t->accepted||!target_valid(t))return result;
+PeHareEngagement pe_hare_engagement_query(const PeHare *h,const PeHareQueries *scene,const PeHareTarget *t){
+    PeHareEngagement result={0};if(!valid(h)||!queries_valid(scene)||!t||!t->accepted||!target_valid(t))return result;
     result.present=true;
     PeVec3 a=closest(h->position,h->radius,h->height,h->yaw_degrees,t->position);
     PeVec3 b=closest(t->position,t->radius,t->height,t->yaw_degrees,h->position);
@@ -68,7 +88,7 @@ PeHareEngagement pe_hare_engagement(const PeHare *h,const PeSceneCollision *scen
     result.facing_degrees=angle;
     PeVec3 eye=add(h->position,(PeVec3){0,h->height*.5f,0});
     PeVec3 to=sub(add(t->position,(PeVec3){0,t->height*.5f,0}),eye);float distance=norm(to);
-    PeSceneHit hit=pe_scene_raycast(scene,eye,to,distance);
+    PeSceneHit hit=scene->ray(scene->context,eye,to,distance);
     result.unobstructed=!hit.hit||hit.distance>=distance-SKIN;
     result.melee_geometry=result.unobstructed&&result.gap<=.5f&&angle<=10;
     result.pounce_geometry=result.unobstructed&&result.gap>=2&&result.gap<=5&&angle<=15;
@@ -76,27 +96,30 @@ PeHareEngagement pe_hare_engagement(const PeHare *h,const PeSceneCollision *scen
 }
 /* Ground projection parallels GetCorrectHeight's roof-then-down query, without
  * Unity water/layer/polar-shield systems. Invalid destinations are retried. */
-static bool ground_goal(const PeHare *h,const PeSceneCollision *scene,PeVec3 *p){
-    PeSceneHit roof=pe_scene_raycast(scene,*p,(PeVec3){0,1,0},128);
+static bool ground_goal(const PeHare *h,const PeHareQueries *scene,PeVec3 *p){
+    PeSceneHit roof=scene->ray(scene->context,*p,(PeVec3){0,1,0},128);
     PeVec3 top=roof.hit?add(roof.position,(PeVec3){0,-.1f,0}):add(*p,(PeVec3){0,128,0});
-    PeSceneHit floor=pe_scene_raycast(scene,top,(PeVec3){0,-1,0},256);
+    PeSceneHit floor=scene->ray(scene->context,top,(PeVec3){0,-1,0},256);
     if(!floor.hit||floor.normal.y<FLOOR_Y)return false;
     *p=add(floor.position,(PeVec3){0,SKIN,0});
-    return !pe_scene_capsule_overlap(scene,*p,h->radius,h->height);
+    return !scene->overlap(scene->context,*p,h->radius,h->height);
 }
-static void choose_goal(PeHare *h,const PeSceneCollision *scene){
+static void choose_goal(PeHare *h,const PeHareQueries *scene){
     /* BTPatrol tries5 calls*5 samples forward, then5*5 reverse; final raw
-     * fallback preserves the authored radius even when outside a small room.
+     * fallback is retained only by tutorial policy, even outside a small room.
      * The controller will stop at walls/edges, not teleport to this goal. */
     h->goal_valid=false;
+    PeVec3 center=h->patrol.spawn_center?h->spawn:h->position;
     for(int attempt=0;attempt<51;attempt++){
         float offset=(attempt<25||attempt==50)?-75+150*random01(h):-135+270*random01(h);
         float a=(h->yaw_degrees+offset)*PI/180;
-        PeVec3 p=add(h->spawn,(PeVec3){30*sinf(a),0,30*cosf(a)});
-        if(attempt==50||ground_goal(h,scene,&p)){h->patrol_goal=p;h->goal_valid=true;break;}
+        float radius=h->patrol.minimum_radius;
+        if(h->patrol.maximum_radius>radius)radius+=(h->patrol.maximum_radius-radius)*random01(h);
+        PeVec3 p=add(center,(PeVec3){radius*sinf(a),0,radius*cosf(a)});
+        if((attempt==50&&h->patrol.unchecked_fallback)||ground_goal(h,scene,&p)){h->patrol_goal=p;h->goal_valid=true;break;}
     }
 }
-static void leisure(PeHare *h,const PeSceneCollision *scene){
+static void leisure(PeHare *h,const PeHareQueries *scene){
     if(h->mode!=PE_HARE_IDLE&&h->mode!=PE_HARE_PATROL){h->mode=PE_HARE_IDLE;h->mode_age=0;h->mode_duration=6+2*random01(h);h->goal_valid=false;}
     if(h->mode_age>h->mode_duration||(h->mode==PE_HARE_PATROL&&h->stuck_seconds>5)){
         h->mode_age=0;h->stuck_seconds=0;h->decisions++;
@@ -107,7 +130,7 @@ static void leisure(PeHare *h,const PeSceneCollision *scene){
         choose_goal(h,scene);h->retarget_age=0;
     }
 }
-static PeVec3 slide(PeHare *h,const PeSceneCollision *s,PeVec3 delta){
+static PeVec3 slide(PeHare *h,const PeHareQueries *s,PeVec3 delta){
     PeVec3 p=h->position;
     for(int k=0;k<5&&norm(delta)>.00001f;k++){
         PeSceneHit hit=sweep(h,s,p,delta);if(!hit.hit){p=add(p,delta);break;}
@@ -117,12 +140,12 @@ static PeVec3 slide(PeHare *h,const PeSceneCollision *s,PeVec3 delta){
     }
     return p;
 }
-bool pe_hare_step(PeHare *h,const PeSceneCollision *s,const PeHareTarget *target){
-    if(!valid(h)||!s||!target_valid(target))return false;
+bool pe_hare_step_query(PeHare *h,const PeHareQueries *s,const PeHareTarget *target){
+    if(!valid(h)||!queries_valid(s)||!target_valid(target)||(s->require_real_support&&s->overlap(s->context,h->position,h->radius,h->height)))return false;
     PeHare next=*h;next.mode_age=fminf(next.mode_age+PE_HARE_DT,99999);next.retarget_age=fminf(next.retarget_age+PE_HARE_DT,99999);
     PeVec3 desired={0};float speed=0,max_travel=100000;bool turn=false;
     if(target&&target->accepted){
-        PeHareEngagement e=pe_hare_engagement(&next,s,target);
+        PeHareEngagement e=pe_hare_engagement_query(&next,s,target);
         float minimum=target->approach==PE_HARE_MELEE?0:2,maximum=target->approach==PE_HARE_MELEE?.5f:5;
         desired=sub(target->position,next.position);desired.y=0;turn=true;
         if(e.gap>maximum||!e.unobstructed){
@@ -147,7 +170,7 @@ bool pe_hare_step(PeHare *h,const PeSceneCollision *s,const PeHareTarget *target
     next.velocity.x=distance>.00001f?desired.x/distance*actual_speed:0;
     next.velocity.z=distance>.00001f?desired.z/distance*actual_speed:0;
     PeSceneHit below=sweep(&next,s,next.position,(PeVec3){0,-.06f,0});
-    next.grounded=next.velocity.y<=0&&below.hit&&below.normal.y>=FLOOR_Y;
+    next.grounded=next.velocity.y<=0&&below.hit&&below.normal.y>=FLOOR_Y&&real_support(s,next.position);
     if(next.grounded)next.velocity.y=0;
     next.velocity.y-=10*PE_HARE_DT; /* Serialized hare motor gravity. */
     PeVec3 before=next.position;
@@ -156,16 +179,16 @@ bool pe_hare_step(PeHare *h,const PeSceneCollision *s,const PeHareTarget *target
      * off a ledge rather than falling forever toward an invalid patrol goal. */
     if(next.grounded){
         PeSceneHit support=sweep(&next,s,proposed,(PeVec3){0,-.15f,0});
-        PeSceneHit under_center=pe_scene_raycast(s,add(proposed,(PeVec3){0,.1f,0}),(PeVec3){0,-1,0},.25f);
+        PeSceneHit under_center=s->ray(s->context,add(proposed,(PeVec3){0,.1f,0}),(PeVec3){0,-1,0},.25f);
         if(!support.hit||support.normal.y<FLOOR_Y||!under_center.hit||under_center.normal.y<FLOOR_Y){proposed=before;next.velocity=(PeVec3){0};}
     }
-    if(!pe_scene_capsule_overlap(s,proposed,next.radius,next.height))next.position=proposed;
+    if(!s->overlap(s->context,proposed,next.radius,next.height))next.position=proposed;
     else next.velocity=(PeVec3){0};
     if(next.velocity.y<=0){
         PeVec3 down={0,-.08f,0};PeSceneHit floor=sweep(&next,s,next.position,down);
-        if(floor.hit&&floor.normal.y>=FLOOR_Y){
+        if(floor.hit&&floor.normal.y>=FLOOR_Y&&real_support(s,next.position)){
             PeVec3 p=contact(next.position,down,floor);
-            if(!pe_scene_capsule_overlap(s,p,next.radius,next.height)){next.position=p;next.velocity.y=0;next.grounded=true;}
+            if(!s->overlap(s->context,p,next.radius,next.height)){next.position=p;next.velocity.y=0;next.grounded=true;}
         }else next.grounded=false;
     }
     if(next.mode==PE_HARE_PATROL){
@@ -174,4 +197,15 @@ bool pe_hare_step(PeHare *h,const PeSceneCollision *s,const PeHareTarget *target
     }
     if(!valid(&next))return false;
     *h=next;return true;
+}
+
+bool pe_hare_init(PeHare *h,const PeSceneCollision *s,uint64_t seed,float scale,bool easy){
+    PeHareQueries q=pe_hare_queries_scene(s);PeHareConfig config=pe_hare_tutorial_config();
+    return pe_hare_init_query(h,&q,&config,seed,scale,easy);
+}
+bool pe_hare_step(PeHare *h,const PeSceneCollision *s,const PeHareTarget *target){
+    PeHareQueries q=pe_hare_queries_scene(s);return pe_hare_step_query(h,&q,target);
+}
+PeHareEngagement pe_hare_engagement(const PeHare *h,const PeSceneCollision *s,const PeHareTarget *target){
+    PeHareQueries q=pe_hare_queries_scene(s);return pe_hare_engagement_query(h,&q,target);
 }

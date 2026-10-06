@@ -1,0 +1,799 @@
+{
+  "schema": 1,
+  "evidence": "Two closed original runtime observations after separately loading the same zero-kill manual6/save5 checkpoint; no manual save writes.",
+  "original_checkpoint": "docs/reference/hunt-original-encounter.json",
+  "source_checkpoints_unchanged": [
+    {
+      "evidence": "docs/reference/hunt-original-save.json",
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save4",
+      "file_count": 7,
+      "all_sha256_unchanged": true
+    },
+    {
+      "evidence": "docs/reference/hunt-original-encounter.json",
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save5",
+      "file_count": 7,
+      "all_sha256_unchanged": true
+    }
+  ],
+  "sessions": [
+    {
+      "capture": {
+        "path": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/hunt-reload-01.jsonl",
+        "sha256": "ac39ae270d114403016f75c34a3f1394bb2cfc9039caf14dab6fe21708212eb5",
+        "frames": 600,
+        "end": {
+          "type": "end",
+          "reason": "capture-limit",
+          "frames": 600
+        }
+      },
+      "probe_source_sha256": "af70c2461c575f36634a63a5672ccd4446e18e76cb7bd82b7745a9e63d8f2a9a",
+      "selected_frame": {
+        "type": "frame",
+        "sample": 0,
+        "frame": 9173,
+        "time": 93.84739,
+        "realtime": 102.710274,
+        "missionActive": true,
+        "counter": "13_0",
+        "missionPointPresent": true,
+        "player": {
+          "id": 20000,
+          "prototype": -1,
+          "prototypeType": 0,
+          "position": [
+            -334.127533,
+            21.3315926,
+            229.56073
+          ],
+          "rotation": [
+            0,
+            -0.217540428,
+            0,
+            0.976051331
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "hp": 5.90397644,
+          "maxHp": 500,
+          "attack": 33,
+          "defense": 12,
+          "campId": 1,
+          "damageId": 1,
+          "defaultPlayerId": 1
+        },
+        "agents": [
+          {
+            "sourceOrder": 0,
+            "agentId": 509,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -351.1564,
+              19.6848335,
+              222.139832
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483648,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -333.2877,
+                21.4186916,
+                228.989624
+              ],
+              "rotation": [
+                -0.00277252449,
+                -0.4512224,
+                0.0868756,
+                0.8881685
+              ],
+              "scale": [
+                0.8217651,
+                0.821765065,
+                0.821765065
+              ],
+              "hp": 174.2142,
+              "maxHp": 174.2142,
+              "attack": 52.592968,
+              "defense": 23.8311882,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 1,
+            "agentId": 510,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -354.059723,
+              19.6894836,
+              224.221024
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483649,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -355.3912,
+                19.6644554,
+                248.248184
+              ],
+              "rotation": [
+                -0.0463748276,
+                -0.3687695,
+                -0.00151247892,
+                0.9283621
+              ],
+              "scale": [
+                1.28230214,
+                1.28230214,
+                1.28230214
+              ],
+              "hp": 271.848053,
+              "maxHp": 271.848053,
+              "attack": 82.06734,
+              "defense": 37.1867638,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 2,
+            "agentId": 511,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -351.383636,
+              19.7065277,
+              222.970779
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483650,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -341.0087,
+                20.3133717,
+                237.310867
+              ],
+              "rotation": [
+                -0.075309135,
+                0.8672091,
+                -0.06264534,
+                -0.488213629
+              ],
+              "scale": [
+                1.21332836,
+                1.21332812,
+                1.21332836
+              ],
+              "hp": 257.2256,
+              "maxHp": 257.2256,
+              "attack": 77.65301,
+              "defense": 35.18652,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 3,
+            "agentId": 512,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -354.934631,
+              19.5676346,
+              219.5362
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483651,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -354.934631,
+                18.5677128,
+                219.5386
+              ],
+              "rotation": [
+                -0.0141562615,
+                -3.118144e-06,
+                -0.0018924285,
+                0.999898
+              ],
+              "scale": [
+                0.919498265,
+                0.919498265,
+                0.9194982
+              ],
+              "hp": 194.933624,
+              "maxHp": 194.933624,
+              "attack": 58.8478851,
+              "defense": 26.6654472,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 4,
+            "agentId": 513,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -348.211334,
+              19.9097633,
+              225.626831
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483652,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -331.945679,
+                21.6505241,
+                229.55777
+              ],
+              "rotation": [
+                -0.0514813736,
+                0.0173737314,
+                0.0622792877,
+                0.996578753
+              ],
+              "scale": [
+                1.1775682,
+                1.17756832,
+                1.1775682
+              ],
+              "hp": 249.644455,
+              "maxHp": 249.644455,
+              "attack": 75.3643646,
+              "defense": 34.14948,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 5,
+            "agentId": 514,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -348.695465,
+              19.853508,
+              224.413254
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483653,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -341.6307,
+                19.9765,
+                230.498688
+              ],
+              "rotation": [
+                0.004612764,
+                -0.196058035,
+                0.09272651,
+                0.9761874
+              ],
+              "scale": [
+                0.834619939,
+                0.8346199,
+                0.834619939
+              ],
+              "hp": 176.9394,
+              "maxHp": 176.9394,
+              "attack": 53.4156723,
+              "defense": 24.2039757,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          }
+        ]
+      },
+      "player_hp_first": 5.90397644,
+      "player_hp_last": 0,
+      "player_hp_min": 0,
+      "observed_quest_counters": [
+        "13_0"
+      ],
+      "every_frame_six_alive_full_hp": true
+    },
+    {
+      "capture": {
+        "path": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/hunt-reload-02.jsonl",
+        "sha256": "be122f86980a084bd13cddacd922b60f48a6b875656f9c3a3c8955fb17d67e25",
+        "frames": 338,
+        "end": {
+          "type": "end",
+          "reason": "stop-file",
+          "frames": 338
+        }
+      },
+      "probe_source_sha256": "af70c2461c575f36634a63a5672ccd4446e18e76cb7bd82b7745a9e63d8f2a9a",
+      "selected_frame": {
+        "type": "frame",
+        "sample": 0,
+        "frame": 6408,
+        "time": 49.70779,
+        "realtime": 58.28753,
+        "missionActive": true,
+        "counter": "13_0",
+        "missionPointPresent": true,
+        "player": {
+          "id": 20000,
+          "prototype": -1,
+          "prototypeType": 0,
+          "position": [
+            -335.868866,
+            21.1365376,
+            231.03334
+          ],
+          "rotation": [
+            0,
+            -0.217540428,
+            0,
+            0.976051331
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "hp": 109.451553,
+          "maxHp": 500,
+          "attack": 33,
+          "defense": 12,
+          "campId": 1,
+          "damageId": 1,
+          "defaultPlayerId": 1
+        },
+        "agents": [
+          {
+            "sourceOrder": 0,
+            "agentId": 511,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -347.671326,
+              19.674,
+              217.802658
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483650,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -334.49942,
+                21.4125156,
+                231.976318
+              ],
+              "rotation": [
+                0.0440001152,
+                -0.665492,
+                0.08274622,
+                0.7404982
+              ],
+              "scale": [
+                1.20585752,
+                1.20585728,
+                1.20585752
+              ],
+              "hp": 255.641739,
+              "maxHp": 255.641739,
+              "attack": 77.1748657,
+              "defense": 34.96986,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 1,
+            "agentId": 512,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -350.462463,
+              19.667284,
+              221.035522
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483651,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -334.648834,
+                21.317112,
+                230.642929
+              ],
+              "rotation": [
+                -0.00604714453,
+                -0.282011926,
+                0.09121934,
+                0.955045462
+              ],
+              "scale": [
+                1.05354834,
+                1.05354846,
+                1.05354834
+              ],
+              "hp": 223.352249,
+              "maxHp": 223.352249,
+              "attack": 67.42709,
+              "defense": 30.5529022,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 2,
+            "agentId": 513,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -347.896759,
+              19.8423119,
+              222.557449
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483652,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -339.101746,
+                20.550333,
+                230.481873
+              ],
+              "rotation": [
+                -0.07745315,
+                0.8708993,
+                -0.0678666,
+                -0.4805512
+              ],
+              "scale": [
+                0.9813689,
+                0.9813691,
+                0.9813689
+              ],
+              "hp": 208.050232,
+              "maxHp": 208.050232,
+              "attack": 62.8076172,
+              "defense": 28.4597015,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 3,
+            "agentId": 514,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -350.664825,
+              19.64985,
+              220.615936
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483653,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -362.041534,
+                18.90799,
+                230.638046
+              ],
+              "rotation": [
+                -0.0220617447,
+                -0.0342889056,
+                -0.00780213671,
+                0.999138
+              ],
+              "scale": [
+                1.159121,
+                1.159121,
+                1.15912092
+              ],
+              "hp": 245.733658,
+              "maxHp": 245.733658,
+              "attack": 74.18375,
+              "defense": 33.61451,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 4,
+            "agentId": 515,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -350.0958,
+              19.6785374,
+              220.981522
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483654,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -336.740448,
+                20.9560318,
+                231.261642
+              ],
+              "rotation": [
+                -0.09603445,
+                0.777999163,
+                0.04898565,
+                0.6189467
+              ],
+              "scale": [
+                0.8889743,
+                0.8889745,
+                0.888974369
+              ],
+              "hp": 188.4626,
+              "maxHp": 188.4626,
+              "attack": 56.89437,
+              "defense": 25.780262,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          },
+          {
+            "sourceOrder": 5,
+            "agentId": 516,
+            "prototype": 13,
+            "step": "Created",
+            "agentPosition": [
+              -353.975922,
+              19.56082,
+              219.405441
+            ],
+            "agentScale": [
+              1,
+              1,
+              1
+            ],
+            "agentRotation": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "canRide": false,
+            "entity": {
+              "id": 2146483655,
+              "prototype": 13,
+              "prototypeType": 3,
+              "position": [
+                -362.824036,
+                19.2369652,
+                235.910614
+              ],
+              "rotation": [
+                -0.0370329,
+                -0.501883447,
+                -0.00110576791,
+                0.864141464
+              ],
+              "scale": [
+                0.867808938,
+                0.8678088,
+                0.867808938
+              ],
+              "hp": 183.975464,
+              "maxHp": 183.975464,
+              "attack": 55.5397644,
+              "defense": 25.1664562,
+              "campId": 45,
+              "damageId": 45,
+              "defaultPlayerId": 4
+            }
+          }
+        ]
+      },
+      "player_hp_first": 109.451553,
+      "player_hp_last": 0,
+      "player_hp_min": 0,
+      "observed_quest_counters": [
+        "13_0"
+      ],
+      "every_frame_six_alive_full_hp": true
+    }
+  ],
+  "comparison": {
+    "all_six_source_anchors_changed": true,
+    "all_six_scales_changed": true,
+    "agent_ids_first": [
+      509,
+      510,
+      511,
+      512,
+      513,
+      514
+    ],
+    "agent_ids_second": [
+      511,
+      512,
+      513,
+      514,
+      515,
+      516
+    ],
+    "entity_ids_first": [
+      2146483648,
+      2146483649,
+      2146483650,
+      2146483651,
+      2146483652,
+      2146483653
+    ],
+    "entity_ids_second": [
+      2146483650,
+      2146483651,
+      2146483652,
+      2146483653,
+      2146483654,
+      2146483655
+    ],
+    "source_agent_rotation_identity_both": true
+  },
+  "physical_operator_observation": "Nearby lepus hares visibly attacked and killed the player without player attacks; this does not identify the damaging actor/skill for every HP decrement.",
+  "limitations": [
+    "Only zero-kill reload was observed. Nonzero kill preservation and exact respawn population after kills remain untested.",
+    "Raw captures start after live simulation resumed. First observed player HP is already below500, not the HP at load.",
+    "Six mission-owned live entities were enumerated; the operator did not visually count all six simultaneously.",
+    "Numerical entity IDs can overlap across processes. Changed anchors/scales demonstrate different cohorts; identity numbers alone are not globally unique.",
+    "No source random center, raw RNG stream, exact attack contacts or skill timestamps are inferred.",
+    "Native generated cohort pins session01 source agent anchors, not session02 or moved live entity poses."
+  ]
+}

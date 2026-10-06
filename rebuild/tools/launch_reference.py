@@ -128,7 +128,7 @@ def prepare_unity_preferences(config_home=None):
     return write_settings_atomically(prefs, original, document.toxml(encoding='utf-8'))
 
 
-def launch_command(game_dir, user_data):
+def launch_command(game_dir, user_data, single_threaded_rendering=False):
     executable = game_dir / 'PE_Client.x86_64'
     plugins = game_dir / 'PE_Client_Data/Plugins/x86_64'
     if not executable.is_file() or not os.access(executable, os.X_OK):
@@ -138,6 +138,10 @@ def launch_command(game_dir, user_data):
     command = [str(executable), '-from-launcher', '-rw', '1280', '-rh', '720',
                '-ql', '0', '-language', 'English', '-ocl', 'Cpu',
                '-userpath', str(user_data), '-screen-fullscreen', '0']
+    if single_threaded_rendering:
+        # PECommandLine reads args[i+1] even for flags it does not recognize.
+        # This valueless Unity switch must never be the last argument.
+        command.insert(1, '-force-gfx-direct')
     environment = os.environ.copy()
     environment.update(SteamAppId='237870', SteamGameId='237870', LANG='en',
                        XDG_CONFIG_HOME=str(user_data / 'engine-config'))
@@ -156,6 +160,8 @@ def main(argv=None):
                         help='profile root without whitespace; created if needed')
     parser.add_argument('--prepare-only', action='store_true',
                         help='validate installation and prepare settings without launching')
+    parser.add_argument('--single-threaded-rendering', action='store_true',
+                        help='diagnostic Unity -force-gfx-direct switch; not a guaranteed crash fix')
     args = parser.parse_args(argv)
     try:
         game_dir = args.game_dir.expanduser().resolve()
@@ -163,7 +169,7 @@ def main(argv=None):
         if any(character.isspace() for character in str(user_data)):
             raise ValueError('The original game cannot parse whitespace in --user-data paths; '
                              'choose a path without whitespace.')
-        command, environment = launch_command(game_dir, user_data)
+        command, environment = launch_command(game_dir, user_data, args.single_threaded_rendering)
         config, backup = prepare_settings(user_data)
         prefs, prefs_backup = prepare_unity_preferences(user_data / 'engine-config')
         print(f'Reference profile: {user_data}', flush=True)

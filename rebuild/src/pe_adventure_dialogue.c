@@ -1,5 +1,6 @@
 #include "pe_adventure_dialogue.h"
 #include "pe_adventure_medicine.h"
+#include "pe_adventure_hunt.h"
 #include "../generated/pe_adventure_dialogue_text.h"
 #include <math.h>
 #include <stdio.h>
@@ -16,10 +17,21 @@ static bool available(const PeGame *g){
 }
 static bool valid(const PeAdventureDialogue *d){
     if(!d)return false;
-    if(d->stage==PE_ADVENTURE_DIALOGUE_IDLE)return !d->entity_id&&!d->page&&!d->role;
+    if(d->stage==PE_ADVENTURE_DIALOGUE_IDLE)return !d->entity_id&&!d->page&&!d->role&&!d->mission_id;
+    if(d->role==3){
+        if(d->mission_id==9127)return d->entity_id&&d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->page<2;
+        if(d->mission_id!=9071&&d->mission_id!=9072&&d->mission_id!=9074)return false;
+    }
+    else if(d->mission_id)return false;
     return d->entity_id&&(d->role>=1&&d->role<=3)&&((d->stage==PE_ADVENTURE_DIALOGUE_MENU&&!d->page)||
         (d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->page<(d->role==3?2u:5u))||
         (d->stage==PE_ADVENTURE_DIALOGUE_CHOICE&&d->role==3&&!d->page));
+}
+static bool annot_offer(const PeAdventureDialogue *d,const PeGame *g){
+    if(!valid(d)||d->role!=3||!menu_allowed(g)||!g->annot_complete)return false;
+    return (d->mission_id==9071&&g->medicine_state==PE_MEDICINE_NONE)||
+        (d->mission_id==9072&&g->medicine_state==PE_MEDICINE_ACTIVE)||
+        (d->mission_id==9074&&g->medicine_state==PE_MEDICINE_COMPLETE&&g->hunt_state==PE_HUNT_NONE);
 }
 void pe_adventure_dialogue_init(PeAdventureDialogue *d){if(d)memset(d,0,sizeof *d);}
 void pe_adventure_dialogue_cancel(PeAdventureDialogue *d){pe_adventure_dialogue_init(d);}
@@ -34,28 +46,43 @@ bool pe_adventure_arrival_step(PeGame *g,PeVec3 supplier){
 }
 bool pe_adventure_dialogue_open(PeAdventureDialogue *d,const PeGame *g,int role,uint32_t entity,bool eligible){
     if(!valid(d)||d->stage!=PE_ADVENTURE_DIALOGUE_IDLE||!menu_allowed(g)||(role!=1&&role!=2&&!(role==3&&g->annot_complete))||!entity||!eligible)return false;
-    *d=(PeAdventureDialogue){.stage=role==1&&g->welcome_page<PE_ADVENTURE_WELCOME_PAGES?PE_ADVENTURE_DIALOGUE_TALK:PE_ADVENTURE_DIALOGUE_MENU,.entity_id=entity,.role=role};return true;
+    int return_talk=role==3?pe_adventure_hunt_return_talk(g):0;
+    if(return_talk){
+        *d=(PeAdventureDialogue){.stage=PE_ADVENTURE_DIALOGUE_TALK,.entity_id=entity,.role=3,
+            .mission_id=9127,.page=(unsigned)(return_talk-4105)};return true;
+    }
+    *d=(PeAdventureDialogue){.stage=role==1&&g->welcome_page<PE_ADVENTURE_WELCOME_PAGES?PE_ADVENTURE_DIALOGUE_TALK:PE_ADVENTURE_DIALOGUE_MENU,.entity_id=entity,.role=role,
+        .mission_id=role==3?(g->medicine_state==PE_MEDICINE_NONE?9071:g->medicine_state==PE_MEDICINE_ACTIVE?9072:9074):0};return true;
 }
 bool pe_adventure_dialogue_choose_supply(PeAdventureDialogue *d,const PeGame *g){
-    if(valid(d)&&d->role==3&&menu_allowed(g)&&g->annot_complete&&d->stage==PE_ADVENTURE_DIALOGUE_MENU){
-        if(g->medicine_state==PE_MEDICINE_COMPLETE||(g->medicine_state==PE_MEDICINE_ACTIVE&&!pe_adventure_medicine_ready(g)))return false;
+    if(annot_offer(d,g)&&d->stage==PE_ADVENTURE_DIALOGUE_MENU){
+        if(g->medicine_state==PE_MEDICINE_ACTIVE&&!pe_adventure_medicine_ready(g))return false;
         d->stage=PE_ADVENTURE_DIALOGUE_TALK;d->page=g->medicine_state==PE_MEDICINE_ACTIVE?1:0;return true;
     }
     if(!valid(d)||d->role!=2||!available(g)||d->stage!=PE_ADVENTURE_DIALOGUE_MENU)return false;
     d->stage=PE_ADVENTURE_DIALOGUE_TALK;return true;
 }
 const PeAdventureDialogueLine *pe_adventure_dialogue_choice(const PeAdventureDialogue *d,const PeGame *g,unsigned index){
-    if(!valid(d)||!menu_allowed(g)||!g->annot_complete||g->medicine_state!=PE_MEDICINE_NONE||d->stage!=PE_ADVENTURE_DIALOGUE_CHOICE||index>1)return NULL;
-    return pe_adventure_dialogue_line(4097+(int)index);
+    if(!annot_offer(d,g)||d->mission_id==9072||d->stage!=PE_ADVENTURE_DIALOGUE_CHOICE||index>1)return NULL;
+    return pe_adventure_dialogue_line((d->mission_id==9074?4103:4097)+(int)index);
 }
 PeAdventureDialogueResult pe_adventure_dialogue_choose_medicine(PeAdventureDialogue *d,PeGame *g,bool accept){
     if(!pe_adventure_dialogue_choice(d,g,0))return PE_ADVENTURE_DIALOGUE_REJECTED;
-    if(accept&&!pe_adventure_medicine_accept(g))return PE_ADVENTURE_DIALOGUE_NO_SPACE;
+    if(accept){
+        if(d->mission_id==9074){if(!pe_adventure_hunt_accept(g))return PE_ADVENTURE_DIALOGUE_UNAVAILABLE;}
+        else if(!pe_adventure_medicine_accept(g))return PE_ADVENTURE_DIALOGUE_NO_SPACE;
+    }
     pe_adventure_dialogue_cancel(d);return PE_ADVENTURE_DIALOGUE_ACCEPTED;
 }
 PeAdventureDialogueResult pe_adventure_dialogue_advance(PeAdventureDialogue *d,PeGame *g){
-    if(valid(d)&&d->role==3&&menu_allowed(g)&&g->annot_complete&&d->stage==PE_ADVENTURE_DIALOGUE_TALK){
-        if(d->page==0&&g->medicine_state==PE_MEDICINE_NONE){d->stage=PE_ADVENTURE_DIALOGUE_CHOICE;return PE_ADVENTURE_DIALOGUE_ADVANCED;}
+    if(valid(d)&&d->role==3&&d->mission_id==9127){
+        const PeAdventureDialogueLine *line=pe_adventure_dialogue_current(d,g);
+        if(!line||!pe_adventure_hunt_return_advance(g,line->talk_id))return PE_ADVENTURE_DIALOGUE_REJECTED;
+        if(pe_adventure_hunt_return_talk(g)){d->page++;return PE_ADVENTURE_DIALOGUE_ADVANCED;}
+        pe_adventure_dialogue_cancel(d);return PE_ADVENTURE_DIALOGUE_ACCEPTED;
+    }
+    if(annot_offer(d,g)&&d->stage==PE_ADVENTURE_DIALOGUE_TALK){
+        if(d->page==0&&d->mission_id!=9072){d->stage=PE_ADVENTURE_DIALOGUE_CHOICE;return PE_ADVENTURE_DIALOGUE_ADVANCED;}
         if(d->page!=1||!pe_adventure_medicine_ready(g))return PE_ADVENTURE_DIALOGUE_REJECTED;
         if(!pe_adventure_medicine_complete(g))return PE_ADVENTURE_DIALOGUE_NO_SPACE;
         pe_adventure_dialogue_cancel(d);return PE_ADVENTURE_DIALOGUE_ACCEPTED;
@@ -79,8 +106,17 @@ const PeAdventureDialogueLine *pe_adventure_dialogue_line(int id){
 const PeAdventureDialogueLine *pe_adventure_dialogue_current(const PeAdventureDialogue *d,const PeGame *g){
     if(!valid(d)||!menu_allowed(g))return NULL;
     if(d->role==3){
-        if(!g->annot_complete||g->medicine_state==PE_MEDICINE_COMPLETE)return NULL;
+        if(d->mission_id==9127){
+            int talk=pe_adventure_hunt_return_talk(g);
+            return g->annot_complete&&talk==4105+(int)d->page?pe_adventure_dialogue_line(talk):NULL;
+        }
+        if(!annot_offer(d,g))return NULL;
         if(d->stage==PE_ADVENTURE_DIALOGUE_CHOICE)return pe_adventure_dialogue_choice(d,g,0);
+        if(d->mission_id==9074){
+            if(d->stage==PE_ADVENTURE_DIALOGUE_MENU)return pe_adventure_dialogue_line(4101);
+            if(d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->page==0)return pe_adventure_dialogue_line(4102);
+            return NULL;
+        }
         if(d->stage==PE_ADVENTURE_DIALOGUE_MENU)return pe_adventure_dialogue_line(g->medicine_state==PE_MEDICINE_ACTIVE?4099:4095);
         if(d->stage==PE_ADVENTURE_DIALOGUE_TALK){
             if(d->page==0&&g->medicine_state==PE_MEDICINE_NONE)return pe_adventure_dialogue_line(4096);

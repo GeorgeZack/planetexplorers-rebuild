@@ -1,0 +1,78 @@
+{
+  "evidence": "Read-only original save4 package and source ItemObject/ItemSample serialization decode",
+  "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save4",
+  "input_sha256": {
+    "MainAdventure/block45.arc": "aa60e3bdc203049c4eb5356996b3e08cc0365cbc97b283451e1bd362b43ddaa8",
+    "MainAdventure/index.arc": "047eeddcc3a9c7765d8ceb53b1b9ce2a63a4abcd2790272d7bfd9e8b4a143662",
+    "MainAdventure/voxel.arc": "e338ece8290f21adc426ae849b7c2f5e1f061c1eab5db1dc6419943b0939ce1f",
+    "MainAdventure/water.arc": "285f3cf550ed2bf5d7f3068187b253e3e5dd16ba7dece412cf44faff25597d55",
+    "MainAdventure/world.arc": "df4f0be963563b35b0412cdd9f5275d8f4dcec614e00be1e65c0e15579e730b2",
+    "index.arc": "2668ed1d0b80a93d9c19fe25adc3785f657dac5232bbed69f85372e52d1ba2e1",
+    "world.arc": "a6d7edc6d26bf82cb27ddac7f488f67cca80c487980d20f71bae0e58a69e7d61"
+  },
+  "archives_unchanged": true,
+  "money": 395,
+  "packages": {
+    "player": {
+      "1": 1,
+      "12": 1,
+      "19": 1,
+      "26": 1,
+      "33": 1,
+      "34": 1,
+      "43": 1,
+      "70": 1,
+      "73": 1,
+      "228": 1,
+      "229": 400,
+      "268": 5,
+      "279": 190,
+      "412": 1,
+      "418": 1,
+      "424": 1,
+      "433": 1,
+      "510": 1,
+      "512": 1,
+      "519": 1,
+      "552": 1,
+      "554": 1,
+      "612": 1,
+      "916": 10,
+      "925": 10,
+      "937": 10,
+      "974": 1,
+      "975": 1,
+      "982": 1,
+      "1527": 1,
+      "1550": 1,
+      "1551": 1,
+      "1579": 1
+    },
+    "mission": {}
+  },
+  "medicine_active": null,
+  "medicine_completed": 1,
+  "known_formulas": [
+    {
+      "formula": 1,
+      "new_flag": false,
+      "file_offset": 79686
+    },
+    {
+      "formula": 337,
+      "new_flag": false,
+      "file_offset": 79691
+    },
+    {
+      "formula": 388,
+      "new_flag": true,
+      "file_offset": 79696
+    },
+    {
+      "formula": 390,
+      "new_flag": true,
+      "file_offset": 79701
+    }
+  ],
+  "running_replication": false
+}

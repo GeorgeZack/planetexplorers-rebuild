@@ -1,0 +1,236 @@
+{
+  "schema": 1,
+  "database": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "sources": [
+    {
+      "path": "Assets/Scripts/SkillSystem/SkInst.cs",
+      "sha256": "cdee9595f4ab9f1c97a28175e9eb04a9d71a08d89fb3d48c1835fae71cbd8340"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkUtils.cs",
+      "sha256": "14f1c749f1e373fdbbdacfdd1a84742118fc446919e9a520e82333e3d0ec18cb"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkCond.cs",
+      "sha256": "6fd665e17f72bf98da1836ce8b56f34e94463bd8ba435af914dcd22311b9374c"
+    },
+    {
+      "path": "Assets/Scripts/PETools/PEMath.cs",
+      "sha256": "3f1aad65bb9928affcc3ad60c3ad7f4518abe3cf7f56f41aab9d4119433cbf3a"
+    }
+  ],
+  "skills": [
+    {
+      "attack": 0,
+      "skill_id": 30100003,
+      "guide_count": 1,
+      "prepare_pre": 0.0,
+      "prepare_post": 0.0,
+      "pre": [
+        0.0
+      ],
+      "main": [
+        1.0
+      ],
+      "post": [
+        0.0
+      ],
+      "ending_pre": 0.0,
+      "ending_post": 0.0,
+      "source_row": {
+        "_id": "30100003",
+        "_name": "\u5154\u5b50-\u653b\u51fb00",
+        "_icon": "0",
+        "_desc": "2200000",
+        "_interruptable": "1",
+        "_coolingTime": "1",
+        "_coolingTimeType": "1",
+        "_coolingTimeShared": "1",
+        "_pretimeOfPrepare": "0",
+        "_postimeOfPrepare": "0",
+        "_effPrepare": "100",
+        "_cond": "False",
+        "_effMainOneTime": "0",
+        "_pretimeOfMain": "0",
+        "_timeOfMain": "1",
+        "_postimeOfMain": "0",
+        "_effMainEachTime": "0",
+        "_triggerEvents": "10100",
+        "_pretimeOfEnding": "0",
+        "_postimeOfEnding": "0",
+        "_effEnding": "0"
+      }
+    },
+    {
+      "attack": 1,
+      "skill_id": 30100004,
+      "guide_count": 1,
+      "prepare_pre": 0.0,
+      "prepare_post": 0.0,
+      "pre": [
+        0.0
+      ],
+      "main": [
+        1.0
+      ],
+      "post": [
+        0.0
+      ],
+      "ending_pre": 0.0,
+      "ending_post": 0.0,
+      "source_row": {
+        "_id": "30100004",
+        "_name": "\u5154\u5b50-\u653b\u51fb01",
+        "_icon": "0",
+        "_desc": "2200000",
+        "_interruptable": "1",
+        "_coolingTime": "1",
+        "_coolingTimeType": "1",
+        "_coolingTimeShared": "1",
+        "_pretimeOfPrepare": "0",
+        "_postimeOfPrepare": "0",
+        "_effPrepare": "101",
+        "_cond": "False",
+        "_effMainOneTime": "0",
+        "_pretimeOfMain": "0",
+        "_timeOfMain": "1",
+        "_postimeOfMain": "0",
+        "_effMainEachTime": "0",
+        "_triggerEvents": "10100",
+        "_pretimeOfEnding": "0",
+        "_postimeOfEnding": "0",
+        "_effEnding": "0"
+      }
+    },
+    {
+      "attack": 2,
+      "skill_id": 30100008,
+      "guide_count": 2,
+      "prepare_pre": 0.0,
+      "prepare_post": 0.0,
+      "pre": [
+        0.36000001430511475,
+        0.23999999463558197
+      ],
+      "main": [
+        0.15000000596046448,
+        0.23999999463558197
+      ],
+      "post": [
+        0.0,
+        0.0
+      ],
+      "ending_pre": 0.0,
+      "ending_post": 0.5099999904632568,
+      "source_row": {
+        "_id": "30100008",
+        "_name": "\u5154\u5b50-\u653b\u51fb02",
+        "_icon": "0",
+        "_desc": "2200000",
+        "_interruptable": "1",
+        "_coolingTime": "1.5",
+        "_coolingTimeType": "1",
+        "_coolingTimeShared": "1",
+        "_pretimeOfPrepare": "0",
+        "_postimeOfPrepare": "0",
+        "_effPrepare": "102",
+        "_cond": "loopcnt,2",
+        "_effMainOneTime": "0",
+        "_pretimeOfMain": "0.36;0.24",
+        "_timeOfMain": "0.15;0.24",
+        "_postimeOfMain": "0",
+        "_effMainEachTime": "0",
+        "_triggerEvents": "10100;10100",
+        "_pretimeOfEnding": "0",
+        "_postimeOfEnding": ".51",
+        "_effEnding": "0"
+      }
+    },
+    {
+      "attack": 3,
+      "skill_id": 30100046,
+      "guide_count": 1,
+      "prepare_pre": 0.0,
+      "prepare_post": 0.0,
+      "pre": [
+        0.0
+      ],
+      "main": [
+        1.0
+      ],
+      "post": [
+        0.0
+      ],
+      "ending_pre": 0.0,
+      "ending_post": 0.0,
+      "source_row": {
+        "_id": "30100046",
+        "_name": "\u5154\u5b50-\u653b\u51fb03",
+        "_icon": "0",
+        "_desc": "2200000",
+        "_interruptable": "1",
+        "_coolingTime": "1",
+        "_coolingTimeType": "1",
+        "_coolingTimeShared": "1",
+        "_pretimeOfPrepare": "0",
+        "_postimeOfPrepare": "0",
+        "_effPrepare": "103",
+        "_cond": "False",
+        "_effMainOneTime": "0",
+        "_pretimeOfMain": "0",
+        "_timeOfMain": "1",
+        "_postimeOfMain": "0",
+        "_effMainEachTime": "0",
+        "_triggerEvents": "10400",
+        "_pretimeOfEnding": "0",
+        "_postimeOfEnding": "0",
+        "_effEnding": "0"
+      }
+    },
+    {
+      "attack": 4,
+      "skill_id": 30100047,
+      "guide_count": 1,
+      "prepare_pre": 0.0,
+      "prepare_post": 0.0,
+      "pre": [
+        0.0
+      ],
+      "main": [
+        1.06659996509552
+      ],
+      "post": [
+        0.0
+      ],
+      "ending_pre": 0.0,
+      "ending_post": 0.0,
+      "source_row": {
+        "_id": "30100047",
+        "_name": "\u5154\u5b50-\u653b\u51fb04",
+        "_icon": "0",
+        "_desc": "2200000",
+        "_interruptable": "1",
+        "_coolingTime": "1.0666",
+        "_coolingTimeType": "1",
+        "_coolingTimeShared": "1",
+        "_pretimeOfPrepare": "0",
+        "_postimeOfPrepare": "0",
+        "_effPrepare": "104",
+        "_cond": "False",
+        "_effMainOneTime": "0",
+        "_pretimeOfMain": "0",
+        "_timeOfMain": "1.0666",
+        "_postimeOfMain": "0",
+        "_effMainEachTime": "0",
+        "_triggerEvents": "10250",
+        "_pretimeOfEnding": "0",
+        "_postimeOfEnding": "0",
+        "_effEnding": "0"
+      }
+    }
+  ],
+  "scope": "Source float-decoded waits only. Native fixed60Hz scheduler is an explicit coroutine cadence adapter; Animator contact windows are independent. No observed timing claim."
+}

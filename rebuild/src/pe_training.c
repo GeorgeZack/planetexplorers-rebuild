@@ -306,6 +306,12 @@ int pe_training_dialogue(const PeTraining *t){
     default:return 0;
     }
 }
+bool pe_training_dialogue_response(PeTraining *t,unsigned response,bool advance){
+    int talk=pe_training_dialogue(t);
+    if(!talk)return false;
+    if(response==1||advance)pe_training_advance_dialogue(t,talk);
+    return true;
+}
 bool pe_training_advance_dialogue(PeTraining *t,int expected){
     if(expected<=0||pe_training_dialogue(t)!=expected)return false;
     if(t->tutorial.mission_id==PE_TUTORIAL_CAMERA){

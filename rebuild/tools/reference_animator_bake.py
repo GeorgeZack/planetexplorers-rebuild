@@ -18,10 +18,11 @@ import sys
 
 import launch_reference
 import reference_pose
-from inventory_reference_bake import CLIPS
+from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS, DIRECTIONAL_CLIPS
 
 TOOLS = Path(__file__).resolve().parent
 BUILD = TOOLS.parent/'build/animator-bake'
+MAX_CLIPS = 32
 DEFAULT_CLIPS = ('NormalIdle', 'NormalWF', 'NormalRF', 'Jump', 'Fall', 'Land', 'Attack6', 'Attack7', 'Attack8', 'Attack9')
 
 
@@ -48,7 +49,7 @@ def read_plan(path, game_dir, sex, selected, rate):
         raise ValueError('Clip plan does not match installed source asset; regenerate inventory')
     if sex not in ('female', 'male') or not 1 <= rate <= 60:
         raise ValueError('Unsupported gender or sampling rate')
-    if not 1 <= len(selected) <= 10 or len(set(selected)) != len(selected) or any(n not in CLIPS for n in selected):
+    if not 1 <= len(selected) <= MAX_CLIPS or len(set(selected)) != len(selected) or any(n not in CLIPS for n in selected):
         raise ValueError('Clip selection must be a unique subset of the verified allowlist')
     gender = plan['genders'][sex]
     if gender['avatar'] != ('FemaleAvatar' if sex == 'female' else 'MaleAvatar') or gender['controller'] != ('FemaleAnimator2' if sex == 'female' else 'MaleAnimator'):
@@ -64,6 +65,8 @@ def read_plan(path, game_dir, sex, selected, rate):
         c = found[name]
         if type(c['path_id']) is not int or c['path_id'] <= 0:
             raise ValueError('Invalid source clip ID')
+        if sex=='female' and name in SWORD_BACKWARD_CLIPS and c['path_id']!=SWORD_BACKWARD_CLIPS[name]:
+            raise ValueError('Sword backward source identity differs')
         if type(c['loop']) is not bool or type(c['humanoid_bindings']) is not int or not 1 <= c['humanoid_bindings'] <= 512:
             raise ValueError('Missing verified source humanoid/loop metadata; regenerate inventory')
         if any(type(c[k]) not in (int, float) or not math.isfinite(c[k]) or not 0 < c[k] <= bound for k, bound in [('length', 10), ('frame_rate', 120)]):
@@ -96,11 +99,13 @@ def main(argv=None):
     p.add_argument('--plan', type=Path, default=BUILD/'clip-plan.json')
     p.add_argument('--sex', choices=('female', 'male'), default='female')
     p.add_argument('--source-entity', type=int, help='read one loaded entity instead of the main player (1..1000000)')
+    p.add_argument('--preset', choices=('default','torch-sword','sword-backward','normal-directional'), default='default', help='bounded clip group; default remains the original ten Normal/attack clips')
     p.add_argument('--clip', choices=tuple(CLIPS), action='append', dest='clips')
     p.add_argument('--fps', type=int, choices=range(1,61), default=30, metavar='1..60')
     p.add_argument('--seconds', type=int, choices=range(1,601), default=180, metavar='1..600')
     p.add_argument('--wait-seconds', type=int, choices=range(1,1801), default=900, metavar='1..1800')
     p.add_argument('--output', type=Path, help='fresh JSONL path within user-data')
+    p.add_argument('--single-threaded-rendering', action='store_true', help='opt-in original -force-gfx-direct launch workaround')
     p.add_argument('--launch', action='store_true', help='explicitly launch original; otherwise build only')
     a = p.parse_args(argv)
     try:
@@ -108,13 +113,16 @@ def main(argv=None):
             raise ValueError('Source entity outside bound')
         game = a.game_dir.expanduser().resolve(); profile = a.user_data.expanduser().resolve()
         plan_path = a.plan.expanduser().resolve()
-        plan = read_plan(plan_path, game, a.sex, a.clips or DEFAULT_CLIPS, a.fps)
+        if a.preset!='default' and a.clips:
+            raise ValueError('Choose either a preset or explicit clips')
+        selected=a.clips or (tuple(SWORD_CLIPS) if a.preset=='torch-sword' else tuple(SWORD_BACKWARD_CLIPS) if a.preset=='sword-backward' else DEFAULT_CLIPS+tuple(DIRECTIONAL_CLIPS) if a.preset=='normal-directional' else DEFAULT_CLIPS)
+        plan = read_plan(plan_path, game, a.sex, selected, a.fps)
         if a.source_entity is not None: plan['source_entity_id'] = a.source_entity
         output, arm, stop, manifest = reference_pose.capture_paths(profile, a.output.expanduser() if a.output else None)
         exit_record = output.with_suffix('.exit.json')
         if exit_record.exists() or exit_record.is_symlink():
             raise ValueError('Exit record already exists; choose a fresh capture path')
-        command, env = launch_reference.launch_command(game, profile)
+        command, env = launch_reference.launch_command(game, profile, a.single_threaded_rendering)
         mono, shim, assembly = build(game)
         if not a.launch:
             print(f'Offline bake probe built: {assembly}\nPlan: {len(plan["clips"])} clips, {plan["planned_samples"]} samples at {a.fps} Hz.\nNo game launched or profile settings changed.')

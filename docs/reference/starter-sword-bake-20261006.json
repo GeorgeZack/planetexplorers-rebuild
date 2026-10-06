@@ -1,0 +1,117 @@
+{
+  "schema": 1,
+  "complete": true,
+  "samples": 304,
+  "maximum_hierarchy_matrix_error": 1.0572749031823037e-06,
+  "general_retargeting_validated": false,
+  "root_motion_validated": false,
+  "runtime_motion_detected": true,
+  "sources": [
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-01.jsonl",
+      "sha256": "4750b6514742f9c9059e01645187de0b9d2236129573645376c9b2a330f1d4b7"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/reference-player-starter/player-female-starter-rig.json",
+      "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/tools/analyze_reference_bake.py",
+      "sha256": "f17097724895b02aa835b8ef70380fa6c14beb68b310c31be002bbf9a1895042"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-01.launch.json",
+      "sha256": "ad8e803101b37aaa74676ee6306d35d8a0c7f9e5b17728029fa882af880bd4f1"
+    }
+  ],
+  "date": "2026-10-06",
+  "mode": "Original Tutorial female pure clone capture",
+  "capture": "female-sword-01.jsonl",
+  "post_cleanup_alive_frames": 120,
+  "exit": {
+    "schema": "pe-animator-bake-exit-1",
+    "capture": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-01.jsonl",
+    "returncode": -9,
+    "signal": 9,
+    "observed_utc": "2026-10-06T20:19:36.325749+00:00"
+  },
+  "operator_exit": "Quit Game and Yes through original UI; raw returncode preserved, not claimed clean0",
+  "rig_bones": 42,
+  "clips": [
+    {
+      "name": "AttackIdle",
+      "sourcePathId": 90,
+      "length": 1.73333359,
+      "samples": 54,
+      "isLooping": true
+    },
+    {
+      "name": "SwordWF",
+      "sourcePathId": 133,
+      "length": 1.09999847,
+      "samples": 34,
+      "isLooping": true
+    },
+    {
+      "name": "SwordRF",
+      "sourcePathId": 435,
+      "length": 0.666667938,
+      "samples": 22,
+      "isLooping": true
+    },
+    {
+      "name": "SwordSprint",
+      "sourcePathId": 113,
+      "length": 0.600000143,
+      "samples": 20,
+      "isLooping": true
+    },
+    {
+      "name": "SwordJump",
+      "sourcePathId": 756,
+      "length": 1.03334045,
+      "samples": 33,
+      "isLooping": false
+    },
+    {
+      "name": "SwordFall",
+      "sourcePathId": 757,
+      "length": 0.666671753,
+      "samples": 22,
+      "isLooping": false
+    },
+    {
+      "name": "SwordLand",
+      "sourcePathId": 758,
+      "length": 1.06668091,
+      "samples": 34,
+      "isLooping": false
+    },
+    {
+      "name": "SwordRunJump",
+      "sourcePathId": 272,
+      "length": 1.40000153,
+      "samples": 44,
+      "isLooping": false
+    },
+    {
+      "name": "SwordRunFall",
+      "sourcePathId": 284,
+      "length": 1.00000381,
+      "samples": 32,
+      "isLooping": true
+    },
+    {
+      "name": "SwordRunLand",
+      "sourcePathId": 279,
+      "length": 0.2333374,
+      "samples": 9,
+      "isLooping": false
+    }
+  ],
+  "export": "Ignored build/sword-body-01/all/recording.peas; not installed",
+  "limits": [
+    "Authored clip poses only; no layer composition, block, transitions or live combat result",
+    "Original manual saves not changed; normal user profile unused"
+  ]
+}

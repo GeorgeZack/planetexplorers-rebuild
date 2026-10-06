@@ -1,6 +1,8 @@
 #include "pe_terrain_material_view.h"
 #include "../generated/pe_terrain_materials.h"
+#include "../generated/pe_torch_source.h"
 #include <rlgl.h>
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -15,6 +17,7 @@ static const char *fragment_shader=
 "in vec3 terrainPosition;in vec3 terrainNormal;in vec3 blendWeights;flat in vec3 materialIds;out vec4 finalColor;\n"
 "uniform sampler2D diffuse0,diffuse1,diffuse2,diffuse3,diffuse4,diffuse5;\n"
 "uniform vec3 terrainOrigin,cameraPosition,terrainSettings;\n"
+"uniform int pointLightCount;uniform vec3 pointLightPositions[8],pointLightColor;uniform vec2 pointLightSettings;\n"
 "vec3 atlas(int a,vec2 uv,float lod){"
 "if(a==0)return textureLod(diffuse0,uv,lod).rgb;if(a==1)return textureLod(diffuse1,uv,lod).rgb;"
 "if(a==2)return textureLod(diffuse2,uv,lod).rgb;if(a==3)return textureLod(diffuse3,uv,lod).rgb;"
@@ -36,7 +39,11 @@ static const char *fragment_shader=
 "vec3 delta=terrainPosition-cameraPosition;float lod=max(0.0,0.73*log(max(0.04*dot(delta,delta),0.000001)));"
 "vec3 color=material(materialIds.x,p,weights,lod);if(materialIds.y!=materialIds.x||materialIds.z!=materialIds.x)color=color*blendWeights.x+"
 "material(materialIds.y,p,weights,lod)*blendWeights.y+material(materialIds.z,p,weights,lod)*blendWeights.z;"
-"float light=0.59+0.41*max(0.0,dot(n,vec3(-0.35,0.85,0.4)));finalColor=vec4(color*light,1.0);}\n";
+"float light=0.59+0.41*max(0.0,dot(n,vec3(-0.35,0.85,0.4)));vec3 illumination=vec3(light);"
+"for(int i=0;i<pointLightCount;i++){vec3 direction=pointLightPositions[i]-terrainPosition;float distance=length(direction);"
+"float attenuation=max(0.0,1.0-distance/pointLightSettings.x);float lambert=max(0.0,dot(n,direction/max(distance,0.00001)));"
+"illumination+=pointLightColor*(pointLightSettings.y*attenuation*attenuation*lambert);}"
+"finalColor=vec4(color*illumination,1.0);}\n";
 
 void pe_terrain_material_view_unload(PeTerrainMaterialView *v) {
     if(!v)return;
@@ -70,9 +77,17 @@ bool pe_terrain_material_view_load(PeTerrainMaterialView *v,const char *root,cha
     v->origin_location=GetShaderLocation(v->shader,"terrainOrigin");
     v->camera_location=GetShaderLocation(v->shader,"cameraPosition");
     int settings=GetShaderLocation(v->shader,"terrainSettings");
-    if(v->origin_location<0||v->camera_location<0||settings<0){reason="Terrain shader parameters missing";goto fail;}
+    v->light_count_location=GetShaderLocation(v->shader,"pointLightCount");
+    v->light_positions_location=GetShaderLocation(v->shader,"pointLightPositions[0]");
+    int light_color=GetShaderLocation(v->shader,"pointLightColor"),light_settings=GetShaderLocation(v->shader,"pointLightSettings");
+    if(v->origin_location<0||v->camera_location<0||settings<0||v->light_count_location<0||v->light_positions_location<0||light_color<0||light_settings<0){reason="Terrain shader parameters missing";goto fail;}
     const float values[]={PE_TERRAIN_INDENT,PE_TERRAIN_REPETITION,PE_TERRAIN_REPETITION_LARGE};
-    SetShaderValue(v->shader,settings,values,SHADER_UNIFORM_VEC3);v->loaded=true;return true;
+    const float color[]={PE_TORCH_LIGHT_R,PE_TORCH_LIGHT_G,PE_TORCH_LIGHT_B},light_values[]={PE_TORCH_LIGHT_RANGE,PE_TORCH_LIGHT_INTENSITY};
+    const int zero=0;
+    SetShaderValue(v->shader,settings,values,SHADER_UNIFORM_VEC3);
+    SetShaderValue(v->shader,light_color,color,SHADER_UNIFORM_VEC3);
+    SetShaderValue(v->shader,light_settings,light_values,SHADER_UNIFORM_VEC2);
+    SetShaderValue(v->shader,v->light_count_location,&zero,SHADER_UNIFORM_INT);v->loaded=true;return true;
 fail:
     if(error&&capacity)snprintf(error,capacity,"%s",reason);
     pe_terrain_material_view_unload(v);return false;
@@ -89,4 +104,19 @@ void pe_terrain_material_view_frame(PeTerrainMaterialView *v,const PeWorld *w,Ve
     if(w->source==1){origin[0]=(float)w->origin_x;origin[1]=(float)w->origin_y;origin[2]=(float)w->origin_z;}
     SetShaderValue(v->shader,v->origin_location,origin,SHADER_UNIFORM_VEC3);
     SetShaderValue(v->shader,v->camera_location,&camera,SHADER_UNIFORM_VEC3);
+}
+void pe_terrain_material_view_lights(PeTerrainMaterialView *v,const PeVec3 *positions,size_t count,PeVec3 camera){
+    if(!v||!v->loaded)return;
+    float chosen[PE_TERRAIN_POINT_LIGHTS][3];double distances[PE_TERRAIN_POINT_LIGHTS];int used=0;
+    if(positions&&isfinite(camera.x)&&isfinite(camera.y)&&isfinite(camera.z))for(size_t i=0;i<count;i++){
+        PeVec3 p=positions[i];if(!isfinite(p.x)||!isfinite(p.y)||!isfinite(p.z))continue;
+        double x=(double)p.x-camera.x,y=(double)p.y-camera.y,z=(double)p.z-camera.z,distance=x*x+y*y+z*z;
+        int at=0;while(at<used&&distance>=distances[at])at++;
+        if(at==PE_TERRAIN_POINT_LIGHTS)continue;
+        if(used<PE_TERRAIN_POINT_LIGHTS)used++;
+        for(int j=used-1;j>at;j--){distances[j]=distances[j-1];memcpy(chosen[j],chosen[j-1],sizeof chosen[j]);}
+        distances[at]=distance;chosen[at][0]=p.x;chosen[at][1]=p.y;chosen[at][2]=p.z;
+    }
+    SetShaderValue(v->shader,v->light_count_location,&used,SHADER_UNIFORM_INT);
+    if(used)SetShaderValueV(v->shader,v->light_positions_location,chosen,SHADER_UNIFORM_VEC3,used);
 }

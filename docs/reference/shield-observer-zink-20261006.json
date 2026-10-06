@@ -1,0 +1,1241 @@
+{
+  "schema": 1,
+  "kind": "original-user-operated-zink-shield-composition-observation",
+  "date_local": "2026-10-06",
+  "timezone": "US/Central",
+  "checked_at_utc": "2026-10-06T20:57:45.875527+00:00",
+  "capture": {
+    "capture_sha256": "25f1965e54ca2ebcb56479f1b2f72a68762736dc3f2b50c60573b269b340dc17",
+    "launch_manifest_sha256": "2104e330f6e8dd9e09356b8d9b1e7fdcb312598afd6b0547237c242cd506a61c",
+    "source_plan_sha256": "d85f56e0701e618d6a9d40df7ee0bbcd8051f00692e68994c0c4e45928140878",
+    "source_asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+    "rig_sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff",
+    "complete": true,
+    "end": {
+      "type": "end",
+      "reason": "capture-limit",
+      "frames": 3600
+    },
+    "frames": 3600,
+    "steady_sword_block_frames": 451,
+    "steady_composition_frames": {
+      "AttackIdle": 0,
+      "SwordWF": 0,
+      "SwordRF": 0
+    },
+    "all_three_steady_compositions_observed": false,
+    "active_named_equipment_paths": [
+      "EntityRoot/audit_20000/FemaleModel(Clone)/Model/Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bone L Forearm/wood_shield",
+      "EntityRoot/audit_20000/FemaleModel(Clone)/Model/Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bone L Forearm/wood_shield/wood_shield",
+      "EntityRoot/audit_20000/FemaleModel(Clone)/Model/Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/mountMain/wood_sword",
+      "EntityRoot/audit_20000/FemaleModel(Clone)/Model/Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/mountBack/wood_sword"
+    ]
+  },
+  "timing": {
+    "realtime_first": 169.433533,
+    "realtime_last": 243.801147,
+    "observed_realtime_span_seconds": 74.36761399999997,
+    "game_time_first": 159.5753,
+    "game_time_last": 225.881927,
+    "first_frame": 9276,
+    "last_frame": 12875,
+    "mean_samples_per_realtime_second": 48.394721928284554,
+    "limit": "Capture cadence is not a controlled frame-time benchmark."
+  },
+  "validation": {
+    "maximum_hierarchy_error": 0.000367947050449402,
+    "missing_rig_bones": [],
+    "rig_bones": 42,
+    "strict_classifier_unchanged": true,
+    "strict_thresholds": {
+      "MoveStyle_distance_to1": 0.0001,
+      "block_layer_weight_distance_to1": 0.0001,
+      "required_named_clip_weight": 0.9999,
+      "other_clip_weight_max": 0.0001
+    },
+    "zero_pure_gait_labels_is_not_zero_composed_evidence": true
+  },
+  "observed_composition": {
+    "parameter_frame_counts": {
+      "FirstPerson1": 1353,
+      "SheildBlock_true": 732,
+      "SheildBlock_false": 2868,
+      "FirstPerson0": 2247,
+      "steady_block_with_other_override": 5
+    },
+    "MoveStyle_range_while_block_true": [
+      0.0945532,
+      0.99999994
+    ],
+    "dominant_base_clip_counts_during_steady_block_without_other_override": {
+      "AttackIdle": 156,
+      "SwordWF": 80,
+      "SwordRF": 138,
+      "SwordWB": 4,
+      "NormalWalkTurnRight": 28,
+      "NormalRunTurnRight": 25,
+      "NormalWalkTurnLeft": 9,
+      "NormalRunTurnLeft": 6
+    },
+    "dominant_rule": "Largest summed current base-layer clip weight by source name; observational label, not a purity or export qualification threshold.",
+    "best_observed_gait_examples": {
+      "AttackIdle": {
+        "sample": 1611,
+        "frame": 10887,
+        "realtime": 204.452179,
+        "weight": 0.999358356,
+        "base_clips": [
+          {
+            "name": "NormalIdle",
+            "id": 14464,
+            "weight": 0.0002861794,
+            "length": 2.00001526
+          },
+          {
+            "name": "NormalWB",
+            "id": 14506,
+            "weight": 8.528813e-11,
+            "length": 0.8
+          },
+          {
+            "name": "NormalWalkTurnLeft",
+            "id": 14502,
+            "weight": 5.1172875e-11,
+            "length": 1.10000229
+          },
+          {
+            "name": "AttackIdle",
+            "id": 14276,
+            "weight": 0.999358356,
+            "length": 1.73333359
+          },
+          {
+            "name": "SwordWB",
+            "id": 14556,
+            "weight": 2.97832059e-07,
+            "length": 0.800003052
+          },
+          {
+            "name": "NormalWalkTurnLeft",
+            "id": 14502,
+            "weight": 1.78699239e-07,
+            "length": 1.10000229
+          },
+          {
+            "name": "NormalWalkTurnLeft",
+            "id": 14502,
+            "weight": 1.78699239e-07,
+            "length": 1.10000229
+          },
+          {
+            "name": "RifleHold",
+            "id": 15008,
+            "weight": 0.000354760065,
+            "length": 1.333334
+          },
+          {
+            "name": "RifleWalkBack",
+            "id": 14734,
+            "weight": 4.22907022e-11,
+            "length": 0.5000005
+          },
+          {
+            "name": "RifleWalkLeft",
+            "id": 14740,
+            "weight": 4.22907022e-11,
+            "length": 0.5
+          }
+        ],
+        "block_clips": [
+          {
+            "name": "NormalSheildBlock",
+            "id": 14346,
+            "weight": 4.351139e-06,
+            "length": 2.00000381
+          },
+          {
+            "name": "SwordSheildBlock",
+            "id": 14380,
+            "weight": 0.999995649,
+            "length": 1.66667175
+          }
+        ],
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": true,
+          "MoveStyle": 0.999995649,
+          "MoveStyleH": 0.9396885,
+          "MoveStyleV": 0.342018634,
+          "ForwardSpeed": -4.354159e-07,
+          "RightSpeed": -3.30821678e-07,
+          "ForwardAngle": 6.492429
+        },
+        "other_active_layers": [],
+        "base_transition": false,
+        "block_transition": false
+      },
+      "SwordWF": {
+        "sample": 2157,
+        "frame": 11433,
+        "realtime": 216.346146,
+        "weight": 0.9700903,
+        "base_clips": [
+          {
+            "name": "NormalRF",
+            "id": 14472,
+            "weight": 3.81297559e-06,
+            "length": 0.6666667
+          },
+          {
+            "name": "NormalRunTurnRight",
+            "id": 14488,
+            "weight": 2.86940281e-06,
+            "length": 0.666671753
+          },
+          {
+            "name": "NormalRunTurnLeft",
+            "id": 14486,
+            "weight": 1.799538e-06,
+            "length": 0.666671753
+          },
+          {
+            "name": "NormalWF",
+            "id": 14508,
+            "weight": 0.000303486362,
+            "length": 1.06667328
+          },
+          {
+            "name": "NormalWalkTurnRight",
+            "id": 14504,
+            "weight": 6.662249e-07,
+            "length": 1.1000061
+          },
+          {
+            "name": "SwordRF",
+            "id": 14550,
+            "weight": 0.0121881282,
+            "length": 0.666667938
+          },
+          {
+            "name": "NormalRunTurnRight",
+            "id": 14488,
+            "weight": 0.009172009,
+            "length": 0.666671753
+          },
+          {
+            "name": "NormalRunTurnLeft",
+            "id": 14486,
+            "weight": 0.00575220026,
+            "length": 0.666671753
+          },
+          {
+            "name": "SwordWF",
+            "id": 14558,
+            "weight": 0.9700903,
+            "length": 1.09999847
+          },
+          {
+            "name": "NormalWalkTurnRight",
+            "id": 14504,
+            "weight": 0.0021295792,
+            "length": 1.1000061
+          },
+          {
+            "name": "RifleHold",
+            "id": 15008,
+            "weight": 0.000148314663,
+            "length": 1.333334
+          },
+          {
+            "name": "RifleWalkForward",
+            "id": 14736,
+            "weight": 0.0002065591,
+            "length": 0.5
+          },
+          {
+            "name": "RifleWalkRight",
+            "id": 14744,
+            "weight": 3.62907e-07,
+            "length": 0.500000954
+          }
+        ],
+        "block_clips": [
+          {
+            "name": "NormalSheildBlock",
+            "id": 14346,
+            "weight": 3.0875206e-05,
+            "length": 2.00000381
+          },
+          {
+            "name": "SwordSheildBlock",
+            "id": 14380,
+            "weight": 0.9999691,
+            "length": 1.66667175
+          }
+        ],
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": true,
+          "MoveStyle": 0.9999691,
+          "MoveStyleH": 0.939663649,
+          "MoveStyleV": 0.342009544,
+          "ForwardSpeed": 2.03722119,
+          "RightSpeed": 0.00327215833,
+          "ForwardAngle": -0.631303847
+        },
+        "other_active_layers": [],
+        "base_transition": false,
+        "block_transition": false
+      },
+      "SwordRF": {
+        "sample": 1686,
+        "frame": 10962,
+        "realtime": 206.092438,
+        "weight": 0.9877594,
+        "base_clips": [
+          {
+            "name": "NormalRF",
+            "id": 14472,
+            "weight": 0.0002785575,
+            "length": 0.6666667
+          },
+          {
+            "name": "NormalRunTurnLeft",
+            "id": 14486,
+            "weight": 1.44173782e-07,
+            "length": 0.666671753
+          },
+          {
+            "name": "NormalWF",
+            "id": 14508,
+            "weight": 3.12815314e-06,
+            "length": 1.06667328
+          },
+          {
+            "name": "SwordRF",
+            "id": 14550,
+            "weight": 0.9877594,
+            "length": 0.666667938
+          },
+          {
+            "name": "NormalRunTurnLeft",
+            "id": 14486,
+            "weight": 0.000511237362,
+            "length": 0.666671753
+          },
+          {
+            "name": "SwordWF",
+            "id": 14558,
+            "weight": 0.0110923685,
+            "length": 1.09999847
+          },
+          {
+            "name": "RifleWalkForward",
+            "id": 14736,
+            "weight": 0.000239366142,
+            "length": 0.5
+          },
+          {
+            "name": "RifleWalkLeft",
+            "id": 14740,
+            "weight": 7.143509e-08,
+            "length": 0.5
+          },
+          {
+            "name": "RifleSprint",
+            "id": 14728,
+            "weight": 0.000115739582,
+            "length": 0.6000004
+          }
+        ],
+        "block_clips": [
+          {
+            "name": "NormalSheildBlock",
+            "id": 14346,
+            "weight": 5.96046448e-08,
+            "length": 2.00000381
+          },
+          {
+            "name": "SwordSheildBlock",
+            "id": 14380,
+            "weight": 0.99999994,
+            "length": 1.66667175
+          }
+        ],
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": true,
+          "MoveStyle": 0.99999994,
+          "MoveStyleH": 0.939692557,
+          "MoveStyleV": 0.3420201,
+          "ForwardSpeed": 4.966685,
+          "RightSpeed": -0.00156909623,
+          "ForwardAngle": 6.92879534
+        },
+        "other_active_layers": [],
+        "base_transition": false,
+        "block_transition": false
+      }
+    },
+    "shield_boolean_edges": [
+      {
+        "sample": 0,
+        "frame": 9276,
+        "time": 159.5753,
+        "realtime": 169.433533,
+        "SheildBlock": false
+      },
+      {
+        "sample": 1506,
+        "frame": 10782,
+        "time": 192.3188,
+        "realtime": 202.17868,
+        "SheildBlock": true
+      },
+      {
+        "sample": 1948,
+        "frame": 11224,
+        "time": 201.870712,
+        "realtime": 211.732574,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2067,
+        "frame": 11343,
+        "time": 204.567688,
+        "realtime": 214.417328,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2174,
+        "frame": 11450,
+        "time": 206.8695,
+        "realtime": 216.723862,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2250,
+        "frame": 11526,
+        "time": 208.447037,
+        "realtime": 218.297287,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2300,
+        "frame": 11576,
+        "time": 209.419281,
+        "realtime": 219.269775,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2413,
+        "frame": 11689,
+        "time": 211.551956,
+        "realtime": 221.403931,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2448,
+        "frame": 11724,
+        "time": 212.253,
+        "realtime": 222.10582,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2504,
+        "frame": 11780,
+        "time": 213.365173,
+        "realtime": 223.2196,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2526,
+        "frame": 11802,
+        "time": 213.75798,
+        "realtime": 223.6067,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2828,
+        "frame": 12104,
+        "time": 219.496658,
+        "realtime": 229.3468,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2849,
+        "frame": 12125,
+        "time": 219.909,
+        "realtime": 229.7584,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2890,
+        "frame": 12166,
+        "time": 220.653519,
+        "realtime": 230.503128,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2929,
+        "frame": 12205,
+        "time": 221.407257,
+        "realtime": 231.257858,
+        "SheildBlock": false
+      },
+      {
+        "sample": 2971,
+        "frame": 12247,
+        "time": 222.180115,
+        "realtime": 232.032837,
+        "SheildBlock": true
+      },
+      {
+        "sample": 2987,
+        "frame": 12263,
+        "time": 222.492966,
+        "realtime": 232.343964,
+        "SheildBlock": false
+      }
+    ]
+  },
+  "source_mixture_interpretation": {
+    "movement_source": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Human.cs",
+    "movement_source_sha256": "3510d27c4bfa86e673a13811097a05614f90d68e963cdf35b708e1dd8a063adb",
+    "damping": "MoveStyle and MoveStyleH/V independently Lerp toward style and cos(style*20degrees)/sin(style*20degrees) at5*Time.deltaTime.",
+    "style_blend_node": 1,
+    "style_blend_type_serialized": 2,
+    "literal_sword_style_point": [
+      0.9399999976158142,
+      0.34200000762939453
+    ],
+    "source_trigonometric_target": [
+      0.9396926207859084,
+      0.3420201433256687
+    ],
+    "best_run_observed_style_point": [
+      0.939692557,
+      0.3420201
+    ],
+    "speed_blend_node": 41,
+    "literal_forward_walk_point": [
+      0,
+      2
+    ],
+    "literal_forward_run_point": [
+      0,
+      5
+    ],
+    "inference": "Persistent small Normal/Rifle contributions are consistent with the trigonometric style target differing from the serialized Sword point. ForwardSpeed/RightSpeed/ForwardAngle also select genuine neighbouring gait/turn/slope mixtures. This report does not reproduce or numerically validate Unity blendType2 weight evaluation.",
+    "qualification_policy": "Keep exact recorded mixtures. Pure single-leaf .9999 labels are diagnostic, not required proof that the live masked composition exists."
+  },
+  "attack_restoration": {
+    "current_attack_clip_episodes": [
+      {
+        "clips": [
+          "Attack6"
+        ],
+        "first": {
+          "sample": 2717,
+          "realtime": 227.296463,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.021332724,
+          "authored_seconds_from_reported_clip": 0.02275490673774528
+        },
+        "last": {
+          "sample": 2736,
+          "realtime": 227.622116,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": true,
+          "normalized_time": 0.3245437,
+          "authored_seconds_from_reported_clip": 0.346179963975664
+        },
+        "frames": 20,
+        "block_boolean_true_frames": 0,
+        "first_block_overlap": null
+      },
+      {
+        "clips": [
+          "Attack7"
+        ],
+        "first": {
+          "sample": 2737,
+          "realtime": 227.6384,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.015165369,
+          "authored_seconds_from_reported_clip": 0.016681909842995942
+        },
+        "last": {
+          "sample": 2763,
+          "realtime": 228.135941,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": true,
+          "normalized_time": 0.46626538,
+          "authored_seconds_from_reported_clip": 0.5128920392289988
+        },
+        "frames": 27,
+        "block_boolean_true_frames": 0,
+        "first_block_overlap": null
+      },
+      {
+        "clips": [
+          "Attack8"
+        ],
+        "first": {
+          "sample": 2764,
+          "realtime": 228.151978,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.01379841,
+          "authored_seconds_from_reported_clip": 0.017477989081644902
+        },
+        "last": {
+          "sample": 2823,
+          "realtime": 229.260635,
+          "SheildBlock": false,
+          "layer_weight": 0.5803095,
+          "in_transition": true,
+          "normalized_time": 0.8902405,
+          "authored_seconds_from_reported_clip": 1.1276381654870449
+        },
+        "frames": 60,
+        "block_boolean_true_frames": 0,
+        "first_block_overlap": null
+      },
+      {
+        "clips": [
+          "Attack6"
+        ],
+        "first": {
+          "sample": 2850,
+          "realtime": 229.774567,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.0155887743,
+          "authored_seconds_from_reported_clip": 0.016628026751401296
+        },
+        "last": {
+          "sample": 2898,
+          "realtime": 230.651169,
+          "SheildBlock": true,
+          "layer_weight": 0.5311419,
+          "in_transition": true,
+          "normalized_time": 0.826947868,
+          "authored_seconds_from_reported_clip": 0.8820777699705529
+        },
+        "frames": 49,
+        "block_boolean_true_frames": 9,
+        "first_block_overlap": {
+          "sample": 2890,
+          "realtime": 230.503128,
+          "SheildBlock": true,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.697980762,
+          "authored_seconds_from_reported_clip": 0.7445128500256406
+        }
+      },
+      {
+        "clips": [
+          "Attack6"
+        ],
+        "first": {
+          "sample": 2930,
+          "realtime": 231.2732,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.0155315539,
+          "authored_seconds_from_reported_clip": 0.016566991655016208
+        },
+        "last": {
+          "sample": 2978,
+          "realtime": 232.149384,
+          "SheildBlock": true,
+          "layer_weight": 0.490920454,
+          "in_transition": true,
+          "normalized_time": 0.8366085,
+          "authored_seconds_from_reported_clip": 0.89238244461912
+        },
+        "frames": 49,
+        "block_boolean_true_frames": 8,
+        "first_block_overlap": {
+          "sample": 2971,
+          "realtime": 232.032837,
+          "SheildBlock": true,
+          "layer_weight": 0.916880131,
+          "in_transition": true,
+          "normalized_time": 0.72456336,
+          "authored_seconds_from_reported_clip": 0.7728676226433792
+        }
+      },
+      {
+        "clips": [
+          "Attack6"
+        ],
+        "first": {
+          "sample": 2988,
+          "realtime": 232.359985,
+          "SheildBlock": false,
+          "layer_weight": 1,
+          "in_transition": false,
+          "normalized_time": 0.0155436238,
+          "authored_seconds_from_reported_clip": 0.016579866215659936
+        },
+        "last": {
+          "sample": 3037,
+          "realtime": 233.238449,
+          "SheildBlock": false,
+          "layer_weight": 0.488784939,
+          "in_transition": true,
+          "normalized_time": 0.839311361,
+          "authored_seconds_from_reported_clip": 0.8952654964966059
+        },
+        "frames": 50,
+        "block_boolean_true_frames": 0,
+        "first_block_overlap": null
+      }
+    ],
+    "draw_current_clip_samples": {
+      "SwordPutOn": {
+        "frames": 14,
+        "first": 2694,
+        "last": 2707
+      }
+    },
+    "selected_transition_frames": {
+      "2828": {
+        "realtime": 229.3468,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": true,
+          "MoveStyle": 0.999999344
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 0.371203959,
+            "in_transition": false,
+            "current_state": 1458450275,
+            "current_normalized_time": 0.199776411,
+            "next_state": 0,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": []
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 498051673,
+            "current_normalized_time": 5.7386694,
+            "next_state": 439445811,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 6.556511e-07
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.999999344
+              }
+            ]
+          }
+        }
+      },
+      "2849": {
+        "realtime": 229.7584,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": false,
+          "MoveStyle": 0.9999998
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 0.041050937,
+            "in_transition": true,
+            "current_state": 1458450275,
+            "current_normalized_time": 0.612119436,
+            "next_state": 998445282,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ]
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 439445811,
+            "current_normalized_time": 0.247405037,
+            "next_state": 498051673,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 1.78813934e-07
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.9999998
+              }
+            ],
+            "next_clips": []
+          }
+        }
+      },
+      "2850": {
+        "realtime": 229.774567,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": false,
+          "MoveStyle": 0.9999998
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 1,
+            "in_transition": false,
+            "current_state": 998445282,
+            "current_normalized_time": 0.0155887743,
+            "next_state": 0,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ],
+            "next_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ]
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 439445811,
+            "current_normalized_time": 0.257381827,
+            "next_state": 498051673,
+            "next_normalized_time": 0.016628027,
+            "current_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 1.78813934e-07
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.9999998
+              }
+            ],
+            "next_clips": []
+          }
+        }
+      },
+      "2890": {
+        "realtime": 230.503128,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": true,
+          "MoveStyle": 0.9999999
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 1,
+            "in_transition": false,
+            "current_state": 998445282,
+            "current_normalized_time": 0.697980762,
+            "next_state": 0,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ],
+            "next_clips": []
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 498051673,
+            "current_normalized_time": 0.744513035,
+            "next_state": 439445811,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 1.1920929e-07
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.9999999
+              }
+            ]
+          }
+        }
+      },
+      "2929": {
+        "realtime": 231.257858,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": false,
+          "MoveStyle": 0.99999994
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 0.0195212867,
+            "in_transition": true,
+            "current_state": 1458450275,
+            "current_normalized_time": 0.751586258,
+            "next_state": 998445282,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ]
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 439445811,
+            "current_normalized_time": 0.4522426,
+            "next_state": 498051673,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 5.96046448e-08
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.99999994
+              }
+            ],
+            "next_clips": []
+          }
+        }
+      },
+      "2930": {
+        "realtime": 231.2732,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": false,
+          "MoveStyle": 0.99999994
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 1,
+            "in_transition": false,
+            "current_state": 998445282,
+            "current_normalized_time": 0.0155315539,
+            "next_state": 0,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ],
+            "next_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ]
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 439445811,
+            "current_normalized_time": 0.4621828,
+            "next_state": 498051673,
+            "next_normalized_time": 0.0165669918,
+            "current_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 5.96046448e-08
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.99999994
+              }
+            ],
+            "next_clips": []
+          }
+        }
+      },
+      "2971": {
+        "realtime": 232.032837,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": true,
+          "MoveStyle": 0.99999994
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 0.916880131,
+            "in_transition": true,
+            "current_state": 998445282,
+            "current_normalized_time": 0.72456336,
+            "next_state": 1458450275,
+            "next_normalized_time": 0.0262009613,
+            "current_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ],
+            "next_clips": []
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 498051673,
+            "current_normalized_time": 0.7728679,
+            "next_state": 439445811,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 5.96046448e-08
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.99999994
+              }
+            ]
+          }
+        }
+      },
+      "2987": {
+        "realtime": 232.343964,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": false,
+          "MoveStyle": 0.99999994
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 0.171743,
+            "in_transition": true,
+            "current_state": 1458450275,
+            "current_normalized_time": 0.33905,
+            "next_state": 998445282,
+            "next_normalized_time": 0,
+            "current_clips": [],
+            "next_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ]
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 439445811,
+            "current_normalized_time": 0.18770887,
+            "next_state": 498051673,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 5.96046448e-08
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.99999994
+              }
+            ],
+            "next_clips": []
+          }
+        }
+      },
+      "2988": {
+        "realtime": 232.359985,
+        "parameters": {
+          "FirstPerson": 0,
+          "SheildBlock": false,
+          "MoveStyle": 0.99999994
+        },
+        "layers": {
+          "FullBody": {
+            "weight": 1,
+            "in_transition": false,
+            "current_state": 998445282,
+            "current_normalized_time": 0.0155436238,
+            "next_state": 0,
+            "next_normalized_time": 0,
+            "current_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ],
+            "next_clips": [
+              {
+                "name": "Attack6",
+                "weight": 1
+              }
+            ]
+          },
+          "LArmOnly": {
+            "weight": 1,
+            "in_transition": true,
+            "current_state": 439445811,
+            "current_normalized_time": 0.197656766,
+            "next_state": 498051673,
+            "next_normalized_time": 0.0165798664,
+            "current_clips": [
+              {
+                "name": "NormalSheildBlock",
+                "weight": 5.96046448e-08
+              },
+              {
+                "name": "SwordSheildBlock",
+                "weight": 0.99999994
+              }
+            ],
+            "next_clips": []
+          }
+        }
+      }
+    },
+    "interpretation": "Boolfalse at each observed attack entry; bool reappears after the Attack6 action-end time even while the visual FullBody clip/exit blend can remain. Example2890 authored.7445128s exceeds sourceAttack6 action-end.709125936s. This is layer/parameter evidence, not a direct PEAction eligibility or key-held trace."
+  },
+  "rendering": {
+    "process_environment_from_root_launch": {
+      "__GLX_VENDOR_LIBRARY_NAME": "mesa",
+      "MESA_LOADER_DRIVER_OVERRIDE": "zink",
+      "GALLIUM_DRIVER": "zink",
+      "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/nvidia_icd.json",
+      "LIBGL_ALWAYS_SOFTWARE": "unset"
+    },
+    "force_gfx_direct": true,
+    "Player_log_evidence": [
+      {
+        "line": 3,
+        "text": "[pose] Waiting for arm file: /home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/sword-shield-zink-01.arm"
+      },
+      {
+        "line": 4,
+        "text": "[pose] Probe installed on Unity main thread"
+      },
+      {
+        "line": 5,
+        "text": "[pose] Capturing player poses"
+      },
+      {
+        "line": 6,
+        "text": "[pose] Finished: capture-limit; frames=3600"
+      },
+      {
+        "line": 9,
+        "text": "    Version:  OpenGL 4.6 [4.6 (Compatibility Profile) Mesa 26.2.2-arch1.1]"
+      },
+      {
+        "line": 10,
+        "text": "    Renderer: zink Vulkan 1.4(Quadro K1200 (NVIDIA_PROPRIETARY))"
+      },
+      {
+        "line": 11,
+        "text": "    Vendor:   Mesa"
+      },
+      {
+        "line": 138,
+        "text": "[graphicsDeviceName]:zink Vulkan 1.4(Quadro K1200 (NVIDIA_PROPRIETARY))"
+      }
+    ],
+    "user_report": "User reported responsive/playable operation and performed ordinary equipment, camera, locomotion, block and attack inputs.",
+    "limit": "Bounded capture success, not long-term driver stability or ordinary Steam/Proton launch verification."
+  },
+  "checkpoint_integrity": {
+    "manual_slots": [
+      1,
+      2
+    ],
+    "files_checked": 14,
+    "all_unchanged": true,
+    "changed": [],
+    "sha256_by_relative_save_path": {
+      "save0/world.arc": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220",
+      "save0/index.arc": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca",
+      "save0/MainAdventure/world.arc": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6",
+      "save0/MainAdventure/voxel.arc": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4",
+      "save0/MainAdventure/water.arc": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b",
+      "save0/MainAdventure/block45.arc": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21",
+      "save0/MainAdventure/index.arc": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae",
+      "save1/world.arc": "d3c472e6fd383f50053eaa98afb94ac416120e359dfa8927e8815c6484a27fd6",
+      "save1/index.arc": "894e1c7256c4a3270cf1aa2b0188b69309e25d17dfc2e452ff9aab13eecba643",
+      "save1/main/world.arc": "01845c58c261158d6a0f893996f2ceb7d98bd8073cda8bb5d70bd7a6d51c6b9b",
+      "save1/main/voxel.arc": "5a5eaa3ad895565efb1de18c17d1471c7778354cbdea6cf8e6a7395649f26ea9",
+      "save1/main/water.arc": "c305510265765544bb01740a74957f8d7fffbe96ab9519066eabef328338ed94",
+      "save1/main/block45.arc": "8c94cd0106669a9d3691937e1d31fe91faa96e7f3a29c9c27b9fc2185dc88f21",
+      "save1/main/index.arc": "6189624b593cb2ecb067707d8e8caf67e2c14e99caa2b0b0d531f5937ad6b919"
+    }
+  },
+  "lifecycle": {
+    "pid": 2253813,
+    "running_at_root_handoff": false,
+    "desktop_owner_after_explicit_return": "root",
+    "exit_observed": true,
+    "operator_action": "SYSTEM -> Quit Game -> YES",
+    "launcher_exit_status": 137,
+    "raw_returncode": -9,
+    "signal": 9,
+    "known_source_pattern": "Original self-kill during quit; not exit0",
+    "graphics_crash_observed_during_this_run": false,
+    "evidence": "Root operator report; no desktop action by this audit"
+  },
+  "qualification": {
+    "original_masked_composition_observed": true,
+    "all_three_pure_gait_labels": false,
+    "authored_masked_runtime_loop_qualified": false,
+    "runtime_pose_export_ready": false,
+    "next_design": "Use measured full body/mount/defence frames as a reference without deleting real residual contributors. A future runtime composite must preserve independent base and block phase and exact masks; an observation-only finite recording/preview is a narrower separate artifact, not a seamless authored loop. Qualify a callback-free exact-mask composition mechanism and compare identical mixed phases, or retain an explicitly finite recorded adapter. Draw/stow transition timing, full directions, action eligibility/attributes, reaction/IK and end-to-end gameplay remain separate."
+  },
+  "local_evidence_files": [
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/starter-pair-next/shield-zink-report.json",
+      "sha256": "829e72ece04c35b15e160160c423b12c11d2d1611df958bb8016a87b35e7f6c1"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/starter-pair-next/shield-zink-player-snapshot.log",
+      "sha256": "8b83508f9e6ca392d9f7448e62547a0f44866dcf4bdcbf5399f7f3a46963f22c"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/sword-shield-zink-01.jsonl",
+      "sha256": "25f1965e54ca2ebcb56479f1b2f72a68762736dc3f2b50c60573b269b340dc17"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/sword-shield-zink-01.launch.json",
+      "sha256": "2104e330f6e8dd9e09356b8d9b1e7fdcb312598afd6b0547237c242cd506a61c"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/tools/analyze_shield_pose.py",
+      "sha256": "7fae0b11831e5df862a4c7b68bb852195f3cca3d7db2771f31a6aa6f58f64f2c"
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/starter-pair-next/summarize-shield-zink.py",
+      "sha256": "0b3483b9718f3eba88c615e8d8d08ee41f95654cedd2c3e2fcde680449132c6b"
+    }
+  ]
+}

@@ -1,0 +1,5710 @@
+{
+  "schema": 1,
+  "item_id": 10,
+  "prefab": {
+    "path": "Assets/Resources/Prefab/Item/Equip/Other/torch.prefab",
+    "sha256": "adb40dc17e371df0c66b19e04f051973bfd6a9346f4f1883a1f77550a68e7a23"
+  },
+  "database": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "scripts": {
+    "drag": {
+      "path": "Assets/Scripts/Items/DrawItem/ItemDragging/ItemDraggingTorch.cs",
+      "sha256": "c9f777bcd7ba1f46d22d6baaedf06f059976c5d80d563a723b09db913ccb3fbc"
+    },
+    "drag_base": {
+      "path": "Assets/Scripts/Items/DrawItem/ItemDragging/ItemDraggingBase.cs",
+      "sha256": "a9806c96b2261db3a9ffbc434a452c855166e829c7f70fc7ed08ce5791087e70"
+    },
+    "construct": {
+      "path": "Assets/Scripts/Items/DrawItem/DragItemNonLogic/ItemScript_Torch.cs",
+      "sha256": "f65824ca4b2ccc743e56c8c31a5bfad974a2ed50b67a617fba940112659255df"
+    },
+    "pickup": {
+      "path": "Assets/Scripts/Items/DrawItem/DragItemMousePick/DragItemMousePickItemList.cs",
+      "sha256": "95bf480efb6c7d26b6db202ebbb81454ae41d6c5bd5c879855e930408417577f"
+    },
+    "range": {
+      "path": "Assets/Scripts/MousePicker/MousePickable.cs",
+      "sha256": "2786964932ead1336f4523f368b8877d1acffaed723874d9f921507949001e5a"
+    },
+    "burn": {
+      "path": "Assets/Scripts/Lilj/torch.cs",
+      "sha256": "e31ac8d280c15b76eccb5f5d2b364278713bf07bffd8bcaf54c5ee32f97b6225"
+    }
+  },
+  "placement": {
+    "max_distance": 10,
+    "ray_distance": 100,
+    "rotation_degrees": [
+      -90,
+      0,
+      0
+    ],
+    "item_bounds": false,
+    "physical_blocker": false
+  },
+  "pickup": {
+    "max_bounds_distance": 4,
+    "root_coarse_axes_distance": 5,
+    "reward_item": 1001,
+    "reward_count": 1,
+    "destroys_original_instance": true
+  },
+  "query_capsules": [
+    {
+      "component": 13664468,
+      "center": [
+        0.0,
+        0.0,
+        0.20000000298023224
+      ],
+      "radius": 0.07999999821186066,
+      "height": 0.699999988079071,
+      "axis": 2,
+      "trigger": true
+    },
+    {
+      "component": 13665548,
+      "center": [
+        0.0,
+        0.0,
+        0.20000000298023224
+      ],
+      "radius": 0.07999999821186066,
+      "height": 0.699999988079071,
+      "axis": 2,
+      "trigger": true
+    }
+  ],
+  "light": {
+    "position": [
+      0.0,
+      0.0,
+      0.44999998807907104
+    ],
+    "color": [
+      0.9552238583564758,
+      0.7151467204093933,
+      0.34216973185539246,
+      1.0
+    ],
+    "range": 20.0,
+    "intensity": 1.2000000476837158
+  },
+  "burn": {
+    "fuel_timer": false,
+    "water_extinguish_depth": 0.5
+  },
+  "physics": {
+    "path": "ProjectSettings/DynamicsManager.asset",
+    "sha256": "75d9bb7ca0fc59fffd439a03421ce29067f8c3062f16a169b259ed5e72508f8e",
+    "gravity": {
+      "x": 0.0,
+      "y": -9.8100004196167,
+      "z": 0.0
+    }
+  },
+  "flame_position": [
+    0.0,
+    0.0,
+    0.4099999964237213
+  ],
+  "particle_systems": {
+    "19800000": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100004
+      },
+      "lengthInSec": 5.0,
+      "startDelay": 0.0,
+      "speed": 1.0,
+      "randomSeed": 0,
+      "looping": true,
+      "prewarm": false,
+      "playOnAwake": true,
+      "moveWithTransform": false,
+      "InitialModule": {
+        "enabled": true,
+        "startLifetime": {
+          "scalar": 4.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.75,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        },
+        "startSpeed": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startColor": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 1146706265
+          },
+          "minMaxState": 0
+        },
+        "startSize": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startRotation": {
+          "scalar": 214.8849334716797,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.02923976443707943,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        },
+        "gravityModifier": -0.019999999552965164,
+        "inheritVelocity": 0.0,
+        "maxNumParticles": 1000
+      },
+      "ShapeModule": {
+        "enabled": true,
+        "type": 4,
+        "radius": 0.10000000149011612,
+        "angle": 9.0,
+        "length": 5.0,
+        "boxX": 0.5,
+        "boxY": 0.10000000149011612,
+        "boxZ": 0.5,
+        "arc": 360.0,
+        "placementMode": 0,
+        "m_Mesh": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "randomDirection": true
+      },
+      "EmissionModule": {
+        "enabled": true,
+        "m_Type": 0,
+        "rate": {
+          "scalar": 4.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "cnt0": 0,
+        "cnt1": 30,
+        "cnt2": 30,
+        "cnt3": 30,
+        "time0": 0.0,
+        "time1": 0.0,
+        "time2": 0.0,
+        "time3": 0.0,
+        "m_BurstCount": 1
+      },
+      "SizeModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.1250000298023224,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 0.9777777791023254,
+                "value": 0.5267857313156128,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        }
+      },
+      "RotationModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 0.7853981256484985,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": -1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        }
+      },
+      "ColorModule": {
+        "enabled": true,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 16777215
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 4278190080
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 18311,
+            "atime2": 45296,
+            "atime3": 65535,
+            "atime4": 65535,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        }
+      },
+      "UVModule": {
+        "enabled": false,
+        "frameOverTime": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "tilesX": 1,
+        "tilesY": 1,
+        "animationType": 0,
+        "rowIndex": 0,
+        "cycles": 1.0,
+        "randomRow": true
+      },
+      "VelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": false
+      },
+      "ForceModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.10000000149011612,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": true,
+        "randomizePerFrame": false
+      },
+      "ExternalForcesModule": {
+        "enabled": false,
+        "multiplier": 1.0
+      },
+      "ClampVelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "magnitude": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "separateAxis": false,
+        "inWorldSpace": false,
+        "dampen": 1.0
+      },
+      "SizeBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "RotationBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 0.7853981852531433,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "ColorBySpeedModule": {
+        "enabled": false,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "CollisionModule": {
+        "enabled": false,
+        "type": 0,
+        "plane0": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane2": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane3": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane4": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane5": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "dampen": 0.0,
+        "bounce": 1.0,
+        "energyLossOnCollision": 0.0,
+        "minKillSpeed": 0.0,
+        "particleRadius": 0.009999999776482582,
+        "collidesWith": {
+          "m_Bits": 4294967295
+        },
+        "quality": 0,
+        "voxelSize": 0.5,
+        "collisionMessages": false
+      },
+      "SubModule": {
+        "enabled": false,
+        "subEmitterBirth": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterBirth1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        }
+      }
+    },
+    "19800002": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100006
+      },
+      "lengthInSec": 1.0,
+      "startDelay": 0.0,
+      "speed": 1.0,
+      "randomSeed": 0,
+      "looping": true,
+      "prewarm": false,
+      "playOnAwake": true,
+      "moveWithTransform": false,
+      "InitialModule": {
+        "enabled": true,
+        "startLifetime": {
+          "scalar": 1.5,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startSpeed": {
+          "scalar": 0.10000000149011612,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startColor": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4285983743
+          },
+          "minMaxState": 0
+        },
+        "startSize": {
+          "scalar": 0.18000000715255737,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startRotation": {
+          "scalar": 6.283185005187988,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        },
+        "gravityModifier": -0.10000000149011612,
+        "inheritVelocity": 0.0,
+        "maxNumParticles": 1000
+      },
+      "ShapeModule": {
+        "enabled": true,
+        "type": 4,
+        "radius": 0.10000000149011612,
+        "angle": 35.0,
+        "length": 5.0,
+        "boxX": 0.5,
+        "boxY": 0.10000000149011612,
+        "boxZ": 0.5,
+        "arc": 360.0,
+        "placementMode": 0,
+        "m_Mesh": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "randomDirection": true
+      },
+      "EmissionModule": {
+        "enabled": true,
+        "m_Type": 0,
+        "rate": {
+          "scalar": 7.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "cnt0": 12,
+        "cnt1": 30,
+        "cnt2": 30,
+        "cnt3": 30,
+        "time0": 0.0,
+        "time1": 0.0,
+        "time2": 0.0,
+        "time3": 0.0,
+        "m_BurstCount": 0
+      },
+      "SizeModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": -2.0,
+                "outSlope": -2.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        }
+      },
+      "RotationModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 0.7853981852531433,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        }
+      },
+      "ColorModule": {
+        "enabled": true,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 16777215
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 46453,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        }
+      },
+      "UVModule": {
+        "enabled": false,
+        "frameOverTime": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "tilesX": 1,
+        "tilesY": 1,
+        "animationType": 0,
+        "rowIndex": 0,
+        "cycles": 1.0,
+        "randomRow": true
+      },
+      "VelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": false
+      },
+      "ForceModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": true,
+        "randomizePerFrame": false
+      },
+      "ExternalForcesModule": {
+        "enabled": false,
+        "multiplier": 1.0
+      },
+      "ClampVelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "magnitude": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "separateAxis": false,
+        "inWorldSpace": false,
+        "dampen": 1.0
+      },
+      "SizeBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "RotationBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 0.7853981852531433,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "ColorBySpeedModule": {
+        "enabled": false,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "CollisionModule": {
+        "enabled": false,
+        "type": 0,
+        "plane0": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane2": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane3": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane4": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane5": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "dampen": 0.0,
+        "bounce": 1.0,
+        "energyLossOnCollision": 0.0,
+        "minKillSpeed": 0.0,
+        "particleRadius": 0.009999999776482582,
+        "collidesWith": {
+          "m_Bits": 4294967295
+        },
+        "quality": 0,
+        "voxelSize": 0.5,
+        "collisionMessages": false
+      },
+      "SubModule": {
+        "enabled": false,
+        "subEmitterBirth": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterBirth1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        }
+      }
+    },
+    "19800004": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100002
+      },
+      "lengthInSec": 0.10000000149011612,
+      "startDelay": 0.0,
+      "speed": 1.0,
+      "randomSeed": 0,
+      "looping": true,
+      "prewarm": false,
+      "playOnAwake": true,
+      "moveWithTransform": false,
+      "InitialModule": {
+        "enabled": true,
+        "startLifetime": {
+          "scalar": 0.15000000596046448,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startSpeed": {
+          "scalar": 0.10000000149011612,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startColor": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 2598494719
+          },
+          "minMaxState": 0
+        },
+        "startSize": {
+          "scalar": 0.5,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startRotation": {
+          "scalar": 214.8849334716797,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.02923976443707943,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        },
+        "gravityModifier": -4.0,
+        "inheritVelocity": 0.0,
+        "maxNumParticles": 8
+      },
+      "ShapeModule": {
+        "enabled": true,
+        "type": 4,
+        "radius": 0.009999999776482582,
+        "angle": 5.0,
+        "length": 5.0,
+        "boxX": 0.5,
+        "boxY": 0.10000000149011612,
+        "boxZ": 0.5,
+        "arc": 360.0,
+        "placementMode": 0,
+        "m_Mesh": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "randomDirection": true
+      },
+      "EmissionModule": {
+        "enabled": true,
+        "m_Type": 0,
+        "rate": {
+          "scalar": 40.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "cnt0": 4,
+        "cnt1": 30,
+        "cnt2": 30,
+        "cnt3": 30,
+        "time0": 0.0,
+        "time1": 0.0,
+        "time2": 0.0,
+        "time3": 0.0,
+        "m_BurstCount": 0
+      },
+      "SizeModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0063492064364254475,
+                "value": 0.696428656578064,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 0.9809523820877075,
+                "value": 0.1517857313156128,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        }
+      },
+      "RotationModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 0.7853981256484985,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": -1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        }
+      },
+      "ColorModule": {
+        "enabled": true,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 16777215
+            },
+            "key1": {
+              "rgba": 1895825407
+            },
+            "key2": {
+              "rgba": 1107296256
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 8674,
+            "atime2": 28527,
+            "atime3": 65535,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 4
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        }
+      },
+      "UVModule": {
+        "enabled": false,
+        "frameOverTime": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "tilesX": 1,
+        "tilesY": 1,
+        "animationType": 0,
+        "rowIndex": 0,
+        "cycles": 1.0,
+        "randomRow": true
+      },
+      "VelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": false
+      },
+      "ForceModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 30.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": true,
+        "randomizePerFrame": false
+      },
+      "ExternalForcesModule": {
+        "enabled": false,
+        "multiplier": 1.0
+      },
+      "ClampVelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "magnitude": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "separateAxis": false,
+        "inWorldSpace": false,
+        "dampen": 1.0
+      },
+      "SizeBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "RotationBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 0.7853981852531433,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "ColorBySpeedModule": {
+        "enabled": false,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "CollisionModule": {
+        "enabled": false,
+        "type": 0,
+        "plane0": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane2": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane3": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane4": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane5": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "dampen": 0.0,
+        "bounce": 1.0,
+        "energyLossOnCollision": 0.0,
+        "minKillSpeed": 0.0,
+        "particleRadius": 0.009999999776482582,
+        "collidesWith": {
+          "m_Bits": 4294967295
+        },
+        "quality": 0,
+        "voxelSize": 0.5,
+        "collisionMessages": false
+      },
+      "SubModule": {
+        "enabled": false,
+        "subEmitterBirth": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterBirth1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        }
+      }
+    },
+    "19800006": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100008
+      },
+      "lengthInSec": 5.0,
+      "startDelay": 0.0,
+      "speed": 1.0,
+      "randomSeed": 0,
+      "looping": true,
+      "prewarm": false,
+      "playOnAwake": true,
+      "moveWithTransform": false,
+      "InitialModule": {
+        "enabled": true,
+        "startLifetime": {
+          "scalar": 0.8999999761581421,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startSpeed": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startColor": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 2589415267
+          },
+          "minMaxState": 0
+        },
+        "startSize": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "startRotation": {
+          "scalar": 214.8849334716797,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.02923976443707943,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        },
+        "gravityModifier": -0.20000000298023224,
+        "inheritVelocity": 0.0,
+        "maxNumParticles": 1000
+      },
+      "ShapeModule": {
+        "enabled": true,
+        "type": 4,
+        "radius": 0.009999999776482582,
+        "angle": 0.0,
+        "length": 5.0,
+        "boxX": 0.5,
+        "boxY": 0.10000000149011612,
+        "boxZ": 0.5,
+        "arc": 360.0,
+        "placementMode": 0,
+        "m_Mesh": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "randomDirection": true
+      },
+      "EmissionModule": {
+        "enabled": true,
+        "m_Type": 0,
+        "rate": {
+          "scalar": 7.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "cnt0": 5,
+        "cnt1": 30,
+        "cnt2": 30,
+        "cnt3": 30,
+        "time0": 0.0,
+        "time1": 0.0,
+        "time2": 0.0,
+        "time3": 0.0,
+        "m_BurstCount": 0
+      },
+      "SizeModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.1250000298023224,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.4821428954601288,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        }
+      },
+      "RotationModule": {
+        "enabled": true,
+        "curve": {
+          "scalar": 0.7853981256484985,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": -1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 3
+        }
+      },
+      "ColorModule": {
+        "enabled": true,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 2902458367
+            },
+            "key1": {
+              "rgba": 16777215
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 25636,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        }
+      },
+      "UVModule": {
+        "enabled": false,
+        "frameOverTime": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 1.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 1.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "tilesX": 1,
+        "tilesY": 1,
+        "animationType": 0,
+        "rowIndex": 0,
+        "cycles": 1.0,
+        "randomRow": true
+      },
+      "VelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": false
+      },
+      "ForceModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 0.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 0.25,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": -1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "inWorldSpace": false,
+        "randomizePerFrame": false
+      },
+      "ExternalForcesModule": {
+        "enabled": false,
+        "multiplier": 1.0
+      },
+      "ClampVelocityModule": {
+        "enabled": false,
+        "x": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "y": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "z": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "magnitude": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "separateAxis": false,
+        "inWorldSpace": false,
+        "dampen": 1.0
+      },
+      "SizeBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 1.0,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "RotationBySpeedModule": {
+        "enabled": false,
+        "curve": {
+          "scalar": 0.7853981852531433,
+          "maxCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 1.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minCurve": {
+            "m_Curve": [
+              {
+                "time": 0.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              },
+              {
+                "time": 1.0,
+                "value": 0.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+              }
+            ],
+            "m_PreInfinity": 2,
+            "m_PostInfinity": 2
+          },
+          "minMaxState": 0
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "ColorBySpeedModule": {
+        "enabled": false,
+        "gradient": {
+          "maxGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minGradient": {
+            "key0": {
+              "rgba": 4294967295
+            },
+            "key1": {
+              "rgba": 4294967295
+            },
+            "key2": {
+              "rgba": 0
+            },
+            "key3": {
+              "rgba": 0
+            },
+            "key4": {
+              "rgba": 0
+            },
+            "key5": {
+              "rgba": 0
+            },
+            "key6": {
+              "rgba": 0
+            },
+            "key7": {
+              "rgba": 0
+            },
+            "ctime0": 0,
+            "ctime1": 65535,
+            "ctime2": 0,
+            "ctime3": 0,
+            "ctime4": 0,
+            "ctime5": 0,
+            "ctime6": 0,
+            "ctime7": 0,
+            "atime0": 0,
+            "atime1": 65535,
+            "atime2": 0,
+            "atime3": 0,
+            "atime4": 0,
+            "atime5": 0,
+            "atime6": 0,
+            "atime7": 0,
+            "m_NumColorKeys": 2,
+            "m_NumAlphaKeys": 2
+          },
+          "minColor": {
+            "rgba": 4294967295
+          },
+          "maxColor": {
+            "rgba": 4294967295
+          },
+          "minMaxState": 1
+        },
+        "range": {
+          "x": 0.0,
+          "y": 1.0
+        }
+      },
+      "CollisionModule": {
+        "enabled": false,
+        "type": 0,
+        "plane0": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane2": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane3": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane4": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "plane5": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "dampen": 0.0,
+        "bounce": 1.0,
+        "energyLossOnCollision": 0.0,
+        "minKillSpeed": 0.0,
+        "particleRadius": 0.009999999776482582,
+        "collidesWith": {
+          "m_Bits": 4294967295
+        },
+        "quality": 0,
+        "voxelSize": 0.5,
+        "collisionMessages": false
+      },
+      "SubModule": {
+        "enabled": false,
+        "subEmitterBirth": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterBirth1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterCollision1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        },
+        "subEmitterDeath1": {
+          "m_FileID": 0,
+          "m_PathID": 0
+        }
+      }
+    },
+    "19900000": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100004
+      },
+      "m_Enabled": true,
+      "m_CastShadows": 1,
+      "m_ReceiveShadows": true,
+      "m_Materials": [
+        {
+          "m_FileID": 13,
+          "m_PathID": 2100000
+        }
+      ],
+      "m_SubsetIndices": [],
+      "m_StaticBatchRoot": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_UseLightProbes": false,
+      "m_ReflectionProbeUsage": 1,
+      "m_ProbeAnchor": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_ScaleInLightmap": 1.0,
+      "m_PreserveUVs": false,
+      "m_IgnoreNormalsForChartDetection": false,
+      "m_ImportantGI": false,
+      "m_MinimumChartSize": 4,
+      "m_AutoUVMaxDistance": 0.5,
+      "m_AutoUVMaxAngle": 89.0,
+      "m_LightmapParameters": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_SortingLayerID": 0,
+      "m_SortingOrder": 0,
+      "m_RenderMode": 0,
+      "m_MaxParticleSize": 50.0,
+      "m_CameraVelocityScale": 0.0,
+      "m_VelocityScale": 0.0,
+      "m_LengthScale": 2.0,
+      "m_SortingFudge": 3.0,
+      "m_NormalDirection": 1.0,
+      "m_SortMode": 1,
+      "m_Mesh": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh1": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh2": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh3": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      }
+    },
+    "19900002": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100006
+      },
+      "m_Enabled": true,
+      "m_CastShadows": 1,
+      "m_ReceiveShadows": true,
+      "m_Materials": [
+        {
+          "m_FileID": 14,
+          "m_PathID": 2100000
+        }
+      ],
+      "m_SubsetIndices": [],
+      "m_StaticBatchRoot": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_UseLightProbes": false,
+      "m_ReflectionProbeUsage": 1,
+      "m_ProbeAnchor": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_ScaleInLightmap": 1.0,
+      "m_PreserveUVs": false,
+      "m_IgnoreNormalsForChartDetection": false,
+      "m_ImportantGI": false,
+      "m_MinimumChartSize": 4,
+      "m_AutoUVMaxDistance": 0.5,
+      "m_AutoUVMaxAngle": 89.0,
+      "m_LightmapParameters": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_SortingLayerID": 0,
+      "m_SortingOrder": 0,
+      "m_RenderMode": 0,
+      "m_MaxParticleSize": 50.0,
+      "m_CameraVelocityScale": 0.0,
+      "m_VelocityScale": 0.0,
+      "m_LengthScale": 2.0,
+      "m_SortingFudge": 0.0,
+      "m_NormalDirection": 1.0,
+      "m_SortMode": 0,
+      "m_Mesh": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh1": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh2": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh3": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      }
+    },
+    "19900004": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100002
+      },
+      "m_Enabled": true,
+      "m_CastShadows": 1,
+      "m_ReceiveShadows": true,
+      "m_Materials": [
+        {
+          "m_FileID": 15,
+          "m_PathID": 2100000
+        }
+      ],
+      "m_SubsetIndices": [],
+      "m_StaticBatchRoot": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_UseLightProbes": false,
+      "m_ReflectionProbeUsage": 1,
+      "m_ProbeAnchor": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_ScaleInLightmap": 1.0,
+      "m_PreserveUVs": false,
+      "m_IgnoreNormalsForChartDetection": false,
+      "m_ImportantGI": false,
+      "m_MinimumChartSize": 4,
+      "m_AutoUVMaxDistance": 0.5,
+      "m_AutoUVMaxAngle": 89.0,
+      "m_LightmapParameters": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_SortingLayerID": 0,
+      "m_SortingOrder": 0,
+      "m_RenderMode": 0,
+      "m_MaxParticleSize": 50.0,
+      "m_CameraVelocityScale": 0.0,
+      "m_VelocityScale": 0.0,
+      "m_LengthScale": 2.0,
+      "m_SortingFudge": 0.0,
+      "m_NormalDirection": 1.0,
+      "m_SortMode": 0,
+      "m_Mesh": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh1": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh2": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh3": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      }
+    },
+    "19900006": {
+      "m_ObjectHideFlags": 1,
+      "m_PrefabParentObject": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_PrefabInternal": {
+        "m_FileID": 0,
+        "m_PathID": 100100000
+      },
+      "m_GameObject": {
+        "m_FileID": 0,
+        "m_PathID": 100008
+      },
+      "m_Enabled": true,
+      "m_CastShadows": 1,
+      "m_ReceiveShadows": true,
+      "m_Materials": [
+        {
+          "m_FileID": 15,
+          "m_PathID": 2100000
+        }
+      ],
+      "m_SubsetIndices": [],
+      "m_StaticBatchRoot": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_UseLightProbes": false,
+      "m_ReflectionProbeUsage": 1,
+      "m_ProbeAnchor": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_ScaleInLightmap": 1.0,
+      "m_PreserveUVs": false,
+      "m_IgnoreNormalsForChartDetection": false,
+      "m_ImportantGI": false,
+      "m_MinimumChartSize": 4,
+      "m_AutoUVMaxDistance": 0.5,
+      "m_AutoUVMaxAngle": 89.0,
+      "m_LightmapParameters": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_SortingLayerID": 0,
+      "m_SortingOrder": 0,
+      "m_RenderMode": 0,
+      "m_MaxParticleSize": 50.0,
+      "m_CameraVelocityScale": 0.0,
+      "m_VelocityScale": 0.0,
+      "m_LengthScale": 2.0,
+      "m_SortingFudge": 0.0,
+      "m_NormalDirection": 1.0,
+      "m_SortMode": 0,
+      "m_Mesh": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh1": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh2": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Mesh3": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      }
+    }
+  },
+  "limitation": "Particle curves are source metadata, not a complete Unity particle-system simulation. Old bundle gameplay is not used."
+}

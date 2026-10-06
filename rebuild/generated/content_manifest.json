@@ -1,6 +1,6 @@
 {
   "format_version": 4,
-  "scope": "Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.",
+  "scope": "Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine,9127 hunt rewards, fixed female starter clothing presentation and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.",
   "adventure_starter": [
     {
       "item_id": 33,
@@ -422,6 +422,76 @@
     1741,
     1742
   ],
+  "hunt_return_rewards": [
+    {
+      "item_id": 592,
+      "count": 1
+    },
+    {
+      "item_id": 593,
+      "count": 1
+    },
+    {
+      "item_id": 594,
+      "count": 1
+    },
+    {
+      "item_id": 595,
+      "count": 1
+    }
+  ],
+  "starter_outfit_catalog": [
+    {
+      "item_id": 95,
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 131,
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 192,
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    }
+  ],
+  "portable_medpack": {
+    "item_id": 925,
+    "skill_id": 20150028,
+    "component_class": 27,
+    "trigger_id": 2,
+    "heal": 350.0,
+    "cooldown_seconds": 10.0,
+    "cooldown_group": 9,
+    "juice_cooldown_group": 11,
+    "target_effect_id": 420
+  },
   "formula_component_classes": [
     28,
     74
@@ -527,6 +597,7 @@
     69,
     70,
     71,
+    72,
     73,
     74,
     76,
@@ -534,12 +605,14 @@
     84,
     87,
     90,
+    95,
     99,
     102,
     106,
     117,
     120,
     124,
+    131,
     135,
     138,
     142,
@@ -550,6 +623,7 @@
     169,
     175,
     186,
+    192,
     196,
     199,
     203,
@@ -664,7 +738,9 @@
     588,
     590,
     591,
+    592,
     593,
+    594,
     595,
     596,
     597,
@@ -861,7 +937,9 @@
     185,
     125,
     186,
+    187,
     188,
+    189,
     190,
     191,
     192,
@@ -916,7 +994,8 @@
     "cut_damage": 0.0,
     "cut_bonus": 0.0,
     "hp": 500.0,
-    "hp_max": 500.0
+    "hp_max": 500.0,
+    "defense": 0.0
   },
   "terrain_material_items": [
     -1,
@@ -3434,6 +3513,31 @@
       "learn_ids": []
     },
     {
+      "id": 72,
+      "name": "Glider",
+      "stack_limit": 1,
+      "item_type": 16,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 32,
+      "icons": [
+        "tool_glider_01",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
       "id": 73,
       "name": "Headlamp",
       "stack_limit": 1,
@@ -3609,6 +3713,31 @@
       "learn_ids": []
     },
     {
+      "id": 95,
+      "name": "Issued Overalls♀",
+      "stack_limit": 1,
+      "item_type": 19,
+      "durability_max": 2156,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.1,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 2,
+      "icons": [
+        "equip_w_torso_01",
+        "leftup_sex_f",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
       "id": 99,
       "name": "Iron Armor♀",
       "stack_limit": 1,
@@ -3753,6 +3882,31 @@
       "icons": [
         "equip_m_torso_15",
         "leftup_sex_m",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 131,
+      "name": "Issued Pants♀",
+      "stack_limit": 1,
+      "item_type": 20,
+      "durability_max": 2156,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.1,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 64,
+      "icons": [
+        "equip_w_legs_01",
+        "leftup_sex_f",
         ""
       ],
       "learn_kind": "PE_LEARN_NONE",
@@ -4003,6 +4157,31 @@
       "icons": [
         "equip_m_hands_15",
         "leftup_sex_m",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 192,
+      "name": "Issued Shoes♀",
+      "stack_limit": 1,
+      "item_type": 22,
+      "durability_max": 862,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 0.1,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 1,
+      "equip_position": 128,
+      "icons": [
+        "equip_w_feet_01",
+        "leftup_sex_f",
         ""
       ],
       "learn_kind": "PE_LEARN_NONE",
@@ -6962,6 +7141,36 @@
       ]
     },
     {
+      "id": 592,
+      "name": "Jet Pack Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "tool_jetpack_01",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        187,
+        42,
+        41,
+        51
+      ]
+    },
+    {
       "id": 593,
       "name": "Parachute Script",
       "stack_limit": 1,
@@ -6986,6 +7195,33 @@
       "learn_kind": "PE_LEARN_RECIPE",
       "learn_ids": [
         188
+      ]
+    },
+    {
+      "id": 594,
+      "name": "Glider Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "tool_glider_01",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        189
       ]
     },
     {
@@ -11495,6 +11731,27 @@
       ]
     },
     {
+      "id": 187,
+      "output_id": 65,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 980,
+          "count": 10
+        },
+        {
+          "item_id": 976,
+          "count": 2
+        },
+        {
+          "item_id": 276,
+          "count": 5
+        }
+      ]
+    },
+    {
       "id": 188,
       "output_id": 66,
       "output_count": 1,
@@ -11512,6 +11769,23 @@
         {
           "item_id": 273,
           "count": 2
+        }
+      ]
+    },
+    {
+      "id": 189,
+      "output_id": 72,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 1006,
+          "count": 80
+        },
+        {
+          "item_id": 276,
+          "count": 5
         }
       ]
     },

@@ -1,0 +1,48 @@
+{
+  "evidence": "Native physical UI/use/persistence check with explicitly staged HP50 and quickslots; not physical medicine reward or hunt completion evidence.",
+  "pid": 1371835,
+  "inputs": [
+    "3: Herbal Juice",
+    "2: Portable Medpack",
+    "2 again during cooldown",
+    "Escape",
+    "Pause Save",
+    "Pause Load",
+    "Pause Save while paused",
+    "Resume, F5, Tab, F5",
+    "I, F5 while inventory open, I",
+    "F5, Escape, main menu, Quit"
+  ],
+  "saved_state": {
+    "hp": 490,
+    "max_hp": 500,
+    "medpack925_count": 9,
+    "juice916_count": 9,
+    "medpack_cooldown": 8.15002823,
+    "juice_cooldown": 7.21666667,
+    "juice_buff_active": true,
+    "juice_buff_elapsed": 2.78333333
+  },
+  "reloaded_paused_save_identical": true,
+  "exit_code": 0,
+  "files": [
+    {
+      "path": "rebuild/build/medpack-physical-start.pesave",
+      "sha256": "f208b7fa989b444083b43b2fb65bad5a32cdfebc72585aada281acecc3fa50d1",
+      "bytes": 22420596,
+      "version": 13
+    },
+    {
+      "path": "rebuild/build/medpack-final-both-saved.pesave",
+      "sha256": "b677d8d93b0364b318c4683ee0afe384de4497eedc8b4d307d8c1567a6ac97f2",
+      "bytes": 22420596,
+      "version": 13
+    },
+    {
+      "path": "rebuild/build/medpack-final.pesave",
+      "sha256": "32a309f75f90f6332d4000a65569ea1b345cff3c0da4a27993a23f378b044eb0",
+      "bytes": 22420596,
+      "version": 13
+    }
+  ]
+}

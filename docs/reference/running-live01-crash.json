@@ -1,0 +1,101 @@
+{
+  "schema": 1,
+  "kind": "original-running-observer-prearm-crash",
+  "pid": 1859771,
+  "faulting_tid": 1859771,
+  "timestamp_local": "2026-10-06 12:46:12 CDT",
+  "timezone": "US/Central",
+  "returncode": -6,
+  "final_signal": "SIGABRT",
+  "launch_argument": "-force-gfx-direct",
+  "profile": "planet-explorers-hunt-reference",
+  "operator_context": "Loaded preserved manual5, equipped Knife and moved away from town; observer not armed",
+  "capture": {
+    "header_only": true,
+    "bytes": 258,
+    "samples": 0,
+    "arm_file_absent_at_inspection": true,
+    "valid_observation": false
+  },
+  "fault": {
+    "pc": "0x415d9b86",
+    "instruction": "mov (%rsi),%edi",
+    "rsi": "0xc",
+    "mapping": "/memfd:/.glXXXXXX (deleted)",
+    "mapping_start": "0x415d9000",
+    "mapping_end_exclusive": "0x415db000",
+    "caller_library": "/usr/lib/libnvidia-glcore.so.580.178.04",
+    "caller_offsets_frames_7_through_11": [
+      "0xb5aa2b",
+      "0xc78545",
+      "0xc785fe",
+      "0xc7865c",
+      "0xc799aa"
+    ],
+    "thread": "main",
+    "thread_backtraces_examined": 41,
+    "other_thread_context": "Other recorded threads are waiting/sleeping/polling in libc, Mono, Steam/audio or native executable paths; many function names unresolved"
+  },
+  "comparison": {
+    "prior_report": "reference-render-diagnostics-20261006.json",
+    "same_instruction_and_near_null_read": true,
+    "same_five_driver_caller_offsets": true,
+    "difference": "Fault is on main thread in this direct-rendering launch; prior documented fault was a worker",
+    "inference": "Recurring invalid near-null read in generated graphics code called from NVIDIA glcore; driver-versus-game defect remains unresolved",
+    "single_threaded_rendering_prevented_recurrence": false,
+    "observer_causation_established": false
+  },
+  "resources": {
+    "journal_interval_local": "2026-10-06 12:40 through 12:48 CDT",
+    "oom_gpu_error_matches": 0,
+    "later_available_memory_GiB": 4.4,
+    "later_free_swap_GiB": 12,
+    "limit": "Later memory snapshot is not the exact crash-time allocation state"
+  },
+  "last_player_log_activity": "Cached needlenose giraffe monster bundle load; temporal context only, no causal attribution",
+  "preserved_files": [
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/Player.log",
+      "sha256": "421ca735456322b56b2fff7ec58a81f6a9f751e7ea789a4c6f442caafaf71007",
+      "bytes": 56956
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/coredump-info.txt",
+      "sha256": "629478a45dc09dea1b8c4d3548eacf56576aa6e0ff7e61b663eb02c81b654657",
+      "bytes": 1863
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/female-running-live-01.exit.json",
+      "sha256": "023cf764aee9a469d5c39df8f43fb133fb9db6ebd29c10f969ef20cdbff46225",
+      "bytes": 131
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/female-running-live-01.jsonl",
+      "sha256": "0eb4e766fd9cffa518ce5e5bcf3e12b586a40a0a15d66020b86d12b3a495fa7e",
+      "bytes": 258
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/female-running-live-01.launch.json",
+      "sha256": "e44f93bb9b3e41a98481de917550e8fed6a32c6d7ce182a5981937af453dc008",
+      "bytes": 1439
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/gdb.txt",
+      "sha256": "3654079ee648b598d2975865d7251e4e7a03bf8b8040119bb8e9aa1b3bdfb00b",
+      "bytes": 64396
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/live-01-launch.log",
+      "sha256": "3724062a58cdb71526c0a2ddc6222081dca341a86fd3a1db86e823ae0724626e",
+      "bytes": 973
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-01-failure/resource-journal.txt",
+      "sha256": "19c4e28b2f54ea8f217db4e622b0a5c758efa7b77ce2dc0394b6d159568c0b2e",
+      "bytes": 17
+    }
+  ],
+  "core_handling": "System core preserved. Extracted copy created in random mode0700 build directory, removed in finally after gdb exit0. No extracted core remains.",
+  "save_status": "This read-only diagnosis did not alter saves; independent baseline hash comparison belongs to operator",
+  "changes": "No desktop input, graphics launch, system setting, asset or runtime modifications"
+}

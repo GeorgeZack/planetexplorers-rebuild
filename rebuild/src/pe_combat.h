@@ -3,10 +3,11 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/* Stationary knife skill20110011 only. No pose, range, faction, AI, hit-stop,
+/* Knife20110011 and female TP running20110014. No pose, range, faction, AI, hit-stop,
  * Animator retargeting or collision queries are supplied by this module. */
 typedef enum { PE_COMBAT_FEMALE, PE_COMBAT_MALE } PeCombatGender;
 typedef enum { PE_COMBAT_THIRD_PERSON, PE_COMBAT_FIRST_PERSON } PeCombatView;
+typedef enum { PE_COMBAT_STATIONARY, PE_COMBAT_RUNNING } PeCombatVariant;
 typedef enum {
     PE_COMBAT_HIT_START, PE_COMBAT_HIT_END, PE_COMBAT_COMBO_START,
     PE_COMBAT_COMBO_END, PE_COMBAT_ACTION_END
@@ -18,6 +19,7 @@ typedef struct {
     bool active, contact_open, combo_window, combo_queued, pending_close;
     PeCombatGender gender;
     PeCombatView view;
+    PeCombatVariant variant;
     unsigned stage, event_index, target_count; /* Combo stage0..3. */
     uint64_t update_index, opened_update;
     double clip_time, wall_time; /* wall_time retains its API name: scaled Time.time action age. */
@@ -28,18 +30,38 @@ typedef enum {
     PE_COMBAT_INVALID=-1, PE_COMBAT_IDLE=0, PE_COMBAT_ADVANCED,
     PE_COMBAT_NEXT_STAGE, PE_COMBAT_ENDED
 } PeCombatAdvance;
+/* Outgoing authored interval, even when the new action has ended or advanced
+ * to another stage at time0. Invalid/idle intervals have valid=false. Running
+ * stage0 is the only newly supported root curve; other stages keep their
+ * existing host movement policy. No unconsumed displacement is accumulated. */
+typedef struct {
+    bool valid;
+    PeCombatVariant variant;
+    PeCombatGender gender;
+    PeCombatView view;
+    unsigned stage;
+    double from,to;
+} PeCombatInterval;
 
 void pe_combat_init(PeCombat *action);
 /* Each start/combo charges5*reduction, clamped at0. Low stamina never rejects
  * an attack. Host verifies weapon held/ownership/alive/action compatibility. */
 bool pe_combat_begin(PeCombat *action, PeCombatGender gender, PeCombatView view,
                      float stamina_reduce_percent, float *stamina);
+bool pe_combat_begin_variant(PeCombat *action,PeCombatGender gender,PeCombatView view,
+                            PeCombatVariant variant,float stamina_reduce_percent,float *stamina);
 void pe_combat_stop(PeCombat *action);
 bool pe_combat_queue_combo(PeCombat *action);
 const PeCombatClip *pe_combat_clip(PeCombatGender gender, PeCombatView view, unsigned stage);
+const PeCombatClip *pe_combat_variant_clip(PeCombatGender gender,PeCombatView view,PeCombatVariant variant,unsigned stage);
+/* Common render/contact asset name, independent of per-asset clip indices. */
+const char *pe_combat_pose_name(const PeCombat *action);
 /* Source knife animation speed1.37, thresholds50/20 each multiply.9, clamp
  * [.5,1.5]. Returns0 for invalid stamina. This is not an FP blend time scale. */
 float pe_combat_animation_speed(float stamina);
+/* Exact supported weapon rates: Knife33 or Wood Sword1. Unsupported items and
+ * invalid stamina return0. Event timestamps remain authored clip seconds. */
+float pe_combat_item_animation_speed(int item_id,float stamina);
 /* Stable stationary knife blend endpoints: TP clip rate equals Animator.speed;
  * FP equals .65*Animator.speed. Source controller leaf timing, calibrated with
  * female TP/FP Attack6..9 runtime captures. Excludes transitions, hit response,
@@ -57,6 +79,8 @@ double pe_combat_stationary_clip_rate(PeCombatView view,double animator_speed);
  * applied; the host suppresses its stamina recovery while action.active. */
 PeCombatAdvance pe_combat_advance(PeCombat *action, double clip_delta,
                                  double wall_delta, float *stamina);
+PeCombatAdvance pe_combat_advance_interval(PeCombat *action,double clip_delta,
+                                          double wall_delta,float *stamina,PeCombatInterval *interval);
 /* Host calls only after an authorized, spatially verified contact. Entity ID
  * must be stable/nonzero. SkInst's per-stage target deduplication is preserved.
  * Capacity is a native bound; overflow refuses additional contacts safely. */

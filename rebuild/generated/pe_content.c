@@ -36,6 +36,7 @@ const PeItemDef pe_items[] = {
     {69, "Organic Fertilizer Sprayer", 1, 16, 100, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 560, "tool_conversion_gun_02", "", "", PE_LEARN_NONE, 0, {0}},
     {70, "Water Pitcher", 1, 16, 100, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 16, "tool_water_pitcher", "", "", PE_LEARN_NONE, 0, {0}},
     {71, "Mobile Water Pump", 1, 16, 100, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 560, "tool_waterpump_gun", "", "", PE_LEARN_NONE, 0, {0}},
+    {72, "Glider", 1, 16, 100, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 32, "tool_glider_01", "", "", PE_LEARN_NONE, 0, {0}},
     {73, "Headlamp", 1, 16, 100, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "tool_headlamp", "", "", PE_LEARN_NONE, 0, {0}},
     {74, "Scuba Mask\342\231\200", 1, 16, 2500, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "tool_scuba_mask", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {76, "Iron Helmet\342\231\200", 1, 18, 3656, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "equip_w_helmet_05", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
@@ -43,12 +44,14 @@ const PeItemDef pe_items[] = {
     {84, "Scuba Mask\342\231\202", 1, 16, 2500, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "tool_scuba_mask", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
     {87, "Iron Helmet\342\231\202", 1, 18, 3656, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "equip_m_helmet_05", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
     {90, "Steel Helmet\342\231\202", 1, 18, 4170, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "equip_m_helmet_08", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
+    {95, "Issued Overalls\342\231\200", 1, 19, 2156, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_w_torso_01", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {99, "Iron Armor\342\231\200", 1, 19, 5222, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_w_torso_05", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {102, "Steel Armor\342\231\200", 1, 19, 5958, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_w_torso_08", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {106, "Guard Armor\342\231\200", 1, 19, 4578, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_w_torso_15", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {117, "Iron Armor\342\231\202", 1, 19, 5222, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_m_torso_05", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
     {120, "Steel Armor\342\231\202", 1, 19, 5958, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_m_torso_08", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
     {124, "Guard Armor\342\231\202", 1, 19, 4578, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_m_torso_15", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
+    {131, "Issued Pants\342\231\200", 1, 20, 2156, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 64, "equip_w_legs_01", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {135, "Iron Pants\342\231\200", 1, 20, 5222, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 64, "equip_w_legs_05", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {138, "Steel Pants\342\231\200", 1, 20, 5958, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 64, "equip_w_legs_08", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {142, "Guard Pants\342\231\200", 1, 20, 4578, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 64, "equip_w_legs_15", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
@@ -59,6 +62,7 @@ const PeItemDef pe_items[] = {
     {169, "Energy Shield Type 00\342\231\202", 1, 23, 100, 0.0f, 0.0f, 0.0f, 0, 0.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 256, "equip_energyhood_00", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {175, "Guard Gloves\342\231\200", 1, 21, 2746, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 4, "equip_w_hands_15", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {186, "Guard Gloves\342\231\202", 1, 21, 2746, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 4, "equip_m_hands_15", "leftup_sex_m", "", PE_LEARN_NONE, 0, {0}},
+    {192, "Issued Shoes\342\231\200", 1, 22, 862, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 128, "equip_w_feet_01", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {196, "Iron Boots\342\231\200", 1, 22, 2089, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 128, "equip_w_feet_05", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {199, "Steel Boots\342\231\200", 1, 22, 2383, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 128, "equip_w_feet_08", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {203, "Guard Boots\342\231\200", 1, 22, 1831, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 128, "equip_w_feet_15", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
@@ -173,7 +177,9 @@ const PeItemDef pe_items[] = {
     {588, "Battery Pack Type 01 Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "battery_001", "", "leftdown_script", PE_LEARN_RECIPE, 3, {183, 42, 51}},
     {590, "Fertilizer Pallet Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "projectile_fertilizer", "", "leftdown_script", PE_LEARN_RECIPE, 2, {185, 125}},
     {591, "Water Pitcher Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "tool_water_pitcher", "", "leftdown_script", PE_LEARN_RECIPE, 2, {186, 42}},
+    {592, "Jet Pack Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "tool_jetpack_01", "", "leftdown_script", PE_LEARN_RECIPE, 4, {187, 42, 41, 51}},
     {593, "Parachute Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "tool_parachute_01", "", "leftdown_script", PE_LEARN_RECIPE, 1, {188}},
+    {594, "Glider Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "tool_glider_01", "", "leftdown_script", PE_LEARN_RECIPE, 1, {189}},
     {595, "Rope Gun Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "tool_rope_gun", "", "leftdown_script", PE_LEARN_RECIPE, 1, {190}},
     {596, "Fertilizer Sprayer Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "tool_conversion_gun", "", "leftdown_script", PE_LEARN_RECIPE, 2, {191, 42}},
     {597, "Pigment Script", 1, 38, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 0, 0, "item_pigment", "", "leftdown_script", PE_LEARN_RECIPE, 1, {192}},
@@ -372,7 +378,9 @@ const PeRecipeDef pe_recipes[] = {
     {185, 51, 5, 0.5f, 0, 3, {{991, 1}, {1003, 1}, {271, 1}}},
     {125, 991, 1, 0.5f, 0, 3, {{276, 2}, {990, 3}, {1010, 1}}},
     {186, 70, 1, 4.0f, 0, 1, {{980, 3}}},
+    {187, 65, 1, 5.0f, 0, 3, {{980, 10}, {976, 2}, {276, 5}}},
     {188, 66, 1, 5.0f, 0, 3, {{1006, 100}, {1008, 10}, {273, 2}}},
+    {189, 72, 1, 5.0f, 0, 2, {{1006, 80}, {276, 5}}},
     {190, 67, 1, 5.0f, 0, 2, {{1006, 20}, {273, 15}}},
     {191, 68, 1, 5.0f, 0, 2, {{980, 10}, {273, 15}}},
     {192, 1038, 10, 0.2f, 0, 2, {{1583, 1}, {1003, 5}}},
@@ -438,7 +446,7 @@ const size_t pe_adventure_starter_count = sizeof(pe_adventure_starter) / sizeof(
 const PeIngredient pe_adventure_supplies[] = {{12, 1}, {19, 1}, {26, 1}, {1, 1}, {34, 1}, {43, 1}, {552, 1}, {512, 1}, {519, 1}, {1550, 1}, {1551, 1}, {406, 1}, {412, 1}, {418, 1}, {424, 1}, {433, 1}, {510, 1}, {612, 1}};
 const size_t pe_adventure_supplies_count = sizeof(pe_adventure_supplies) / sizeof(pe_adventure_supplies[0]);
 
-const PePlayerDefaults pe_player_defaults = {100.0f, 40.0f, 0.0f, 1.0f, 0.49f, 0.0f, 10.0f, 0.0f, 0.0f, 500.0f, 500.0f};
+const PePlayerDefaults pe_player_defaults = {100.0f, 40.0f, 0.0f, 1.0f, 0.49f, 0.0f, 10.0f, 0.0f, 0.0f, 500.0f, 500.0f, 0.0f};
 
 const int pe_terrain_material_items[256] = {
     -1, 268, 268, 268, 268, 268, 268, 268, 268, 268, 278, 278, 270, 268, 278, 278,
@@ -639,3 +647,6 @@ const PeTerrainResourceDef *pe_terrain_resource(int material)
 {
     return pe_terrain_material_duration(material) > 0.0f ? &pe_terrain_resources[material] : NULL;
 }
+
+const float pe_medpack_heal = 350.0f;
+const float pe_medpack_cooldown_seconds = 10.0f;

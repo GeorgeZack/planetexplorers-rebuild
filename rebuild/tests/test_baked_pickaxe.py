@@ -114,6 +114,8 @@ pe_actor_scene_manifest_free(s);return bad;}
             self.assertEqual((result['item_id'],result['attachment']),(19,mount))
             first=(body/'recording.peas').read_text().splitlines()[1].split()[0]
             expected=pickaxe.clip_headers((body/first).read_bytes())
+            if expected[-1][:32].rstrip(b'\0')==b'RunSwordAttack':
+                expected=expected[:-1] # Only the appended Knife pose is excluded.
             for part in result['parts']:
                 self.assertEqual(pickaxe.clip_headers((output/part['file']).read_bytes()),expected)
             tested+=1
@@ -121,8 +123,8 @@ pe_actor_scene_manifest_free(s);return bad;}
 
     def test_optional_actual_locomotion_export_repeats_identical_actor_bytes(self):
         root=TOOLS.parent/'build';assets=root/'reference-assets/wood-pickaxe'
-        original=root/'pickaxe-staging/player-pickaxe'
-        if not (original/'recording.peas').exists():original=root/'reference-assets/player-pickaxe'
+        original=root/'reference-assets/player-pickaxe'
+        if not (original/'recording.peas').exists():original=root/'pickaxe-staging/player-pickaxe'
         if not (original/'recording-manifest.json').exists():self.skipTest('Optional pickaxe bake unavailable')
         manifest=json.loads((original/'recording-manifest.json').read_text())
         inputs=[Path(row['path']) for row in manifest['sources']]
@@ -130,7 +132,7 @@ pe_actor_scene_manifest_free(s);return bad;}
         with tempfile.TemporaryDirectory() as temp:
             output=Path(temp)/'repeat'
             result=pickaxe.export(inputs[0],inputs[1],assets,inputs[3],output)
-            self.assertEqual(len(result['clips']),10)
+            self.assertEqual([c['clip'] for c in result['clips']],[c['clip'] for c in manifest['clips']])
             for part in result['parts']:
                 for key in ('file','texture'):
                     self.assertEqual((output/part[key]).read_bytes(),(original/part[key]).read_bytes())

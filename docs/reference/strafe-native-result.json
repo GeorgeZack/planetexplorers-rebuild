@@ -1,0 +1,89 @@
+{
+  "schema": "pe-native-directional-observation-1",
+  "date": "2026-10-06",
+  "operator": "parent desktop operator",
+  "native_pid": 1657905,
+  "mode": "Adventure sandbox, free third person",
+  "fixture": "staged hunt-return UI fixture with preexisting equipped Knife33; kill progress was staged",
+  "inputs": [
+    "draw existing Knife33",
+    "A/D/S running",
+    "Z walk toggle",
+    "A/D/S walking",
+    "Pause -> Main menu -> Quit"
+  ],
+  "exit_code": 0,
+  "frames": 20021,
+  "locomotion_mask": 4037,
+  "clips_seen": [
+    "NormalIdle",
+    "NormalRF",
+    "NormalWL",
+    "NormalWR",
+    "NormalWB",
+    "NormalRL",
+    "NormalRR",
+    "NormalRB"
+  ],
+  "tools_swings": 0,
+  "resource_changes": 0,
+  "knife_swing_stages": 0,
+  "outgoing_contacts": 0,
+  "incoming_contacts": 0,
+  "displayed_kills": 4,
+  "displayed_kills_origin": "preexisting staged fixture; no kills occurred in this run",
+  "screenshot": {
+    "path": "reference/strafe-native-run-right.png",
+    "source": "rebuild/build/strafe-native-d1791302922382710518.png",
+    "sha256": "9141ab5548ed1e396f3f2ca3d835f6df8c6454f9e8bd1d0a8665fdd35a4a249c",
+    "input": "D run",
+    "observation": "player body and drawn knife visible; one still does not measure clock synchronization"
+  },
+  "logs": [
+    {
+      "path": "rebuild/build/strafe-physical.log",
+      "sha256": "d3c6dfbc0925782f301d1824bb3978e10c5bfc524d9fa09bed94fa85cd46a981"
+    },
+    {
+      "path": "rebuild/build/strafe-verification.log",
+      "sha256": "1f798ae0bcff84160440b69266c2029a0b2a39b47432a09cda693739d543b068"
+    },
+    {
+      "path": "rebuild/build/strafe-training.log",
+      "sha256": "659cc3f152bf7cfbe3d3919ead912c382e9b50351d16109f05eeaa6657ba58c6"
+    },
+    {
+      "path": "rebuild/build/strafe-sanitize.log",
+      "sha256": "041a7b8f4329f5a077a8fb2bce795bae56ca78e7deb6e17ec1f589494e145c78"
+    }
+  ],
+  "limitations": [
+    "Backward screenshots were mostly occluded; all-six coverage uses input record plus runtime selected-clip mask.",
+    "No original normal movement blend comparison.",
+    "No physical four-kill completion, partial combat reload, moving knife attack or incoming defence collision coverage."
+  ],
+  "verification": {
+    "optimized_content_cli": "passed",
+    "cli_cases": 23,
+    "full_sanitizer": "passed, exit0",
+    "asan": "detect_leaks=1",
+    "core_failures": 0,
+    "training": {
+      "frames": 15000,
+      "result": "PASS",
+      "exit_code": 0,
+      "tutorial_mission": 756,
+      "gathering_ledger_mission": 752,
+      "npcs": 9,
+      "construction_added": 19,
+      "construction_removed": 1,
+      "construction_score": 50,
+      "melee_starts": 8,
+      "melee_contacts": 24,
+      "hare_hp": 0,
+      "locomotion_mask": 63,
+      "directional_strafe_coverage": false
+    },
+    "optional_python_skips": "not counted as passes"
+  }
+}

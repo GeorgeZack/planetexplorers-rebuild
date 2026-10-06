@@ -1,0 +1,1538 @@
+{
+  "schema": 1,
+  "capture_sha256": "09ab810b52c457e65efe5ddb5ded6e38756762a980dd4ba04be47dfb99c8936c",
+  "header": {
+    "type": "header",
+    "schema": 1,
+    "kind": "observed-original-hunt-combat",
+    "mission": 9126,
+    "target": 1518,
+    "phase": "WaitForEndOfFrame",
+    "unity": "5.2.4f1",
+    "probeSourceSha256": "1e435d24b45f272bef1fc1a2195d57eabf9066c9d0f3848bd06a1f93756ba546",
+    "captureAnimators": true,
+    "traceStages": true,
+    "maxFrames": 3600,
+    "maxBytes": 67108864
+  },
+  "frames": 630,
+  "end_reason": "stop-file",
+  "observed_entity_ids": [
+    2146483650,
+    2146483651,
+    2146483652,
+    2146483653,
+    2146483654,
+    2146483655
+  ],
+  "selected_target_changes": [
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "entity": 2146483650,
+      "target": null
+    },
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "entity": 2146483651,
+      "target": null
+    },
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "entity": 2146483652,
+      "target": null
+    },
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "entity": 2146483653,
+      "target": null
+    },
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "entity": 2146483654,
+      "target": null
+    },
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "entity": 2146483655,
+      "target": null
+    },
+    {
+      "sample": 25,
+      "time": 496.294769,
+      "entity": 2146483650,
+      "target": 20000
+    },
+    {
+      "sample": 25,
+      "time": 496.294769,
+      "entity": 2146483654,
+      "target": 20000
+    },
+    {
+      "sample": 40,
+      "time": 497.028656,
+      "entity": 2146483652,
+      "target": 20000
+    },
+    {
+      "sample": 237,
+      "time": 506.4795,
+      "entity": 2146483650,
+      "target": null
+    },
+    {
+      "sample": 237,
+      "time": 506.4795,
+      "entity": 2146483652,
+      "target": null
+    },
+    {
+      "sample": 237,
+      "time": 506.4795,
+      "entity": 2146483654,
+      "target": null
+    }
+  ],
+  "player_hp_changes": [
+    {
+      "sample": 0,
+      "time": 495.002319,
+      "hp": 0
+    },
+    {
+      "sample": 19,
+      "time": 495.998932,
+      "hp": 1
+    },
+    {
+      "sample": 22,
+      "time": 496.143372,
+      "hp": 166.5
+    },
+    {
+      "sample": 195,
+      "time": 504.270935,
+      "hp": 119.938583
+    },
+    {
+      "sample": 234,
+      "time": 506.328644,
+      "hp": 96.6578751
+    },
+    {
+      "sample": 237,
+      "time": 506.4795,
+      "hp": 0
+    }
+  ],
+  "skills": [
+    {
+      "entity": 2146483650,
+      "skill": 30100053,
+      "instance": 1,
+      "start_time": 503.65686,
+      "first_sample": 183,
+      "last_sample": 201,
+      "observations": 19,
+      "transitions": [
+        {
+          "sample": 183,
+          "frame": 38559,
+          "time": 503.65686,
+          "elapsed": 0.0,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 0,
+            "targetEntity": 20000
+          },
+          "animators": [
+            {
+              "id": -253758,
+              "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": true,
+                  "current": {
+                    "fullPathHash": -553078109,
+                    "shortNameHash": 673977882,
+                    "normalizedTime": 1.85173535,
+                    "length": 0.6693498,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": true
+                  },
+                  "next": {
+                    "fullPathHash": 336979320,
+                    "shortNameHash": 905773735,
+                    "normalizedTime": 0,
+                    "length": 0.9666672,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "move_turnleft_normal",
+                      "id": 738342,
+                      "weight": 9.537483e-12,
+                      "length": 1.20000029
+                    },
+                    {
+                      "name": "move_walk",
+                      "id": 737538,
+                      "weight": 0.115582585,
+                      "length": 1.2
+                    },
+                    {
+                      "name": "move_turnleft_normalrun",
+                      "id": 738330,
+                      "weight": 7.297912e-11,
+                      "length": 1.19999981
+                    },
+                    {
+                      "name": "move_run",
+                      "id": 738388,
+                      "weight": 0.8844174,
+                      "length": 0.600000262
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sample": 195,
+          "frame": 38571,
+          "time": 504.270935,
+          "elapsed": 0.6140750000000139,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 1,
+            "targetEntity": 20000
+          },
+          "animators": [
+            {
+              "id": -253758,
+              "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": false,
+                  "current": {
+                    "fullPathHash": 336979320,
+                    "shortNameHash": 905773735,
+                    "normalizedTime": 0.635252833,
+                    "length": 0.9666672,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "next": {
+                    "fullPathHash": 0,
+                    "shortNameHash": 0,
+                    "normalizedTime": 0,
+                    "length": 0,
+                    "speed": 0,
+                    "speedMultiplier": 0,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack5_pouncefront",
+                      "id": 738096,
+                      "weight": 1,
+                      "length": 0.9666672
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "first_time": 503.65686,
+      "last_time": 504.587677,
+      "first_animator_observation": [
+        {
+          "id": -253758,
+          "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+          "enabled": true,
+          "active": true,
+          "speed": 1,
+          "controller": "lepus_hare",
+          "layers": [
+            {
+              "name": "Base Layer",
+              "weight": 0,
+              "transition": true,
+              "current": {
+                "fullPathHash": -553078109,
+                "shortNameHash": 673977882,
+                "normalizedTime": 1.85173535,
+                "length": 0.6693498,
+                "speed": 1,
+                "speedMultiplier": 1,
+                "loop": true
+              },
+              "next": {
+                "fullPathHash": 336979320,
+                "shortNameHash": 905773735,
+                "normalizedTime": 0,
+                "length": 0.9666672,
+                "speed": 1,
+                "speedMultiplier": 1,
+                "loop": false
+              },
+              "clips": [
+                {
+                  "name": "move_turnleft_normal",
+                  "id": 738342,
+                  "weight": 9.537483e-12,
+                  "length": 1.20000029
+                },
+                {
+                  "name": "move_walk",
+                  "id": 737538,
+                  "weight": 0.115582585,
+                  "length": 1.2
+                },
+                {
+                  "name": "move_turnleft_normalrun",
+                  "id": 738330,
+                  "weight": 7.297912e-11,
+                  "length": 1.19999981
+                },
+                {
+                  "name": "move_run",
+                  "id": 738388,
+                  "weight": 0.8844174,
+                  "length": 0.600000262
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity": 2146483650,
+      "skill": 30100004,
+      "instance": 2,
+      "start_time": 505.8228,
+      "first_sample": 224,
+      "last_sample": 243,
+      "observations": 20,
+      "transitions": [
+        {
+          "sample": 224,
+          "frame": 38600,
+          "time": 505.8228,
+          "elapsed": 0.0,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 0,
+            "targetEntity": null
+          },
+          "animators": [
+            {
+              "id": -253758,
+              "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": true,
+                  "current": {
+                    "fullPathHash": 995223745,
+                    "shortNameHash": 129413269,
+                    "normalizedTime": 0.6394508,
+                    "length": 2.2657845,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": true
+                  },
+                  "next": {
+                    "fullPathHash": 326639969,
+                    "shortNameHash": 848348862,
+                    "normalizedTime": 0,
+                    "length": 1.000001,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack_attackidle",
+                      "id": 738204,
+                      "weight": 0.968894839,
+                      "length": 2.30000019
+                    },
+                    {
+                      "name": "move_turnright_normal",
+                      "id": 738062,
+                      "weight": 0.0311051644,
+                      "length": 1.2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sample": 234,
+          "frame": 38610,
+          "time": 506.328644,
+          "elapsed": 0.5058440000000246,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 1,
+            "targetEntity": 20000
+          },
+          "animators": [
+            {
+              "id": -253758,
+              "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": false,
+                  "current": {
+                    "fullPathHash": 326639969,
+                    "shortNameHash": 848348862,
+                    "normalizedTime": 0.50580734,
+                    "length": 1.000001,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "next": {
+                    "fullPathHash": 0,
+                    "shortNameHash": 0,
+                    "normalizedTime": 0,
+                    "length": 0,
+                    "speed": 0,
+                    "speedMultiplier": 0,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack1_handhitrightfront",
+                      "id": 737738,
+                      "weight": 1,
+                      "length": 1.000001
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sample": 236,
+          "frame": 38612,
+          "time": 506.4265,
+          "elapsed": 0.6037000000000035,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 2,
+            "targetEntity": null
+          },
+          "animators": [
+            {
+              "id": -253758,
+              "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": false,
+                  "current": {
+                    "fullPathHash": 326639969,
+                    "shortNameHash": 848348862,
+                    "normalizedTime": 0.6036883,
+                    "length": 1.000001,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "next": {
+                    "fullPathHash": 0,
+                    "shortNameHash": 0,
+                    "normalizedTime": 0,
+                    "length": 0,
+                    "speed": 0,
+                    "speedMultiplier": 0,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack1_handhitrightfront",
+                      "id": 737738,
+                      "weight": 1,
+                      "length": 1.000001
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "first_time": 505.8228,
+      "last_time": 506.806,
+      "first_animator_observation": [
+        {
+          "id": -253758,
+          "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model",
+          "enabled": true,
+          "active": true,
+          "speed": 1,
+          "controller": "lepus_hare",
+          "layers": [
+            {
+              "name": "Base Layer",
+              "weight": 0,
+              "transition": true,
+              "current": {
+                "fullPathHash": 995223745,
+                "shortNameHash": 129413269,
+                "normalizedTime": 0.6394508,
+                "length": 2.2657845,
+                "speed": 1,
+                "speedMultiplier": 1,
+                "loop": true
+              },
+              "next": {
+                "fullPathHash": 326639969,
+                "shortNameHash": 848348862,
+                "normalizedTime": 0,
+                "length": 1.000001,
+                "speed": 1,
+                "speedMultiplier": 1,
+                "loop": false
+              },
+              "clips": [
+                {
+                  "name": "attack_attackidle",
+                  "id": 738204,
+                  "weight": 0.968894839,
+                  "length": 2.30000019
+                },
+                {
+                  "name": "move_turnright_normal",
+                  "id": 738062,
+                  "weight": 0.0311051644,
+                  "length": 1.2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "entity": 2146483652,
+      "skill": 30100047,
+      "instance": 3,
+      "start_time": 505.9233,
+      "first_sample": 226,
+      "last_sample": 246,
+      "observations": 21,
+      "transitions": [
+        {
+          "sample": 226,
+          "frame": 38602,
+          "time": 505.9233,
+          "elapsed": 0.0,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 0,
+            "targetEntity": null
+          },
+          "animators": [
+            {
+              "id": -251182,
+              "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": true,
+                  "current": {
+                    "fullPathHash": 995223745,
+                    "shortNameHash": 129413269,
+                    "normalizedTime": 0.231119126,
+                    "length": 2.30000019,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": true
+                  },
+                  "next": {
+                    "fullPathHash": 1662178798,
+                    "shortNameHash": 1123693105,
+                    "normalizedTime": 0,
+                    "length": 1.06666708,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack_attackidle",
+                      "id": 738204,
+                      "weight": 1,
+                      "length": 2.30000019
+                    },
+                    {
+                      "name": "move_turnright_normal",
+                      "id": 738062,
+                      "weight": 1.00170294e-14,
+                      "length": 1.2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sample": 237,
+          "frame": 38613,
+          "time": 506.4795,
+          "elapsed": 0.5561999999999898,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 1,
+            "targetEntity": 20000
+          },
+          "animators": [
+            {
+              "id": -251182,
+              "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": false,
+                  "current": {
+                    "fullPathHash": 1662178798,
+                    "shortNameHash": 1123693105,
+                    "normalizedTime": 0.5214429,
+                    "length": 1.06666708,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "next": {
+                    "fullPathHash": 0,
+                    "shortNameHash": 0,
+                    "normalizedTime": 0,
+                    "length": 0,
+                    "speed": 0,
+                    "speedMultiplier": 0,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack4_normalattack1",
+                      "id": 738186,
+                      "weight": 1,
+                      "length": 1.06666708
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "sample": 238,
+          "frame": 38614,
+          "time": 506.538177,
+          "elapsed": 0.6148770000000354,
+          "state": {
+            "guide": 1,
+            "active": true,
+            "execExtEnable": true,
+            "coolStat": 0,
+            "hitCount": 2,
+            "targetEntity": null
+          },
+          "animators": [
+            {
+              "id": -251182,
+              "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model",
+              "enabled": true,
+              "active": true,
+              "speed": 1,
+              "controller": "lepus_hare",
+              "layers": [
+                {
+                  "name": "Base Layer",
+                  "weight": 0,
+                  "transition": false,
+                  "current": {
+                    "fullPathHash": 1662178798,
+                    "shortNameHash": 1123693105,
+                    "normalizedTime": 0.5764536,
+                    "length": 1.06666708,
+                    "speed": 1,
+                    "speedMultiplier": 1,
+                    "loop": false
+                  },
+                  "next": {
+                    "fullPathHash": 0,
+                    "shortNameHash": 0,
+                    "normalizedTime": 0,
+                    "length": 0,
+                    "speed": 0,
+                    "speedMultiplier": 0,
+                    "loop": false
+                  },
+                  "clips": [
+                    {
+                      "name": "attack4_normalattack1",
+                      "id": 738186,
+                      "weight": 1,
+                      "length": 1.06666708
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "first_time": 505.9233,
+      "last_time": 506.972839,
+      "first_animator_observation": [
+        {
+          "id": -251182,
+          "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model",
+          "enabled": true,
+          "active": true,
+          "speed": 1,
+          "controller": "lepus_hare",
+          "layers": [
+            {
+              "name": "Base Layer",
+              "weight": 0,
+              "transition": true,
+              "current": {
+                "fullPathHash": 995223745,
+                "shortNameHash": 129413269,
+                "normalizedTime": 0.231119126,
+                "length": 2.30000019,
+                "speed": 1,
+                "speedMultiplier": 1,
+                "loop": true
+              },
+              "next": {
+                "fullPathHash": 1662178798,
+                "shortNameHash": 1123693105,
+                "normalizedTime": 0,
+                "length": 1.06666708,
+                "speed": 1,
+                "speedMultiplier": 1,
+                "loop": false
+              },
+              "clips": [
+                {
+                  "name": "attack_attackidle",
+                  "id": 738204,
+                  "weight": 1,
+                  "length": 2.30000019
+                },
+                {
+                  "name": "move_turnright_normal",
+                  "id": 738062,
+                  "weight": 1.00170294e-14,
+                  "length": 1.2
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "melee_instances": 2,
+  "melee_contact_enabled_instances": 2,
+  "limits": "End-of-frame observations bracket transitions; they do not prove exact event time, contact damage attribution, or unobserved skills. No Attack2/two-guide instance was captured. Pounce30100053 was observed and is outside the native melee-only controller. Later death-dialogue Cancel/transition and UI2/4 occurred after capture and are separate operator evidence.",
+  "status": "validated-closed-observation",
+  "sensors": [
+    {
+      "entity": 2146483650,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "vision",
+        "id": -253852,
+        "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 20,
+        "position": [
+          -337.781464,
+          21.75735,
+          237.733185
+        ],
+        "rotation": [
+          -0.901837349,
+          0.355034173,
+          0.212660968,
+          -0.124161944
+        ],
+        "localPosition": [
+          -0.19065088,
+          0.009903411,
+          9.536743e-09
+        ],
+        "lossyScale": [
+          0.8821562,
+          0.882157147,
+          0.8821569
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 648,
+        "angle": 60,
+        "axis": [
+          -0.5,
+          1,
+          0
+        ],
+        "worldAxis": [
+          -0.916283369,
+          -0.3704831,
+          0.5226555
+        ],
+        "entities": [
+          2146483651
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "vision",
+          "radius": 20,
+          "angle": 60,
+          "axis": [
+            -0.5,
+            1,
+            0
+          ],
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483650,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "hearing",
+        "id": -253854,
+        "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 15,
+        "position": [
+          -337.781464,
+          21.75735,
+          237.733185
+        ],
+        "rotation": [
+          -0.901837349,
+          0.355034173,
+          0.212660968,
+          -0.124161944
+        ],
+        "localPosition": [
+          -0.19065088,
+          0.009903411,
+          9.536743e-09
+        ],
+        "lossyScale": [
+          0.8821562,
+          0.882157147,
+          0.8821569
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 648,
+        "ignoreBlock": false,
+        "entities": [
+          20000,
+          2146483650,
+          2146483651
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "hearing",
+          "radius": 15,
+          "ignoreBlock": false,
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483650/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483651,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "vision",
+        "id": -252564,
+        "path": "EntityRoot/lepus hare_2146483651/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 20,
+        "position": [
+          -342.078125,
+          21.2767181,
+          242.101959
+        ],
+        "rotation": [
+          -0.734298348,
+          0.317117482,
+          0.5119763,
+          -0.313246131
+        ],
+        "localPosition": [
+          -0.19065088,
+          0.009903411,
+          9.536743e-09
+        ],
+        "lossyScale": [
+          1.05888772,
+          1.05888832,
+          1.05888784
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 649,
+        "angle": 60,
+        "axis": [
+          -0.5,
+          1,
+          0
+        ],
+        "worldAxis": [
+          -0.282285243,
+          -0.2093941,
+          1.061353
+        ],
+        "entities": []
+      },
+      "settings_variants": [
+        {
+          "kind": "vision",
+          "radius": 20,
+          "angle": 60,
+          "axis": [
+            -0.5,
+            1,
+            0
+          ],
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483651/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483651,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "hearing",
+        "id": -252566,
+        "path": "EntityRoot/lepus hare_2146483651/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 15,
+        "position": [
+          -342.078125,
+          21.2767181,
+          242.101959
+        ],
+        "rotation": [
+          -0.734298348,
+          0.317117482,
+          0.5119763,
+          -0.313246131
+        ],
+        "localPosition": [
+          -0.19065088,
+          0.009903411,
+          9.536743e-09
+        ],
+        "lossyScale": [
+          1.05888772,
+          1.05888832,
+          1.05888784
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 649,
+        "ignoreBlock": false,
+        "entities": [
+          20000,
+          2146483650,
+          2146483651
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "hearing",
+          "radius": 15,
+          "ignoreBlock": false,
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483651/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483652,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "vision",
+        "id": -251276,
+        "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 20,
+        "position": [
+          -337.3566,
+          20.0150127,
+          205.670639
+        ],
+        "rotation": [
+          -0.7393391,
+          0.451235056,
+          0.4227535,
+          -0.2665415
+        ],
+        "localPosition": [
+          -0.190650865,
+          0.009903342,
+          1.19209282e-08
+        ],
+        "lossyScale": [
+          1.24115145,
+          1.24115193,
+          1.24115181
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 650,
+        "angle": 60,
+        "axis": [
+          -0.5,
+          1,
+          0
+        ],
+        "worldAxis": [
+          -0.559535146,
+          -0.00438866,
+          0.9679369
+        ],
+        "entities": [
+          2146483654
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "vision",
+          "radius": 20,
+          "angle": 60,
+          "axis": [
+            -0.5,
+            1,
+            0
+          ],
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483652,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "hearing",
+        "id": -251278,
+        "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 15,
+        "position": [
+          -337.3566,
+          20.0150127,
+          205.670639
+        ],
+        "rotation": [
+          -0.7393391,
+          0.451235056,
+          0.4227535,
+          -0.2665415
+        ],
+        "localPosition": [
+          -0.190650865,
+          0.009903342,
+          1.19209282e-08
+        ],
+        "lossyScale": [
+          1.24115145,
+          1.24115193,
+          1.24115181
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 650,
+        "ignoreBlock": false,
+        "entities": [
+          2146483652,
+          2146483655
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "hearing",
+          "radius": 15,
+          "ignoreBlock": false,
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483652/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483653,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "vision",
+        "id": -249988,
+        "path": "EntityRoot/lepus hare_2146483653/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 20,
+        "position": [
+          -314.474731,
+          22.0261879,
+          245.71582
+        ],
+        "rotation": [
+          -0.100936733,
+          0.0301467869,
+          0.9007926,
+          -0.4212795
+        ],
+        "localPosition": [
+          -0.190650865,
+          0.009903379,
+          8.85581e-09
+        ],
+        "lossyScale": [
+          0.8758407,
+          0.875841,
+          0.875839651
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 651,
+        "angle": 60,
+        "axis": [
+          -0.5,
+          1,
+          0
+        ],
+        "worldAxis": [
+          1.06522131,
+          -0.26070267,
+          0.217579991
+        ],
+        "entities": []
+      },
+      "settings_variants": [
+        {
+          "kind": "vision",
+          "radius": 20,
+          "angle": 60,
+          "axis": [
+            -0.5,
+            1,
+            0
+          ],
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483653/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483653,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "hearing",
+        "id": -249990,
+        "path": "EntityRoot/lepus hare_2146483653/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 15,
+        "position": [
+          -314.474731,
+          22.0261879,
+          245.71582
+        ],
+        "rotation": [
+          -0.100936733,
+          0.0301467869,
+          0.9007926,
+          -0.4212795
+        ],
+        "localPosition": [
+          -0.190650865,
+          0.009903379,
+          8.85581e-09
+        ],
+        "lossyScale": [
+          0.8758407,
+          0.875841,
+          0.875839651
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 651,
+        "ignoreBlock": false,
+        "entities": [
+          2146483653
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "hearing",
+          "radius": 15,
+          "ignoreBlock": false,
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483653/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483654,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "vision",
+        "id": -248700,
+        "path": "EntityRoot/lepus hare_2146483654/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 20,
+        "position": [
+          -336.302551,
+          21.4321117,
+          223.063766
+        ],
+        "rotation": [
+          -0.634720564,
+          0.32703793,
+          0.5645768,
+          -0.4140403
+        ],
+        "localPosition": [
+          -0.19065094,
+          0.009903266,
+          1.90734877e-08
+        ],
+        "lossyScale": [
+          1.09156227,
+          1.09156227,
+          1.09156191
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 652,
+        "angle": 60,
+        "axis": [
+          -0.5,
+          1,
+          0
+        ],
+        "worldAxis": [
+          -0.0219395757,
+          -0.00189906359,
+          1.1178174
+        ],
+        "entities": [
+          20000,
+          2146483650,
+          2146483651
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "vision",
+          "radius": 20,
+          "angle": 60,
+          "axis": [
+            -0.5,
+            1,
+            0
+          ],
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483654/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483654,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "hearing",
+        "id": -248702,
+        "path": "EntityRoot/lepus hare_2146483654/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 15,
+        "position": [
+          -336.302551,
+          21.4321117,
+          223.063766
+        ],
+        "rotation": [
+          -0.634720564,
+          0.32703793,
+          0.5645768,
+          -0.4140403
+        ],
+        "localPosition": [
+          -0.19065094,
+          0.009903266,
+          1.90734877e-08
+        ],
+        "lossyScale": [
+          1.09156227,
+          1.09156227,
+          1.09156191
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 652,
+        "ignoreBlock": false,
+        "entities": [
+          20000,
+          2146483650,
+          2146483654,
+          2146483655
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "hearing",
+          "radius": 15,
+          "ignoreBlock": false,
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483654/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483655,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "vision",
+        "id": -241988,
+        "path": "EntityRoot/lepus hare_2146483655/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 20,
+        "position": [
+          -326.230835,
+          21.1390686,
+          213.9736
+        ],
+        "rotation": [
+          0.668674231,
+          -0.223758116,
+          0.6316517,
+          -0.32221666
+        ],
+        "localPosition": [
+          -0.190650776,
+          0.009903366,
+          9.536763e-09
+        ],
+        "lossyScale": [
+          1.22323143,
+          1.22323179,
+          1.22323132
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 672,
+        "angle": 60,
+        "axis": [
+          -0.5,
+          1,
+          0
+        ],
+        "worldAxis": [
+          0.0568663776,
+          -0.339068174,
+          -1.063861
+        ],
+        "entities": [
+          2146483652
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "vision",
+          "radius": 20,
+          "angle": 60,
+          "axis": [
+            -0.5,
+            1,
+            0
+          ],
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483655/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    },
+    {
+      "entity": 2146483655,
+      "first_sample": 0,
+      "first_observation": {
+        "kind": "hearing",
+        "id": -241990,
+        "path": "EntityRoot/lepus hare_2146483655/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+        "enabled": true,
+        "active": true,
+        "radius": 15,
+        "position": [
+          -326.230835,
+          21.1390686,
+          213.9736
+        ],
+        "rotation": [
+          0.668674231,
+          -0.223758116,
+          0.6316517,
+          -0.32221666
+        ],
+        "localPosition": [
+          -0.190650776,
+          0.009903366,
+          9.536763e-09
+        ],
+        "lossyScale": [
+          1.22323143,
+          1.22323179,
+          1.22323132
+        ],
+        "blockLayer": 2193408,
+        "componentFrame": 672,
+        "ignoreBlock": false,
+        "entities": [
+          2146483652,
+          2146483654,
+          2146483655
+        ]
+      },
+      "settings_variants": [
+        {
+          "kind": "hearing",
+          "radius": 15,
+          "ignoreBlock": false,
+          "blockLayer": 2193408,
+          "enabled": true,
+          "active": true,
+          "path": "EntityRoot/lepus hare_2146483655/M_lepus_hare(Clone)/mlepus_hare_model/lepus_hare_model/Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head"
+        }
+      ]
+    }
+  ],
+  "counters": [
+    "13_0"
+  ],
+  "mission_active_samples": 630,
+  "operator_actions": [
+    "Loaded original manual slot6; player already dead before capture armed.",
+    "Clicked ordinary revive-item OK once after arming; no attack input or manual save during capture."
+  ],
+  "client_exit": {
+    "pid": 557717,
+    "method": "System Quit Game then Yes through original UI",
+    "launcher_exit": 137,
+    "capture_closed_before_quit": true
+  }
+}

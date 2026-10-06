@@ -25,11 +25,20 @@ static const PeAdventureDialogueLine pe_adventure_lines[]={
     {4098,3004098,0,"Wha? No way."},
     {4099,3004099,0,"I've created the cure that you need."},
     {4100,3004100,3,"Oh thank you, thank you! We'll replicate the medicine right away. Our colonists will be up in no time! Here, take this as a sign of our appreciation."},
+    {4101,3004101,0,"So the supplies will be there soon?"},
+    {4102,3004102,3,"Umm, about that. We've been too afraid to venture out too far to gather the materials. There have been a much heavier monster presence in the area recently, leading to several attacks before the virus outbreak. If you can help us subdue some of these animals, we can get back on schedule."},
+    {4103,3004103,0,"Okay."},
+    {4104,3004104,0,"Nope."},
+    {4105,3004105,0,"I've subdued the animals that you've requested."},
+    {4106,3004106,3,"Thank you! We can live in peace again! Here's something for your effort! I'll get our people to start..."},
 };
 typedef struct {int id;const char *title,*description,*objective;} PeAdventureMissionText;
 static const PeAdventureMissionText pe_adventure_missions[]={
     {9031,"Arrival","Ask \042AdvNPC%\042002 for the supplies.","Talk to \042AdvNPC%\042002"},
     {9032,"The Delayed Supplies","Go to \042Town%\042004 and find out why the supplies has been delayed.","Go to \042Town%\042004"},
+    {9075,"Bug Hunt","Kill the animals causing problems near \042Town%\042004.","Bug Hunt"},
+    {9127,"Bug Hunt","Return to town and report in.","Return to town"},
     {9072,"Herb Collecting","Collect medical materials for the people in \042Town%\042004.","Gather \042itemnum%\042 units of \042itemid%\042"},
+    {9126,"Bug Hunt","Kill the animals causing problems near \042Town%\042004.","Kill \042monsternum%\042 \042monsterid%\042s"},
 };
 #endif

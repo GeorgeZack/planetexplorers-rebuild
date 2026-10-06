@@ -1,0 +1,69 @@
+{
+  "schema": 1,
+  "capture": {
+    "path": "docs/reference/hunt-encounter-cohort.json",
+    "sha256": "c672e6f6f026eb47fa887d825b204e737c1d504b4df5b6b28c19b0104b3ce337"
+  },
+  "mission": 9126,
+  "target": 1518,
+  "actor_count": 6,
+  "source_sha256": {
+    "rebuild/tools/ReferenceHuntEncounterProbe.cs": "af70c2461c575f36634a63a5672ccd4446e18e76cb7bd82b7745a9e63d8f2a9a",
+    "Assets/Resources/DataBase/localData.bytes": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376",
+    "Assets/Scripts/Scene/SceneEntityMissionPointMonsterKill.cs": "0f2c014ec0c680c06134100cbbc3d46919d17685de0f92405d61395e9abedc9f",
+    "Assets/Scripts/Scene/SceneEntityPosAgent.cs": "14b83de45503a6358eba3bbea5f73d76462bcee14ed2f74da882a01e6017b1db",
+    "Assets/Scripts/Scene/MonsterEntityCreator.cs": "f7773406c9a521abe6a42e99fe12d415e0b8699a8735877349df47e7d97eb73e",
+    "Assets/Scripts/Scene/EntityMonsterBeacon.cs": "fa852a0d8069b957f8c18d05e30d1ae6423b8bd5f7d2d7401fb71ab4664263ab",
+    "Assets/PeWorld/PeEntityCreator.cs": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+  },
+  "raw_capture": {
+    "path": "/home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/hunt-reload-01.jsonl",
+    "sha256": "ac39ae270d114403016f75c34a3f1394bb2cfc9039caf14dab6fe21708212eb5",
+    "frames": 600,
+    "end": {
+      "type": "end",
+      "reason": "capture-limit",
+      "frames": 600
+    }
+  },
+  "sample": 0,
+  "source_agent_anchors": [
+    [
+      -351.1564,
+      19.6848335,
+      222.139832
+    ],
+    [
+      -354.059723,
+      19.6894836,
+      224.221024
+    ],
+    [
+      -351.383636,
+      19.7065277,
+      222.970779
+    ],
+    [
+      -354.934631,
+      19.5676346,
+      219.5362
+    ],
+    [
+      -348.211334,
+      19.9097633,
+      225.626831
+    ],
+    [
+      -348.695465,
+      19.853508,
+      224.413254
+    ]
+  ],
+  "spawn_policy": "Pinned source agentPosition/agentRotation, followed by authoritative native support settling; live entity pose is evidence only.",
+  "limitations": [
+    "This cohort is the observed reload instance, not the six actors from the initial arrival.",
+    "No source random stream, general respawn policy, AI permissions, combat or kill progression is installed by this export.",
+    "Bounds checks do not establish supported spawn terrain or complete movement coverage.",
+    "Captured scale X supplies the scalar capsule/attribute scale; all three observed components remain in evidence."
+  ]
+}

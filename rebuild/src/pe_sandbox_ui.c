@@ -1,5 +1,7 @@
 #include "pe_sandbox_ui.h"
+#include "pe_shield.h"
 #include "pe_adventure_medicine.h"
+#include "pe_adventure_hunt.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -121,14 +123,14 @@ PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *u,PeGame *g,float dt) {
     while((code=GetCharPressed())!=0)if(code>=32&&code<127&&n+1<sizeof typed)typed[n++]=(char)code;
     typed[n]=0;
     bool keys=!u->search_focus;
-    PeSandboxUIInput i={.mouse_x=mouse.x,.mouse_y=mouse.y,.wheel=GetMouseWheelMove(),.focused=IsWindowFocused(),
+    PeSandboxUIInput i={.frame_dt=dt,.mouse_x=mouse.x,.mouse_y=mouse.y,.wheel=GetMouseWheelMove(),.focused=IsWindowFocused(),
         .left_pressed=IsMouseButtonPressed(MOUSE_BUTTON_LEFT),.left_released=IsMouseButtonReleased(MOUSE_BUTTON_LEFT),
         .right_pressed=IsMouseButtonPressed(MOUSE_BUTTON_RIGHT),.inventory=keys&&IsKeyPressed(KEY_I),
         .character=keys&&IsKeyPressed(KEY_C),.missions=keys&&IsKeyPressed(KEY_Q),.replicator=keys&&IsKeyPressed(KEY_Y),
         .escape=IsKeyPressed(KEY_ESCAPE),.tab=keys&&IsKeyPressed(KEY_TAB),.save=keys&&IsKeyPressed(KEY_F9),
         .load=keys&&IsKeyPressed(KEY_F10),.backspace=IsKeyPressed(KEY_BACKSPACE),
         .advance=IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_SPACE),.quickslot=-1,.typed=typed};
-    if(keys)for(int k=0;k<9;k++)if(IsKeyPressed(KEY_ONE+k))i.quickslot=k;
+    if(keys)for(int k=0;k<9;k++)if(IsKeyPressed(KEY_ONE+k)||IsKeyPressed(KEY_KP_1+k)){i.quickslot=k;i.response=(unsigned)k+1;break;}
     return pe_sandbox_ui_route(u,g,i);
 }
 static void prepare_map(PeSandboxUI *u,const PeGame *g) {
@@ -182,8 +184,9 @@ static void hud(const PeSandboxUI *u,const PeGame *g,bool building) {
         char number[4];snprintf(number,sizeof number,"%d",k+1);
         text(u,number,r.x+4*z,r.y+2*z,14,(Color){220,225,235,130},true);
         if(id)item(u,id,count,r,false,count?WHITE:dim);
-        if(id==916&&g->juice_cooldown>0) {
-            DrawRectangleRec(rect(r),(Color){25,40,90,160});center(u,TextFormat("%.0f",ceilf(g->juice_cooldown)),r,18,ink,true);
+        float cooldown=pe_game_item_cooldown(g,id);
+        if(cooldown>0) {
+            DrawRectangleRec(rect(r),(Color){25,40,90,160});center(u,TextFormat("%.0f",ceilf(cooldown)),r,18,ink,true);
         }
     }
     sprite(u,"icons:itemhand",l->hand_slot,WHITE);
@@ -265,6 +268,7 @@ static void inventory(const PeSandboxUI *u,const PeGame *g) {
     text(u,TextFormat("Money: %u",g->money),p.x+24*z,p.y+531*z,14,gold,false);
     text(u,"Right-click: use / equip   Drag: quickbar",p.x+17*z,p.y+507*z,14,dim,false);
 }
+static const int outfit_ui_slots[PE_OUTFIT_SLOTS]={1,6,7}; /* coat, pants, shoes */
 static void character(const PeSandboxUI *u,const PeGame *g) {
     const PeTrainingUILayout *l=&u->layout;float z=l->scale;PeTrainingUIRect p=l->equipment;
     panel(u,p,"CHARACTER",PE_UI_EFFECT_CHARACTER);sprite(u,"close1",l->equipment_close,WHITE);
@@ -274,7 +278,13 @@ static void character(const PeSandboxUI *u,const PeGame *g) {
     const PeSlot *equipped=pe_game_equipped_tool(g);const PeItemDef *tool=equipped?pe_item_def(equipped->item_id):NULL;
     static const char *masks[]={"Icons_helmet","Icons_coat","Icons_gloves","Icons_battery","Icons_arms","Icons_back","Icons_pants","Icons_shoes","Icons_glass","Icons_dun"};
     for(int k=0;k<10;k++){item(u,0,0,l->equipment_slots[k],true,WHITE);sprite(u,masks[k],l->equipment_slots[k],(Color){175,200,220,110});}
-    if(equipped)item(u,equipped->item_id,1,l->equipment_weapon,true,WHITE);
+    for(unsigned k=0;k<PE_OUTFIT_SLOTS;k++){
+        const PeWornItem *w=&g->outfit.items[k];
+        if(w->item_id)item(u,w->item_id,1,l->equipment_slots[outfit_ui_slots[k]],true,w->durability>0?WHITE:GRAY);
+    }
+    if(equipped)item(u,equipped->item_id,1,l->equipment_weapon,true,equipped->durability>0?WHITE:GRAY);
+    const PeSlot *shield=pe_shield_equipped(g);
+    if(shield)item(u,shield->item_id,1,l->equipment_slots[9],true,u->starter_pair_available&&shield->durability>0?WHITE:GRAY);
     text(u,"Explorer",p.x+25*z,p.y+70*z,18,ink,true);
     static const char *labels[]={"Health","Stamina","Hunger","Comfort","Oxygen","E-Shield","Energy","Attack","Defense"};
     for(int k=0;k<9;k++) {
@@ -282,10 +292,11 @@ static void character(const PeSandboxUI *u,const PeGame *g) {
         char number[64];
         if(k==0)snprintf(number,sizeof number,"%.0f / %.0f",g->hp,g->max_hp);
         else if(k==1)snprintf(number,sizeof number,"%.0f / %.0f",g->stamina,g->stamina_max);
-        else if(k==7)snprintf(number,sizeof number,"%.0f",pe_player_defaults.attack+(tool?tool->attack:0));
+        else if(k==7)snprintf(number,sizeof number,"%.0f",pe_player_defaults.attack+(tool&&!(tool->id==1&&equipped->durability<=0)?tool->attack:0));
+        else if(k==8)snprintf(number,sizeof number,"%.0f",pe_player_defaults.defense+pe_outfit_defense(&g->outfit)+(u->starter_pair_available?pe_shield_defense(shield):0));
         else snprintf(number,sizeof number,"--");
         Vector2 extent=MeasureTextEx(font(u,18,true),number,18*z,0);
-        text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||k==7?gold:dim,true);
+        text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||k==7||k==8?gold:dim,true);
     }
     if(tool)wrapped(u,TextFormat("%s\nDurability %.0f / %d\nRight-click hand to unequip",tool->name,equipped->durability,tool->durability_max),rel(u,p,25,446,250,110),14,ink);
 }
@@ -336,16 +347,12 @@ static void replicator(const PeSandboxUI *u,const PeGame *g) {
         text(u,TextFormat("%d left, %d ready",g->craft.batches_left,g->craft.batches_pending),p.x+285*z,p.y+456*z,14,ink,false);
     } else sprite(u,"jindulan_1",l->replicator_progress,WHITE);
 }
-static const char *mission_title(const PeGame *g) {
-    if(g->mode!=PE_GAME_ADVENTURE||g->welcome_page<PE_ADVENTURE_WELCOME_PAGES)return "";
-    if(g->medicine_state==PE_MEDICINE_ACTIVE)return pe_adventure_mission_title(9072);
-    if(g->annot_complete)return "";
-    if(g->arrival_complete&&!g->supplies_claimed)return "";
-    return pe_adventure_mission_title(g->supplies_claimed?PE_ADVENTURE_SUPPLIES:PE_ADVENTURE_ARRIVAL);
-}
-static const char *mission_goal(const PeGame *g) {
+static const char *mission_goal(const PeSandboxUI *u,const PeGame *g) {
     if(g->mode!=PE_GAME_ADVENTURE||g->welcome_page<PE_ADVENTURE_WELCOME_PAGES)return "";
     static char value[2048];
+    if(g->hunt_state){
+        return pe_sandbox_ui_hunt_goal(u,g,value,sizeof value)?value:"";
+    }
     if(g->medicine_state==PE_MEDICINE_ACTIVE){
         const PeItemDef *item=pe_item_def(917);PeAdventureDialogueBindings names=supplier_names;
         names.item_name=item?item->name:"Medicine";names.item_count="5";
@@ -361,11 +368,17 @@ static void missions(const PeSandboxUI *u,const PeGame *g) {
     PeTrainingUIRect p=u->layout.mission;float z=u->layout.scale;
     panel(u,p,"MISSION",PE_UI_EFFECT_MISSION);sprite(u,"close1",u->layout.mission_close,WHITE);
     sprite(u,"insidebox2",rel(u,p,35,95,310,400),WHITE);sprite(u,"insidebox2",rel(u,p,365,75,640,390),WHITE);
-    if(*mission_title(g)) {
-        wrapped(u,mission_title(g),rel(u,p,50,115,275,70),18,blue);
+    if(*pe_sandbox_ui_mission_title(g)) {
+        wrapped(u,pe_sandbox_ui_mission_title(g),rel(u,p,50,115,275,70),18,blue);
         text(u,"Goal",p.x+390*z,p.y+110*z,18,ink,true);
-        wrapped(u,mission_goal(g),rel(u,p,390,150,570,120),18,ink);
-        if(g->medicine_state==PE_MEDICINE_ACTIVE){
+        wrapped(u,mission_goal(u,g),rel(u,p,390,150,570,120),18,ink);
+        if(g->hunt_state){
+            if(g->hunt_state==PE_HUNT_ENCOUNTER_PENDING&&!u->hunt_encounter_available)wrapped(u,"The creature encounter is unavailable in this session.",rel(u,p,390,275,560,100),18,ink);
+            else {
+                char description[2048];int mission=pe_sandbox_ui_hunt_mission_id(g);
+                if(pe_adventure_dialogue_format(pe_adventure_mission_description(mission),&supplier_names,description,sizeof description))wrapped(u,description,rel(u,p,390,275,560,100),18,ink);
+            }
+        }else if(g->medicine_state==PE_MEDICINE_ACTIVE){
             char description[2048];
             if(pe_adventure_dialogue_format(pe_adventure_mission_description(9072),&supplier_names,description,sizeof description))wrapped(u,description,rel(u,p,390,275,560,60),18,ink);
             wrapped(u,"Learn the Herbal Drink script from your inventory, then use the Replicator to create five units. Return to Naoko in Annot to deliver them.",rel(u,p,390,345,560,100),17,ink);
@@ -375,7 +388,7 @@ static void missions(const PeSandboxUI *u,const PeGame *g) {
             bool reachable=g->world.source&&x>=0&&x<pe_world_width(&g->world)&&zpos>=0&&zpos<pe_world_depth(&g->world);
             wrapped(u,reachable?"Go to Annot at P: -284, 134. Approach within 15 meters to complete the objective.":"Annot is at P: -284, 134, outside this saved world's terrain.",rel(u,p,390,300,560,125),18,ink);
         }
-    } else wrapped(u,g->medicine_state==PE_MEDICINE_COMPLETE?"Herb Collecting: completed. Further missions are not yet available.":g->annot_complete?"Supplies: completed. Speak with Naoko in Annot about the delayed supplies.":"No active missions.",rel(u,p,60,125,270,180),18,dim);
+    } else wrapped(u,g->medicine_state==PE_MEDICINE_COMPLETE?"Herb Collecting: completed. Ask Naoko about the next request.":g->annot_complete?"Supplies: completed. Speak with Naoko in Annot about the delayed supplies.":"No active missions.",rel(u,p,60,125,270,180),18,dim);
 }
 static void supplier_portrait(const PeSandboxUI *u,PeTrainingUIRect r) {
     Texture2D t=u->dialogue.role==1?u->welcome_portrait:u->dialogue.role==3?u->annot_portrait:u->supplier_portrait;
@@ -392,13 +405,16 @@ static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
         sprite(u,"talkbg",l->dialogue,WHITE);sprite(u,"talkbg",l->dialogue,(Color){0,33,255,77});effect(u,PE_UI_EFFECT_DIALOGUE,l->dialogue);
         supplier_portrait(u,l->dialogue_portrait);sprite(u,"namebg",l->dialogue_name,WHITE);
         center(u,supplier_names.annot_full_name,l->dialogue_name,18,ink,true);
-        for(unsigned index=0;index<2;index++){
-            const PeAdventureDialogueLine *option=pe_adventure_dialogue_choice(&u->dialogue,g,index);if(!option)continue;
-            PeTrainingUIRect choice=pe_sandbox_ui_supplier_choice(u,(int)index);
-            text(u,">",choice.x+5*l->scale,choice.y+2*l->scale,16,ink,false);
+        for(int row=0;row<9;row++){
+            int index=pe_sandbox_ui_dialogue_choice_index(u,g,row);if(index<0)break;
+            const PeAdventureDialogueLine *option=pe_adventure_dialogue_choice(&u->dialogue,g,(unsigned)index);
+            PeTrainingUIRect choice=pe_sandbox_ui_supplier_choice(u,row);
+            char number[8];snprintf(number,sizeof number,"%d.",row+1);
+            text(u,number,choice.x+5*l->scale,choice.y+2*l->scale,16,ink,false);
             text(u,option->text,choice.x+25*l->scale,choice.y+2*l->scale,16,pe_training_ui_contains(choice,u->mouse_x,u->mouse_y)?blue:ink,false);
         }
-        if(strstr(g->message,"room"))wrapped(u,g->message,rel(u,l->dialogue,180,82,640,42),16,gold);
+        if(u->dialogue_result==PE_ADVENTURE_DIALOGUE_NO_SPACE||u->dialogue_result==PE_ADVENTURE_DIALOGUE_UNAVAILABLE)
+            wrapped(u,g->message,rel(u,l->dialogue,180,82,640,42),16,gold);
     }else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU) {
         PeTrainingUIRect p=pe_sandbox_ui_supplier_menu(u);
         sprite(u,"midbg",p,WHITE);sprite(u,"midbg",p,(Color){0,33,255,77});
@@ -412,11 +428,12 @@ static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
                 PeTrainingUIRect choice=pe_sandbox_ui_supplier_choice(u,0);
                 bool ready=u->dialogue.role!=3||g->medicine_state!=PE_MEDICINE_ACTIVE||pe_adventure_medicine_ready(g);
                 sprite(u,u->dialogue.role==3&&g->medicine_state==PE_MEDICINE_ACTIVE?"MainMissionEnd":"MainMissionGet",rel(u,p,22,88,14,14),ready?WHITE:dim);
-                choice.x+=10*u->layout.scale;choice.w-=10*u->layout.scale;
+                text(u,"1.",choice.x+10*u->layout.scale,choice.y,18,ready?ink:dim,false);
+                choice.x+=34*u->layout.scale;choice.w-=34*u->layout.scale;
                 wrapped(u,value,choice,18,!ready?dim:pe_training_ui_contains(pe_sandbox_ui_supplier_choice(u,0),u->mouse_x,u->mouse_y)?blue:ink);
             }
             PeTrainingUIRect close=pe_sandbox_ui_supplier_choice(u,line?1:0);
-            text(u,">  That's all.",close.x,close.y,18,pe_training_ui_contains(close,u->mouse_x,u->mouse_y)?blue:ink,false);
+            text(u,line?"2.  That's all.":"1.  That's all.",close.x,close.y,18,pe_training_ui_contains(close,u->mouse_x,u->mouse_y)?blue:ink,false);
     } else if(line) {
         const PeTrainingUILayout *l=&u->layout;
         sprite(u,"talkbg",l->dialogue,WHITE);sprite(u,"talkbg",l->dialogue,(Color){0,33,255,77});
@@ -426,6 +443,7 @@ static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
         const char *speaker=pe_adventure_dialogue_speaker(line,&supplier_names);
         center(u,speaker?speaker:"",l->dialogue_name,18,ink,true);
         wrapped_spaced(u,value,l->dialogue_text,17,ink,1);
+        text(u,"1. Continue",l->dialogue_next.x-105*l->scale,l->dialogue_next.y+26*l->scale,16,ink,false);
         sprite(u,"btn_down",l->dialogue_next,pe_training_ui_contains(l->dialogue_next,u->mouse_x,u->mouse_y)?blue:WHITE);
     }
 }
@@ -438,9 +456,23 @@ static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
         if(u->town_portrait.id)DrawTexturePro(u->town_portrait,(Rectangle){0,0,(float)u->town_portrait.width,-(float)u->town_portrait.height},rect(rel(u,p,24,21,48,48)),(Vector2){0},0,WHITE);
         text(u,u->town_name,p.x+78*u->layout.scale,p.y+34*u->layout.scale,20,ink,true);
         sprite(u,"close1",pe_sandbox_ui_supplier_close(u),WHITE);
+        if(u->deploy_entity){
+            if(u->deploy_get_pending){
+                text(u,"Picking up...",p.x+29*u->layout.scale,p.y+85*u->layout.scale,18,ink,false);
+                PeTrainingUIRect progress=rel(u,p,29,119,365,22);
+                DrawRectangleRec(rect(progress),(Color){16,29,38,230});
+                progress.w*=(float)fminf((float)u->deploy_get_ticks/200000.0f,1.0f);
+                DrawRectangleRec(rect(progress),blue);
+                text(u,"Esc: Cancel",p.x+29*u->layout.scale,p.y+157*u->layout.scale,16,dim,false);
+                return;
+            }
+            const char *labels[]={"1.  Get (returns Charcoal)","2.  Turn","3.  That's all."};
+            for(int k=0;k<3;k++){PeTrainingUIRect r=pe_sandbox_ui_supplier_choice(u,k);text(u,labels[k],r.x,r.y,18,pe_training_ui_contains(r,u->mouse_x,u->mouse_y)?blue:ink,false);}
+            wrapped(u,g->message,rel(u,p,29,220,365,150),16,dim);return;
+        }
         bool vendor=pe_town_shop_count(u->town_entity)>0;
-        if(vendor){PeTrainingUIRect r=pe_sandbox_ui_supplier_choice(u,0);text(u,">  Shop",r.x,r.y,18,pe_training_ui_contains(r,u->mouse_x,u->mouse_y)?blue:ink,false);}
-        PeTrainingUIRect r=pe_sandbox_ui_supplier_choice(u,vendor?1:0);text(u,">  That's all.",r.x,r.y,18,pe_training_ui_contains(r,u->mouse_x,u->mouse_y)?blue:ink,false);
+        if(vendor){PeTrainingUIRect r=pe_sandbox_ui_supplier_choice(u,0);text(u,"1.  Shop",r.x,r.y,18,pe_training_ui_contains(r,u->mouse_x,u->mouse_y)?blue:ink,false);}
+        PeTrainingUIRect r=pe_sandbox_ui_supplier_choice(u,vendor?1:0);text(u,vendor?"2.  That's all.":"1.  That's all.",r.x,r.y,18,pe_training_ui_contains(r,u->mouse_x,u->mouse_y)?blue:ink,false);
         return;
     }
     PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);float z=u->layout.scale;
@@ -476,12 +508,24 @@ static void tooltip(const PeSandboxUI *u,const PeGame *g) {
     if(top==PE_UI_WINDOW_CHARACTER&&pe_training_ui_contains(u->layout.equipment_weapon,u->mouse_x,u->mouse_y)) {
         for(int k=0;k<PE_INVENTORY_SLOTS;k++)if(g->equipped_instance_id&&g->inventory.slots[k].instance_id==g->equipped_instance_id)index=k;
     }
-    if(index<0)return;
-    const PeSlot *s=&g->inventory.slots[index];const PeItemDef *d=pe_item_def(s->item_id);if(!d)return;
+    if(top==PE_UI_WINDOW_CHARACTER&&pe_training_ui_contains(u->layout.equipment_slots[9],u->mouse_x,u->mouse_y)){
+        const PeSlot *shield=pe_shield_equipped(g);
+        if(shield)index=(int)(shield-g->inventory.slots);
+    }
+    PeSlot worn={0};
+    if(top==PE_UI_WINDOW_CHARACTER)for(unsigned k=0;k<PE_OUTFIT_SLOTS;k++)
+        if(pe_training_ui_contains(u->layout.equipment_slots[outfit_ui_slots[k]],u->mouse_x,u->mouse_y)){
+            const PeWornItem *w=&g->outfit.items[k];
+            if(w->item_id)worn=(PeSlot){w->item_id,1,w->instance_id,w->durability};
+        }
+    if(index<0&&!worn.item_id)return;
+    const PeSlot *s=worn.item_id?&worn:&g->inventory.slots[index];const PeItemDef *d=pe_item_def(s->item_id);if(!d)return;
     float z=u->layout.scale;PeTrainingUIRect box={fminf(u->mouse_x+18*z,u->layout.width-312*z),fminf(u->mouse_y+20*z,u->layout.height-134*z),300*z,122*z};
     DrawRectangleRec(rect(box),(Color){14,29,51,245});DrawRectangleLinesEx(rect(box),z,blue);
     char value[512];
-    const char *action=d->learn_count?"Right-click to learn":(d->equip_position&16)?"Right-click to equip":d->id==916?"Right-click to use":"Drag to quickbar";
+    const char *action=d->learn_count?"Right-click to learn":(d->equip_position&(16|512))?"Right-click to equip":d->id==916?"Right-click to use":"Drag to quickbar";
+    if(s->instance_id&&s->instance_id==g->shield_instance_id)action=u->starter_pair_available?"Right-click shield slot to unequip":"Unavailable; right-click slot to unequip";
+    if(worn.item_id)action=worn.durability>0?"Equipped clothing":"Broken clothing";
     if(s->instance_id&&d->durability_max>0)snprintf(value,sizeof value,"%s\nDurability %.0f / %d\n%s",d->name,s->durability,d->durability_max,action);
     else snprintf(value,sizeof value,"%s\n%d owned\n%s",d->name,pe_inventory_count(&g->inventory,s->item_id),action);
     wrapped(u,value,rel(u,box,10,8,280,108),14,ink);
@@ -546,10 +590,10 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(!u||!u->loaded||!g)return;
     if(building)build_hud(u,g);else hud(u,g,false);
     minimap(u,g);
-    if(*mission_title(g)) {
+    if(*pe_sandbox_ui_mission_title(g)) {
         PeTrainingUIRect r=u->layout.mission_tracker;
-        wrapped(u,mission_title(g),rel(u,r,18,-7,250,65),18,(Color){155,61,244,255});
-        wrapped(u,mission_goal(g),rel(u,r,18,57,233,120),18,ink);
+        wrapped(u,pe_sandbox_ui_mission_title(g),rel(u,r,18,-7,250,65),18,(Color){155,61,244,255});
+        wrapped(u,mission_goal(u,g),rel(u,r,18,57,233,120),18,ink);
     }
     if(u->character_open)character(u,g);
     if(u->inventory_open)inventory(u,g);

@@ -1,5 +1,8 @@
 #include "pe_sandbox_ui.h"
 #include "pe_adventure_medicine.h"
+#include "pe_adventure_hunt.h"
+#include "pe_deployable.h"
+#include "pe_shield.h"
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
@@ -15,9 +18,25 @@ static PeTrainingUIRect relative(const PeSandboxUI *u,PeTrainingUIRect p,float x
 }
 bool pe_sandbox_pointer_release_gate(PeSandboxPointerGate *gate,bool ui_owned,unsigned buttons_down) {
     if(!gate)return true;
-    if(ui_owned&&buttons_down)gate->waiting_for_release=true;
+    if(ui_owned&&buttons_down){gate->waiting_for_release=true;gate->actions_only=false;}
     bool blocked=gate->waiting_for_release;
-    if(!buttons_down)gate->waiting_for_release=false;
+    if(!buttons_down){gate->waiting_for_release=false;gate->actions_only=false;}
+    return blocked;
+}
+bool pe_sandbox_pointer_route(PeSandboxPointerGate *gate,PeSandboxUIResult *r,unsigned buttons){
+    if(!gate||!r)return true;
+    if((r->consume_world||r->consume_actions)&&buttons){
+        if(!gate->waiting_for_release)gate->actions_only=!r->consume_world;
+        else if(r->consume_world)gate->actions_only=false;
+        gate->waiting_for_release=true;
+    }
+    bool blocked=gate->waiting_for_release;
+    if(blocked){
+        if(gate->actions_only)r->consume_actions=true;
+        else r->consume_world=true;
+        r->npc_interaction=false;r->camera_cycle_allowed=false;
+    }
+    if(!buttons){gate->waiting_for_release=false;gate->actions_only=false;}
     return blocked;
 }
 void pe_sandbox_ui_init(PeSandboxUI *u,float w,float h) {
@@ -35,7 +54,7 @@ bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *u,const PeSandboxMapNpc *ma
     u->resident_markers=markers;u->resident_marker_count=count;return true;
 }
 bool pe_sandbox_ui_cursor(const PeSandboxUI *u) {
-    return u&&(u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
+    return u&&(u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->camera_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
 }
 static bool panel(const PeSandboxUI *u) {
     return u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
@@ -67,11 +86,11 @@ PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *u,int b) {
     if(b==3)return relative(u,p,445,408,160,30);
     return relative(u,p,591,19,25,25);
 }
-void pe_sandbox_ui_cancel_town(PeSandboxUI *u){if(u){u->town_open=u->shop_open=u->shop_dragging=false;u->town_entity=0;u->town_name[0]=0;u->town_portrait=(Texture2D){0};}}
+void pe_sandbox_ui_cancel_town(PeSandboxUI *u){if(u){u->town_open=u->shop_open=u->shop_dragging=false;u->town_entity=u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_name[0]=0;u->town_portrait=(Texture2D){0};}}
 static bool item_visible(const PeSandboxUI *u,const PeGame *g,int i) {
     const PeSlot *s=&g->inventory.slots[i];const PeItemDef *d=pe_item_def(s->item_id);
     return s->count>0&&d&&d->tab==u->inventory_tab&&
-        !(s->instance_id&&s->instance_id==g->equipped_instance_id);
+        !(s->instance_id&&(s->instance_id==g->equipped_instance_id||s->instance_id==g->shield_instance_id));
 }
 int pe_sandbox_ui_inventory_count(const PeSandboxUI *u,const PeGame *g) {
     if(!u||!g)return 0;
@@ -157,13 +176,33 @@ static int maximum_batches(const PeGame *g,const PeRecipeDef *r) {
     }
     return maximum>0?maximum:1;
 }
-static void quick_use(PeSandboxUIResult *r,PeGame *g,int i) {
+static bool use_inventory_slot(const PeSandboxUI *u,PeGame *g,int slot) {
+    if(slot<0||slot>=PE_INVENTORY_SLOTS)return false;
+    int item=g->inventory.slots[slot].item_id;
+    if((item==1||item==PE_SHIELD_ITEM)&&!u->starter_pair_available){
+        snprintf(g->message,sizeof g->message,"Sword and shield gameplay is not available in this build yet.");
+        return false;
+    }
+    if(item==PE_SHIELD_ITEM)return pe_shield_equip(g,slot);
+    return pe_game_use_slot(g,slot);
+}
+static void quick_use(const PeSandboxUI *u,PeSandboxUIResult *r,PeGame *g,int i) {
     if(i<0||i>=9)return;
     const PeItemDef *d=pe_item_def(g->quickslots[i].item_id);
     /* Fence/ladder are source tab0 nonstack placeables, not tab2 resources. */
     if(d&&(d->tab==2||d->id==PE_ITEM_FENCE||d->id==PE_ITEM_LADDER)&&
        pe_inventory_count(&g->inventory,d->id)>0)r->selected_item=d->id;
-    else pe_game_quickslot_use(g,i);
+    else if(d&&(d->id==1||d->id==PE_SHIELD_ITEM)){
+        PeQuickslot q=g->quickslots[i];
+        for(int slot=0;slot<PE_INVENTORY_SLOTS;slot++){
+            const PeSlot *item=&g->inventory.slots[slot];
+            if(item->count&&item->item_id==q.item_id&&item->instance_id==q.instance_id){use_inventory_slot(u,g,slot);break;}
+        }
+    }else pe_game_quickslot_use(g,i);
+    /* A cooldown/empty-stack retry owns the key too, but must not interrupt
+       locomotion, camera capture, drawn equipment or enemy clocks. */
+    if(d&&(d->id==916||d->id==925))r->consume_actions=true;
+    else r->consume_world=true;
 }
 static void close_panels(PeSandboxUI *u) {
     u->inventory_open=u->character_open=u->missions_open=u->replicator_open=false;
@@ -171,29 +210,69 @@ static void close_panels(PeSandboxUI *u) {
 }
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
     if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,1,entity,eligible))return false;
-    close_panels(u);return true;
+    u->dialogue_result=PE_ADVENTURE_DIALOGUE_REJECTED;close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_supplier(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
     if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,2,entity,eligible))return false;
-    close_panels(u);return true;
+    u->dialogue_result=PE_ADVENTURE_DIALOGUE_REJECTED;close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_annot(PeSandboxUI *u,const PeGame *g,uint32_t entity,Texture2D portrait,bool eligible) {
     if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,3,entity,eligible))return false;
-    u->annot_portrait=portrait;close_panels(u);return true;
+    u->dialogue_result=PE_ADVENTURE_DIALOGUE_REJECTED;u->annot_portrait=portrait;close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_town(PeSandboxUI *u,const PeGame *g,uint32_t entity,const char *name,Texture2D portrait,bool eligible) {
     if(!u||!g||!entity||!name||strlen(name)>128||!eligible||u->town_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0)return false;
-    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->town_portrait=portrait;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;
+    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_portrait=portrait;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;
     snprintf(u->town_name,sizeof u->town_name,"%s",name);return true;
+}
+bool pe_sandbox_ui_open_deployable(PeSandboxUI *u,const PeGame *g,uint32_t instance){
+    if(!u||!g||u->town_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||
+       g->mode!=PE_GAME_ADVENTURE||g->hp<=0||!pe_deployable_in_range(g,instance))return false;
+    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=0;u->deploy_entity=instance;u->deploy_get_pending=false;u->deploy_get_ticks=0;
+    u->town_portrait=(Texture2D){0};snprintf(u->town_name,sizeof u->town_name,"Torch");return true;
+}
+int pe_sandbox_ui_dialogue_choice_index(const PeSandboxUI *u,const PeGame *g,int row) {
+    if(!u||!g||row<0||row>=9)return -1;
+    for(unsigned source=0;source<2;source++)
+        if(pe_adventure_dialogue_choice(&u->dialogue,g,source)&&row--==0)return (int)source;
+    return -1;
 }
 static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
     if(i.escape||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0){pe_sandbox_ui_cancel_town(u);return;}
+    if(u->deploy_entity){
+        if(!pe_deployable_in_range(g,u->deploy_entity)){pe_sandbox_ui_cancel_town(u);return;}
+        if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i)){pe_sandbox_ui_cancel_town(u);return;}
+        if(u->deploy_get_pending){
+            /* UIItemOp hides its command list while the timer runs. A click
+               starts the clock; neither holding nor repeated clicks drive it.
+               Cancellation/range checks above precede the commit boundary. */
+            if(!u->paused&&isfinite(i.frame_dt)&&i.frame_dt>0){
+                /* UTimer.Update truncates each float dt to 100,000 ticks/s.
+                   Bound before conversion so even huge finite dt is safe. */
+                float ticks=i.frame_dt*100000.0f;
+                uint32_t remaining=200001u-u->deploy_get_ticks;
+                u->deploy_get_ticks+=ticks>=(float)remaining?remaining:(uint32_t)ticks;
+            }
+            if(u->deploy_get_ticks>200000u){
+                pe_deployable_get(g,u->deploy_entity);
+                /* The source panel closes even when CanAdd rejects the list.
+                   Reopen the still-existing Torch to retry with room. */
+                pe_sandbox_ui_cancel_town(u);
+            }
+            return;
+        }
+        if(i.advance||i.response==1||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i))){
+            u->deploy_get_pending=true;u->deploy_get_ticks=0;
+        }else if(i.response==2||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,1),i)))pe_deployable_turn(g,u->deploy_entity);
+        else if(i.response==3||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,2),i)))pe_sandbox_ui_cancel_town(u);
+        return;
+    }
     if(!u->shop_open){
         bool vendor=pe_town_shop_count(u->town_entity)>0;
         if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i))pe_sandbox_ui_cancel_town(u);
-        else if(vendor&&(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))){
+        else if(vendor&&(i.advance||i.response==1||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))){
             if(pe_town_shop_open(g,u->town_entity)){u->shop_open=true;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;}
-        }else if((!vendor&&i.advance)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,vendor?1:0),i)))pe_sandbox_ui_cancel_town(u);
+        }else if((!vendor&&i.advance)||i.response==(unsigned)(vendor?2:1)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,vendor?1:0),i)))pe_sandbox_ui_cancel_town(u);
         return;
     }
     PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);
@@ -248,13 +327,16 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
             (g->welcome_page<PE_ADVENTURE_WELCOME_PAGES||g->adventure_mission==PE_ADVENTURE_ARRIVAL||g->adventure_mission==PE_ADVENTURE_SUPPLIES);
         if(i.escape||(!offer&&!empty_menu))pe_adventure_dialogue_cancel(&u->dialogue);
         else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE) {
-            if(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))pe_adventure_dialogue_choose_medicine(&u->dialogue,g,true);
-            else if(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,1),i))pe_adventure_dialogue_choose_medicine(&u->dialogue,g,false);
+            int selected=i.advance?0:i.response>=1&&i.response<=9?(int)i.response-1:-1;
+            if(i.left_pressed)for(int row=0;row<9;row++)
+                if(pe_sandbox_ui_dialogue_choice_index(u,g,row)>=0&&hit(pe_sandbox_ui_supplier_choice(u,row),i)){selected=row;break;}
+            int source=pe_sandbox_ui_dialogue_choice_index(u,g,selected);
+            if(source>=0)u->dialogue_result=pe_adventure_dialogue_choose_medicine(&u->dialogue,g,source==0);
         } else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU) {
             if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i))pe_adventure_dialogue_cancel(&u->dialogue);
-            else if(offer&&(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i))))pe_adventure_dialogue_choose_supply(&u->dialogue,g);
-            else if((!offer&&i.advance)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,offer?1:0),i)))pe_adventure_dialogue_cancel(&u->dialogue);
-        } else if(i.advance||(i.left_pressed&&(hit(u->layout.dialogue_next,i)||hit(u->layout.dialogue,i))))pe_adventure_dialogue_advance(&u->dialogue,g);
+            else if(offer&&(i.advance||i.response==1||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i))))pe_adventure_dialogue_choose_supply(&u->dialogue,g);
+            else if((!offer&&i.advance)||i.response==(unsigned)(offer?2:1)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,offer?1:0),i)))pe_adventure_dialogue_cancel(&u->dialogue);
+        } else if(i.advance||i.response==1||(i.left_pressed&&(hit(u->layout.dialogue_next,i)||hit(u->layout.dialogue,i))))u->dialogue_result=pe_adventure_dialogue_advance(&u->dialogue,g);
         goto done;
     }
     if(i.escape) {
@@ -269,11 +351,11 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(i.replicator){bool open=!u->replicator_open;close_panels(u);u->replicator_open=open;}
         if(i.tab)u->free_cursor=!u->free_cursor;
         if(!u->search_focus){r.save=i.save;r.load=i.load;}
-        if(!before&&!panel(u)&&!i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&i.quickslot>=0){if(u->building)build_select(u,&r,i.quickslot);else quick_use(&r,g,i.quickslot);r.consume_world=true;}
+        if(!before&&!panel(u)&&!i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&i.quickslot>=0){if(u->building){build_select(u,&r,i.quickslot);r.consume_world=true;}else quick_use(u,&r,g,i.quickslot);}
     }
     bool cursor=pe_sandbox_ui_cursor(u);
     /* A closing/toggling frame is consumed as well: held clicks cannot leak. */
-    r.consume_world=r.consume_world||before||panel(u)||(!u->building&&u->free_cursor)||i.escape||i.inventory||i.character||i.missions||i.replicator||i.tab;
+    r.consume_world=r.consume_world||before||panel(u)||i.escape||i.inventory||i.character||i.missions||i.replicator||i.tab;
     if(u->paused) {
         if(i.left_pressed)for(int b=0;b<4;b++)if(hit(pe_sandbox_ui_pause_button(u,b),i)) {
             if(b==0)u->paused=false;
@@ -283,7 +365,8 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         }
         goto done;
     }
-    if(cursor&&((!u->building&&hit(u->layout.hud,i))||hit(u->layout.minimap,i)||hit(u->layout.menu_button,i)))r.consume_world=true;
+    if(cursor&&!u->building&&hit(u->layout.hud,i))r.consume_actions=true;
+    if(cursor&&(hit(u->layout.minimap,i)||hit(u->layout.menu_button,i)))r.consume_world=true;
     if(i.left_pressed&&cursor&&hit(u->layout.menu_button,i)){u->menu_open=!u->menu_open;r.consume_world=true;}
     if(u->menu_open&&i.left_pressed)for(int b=0;b<PE_UI_MENU_ITEMS;b++)if(hit(u->layout.menu_items[b],i)) {
         close_panels(u);
@@ -347,6 +430,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     if(u->character_open&&pointer_window==PE_UI_WINDOW_CHARACTER) {
         if(i.left_pressed&&hit(u->layout.equipment_close,i))u->character_open=false;
         if(i.right_pressed&&hit(u->layout.equipment_weapon,i))pe_game_unequip(g);
+        if(i.right_pressed&&hit(u->layout.equipment_slots[9],i))pe_shield_unequip(g);
     }
     if(u->inventory_open&&pointer_window==PE_UI_WINDOW_INVENTORY) {
         if(i.left_pressed&&hit(u->layout.inventory_close,i)){u->inventory_open=false;u->dragging=false;goto done;}
@@ -364,7 +448,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(u->inventory_page>=pages)u->inventory_page=pages-1;
         int visible=pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,i.mouse_x,i.mouse_y);
         int index=pe_sandbox_ui_inventory_slot(u,g,visible);
-        if(index>=0&&i.right_pressed){pe_game_use_slot(g,index);u->dragging=false;}
+        if(index>=0&&i.right_pressed){use_inventory_slot(u,g,index);u->dragging=false;}
         if(index>=0&&i.left_pressed) {
             const PeSlot *s=&g->inventory.slots[index];u->selected_slot=index;u->dragging=true;u->drag_slot=index;u->drag_quickslot=-1;
             u->drag_item=s->item_id;u->drag_instance=s->instance_id;u->drag_x=i.mouse_x;u->drag_y=i.mouse_y;
@@ -399,7 +483,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
             u->drag_item=g->quickslots[q].item_id;u->drag_instance=g->quickslots[q].instance_id;
             u->drag_x=i.mouse_x;u->drag_y=i.mouse_y;
         }
-        if(i.right_pressed&&q>=0)quick_use(&r,g,q);
+        if(i.right_pressed&&q>=0)quick_use(u,&r,g,q);
         if(i.left_pressed&&hit(u->layout.build_button,i)){r.toggle_build=true;close_panels(u);}
     }
  done:
@@ -410,5 +494,42 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     if(r.load)u->map_valid=false;
     r.cursor_visible=pe_sandbox_ui_cursor(u);r.paused=u->paused;
     r.consume_world=r.consume_world||panel(u)||u->dragging;
+    /* Tab blocks gameplay, but alone must not block the keyboard camera mode
+     * command. All real UI activity, including closing frames, still wins. */
+    r.camera_cycle_allowed=!r.consume_world&&!r.consume_actions&&!r.save&&!r.load;
+    r.consume_world=r.consume_world||(!u->building&&u->free_cursor);
     return r;
+}
+
+int pe_sandbox_ui_hunt_mission_id(const PeGame *g){
+    if(!g||g->mode!=PE_GAME_ADVENTURE)return 0;
+    switch(g->hunt_state){
+    case PE_HUNT_TRAVEL:return 9075;
+    case PE_HUNT_ENCOUNTER_PENDING:return 9126;
+    case PE_HUNT_RETURN_PENDING:case PE_HUNT_RETURN_TALK1:case PE_HUNT_RETURN_TALK2:case PE_HUNT_COMPLETE:return 9127;
+    default:return 0;
+    }
+}
+const char *pe_sandbox_ui_mission_title(const PeGame *g) {
+    if(!g||g->mode!=PE_GAME_ADVENTURE||g->welcome_page<PE_ADVENTURE_WELCOME_PAGES)return "";
+    if(g->hunt_state)return pe_adventure_mission_title(pe_sandbox_ui_hunt_mission_id(g));
+    if(g->medicine_state==PE_MEDICINE_ACTIVE)return pe_adventure_mission_title(9072);
+    if(g->annot_complete)return "";
+    if(g->arrival_complete&&!g->supplies_claimed)return "";
+    return pe_adventure_mission_title(g->supplies_claimed?PE_ADVENTURE_SUPPLIES:PE_ADVENTURE_ARRIVAL);
+}
+bool pe_sandbox_ui_hunt_goal(const PeSandboxUI *u,const PeGame *g,char *out,size_t capacity){
+    if(!u||!g||!out||!capacity||g->mode!=PE_GAME_ADVENTURE||g->welcome_page<PE_ADVENTURE_WELCOME_PAGES)return false;
+    char value[320];int length;
+    if(g->hunt_state==PE_HUNT_TRAVEL)length=snprintf(value,sizeof value,"Travel to the hunting area at P: %.0f, %.0f.",g->hunt_destination.x,g->hunt_destination.z);
+    else if(g->hunt_state==PE_HUNT_ENCOUNTER_PENDING)length=snprintf(value,sizeof value,"Kill Lepus hares (%u/4).%s",g->hunt_kills,u->hunt_encounter_available?"":" Creature encounter unavailable.");
+    else if(g->hunt_state==PE_HUNT_RETURN_PENDING){PeVec3 target;
+        if(!pe_adventure_hunt_return_reference(&target))return false;
+        length=snprintf(value,sizeof value,"Lepus hares: 4/4. Return to town at P: %.0f, %.0f.",target.x,target.z);
+    }else if(g->hunt_state==PE_HUNT_RETURN_TALK1||g->hunt_state==PE_HUNT_RETURN_TALK2)
+        length=snprintf(value,sizeof value,"Rewards received. Finish reporting to Naoko.");
+    else if(g->hunt_state==PE_HUNT_COMPLETE)length=snprintf(value,sizeof value,"Bug Hunt complete. Town Defense is not available yet.");
+    else return false;
+    if(length<0||(size_t)length>=sizeof value||(size_t)length>=capacity)return false;
+    memcpy(out,value,(size_t)length+1);return true;
 }

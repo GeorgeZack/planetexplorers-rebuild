@@ -12,7 +12,108 @@ static void close_to(float value,float expected,float tolerance) {
     if(fabsf(value-expected)>tolerance)fprintf(stderr,"camera: %.9g != %.9g\n",value,expected);
     assert(fabsf(value-expected)<=tolerance);
 }
+static void control_tests(void) {
+    PeSandboxCameraControls c;pe_sandbox_camera_controls_init(&c);
+    PeSandboxCameraControlInput in={.dt=.016f,.focused=true,.input_allowed=true};
+    PeSandboxCameraControlResult out={0};
+    assert(c.mode==PE_SANDBOX_CAMERA_FREE);
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(out.third_person&&out.world_input&&out.pointer_cursor&&!out.capture&&!out.look);
+    /* Keyboard movement/actions are independent of pointer capture/hover. */
+    in.pointer_over_ui=true;assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(out.world_input&&!out.capture);
+    in.right_pressed=in.right_down=true;assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!c.right_tracking&&!out.capture);
+    in.pointer_over_ui=false;in.right_pressed=false;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.capture); /* no inherited UI-held drag */
+    in.right_down=false;in.right_released=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.right_click);
+    in.right_released=false;in.right_pressed=in.right_down=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!out.capture&&!out.look&&!out.right_click&&out.pointer_cursor);
+    in.right_pressed=false;in.mouse_dx=3;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(out.capture&&!out.look&&c.right_dragged); /* exact drag threshold */
+    in.captured=true;in.mouse_dx=0;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(out.look);
+    in.right_down=false;in.right_released=true;in.mouse_dx=0;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!out.capture&&!out.look&&!out.right_click&&out.world_input);
+    /* A genuine short click is emitted only on release, not on press. */
+    in.captured=false;in.right_released=false;in.right_pressed=in.right_down=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.right_click&&!out.capture&&out.pointer_cursor);
+    in.right_pressed=in.right_down=false;in.right_released=true;in.dt=.249f;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(out.right_click&&!out.capture&&out.pointer_cursor);
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.right_click); /* no repeated release */
+    in.captured=false;in.right_released=false;in.right_pressed=in.right_down=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    in.right_pressed=in.right_down=false;in.right_released=true;in.dt=.25f;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.right_click); /* strict tutorial cutoff */
+    /* A stationary hold leaves the original pointer untouched until exactly
+     * .25s, then requests capture without applying a capture-frame warp. */
+    in=(PeSandboxCameraControlInput){.dt=.01f,.focused=true,.input_allowed=true,.right_pressed=true,.right_down=true};
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.capture);
+    in.right_pressed=false;in.dt=.249f;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.capture&&out.pointer_cursor);
+    in.dt=.001f;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(out.capture&&!out.look&&!out.pointer_cursor);
+    in.captured=true;in.dt=.01f;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(out.look);
+    in.right_down=false;in.right_released=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.capture&&!out.right_click);
+    /* Back-and-forth movement still counts as a drag; net displacement zero
+     * does not turn an orbit into an interaction or stow. */
+    in=(PeSandboxCameraControlInput){.dt=.01f,.focused=true,.input_allowed=true,.right_pressed=true,.right_down=true};
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    in.right_pressed=false;in.mouse_dx=1.5f;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!c.right_dragged&&!out.capture);
+    in.mouse_dx=-1.5f;in.right_down=false;in.right_released=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.right_click);
+    /* F5 follows tutorial 0->1->2->0 and clears the effective Tab override. */
+    in=(PeSandboxCameraControlInput){.dt=.01f,.focused=true,.input_allowed=true,.free_cursor=true,.cycle_pressed=true};
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(c.mode==PE_SANDBOX_CAMERA_LOCKED&&out.third_person&&out.capture&&out.cycle_accepted&&!out.look);
+    in.free_cursor=false;in.captured=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(c.mode==PE_SANDBOX_CAMERA_FIRST_PERSON&&!out.third_person&&out.capture);
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(c.mode==PE_SANDBOX_CAMERA_FREE&&out.third_person&&!out.capture);
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    in.cycle_pressed=false;in.free_cursor=true;
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!out.capture&&out.world_input&&out.pointer_cursor);
+    /* UI press/hold/release ownership and focus outrank every camera mode. */
+    for(int mode=0;mode<3;mode++){
+        c=(PeSandboxCameraControls){.mode=(PeSandboxCameraMode)mode};
+        in=(PeSandboxCameraControlInput){.dt=.01f,.focused=true,.input_allowed=true,.right_pressed=true,.right_down=true};
+        assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(c.right_tracking);
+        in.right_pressed=false;in.input_allowed=false;in.cycle_pressed=true;
+        assert(pe_sandbox_camera_controls_step(&c,in,&out));
+        assert(!out.capture&&!out.world_input&&!out.cycle_accepted&&!c.right_tracking&&c.mode==(PeSandboxCameraMode)mode);
+        in.right_down=false;in.right_released=true;
+        assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.right_click&&!out.capture);
+        in.input_allowed=true;in.focused=false;
+        assert(pe_sandbox_camera_controls_step(&c,in,&out));assert(!out.world_input&&!out.capture);
+    }
+    /* A lost release and explicit host cancellation cannot leave a latent click. */
+    pe_sandbox_camera_controls_init(&c);
+    in=(PeSandboxCameraControlInput){.dt=.01f,.focused=true,.input_allowed=true,.right_pressed=true,.right_down=true};
+    assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    in.right_pressed=in.right_down=false;assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!c.right_tracking&&!out.capture);
+    in.right_pressed=in.right_down=true;assert(pe_sandbox_camera_controls_step(&c,in,&out));
+    pe_sandbox_camera_controls_cancel(&c);assert(!c.right_tracking);
+    PeSandboxCameraControls before=c;PeSandboxCameraControlResult previous=out;
+    in.dt=NAN;assert(!pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!memcmp(&c,&before,sizeof c)&&!memcmp(&out,&previous,sizeof out));
+    in.dt=.01f;in.mouse_dx=INFINITY;assert(!pe_sandbox_camera_controls_step(&c,in,&out));
+    assert(!memcmp(&c,&before,sizeof c)&&!memcmp(&out,&previous,sizeof out));
+    assert(!pe_sandbox_camera_controls_step(NULL,in,&out));
+    assert(!pe_sandbox_camera_controls_step(&c,in,NULL));
+    pe_sandbox_camera_controls_init(NULL);pe_sandbox_camera_controls_cancel(NULL);
+}
 int main(void) {
+    control_tests();
     /* Values invoked directly from installed Unity5.2.4f1 managed six-argument
      * SmoothDamp; regenerate with tools/reference_smoothdamp.c. Assembly hash:
      * f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b
@@ -81,6 +182,6 @@ int main(void) {
     assert(!pe_sandbox_camera_step(NULL,frame(.1f)));pe_sandbox_camera_init(NULL);
     assert((PE_SANDBOX_CAMERA_OBSTACLE_MASK&((1u<<14)|(1u<<19)|(1u<<21)))==0);
     assert((PE_SANDBOX_CAMERA_OBSTACLE_MASK&(1u<<12))!=0);
-    puts("sandbox camera: Unity5.2 oracle, smoothing, bounds, modal/pause gates and tree-excluding mask passed");
+    puts("sandbox camera: free/locked/first-person input, RMB gestures, UI/focus gates, Unity5.2 zoom and tree-excluding mask passed");
     return 0;
 }

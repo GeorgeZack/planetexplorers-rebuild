@@ -1,0 +1,43 @@
+{
+  "schema": "pe-reference-render-diagnostic-1",
+  "date": "2026-10-06",
+  "original_pid": 2253813,
+  "launch_session": 48255,
+  "profile": "planet-explorers-sandbox-reference",
+  "capture": "sword-shield-zink-01.jsonl",
+  "environment": {
+    "__GLX_VENDOR_LIBRARY_NAME": "mesa",
+    "MESA_LOADER_DRIVER_OVERRIDE": "zink",
+    "GALLIUM_DRIVER": "zink",
+    "VK_DRIVER_FILES": "/usr/share/vulkan/icd.d/nvidia_icd.json",
+    "LIBGL_ALWAYS_SOFTWARE": null
+  },
+  "single_threaded_rendering": true,
+  "renderer": "zink Vulkan 1.4(Quadro K1200 (NVIDIA_PROPRIETARY))",
+  "mesa_version": "26.2.2-arch1.1",
+  "glxinfo_accelerated": true,
+  "main_menu_observed": true,
+  "user_report": "Yes, playable now",
+  "user_report_context": "Responsiveness after requesting Single Player manual slot 1 audit; no measured FPS or long-term stability claim.",
+  "preceding_llvmpipe": {
+    "user_report": "the game is so slow it cannot be interacted with.",
+    "launcher_exit": 143,
+    "operator_sent_kill": false
+  },
+  "settings_scope": "Environment only for this launch; no system graphics changes.",
+  "documentation": "https://docs.mesa3d.org/drivers/zink.html",
+  "startup_log": "rebuild/build/starter-pair-next/shield-zink-startup-player.log",
+  "startup_log_sha256": "2f88f91b2699216a3c5e5ba57b369a04af05d1823546a544708c833007c7aeb9",
+  "status_at_checkpoint": "Original exited after operator SYSTEM/Quit Game/YES; no observed graphics crash during this run.",
+  "manual_checkpoint_hash_check": {
+    "files": 14,
+    "changed": []
+  },
+  "capture_end": {
+    "reason": "capture-limit",
+    "frames": 3600
+  },
+  "capture_sha256": "25f1965e54ca2ebcb56479f1b2f72a68762736dc3f2b50c60573b269b340dc17",
+  "launcher_exit": 137,
+  "exit_interpretation": "SIGKILL after normal quit confirmation, matching known source self-kill pattern; not exit0."
+}

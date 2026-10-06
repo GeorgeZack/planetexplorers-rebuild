@@ -1,0 +1,2565 @@
+{
+  "schema": 1,
+  "evidence": "Offline installed bundle typetree inventory through UnityPy1.25.4; no actor exported or live behavior measured.",
+  "species": [
+    {
+      "bundle": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/AssetBundles/Monster/m_coelodonta_rhino.unity3d",
+      "sha256": "393ddf14feb608886486d39532c8b3b5cc0036495188c7831a0274ee5224c295",
+      "bytes": 3954345,
+      "renderers": [
+        {
+          "id": 5011322549539694127,
+          "owner": "coelodonta_rhino",
+          "mesh": 7236384840505367644,
+          "bones": [
+            -1730129724720440005,
+            -3470018896429221444,
+            -6404804253028998630,
+            8864371921081296500,
+            6371938541925273895,
+            -7162626532339122364,
+            2398939866917507001,
+            2552102288301071837,
+            -2395288598496269851,
+            5325281852128506626,
+            6532889807929607085,
+            6105346224574327909,
+            5698744618673519055,
+            -5615246332490739527,
+            6106934266635350524,
+            8440456760733987489,
+            -1129885419729283833,
+            8816047116880803639,
+            4877449775810803465,
+            -3588373638587040389,
+            -1764446905792976762,
+            -7264116551445686355,
+            4510877371545999635,
+            -5189990317262346640,
+            6977583884540430492,
+            -4451030785785627849,
+            -4005792117316424196,
+            4318719653529598871,
+            2911529578096026250,
+            -9189423714068446763,
+            2447232452625026169,
+            212048260787464762,
+            -5753936491682937850,
+            3359245308075932668,
+            -4727449204457343999,
+            251237915660008951,
+            2831977657499505550,
+            1073238015238119491,
+            -2043122851377592796,
+            2799763593854036620,
+            5018607069480305015,
+            -8771985361262103068,
+            -9095149477925914958
+          ],
+          "root_bone": -1730129724720440005,
+          "materials": [
+            {
+              "m_FileID": 0,
+              "m_PathID": -933953022702470884
+            },
+            {
+              "m_FileID": 0,
+              "m_PathID": -733858441381111618
+            },
+            {
+              "m_FileID": 0,
+              "m_PathID": -7033748023663607523
+            },
+            {
+              "m_FileID": 0,
+              "m_PathID": 353249201761176165
+            }
+          ],
+          "hierarchy": [
+            {
+              "id": 3150329051946032425,
+              "name": "M_coelodonta_rhino",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": -744999435557692354,
+              "name": "mcoelodonta_rhino_ragdoll",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": 961415837914807881,
+              "name": "coelodonta_rhino_ragdoll",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": -8861094983833263847,
+              "name": "coelodonta_rhino",
+              "active": true,
+              "position": {
+                "x": -2.2873139471357717e-07,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 2.1855694143368964e-08,
+                "y": 8.742277657347586e-08,
+                "z": -1.910685465164705e-15,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "capsule_bones_outside_skin": [
+            {
+              "component": -7373486404793081900,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 Head",
+              "bone": 4759929639764804940,
+              "name": null
+            },
+            {
+              "component": -7373486404793081900,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 Head",
+              "bone": 4759929639764804940,
+              "name": null
+            },
+            {
+              "component": -7373486404793081900,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 Head",
+              "bone": 4759929639764804940,
+              "name": null
+            },
+            {
+              "component": -3806008989325130226,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 L Calf",
+              "bone": 1152524727168642624,
+              "name": null
+            },
+            {
+              "component": -3806008989325130226,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 L Calf",
+              "bone": 2411458661229288143,
+              "name": null
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 4759929639764804940,
+              "name": "Head"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 7064491598462087796,
+              "name": "Body"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 7508034432790039919,
+              "name": "LForearm"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -4418119581981027493,
+              "name": "RForearm"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -7322934511521158462,
+              "name": "LForearm_M"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 3353627700224698731,
+              "name": "RForearm_M"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 2411458661229288143,
+              "name": "LCalf"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 7594315913211071196,
+              "name": "RCalf"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -3449666079265434517,
+              "name": "Tail"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -1173065366639986561,
+              "name": "RThigh"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 1152524727168642624,
+              "name": "LThigh"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -7352803011280733102,
+              "name": "RUpperArm_M"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -6912073156538125517,
+              "name": "LUpperArm_M"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -6304845213373184159,
+              "name": "RUpperArm"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -8967515955384051189,
+              "name": "LUpperArm"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 4759929639764804940,
+              "name": "Head_L"
+            },
+            {
+              "component": -3087400075822538327,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 4759929639764804940,
+              "name": "Head_R"
+            },
+            {
+              "component": 1993829510693280479,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 R Calf",
+              "bone": -1173065366639986561,
+              "name": null
+            },
+            {
+              "component": 1993829510693280479,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 R Calf",
+              "bone": 7594315913211071196,
+              "name": null
+            },
+            {
+              "component": 2032936359362559167,
+              "kind": "PEAttackTrigger",
+              "owner": "Bone13",
+              "bone": -6912073156538125517,
+              "name": null
+            },
+            {
+              "component": 2032936359362559167,
+              "kind": "PEAttackTrigger",
+              "owner": "Bone13",
+              "bone": -7322934511521158462,
+              "name": null
+            },
+            {
+              "component": 2044544219426871836,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 R Forearm",
+              "bone": -6304845213373184159,
+              "name": null
+            },
+            {
+              "component": 2044544219426871836,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 R Forearm",
+              "bone": -4418119581981027493,
+              "name": null
+            },
+            {
+              "component": 3481212519937836085,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 L Forearm",
+              "bone": -8967515955384051189,
+              "name": null
+            },
+            {
+              "component": 3481212519937836085,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 L Forearm",
+              "bone": 7508034432790039919,
+              "name": null
+            },
+            {
+              "component": 5399945911716212643,
+              "kind": "PEAttackTrigger",
+              "owner": "Bone02",
+              "bone": -3449666079265434517,
+              "name": null
+            },
+            {
+              "component": 5773398141977200886,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01 Pelvis",
+              "bone": 970044113589970542,
+              "name": null
+            },
+            {
+              "component": 7687323420120534418,
+              "kind": "PEAttackTrigger",
+              "owner": "Bone07",
+              "bone": -7352803011280733102,
+              "name": null
+            },
+            {
+              "component": 7687323420120534418,
+              "kind": "PEAttackTrigger",
+              "owner": "Bone07",
+              "bone": 3353627700224698731,
+              "name": null
+            }
+          ]
+        },
+        {
+          "id": 9061803555269046225,
+          "owner": "coelodonta_rhino",
+          "mesh": 7236384840505367644,
+          "bones": [
+            970044113589970542,
+            4270066209945450327,
+            7159699837424613303,
+            7064491598462087796,
+            -5000396218351127705,
+            -1173065366639986561,
+            5788065614443570705,
+            4759929639764804940,
+            5450743465216278955,
+            -6304845213373184159,
+            -7451952468472783267,
+            -5115519710627717210,
+            -8967515955384051189,
+            2118367182468153012,
+            -7352803011280733102,
+            4967036601512213563,
+            6686452620926053149,
+            -4418119581981027493,
+            7594315913211071196,
+            7508034432790039919,
+            4022498593613883924,
+            -3853657971913979509,
+            -3449666079265434517,
+            4381227981193644132,
+            6800274227203480464,
+            -4575797379441211773,
+            -4683954863049684598,
+            -1794558968157408144,
+            3353627700224698731,
+            -5807036315956506739,
+            -1171344299100545470,
+            -6226229188337158655,
+            -2571152797879808353,
+            1152524727168642624,
+            2411458661229288143,
+            -6912073156538125517,
+            -2585823211341028262,
+            2559447565515801997,
+            8710654247017317213,
+            -535370739897370664,
+            -7322934511521158462,
+            7904795526930972395,
+            1543020054158115348
+          ],
+          "root_bone": 970044113589970542,
+          "materials": [
+            {
+              "m_FileID": 0,
+              "m_PathID": -933953022702470884
+            },
+            {
+              "m_FileID": 0,
+              "m_PathID": -733858441381111618
+            },
+            {
+              "m_FileID": 0,
+              "m_PathID": -7033748023663607523
+            },
+            {
+              "m_FileID": 0,
+              "m_PathID": 353249201761176165
+            }
+          ],
+          "hierarchy": [
+            {
+              "id": 3150329051946032425,
+              "name": "M_coelodonta_rhino",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": 705351890664988904,
+              "name": "mcoelodonta_rhino_model",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": -3143692575000355903,
+              "name": "coelodonta_rhino_model",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": 696690591577217529,
+              "name": "coelodonta_rhino",
+              "active": true,
+              "position": {
+                "x": -2.2873139471357717e-07,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 2.1855694143368964e-08,
+                "y": 8.742277657347586e-08,
+                "z": -1.910685465164705e-15,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "capsule_bones_outside_skin": []
+        }
+      ],
+      "meshes": [
+        {
+          "id": 7236384840505367644,
+          "name": "coelodonta_rhino",
+          "vertex_count": 3678,
+          "bind_poses": 43,
+          "submeshes": 4
+        }
+      ],
+      "controllers": [
+        {
+          "id": 5289878430810792808,
+          "name": "coelodonta_rhino",
+          "states": [
+            {
+              "name": "Base Layer.Locomotion.Idle",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Locomotion.AttackIdle",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Locomotion.Backward",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Locomotion.Forward",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Threat.threat0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Threat.threat1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Threat.threat2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Threat.threat3",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Threat.threat_before",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Leisure.leisure0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure2",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure3",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack3",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack2",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack4",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack5",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack6",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack7",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack9",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack8",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Jump.move_afterjumpback",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_afterjumpleft",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_afterjumpright",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_beforejumpfront",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_beforejumpright",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_beforejumpleft",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_jumpturnleft",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_jumpturnright",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sprint.move_sprintready",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Sprint.move_emergencystop",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Sprint.move_sprint",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sleep.normal_sleepdown",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Sleep.normal_sleeping",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sleep.normal_sleepup",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Pounce.pounce",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.eat0",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.eat1",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.eat2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.normal_feces",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Dodge.dodge0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Dodge.dodge1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Dodge.dodge2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Help.help",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.TurnOnSpot.TurnOnSpot",
+              "speed": 1.0,
+              "loop": false
+            }
+          ]
+        }
+      ],
+      "clips": [
+        {
+          "id": -9174312534865924164,
+          "name": "normal_leisure1",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 4.466668128967285,
+          "streamed_curve_count": 261,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -9068081939754379856,
+          "name": "attack5_headknockground",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.7666683197021484,
+          "streamed_curve_count": 271,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -7008638605414553803,
+          "name": "move_run",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 0.9333333969116211,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 271,
+          "events": []
+        },
+        {
+          "id": -6959899561007937567,
+          "name": "normal_sleeping",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 9.60000228881836,
+          "streamed_curve_count": 261,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -6012721116749207114,
+          "name": "attack3_mouthhitright",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.5,
+          "streamed_curve_count": 275,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -5865247229857446055,
+          "name": "attack8_bodyknockbackleft",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.666667938232422,
+          "streamed_curve_count": 283,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -5556783237612534605,
+          "name": "fight_fightinghelp",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.3333334922790527,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 235,
+          "events": []
+        },
+        {
+          "id": -5373099426780047258,
+          "name": "fight_dodgeright",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.2000007629394531,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 247,
+          "events": []
+        },
+        {
+          "id": -4879018940722653290,
+          "name": "move_turnright_normalrun",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.8666667938232422,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 275,
+          "events": []
+        },
+        {
+          "id": -4620947392360397759,
+          "name": "normal_leisure0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.833333969116211,
+          "streamed_curve_count": 257,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -4373986406732056693,
+          "name": "move_attackturnright_fast90",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 0.8333339691162109,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 281,
+          "events": []
+        },
+        {
+          "id": -4277099455448548130,
+          "name": "move_walk",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.066666603088379,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 267,
+          "events": []
+        },
+        {
+          "id": -3540094360993184767,
+          "name": "move_turnleft_normal",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.1666667461395264,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 271,
+          "events": []
+        },
+        {
+          "id": -3404613132047688330,
+          "name": "move_emergencystop",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.3333337306976318,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 293,
+          "events": []
+        },
+        {
+          "id": -3091952400666863886,
+          "name": "attack0_mouthhitfront0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.333333969116211,
+          "streamed_curve_count": 265,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -2675540555498493297,
+          "name": "attack9_bodyknockbackright",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.666667938232422,
+          "streamed_curve_count": 283,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -2325442435094459098,
+          "name": "attack_attackidle",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.3333332538604736,
+          "streamed_curve_count": 263,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -1733494906976115482,
+          "name": "fight_dodgeleft",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.333333969116211,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 251,
+          "events": []
+        },
+        {
+          "id": -1645603340568566128,
+          "name": "attack7_fastturnright90",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.200000762939453,
+          "streamed_curve_count": 275,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -86754997384987700,
+          "name": "normal_sleepdown",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.9666671752929688,
+          "streamed_curve_count": 275,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 1173829081551132449,
+          "name": "normal_leisure2",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 7.833333969116211,
+          "streamed_curve_count": 271,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 2217134458758766984,
+          "name": "move_sprintready",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 0.800000011920929,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 290,
+          "events": []
+        },
+        {
+          "id": 2717378960351384573,
+          "name": "move_turnright_normal",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.1666667461395264,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 271,
+          "events": []
+        },
+        {
+          "id": 2826718245620233311,
+          "name": "fight_fightingthreat0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.8000001907348633,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 270,
+          "events": []
+        },
+        {
+          "id": 3224287858368629503,
+          "name": "move_attackturnleft_fast180",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.1666669845581055,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 285,
+          "events": []
+        },
+        {
+          "id": 3862893295125182834,
+          "name": "normal_sleepup",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.0333328247070312,
+          "streamed_curve_count": 275,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 4236708989442712335,
+          "name": "attack2_mouthhitleft",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.5000009536743164,
+          "streamed_curve_count": 267,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 4293842403128334311,
+          "name": "move_turnleft_normalrun",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.8666677474975586,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 275,
+          "events": []
+        },
+        {
+          "id": 5321371519662363972,
+          "name": "move_attackturnleft_fast90",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 0.8333334922790527,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 285,
+          "events": []
+        },
+        {
+          "id": 5663349351516319524,
+          "name": "attack1_normalattack0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.500001907348633,
+          "streamed_curve_count": 283,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 5962180345750623148,
+          "name": "attack6_fastturnleft90",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.200000762939453,
+          "streamed_curve_count": 283,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 6170826252793281841,
+          "name": "move_attackturnright_fast180",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.1666669845581055,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 277,
+          "events": []
+        },
+        {
+          "id": 6267438777261469153,
+          "name": "attack4_headshootfront",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.2333335876464844,
+          "streamed_curve_count": 279,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 7457364986650616521,
+          "name": "fight_fightingthreat1",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.266667127609253,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 251,
+          "events": []
+        },
+        {
+          "id": 8414543558138826511,
+          "name": "move_retreat",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.0666675567626953,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 289,
+          "events": []
+        },
+        {
+          "id": 8570975197445724686,
+          "name": "move_sprint",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 0.8000001907348633,
+          "streamed_curve_count": 0,
+          "dense_curve_count": 293,
+          "events": []
+        },
+        {
+          "id": 8898612598950709696,
+          "name": "normal_leisureidle",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.3333334922790527,
+          "streamed_curve_count": 249,
+          "dense_curve_count": 0,
+          "events": []
+        }
+      ],
+      "textures": [
+        {
+          "id": -7660611139764736573,
+          "name": "coelodonta_rhino02",
+          "width": 512,
+          "height": 512
+        },
+        {
+          "id": -4346280680311402999,
+          "name": "coelodonta_rhino01_n",
+          "width": 512,
+          "height": 512
+        },
+        {
+          "id": -4018099179153503726,
+          "name": "coelodonta_rhino03_n",
+          "width": 512,
+          "height": 512
+        },
+        {
+          "id": -408171829713470687,
+          "name": "coelodonta_rhino03",
+          "width": 512,
+          "height": 512
+        },
+        {
+          "id": 1873735045762087530,
+          "name": "coelodonta_rhino04_n",
+          "width": 128,
+          "height": 128
+        },
+        {
+          "id": 2538411397680639177,
+          "name": "coelodonta_rhino04",
+          "width": 128,
+          "height": 128
+        },
+        {
+          "id": 4421852555301524748,
+          "name": "coelodonta_rhino01",
+          "width": 512,
+          "height": 512
+        },
+        {
+          "id": 5859023907510840799,
+          "name": "coelodonta_rhino02_n",
+          "width": 512,
+          "height": 512
+        }
+      ],
+      "components": [
+        {
+          "id": -7373486404793081900,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01 Head",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 3
+        },
+        {
+          "id": -5421557510613506518,
+          "kind": "PEHearing",
+          "owner": "Bip01 Head",
+          "settings": {
+            "m_Enabled": 1,
+            "radius": 15.0,
+            "isIgnoreBlock": 0
+          },
+          "capsule_parts": 0,
+          "transform_path": "M_coelodonta_rhino/mcoelodonta_rhino_model/coelodonta_rhino_model/Bone_coelodonta_rhino/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Spine2/Bip01 Neck/Bip01 Neck1/Bip01 Neck2/Bip01 Head"
+        },
+        {
+          "id": -3806008989325130226,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01 L Calf",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 2
+        },
+        {
+          "id": -3088727159890281373,
+          "kind": "PEVision",
+          "owner": "Bip01 Head",
+          "settings": {
+            "m_Enabled": 1,
+            "radius": 25.0,
+            "angle": 60.0,
+            "axis": {
+              "x": -1.0,
+              "y": -1.0,
+              "z": 0.0
+            }
+          },
+          "capsule_parts": 0,
+          "transform_path": "M_coelodonta_rhino/mcoelodonta_rhino_model/coelodonta_rhino_model/Bone_coelodonta_rhino/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Spine2/Bip01 Neck/Bip01 Neck1/Bip01 Neck2/Bip01 Head"
+        },
+        {
+          "id": -3087400075822538327,
+          "kind": "PEDefenceTrigger",
+          "owner": "Defencetrigger",
+          "settings": {
+            "m_Enabled": 1,
+            "modelRoot": {
+              "m_FileID": 0,
+              "m_PathID": 705351890664988904
+            },
+            "centerBone": {
+              "m_FileID": 0,
+              "m_PathID": 7064491598462087796
+            },
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 17
+        },
+        {
+          "id": 1993829510693280479,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01 R Calf",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 2
+        },
+        {
+          "id": 2032936359362559167,
+          "kind": "PEAttackTrigger",
+          "owner": "Bone13",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 2
+        },
+        {
+          "id": 2044544219426871836,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01 R Forearm",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 2
+        },
+        {
+          "id": 3481212519937836085,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01 L Forearm",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 2
+        },
+        {
+          "id": 3485789581123640074,
+          "kind": "CapsuleCollider",
+          "owner": "collider",
+          "settings": {
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 2.140000104904175,
+            "m_Height": 8.0,
+            "m_Direction": 2,
+            "m_Center": {
+              "x": 0.0,
+              "y": 2.140000104904175,
+              "z": 0.0
+            }
+          },
+          "capsule_parts": 0,
+          "transform_path": "M_coelodonta_rhino/mcoelodonta_rhino_model/collider"
+        },
+        {
+          "id": 5399945911716212643,
+          "kind": "PEAttackTrigger",
+          "owner": "Bone02",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 1
+        },
+        {
+          "id": 5773398141977200886,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01 Pelvis",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 1
+        },
+        {
+          "id": 7687323420120534418,
+          "kind": "PEAttackTrigger",
+          "owner": "Bone07",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 2
+        }
+      ],
+      "source_files": [
+        {
+          "path": "Assets/Resources/AiPrefab/EntityData/Monster/M_coelodonta_rhino.xml",
+          "sha256": "f8921474a91df3d1e03eea884eb4924d667292400cd6795520d78702e1cfa75c"
+        },
+        {
+          "path": "Assets/Prefabs/AiPrefab/AiPrefabEntity/AiPrefabMonster/Monster/M_coelodonta_rhino.prefab",
+          "sha256": "1dc290a4892324a13aab675665852419eb655f2c75c9a5c66ea36783b9b4bb26"
+        }
+      ]
+    },
+    {
+      "bundle": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/AssetBundles/Monster/m_lupus_wolf.unity3d",
+      "sha256": "f8e274a9e1c1ae479f88bf12067a440fad8bbf372258fc04bf732b582681aa38",
+      "bytes": 3115999,
+      "renderers": [
+        {
+          "id": 95028923182282536,
+          "owner": "lupus_wolf",
+          "mesh": -7480331273908971926,
+          "bones": [
+            5337963006573305313,
+            -2783958947042830971,
+            -6414220539868180426,
+            -7341385022941959454,
+            6528717337417324812,
+            -5221098079115929365,
+            -8200810612710443402,
+            -4210420305506331684,
+            7839515679981467354,
+            -3195370031557919786,
+            -3832589731946286856,
+            -9201241519689981406,
+            -2330479110521707856,
+            247127383654291116,
+            -47071021646195648,
+            2883757912212366563,
+            5838979726973916128,
+            -3263348436292152963,
+            4477738900788700372,
+            -4059926876186412150,
+            4581176194414016736,
+            -3689454743291440373,
+            8817666168443949232,
+            316930663271099147,
+            -8624060525384187576,
+            5776811713218005198,
+            5599906117245415251,
+            4506688623239939055,
+            -3010896560606501820,
+            4108127491292405604,
+            -7359302054570267638,
+            3256291591732193882,
+            5717387113354308629,
+            3708690609360340535,
+            8353835233614584171,
+            -2169042328259583976,
+            -8637014178814451524,
+            7811748465361803847,
+            9191439601764798643,
+            -4935807774459732112,
+            7630285298197051329,
+            6744770651713972892,
+            5377008668651465522,
+            -1591712595709837994,
+            6753482803098473066
+          ],
+          "root_bone": -3689454743291440373,
+          "materials": [
+            {
+              "m_FileID": 0,
+              "m_PathID": 296702016852596933
+            }
+          ],
+          "hierarchy": [
+            {
+              "id": 7536392961396745533,
+              "name": "M_lupus_wolf",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": -5710197759955247117,
+              "name": "mlupus_wolf_model",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": 5699745300516145509,
+              "name": "lupus_wolf_model",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": 4676775887354102269,
+              "name": "lupus_wolf",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 2.1855694143368964e-08,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "capsule_bones_outside_skin": [
+            {
+              "component": 7648945968148926611,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01",
+              "bone": 1664068957102402253,
+              "name": null
+            }
+          ]
+        },
+        {
+          "id": 6848755056612394523,
+          "owner": "lupus_wolf",
+          "mesh": -7480331273908971926,
+          "bones": [
+            -5465884745515476830,
+            8371524378342912853,
+            -4410038776726954861,
+            -5307080105445346103,
+            -2245121532827449713,
+            -8849609008082717644,
+            -5688503435041044420,
+            -4939508598832502478,
+            -7440447374471445189,
+            1262810701325374552,
+            -7259042807844318828,
+            4531053332737813477,
+            -8870702753912650984,
+            7584066697662124579,
+            9137134576868175135,
+            -4755261358214174959,
+            3008223404232612340,
+            -962820550631822226,
+            -6270378187307662359,
+            -8686987307714096628,
+            -9063933774080958670,
+            -441149385072095026,
+            7960727593612146387,
+            5702960673216407334,
+            -4429281819218325574,
+            -3415434488814723184,
+            3331365625392190049,
+            -4223627224592488510,
+            4810155610064456583,
+            -2952750006049481708,
+            4842693567242873123,
+            7699430762144671065,
+            -5357666654655148084,
+            -6847621486981482977,
+            1015921821740007971,
+            8031056521469963260,
+            7423990780786061089,
+            2745702460724900725,
+            9152054158595760774,
+            7312330755596067911,
+            1204370368771511573,
+            -152429459306152672,
+            3492937853872267716,
+            9183643905243698250,
+            9071433936585457581
+          ],
+          "root_bone": -441149385072095026,
+          "materials": [
+            {
+              "m_FileID": 0,
+              "m_PathID": 296702016852596933
+            }
+          ],
+          "hierarchy": [
+            {
+              "id": 7536392961396745533,
+              "name": "M_lupus_wolf",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": -5742760413165246799,
+              "name": "mlupus_wolf_ragdoll",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": 4646822350685048395,
+              "name": "lupus_wolf_ragdoll",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            },
+            {
+              "id": -467925241856254195,
+              "name": "lupus_wolf",
+              "active": true,
+              "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+              },
+              "rotation": {
+                "x": 2.1855694143368964e-08,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+              },
+              "scale": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+              }
+            }
+          ],
+          "capsule_bones_outside_skin": [
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 5337963006573305313,
+              "name": "Neck"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -9201241519689981406,
+              "name": "Head"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -47071021646195648,
+              "name": "Body1"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 316930663271099147,
+              "name": "Body2"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 8817666168443949232,
+              "name": "Thigh L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 5599906117245415251,
+              "name": "Calf L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 4506688623239939055,
+              "name": "Foot L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -3195370031557919786,
+              "name": "Toe L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 9191439601764798643,
+              "name": "Thigh R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -4935807774459732112,
+              "name": "Calf R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -1591712595709837994,
+              "name": "Foot R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 3708690609360340535,
+              "name": "Toe R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -4059926876186412150,
+              "name": "MUpperarm L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -3263348436292152963,
+              "name": "MForearm L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 7839515679981467354,
+              "name": "MHand L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -8624060525384187576,
+              "name": "MUpperarm R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -8637014178814451524,
+              "name": "MForearm R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 5717387113354308629,
+              "name": "MHand R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -2330479110521707856,
+              "name": "FUpperarm L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 247127383654291116,
+              "name": "FForearm L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 4108127491292405604,
+              "name": "FHand L"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 2883757912212366563,
+              "name": "FUpperarm R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -2169042328259583976,
+              "name": "FForearm R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 7630285298197051329,
+              "name": "FHand R"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": 4581176194414016736,
+              "name": "Tail1"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -4210420305506331684,
+              "name": "Tail2"
+            },
+            {
+              "component": -6188352096381466231,
+              "kind": "PEDefenceTrigger",
+              "owner": "Defencetrigger",
+              "bone": -8200810612710443402,
+              "name": "Tail3"
+            },
+            {
+              "component": 7648945968148926611,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01",
+              "bone": 1664068957102402253,
+              "name": null
+            },
+            {
+              "component": 9220185767094753613,
+              "kind": "PEAttackTrigger",
+              "owner": "Bip01_Mouth",
+              "bone": -9201241519689981406,
+              "name": null
+            }
+          ]
+        }
+      ],
+      "meshes": [
+        {
+          "id": -7480331273908971926,
+          "name": "lupus_wolf",
+          "vertex_count": 3023,
+          "bind_poses": 45,
+          "submeshes": 1
+        }
+      ],
+      "controllers": [
+        {
+          "id": 6856608753594384806,
+          "name": "lupus_wolf",
+          "states": [
+            {
+              "name": "Base Layer.Locomotion.Idle",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Locomotion.AttackIdle",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Locomotion.Backward",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Locomotion.Forward",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Threat.threat0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Threat.threat1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Threat.threat2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Threat.threat3",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Threat.threat_before",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure2",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Leisure.leisure3",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack3",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack1",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Attack.attack2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack4",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack5",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack6",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack7",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack9",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Attack.attack8",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_afterjumpback",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Jump.move_afterjumpleft",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_afterjumpright",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_beforejumpfront",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_beforejumpright",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_beforejumpleft",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_jumpturnleft",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Jump.move_jumpturnright",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sprint.move_sprintready",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sprint.move_emergencystop",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sprint.move_sprint",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sleep.normal_sleepdown",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sleep.normal_sleeping",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Sleep.normal_sleepup",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Pounce.pounce",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.eat0",
+              "speed": 1.0,
+              "loop": false
+            },
+            {
+              "name": "Base Layer.Eat.eat1",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.eat2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Eat.feces",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Dodge.dodge0",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Dodge.dodge1",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Dodge.dodge2",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.Help.help",
+              "speed": 1.0,
+              "loop": true
+            },
+            {
+              "name": "Base Layer.TurnOnSpot.TurnOnSpot",
+              "speed": 1.0,
+              "loop": false
+            }
+          ]
+        }
+      ],
+      "clips": [
+        {
+          "id": -8975868048638437516,
+          "name": "move_attackturnright_fast90",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.0,
+          "streamed_curve_count": 303,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -8721201719529954008,
+          "name": "fight_fightingthreat0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 4.099999904632568,
+          "streamed_curve_count": 284,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -8520862518655967777,
+          "name": "normal_leisure2",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 9.666666984558105,
+          "streamed_curve_count": 274,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -8443254897980843229,
+          "name": "fight_eat",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.9666666984558105,
+          "streamed_curve_count": 289,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -8219250280400160137,
+          "name": "move_retreat",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.133333444595337,
+          "streamed_curve_count": 342,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -8100746663324330150,
+          "name": "move_walk",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.1333333253860474,
+          "streamed_curve_count": 338,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -5974625522937481487,
+          "name": "normal_fightbeforethreat0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 3.1666669845581055,
+          "streamed_curve_count": 274,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -5641808743126204038,
+          "name": "attack0_mouthhitfront",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.3333334922790527,
+          "streamed_curve_count": 335,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -5573473765084115522,
+          "name": "move_turnright_normal",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.133333444595337,
+          "streamed_curve_count": 335,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -4773003340094549126,
+          "name": "move_turnright_normalrun",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.0000004768371582,
+          "streamed_curve_count": 335,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -3882057650561268103,
+          "name": "move_afterjumpback",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.633333683013916,
+          "streamed_curve_count": 347,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -3131655887586843605,
+          "name": "fight_fightingthreat1",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.8000001907348633,
+          "streamed_curve_count": 295,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -2979888083637282094,
+          "name": "attack_attackidle",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.533333420753479,
+          "streamed_curve_count": 280,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -1020605356395414990,
+          "name": "normal_leisure1",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 4.666667461395264,
+          "streamed_curve_count": 274,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": -812016210473364797,
+          "name": "move_turnleft_normalrun",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.0000004768371582,
+          "streamed_curve_count": 334,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 653196280824027263,
+          "name": "move_attackturnright_fast180",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.100001335144043,
+          "streamed_curve_count": 311,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 2790398011441067030,
+          "name": "move_run",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 0.5000004768371582,
+          "streamed_curve_count": 341,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 3405747981061942981,
+          "name": "move_attackturnleft_fast180",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.1000003814697266,
+          "streamed_curve_count": 319,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 5669324198223633197,
+          "name": "move_attackturnleft_fast90",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.0000004768371582,
+          "streamed_curve_count": 311,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 5704608327938881245,
+          "name": "attack1_pouncefront",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 2.333333969116211,
+          "streamed_curve_count": 351,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 6470449588314259856,
+          "name": "normal_leisure0",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 4.566667079925537,
+          "streamed_curve_count": 258,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 6818578352614485488,
+          "name": "move_turnleft_normal",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.133333444595337,
+          "streamed_curve_count": 332,
+          "dense_curve_count": 0,
+          "events": []
+        },
+        {
+          "id": 7226906350380752722,
+          "name": "normal_leisureidle",
+          "legacy": false,
+          "sample_rate": 30.0,
+          "duration": 1.5000001192092896,
+          "streamed_curve_count": 250,
+          "dense_curve_count": 0,
+          "events": []
+        }
+      ],
+      "textures": [
+        {
+          "id": -8734870439193617845,
+          "name": "lupus_wolf_N",
+          "width": 512,
+          "height": 512
+        },
+        {
+          "id": -5280611229496927807,
+          "name": "lupus_wolf",
+          "width": 1024,
+          "height": 1024
+        }
+      ],
+      "components": [
+        {
+          "id": -6188352096381466231,
+          "kind": "PEDefenceTrigger",
+          "owner": "Defencetrigger",
+          "settings": {
+            "m_Enabled": 1,
+            "modelRoot": {
+              "m_FileID": 0,
+              "m_PathID": -5710197759955247117
+            },
+            "centerBone": {
+              "m_FileID": 0,
+              "m_PathID": -5710197759955247117
+            },
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 27
+        },
+        {
+          "id": 2297876040366856653,
+          "kind": "PEHearing",
+          "owner": "Bip01 Head",
+          "settings": {
+            "m_Enabled": 1,
+            "radius": 20.0,
+            "isIgnoreBlock": 0
+          },
+          "capsule_parts": 0,
+          "transform_path": "M_lupus_wolf/mlupus_wolf_model/lupus_wolf_model/Bone037/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Spine2/Bip01 Neck/Bip01 Neck1/Bip01 Head"
+        },
+        {
+          "id": 2691522724716516937,
+          "kind": "PEVision",
+          "owner": "Bip01 Head",
+          "settings": {
+            "m_Enabled": 1,
+            "radius": 20.0,
+            "angle": 60.0,
+            "axis": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 1.0
+            }
+          },
+          "capsule_parts": 0,
+          "transform_path": "M_lupus_wolf/mlupus_wolf_model/lupus_wolf_model/Bone037/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Spine2/Bip01 Neck/Bip01 Neck1/Bip01 Head"
+        },
+        {
+          "id": 7648945968148926611,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 1
+        },
+        {
+          "id": 8913775476716333947,
+          "kind": "CapsuleCollider",
+          "owner": "collider",
+          "settings": {
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.7599999904632568,
+            "m_Height": 3.5899999141693115,
+            "m_Direction": 2,
+            "m_Center": {
+              "x": 0.0,
+              "y": 0.7599999904632568,
+              "z": -0.05999999865889549
+            }
+          },
+          "capsule_parts": 0,
+          "transform_path": "M_lupus_wolf/mlupus_wolf_model/collider"
+        },
+        {
+          "id": 9220185767094753613,
+          "kind": "PEAttackTrigger",
+          "owner": "Bip01_Mouth",
+          "settings": {
+            "m_Enabled": 1,
+            "attackLayer": {
+              "m_Bits": 34082816
+            },
+            "arrowSize": 1.0,
+            "showDebugInfo": 0
+          },
+          "capsule_parts": 1
+        }
+      ],
+      "source_files": [
+        {
+          "path": "Assets/Resources/AiPrefab/EntityData/Monster/M_lupus_wolf.xml",
+          "sha256": "aabff29b8d4d7e8c4a014174a5d24ee7b3655fe2cda128225b7252fd0ab21023"
+        },
+        {
+          "path": "Assets/Prefabs/AiPrefab/AiPrefabEntity/AiPrefabMonster/Monster/M_lupus_wolf.prefab",
+          "sha256": "40c7ba64b85bc4b1e877f2bd5ab485c96b2af84ca3548f24068a8e825439731c"
+        }
+      ]
+    }
+  ]
+}

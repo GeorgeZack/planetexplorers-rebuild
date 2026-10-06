@@ -1,0 +1,90 @@
+{
+  "evidence_limit": "Return UI segment began from explicitly staged state3/count4 fixture; inspection establishes saved return progress/reward counts, not physically completed four-kill gameplay.",
+  "saves": [
+    {
+      "save": "rebuild/build/hunt-return-native-page4105.pesave",
+      "hunt_state": 4,
+      "hunt_kills": 4,
+      "pending_talk": 4105,
+      "source_position": [
+        -270.27298,
+        22.491291,
+        133.284821
+      ],
+      "hp": 500,
+      "max_hp": 500,
+      "money": 325,
+      "equipped_instance": 0,
+      "scripts": {
+        "592": 1,
+        "593": 1,
+        "594": 1,
+        "595": 1
+      },
+      "known_recipe_count": 20,
+      "sha256": "00e343e005cd888fb2ff240f043eab1140ab04ae46326ed3361a1e8cfaa6c057"
+    },
+    {
+      "save": "rebuild/build/hunt-return-native-page4106.pesave",
+      "hunt_state": 5,
+      "hunt_kills": 4,
+      "pending_talk": 4106,
+      "source_position": [
+        -270.27298,
+        22.491291,
+        133.284821
+      ],
+      "hp": 500,
+      "max_hp": 500,
+      "money": 325,
+      "equipped_instance": 0,
+      "scripts": {
+        "592": 1,
+        "593": 1,
+        "594": 1,
+        "595": 1
+      },
+      "known_recipe_count": 20,
+      "sha256": "38517e37677f137ead5dae69db2677418aa1b3079793dda17ec2f50f30fc4b58"
+    },
+    {
+      "save": "rebuild/build/hunt-return-native-complete.pesave",
+      "hunt_state": 6,
+      "hunt_kills": 4,
+      "pending_talk": 0,
+      "source_position": [
+        -270.27298,
+        22.491291,
+        133.284821
+      ],
+      "hp": 500,
+      "max_hp": 500,
+      "money": 325,
+      "equipped_instance": 0,
+      "scripts": {
+        "592": 1,
+        "593": 1,
+        "594": 1,
+        "595": 1
+      },
+      "known_recipe_count": 20,
+      "sha256": "4bcdff5330bb3d94ee49b90e11c6999331d8781b13a9476eae3fa8708b58d005"
+    }
+  ],
+  "read_only_verified": true,
+  "staged_start": {
+    "save": "rebuild/build/hunt-return-ui-fixture.pesave",
+    "sha256": "bbd97e454c62b9f656570e412c924f083c3c2b57837c92cc977deb1eedd0c243",
+    "hunt_state": 3,
+    "hunt_kills": 4,
+    "pending_talk": 0,
+    "scripts": {
+      "592": 0,
+      "593": 0,
+      "594": 0,
+      "595": 0
+    },
+    "known_recipe_count": 20,
+    "verification": "Read-only normal native loader inspection; scripts all absent before physically walked return segment."
+  }
+}

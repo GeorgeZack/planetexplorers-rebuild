@@ -1,4 +1,6 @@
 #include "pe_game.h"
+#include "pe_shield.h"
+#include "pe_sword.h"
 #include "pe_tree_collision.h"
 #include "pe_settlement.h"
 #include <limits.h>
@@ -84,11 +86,12 @@ const PeSlot *pe_game_equipped_tool(const PeGame *g){
 bool pe_game_equip_slot(PeGame *g,int index){
     if(!g||index<0||index>=PE_INVENTORY_SLOTS||!(g->hp>0))return false;
     PeSlot *slot=&g->inventory.slots[index];const PeItemDef *def=pe_item_def(slot->item_id);
-    bool supported=def&&(def->tool_kind!=PE_TOOL_NONE||
+    bool supported=def&&(def->id==10||def->tool_kind!=PE_TOOL_NONE||
         (g->mode==PE_GAME_ADVENTURE&&(def->equip_position&16)&&(def->item_type==9||def->item_type==10||def->item_type==14)));
     if(!supported||def->durability_max<=0||!slot->instance_id||slot->count!=1){say(g,"This equipment action is not implemented.");return false;}
-    if(slot->durability<=0){say(g,"That tool is broken.");return false;}
-    g->equipped_instance_id=slot->instance_id;say(g,"Equipment selected.");return true;
+    if(def->id==1&&!pe_sword_slot_valid(slot)){say(g,"Invalid sword instance.");return false;}
+    if(slot->durability<=0&&def->id!=1){say(g,"That tool is broken.");return false;}
+    g->equipped_instance_id=slot->instance_id;say(g,def->id==10?"Torch equipped: left click to hold, P to place, R to stow.":"Equipment selected.");return true;
 }
 void pe_game_unequip(PeGame *g){if(g){g->equipped_instance_id=0;say(g,"Equipment put away.");}}
 bool pe_game_tool_stats(const PeGame *g,PeToolStats *stats){
@@ -96,7 +99,9 @@ bool pe_game_tool_stats(const PeGame *g,PeToolStats *stats){
     memset(stats,0,sizeof *stats);const PeSlot *slot=pe_game_equipped_tool(g);
     const PeItemDef *def=slot?pe_item_def(slot->item_id):NULL;
     if(!def)return false;
-    stats->attack=pe_player_defaults.attack+def->attack;
+    float attack=def->id==1?pe_sword_attack(slot,pe_player_defaults.attack):pe_player_defaults.attack+def->attack;
+    if(!isfinite(attack))return false;
+    stats->attack=attack;
     stats->mining_damage=stats->attack*(1.0f+pe_player_defaults.resource_damage+def->resource_damage)*5.0f;
     stats->mining_radius=pe_player_defaults.resource_range+def->resource_range;
     stats->stamina_cost=def->stamina_cost*pe_player_defaults.stamina_reduce_percent;
@@ -191,6 +196,7 @@ bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
     PeGame *next=calloc(1,sizeof *next);if(!next)return false;
     *next=*g;memset(&next->world,0,sizeof next->world);
     if(!pe_world_clone(&next->world,world)){free(next);return false;}next->block_count=0;next->tree_count=0;next->cell_count=0;
+    next->deployed_count=0;memset(next->deployed,0,sizeof next->deployed);
     memset(next->blocks,0,sizeof next->blocks);memset(next->trees,0,sizeof next->trees);memset(next->cells,0,sizeof next->cells);
     PeSandboxCollision *collision=NULL;
     if(g->mode==PE_GAME_ADVENTURE||pe_settlement_matches(world)){
@@ -258,8 +264,9 @@ bool pe_game_init_mode(PeGame *g,uint32_t seed,PeGameMode mode){
             pe_game_collision_settle(staged,collision)&&pe_game_collision_update(staged,collision,error,sizeof error)&&
             pe_game_collision_recover_trees(staged,collision)&&pe_game_collision_settle(staged,collision);
         pe_sandbox_collision_free(collision);
-        if(!ready){free(staged);return false;}
+        if(!ready){pe_game_destroy(staged);free(staged);return false;}
         staged->inventory=starter;staged->money=500;staged->adventure_mission=0;
+        if(!pe_outfit_init(staged)){pe_game_destroy(staged);free(staged);return false;}
         say(staged,"Welcome: speak with Westina. No recipes learned yet.");
     }
     *g=*staged;free(staged);
@@ -294,6 +301,7 @@ bool pe_game_recipe_known(const PeGame *g,int id){
     return false;
 }
 static void clear_spent_references(PeGame *g){
+    pe_shield_clear_missing(g);
     if(g->equipped_instance_id&&!pe_game_equipped_tool(g))g->equipped_instance_id=0;
     for(int i=0;i<PE_QUICKSLOTS;i++){
         PeQuickslot *q=&g->quickslots[i];bool exists=false;
@@ -308,6 +316,11 @@ static void clear_spent_references(PeGame *g){
 static void consume_slot(PeGame *g,int index){
     PeSlot *s=&g->inventory.slots[index];if(--s->count==0)memset(s,0,sizeof *s);
     clear_spent_references(g);
+}
+float pe_game_item_cooldown(const PeGame *g,int item_id){
+    if(!g)return 0;
+    double cooldown=item_id==916?g->juice_cooldown:item_id==PE_ITEM_MEDPACK?g->medpack_cooldown:0;
+    return isfinite(cooldown)&&cooldown>0?(float)cooldown:0;
 }
 bool pe_game_use_slot(PeGame *g,int index){
     if(!g||index<0||index>=PE_INVENTORY_SLOTS||!isfinite(g->hp)||!(g->hp>0)||
@@ -337,6 +350,11 @@ bool pe_game_use_slot(PeGame *g,int index){
         consume_slot(g,index);g->juice_cooldown=10;g->juice_buff_elapsed=0;g->juice_buff_tick=1;g->juice_buff_active=true;
         g->hp=fminf(g->max_hp,g->hp+30);say(g,"Herbal Juice used.");return true;
     }
+    if(d->id==PE_ITEM_MEDPACK){
+        if(!isfinite(g->medpack_cooldown)||g->medpack_cooldown!=0||!isfinite(g->max_hp)||g->max_hp<=0)return false;
+        consume_slot(g,index);g->medpack_cooldown=pe_medpack_cooldown_seconds;
+        g->hp=fminf(g->max_hp,g->hp+pe_medpack_heal);say(g,"Portable Medpack used.");return true;
+    }
     return pe_game_equip_slot(g,index);
 }
 bool pe_game_quickslot_assign(PeGame *g,int quick,int index){
@@ -354,10 +372,14 @@ bool pe_game_quickslot_use(PeGame *g,int quick){
     }
     return false;
 }
-static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollision *collision) {
+static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollision *collision,const PeVec3 *motion) {
     if (!isfinite(dt) || dt<=0 || dt>0.25f) return;
     g->game_seconds+=(double)dt*12.0;
     double health_dt=dt==PE_FIXED_DT?1.0/60.0:(double)dt;
+    g->medpack_cooldown=(float)fmax(0,(double)g->medpack_cooldown-health_dt);
+    /* Float serialization/clock accumulation can leave ~20us after600 fixed
+     * steps. Discard only sub-.1ms residue, not an extra display-frame delay. */
+    if(g->medpack_cooldown<=.0001f)g->medpack_cooldown=0;
     g->juice_cooldown=fmax(0,g->juice_cooldown-health_dt);
     if(g->juice_cooldown<1e-9)g->juice_cooldown=0;
     if(g->juice_buff_active){
@@ -367,7 +389,8 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
         if(g->juice_buff_elapsed>10+1e-9)g->juice_buff_active=false;
     }
     clear_spent_references(g);
-    if(!(g->hp>0)){input=(PeInput){0};g->sprinting=false;}
+    if(!(g->hp>0)){input=(PeInput){0};g->sprinting=false;motion=NULL;}
+    if(motion){input.move_x=input.move_z=0;input.jump=input.sprint=false;input.stamina_action=true;}
     if(g->equipped_instance_id&&!pe_game_equipped_tool(g))g->equipped_instance_id=0;
     if (!isfinite(input.move_x)) input.move_x=0;
     if (!isfinite(input.move_z)) input.move_z=0;
@@ -388,6 +411,7 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
     }
     float speed=g->sprinting?PE_SPRINT_SPEED:(input.walk?PE_WALK_SPEED:PE_RUN_SPEED);
     g->velocity.x=input.move_x*speed; g->velocity.z=input.move_z*speed;
+    if(motion){g->velocity.x=motion->x;g->velocity.z=motion->z;}
     float jump_cost=PE_JUMP_STAMINA*pe_player_defaults.stamina_reduce_percent;
     if (input.jump && g->grounded && g->stamina>=jump_cost) {
         g->stamina-=jump_cost;g->jumping=true;g->sprinting=false;stamina_active=true;
@@ -436,7 +460,7 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
     step_craft(g,dt);
     clear_spent_references(g);
 }
-void pe_game_step(PeGame *g,PeInput input,float dt){if(g)game_step(g,input,dt,NULL);}
+void pe_game_step(PeGame *g,PeInput input,float dt){if(g)game_step(g,input,dt,NULL,NULL);}
 bool pe_game_collision_update(const PeGame *g,PeSandboxCollision *collision,char *error,size_t capacity){
     if(!g||g->block_count<0||g->block_count>PE_MAX_BLOCKS||g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS||g->tree_count<0||g->tree_count>PE_MAX_TREES)return false;
     PeSandboxBox boxes[PE_MAX_BLOCKS];
@@ -454,7 +478,14 @@ bool pe_game_collision_update(const PeGame *g,PeSandboxCollision *collision,char
 bool pe_game_step_collision(PeGame *g,PeInput input,float dt,const PeSandboxCollision *collision){
     if(!g||!collision||!isfinite(dt)||dt<=0||dt>0.25f||!finite3(g->velocity)||
        pe_sandbox_collision_overlap(collision,g->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT))return false;
-    game_step(g,input,dt,collision);return true;
+    game_step(g,input,dt,collision,NULL);return true;
+}
+bool pe_game_step_collision_motion(PeGame *g,PeInput input,float dt,const PeSandboxCollision *collision,PeVec3 motion){
+    if(!g||!collision||!isfinite(dt)||dt<=0||dt>.25f||!finite3(g->velocity)||
+       !finite3(motion)||motion.y!=0||hypotf(motion.x,motion.z)>100||
+       hypot(hypot(motion.x,motion.z),(double)g->velocity.y-20*dt)>1000||
+       pe_sandbox_collision_overlap(collision,g->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT))return false;
+    game_step(g,input,dt,collision,&motion);return true;
 }
 /* Version-4 compatibility/spawn policy, not ordinary movement or a Unity rule.
  * Same-height radial candidates every .05m/64 directions, at most 3m away.

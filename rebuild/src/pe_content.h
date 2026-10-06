@@ -9,6 +9,8 @@ typedef enum { PE_LEARN_NONE, PE_LEARN_RECIPE, PE_LEARN_SCAN } PeLearnKind;
 #define PE_ITEM_DIRT 268
 #define PE_ITEM_FENCE 308
 #define PE_ITEM_LADDER 310
+#define PE_ITEM_MEDPACK 925
+extern const float pe_medpack_heal,pe_medpack_cooldown_seconds;
 typedef enum { PE_TOOL_NONE, PE_TOOL_PICKAXE, PE_TOOL_SHOVEL, PE_TOOL_AXE } PeToolKind;
 typedef struct {
     int id;
@@ -29,7 +31,7 @@ typedef struct {
     float stamina_max, stamina_recover_speed, stamina_recover_delay;
     float stamina_reduce_percent, resource_range, resource_damage, attack;
     float cut_damage, cut_bonus;
-    float hp, hp_max;
+    float hp, hp_max, defense;
 } PePlayerDefaults;
 extern const PePlayerDefaults pe_player_defaults;
 /* Legacy byte material IDs. Unmapped entries are -1, not resource IDs. */

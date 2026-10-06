@@ -52,6 +52,21 @@ class ReferenceLauncherTests(unittest.TestCase):
         return subprocess.run(command + list(arguments), env=self.environment,
                               capture_output=True, text=True, cwd=self.root)
 
+    def test_rendering_diagnostic_preserves_game_argument_parser_and_is_opt_in(self):
+        result = self.run_launcher('--single-threaded-rendering')
+        self.assertEqual(result.returncode, 7, result.stderr)
+        record = json.loads(self.record.read_text())
+        arguments = record['argv']
+        self.assertEqual(arguments[0], '-force-gfx-direct')
+        self.assertEqual(arguments[-2:], ['-screen-fullscreen', '0'])
+        # The original parser reads the following token for every dash option.
+        for index, value in enumerate(arguments):
+            if value.startswith('-'):
+                self.assertLess(index + 1, len(arguments))
+        result = self.run_launcher()
+        self.assertEqual(result.returncode, 7, result.stderr)
+        self.assertNotIn('-force-gfx-direct', json.loads(self.record.read_text())['argv'])
+
     def test_prepare_creates_minimal_settings_and_is_idempotent(self):
         result = self.run_launcher('--prepare-only')
         self.assertEqual(result.returncode, 0, result.stderr)

@@ -84,6 +84,21 @@ bool pe_actor_view_draw(PeActorView *v,size_t clip,double seconds,Vector3 pos,fl
     DrawModelEx(v->model,pos,(Vector3){0,1,0},yaw,(Vector3){scale,scale,scale},tint);
     return true;
 }
+bool pe_actor_view_draw_blend(PeActorView *v,const PeActorBlendSample *samples,size_t count,Vector3 pos,float yaw,float scale,Color tint){
+    if(!v||!v->loaded||!v->actor||!v->pose||v->model.meshCount<1||!v->model.meshes||
+       !v->model.meshes[0].vertices||!v->model.meshes[0].normals||
+       !isfinite(pos.x)||!isfinite(pos.y)||!isfinite(pos.z)||!isfinite(yaw)||!isfinite(scale)||scale<=0||scale>1000)return false;
+    PeActorStats s=pe_actor_stats(v->actor);
+    if(!pe_actor_pose_blend(v->actor,samples,count,v->pose,s.vertices))return false;
+    Mesh *m=v->model.meshes;const uint32_t *indices=pe_actor_indices(v->actor);
+    for(size_t k=0;k<s.indices;k++){
+        PeActorVertex *p=v->pose+indices[k];memcpy(m->vertices+k*3,p->position,3*sizeof(float));memcpy(m->normals+k*3,p->normal,3*sizeof(float));
+    }
+    UpdateMeshBuffer(*m,0,m->vertices,(int)(s.indices*3*sizeof(float)),0);
+    UpdateMeshBuffer(*m,2,m->normals,(int)(s.indices*3*sizeof(float)),0);
+    DrawModelEx(v->model,pos,(Vector3){0,1,0},yaw,(Vector3){scale,scale,scale},tint);
+    return true;
+}
 
 int pe_actor_preview(const char *peac,int smoke,const char *screenshot) {
     if(!peac||!*peac||smoke<0||(screenshot&&!*screenshot)) {

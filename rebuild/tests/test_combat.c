@@ -81,6 +81,15 @@ static void combo_tests(void){
     CHECK(fabsf(pe_combat_animation_speed(50)-1.233f)<.000001f);
     CHECK(fabsf(pe_combat_animation_speed(20)-1.1097f)<.000001f);
     CHECK(pe_combat_animation_speed(0)==pe_combat_animation_speed(20));
+    CHECK(pe_combat_item_animation_speed(1,51)==1);
+    CHECK(fabsf(pe_combat_item_animation_speed(1,50)-.9f)<.000001f);
+    CHECK(fabsf(pe_combat_item_animation_speed(1,20)-.81f)<.000001f);
+    CHECK(pe_combat_item_animation_speed(1,0)==pe_combat_item_animation_speed(1,20));
+    CHECK(pe_combat_item_animation_speed(34,100)==0);
+    CHECK(pe_combat_item_animation_speed(0,100)==0);
+    CHECK(pe_combat_item_animation_speed(1,NAN)==0);
+    CHECK(pe_combat_item_animation_speed(1,INFINITY)==0);
+    CHECK(pe_combat_item_animation_speed(1,-1)==0);
     pe_combat_stop(&a);stamina=10;
     CHECK(pe_combat_begin(&a,PE_COMBAT_FEMALE,PE_COMBAT_FIRST_PERSON,.5f,&stamina)&&stamina==7.5f);
 }
@@ -161,4 +170,46 @@ static void calibrated_clock_tests(void){
     CHECK(pe_combat_stationary_clip_rate(PE_COMBAT_FIRST_PERSON,-1)==0);
     CHECK(pe_combat_stationary_clip_rate(PE_COMBAT_FIRST_PERSON,0)==0);
 }
-int pe_test_combat(void){failures=0;window_tests();combo_tests();guards_tests();damage_tests();calibrated_clock_tests();return failures;}
+static void running_tests(void){
+    PeCombat a={0};float stamina=100;PeCombatInterval span;
+    CHECK(!pe_combat_begin_variant(&a,PE_COMBAT_MALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_RUNNING,1,&stamina));
+    CHECK(!pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_FIRST_PERSON,PE_COMBAT_RUNNING,1,&stamina));
+    CHECK(!pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,(PeCombatVariant)9,1,&stamina));
+    CHECK(stamina==100);
+    CHECK(pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_RUNNING,1,&stamina));
+    CHECK(!strcmp(pe_combat_pose_name(&a),"RunSwordAttack")&&stamina==95);
+    const PeCombatClip *clip=pe_combat_variant_clip(a.gender,a.view,a.variant,0);
+    CHECK(clip&&clip->path_id==408);
+    CHECK(event_time(clip,PE_COMBAT_ACTION_END)==1.1680725812911987);
+    CHECK(to_time(&a,.2968580424785614-1e-9,&stamina)==PE_COMBAT_ADVANCED&&!a.contact_open);
+    CHECK(to_time(&a,.2968580424785614,&stamina)==PE_COMBAT_ADVANCED&&a.contact_open);
+    CHECK(to_time(&a,.4202437996864319,&stamina)==PE_COMBAT_ADVANCED&&pe_combat_queue_combo(&a));
+    double from=a.clip_time;
+    CHECK(pe_combat_advance_interval(&a,.4,.4,&stamina,&span)==PE_COMBAT_NEXT_STAGE);
+    CHECK(span.valid&&span.variant==PE_COMBAT_RUNNING&&span.stage==0&&span.from==from&&span.to==.7091204524040222);
+    CHECK(a.stage==1&&a.clip_time==0&&stamina==90&&!strcmp(pe_combat_pose_name(&a),"Attack7"));
+    for(unsigned stage=1;stage<4;stage++){
+        CHECK(pe_combat_variant_clip(a.gender,a.view,a.variant,stage)==pe_combat_clip(a.gender,a.view,stage));
+        bool queued=false;
+        for(unsigned n=0;n<1000&&a.active&&a.stage==stage;n++){
+            CHECK(pe_combat_advance_interval(&a,.005,.005,&stamina,&span)!=PE_COMBAT_INVALID);
+            if(a.stage==stage&&stage<3&&a.combo_window&&!queued){CHECK(pe_combat_queue_combo(&a));queued=true;}
+        }
+    }
+    CHECK(!a.active&&stamina==80);
+    CHECK(pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_RUNNING,1,&stamina));
+    CHECK(pe_combat_advance_interval(&a,1.4,1.4,&stamina,&span)==PE_COMBAT_ENDED);
+    CHECK(span.valid&&span.stage==0&&span.from==0&&span.to==1.1680725812911987);
+    CHECK(pe_combat_advance_interval(&a,0,0,&stamina,&span)==PE_COMBAT_IDLE&&!span.valid);
+    CHECK(pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_RUNNING,1,&stamina));
+    CHECK(to_time(&a,.43,&stamina)==PE_COMBAT_ADVANCED&&pe_combat_queue_combo(&a));
+    CHECK(pe_combat_advance_interval(&a,.3,.3,&stamina,&span)==PE_COMBAT_ADVANCED&&a.pending_close);
+    CHECK(span.to==a.clip_time);from=a.clip_time;
+    CHECK(pe_combat_advance_interval(&a,.02,.02,&stamina,&span)==PE_COMBAT_NEXT_STAGE);
+    CHECK(span.from==from&&span.to==from&&a.stage==1&&a.clip_time==0);
+    PeCombat saved=a;PeCombatInterval saved_span=span;float saved_stamina=stamina;
+    CHECK(pe_combat_advance_interval(&a,NAN,.1,&stamina,&span)==PE_COMBAT_INVALID);
+    CHECK(!memcmp(&a,&saved,sizeof a)&&!memcmp(&span,&saved_span,sizeof span)&&stamina==saved_stamina);
+    a.variant=(PeCombatVariant)9;CHECK(!pe_combat_pose_name(&a));
+}
+int pe_test_combat(void){failures=0;window_tests();combo_tests();guards_tests();damage_tests();calibrated_clock_tests();running_tests();return failures;}

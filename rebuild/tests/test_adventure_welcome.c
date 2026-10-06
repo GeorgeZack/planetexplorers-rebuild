@@ -62,7 +62,9 @@ int pe_test_adventure_welcome(void){
             CHECK(pe_game_load(loaded,path,error,sizeof error));
             CHECK(loaded->welcome_page==9&&loaded->adventure_mission==g->adventure_mission);
             CHECK(loaded->arrival_complete==g->arrival_complete&&loaded->supplies_claimed==g->supplies_claimed);
-            CHECK(!memcmp(&loaded->inventory,&before,sizeof before));
+            CHECK(!memcmp(loaded->inventory.slots,before.slots,sizeof before.slots));
+            CHECK(loaded->inventory.next_instance_id==before.next_instance_id+PE_OUTFIT_SLOTS);
+            CHECK(pe_outfit_state_valid(loaded));
             CHECK(!pe_game_welcome_advance(loaded,9));
         }
     }

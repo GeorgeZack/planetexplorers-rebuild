@@ -1,0 +1,246 @@
+{
+  "schema": 1,
+  "kind": "original-shield-observation-unqualified-software-capture",
+  "date_local": "2026-10-06",
+  "timezone": "US/Central",
+  "checked_at_utc": "2026-10-06T20:45:03.421253+00:00",
+  "capture": {
+    "basename": "sword-shield-live-03.jsonl",
+    "capture_sha256": "6267c17cb791a9fc4ff33f7c4bf6255462de80bd7bef585e863d055c244dc3c7",
+    "launch_manifest_sha256": "286d3e5eaf871c80610c0758c738cbd3c5d786406e373e6a5350a8251f734843",
+    "source_plan_sha256": "d85f56e0701e618d6a9d40df7ee0bbcd8051f00692e68994c0c4e45928140878",
+    "source_asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+    "rig_sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff",
+    "complete": true,
+    "end": {
+      "type": "end",
+      "reason": "capture-limit",
+      "frames": 187
+    },
+    "frames": 187,
+    "steady_sword_block_frames": 0,
+    "steady_composition_frames": {
+      "AttackIdle": 0,
+      "SwordWF": 0,
+      "SwordRF": 0
+    },
+    "all_three_steady_compositions_observed": false,
+    "active_named_equipment_paths": [],
+    "realtime_seconds": [
+      592.335449,
+      711.759766
+    ],
+    "realtime_span_seconds": 119.42431699999997,
+    "game_time_seconds": [
+      264.3771,
+      326.3771
+    ],
+    "parameter_frame_counts": {
+      "FirstPerson": [
+        {
+          "value": 1,
+          "frames": 187
+        }
+      ],
+      "MoveStyle": [
+        {
+          "value": 0,
+          "frames": 118
+        },
+        {
+          "value": 6,
+          "frames": 69
+        }
+      ],
+      "SheildBlock": [
+        {
+          "value": false,
+          "frames": 187
+        }
+      ]
+    },
+    "block_state_hash": 498051673,
+    "block_state_name_source": "LArmOnly.DoNothing",
+    "base_clip_first": [
+      {
+        "name": "NormalIdle",
+        "id": 14464,
+        "weight": 0.99999547,
+        "length": 2.00001526
+      },
+      {
+        "name": "NormalWF",
+        "id": 14508,
+        "weight": 2.14576266e-06,
+        "length": 1.06667328
+      },
+      {
+        "name": "NormalWalkTurnLeft",
+        "id": 14502,
+        "weight": 2.38418079e-06,
+        "length": 1.10000229
+      }
+    ],
+    "base_clip_last": [
+      {
+        "name": "ShotGunIdle",
+        "id": 14752,
+        "weight": 3.61786224e-05,
+        "length": 1.93333435
+      },
+      {
+        "name": "ShotGunWF",
+        "id": 14770,
+        "weight": 4.31283342e-11,
+        "length": 0.500015259
+      },
+      {
+        "name": "ShotGunWL",
+        "id": 14776,
+        "weight": 4.09719134e-11,
+        "length": 0.5
+      },
+      {
+        "name": "MineHold",
+        "id": 14880,
+        "weight": 0.99995923,
+        "length": 2.00000381
+      },
+      {
+        "name": "MineWF",
+        "id": 14704,
+        "weight": 2.145685e-06,
+        "length": 0.8000183
+      },
+      {
+        "name": "MineWFL",
+        "id": 14706,
+        "weight": 2.38409439e-06,
+        "length": 0.8000183
+      }
+    ],
+    "structural_maximum_error": 7.18002565918141e-05,
+    "missing_rig_bones": []
+  },
+  "rendering": {
+    "process_scoped_environment": {
+      "__GLX_VENDOR_LIBRARY_NAME": "mesa",
+      "LIBGL_ALWAYS_SOFTWARE": "1"
+    },
+    "environment_evidence": "Root operator launch record; these environment values are not in the legacy launch manifest",
+    "force_gfx_direct": true,
+    "force_gfx_direct_evidence": "Retained launch manifest command",
+    "actual_backend_evidence": [
+      {
+        "line": 3,
+        "text": "[pose] Waiting for arm file: /home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/sword-shield-live-03.arm"
+      },
+      {
+        "line": 4,
+        "text": "[pose] Probe installed on Unity main thread"
+      },
+      {
+        "line": 5,
+        "text": "[pose] Capturing player poses"
+      },
+      {
+        "line": 6,
+        "text": "[pose] Finished: capture-limit; frames=187"
+      },
+      {
+        "line": 9,
+        "text": "    Version:  OpenGL 4.6 [4.6 (Compatibility Profile) Mesa 26.2.2-arch1.1]"
+      },
+      {
+        "line": 10,
+        "text": "    Renderer: llvmpipe (LLVM 22.1.8, 256 bits)"
+      },
+      {
+        "line": 11,
+        "text": "    Vendor:   Mesa"
+      },
+      {
+        "line": 138,
+        "text": "[graphicsDeviceName]:llvmpipe (LLVM 22.1.8, 256 bits)"
+      }
+    ],
+    "observation": "Mesa llvmpipe software rendering reached a closed187-frame recording. This does not establish permanent stability, performance parity or ordinary Steam/Proton startup."
+  },
+  "operator_observation": {
+    "equipment_attempts_did_not_establish_pair": true,
+    "visible_equipment": "Shovel presentation remained",
+    "visible_attributes": {
+      "attack": 33,
+      "defense": 12
+    },
+    "limit": "Reported by root desktop operator; no equipped item IDs or damage attributes are sampled by this generic observer."
+  },
+  "checkpoint_integrity": {
+    "baseline": "rebuild/build/starter-pair-next/reference-checkpoint-hashes.json",
+    "manual_slots": [
+      1,
+      2
+    ],
+    "directories": [
+      "save0",
+      "save1"
+    ],
+    "files_checked": 14,
+    "all_unchanged": true,
+    "changed": [],
+    "sha256_by_relative_save_path": {
+      "save0/world.arc": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220",
+      "save0/index.arc": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca",
+      "save0/MainAdventure/world.arc": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6",
+      "save0/MainAdventure/voxel.arc": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4",
+      "save0/MainAdventure/water.arc": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b",
+      "save0/MainAdventure/block45.arc": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21",
+      "save0/MainAdventure/index.arc": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae",
+      "save1/world.arc": "d3c472e6fd383f50053eaa98afb94ac416120e359dfa8927e8815c6484a27fd6",
+      "save1/index.arc": "894e1c7256c4a3270cf1aa2b0188b69309e25d17dfc2e452ff9aab13eecba643",
+      "save1/main/world.arc": "01845c58c261158d6a0f893996f2ceb7d98bd8073cda8bb5d70bd7a6d51c6b9b",
+      "save1/main/voxel.arc": "5a5eaa3ad895565efb1de18c17d1471c7778354cbdea6cf8e6a7395649f26ea9",
+      "save1/main/water.arc": "c305510265765544bb01740a74957f8d7fffbe96ab9519066eabef328338ed94",
+      "save1/main/block45.arc": "8c94cd0106669a9d3691937e1d31fe91faa96e7f3a29c9c27b9fc2185dc88f21",
+      "save1/main/index.arc": "6189624b593cb2ecb067707d8e8caf67e2c14e99caa2b0b0d531f5937ad6b919"
+    }
+  },
+  "lifecycle": {
+    "process_still_running_at_handoff": true,
+    "desktop_owner": "user",
+    "exit_observed": false,
+    "exit_code": null,
+    "limit": "Root handed desktop to user for ordinary manual equipment/camera setup. This report performed no input, process control or graphics launch.",
+    "pid_at_handoff": 2213917
+  },
+  "qualification": {
+    "shield_layer_pose_qualified": false,
+    "runtime_pose_export_ready": false,
+    "reason": "All187 frames report SheildBlock=false and FirstPerson=1; MoveStyle is0 for118 frames then6 for69. No simultaneous Sword block+idle/walk/run frame and no named sword/shield attachment path were observed.",
+    "next_gate": "Verify original Sword1+Shield34 actually equipped in third person, then make a fresh bounded observation. Keep the source masked-clone safety gate in SHIELD_LAYER_CAPTURE.md."
+  },
+  "limitations": [
+    "Observer records evaluated live poses including IK/transitions, not pure authored loops.",
+    "Named attachment paths are visual evidence, not an inventory-instance or buff/attribute trace.",
+    "Launch manifest has no at-launch asset hash; current installed source identity is separately recorded.",
+    "Original responsiveness and teardown require separate operator evidence."
+  ],
+  "local_evidence_files": [
+    {
+      "path": "rebuild/build/starter-pair-next/shield-live03-report.json",
+      "sha256": "2a477fa9ded567773b2b2a0defc30aa360a54c55a4e1187c99c5c8fce4c2890c"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/shield-live03-player-snapshot.log",
+      "sha256": "76d95326b4cc5d2b7b3051af66b592db4dc349c5baf49c83fb94518da139fd3d"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/shield-pose-launch03.log",
+      "sha256": "20730e876a7e80d0a63185ca036a7f94ba3d5dac58e08411c17853384a93c5b6"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/reference-checkpoint-hashes.json",
+      "sha256": "454b86d82930df42d935b3469bbb66d50831d50625765dd6d9e436fcc21b1bd2"
+    }
+  ]
+}

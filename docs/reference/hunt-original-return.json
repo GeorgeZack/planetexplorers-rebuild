@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "evidence": "Read-only original archive decode; no native quest installed.",
+  "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save6",
+  "archive_guid": "ecc287465192d940b2a1e5793ac1aaf0",
+  "input_sha256": {
+    "MainAdventure/block45.arc": "be81614460b92c9fe08d1ab9624c22625dd94b0995fa563651cdcd6698ff24d6",
+    "MainAdventure/index.arc": "ecb60442978d1259f2402b15556897e42549e9a3a473f2d539f4d6ac68f71704",
+    "MainAdventure/voxel.arc": "5abbc2b3b7adc6bee3735242e83df2ead6fe3b06751d0e3f6dbabdb8a3179795",
+    "MainAdventure/water.arc": "61534fe1d8d6f2dfe485350e91b7f27a9ca3d9b868add548ab07e4d3a89de630",
+    "MainAdventure/world.arc": "3cf44dc44370669e64d0983b79b7fc593c59df4abcee4d6537d539fd2cb2664e",
+    "index.arc": "bf3de42113b858948cd5c43c4d5ba55aba989fde6e827004aaf939e3a3e652cb",
+    "world.arc": "31e663ee2492d52083218ee3d3b32267d27fd336fe0f3b1c2ab409022f6277f3"
+  },
+  "archives_unchanged": true,
+  "active_missions": {
+    "9127": [
+      [
+        "STEP",
+        "0"
+      ]
+    ]
+  },
+  "completed_missions": {
+    "9027": 1,
+    "9028": 1,
+    "9029": 1,
+    "9030": 1,
+    "9031": 1,
+    "9032": 1,
+    "9072": 1,
+    "9075": 1,
+    "9126": 1
+  },
+  "top_mission_prefix_decoded_bytes": 179,
+  "random_missions": {
+    "9127": {
+      "record_offset": 4,
+      "name": "Bug Hunt",
+      "npc": 20018,
+      "reply_npc": 20018,
+      "type": 1,
+      "max_count": 1,
+      "description": "Return to town and report in.",
+      "targets": [
+        {
+          "id": 4525,
+          "kind": 4,
+          "present": true,
+          "position_record_offset": 79,
+          "position": [
+            -266.0,
+            25.0,
+            136.0
+          ]
+        }
+      ],
+      "player_talk": [
+        0,
+        0
+      ],
+      "items": {
+        "get_demand": [],
+        "get_delete": [],
+        "get_mission": [],
+        "reward": [
+          [
+            592,
+            1
+          ],
+          [
+            593,
+            1
+          ],
+          [
+            594,
+            1
+          ],
+          [
+            595,
+            1
+          ]
+        ],
+        "selection_reward": [],
+        "complete_remove": []
+      },
+      "opening_talk": [],
+      "opening_quests": [],
+      "ongoing_talk": [],
+      "ongoing_quests": [],
+      "ending_talk": [
+        4105,
+        4106
+      ],
+      "ending_quests": [
+        9077
+      ]
+    }
+  },
+  "hunt_target": null,
+  "limitations": [
+    "Offsets are relative to ArchiveKeyAdRMRepository record, not whole archive file.",
+    "Bounds checks do not establish traversability, support, collision or complete spawn-area coverage.",
+    "No target is inferred if original9075 is not active.",
+    "Death/kill cause is not established; no player attacks were issued.",
+    "This is a completed-kill checkpoint, not an observation of partial nonzero-kill reload.",
+    "9127 reporting/reward delivery has not yet been exercised."
+  ],
+  "previous_checkpoints_verified": {
+    "hunt-original-save.json": {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save4",
+      "archive_count": 7,
+      "unchanged": true
+    },
+    "hunt-original-encounter.json": {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save5",
+      "archive_count": 7,
+      "unchanged": true
+    }
+  },
+  "observed_sequence": [
+    "Original UI showed2/4 after ordinary death-dialogue Cancel returned to town.",
+    "UI then advanced to return objective without player attack input.",
+    "Root saved fresh manual slot7/save6; no prior checkpoint overwritten."
+  ]
+}

@@ -1,0 +1,1540 @@
+{
+  "schema": "pe-shield-composition-regions-1",
+  "capture_sha256": "632847800fb07cb94a10291f94611a529bbdd1527896065acece0d3957d4da3c",
+  "plan_sha256": "d400ae16aa8303f01a4df5e9c11f7b897998b7d527d96b5c210c7d4e7584d4fa",
+  "source_live_capture_sha256": "25f1965e54ca2ebcb56479f1b2f72a68762736dc3f2b50c60573b269b340dc17",
+  "bundle_sha256": "4cbfd1e4929c6218b2357225334e08de789e93c24d50abb091aee8e63c138c91",
+  "frames": [
+    {
+      "source_sample": 1611,
+      "groups": {
+        "shield_arm": {
+          "bones": 4,
+          "max_model_position_m": 0.0008695206639071158,
+          "max_local_position_m": 3.896909782401128e-05,
+          "max_model_rotation_degrees": 0.14800539030484527,
+          "max_local_rotation_degrees": 0.1431357160467787
+        },
+        "shield_fingers": {
+          "bones": 9,
+          "max_model_position_m": 0.000387800212429494,
+          "max_local_position_m": 0.0,
+          "max_model_rotation_degrees": 0.14801511255620978,
+          "max_local_rotation_degrees": 1.2074182697257333e-06
+        },
+        "lower_body": {
+          "bones": 8,
+          "max_model_position_m": 0.04723523083464054,
+          "max_local_position_m": 2.1968964525805874e-05,
+          "max_model_rotation_degrees": 6.952315303390684,
+          "max_local_rotation_degrees": 13.021860860032572
+        },
+        "head_neck": {
+          "bones": 4,
+          "max_model_position_m": 0.0010504626877284472,
+          "max_local_position_m": 0.0,
+          "max_model_rotation_degrees": 0.12821757962701305,
+          "max_local_rotation_degrees": 0.0
+        },
+        "trunk": {
+          "bones": 3,
+          "max_model_position_m": 0.0004087315552947905,
+          "max_local_position_m": 2.4249949740442867e-05,
+          "max_model_rotation_degrees": 0.12888034516709376,
+          "max_local_rotation_degrees": 0.11011078802448948
+        },
+        "weapon_arm": {
+          "bones": 4,
+          "max_model_position_m": 0.0014800307006544921,
+          "max_local_position_m": 6.796993144643471e-05,
+          "max_model_rotation_degrees": 0.40543127431549275,
+          "max_local_rotation_degrees": 0.6022781695682002
+        }
+      },
+      "bones": [
+        {
+          "bone": "Hips",
+          "path": "Bip01/Bip01 Pelvis",
+          "model_position_m": 0.0002941115758074967,
+          "local_position_m": 2.4249949740442867e-05,
+          "model_rotation_degrees": 0.018771115545139216,
+          "local_rotation_degrees": 1.4589290462454084e-05,
+          "model_matrix_max_abs": 0.0003160759800000003,
+          "local_matrix_max_abs": 2.3210400000001075e-05,
+          "local_scale_error": 5.7142040210678147e-08
+        },
+        {
+          "bone": "LeftUpperLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh",
+          "model_position_m": 0.00032633828762718327,
+          "local_position_m": 1.4780708511097205e-05,
+          "model_rotation_degrees": 1.0578666675737967,
+          "local_rotation_degrees": 1.0699720273218418,
+          "model_matrix_max_abs": 0.017504066718141975,
+          "local_matrix_max_abs": 0.01676505899999997,
+          "local_scale_error": 9.252082122657157e-08
+        },
+        {
+          "bone": "RightUpperLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh",
+          "model_position_m": 0.0002682945973586572,
+          "local_position_m": 2.1968964525805874e-05,
+          "model_rotation_degrees": 6.952315303390684,
+          "local_rotation_degrees": 6.948876384653597,
+          "model_matrix_max_abs": 0.1200618893,
+          "local_matrix_max_abs": 0.12025428499999999,
+          "local_scale_error": 3.425440544546632e-07
+        },
+        {
+          "bone": "LeftLowerLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf",
+          "model_position_m": 0.0070117895616691964,
+          "local_position_m": 7.409775961184104e-06,
+          "model_rotation_degrees": 0.8585471970435391,
+          "local_rotation_degrees": 1.9137487064769965,
+          "model_matrix_max_abs": 0.014896784999999996,
+          "local_matrix_max_abs": 0.030530601999999962,
+          "local_scale_error": 3.013459481948644e-08
+        },
+        {
+          "bone": "RightLowerLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf",
+          "model_position_m": 0.04723523083464054,
+          "local_position_m": 1.1453459392593243e-05,
+          "model_rotation_degrees": 6.071373317325996,
+          "local_rotation_degrees": 13.021860860032572,
+          "model_matrix_max_abs": 0.101921758,
+          "local_matrix_max_abs": 0.220697559,
+          "local_scale_error": 4.051622459755322e-08
+        },
+        {
+          "bone": "LeftFoot",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot",
+          "model_position_m": 0.0025736175086968917,
+          "local_position_m": 8.550000000218111e-07,
+          "model_rotation_degrees": 6.007900456878398,
+          "local_rotation_degrees": 6.78002392515523,
+          "model_matrix_max_abs": 0.09137663272600001,
+          "local_matrix_max_abs": 0.10878527,
+          "local_scale_error": 1.956484618759191e-08
+        },
+        {
+          "bone": "RightFoot",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot",
+          "model_position_m": 0.01155575118335967,
+          "local_position_m": 3.2490000000384796e-06,
+          "model_rotation_degrees": 6.0079204696220785,
+          "local_rotation_degrees": 1.29616339885088,
+          "model_matrix_max_abs": 0.104534056,
+          "local_matrix_max_abs": 0.018512398,
+          "local_scale_error": 4.893299154762332e-08
+        },
+        {
+          "bone": "Spine",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2",
+          "model_position_m": 0.00029589107570756576,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12888034516709376,
+          "local_rotation_degrees": 0.11011078802448948,
+          "model_matrix_max_abs": 0.0022451048760000003,
+          "local_matrix_max_abs": 0.0019170786999999998,
+          "local_scale_error": 5.92681163036346e-08
+        },
+        {
+          "bone": "Chest",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3",
+          "model_position_m": 0.0004087315552947905,
+          "local_position_m": 1.6216204052550158e-05,
+          "model_rotation_degrees": 0.1282153103415266,
+          "local_rotation_degrees": 0.0164959461580461,
+          "model_matrix_max_abs": 0.0022029222899999992,
+          "local_matrix_max_abs": 0.0002607550000000014,
+          "local_scale_error": 2.7816895675769615e-08
+        },
+        {
+          "bone": "Neck",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck",
+          "model_position_m": 0.0007605151394888089,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12821546219320473,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0022029406,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "Head",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head",
+          "model_position_m": 0.0008913585277854093,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12821609431723202,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0017772012000000018,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftShoulder",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle",
+          "model_position_m": 0.0007942844987780247,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12821777683737254,
+          "local_rotation_degrees": 8.099607985145754e-06,
+          "model_matrix_max_abs": 0.0021656300000000017,
+          "local_matrix_max_abs": 2.399999999985747e-07,
+          "local_scale_error": 2.3550379069092742e-07
+        },
+        {
+          "bone": "RightShoulder",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle",
+          "model_position_m": 0.0006732971729956722,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12821500547784667,
+          "local_rotation_degrees": 7.540324677666867e-06,
+          "model_matrix_max_abs": 0.0020562409999999864,
+          "local_matrix_max_abs": 2.439999999825915e-07,
+          "local_scale_error": 2.0818854506998719e-07
+        },
+        {
+          "bone": "LeftUpperArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm",
+          "model_position_m": 0.0008695206639071158,
+          "local_position_m": 3.896909782401128e-05,
+          "model_rotation_degrees": 0.10959202464248544,
+          "local_rotation_degrees": 0.1431357160467787,
+          "model_matrix_max_abs": 0.0018143971969647454,
+          "local_matrix_max_abs": 0.0019746579999999903,
+          "local_scale_error": 3.68522946603278e-08
+        },
+        {
+          "bone": "RightUpperArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm",
+          "model_position_m": 0.0005773436657290607,
+          "local_position_m": 6.796993144643471e-05,
+          "model_rotation_degrees": 0.3975748904684043,
+          "local_rotation_degrees": 0.4106226786789357,
+          "model_matrix_max_abs": 0.006471327999999998,
+          "local_matrix_max_abs": 0.006002708999999995,
+          "local_scale_error": 9.189223892924758e-08
+        },
+        {
+          "bone": "LeftLowerArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm",
+          "model_position_m": 0.000800112629498144,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1480027484239729,
+          "local_rotation_degrees": 0.03857901285149915,
+          "model_matrix_max_abs": 0.0023732339984895573,
+          "local_matrix_max_abs": 0.0006592230000000143,
+          "local_scale_error": 7.262878887193125e-08
+        },
+        {
+          "bone": "RightLowerArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm",
+          "model_position_m": 0.0014800307006544921,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.40542043527524696,
+          "local_rotation_degrees": 0.6022781695682002,
+          "model_matrix_max_abs": 0.005519625529390865,
+          "local_matrix_max_abs": 0.009792148999999972,
+          "local_scale_error": 4.735755587681467e-08
+        },
+        {
+          "bone": "LeftHand",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand",
+          "model_position_m": 0.00029238306605592577,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14800539030484527,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.002391355834276472,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightHand",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand",
+          "model_position_m": 0.00030795523240375716,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.40543127431549275,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.005181423526754603,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftToes",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0",
+          "model_position_m": 0.014464222455727508,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 6.007901462226765,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.09138716429,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightToes",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0",
+          "model_position_m": 0.005228008896801969,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 6.007920808788635,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.1045341323,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftEye",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone Eyelid",
+          "model_position_m": 0.0010504626877284472,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12821757962701305,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0017771999999999996,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "Jaw",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 Mouth",
+          "model_position_m": 0.0009383673982855099,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12821311653373918,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0017771999999999996,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0",
+          "model_position_m": 0.0003046469161543174,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1480124977234433,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0019761950769929815,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01",
+          "model_position_m": 0.00033925135817179295,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14801027181556456,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0023519906285439096,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01/Bip01 L Finger0Nub",
+          "model_position_m": 0.00034884902931933335,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1480090420377943,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0025335725850717666,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1",
+          "model_position_m": 0.0003020300521902075,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14801030444770044,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.002105887965558384,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11",
+          "model_position_m": 0.0003362881692159065,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14800721225738545,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.0021821780337417662,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11/Bip01 L Finger1Nub",
+          "model_position_m": 0.0003224953343222441,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14801037647870718,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0023270338092661047,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2",
+          "model_position_m": 0.00028208844105714854,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14801217058907948,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0020711123439189905,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21",
+          "model_position_m": 0.000338801571070339,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14801511255620978,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.001986898740907017,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21/Bip01 L Finger2Nub",
+          "model_position_m": 0.000387800212429494,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.14800474465728258,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.001901053312259815,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0",
+          "model_position_m": 0.00036442525475436423,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.40542002653255427,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.006263259039584412,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01",
+          "model_position_m": 0.00035649732658536335,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.4054241941028862,
+          "local_rotation_degrees": 1.7075472925031877e-06,
+          "model_matrix_max_abs": 0.006527362925619451,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01/Bip01 R Finger0Nub",
+          "model_position_m": 0.0003284446734250125,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.4054260580161021,
+          "local_rotation_degrees": 1.7075472925031877e-06,
+          "model_matrix_max_abs": 0.00667679019565548,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1",
+          "model_position_m": 0.0003432956164855677,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.405429093491635,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.004924299159826506,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11",
+          "model_position_m": 0.00029860812604444535,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.4054276756351071,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.005487116913508117,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11/Bip01 R Finger1Nub",
+          "model_position_m": 0.00028679442552357226,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.40543176923214164,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.004939193790715168,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2",
+          "model_position_m": 0.0003910832862321592,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.40543170764784503,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.006182914864015843,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21",
+          "model_position_m": 0.00034128674069431355,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.4054307090506881,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.004655424758919613,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21/Bip01 R Finger2Nub",
+          "model_position_m": 0.00039505573856603895,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.4054312086534236,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.006643946864084045,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        }
+      ]
+    },
+    {
+      "source_sample": 1686,
+      "groups": {
+        "shield_arm": {
+          "bones": 4,
+          "max_model_position_m": 0.016900402027133863,
+          "max_local_position_m": 1.9713859020689212e-05,
+          "max_model_rotation_degrees": 3.298614827734909,
+          "max_local_rotation_degrees": 3.8683732355767027
+        },
+        "shield_fingers": {
+          "bones": 9,
+          "max_model_position_m": 0.003463230342004242,
+          "max_local_position_m": 0.0,
+          "max_model_rotation_degrees": 2.1480925436558382,
+          "max_local_rotation_degrees": 1.2074182697257333e-06
+        },
+        "lower_body": {
+          "bones": 8,
+          "max_model_position_m": 0.057691120522293374,
+          "max_local_position_m": 0.0007102771644290556,
+          "max_model_rotation_degrees": 8.714688376781174,
+          "max_local_rotation_degrees": 16.963620014662325
+        },
+        "head_neck": {
+          "bones": 4,
+          "max_model_position_m": 0.028860239818878964,
+          "max_local_position_m": 0.0,
+          "max_model_rotation_degrees": 3.298628895730398,
+          "max_local_rotation_degrees": 1.2074182697257333e-06
+        },
+        "trunk": {
+          "bones": 3,
+          "max_model_position_m": 0.00787070524635049,
+          "max_local_position_m": 6.0301226361387334e-05,
+          "max_model_rotation_degrees": 3.317266123929807,
+          "max_local_rotation_degrees": 3.003919469442382
+        },
+        "weapon_arm": {
+          "bones": 4,
+          "max_model_position_m": 0.020356523558508442,
+          "max_local_position_m": 0.0011195953499595253,
+          "max_model_rotation_degrees": 4.3257666510255826,
+          "max_local_rotation_degrees": 5.110782074942452
+        }
+      },
+      "bones": [
+        {
+          "bone": "Hips",
+          "path": "Bip01/Bip01 Pelvis",
+          "model_position_m": 0.0012153596133859415,
+          "local_position_m": 3.297247680284274e-05,
+          "model_rotation_degrees": 0.3683939233917406,
+          "local_rotation_degrees": 2.094792405701141e-05,
+          "model_matrix_max_abs": 0.005633294999999983,
+          "local_matrix_max_abs": 3.114328999999968e-05,
+          "local_scale_error": 3.3381125419396085e-08
+        },
+        {
+          "bone": "LeftUpperLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh",
+          "model_position_m": 0.0011305165958942981,
+          "local_position_m": 3.984235263046026e-05,
+          "model_rotation_degrees": 8.714688376781174,
+          "local_rotation_degrees": 8.381245419531327,
+          "model_matrix_max_abs": 0.1517345006396152,
+          "local_matrix_max_abs": 0.13988587300000002,
+          "local_scale_error": 4.879021558990004e-07
+        },
+        {
+          "bone": "RightUpperLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh",
+          "model_position_m": 0.000973237136523325,
+          "local_position_m": 0.0007102771644290556,
+          "model_rotation_degrees": 0.41569653587751865,
+          "local_rotation_degrees": 0.12317444083038019,
+          "model_matrix_max_abs": 0.005226100000000011,
+          "local_matrix_max_abs": 0.0016213337999999994,
+          "local_scale_error": 3.091178265579586e-07
+        },
+        {
+          "bone": "LeftLowerLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf",
+          "model_position_m": 0.057691120522293374,
+          "local_position_m": 1.1162958167870097e-05,
+          "model_rotation_degrees": 8.25131253198772,
+          "local_rotation_degrees": 16.963620014662325,
+          "model_matrix_max_abs": 0.12681683504266866,
+          "local_matrix_max_abs": 0.265091653,
+          "local_scale_error": 4.085710536561038e-08
+        },
+        {
+          "bone": "RightLowerLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf",
+          "model_position_m": 0.0019261368523918324,
+          "local_position_m": 2.348648111080825e-05,
+          "model_rotation_degrees": 0.86030969713239,
+          "local_rotation_degrees": 1.2700350347956137,
+          "model_matrix_max_abs": 0.01481239300695461,
+          "local_matrix_max_abs": 0.017541436999999993,
+          "local_scale_error": 5.273556147322722e-08
+        },
+        {
+          "bone": "LeftFoot",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot",
+          "model_position_m": 0.028454441475206874,
+          "local_position_m": 3.469999999561326e-07,
+          "model_rotation_degrees": 5.721241727162611,
+          "local_rotation_degrees": 6.999553775735826,
+          "model_matrix_max_abs": 0.07885516168646413,
+          "local_matrix_max_abs": 0.091308363,
+          "local_scale_error": 5.2811754747139616e-08
+        },
+        {
+          "bone": "RightFoot",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot",
+          "model_position_m": 0.008335727266609545,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 5.712472109111609,
+          "local_rotation_degrees": 5.201688072714912,
+          "model_matrix_max_abs": 0.07282816095103982,
+          "local_matrix_max_abs": 0.073027328,
+          "local_scale_error": 1.1944856881385135e-08
+        },
+        {
+          "bone": "Spine",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2",
+          "model_position_m": 0.0019593190954290797,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.317266123929807,
+          "local_rotation_degrees": 3.003919469442382,
+          "model_matrix_max_abs": 0.04663743045257873,
+          "local_matrix_max_abs": 0.048683493999999994,
+          "local_scale_error": 4.902213002200284e-08
+        },
+        {
+          "bone": "Chest",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3",
+          "model_position_m": 0.00787070524635049,
+          "local_position_m": 6.0301226361387334e-05,
+          "model_rotation_degrees": 3.298625660958923,
+          "local_rotation_degrees": 0.058005542090879506,
+          "model_matrix_max_abs": 0.04631698474171375,
+          "local_matrix_max_abs": 0.0009413474000000005,
+          "local_scale_error": 1.952848971420451e-08
+        },
+        {
+          "bone": "Neck",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck",
+          "model_position_m": 0.01924486966714358,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.298628895730398,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.04424325299999998,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "Head",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head",
+          "model_position_m": 0.02301349806249462,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.2986252476963043,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.05438404952043063,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftShoulder",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle",
+          "model_position_m": 0.016900402027133863,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.298614827734909,
+          "local_rotation_degrees": 6.502146373618258e-06,
+          "model_matrix_max_abs": 0.04731444024270892,
+          "local_matrix_max_abs": 2.53000000061121e-07,
+          "local_scale_error": 2.4468808024202815e-07
+        },
+        {
+          "bone": "RightShoulder",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle",
+          "model_position_m": 0.017416297946283493,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.3161505165598557,
+          "local_rotation_degrees": 0.267625278119979,
+          "model_matrix_max_abs": 0.04902758375099214,
+          "local_matrix_max_abs": 0.004470469000000005,
+          "local_scale_error": 1.6677628722483462e-07
+        },
+        {
+          "bone": "LeftUpperArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm",
+          "model_position_m": 0.016789400501540642,
+          "local_position_m": 1.9713859020689212e-05,
+          "model_rotation_degrees": 2.5425712987611697,
+          "local_rotation_degrees": 2.0871347964708162,
+          "model_matrix_max_abs": 0.03727549299999999,
+          "local_matrix_max_abs": 0.03059366400000002,
+          "local_scale_error": 9.86284798276671e-09
+        },
+        {
+          "bone": "RightUpperArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm",
+          "model_position_m": 0.017350762668788322,
+          "local_position_m": 0.0011195953499595253,
+          "model_rotation_degrees": 0.8578976951775076,
+          "local_rotation_degrees": 4.064099182890928,
+          "model_matrix_max_abs": 0.01624532711663934,
+          "local_matrix_max_abs": 0.06242511999999997,
+          "local_scale_error": 8.299819787005447e-08
+        },
+        {
+          "bone": "LeftLowerArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm",
+          "model_position_m": 0.009718422200299701,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480903349868754,
+          "local_rotation_degrees": 3.8683732355767027,
+          "model_matrix_max_abs": 0.028118907800000002,
+          "local_matrix_max_abs": 0.06558883199999999,
+          "local_scale_error": 3.045657648304001e-08
+        },
+        {
+          "bone": "RightLowerArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm",
+          "model_position_m": 0.020356523558508442,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325761262581016,
+          "local_rotation_degrees": 5.110782074942452,
+          "model_matrix_max_abs": 0.07117321858063441,
+          "local_matrix_max_abs": 0.07195085999999995,
+          "local_scale_error": 5.512263623330682e-08
+        },
+        {
+          "bone": "LeftHand",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand",
+          "model_position_m": 0.0029938704527354416,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480827840717027,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.027734870000000023,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightHand",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand",
+          "model_position_m": 0.0029850371793072096,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.3257666510255826,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.061430607297942585,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftToes",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0",
+          "model_position_m": 0.02236504784318201,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 5.721237017024885,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.07891301197463714,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightToes",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0",
+          "model_position_m": 0.01505890277107113,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 5.712469232619002,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.07776726320498442,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftEye",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone Eyelid",
+          "model_position_m": 0.028860239818878964,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.298622556869533,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.05683403904601739,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "Jaw",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 Mouth",
+          "model_position_m": 0.02519172098735444,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.2986081409909622,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.045601600861743585,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0",
+          "model_position_m": 0.0024303667728254315,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480866305869735,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0332506987655274,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01",
+          "model_position_m": 0.00195792661837479,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480888352607197,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.032776049918180006,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01/Bip01 L Finger0Nub",
+          "model_position_m": 0.001790603069997074,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480925436558382,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.02950378463019626,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1",
+          "model_position_m": 0.0027841209279351356,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480751852571496,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.029918939000000006,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11",
+          "model_position_m": 0.0022147018257654316,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.148080221880583,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.030474126300000008,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11/Bip01 L Finger1Nub",
+          "model_position_m": 0.001740459491659466,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480870188931824,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.027103132921869194,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2",
+          "model_position_m": 0.0029790727170156614,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.148083397974787,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.03308987659506677,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21",
+          "model_position_m": 0.0031695794400305433,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480739428062305,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.030077442999999995,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21/Bip01 L Finger2Nub",
+          "model_position_m": 0.003463230342004242,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 2.1480781367128032,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.027839514309617563,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0",
+          "model_position_m": 0.004977182656862872,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325763397337291,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.06405852004340061,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01",
+          "model_position_m": 0.006804954289123659,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325768492384811,
+          "local_rotation_degrees": 1.7075472925031877e-06,
+          "model_matrix_max_abs": 0.06311417092085841,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01/Bip01 R Finger0Nub",
+          "model_position_m": 0.008163831633635455,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.3257799256043645,
+          "local_rotation_degrees": 1.7075472925031877e-06,
+          "model_matrix_max_abs": 0.0542219939665024,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1",
+          "model_position_m": 0.0052255761677309906,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325763652347173,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.06522388961335257,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11",
+          "model_position_m": 0.0051000763344880564,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325759660450503,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.06808582300317961,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11/Bip01 R Finger1Nub",
+          "model_position_m": 0.0034572547303601928,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325763526648596,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.06883823500000003,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2",
+          "model_position_m": 0.003788539000011349,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.3257748458216385,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.06147811713318008,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21",
+          "model_position_m": 0.003271078731164513,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.3257680796301905,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.06366190299999996,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21/Bip01 R Finger2Nub",
+          "model_position_m": 0.001957010954853641,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.325765388443397,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.07166141599999999,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        }
+      ]
+    },
+    {
+      "source_sample": 2157,
+      "groups": {
+        "shield_arm": {
+          "bones": 4,
+          "max_model_position_m": 0.004657189656642325,
+          "max_local_position_m": 5.049725090360321e-05,
+          "max_model_rotation_degrees": 0.9851193418080618,
+          "max_local_rotation_degrees": 1.2623627909457937
+        },
+        "shield_fingers": {
+          "bones": 9,
+          "max_model_position_m": 0.0019309494107335764,
+          "max_local_position_m": 0.0,
+          "max_model_rotation_degrees": 0.5739398189069873,
+          "max_local_rotation_degrees": 1.2074182697257333e-06
+        },
+        "lower_body": {
+          "bones": 8,
+          "max_model_position_m": 0.009117405029963388,
+          "max_local_position_m": 4.7081250910161814e-05,
+          "max_model_rotation_degrees": 4.150324344242737,
+          "max_local_rotation_degrees": 4.1177309973083975
+        },
+        "head_neck": {
+          "bones": 4,
+          "max_model_position_m": 0.0077845073996192365,
+          "max_local_position_m": 0.0,
+          "max_model_rotation_degrees": 0.9851121317565956,
+          "max_local_rotation_degrees": 0.0
+        },
+        "trunk": {
+          "bones": 3,
+          "max_model_position_m": 0.0019967334219251204,
+          "max_local_position_m": 6.939522592725742e-05,
+          "max_model_rotation_degrees": 1.008164816183406,
+          "max_local_rotation_degrees": 0.9932053850787874
+        },
+        "weapon_arm": {
+          "bones": 4,
+          "max_model_position_m": 0.00484615651416913,
+          "max_local_position_m": 2.985941959791301e-05,
+          "max_model_rotation_degrees": 0.9851132042483431,
+          "max_local_rotation_degrees": 0.8802127094711921
+        }
+      },
+      "bones": [
+        {
+          "bone": "Hips",
+          "path": "Bip01/Bip01 Pelvis",
+          "model_position_m": 0.0008519029013802647,
+          "local_position_m": 4.7935232303889566e-05,
+          "model_rotation_degrees": 0.017597757961405145,
+          "local_rotation_degrees": 1.010198601586461e-05,
+          "model_matrix_max_abs": 0.0008472999999989961,
+          "local_matrix_max_abs": 4.755340000000066e-05,
+          "local_scale_error": 6.105917171872477e-08
+        },
+        {
+          "bone": "LeftUpperLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh",
+          "model_position_m": 0.0008364773900932007,
+          "local_position_m": 4.278945523385378e-05,
+          "model_rotation_degrees": 0.48968576849700296,
+          "local_rotation_degrees": 0.47729776115123046,
+          "model_matrix_max_abs": 0.00804344992368805,
+          "local_matrix_max_abs": 0.00758194299999998,
+          "local_scale_error": 1.591697131875236e-07
+        },
+        {
+          "bone": "RightUpperLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh",
+          "model_position_m": 0.0008786976497514754,
+          "local_position_m": 4.7081250910161814e-05,
+          "model_rotation_degrees": 0.12996392965582435,
+          "local_rotation_degrees": 0.11599097855293317,
+          "model_matrix_max_abs": 0.0019951061745827614,
+          "local_matrix_max_abs": 0.0017031480000000432,
+          "local_scale_error": 1.822042395849266e-07
+        },
+        {
+          "bone": "LeftLowerLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf",
+          "model_position_m": 0.003164053418713573,
+          "local_position_m": 1.2471834730644118e-05,
+          "model_rotation_degrees": 0.39736030999668054,
+          "local_rotation_degrees": 0.8863399332718104,
+          "model_matrix_max_abs": 0.006812080999999998,
+          "local_matrix_max_abs": 0.013457715999999953,
+          "local_scale_error": 1.6111880940528067e-08
+        },
+        {
+          "bone": "RightLowerLeg",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf",
+          "model_position_m": 0.0009579912749287963,
+          "local_position_m": 5.16201355920859e-06,
+          "model_rotation_degrees": 0.12876926624438978,
+          "local_rotation_degrees": 0.2575596782685327,
+          "model_matrix_max_abs": 0.001622915288408966,
+          "local_matrix_max_abs": 0.004262980999999999,
+          "local_scale_error": 4.050826762913573e-08
+        },
+        {
+          "bone": "LeftFoot",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot",
+          "model_position_m": 0.0008232873333845914,
+          "local_position_m": 1.7900000004456026e-07,
+          "model_rotation_degrees": 3.080809732739678,
+          "local_rotation_degrees": 3.025489104566831,
+          "model_matrix_max_abs": 0.0534096091,
+          "local_matrix_max_abs": 0.05243879110000001,
+          "local_scale_error": 2.1003308536826637e-08
+        },
+        {
+          "bone": "RightFoot",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot",
+          "model_position_m": 0.0002490757869897084,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.150321413949052,
+          "local_rotation_degrees": 4.1177309973083975,
+          "model_matrix_max_abs": 0.0702596752,
+          "local_matrix_max_abs": 0.06716682299999999,
+          "local_scale_error": 3.477740806445695e-08
+        },
+        {
+          "bone": "Spine",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2",
+          "model_position_m": 0.0008509115381821863,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 1.008164816183406,
+          "local_rotation_degrees": 0.9932053850787874,
+          "model_matrix_max_abs": 0.017359236,
+          "local_matrix_max_abs": 0.0171586871,
+          "local_scale_error": 1.8556568615046842e-08
+        },
+        {
+          "bone": "Chest",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3",
+          "model_position_m": 0.0019967334219251204,
+          "local_position_m": 6.939522592725742e-05,
+          "model_rotation_degrees": 0.9851056227148164,
+          "local_rotation_degrees": 0.071211928317171,
+          "model_matrix_max_abs": 0.017040199,
+          "local_matrix_max_abs": 0.0011172070999999999,
+          "local_scale_error": 6.711186406604952e-08
+        },
+        {
+          "bone": "Neck",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck",
+          "model_position_m": 0.0053505527700762005,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.9851083965025984,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.01656291934274881,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "Head",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head",
+          "model_position_m": 0.006444148545550998,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.9851063544188692,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.01677448,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftShoulder",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle",
+          "model_position_m": 0.004611046986824369,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.9851193418080618,
+          "local_rotation_degrees": 1.6860678551682353e-05,
+          "model_matrix_max_abs": 0.0168596786,
+          "local_matrix_max_abs": 2.2357000000004096e-07,
+          "local_scale_error": 1.2145528449636345e-07
+        },
+        {
+          "bone": "RightShoulder",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle",
+          "model_position_m": 0.00484615651416913,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.9851132042483431,
+          "local_rotation_degrees": 1.413246851386007e-05,
+          "model_matrix_max_abs": 0.017053349699999998,
+          "local_matrix_max_abs": 2.360000000145579e-07,
+          "local_scale_error": 9.660916822085142e-08
+        },
+        {
+          "bone": "LeftUpperArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm",
+          "model_position_m": 0.004657189656642325,
+          "local_position_m": 5.049725090360321e-05,
+          "model_rotation_degrees": 0.7447007684237589,
+          "local_rotation_degrees": 0.8126806894834626,
+          "model_matrix_max_abs": 0.012017515657647637,
+          "local_matrix_max_abs": 0.012772560000000016,
+          "local_scale_error": 6.572074484623158e-08
+        },
+        {
+          "bone": "RightUpperArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm",
+          "model_position_m": 0.004720555127986965,
+          "local_position_m": 2.985941959791301e-05,
+          "model_rotation_degrees": 0.9386357051702254,
+          "local_rotation_degrees": 0.24678172321563874,
+          "model_matrix_max_abs": 0.0161506763,
+          "local_matrix_max_abs": 0.004011910999999979,
+          "local_scale_error": 3.551370730825454e-08
+        },
+        {
+          "bone": "LeftLowerArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm",
+          "model_position_m": 0.0024965842488493505,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739324341376468,
+          "local_rotation_degrees": 1.2623627909457937,
+          "model_matrix_max_abs": 0.007904986131147429,
+          "local_matrix_max_abs": 0.021498321999999986,
+          "local_scale_error": 2.3685890149227617e-07
+        },
+        {
+          "bone": "RightLowerArm",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm",
+          "model_position_m": 0.0012427541502767984,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12523336611500244,
+          "local_rotation_degrees": 0.8802127094711921,
+          "model_matrix_max_abs": 0.0015563485815059397,
+          "local_matrix_max_abs": 0.01485888299999999,
+          "local_scale_error": 2.81232965804179e-08
+        },
+        {
+          "bone": "LeftHand",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand",
+          "model_position_m": 0.000996971594234774,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739339052432881,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.007839827424142132,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightHand",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand",
+          "model_position_m": 0.0009975286078305096,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1252455261521258,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0015545262999999976,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftToes",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 L Thigh/Bip01 L Calf/Bip01 L Foot/Bip01 L Toe0",
+          "model_position_m": 0.0032019144734801233,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 3.0808097925427402,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0533934166,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightToes",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 R Thigh/Bip01 R Calf/Bip01 R Foot/Bip01 R Toe0",
+          "model_position_m": 0.009117405029963388,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 4.150324344242737,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.07053978,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftEye",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bone Eyelid",
+          "model_position_m": 0.0077845073996192365,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.9851121317565956,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.015682146000000008,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "Jaw",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 Neck/Bip01 Head/Bip01 Mouth",
+          "model_position_m": 0.007007245903797465,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.985100579832589,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.015514841000000001,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0",
+          "model_position_m": 0.0011239951165863047,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739377398148279,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.009730492356778558,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01",
+          "model_position_m": 0.0013159398053636665,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739369770351317,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.008920265711941266,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftThumbDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger0/Bip01 L Finger01/Bip01 L Finger0Nub",
+          "model_position_m": 0.0015015946202944417,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739398189069873,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0072553824879392215,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1",
+          "model_position_m": 0.001237137373871024,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739354735428079,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.009470137234993209,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11",
+          "model_position_m": 0.00146568768806455,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739254622318578,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.0089948129647546,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftIndexDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger1/Bip01 L Finger11/Bip01 L Finger1Nub",
+          "model_position_m": 0.001338331172585897,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.57393214015789,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.007655585057274983,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2",
+          "model_position_m": 0.0013399293796077566,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739395999894253,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.00940486921125222,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21",
+          "model_position_m": 0.0016202781131212218,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739370316825428,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.009628913509419468,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "LeftRingDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 L Clavicle/Bip01 L UpperArm/Bip01 L Forearm/Bip01 L Hand/Bip01 L Finger2/Bip01 L Finger21/Bip01 L Finger2Nub",
+          "model_position_m": 0.0019309494107335764,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.5739343839639558,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.00717444797159561,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0",
+          "model_position_m": 0.0010023376631208961,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1252432052509352,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.002114204999999994,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01",
+          "model_position_m": 0.001032580490616061,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.125244751430946,
+          "local_rotation_degrees": 1.7075472925031877e-06,
+          "model_matrix_max_abs": 0.00202947600000003,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightThumbDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger0/Bip01 R Finger01/Bip01 R Finger0Nub",
+          "model_position_m": 0.001066453089897075,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.125247590538667,
+          "local_rotation_degrees": 1.7075472925031877e-06,
+          "model_matrix_max_abs": 0.0018112000000000128,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1",
+          "model_position_m": 0.0010243386302242557,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12524738663786608,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0018320083999999945,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11",
+          "model_position_m": 0.0010686746854346066,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12523904234357186,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0015491240000000128,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightIndexDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger1/Bip01 R Finger11/Bip01 R Finger1Nub",
+          "model_position_m": 0.0011044645744431097,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12523658152735434,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0017162859999999558,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingProximal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2",
+          "model_position_m": 0.0010741122356649696,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.12525248436093256,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0016786540000000016,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingIntermediate",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21",
+          "model_position_m": 0.0011231928247664887,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1252364955538402,
+          "local_rotation_degrees": 0.0,
+          "model_matrix_max_abs": 0.0018790659999999848,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        },
+        {
+          "bone": "RightRingDistal",
+          "path": "Bip01/Bip01 Pelvis/Bip01 Spine1/Bip01 Spine2/Bip01 Spine3/Bip01 R Clavicle/Bip01 R UpperArm/Bip01 R Forearm/Bip01 R Hand/Bip01 R Finger2/Bip01 R Finger21/Bip01 R Finger2Nub",
+          "model_position_m": 0.0011263360948220577,
+          "local_position_m": 0.0,
+          "model_rotation_degrees": 0.1252438623636214,
+          "local_rotation_degrees": 1.2074182697257333e-06,
+          "model_matrix_max_abs": 0.0019538999999999807,
+          "local_matrix_max_abs": 0.0,
+          "local_scale_error": 0.0
+        }
+      ]
+    }
+  ],
+  "rotation_method": "Orthogonalize matrix basis columns with Gram-Schmidt, require matching handedness and retain common reflected basis; compute acos((trace(Ra^T Rb)-1)/2). Local and model rotations are separate.",
+  "limits": [
+    "No live IK target/solver state or same-pose clone bind snapshot was observed.",
+    "Raw local translation/scale differences are diagnostics, not proof of character proportion differences.",
+    "No tolerance relaxed or runtime asset installed."
+  ],
+  "provenance": {
+    "capture": "shield-composition-04.jsonl",
+    "prepared_build": "smoke-06",
+    "comparison_sha256": "d42946942752ccfa22606b9bc63bc57c194116ccb51957b78d5ff3868d53d9e8",
+    "analysis_source_sha256": "d0def9443b05f27201e34caa60b089671a33ab5204754ffcf1ec1d023c579ab7",
+    "source_paths": {
+      "Assets/Scripts/PeEntity/Cmpt/IKCmpt.cs": "c933e6ac0af067e3159a2cdfe3c119c42db992928f48a6aa7a19c7f6117c86e1",
+      "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Human.cs": "3510d27c4bfa86e673a13811097a05614f90d68e963cdf35b708e1dd8a063adb",
+      "Assets/AppearBuilder/AppearBuilder.cs": "b30b1d3d8573ea4b40fa9f0c5c2484515213c73463a8e125f0d500ec1f8d4a54"
+    }
+  },
+  "lifecycle": {
+    "evidence": "Parent root operator report; no analysis-agent desktop actions",
+    "pid": 2374148,
+    "session": 21876,
+    "closed_samples": 3,
+    "post_cleanup_updates": 120,
+    "ordinary_response": "Andy acknowledgment then Camera tips",
+    "quit": "Escape SYSTEM\u2192Quit\u2192YES",
+    "launcher_exit": 137,
+    "raw_signal": 9,
+    "observed_crash": false,
+    "reference_report": "shield-composition-smoke-20261006.json",
+    "responsive_screenshot": "shield-composition-responsive.png"
+  }
+}

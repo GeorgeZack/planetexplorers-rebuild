@@ -17,6 +17,88 @@ CLIPS = {'NormalIdle': 684, 'NormalWF': 531, 'NormalRF': 539, 'Jump': 263,
          'Felling1': 244, 'Felling2': 252, 'Felling3': 259,
          'Spade1': 189, 'Spade2': 201, 'Spade3': 211,
          'Mine1': 221, 'Mine2': 228, 'Mine3': 237}
+# Sword style's idle leaf is AttackIdle, not a nonexistent SwordIdle clip.
+# Ten authored clips fit the unchanged isolated sampler retention bound.
+SWORD_CLIPS = {'AttackIdle': 90, 'SwordWF': 133, 'SwordRF': 435, 'SwordSprint': 113,
+               'SwordJump': 756, 'SwordFall': 757, 'SwordLand': 758,
+               'SwordRunJump': 272, 'SwordRunFall': 284, 'SwordRunLand': 279}
+CLIPS.update(SWORD_CLIPS)
+# Separate backward pair: never aliases NormalWB/RB or expands torch-sword.
+SWORD_BACKWARD_CLIPS = {'SwordWB': 441, 'SwordRB': 708}
+CLIPS.update(SWORD_BACKWARD_CLIPS)
+# Ground Move Normal branch: cardinal strafe/back leaves plus authored third-
+# person turn alternatives. The unusual WR parent really uses RightSpeed.
+DIRECTIONAL_CLIPS = {'NormalWB': 547, 'NormalWL': 517, 'NormalWR': 524,
+                     'NormalRB': 696, 'NormalRL': 447, 'NormalRR': 510,
+                     'NormalWalkTurnLeft': 751, 'NormalWalkTurnRight': 752,
+                     'NormalRunTurnLeft': 753, 'NormalRunTurnRight': 754}
+CLIPS.update(DIRECTIONAL_CLIPS)
+# Bounded running first-stage pose; root motion is sampled separately.
+CLIPS['RunSwordAttack'] = 408
+DIRECTIONAL_BRANCHES = {
+    'NormalWB': ((0,1,2,33), (0,-2), None),
+    'NormalWL': ((0,1,2,34,36), (-2,0), ('FirstPerson',1)),
+    'NormalWR': ((0,1,2,30,32), (2,0), ('RightSpeed',1)),
+    'NormalRB': ((0,1,2,16), (0,-5), None),
+    'NormalRL': ((0,1,2,20,22), (-5,0), ('FirstPerson',1)),
+    'NormalRR': ((0,1,2,10,12), (5,0), ('FirstPerson',1)),
+    'NormalWalkTurnLeft': ((0,1,2,34,35), (-2,0), ('FirstPerson',0)),
+    'NormalWalkTurnRight': ((0,1,2,30,31), (2,0), ('RightSpeed',0)),
+    'NormalRunTurnLeft': ((0,1,2,20,21), (-5,0), ('FirstPerson',0)),
+    'NormalRunTurnRight': ((0,1,2,10,11), (5,0), ('FirstPerson',0)),
+}
+
+
+def _directional_states(controller,selected,clip_ids,style):
+    """Require exact installed branch ancestry, parameters, points and IDs."""
+    names=dict(controller['m_TOS']);path='Base Layer.GroundLocomotion.Move'
+    states=[e['data'] for m in controller['m_Controller']['m_StateMachineArray']
+            for e in m['data']['m_StateConstantArray'] if names.get(e['data']['m_FullPathID'])==path]
+    if len(states)!=1 or len(states[0]['m_BlendTreeConstantArray'])!=1:
+        raise ValueError('Missing/duplicate directional Move tree')
+    state=states[0];nodes=state['m_BlendTreeConstantArray'][0]['data']['m_NodeArray'];result={}
+    for name,(indices,point,variant) in selected.items():
+        expected=[('BeatWeight',None,0),('MoveStyleH','MoveStyleV',style),
+                  ('RightSpeed','ForwardSpeed',point)]
+        if variant:expected.append((variant[0],None,variant[1]))
+        branches=[]
+        for (parent,child),(parameter,parameter_y,value) in zip(zip(indices,indices[1:]),expected):
+            node=nodes[parent]['data'];children=node['m_ChildIndices']
+            if children.count(child)!=1:raise ValueError('Directional ancestry differs')
+            slot=children.index(child)
+            if names.get(node['m_BlendEventID'])!=parameter or names.get(node['m_BlendEventYID'])!=parameter_y:
+                raise ValueError('Directional branch parameter differs')
+            branch=dict(node=parent,child=child,parameter=parameter,parameter_y=parameter_y,blend_type=node['m_BlendType'])
+            if isinstance(value,tuple):
+                actual=node['m_Blend2dData']['data']['m_ChildPositionArray'][slot]
+                if any(abs(actual[k]-v)>1e-5 for k,v in zip(('x','y'),value)):
+                    raise ValueError('Directional branch point differs')
+                branch['point']=actual
+            else:
+                actual=node['m_Blend1dData']['data']['m_ChildThresholdArray'][slot]
+                if abs(actual-value)>1e-5:raise ValueError('Directional branch threshold differs')
+                branch['threshold']=actual
+            branches.append(branch)
+        leaf=nodes[indices[-1]]['data'];index=leaf['m_ClipID']
+        if leaf['m_ChildIndices'] or controller['m_AnimationClips'][index]!={'m_FileID':0,'m_PathID':clip_ids[name]}:
+            raise ValueError('Directional leaf differs from exact source clip')
+        result[name]=dict(path=path,clip_index=index,speed=state['m_Speed'],node_path=list(indices),branches=branches)
+    return result
+
+
+def directional_states(controller):
+    return _directional_states(controller,DIRECTIONAL_BRANCHES,DIRECTIONAL_CLIPS,(0,0))
+
+
+def sword_backward_states(controller):
+    """Exact Sword backward branches, not Normal backward or turn substitutes."""
+    branches={'SwordWB':((0,1,41,68),(0,-2),None),
+              'SwordRB':((0,1,41,53),(0,-5),None)}
+    result=_directional_states(controller,branches,SWORD_BACKWARD_CLIPS,(.94,.342))
+    if any(value['speed']!=1 for value in result.values()):
+        raise ValueError('Sword backward source state speed differs')
+    return result
+
 
 
 def direct_states(controller, prefix, selected):
@@ -50,8 +132,58 @@ def spade_states(controller):
     return direct_states(controller,'FullBody.Dig.',('Spade1','Spade2','Spade3'))
 
 
+def running_attack_states(controller):
+    return direct_states(controller,'FullBody.Attack.',('RunSwordAttack',))
+
+
 def mine_states(controller):
     return direct_states(controller,'FullBody.Dig.',('Mine1','Mine2','Mine3'))
+
+
+def sword_states(controller):
+    """Pin source Sword blend leaves, retaining their branch coordinates.
+
+    Motion_Move_Human maps style1 to cos/sin20 degrees, selecting the authored
+    (.94,.342) MoveStyleH/V point. This records leaves, not a blend-graph port.
+    """
+    names=dict(controller['m_TOS']);states={}
+    for machine in controller['m_Controller']['m_StateMachineArray']:
+        for entry in machine['data']['m_StateConstantArray']:
+            state=entry['data'];path=names.get(state['m_FullPathID'])
+            if path in states:raise ValueError('Duplicate source state path')
+            states[path]=state
+    move='Base Layer.GroundLocomotion.Move'
+    paths={'AttackIdle':(move,(0,1,41,42)), 'SwordWF':(move,(0,1,41,61,63)),
+           'SwordRF':(move,(0,1,41,43,45)), 'SwordSprint':(move,(0,1,41,74))}
+    for phase in ('Jump','Fall','Land'):
+        path='Base Layer.GroundLocomotion.Jump.'+phase
+        paths['Sword'+phase]=(path,(0,1,3))
+        paths['SwordRun'+phase]=(path,(0,17,19))
+    result={}
+    for name,(path,indices) in paths.items():
+        state=states[path];trees=state['m_BlendTreeConstantArray']
+        if len(trees)!=1:raise ValueError('Sword state blend-tree count differs')
+        nodes=trees[0]['data']['m_NodeArray'];branches=[];sword_branch=False
+        for parent,child in zip(indices,indices[1:]):
+            node=nodes[parent]['data'];children=node['m_ChildIndices']
+            if children.count(child)!=1:raise ValueError('Sword blend ancestry differs')
+            slot=children.index(child);thresholds=node['m_Blend1dData']['data']['m_ChildThresholdArray']
+            points=node['m_Blend2dData']['data']['m_ChildPositionArray']
+            parameter=names.get(node['m_BlendEventID']);parameter_y=names.get(node['m_BlendEventYID'])
+            branch=dict(node=parent,child=child,blend_type=node['m_BlendType'],parameter=parameter,parameter_y=parameter_y)
+            if thresholds:branch['threshold']=thresholds[slot]
+            if points:branch['point']=points[slot]
+            if parameter=='MoveStyleH':
+                point=points[slot]
+                if parameter_y!='MoveStyleV' or abs(point['x']-.94)>1e-5 or abs(point['y']-.342)>1e-5:
+                    raise ValueError('Sword style branch coordinates differ')
+                sword_branch=True
+            branches.append(branch)
+        leaf=nodes[indices[-1]]['data'];index=leaf['m_ClipID']
+        if not sword_branch or leaf['m_ChildIndices'] or controller['m_AnimationClips'][index]!={'m_FileID':0,'m_PathID':SWORD_CLIPS[name]}:
+            raise ValueError('Sword blend leaf differs from exact source clip')
+        result[name]=dict(path=path,clip_index=index,speed=state['m_Speed'],node_path=list(indices),branches=branches)
+    return result
 
 
 def inventory(asset):
@@ -67,7 +199,7 @@ def inventory(asset):
     refs = {x['m_PathID'] for x in controller['m_AnimationClips'] if x['m_FileID'] == 0}
     replacements = {x['m_OriginalClip']['m_PathID']: x['m_OverrideClip']['m_PathID']
                     for x in override['m_Clips']}
-    states={**felling_states(controller),**spade_states(controller),**mine_states(controller)}
+    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller)}
     with asset.open('rb') as stream:
         asset_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
     result = {'schema': 1, 'asset': str(asset), 'asset_sha256': asset_hash,

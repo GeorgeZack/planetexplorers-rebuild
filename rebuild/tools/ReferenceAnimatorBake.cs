@@ -14,10 +14,10 @@ using UnityEngine.Experimental.Director;
 namespace PeReference {
 public sealed class PoseProbe : MonoBehaviour {
     const long MaxBytes = 256L * 1024 * 1024;
-    const int MaxTransforms = 512, MaxClips = 10, MaxSamples = 3600;
+    const int MaxTransforms = 512, MaxClips = 32, MaxSamples = 3600;
     static readonly CultureInfo Invariant = CultureInfo.InvariantCulture;
     static PoseProbe instance;
-    static readonly string[] Allowed = {"NormalIdle", "NormalWF", "NormalRF", "Jump", "Fall", "Land", "Attack6", "Attack7", "Attack8", "Attack9", "Felling1", "Felling2", "Felling3", "Spade1", "Spade2", "Spade3", "Mine1", "Mine2", "Mine3"};
+    static readonly string[] Allowed = {"NormalIdle", "NormalWF", "NormalRF", "Jump", "Fall", "Land", "Attack6", "Attack7", "Attack8", "Attack9", "Felling1", "Felling2", "Felling3", "Spade1", "Spade2", "Spade3", "Mine1", "Mine2", "Mine3", "AttackIdle", "SwordWF", "SwordRF", "SwordWB", "SwordRB", "SwordSprint", "SwordJump", "SwordFall", "SwordLand", "SwordRunJump", "SwordRunFall", "SwordRunLand", "NormalWB", "NormalWL", "NormalWR", "NormalRB", "NormalRL", "NormalRR", "NormalWalkTurnLeft", "NormalWalkTurnRight", "NormalRunTurnLeft", "NormalRunTurnRight", "RunSwordAttack"};
     sealed class ClipSpec { public string name; public float length, rate; public int sourceId; public bool loop; public AnimationClip clip; }
     sealed class RetainedGraph { public GameObject root; public Animator animator; public AnimationClipPlayable playable; }
     static readonly List<RetainedGraph> retained = new List<RetainedGraph>();
@@ -99,7 +99,7 @@ public sealed class PoseProbe : MonoBehaviour {
         installedAt = Time.realtimeSinceStartup;
         Write("{\"type\":\"header\",\"schema\":\"pe-animator-bake-1\",\"unity\":" + Q(Application.unityVersion) +
               ",\"matrixOrder\":\"row-major\",\"coordinateSpace\":\"isolated-animator-model-local\",\"sampleRate\":" + sampleRate +
-              ",\"sampleCountPolicy\":\"ceil-f64-product-terminal-length\",\"cleanupPolicy\":\"retain-inactive-per-clip-until-process-exit\",\"maxRetainedGraphs\":10,\"postCleanupUpdates\":120" +
+              ",\"sampleCountPolicy\":\"ceil-f64-product-terminal-length\",\"cleanupPolicy\":\"retain-inactive-per-clip-until-process-exit\",\"maxRetainedGraphs\":" + MaxClips + ",\"postCleanupUpdates\":120" +
               ",\"maxBytes\":" + MaxBytes + ",\"maxSamples\":" + MaxSamples + ",\"fireEvents\":false,\"controllerAttached\":false,\"applyRootMotion\":false}");
         output.Flush(); Console.Error.WriteLine("[bake] Waiting for arm file and matching live player: " + arm);
         StartCoroutine(Capture());

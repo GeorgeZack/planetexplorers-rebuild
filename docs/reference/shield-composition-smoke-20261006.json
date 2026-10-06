@@ -1,0 +1,120 @@
+{
+  "schema": "pe-shield-composition-smoke-1",
+  "observed_utc": "2026-10-06T21:36:05.231628+00:00",
+  "pid": 2346190,
+  "profile": "isolated shield-composition reference; female tutorial",
+  "capture": "/home/admin/.local/share/planet-explorers-shield-composition-reference/pose-captures/shield-composition-01.jsonl",
+  "capture_sha256": "79ebff837ff38befaf1d9de0d64dae85be9be439e3ccbc5b3ac9deacfbd89958",
+  "probe_build": "rebuild/build/shield-composition/smoke-03",
+  "end": {
+    "type": "end",
+    "reason": "error",
+    "frames": 0,
+    "error": "System.InvalidOperationException: Unexpected loaded object count\n  at PeReference.ShieldCompositionClone.Controller (System.String path, System.String expectedHash) [0x00000] in <filename unknown>:0 \n  at PeReference.ShieldCompositionClone.Create (UnityEngine.Animator original, System.String bundlePath, System.String expectedHash) [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe.Tick () [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe+<Capture>c__Iterator0.MoveNext () [0x00000] in <filename unknown>:0 "
+  },
+  "post_cleanup_alive_frames": 120,
+  "ordinary_responsiveness": "Andy acknowledgment advanced to Camera tips; SYSTEM Quit Game YES",
+  "launcher_exit": 137,
+  "exit": {
+    "returncode": -9,
+    "signal": 9,
+    "observed_utc": "2026-10-06T21:35:36.740442+00:00"
+  },
+  "renderer": "process-only Mesa Zink, NVIDIA Vulkan; ZINK_DEBUG=flushsync,nobgc; force-gfx-direct",
+  "runtime_pose_export_ready": false,
+  "interpretation": "Guard rejected bundle asset enumeration before any clone poses; not a rendering crash. Expected all serialized dependencies from LoadAllAssets, but container exposes controller. Actual returned count was not logged by this probe; do not infer it.",
+  "retry": {
+    "pid": 2355734,
+    "build": "smoke-04",
+    "capture": "/home/admin/.local/share/planet-explorers-shield-composition-reference/pose-captures/shield-composition-02.jsonl",
+    "capture_sha256": "d52e08c29b9a69ea2678ae801a4822034f6664884bad77e7e560f0a6b5f7ef7a",
+    "diagnostics": [
+      "LoadAllAssets count=1",
+      "LoadAllAssets[0] type=UnityEngine.RuntimeAnimatorController name=ReferenceShieldCompositionNoCallbacks",
+      "Controller animationClips references=608 expectedDistinct=452",
+      "Validated named controller and452 distinct event-free clips against compiled source names/lengths/rates"
+    ],
+    "end": {
+      "type": "end",
+      "reason": "error",
+      "frames": 0,
+      "error": "System.InvalidOperationException: Nonfinite capture\n  at PeReference.PoseProbe.N (Single x) [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe.WritePose () [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe.Tick () [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe+<Capture>c__Iterator0.MoveNext () [0x00000] in <filename unknown>:0 "
+    },
+    "clone_ready": true,
+    "post_cleanup_alive_frames": 120,
+    "ordinary_responsiveness": "Andy acknowledgment advanced Camera tips; SYSTEM Quit Game YES",
+    "launcher_exit": 137,
+    "exit": {
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T21:40:26.457349+00:00"
+    },
+    "interpretation": "Controller closure validated, pure clone created. Capture rejected a nonfinite WritePose field, not yet localized. No pose sample or parity established."
+  },
+  "diagnostic_retry": {
+    "pid": 2366234,
+    "build": "smoke-05",
+    "capture": "/home/admin/.local/share/planet-explorers-shield-composition-reference/pose-captures/shield-composition-03.jsonl",
+    "capture_sha256": "8fbd6106dbe67ce6c1e3d668b298453cff5ae5b7d507538a72b3fa241fc80bf7",
+    "end": {
+      "type": "end",
+      "reason": "error",
+      "frames": 0,
+      "error": "System.InvalidOperationException: Nonfinite capture field: layer[0]Base Layer state=-1436569151.length value=Infinity\n  at PeReference.ShieldCaptureNumbers.Finite (Single value, System.String context) [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe.N (Single x, System.String context) [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe.WritePose () [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe.Tick () [0x00000] in <filename unknown>:0 \n  at PeReference.PoseProbe+<Capture>c__Iterator0.MoveNext () [0x00000] in <filename unknown>:0 "
+    },
+    "post_cleanup_alive_frames": 120,
+    "ordinary_responsiveness": "Andy acknowledgment advanced Camera tips; SYSTEM Quit Game YES",
+    "launcher_exit": 137,
+    "exit": {
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T21:45:37.378959+00:00"
+    },
+    "interpretation": "Localized nonfinite field is Base Layer effective state length +Infinity while Animator.speed=0. Current normalized time passed finite serialization. No completed pose sample or parity established."
+  },
+  "completed_retry": {
+    "pid": 2374148,
+    "build": "smoke-06",
+    "capture": "/home/admin/.local/share/planet-explorers-shield-composition-reference/pose-captures/shield-composition-04.jsonl",
+    "capture_sha256": "632847800fb07cb94a10291f94611a529bbdd1527896065acece0d3957d4da3c",
+    "plan_sha256": "d400ae16aa8303f01a4df5e9c11f7b897998b7d527d96b5c210c7d4e7584d4fa",
+    "bundle_sha256": "4cbfd1e4929c6218b2357225334e08de789e93c24d50abb091aee8e63c138c91",
+    "end": {
+      "type": "end",
+      "reason": "complete",
+      "frames": 3,
+      "error": null
+    },
+    "comparison_sha256": "d42946942752ccfa22606b9bc63bc57c194116ccb51957b78d5ff3868d53d9e8",
+    "readback_matches": true,
+    "samples": [
+      {
+        "sample": 1611,
+        "state_clock_weight_readback_matches": true,
+        "parameter_max_error": 0.0,
+        "max_human_position_error_metres": 0.04723523083464054
+      },
+      {
+        "sample": 1686,
+        "state_clock_weight_readback_matches": true,
+        "parameter_max_error": 0.0,
+        "max_human_position_error_metres": 0.057691120522293374
+      },
+      {
+        "sample": 2157,
+        "state_clock_weight_readback_matches": true,
+        "parameter_max_error": 0.0,
+        "max_human_position_error_metres": 0.009117405029963388
+      }
+    ],
+    "post_cleanup_alive_frames": 120,
+    "ordinary_responsiveness": "Andy acknowledgment advanced Camera tips; SYSTEM Quit Game YES",
+    "launcher_exit": 137,
+    "exit": {
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T21:50:00.151011+00:00"
+    },
+    "interpretation": "Closed3-frame pure-clone replay; all actual states/clocks/layerweights/clipweights/parameters match source. Human model-space matrices retain residual differences. No looping runtimeasset or fullposeparity qualified."
+  }
+}

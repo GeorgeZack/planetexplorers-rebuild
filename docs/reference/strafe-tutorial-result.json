@@ -1,0 +1,61 @@
+{
+  "schema": "pe-native-tutorial-directional-observation-1",
+  "date": "2026-10-06",
+  "native_pid": 1689786,
+  "mode": "Tutorial, captured third person (camera1)",
+  "inputs": [
+    "Return twice to clear starting replies",
+    "F5 once",
+    "D/A/S running each1.5seconds",
+    "Z walk toggle",
+    "D/A/S walking each1.5seconds",
+    "Pause -> Main menu -> Quit"
+  ],
+  "frames": 4314,
+  "tutorial_mission": 739,
+  "locomotion_mask": 4033,
+  "clips_seen": [
+    "NormalIdle",
+    "NormalWL",
+    "NormalWR",
+    "NormalWB",
+    "NormalRL",
+    "NormalRR",
+    "NormalRB"
+  ],
+  "melee_starts": 0,
+  "melee_contacts": 0,
+  "mining_swings": 0,
+  "knife_owned": false,
+  "knife_equipped": false,
+  "screenshots": [
+    {
+      "path": "reference/strafe-tutorial-d-run.png",
+      "source": "rebuild/build/tutorial-strafe-d1791303542827091262.png",
+      "sha256": "c421b44af27c311ff982db59b09e1883502eb72c22258880cbabd0f3c91d5856",
+      "input": "D run"
+    },
+    {
+      "path": "reference/strafe-tutorial-a-walk.png",
+      "source": "rebuild/build/tutorial-strafe-a1791303549794323876.png",
+      "sha256": "8ef91cf468c6e7a4030b16e994e70014eadbbd6d61cefda05d2e76dab5777d0d",
+      "input": "A walk"
+    }
+  ],
+  "logs": [
+    {
+      "path": "rebuild/build/strafe-training-manual.log",
+      "sha256": "e70a1ee98fc842f02181976953fed2c44b92b87eae1c6ed6c2eb714b30185c88"
+    },
+    {
+      "path": "rebuild/build/strafe-training-manual.exit",
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    }
+  ],
+  "limitations": [
+    "Ordinary captured tutorial directional movement only; no combat or quest progression claim.",
+    "Input directions and authored left/right leaf names differ under the existing unreflected tutorial coordinate presentation.",
+    "No proof of original turn blends, continuous blending or full source handedness parity."
+  ],
+  "exit_code": 0
+}

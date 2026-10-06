@@ -19,6 +19,31 @@ typedef struct {
     bool present, unobstructed, melee_geometry, pounce_geometry;
     float gap, facing_degrees;
 } PeHareEngagement;
+
+/* Borrowed query snapshot; never stored in PeHare or a save. Sweep/overlap use
+ * creature movement geometry; ray is real support/LOS geometry (no synthetic
+ * crop planes). Refresh the sandbox snapshot before calling any query API. */
+typedef struct {
+    const void *context;
+    bool (*overlap)(const void *,PeVec3,float,float);
+    PeSceneHit (*sweep)(const void *,PeVec3,float,float,PeVec3);
+    PeSceneHit (*ray)(const void *,PeVec3,PeVec3,float);
+    bool require_real_support;
+} PeHareQueries;
+typedef struct {
+    float minimum_radius,maximum_radius;
+    bool spawn_center,unchecked_fallback;
+} PeHarePatrol;
+typedef struct { PeVec3 spawn; float yaw_degrees; PeHarePatrol patrol; } PeHareConfig;
+struct PeSandboxCollision;
+PeHareQueries pe_hare_queries_scene(const PeSceneCollision *scene);
+PeHareQueries pe_hare_queries_sandbox(const struct PeSandboxCollision *collision);
+PeHareConfig pe_hare_tutorial_config(void);
+/* Source Adventure defaults: current center, radial distance uniform15..30.
+ * Reject unsupported/out-of-crop candidates rather than the source raw final
+ * fallback; bounded native navigation policy, not full BTPatrol/A* parity. */
+PeHareConfig pe_hare_adventure_config(PeVec3 spawn,float yaw_degrees);
+
 typedef struct {
     bool ready, grounded, goal_valid;
     PeVec3 spawn, position, velocity, patrol_goal;
@@ -27,7 +52,18 @@ typedef struct {
     uint64_t rng;
     uint32_t decisions;
     PeHareMode mode;
+    PeHarePatrol patrol;
 } PeHare;
+
+/* General fixed-step foundation. Explicit spawn is grounded within5m without
+ * horizontal relocation/lift or any mission-specific spawn-height adjustment.
+ * Query/configuration failure is transactional; accepted targets remain the
+ * host's decision. No attack, current HP, perception or mission ownership here. */
+bool pe_hare_init_query(PeHare *hare,const PeHareQueries *queries,const PeHareConfig *config,
+                        uint64_t seed,float scale,bool easy);
+bool pe_hare_step_query(PeHare *hare,const PeHareQueries *queries,const PeHareTarget *target);
+PeHareEngagement pe_hare_engagement_query(const PeHare *hare,const PeHareQueries *queries,
+                                         const PeHareTarget *target);
 
 /* Transactional initial spawn (15,2,12), grounded using the scene capsule.
  * scale==0 chooses deterministic uniform [.8,1.3); explicit values must lie in

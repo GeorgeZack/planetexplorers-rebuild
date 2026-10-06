@@ -18,7 +18,7 @@ static bool corrupt(const char *path,int mode){
     if(fseek(f,0,SEEK_END)){fclose(f);return false;}long n=ftell(f);rewind(f);
     if(n<20){fclose(f);return false;}unsigned char *p=malloc((size_t)n+1);if(!p){fclose(f);return false;}
     bool ok=fread(p,1,(size_t)n,f)==(size_t)n;fclose(f);
-    if(mode==0)put32(p+n-(8+16*(PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY))-(12+4+16*PE_TOWN_V8_STOCK_CAPACITY)-4,96);else if(mode==1)n--;else p[n++]=0;
+    if(mode==0)put32(p+n-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-(8+16*(PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY))-(12+4+16*PE_TOWN_V8_STOCK_CAPACITY)-4,96);else if(mode==1)n--;else p[n++]=0;
     put32(p+8,(uint32_t)n-16);uint32_t sum=2166136261u;
     for(long i=16;i<n;i++){sum^=p[i];sum*=16777619u;}put32(p+12,sum);
     f=fopen(path,"wb");if(!f)ok=false;else{ok=ok&&fwrite(p,1,(size_t)n,f)==(size_t)n;if(fclose(f))ok=false;}
@@ -90,7 +90,7 @@ static int static_game_child(void){
     CHECK(pe_game_collision_update(g,cache,error,sizeof error));
     CHECK(!pe_game_static_segment_clear(g,(PeVec3){9,10,95},(PeVec3){11,10,95}));
     CHECK(pe_game_static_segment_clear(g,(PeVec3){9,10,95},(PeVec3){10,10,95}));
-    g->inventory=(PeInventory){.next_instance_id=1};
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
     CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,0));
     CHECK(pe_inventory_add(&g->inventory,PE_ITEM_WOOD,10));
     PeB45Cell cell={20,20,190,(PE_B45_CUBE<<2),0};
@@ -230,7 +230,7 @@ int pe_test_world_depth(void){
     CHECK(pe_world_depth(w)==0);w->depth=128;
     pe_game_init_mode(g,666,PE_GAME_ADVENTURE);
     CHECK(pe_game_set_world(g,w,(PeVec3){25,9,95}));CHECK(g->player.z==95);
-    memset(&g->inventory,0,sizeof g->inventory);g->inventory.next_instance_id=1;
+    memset(g->inventory.slots,0,sizeof g->inventory.slots);
     CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,0));
     PeResourceEdit edit={0};CHECK(pe_game_dig_sample(g,22,8,95,&edit)&&edit.changed);
     /* A stored extended-Z action must survive both pose and subsequent-clock

@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "kind": "incomplete-original-running-observer-diagnostic",
+  "pid": 1888279,
+  "timestamp_local": "2026-10-06 12:58:25 CDT",
+  "timezone": "US/Central",
+  "returncode": -6,
+  "final_signal": "SIGABRT",
+  "faulting_tid": 1888279,
+  "launch_argument": "-force-gfx-direct",
+  "capture_valid": false,
+  "strict_analyzer_rejection": "Capture did not close normally",
+  "partial_observations": {
+    "frames": 634,
+    "elapsed_game_seconds": 29.191337999999988,
+    "elapsed_real_seconds": 29.18661499999999,
+    "max_velocity_magnitude": 3.8904215901305155,
+    "skill_sample_counts": {
+      "20110011": 8
+    },
+    "threshold_pairs": [
+      {
+        "move": 4.5,
+        "sprint": 7
+      }
+    ],
+    "positive_weight_current_clip_names": [
+      "Attack6",
+      "AxPutOn"
+    ],
+    "running_skill_observed": false,
+    "limit": "Diagnostic prefix only: abrupt crash, missing closure, no qualified live running capture. Actual instantaneous branch-selection velocity not observed."
+  },
+  "crash": {
+    "fault_pc": "0x40abee02",
+    "available_stack": "libc abort/raise, Mono signal handler, anonymous address",
+    "comparison": "Outer abort/anonymous-PC signature resembles earlier generated-GL failures; mapping/instruction/NVIDIA caller offsets are not available in coredumpctl summary, so exact recurrence is not established by this bounded inspection",
+    "core_extracted": false,
+    "system_core_preserved": true
+  },
+  "resources": {
+    "journal_interval_local": "2026-10-06 12:54 through13:00 CDT",
+    "oom_gpu_error_entries": "-- No entries --",
+    "limit": "No crash-time resource telemetry"
+  },
+  "preserved_files": [
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/Player.log",
+      "bytes": 56357,
+      "sha256": "0bdbbd0a983d4d9f453a7eece7eb104d5d8f512fb7d34fa1c58ea0432d12b235"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/coredump-info.txt",
+      "bytes": 1863,
+      "sha256": "58199297c85e5f83cb25cac6c0c2ae906774fc1b7976c69cb5a194053b43f28a"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/female-running-live-02.arm",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/female-running-live-02.exit.json",
+      "bytes": 131,
+      "sha256": "09417584d9a1c350d98d49049010a043ae35c57e11856af3814a9bd3f9142fe7"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/female-running-live-02.jsonl",
+      "bytes": 2117729,
+      "sha256": "d022c164ebaee039de70d31d8f80c9071c54289dc078f9b89081f29299395274"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/female-running-live-02.launch.json",
+      "bytes": 1439,
+      "sha256": "43d2636d215237c861d1fcd5f37e8057250a15095523a5ea71e68c37c806c62c"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/live-02-launch.log",
+      "bytes": 973,
+      "sha256": "0b570d89456390d8e28b1bfb649b8f51ce6e6f57352bffe54c63f445eee53984"
+    },
+    {
+      "path": "rebuild/build/running-attack-probe/live-02-failure/resource-journal.txt",
+      "bytes": 17,
+      "sha256": "19c4e28b2f54ea8f217db4e622b0a5c758efa7b77ce2dc0394b6d159568c0b2e"
+    }
+  ],
+  "next_trial": {
+    "operator_plan": "Process-scoped __GLX_VENDOR_LIBRARY_NAME=mesa LIBGL_ALWAYS_SOFTWARE=1; no system changes",
+    "operator_preflight": "Root reported glxinfo-B identifies llvmpipe Mesa26.2.2 GL4.6",
+    "status": "Plan only; original-game renderer and stability still require verification"
+  },
+  "changes": "Read-only inspection and log preservation. No desktop inputs, launches, runtime, assets, settings or saves modified."
+}

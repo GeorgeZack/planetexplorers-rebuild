@@ -45,8 +45,8 @@ class ContentTests(unittest.TestCase):
     def test_original_recipe_and_item_invariants(self):
         items = {row['id']: row for row in self.manifest['items']}
         recipes = {row['id']: row for row in self.manifest['recipes']}
-        self.assertEqual(len(items), 314)
-        self.assertEqual(len(recipes), 93)
+        self.assertEqual(len(items), 320)
+        self.assertEqual(len(recipes), 95)
         self.assertEqual({k: items[279][k] for k in ('id', 'name', 'stack_limit')},
                          {'id': 279, 'name': 'Wood', 'stack_limit': 9999})
         self.assertEqual(items[20]['stack_limit'], 1)
@@ -87,6 +87,26 @@ class ContentTests(unittest.TestCase):
                 self.assertTrue(set(item['learn_ids']) <= recipes)
         self.assertEqual(self.manifest['selected_recipe_ids'][:8], list(export.RECIPE_IDS))
 
+    def test_starter_outfit_presentation_and_component_provenance(self):
+        items = {row['id']: row for row in self.manifest['items']}
+        expected = [(95, 'Issued Overalls♀', 'equip_w_torso_01', 19, 2, 2),
+                    (131, 'Issued Pants♀', 'equip_w_legs_01', 20, 64, 15),
+                    (192, 'Issued Shoes♀', 'equip_w_feet_01', 22, 128, 16)]
+        bindings = {row['item_id']: row for row in self.manifest['starter_outfit_catalog']}
+        outfit = json.loads((export.ROOT/'rebuild/generated/pe_starter_outfit_source.json').read_text())
+        source = {row['item_id']: row for row in outfit['outfits']['female']}
+        for identity, name, icon, item_type, position, component in expected:
+            row = items[identity]
+            self.assertEqual((row['name'], row['icons']), (name, [icon, 'leftup_sex_f', '']))
+            self.assertEqual((row['item_type'], row['tab'], row['equip_position']), (item_type, 1, position))
+            self.assertEqual((row['tool_kind'], row['learn_kind'], row['skill_id']), ('PE_TOOL_NONE', 'PE_LEARN_NONE', 0))
+            self.assertEqual((row['durability_max'], row['durability_cost']),
+                             (source[identity]['durability'], source[identity]['wear_factor']))
+            self.assertEqual(bindings[identity]['component_class'], component)
+            self.assertIn('EquipDefence', bindings[identity]['components'])
+        # Worn instances belong to the separate outfit owner, not duplicate bag grants.
+        self.assertTrue(set(source).isdisjoint(v['item_id'] for v in self.manifest['adventure_starter']))
+
     def test_medicine_and_annot_closure(self):
         items = {row['id']: row for row in self.manifest['items']}
         recipes = {row['id']: row for row in self.manifest['recipes']}
@@ -100,6 +120,36 @@ class ContentTests(unittest.TestCase):
             {'item_id':241,'count':2},{'item_id':238,'count':1},{'item_id':233,'count':1}])
         self.assertEqual(self.manifest['medicine_grants']['RewardItem'], [{'item_id':925,'count':10},{'item_id':554,'count':1}])
         self.assertTrue(set(self.manifest['annot_vendor_item_ids']) <= set(items))
+
+    def test_hunt_reward_formula_closure(self):
+        items = {row['id']: row for row in self.manifest['items']}
+        recipes = {row['id']: row for row in self.manifest['recipes']}
+        self.assertEqual(self.manifest['hunt_return_rewards'],
+                         [{'item_id': identity, 'count': 1} for identity in (592,593,594,595)])
+        for identity, formulas in ((592,[187,42,41,51]),(593,[188]),(594,[189]),(595,[190])):
+            self.assertEqual(items[identity]['learn_kind'], 'PE_LEARN_RECIPE')
+            self.assertEqual(items[identity]['learn_ids'], formulas)
+            for formula in formulas:
+                self.assertIn(recipes[formula]['output_id'], items)
+                for ingredient in recipes[formula]['ingredients']:
+                    self.assertIn(ingredient['item_id'], items)
+
+    def test_changed_hunt_rewards_rejected(self):
+        database = self.clone_database()
+        self.mutate(database, "UPDATE AdRandomQuest_List SET RewardItem='592_2,593_1,594_1,595_1' WHERE ID='9127'")
+        with self.assertRaisesRegex(ValueError, 'Hunt9127 reward contract'):
+            export.build_outputs(database, None)
+
+    def test_medpack_heal_and_independent_cooldown_source(self):
+        m=self.manifest['portable_medpack']
+        self.assertEqual((m['item_id'],m['skill_id'],m['trigger_id']), (925,20150028,2))
+        self.assertEqual((m['heal'],m['cooldown_seconds'],m['cooldown_group'],m['juice_cooldown_group']), (350,10,9,11))
+        for sql in ["UPDATE skTriggerEvent SET _modsTarget='mad,1,1,300' WHERE _id='2'",
+                    "UPDATE skMain SET _coolingTimeType='11' WHERE _id='20150028'",
+                    "UPDATE skMain SET _pretimeOfMain='1' WHERE _id='20150028'"]:
+            database=self.clone_database();self.mutate(database,sql)
+            with self.assertRaisesRegex(ValueError,'Portable Medpack925'):
+                export.build_outputs(database,None)
 
     def test_invalid_adventure_grants_rejected(self):
         database = self.clone_database()

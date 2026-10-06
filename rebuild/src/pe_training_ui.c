@@ -193,6 +193,7 @@ static void dialogue(PeTrainingUi *u,const PeTraining *t){
     sprite(u,tips||player?"npc_big_Unknown":"npc_big_Andy",map(u,230,453,130,130,PE_UI_BOTTOM_CENTER),WHITE);
     sprite(u,"namebg",l->dialogue_name,WHITE);center(u,tips?"Tips":(player?"You":"Andy"),l->dialogue_name,18,ink,true);
     wrap(u,pe_training_dialogue_text(id),l->dialogue_text,18,ink,true);
+    text(u,"1. Continue",l->dialogue_next.x-105*l->scale,l->dialogue_next.y+26*l->scale,16,ink,false);
     sprite(u,"btn_down",l->dialogue_next,CheckCollisionPointRec(GetMousePosition(),rect(l->dialogue_next))?blue:(Color){220,220,220,255});
 }
 static void character(PeTrainingUi *u,const PeTraining *t){

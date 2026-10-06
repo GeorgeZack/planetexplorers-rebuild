@@ -1,0 +1,317 @@
+{
+  "schema": 1,
+  "kind": "qualified-isolated-running-knife-root-06",
+  "date": "2026-10-06",
+  "source": {
+    "unity": "5.2.4f1",
+    "controller": "FemaleAnimator2",
+    "controller_path_id": 779,
+    "avatar": "FemaleAvatar",
+    "clip": "RunSwordAttack",
+    "clip_path_id": 408,
+    "skill_id": 20110014,
+    "item_id": 33,
+    "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+    "plan_sha256": "2e46a5eb1bb9578b2b99d41c22f6212094e5cbdefb18c159bbbeb4de02441186",
+    "probe_source_sha256": "f5a9964fedab299443a7cb708cb4cf249ba27c664c080fcd802c7b44d6e6a94d",
+    "assembly_sha256": "2779a6652bf1e2b636039155952676cdb3b36a478f76e8a92d97b9597f1dc521",
+    "unity_engine_sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b"
+  },
+  "captures": [
+    {
+      "capture": "female-running-root-04.jsonl",
+      "capture_sha256": "f8dbc3298012bd4d8bb85a9dcf7fd38d1c21c6c3ee5be23a2c4a4071b80b5317",
+      "launch_sha256": "cc24d5abfbcaa4922ed1382dbd00a20fb3eb791c6405f26f0863a2ed9cc4c5fe",
+      "report_sha256": "4ad87227a68a0e1f7bebfa60753934d3aac21b7e487c2e5d1bf1a4641e49ddd7",
+      "strict_motion_pass": false,
+      "report": {
+        "schema": 2,
+        "kind": "isolated-running-knife-frame-root-motion",
+        "capture_sha256": "f8dbc3298012bd4d8bb85a9dcf7fd38d1c21c6c3ee5be23a2c4a4071b80b5317",
+        "source_clip": 408,
+        "source_skill": 20110014,
+        "samples": 654,
+        "trials": [
+          {
+            "trial": 0,
+            "playback_speed": 0.1,
+            "samples": 218,
+            "clone_id": -249722,
+            "observed_terminal_time": 1.8355426788330078,
+            "terminal_overshoot": 0.0022029876708984375,
+            "maximum_authored_sample_gap": 0.01097901165485382,
+            "maximum_engine_frame_dt": 0.109790087,
+            "max_clock_error": 4.8042175293527833e-08,
+            "max_applied_vs_delta_position_error": 1.2255495714825747e-06,
+            "max_applied_vs_delta_quaternion_error": 0.0
+          },
+          {
+            "trial": 1,
+            "playback_speed": 0.05,
+            "samples": 436,
+            "clone_id": -250036,
+            "observed_terminal_time": 1.8366221189498901,
+            "terminal_overshoot": 0.0032824277877807617,
+            "maximum_authored_sample_gap": 0.0064078569412231445,
+            "maximum_engine_frame_dt": 0.1281569,
+            "max_clock_error": 5.977606201169883e-08,
+            "max_applied_vs_delta_position_error": 1.220058722092967e-06,
+            "max_applied_vs_delta_quaternion_error": 0.0
+          }
+        ],
+        "clone_motion_qualified": false,
+        "common_authored_end": 1.8333396911621094,
+        "all_authored_gaps_within_60hz": true,
+        "comparison_policy": "linear position and normalized shortest quaternion interpolation only within measured brackets; no raw samples changed",
+        "comparison_samples": 762,
+        "comparison_includes_all_measured_knots": true,
+        "maximum_cross_speed_position_error": 0.010034785485097716,
+        "maximum_cross_speed_quaternion_error": 0.0,
+        "interpolated_source_end_displacements": [
+          [
+            -0.07591538526793995,
+            0.0,
+            3.9849053452120713
+          ],
+          [
+            -0.0759838646021596,
+            0.0,
+            3.98485607001609
+          ]
+        ],
+        "process_teardown_validated": false,
+        "gameplay_motion_validated": false,
+        "limits": "Variable engine-frame samples, explicit terminal overshoot, clone-local configured speeds. No exact terminal sample or fixed-rate capture claimed; transitions, source motor/collision and process lifetime remain unverified."
+      },
+      "exit": {
+        "schema": "pe-root-motion-exit-1",
+        "returncode": -9,
+        "signal": 9,
+        "observed_utc": "2026-10-06T17:35:56.536558+00:00"
+      },
+      "exit_sha256": "23719be75da6d1416cb919ce85773d70d58b1d646d62f5b317be33dda0711255"
+    },
+    {
+      "capture": "female-running-root-05.jsonl",
+      "capture_sha256": "6b4ed6137808f0343a58bfc40528fdfae2c6e832c2c842421779de93985b4921",
+      "launch_sha256": "014daa31f71c21270f0ed8d8d0b00239679d30f2bc629ac1204b03fd306ad222",
+      "report_sha256": "07eff3fb2a97699d35c7b4d96a7992a978710519734de98ec46bb98142245ea1",
+      "strict_motion_pass": false,
+      "report": {
+        "schema": 2,
+        "kind": "isolated-running-knife-frame-root-motion",
+        "capture_sha256": "6b4ed6137808f0343a58bfc40528fdfae2c6e832c2c842421779de93985b4921",
+        "source_clip": 408,
+        "source_skill": 20110014,
+        "samples": 1294,
+        "trials": [
+          {
+            "trial": 0,
+            "playback_speed": 0.05,
+            "samples": 428,
+            "clone_id": -249842,
+            "observed_terminal_time": 1.8373955488204956,
+            "terminal_overshoot": 0.0040558576583862305,
+            "maximum_authored_sample_gap": 0.006718754768371582,
+            "maximum_engine_frame_dt": 0.134376049,
+            "max_clock_error": 5.978601074190654e-08,
+            "max_applied_vs_delta_position_error": 2.87342871098467e-06,
+            "max_applied_vs_delta_quaternion_error": 0.0
+          },
+          {
+            "trial": 1,
+            "playback_speed": 0.025,
+            "samples": 866,
+            "clone_id": -250156,
+            "observed_terminal_time": 1.8349648714065552,
+            "terminal_overshoot": 0.0016251802444458008,
+            "maximum_authored_sample_gap": 0.003915369510650635,
+            "maximum_engine_frame_dt": 0.156614065,
+            "max_clock_error": 5.968847656238896e-08,
+            "max_applied_vs_delta_position_error": 3.183669114476309e-06,
+            "max_applied_vs_delta_quaternion_error": 0.0
+          }
+        ],
+        "clone_motion_qualified": false,
+        "common_authored_end": 1.8333396911621094,
+        "all_authored_gaps_within_60hz": true,
+        "comparison_policy": "linear position and normalized shortest quaternion interpolation only within measured brackets; no raw samples changed",
+        "comparison_samples": 1402,
+        "comparison_includes_all_measured_knots": true,
+        "maximum_cross_speed_position_error": 0.007640743845549533,
+        "maximum_cross_speed_quaternion_error": 0.0,
+        "interpolated_source_end_displacements": [
+          [
+            -0.07605300019154504,
+            0.0,
+            3.984806782717781
+          ],
+          [
+            -0.07605405426172905,
+            0.0,
+            3.9848021031679615
+          ]
+        ],
+        "process_teardown_validated": false,
+        "gameplay_motion_validated": false,
+        "limits": "Variable engine-frame samples, explicit terminal overshoot, clone-local configured speeds. No exact terminal sample or fixed-rate capture claimed; transitions, source motor/collision and process lifetime remain unverified."
+      },
+      "exit": {
+        "schema": "pe-root-motion-exit-1",
+        "returncode": -9,
+        "signal": 9,
+        "observed_utc": "2026-10-06T17:41:59.047442+00:00"
+      },
+      "exit_sha256": "d62bc5fc144c2cde7b2b4803532e5f27b2066d45720d91394e1fc90ead9db23f"
+    },
+    {
+      "capture": "female-running-root-06.jsonl",
+      "capture_sha256": "b6ccd0199470a14b10182943d18db566409a03d27029a65bea657a06e63a43b4",
+      "launch_sha256": "23b0b3936565a78ef65a0e1e872b0468ab01a983b81e6db0c20b4fda6fa35ff4",
+      "report_sha256": "4649e0e869b97a2f25ef6698e098cda3db928ca6c82e7cc874056e250ab82bf2",
+      "strict_motion_pass": true,
+      "report": {
+        "schema": 2,
+        "kind": "isolated-running-knife-frame-root-motion",
+        "capture_sha256": "b6ccd0199470a14b10182943d18db566409a03d27029a65bea657a06e63a43b4",
+        "source_clip": 408,
+        "source_skill": 20110014,
+        "samples": 2597,
+        "trials": [
+          {
+            "trial": 0,
+            "playback_speed": 0.025,
+            "samples": 823,
+            "clone_id": -249662,
+            "observed_terminal_time": 1.8346151113510132,
+            "terminal_overshoot": 0.0012754201889038086,
+            "maximum_authored_sample_gap": 0.007265150547027588,
+            "maximum_engine_frame_dt": 0.290606022,
+            "max_clock_error": 5.96882934571219e-08,
+            "max_applied_vs_delta_position_error": 3.3734583331486754e-06,
+            "max_applied_vs_delta_quaternion_error": 0.0
+          },
+          {
+            "trial": 1,
+            "playback_speed": 0.0125,
+            "samples": 1774,
+            "clone_id": -249976,
+            "observed_terminal_time": 1.833589792251587,
+            "terminal_overshoot": 0.00025010108947753906,
+            "maximum_authored_sample_gap": 0.0028259754180908203,
+            "maximum_engine_frame_dt": 0.22607398,
+            "max_clock_error": 5.964898681649726e-08,
+            "max_applied_vs_delta_position_error": 1.0389601499535986e-05,
+            "max_applied_vs_delta_quaternion_error": 0.0
+          }
+        ],
+        "sampling_profile": "ultra-dense",
+        "trial_wall_limit_seconds": 180,
+        "clone_motion_qualified": true,
+        "common_authored_end": 1.8333396911621094,
+        "all_authored_gaps_within_60hz": true,
+        "comparison_policy": "linear position and normalized shortest quaternion interpolation only within measured brackets; no raw samples changed",
+        "comparison_samples": 2705,
+        "comparison_includes_all_measured_knots": true,
+        "maximum_cross_speed_position_error": 0.002425774792022091,
+        "maximum_cross_speed_quaternion_error": 0.0,
+        "interpolated_source_end_displacements": [
+          [
+            -0.07603214613973183,
+            0.0,
+            3.984815889654199
+          ],
+          [
+            -0.07606752164957371,
+            0.0,
+            3.984784739527987
+          ]
+        ],
+        "process_teardown_validated": false,
+        "gameplay_motion_validated": false,
+        "limits": "Variable engine-frame samples, explicit terminal overshoot, clone-local configured speeds. No exact terminal sample or fixed-rate capture claimed; transitions, source motor/collision and process lifetime remain unverified."
+      },
+      "exit": {
+        "schema": "pe-root-motion-exit-1",
+        "returncode": -9,
+        "signal": 9,
+        "observed_utc": "2026-10-06T17:54:59.964570+00:00"
+      },
+      "exit_sha256": "19b7c600ce88a481cdc106ea08da66b5aa046a895a5e7068a2af9f6bc0ee7de6"
+    }
+  ],
+  "export": {
+    "path": "rebuild/build/running-motion-20261006",
+    "files": {
+      "provenance.json": {
+        "bytes": 2283854,
+        "sha256": "b1c51537eb998c70b894d5cf6ab3e35b36e9d172844f79d52bf315a1f38a50b1"
+      },
+      "running-knife.perm": {
+        "bytes": 56800,
+        "sha256": "1643255b87413534856f9c7635cb0f22d3c47a9802e1a64a826eef8bd3093860"
+      }
+    },
+    "selected_trial": {
+      "trial": 1,
+      "playback_speed": 0.0125,
+      "samples": 1774,
+      "authored_duration": 1.8333396911621094,
+      "observed_origin_xyz": [
+        0,
+        0,
+        0
+      ],
+      "maximum_allowed_authored_gap": 0.016666666666666666
+    },
+    "strict_export_pass": true,
+    "deterministic_check_pass": true,
+    "installed": false,
+    "status_scope": "Export-time snapshot; subsequently installed unchanged, see running-player-install.json."
+  },
+  "native_curve_checks": {
+    "checks": 3547,
+    "curve_samples": 1774,
+    "maximum_absolute_component_error_m": 2.383605952616108e-07,
+    "maximum_interval_component_error_m": 2.298117252053089e-10,
+    "interval_composition_component_error_m": 1.2609633337490322e-09,
+    "compiler": "C11 with ASan/UBSan",
+    "detect_leaks": true,
+    "exit_code": 0,
+    "queries": "Every source-end-bounded observed knot and adjacent midpoint, plus exact authored end; intervals between consecutive query times compared independently against raw slower-trial samples.",
+    "runner_sha256": "65d58c240ae9e905e20d8025325ec3651098062b0be7639f87ff092a934002ec",
+    "expected_sha256": "73912c45a7971d385edf66f45aec6309523d3ca95679f15c383402201f095a59"
+  },
+  "preserved_provenance": {
+    "Player.log": "ad9fd255de2f3008dd669badb7357af6133df14976463b42b5042578a8126b07",
+    "ReferenceRootMotionBake.cs": "f5a9964fedab299443a7cb708cb4cf249ba27c664c080fcd802c7b44d6e6a94d",
+    "ReferenceRootMotionBake.dll": "2779a6652bf1e2b636039155952676cdb3b36a478f76e8a92d97b9597f1dc521",
+    "analyze_reference_root_motion.py": "1892bedfe7d76c3031936fa70a6fa4813f6f5472072d79241ab076568defc80f",
+    "export_running_knife_motion.py": "dc51203ed2ba8067f90ee615a01303ac6e24f259e50dcd882cb8aace23c5fffe",
+    "reference_root_motion_bake.py": "19795638b69164cfa33725a347dc761a44c20dcbb2e1134bdbfbd5d547362f05",
+    "running-knife-plan.json": "2e46a5eb1bb9578b2b99d41c22f6212094e5cbdefb18c159bbbeb4de02441186"
+  },
+  "lifecycle": {
+    "operator_observed_post_cleanup_120_updates": true,
+    "operator_observed_Andy_ack_to_Camera_Tips_responsive": true,
+    "screenshot": "running-knife-root06-responsive.png",
+    "screenshot_sha256": "035bd1fa4e3c2ba3dba9311fbd665257a1eda9bea4782fd4dc49f3020bedbcab",
+    "quit_via_game_UI_and_confirmation": true,
+    "exit": {
+      "schema": "pe-root-motion-exit-1",
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T17:54:59.964570+00:00"
+    },
+    "graph_disposal_validated": false
+  },
+  "limits": [
+    "Clone-only sequential Unity evaluation; no live running-attack or source motor/collision qualification.",
+    "Actual knots retain variable engine frame intervals and first authored-end overshoot; interpolation is confined to observed brackets.",
+    "No fitted timing shift, rescaling, averaged trajectory, relaxed comparison tolerance or invented endpoint.",
+    "Quaternion and source Y data remain evidence, not automatic gameplay yaw or grounded vertical movement.",
+    "At this export checkpoint the curve and pose group were staged separately; subsequent installation is recorded in running-player-install.json and does not establish native gameplay validation.",
+    "Original process exited with signal9 after ordinary Quit confirmation, not exit0."
+  ],
+  "subsequent_installation_record": "running-player-install.json"
+}

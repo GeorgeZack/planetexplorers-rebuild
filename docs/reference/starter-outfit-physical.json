@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-06",
+  "kind": "native physical input with read-only saved-state inspection",
+  "mode": "Adventure",
+  "resolution": [
+    1280,
+    720
+  ],
+  "executable_sha256": "7421582427f39e1665a085c5936744ec0ede014c5382d68acc2b2a4af49a5f22",
+  "original_checkpoint_sha256": "2befca8d1890b9a85d12b7e34a11d3dcdc00d326c3d4dd7b9e089601bb3818e1",
+  "original_checkpoint_unchanged": true,
+  "inputs": [
+    "Loaded earned v13 hunt-travel checkpoint into current C build",
+    "Opened Character; observed defense12 and three source clothing icons",
+    "Ordinary movement to archived hare encounter",
+    "Eight incoming contacts while standing; no attacks or consumables before wear checkpoint",
+    "Escape; pause Save game",
+    "Pause Load game; pause Save game",
+    "Opened Character after reload; observed health215/500 and defense12"
+  ],
+  "wear_checkpoint": {
+    "sha256": "5d4ddf20af03086e0b5f8566e6a8d1fba2507ec96c453303902a08b0319d7d30",
+    "version": 14,
+    "hp": 215.395752,
+    "effective_defence": 12,
+    "outfit": [
+      {
+        "item_id": 95,
+        "instance_id": 31,
+        "durability": 2127.539794921875
+      },
+      {
+        "item_id": 131,
+        "instance_id": 32,
+        "durability": 2127.539794921875
+      },
+      {
+        "item_id": 192,
+        "instance_id": 33,
+        "durability": 833.5396118164062
+      }
+    ],
+    "incoming_contacts": 8,
+    "outgoing_contacts": 0,
+    "kills": 0,
+    "medpacks": 8,
+    "juice": 10
+  },
+  "ui_reload": {
+    "sha256": "5d4ddf20af03086e0b5f8566e6a8d1fba2507ec96c453303902a08b0319d7d30",
+    "save_bytes_identical": true,
+    "inspected_copies_unchanged": true
+  },
+  "subsequent_attempt": {
+    "starting_hp": 215.395752,
+    "inputs": "Closed Character, pressed3 (juice), turned camera, repeated fresh stationary knife clicks; later pressed empty4. Paused after bounded attempt.",
+    "outgoing_contacts": 6,
+    "incoming_contacts": 5,
+    "kills": 0,
+    "final_hp": 0,
+    "medpack_used": false,
+    "juice_used": 1,
+    "limitation": "This started wounded and did not use the intended medpack. It is not a full-health survival or difficulty comparison.",
+    "recovery": "Loaded prior alive checkpoint, returned to main menu and Quit."
+  },
+  "native_exit": 0,
+  "limitations": [
+    "No physical four-kill completion or partial-kill reload",
+    "No matched original-vs-native damage measurement",
+    "Broken appearance, general clothing swaps and repairs remain unsupported",
+    "The fixed visible clothes remain rendered when worn out; numerical broken-defense behavior is headless-tested"
+  ],
+  "checks": {
+    "optimized_build": "pass",
+    "full_test": "pass;21 optional UnityPy skips are not passes",
+    "full_asan_ubsan_leak": "pass",
+    "check_content": "pass",
+    "cli": "23 pass"
+  }
+}

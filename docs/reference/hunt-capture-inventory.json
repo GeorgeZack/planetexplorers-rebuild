@@ -1,0 +1,294 @@
+{
+  "schema": 1,
+  "date": "2026-10-05",
+  "evidence": "Read-only original archive inspection; no new physical original session.",
+  "saves": [
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/auto0",
+      "archive_guid": "c0ca5b9f60378946997976e32d5802cf",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "c4b5beb1d51aeaf730324a2313b1cd2d8e1da304efeff8bb37523402d784025d",
+        "MainAdventure/index.arc": "c42b35f93e6117147e354c14c0d35b9806662a5ed73512f1bb1456884af68628",
+        "MainAdventure/voxel.arc": "0a3280c69e4acda9637e4e59225f51742593d6f5e592adec94c4f8e2571447ee",
+        "MainAdventure/water.arc": "bfd2054866054f1e4a6848806f1ea4569207a7f5a5e32a9144609fb3d369d6e9",
+        "MainAdventure/world.arc": "c54e9a6f4a13bb9de393b7bb79e6ced8b6596f42838dc24508c654bd0870eed6",
+        "index.arc": "dbc24951b8dd51db3037483cce7f6e3b5892e259b200555c26435ac32e6cbe57",
+        "main/block45.arc": "396c586e823608ef37c0faa92abda1a6b887909691ff5b8b55c50b585de93717",
+        "main/index.arc": "a99ed90ed3205de8f81c9de0bbebc898904d7496de9297e1c584a686cb536b92",
+        "main/world.arc": "7ff9148fae0d93974558eb282bbf2ae62c3472dead97a4c53063cc2a21056439",
+        "world.arc": "98a7dd9adbf0998436a0ecebd34daaf5522e15d4ef490bd202511690a8e57954"
+      },
+      "archives_unchanged": true,
+      "active_missions": {
+        "9072": [
+          [
+            "STEP",
+            "0"
+          ]
+        ]
+      },
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/auto1",
+      "archive_guid": "2fd015ee901d774abfd54b21649a83e5",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "59a38442732566d067b147942b8fd229354d85f768f5fed76470ebf191afbdd1",
+        "MainAdventure/index.arc": "fd4190515ee1b3158182b54b02a37c27412760825e0845a4e23889114e89742c",
+        "MainAdventure/voxel.arc": "8dbbfb28a1b205ac116343e2dd83e6e43bb8a2ca4c0f731bf761f65ef8f303f3",
+        "MainAdventure/water.arc": "831655ce9e12c72dd105ecae582227ea2cdf3a9ba05700e740a1c501eadc9341",
+        "MainAdventure/world.arc": "2836e96a4c3a83a3cfc8f5342aa6758116a32f346688b6d3682acb342a013d26",
+        "index.arc": "c6836d8afeed0003f11de7ff1059d50ad57e745d1ac3dd85d7c3d4acf07893ca",
+        "world.arc": "f5345751a4700fe8fbd71f7b8e248eaff86abef3b393514b4d0e68ae8524aecb"
+      },
+      "archives_unchanged": true,
+      "active_missions": {},
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save0",
+      "archive_guid": "03f788c050bd5446a419dd567f0d980d",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21",
+        "MainAdventure/index.arc": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae",
+        "MainAdventure/voxel.arc": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4",
+        "MainAdventure/water.arc": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b",
+        "MainAdventure/world.arc": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6",
+        "index.arc": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca",
+        "world.arc": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+      },
+      "archives_unchanged": true,
+      "active_missions": {
+        "9032": [
+          [
+            "STEP",
+            "0"
+          ]
+        ]
+      },
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save2",
+      "archive_guid": "41361f4e2222ba4e834286f531bf166f",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "2d25fc57e2c879e95148cb5f8fca3a303f5d9f9a62baea86302d593a4610c826",
+        "MainAdventure/index.arc": "d6113bc10bb71e511670a16a04b9ca90f0354a8887977343897ecd6d0803dd9f",
+        "MainAdventure/voxel.arc": "715e57d73ef7d80a4accdbf4b3bda00429aeda317257959ff7ededbd9b359e6a",
+        "MainAdventure/water.arc": "479386d34496f3bda3778df753388902cfc24fb2fd7993b5aef831c1d4452afa",
+        "MainAdventure/world.arc": "21da9cf0582805359f7d2da5ce714608181b06c6c741ea85c4db173154ca1668",
+        "index.arc": "5c69435879e0c39953a1d95fcab30026195145b28e42c9a4e21853fd73bbd440",
+        "world.arc": "0c015f99944af29f70aa665ef9004a36a53a9d220bc59fc16aacde166920309a"
+      },
+      "archives_unchanged": true,
+      "active_missions": {},
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save3",
+      "archive_guid": "5dc2f03e7523a2489a68ce1cd6c7f259",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "461d2789395ddb7a78c1d956add09dcc8c9e4ef2bdba99b70fcf0f7534ef6f78",
+        "MainAdventure/index.arc": "3b10d89b7737b55bdf7348a5b47d8d8a5f92d5e16fc555b08848105fc9fd846d",
+        "MainAdventure/voxel.arc": "38eeef40357d91b6f419308cf731150bf7bf526efc4cfa2e7c95410da30b6960",
+        "MainAdventure/water.arc": "a4aaf46b63a90d3f8325bcc0e2b52bbdacf246e13d1ceb32b505cfbc2e962de1",
+        "MainAdventure/world.arc": "2d1182baa49d0e905df8ac78defd29f6423ac19db88257e0f65d7ff816785782",
+        "index.arc": "b6e85b3ec11d9fbf2e6ebbc3ce03523ae78dd2d31d2e6136444ca5a8175174b1",
+        "world.arc": "f705240d9cfbf467e65ea61bda3ce7605711e74ccfcef68bc81a234b1b5aaba1"
+      },
+      "archives_unchanged": true,
+      "active_missions": {
+        "9072": [
+          [
+            "STEP",
+            "0"
+          ]
+        ]
+      },
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/auto0",
+      "archive_guid": "c0ca5b9f60378946997976e32d5802cf",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "c4b5beb1d51aeaf730324a2313b1cd2d8e1da304efeff8bb37523402d784025d",
+        "MainAdventure/index.arc": "c42b35f93e6117147e354c14c0d35b9806662a5ed73512f1bb1456884af68628",
+        "MainAdventure/voxel.arc": "0a3280c69e4acda9637e4e59225f51742593d6f5e592adec94c4f8e2571447ee",
+        "MainAdventure/water.arc": "bfd2054866054f1e4a6848806f1ea4569207a7f5a5e32a9144609fb3d369d6e9",
+        "MainAdventure/world.arc": "c54e9a6f4a13bb9de393b7bb79e6ced8b6596f42838dc24508c654bd0870eed6",
+        "index.arc": "dbc24951b8dd51db3037483cce7f6e3b5892e259b200555c26435ac32e6cbe57",
+        "main/block45.arc": "396c586e823608ef37c0faa92abda1a6b887909691ff5b8b55c50b585de93717",
+        "main/index.arc": "a99ed90ed3205de8f81c9de0bbebc898904d7496de9297e1c584a686cb536b92",
+        "main/world.arc": "7ff9148fae0d93974558eb282bbf2ae62c3472dead97a4c53063cc2a21056439",
+        "world.arc": "98a7dd9adbf0998436a0ecebd34daaf5522e15d4ef490bd202511690a8e57954"
+      },
+      "archives_unchanged": true,
+      "active_missions": {
+        "9072": [
+          [
+            "STEP",
+            "0"
+          ]
+        ]
+      },
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/auto1",
+      "archive_guid": "2fd015ee901d774abfd54b21649a83e5",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "59a38442732566d067b147942b8fd229354d85f768f5fed76470ebf191afbdd1",
+        "MainAdventure/index.arc": "fd4190515ee1b3158182b54b02a37c27412760825e0845a4e23889114e89742c",
+        "MainAdventure/voxel.arc": "8dbbfb28a1b205ac116343e2dd83e6e43bb8a2ca4c0f731bf761f65ef8f303f3",
+        "MainAdventure/water.arc": "831655ce9e12c72dd105ecae582227ea2cdf3a9ba05700e740a1c501eadc9341",
+        "MainAdventure/world.arc": "2836e96a4c3a83a3cfc8f5342aa6758116a32f346688b6d3682acb342a013d26",
+        "index.arc": "c6836d8afeed0003f11de7ff1059d50ad57e745d1ac3dd85d7c3d4acf07893ca",
+        "world.arc": "f5345751a4700fe8fbd71f7b8e248eaff86abef3b393514b4d0e68ae8524aecb"
+      },
+      "archives_unchanged": true,
+      "active_missions": {},
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save0",
+      "archive_guid": "03f788c050bd5446a419dd567f0d980d",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21",
+        "MainAdventure/index.arc": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae",
+        "MainAdventure/voxel.arc": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4",
+        "MainAdventure/water.arc": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b",
+        "MainAdventure/world.arc": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6",
+        "index.arc": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca",
+        "world.arc": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+      },
+      "archives_unchanged": true,
+      "active_missions": {
+        "9032": [
+          [
+            "STEP",
+            "0"
+          ]
+        ]
+      },
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save2",
+      "archive_guid": "41361f4e2222ba4e834286f531bf166f",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "2d25fc57e2c879e95148cb5f8fca3a303f5d9f9a62baea86302d593a4610c826",
+        "MainAdventure/index.arc": "d6113bc10bb71e511670a16a04b9ca90f0354a8887977343897ecd6d0803dd9f",
+        "MainAdventure/voxel.arc": "715e57d73ef7d80a4accdbf4b3bda00429aeda317257959ff7ededbd9b359e6a",
+        "MainAdventure/water.arc": "479386d34496f3bda3778df753388902cfc24fb2fd7993b5aef831c1d4452afa",
+        "MainAdventure/world.arc": "21da9cf0582805359f7d2da5ce714608181b06c6c741ea85c4db173154ca1668",
+        "index.arc": "5c69435879e0c39953a1d95fcab30026195145b28e42c9a4e21853fd73bbd440",
+        "world.arc": "0c015f99944af29f70aa665ef9004a36a53a9d220bc59fc16aacde166920309a"
+      },
+      "archives_unchanged": true,
+      "active_missions": {},
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    },
+    {
+      "save_directory": "/home/admin/.local/share/planet-explorers-medicine-reference/PlanetExplorers/GameSave/save3",
+      "archive_guid": "5dc2f03e7523a2489a68ce1cd6c7f259",
+      "input_sha256": {
+        "MainAdventure/block45.arc": "461d2789395ddb7a78c1d956add09dcc8c9e4ef2bdba99b70fcf0f7534ef6f78",
+        "MainAdventure/index.arc": "3b10d89b7737b55bdf7348a5b47d8d8a5f92d5e16fc555b08848105fc9fd846d",
+        "MainAdventure/voxel.arc": "38eeef40357d91b6f419308cf731150bf7bf526efc4cfa2e7c95410da30b6960",
+        "MainAdventure/water.arc": "a4aaf46b63a90d3f8325bcc0e2b52bbdacf246e13d1ceb32b505cfbc2e962de1",
+        "MainAdventure/world.arc": "2d1182baa49d0e905df8ac78defd29f6423ac19db88257e0f65d7ff816785782",
+        "index.arc": "b6e85b3ec11d9fbf2e6ebbc3ce03523ae78dd2d31d2e6136444ca5a8175174b1",
+        "world.arc": "f705240d9cfbf467e65ea61bda3ce7605711e74ccfcef68bc81a234b1b5aaba1"
+      },
+      "archives_unchanged": true,
+      "active_missions": {
+        "9072": [
+          [
+            "STEP",
+            "0"
+          ]
+        ]
+      },
+      "completed_missions": {
+        "9027": 1,
+        "9028": 1,
+        "9029": 1,
+        "9030": 1,
+        "9031": 1,
+        "9032": 1
+      },
+      "hunt_target": null
+    }
+  ],
+  "conclusion": "No captured active9075 target; native acceptance remains unavailable."
+}

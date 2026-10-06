@@ -7,6 +7,7 @@ then104B records: name32,kind/group/joint/form/material u32,damageScale f32,
 12f32 bind points (endpointA,B,radiusOrigin,radiusXPoint). jointUINT_MAX disables.
 """
 import argparse
+from pe_actor_limits import PEAC_MAX_CLIPS
 import hashlib
 import importlib.metadata
 import json
@@ -27,7 +28,7 @@ def skeleton_data(data):
     if len(data) < 24 or len(data) > 256*1024*1024:
         raise ValueError('Missing/oversized PEAC')
     magic, version, nv, ni, nj, nc = struct.unpack_from('<4s5I', data)
-    if magic != b'PEAC' or version not in (1,2) or not 1 <= nv <= 1000000 or not 1 <= ni <= 3000000 or ni % 3 or not 1 <= nj <= 256 or not 1 <= nc <= 32:
+    if magic != b'PEAC' or version not in (1,2) or not 1 <= nv <= 1000000 or not 1 <= ni <= 3000000 or ni % 3 or not 1 <= nj <= 256 or not 1 <= nc <= PEAC_MAX_CLIPS:
         raise ValueError('Invalid PEAC header')
     start = 24+nv*56+ni*4
     if start+nj*48 > len(data):

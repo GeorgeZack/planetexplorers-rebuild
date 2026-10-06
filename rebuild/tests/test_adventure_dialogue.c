@@ -2,6 +2,7 @@
 #include "adventure_test_helpers.h"
 #include "pe_adventure_dialogue.h"
 #include "pe_adventure_medicine.h"
+#include "pe_adventure_hunt.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -159,13 +160,126 @@ static void medicine(PeGame *g,PeAdventureDialogue *d){
     CHECK(!memcmp(&full,&g->inventory,sizeof full));g->inventory=before_delivery;
     CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ACCEPTED);
     CHECK(g->medicine_state==PE_MEDICINE_COMPLETE&&pe_inventory_count(&g->inventory,917)==0);
-    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(!pe_adventure_dialogue_current(d,g)&&!pe_adventure_dialogue_choose_supply(d,g));
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_current(d,g)->talk_id==4101);
     CHECK(strcmp(pe_adventure_mission_title(9072),"Herb Collecting")==0);
     char text[2048];PeAdventureDialogueBindings names={.item_name="Medicine",.item_count="5"};
     CHECK(pe_adventure_dialogue_format(pe_adventure_mission_objective(9072),&names,text,sizeof text));CHECK(strcmp(text,"Gather 5 units of Medicine")==0);
 }
+static void hunt_offer(PeGame *g,PeAdventureDialogue *d){
+    /* Continue the real medicine delivery above. Source9074 offers9075, but
+     * the current capture has no supported hunt target: no invented acceptance. */
+    CHECK(g->medicine_state==PE_MEDICINE_COMPLETE&&g->hunt_state==PE_HUNT_NONE);
+    PeInventory inventory=g->inventory;uint32_t money=g->money;
+    int known=g->known_recipe_count;uint32_t equipped=g->equipped_instance_id;
+    PeVec3 destination=g->hunt_destination;
+    pe_adventure_dialogue_cancel(d);
+    for(int retry=0;retry<2;retry++){
+        CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));
+        const PeAdventureDialogueLine *line=pe_adventure_dialogue_current(d,g);
+        CHECK(line&&line->talk_id==4101&&line->speaker==PE_ADVENTURE_SPEAKER_PLAYER);
+        CHECK(pe_adventure_dialogue_choose_supply(d,g));line=pe_adventure_dialogue_current(d,g);
+        CHECK(line&&line->talk_id==4102&&line->speaker==PE_ADVENTURE_SPEAKER_ANNOT);
+        CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ADVANCED);
+        CHECK(pe_adventure_dialogue_choice(d,g,0)->talk_id==4103&&pe_adventure_dialogue_choice(d,g,1)->talk_id==4104);
+        CHECK(!pe_adventure_dialogue_choice(d,g,2));
+        CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_REJECTED);
+        if(retry){
+            CHECK(!pe_adventure_hunt_available(g));
+            for(int blocked=0;blocked<2;blocked++){
+                CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_UNAVAILABLE);
+                CHECK(d->stage==PE_ADVENTURE_DIALOGUE_CHOICE&&d->mission_id==9074);
+                CHECK(g->message[0]&&g->hunt_state==PE_HUNT_NONE&&g->medicine_state==PE_MEDICINE_COMPLETE);
+                CHECK(!memcmp(&g->hunt_destination,&destination,sizeof destination));
+                CHECK(!memcmp(&g->inventory,&inventory,sizeof inventory)&&g->money==money);
+                CHECK(g->known_recipe_count==known&&g->equipped_instance_id==equipped);
+            }
+        }
+        CHECK(pe_adventure_dialogue_choose_medicine(d,g,false)==PE_ADVENTURE_DIALOGUE_ACCEPTED);
+        CHECK(d->stage==PE_ADVENTURE_DIALOGUE_IDLE&&g->hunt_state==PE_HUNT_NONE);
+        CHECK(!memcmp(&g->inventory,&inventory,sizeof inventory)&&g->money==money);
+    }
+    /* A stale choice must not switch quests when progression changes outside
+     * the dialog. Accepted/pending hunt stages must not offer another hunt. */
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_choose_supply(d,g));
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ADVANCED);
+    g->medicine_state=PE_MEDICINE_NONE;
+    CHECK(!pe_adventure_dialogue_current(d,g)&&!pe_adventure_dialogue_choice(d,g,0));
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_REJECTED);
+    CHECK(!memcmp(&g->inventory,&inventory,sizeof inventory));g->medicine_state=PE_MEDICINE_COMPLETE;
+    g->hp=0;CHECK(!pe_adventure_dialogue_current(d,g));
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_REJECTED);g->hp=500;
+    pe_adventure_dialogue_cancel(d);g->medicine_state=PE_MEDICINE_NONE;
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));CHECK(pe_adventure_dialogue_choose_supply(d,g));
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ADVANCED);
+    g->medicine_state=PE_MEDICINE_COMPLETE;
+    CHECK(!pe_adventure_dialogue_current(d,g));
+    CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_REJECTED);
+    for(unsigned state=PE_HUNT_TRAVEL;state<=PE_HUNT_ENCOUNTER_PENDING;state++){
+        pe_adventure_dialogue_cancel(d);g->hunt_state=state;
+        CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));
+        CHECK(!pe_adventure_dialogue_current(d,g)&&!pe_adventure_dialogue_choose_supply(d,g));
+    }
+    g->hunt_state=PE_HUNT_NONE;pe_adventure_dialogue_cancel(d);
+}
+static void hunt_return(PeGame *g,PeAdventureDialogue *d){
+    /* Model restored, already-rewarded return progress. The authoritative
+     * arrival/reward transaction has separate route and capacity coverage. */
+    CHECK(pe_adventure_hunt_reference(&g->hunt_destination));
+    g->hunt_kills=4;g->hunt_state=PE_HUNT_RETURN_TALK1;
+    CHECK(pe_adventure_hunt_state_valid(g));
+    PeInventory inventory=g->inventory;uint32_t money=g->money;int known=g->known_recipe_count;
+    for(int retry=0;retry<2;retry++){
+        CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));
+        const PeAdventureDialogueLine *line=pe_adventure_dialogue_current(d,g);
+        CHECK(d->stage==PE_ADVENTURE_DIALOGUE_TALK&&d->mission_id==9127&&d->page==0);
+        CHECK(line&&line->talk_id==4105&&line->speaker==PE_ADVENTURE_SPEAKER_PLAYER);
+        CHECK(!pe_adventure_dialogue_choose_supply(d,g)&&!pe_adventure_dialogue_choice(d,g,0));
+        CHECK(pe_adventure_dialogue_choose_medicine(d,g,true)==PE_ADVENTURE_DIALOGUE_REJECTED);
+        pe_adventure_dialogue_cancel(d);CHECK(g->hunt_state==PE_HUNT_RETURN_TALK1);
+        CHECK(!memcmp(&inventory,&g->inventory,sizeof inventory));
+    }
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));PeAdventureDialogue stale=*d;
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ADVANCED);
+    CHECK(g->hunt_state==PE_HUNT_RETURN_TALK2&&d->page==1);
+    const PeAdventureDialogueLine *line=pe_adventure_dialogue_current(d,g);
+    CHECK(line&&line->talk_id==4106&&line->speaker==PE_ADVENTURE_SPEAKER_ANNOT);
+    CHECK(!pe_adventure_dialogue_current(&stale,g));
+    CHECK(pe_adventure_dialogue_advance(&stale,g)==PE_ADVENTURE_DIALOGUE_REJECTED&&g->hunt_state==PE_HUNT_RETURN_TALK2);
+    pe_adventure_dialogue_cancel(d);CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));
+    CHECK(d->page==1&&pe_adventure_dialogue_current(d,g)->talk_id==4106);
+    g->hp=0;CHECK(!pe_adventure_dialogue_current(d,g));
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_REJECTED&&g->hunt_state==PE_HUNT_RETURN_TALK2);
+    g->hp=500;CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_ACCEPTED);
+    CHECK(g->hunt_state==PE_HUNT_COMPLETE&&d->stage==PE_ADVENTURE_DIALOGUE_IDLE);
+    CHECK(pe_adventure_dialogue_advance(d,g)==PE_ADVENTURE_DIALOGUE_REJECTED);
+    CHECK(pe_adventure_dialogue_open(d,g,3,20018,true));
+    CHECK(!pe_adventure_dialogue_current(d,g)&&!pe_adventure_dialogue_choose_supply(d,g)); /*9077 unported*/
+    CHECK(!memcmp(&inventory,&g->inventory,sizeof inventory)&&g->money==money&&g->known_recipe_count==known);
+    pe_adventure_dialogue_cancel(d);
+}
+static void hunt_reward_learning(PeGame *g,PeAdventureDialogue *d){
+    initialize(g,d);
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=0;
+    memset(g->quickslots,0,sizeof g->quickslots);
+    CHECK(pe_inventory_add(&g->inventory,592,2)&&pe_inventory_add(&g->inventory,594,1));
+    const int formulas[]={187,42,41,51};
+    for(unsigned i=0;i<4;i++)CHECK(!pe_game_recipe_known(g,formulas[i]));
+    int jet=-1,glider=-1;
+    for(int i=0;i<PE_INVENTORY_SLOTS;i++){
+        if(g->inventory.slots[i].item_id==592)jet=i;
+        if(g->inventory.slots[i].item_id==594)glider=i;
+    }
+    CHECK(jet>=0&&glider>=0&&pe_game_use_slot(g,jet));
+    CHECK(g->known_recipe_count==4&&pe_inventory_count(&g->inventory,592)==1);
+    for(unsigned i=0;i<4;i++)CHECK(pe_game_recipe_known(g,formulas[i]));
+    CHECK(!pe_game_recipe_known(g,189)&&pe_game_use_slot(g,glider));
+    CHECK(pe_game_recipe_known(g,189)&&g->known_recipe_count==5&&pe_inventory_count(&g->inventory,594)==0);
+    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==592)jet=i;
+    PeInventory before=g->inventory;
+    CHECK(!pe_game_use_slot(g,jet)&&!memcmp(&before,&g->inventory,sizeof before)&&g->known_recipe_count==5);
+}
 int pe_test_adventure_dialogue(void){
     failures=0;PeGame *g=malloc(sizeof *g);if(!g)return 1;PeAdventureDialogue d;
-    arrival(g,&d);close_only_menu(g,&d);pages(g,&d);cancellation_capacity(g,&d);medicine(g,&d);text_tests();
+    arrival(g,&d);close_only_menu(g,&d);pages(g,&d);cancellation_capacity(g,&d);medicine(g,&d);hunt_offer(g,&d);hunt_return(g,&d);hunt_reward_learning(g,&d);text_tests();
     free(g);return failures;
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recover source female defence capsules and a compatible ten-clip PEAC.
+"""Recover source female defence capsules and a compatible multi-clip PEAC.
 
 Uses optional UnityPy 1.25.4 only to read the repository prefab. The auxiliary
 actor preserves the first rendered part's actual geometry, adding source joints
@@ -14,6 +14,7 @@ import math
 from pathlib import Path
 import struct
 import tempfile
+from pe_actor_limits import PEAC_MAX_CLIPS
 
 import analyze_reference_bake as bake
 import analyze_reference_pose as pose
@@ -128,23 +129,79 @@ def validate_palettes(data, entries, names, samples):
     return clips,maximum
 
 
-def recover(prefab,rig_path,capture,actor_dir,output):
+def compatible_capture(first, other):
+    """Compare authored rig paths, not process-local Unity object IDs."""
+    for key in ('unity', 'matrixOrder', 'coordinateSpace', 'sampleRate'):
+        if first['header'].get(key) != other['header'].get(key):
+            raise ValueError('Extra capture sampling contract differs: '+key)
+    for key in ('gender', 'avatar'):
+        if first['skeleton'].get(key) != other['skeleton'].get(key):
+            raise ValueError('Extra capture skeleton differs: '+key)
+    def paths(report):
+        return {name: entry['relative_path'] for name, entry in report['rig_mapping']['bones'].items()}
+    if paths(first) != paths(other) or first['rig_mapping']['missing_bones'] or other['rig_mapping']['missing_bones']:
+        raise ValueError('Extra capture Avatar bone paths differ')
+
+
+def gather_captures(captures, rig):
+    if not 1 <= len(captures) <= 8:
+        raise ValueError('Expected one to eight closed captures')
+    groups=[];samples={};names=set()
+    for capture in captures:
+        report, retained=bake.analyze(capture,rig,True)
+        if groups:compatible_capture(groups[0][1],report)
+        for clip in report['clips']:
+            name=clip['name']
+            if name in names:raise ValueError('Duplicate/conflicting defence clip: '+name)
+            if Path(name).name != name or name in ('.','..') or '/' in name or '\\' in name:
+                raise ValueError('Unsafe defence clip name')
+            names.add(name)
+        if len(names)>PEAC_MAX_CLIPS:raise ValueError('Combined defence clip count exceeds64')
+        samples.update(retained);groups.append((capture,report,retained))
+    return groups,samples
+
+
+def combine_defence_actor(manifests):
+    """Combine only the auxiliary first part, checking exact skin/bind identity."""
+    if not 1 <= len(manifests) <= PEAC_MAX_CLIPS:raise ValueError('Invalid combined defence clip count')
+    prefix=None;payload=[];first=manifests[0][1]['parts'][0]['file']
+    for directory,manifest in manifests:
+        if len(manifest['parts'])!=1 or manifest['parts'][0]['file']!=first:
+            raise ValueError('Auxiliary defence actor part identity differs')
+        data=(directory/first).read_bytes()
+        if not 24 <= len(data) <= pose.MAX_BYTES:raise ValueError('Invalid auxiliary actor size')
+        magic,version,nv,ni,nj,nc=struct.unpack_from('<4s5I',data)
+        offset=24+nv*56+ni*4+nj*48
+        if magic!=b'PEAC' or version!=2 or nc!=1 or offset+48>len(data):
+            raise ValueError('Expected a complete single-clip PEAC2')
+        if prefix is None:prefix=bytearray(data[:offset])
+        elif bytes(prefix)!=data[:offset]:raise ValueError('Defence geometry/skeleton/inverse binds differ')
+        payload.append(data[offset:])
+    if len(prefix)+sum(map(len,payload))>pose.MAX_BYTES:raise ValueError('Combined defence byte budget exceeded')
+    struct.pack_into('<I',prefix,20,len(manifests))
+    return first,bytes(prefix)+b''.join(payload)
+
+
+def recover(prefab,rig_path,capture,actor_dir,output,extra_captures=()):
     if not rig_path.is_file() or rig_path.stat().st_size>64*1024*1024:
         raise ValueError('Missing or oversized player rig')
-    rig=json.loads(rig_path.read_text());report,samples=bake.analyze(capture,rig,True)
+    rig=json.loads(rig_path.read_text());groups,samples=gather_captures([capture,*extra_captures],rig)
+    report=groups[0][1]
     if rig['sex']!='female' or rig['appearance']!='starter':raise ValueError('Expected recovered female starter rig')
     entries,trigger=source_capsules(prefab)
     if len(entries)!=16 or trigger['component']!=11488762 or trigger['model_root']!=400170:
         raise ValueError('Unexpected female defence prefab identity/count')
     extended,extension=extend_part(rig,entries,report['rig_mapping'])
     manifests=[]
-    for clip in report['clips']:
-        directory=output/clip['name'];directory.mkdir()
-        manifest=bake.export_clip(directory,extended,rig_path,samples[clip['name']],report,clip)
-        manifests.append((directory,manifest))
-    combined=output/'all';bake.combine_clips(combined,manifests)
-    manifest=json.loads((combined/'recording-manifest.json').read_text())
-    first=manifest['parts'][0]['file'];data=(combined/first).read_bytes()
+    for _,clip_report,clip_samples in groups:
+        # Every capsule must independently match this capture's Avatar mapping.
+        matching,_=extend_part(rig,copy.deepcopy(entries),clip_report['rig_mapping'])
+        if matching != extended:raise ValueError('Extra capture changes defence skeleton')
+        for clip in clip_report['clips']:
+            directory=output/clip['name'];directory.mkdir()
+            manifest=bake.export_clip(directory,extended,rig_path,clip_samples[clip['name']],clip_report,clip)
+            manifests.append((directory,manifest))
+    first,data=combine_defence_actor(manifests)
     # Only the first material is needed to anchor an auxiliary collision actor.
     original_path=actor_dir/first
     if not original_path.is_file() or not 24<=original_path.stat().st_size<=256*1024*1024:
@@ -161,7 +218,7 @@ def recover(prefab,rig_path,capture,actor_dir,output):
     for e in entries:
         binary+=hb.RECORD.pack(e['name'].encode(),0,0,e['joint'],e['form'],e['material'],e['damage_scale'],*(x for p in e['bind_points'] for x in p))
     (output/'player-defence.peac').write_bytes(data);(output/'player-defence.pehb').write_bytes(binary)
-    provenance=[prefab,rig_path,capture,actor_dir/first,ROOT/'Assets/Scripts/Attack/PECapsuleTrigger.cs',ROOT/'Assets/Scripts/Attack/PEDefenceTrigger.cs']
+    provenance=[prefab,rig_path,capture,*extra_captures,actor_dir/first,ROOT/'Assets/Scripts/Attack/PECapsuleTrigger.cs',ROOT/'Assets/Scripts/Attack/PEDefenceTrigger.cs']
     result=dict(schema=1,format='PEHB1',actor_format='PEAC2',sex='female',source_trigger=trigger,entries=entries,
                 defence_records=len(entries),enabled_defence=len(entries),joints=nj,joint_names=extended['parts'][0]['bone_names'],
                 extension=extension,skeleton_hash=f'{fingerprint:016x}',clips=clips,maximum_point_error_m=error,
@@ -172,6 +229,8 @@ def recover(prefab,rig_path,capture,actor_dir,output):
                              'All capsule bones use source-baked poses; no controller blending, procedural IK or root-motion reconstruction.',
                              'Instantaneous geometry only: target eligibility, damage permission, swept history and damage application are separate.',
                              'Player movement/collision body and rendered clothing are not defence capsules.'])
+    if extra_captures:
+        result['clip_captures']=[dict(path=str(path),sha256=sha(path),clips=[c['name'] for c in item['clips']]) for path,item,_ in groups]
     (output/'player-defence.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
     return result
 
@@ -179,6 +238,7 @@ def recover(prefab,rig_path,capture,actor_dir,output):
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('capture',type=Path);p.add_argument('--rig',type=Path,default=DEFAULT_RIG)
+    p.add_argument('--extra-capture',type=Path,action='append',default=[],help='Additional closed compatible bake; repeated; duplicate clip names fail')
     p.add_argument('--actor-dir',type=Path,default=DEFAULT_ACTORS)
     p.add_argument('--prefab',type=Path,default=ROOT/'Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab')
     p.add_argument('--output',type=Path,default=ROOT/'rebuild/build/player-defence')
@@ -189,7 +249,7 @@ def main(argv=None):
         if not output.is_relative_to(ROOT/'rebuild/build'):raise ValueError('Keep recovered output within rebuild/build')
         output.parent.mkdir(parents=True,exist_ok=True)
         with tempfile.TemporaryDirectory(prefix='.player-defence-',dir=output.parent) as tmp:
-            staging=Path(tmp);result=recover(a.prefab.resolve(),a.rig.resolve(),a.capture.expanduser().resolve(),a.actor_dir.resolve(),staging)
+            staging=Path(tmp);result=recover(a.prefab.resolve(),a.rig.resolve(),a.capture.expanduser().resolve(),a.actor_dir.resolve(),staging,[p.expanduser().resolve() for p in a.extra_capture])
             output.mkdir(exist_ok=True)
             for name in ('player-defence.peac','player-defence.pehb','player-defence.json'):(staging/name).replace(output/name)
         print(f'Exported {result["enabled_defence"]} defence capsules, {result["joints"]} joints, {len(result["clips"])} clips; max point error {result["maximum_point_error_m"]:.3g}m')

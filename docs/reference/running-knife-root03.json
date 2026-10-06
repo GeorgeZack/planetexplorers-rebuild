@@ -1,0 +1,148 @@
+{
+  "schema": 2,
+  "kind": "isolated-running-knife-frame-root-motion",
+  "capture_sha256": "f2c0fe0b6d6ab909a7d9713fd6eaff1421c449cf02872deef1436a4424ba489c",
+  "source_clip": 408,
+  "source_skill": 20110014,
+  "samples": 70,
+  "trials": [
+    {
+      "trial": 0,
+      "playback_speed": 1,
+      "samples": 23,
+      "clone_id": -249540,
+      "observed_terminal_time": 1.881633996963501,
+      "terminal_overshoot": 0.0482943058013916,
+      "maximum_authored_sample_gap": 0.09479308128356934,
+      "maximum_engine_frame_dt": 0.09479308,
+      "max_clock_error": 3.6395263608435258e-09,
+      "max_applied_vs_delta_position_error": 1.041383281018343e-06,
+      "max_applied_vs_delta_quaternion_error": 0.0
+    },
+    {
+      "trial": 1,
+      "playback_speed": 0.5,
+      "samples": 47,
+      "clone_id": -249854,
+      "observed_terminal_time": 1.85493004322052,
+      "terminal_overshoot": 0.021590352058410645,
+      "maximum_authored_sample_gap": 0.052204012870788574,
+      "maximum_engine_frame_dt": 0.104408026,
+      "max_clock_error": 1.8414306607317243e-09,
+      "max_applied_vs_delta_position_error": 9.460363632964762e-07,
+      "max_applied_vs_delta_quaternion_error": 0.0
+    }
+  ],
+  "clone_motion_qualified": false,
+  "common_authored_end": 1.8333396911621094,
+  "comparison_policy": "linear position and normalized shortest quaternion interpolation only within measured brackets; no raw samples changed",
+  "comparison_samples": 178,
+  "maximum_cross_speed_position_error": 0.1892733430492633,
+  "maximum_cross_speed_quaternion_error": 0.0,
+  "interpolated_source_end_displacements": [
+    [
+      -0.07416579186039324,
+      0.0,
+      3.9861970523327197
+    ],
+    [
+      -0.07507103326985559,
+      0.0,
+      3.985528378419274
+    ]
+  ],
+  "process_teardown_validated": false,
+  "gameplay_motion_validated": false,
+  "limits": "Variable engine-frame samples, explicit terminal overshoot, clone-local configured speeds. No exact terminal sample or fixed-rate capture claimed; transitions, source motor/collision and process lifetime remain unverified.",
+  "difference_diagnostics": {
+    "comparison_is_interpolated_not_simultaneously_sampled": true,
+    "dense_diagnostic_grid_hz": 600,
+    "peak": {
+      "time": 0.04,
+      "distance_m": 0.18824016167710506
+    },
+    "maximum_error_after_authored_time": {
+      "0": 0.18824016167710506,
+      "0.1": 0.06795183025192997,
+      "0.2": 0.03708657353411164,
+      "0.3": 0.03708657353411164,
+      "0.5": 0.03708657353411164,
+      "1.0": 0.013559703917775312
+    },
+    "raw_terminal_position_difference_m": 2.3130121092241569e-07,
+    "first_positive_samples": [
+      {
+        "trial": 0,
+        "time": 0.09479308128356934,
+        "position": [
+          0.07769291,
+          0,
+          0.5971688
+        ]
+      },
+      {
+        "trial": 1,
+        "time": 0.04021954536437988,
+        "position": [
+          0.0113398749,
+          0,
+          0.06533741
+        ]
+      }
+    ],
+    "source_event_interpolated_differences": [
+      {
+        "event": "StartAttack",
+        "time": 0.2968580424785614,
+        "distance_m": 0.011636410670003004
+      },
+      {
+        "event": "EndAttack",
+        "time": 0.7091204524040222,
+        "distance_m": 8.272075635894503e-05
+      },
+      {
+        "event": "EndAction",
+        "time": 1.1680725812911987,
+        "distance_m": 0.009775998833579175
+      }
+    ],
+    "union_knot_peak": {
+      "time": 0.04021954536437988,
+      "distance_m": 0.1892733430492633
+    },
+    "independent_same_speed_decimation": {
+      "operation": "Interpolate every other recorded sample of the slow trial, compare to all its original measured knots",
+      "maximum_position_error_m": 0.162081,
+      "peak_authored_time": 0.04021954536437988,
+      "limit": "Loss of sampling resolution alone can produce a large early interpolation error in this recorded trial; this does not establish speed invariance or rule out initialization effects."
+    }
+  },
+  "provenance": {
+    "capture": "/home/admin/.local/share/planet-explorers-strafe-reference/pose-captures/female-running-root-03.jsonl",
+    "launch_sha256": "f66eb8d2f8db8a4500b78ab5bfd3630f7c2fd7e578998e8fde86bac57c8002fd",
+    "plan_asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+  },
+  "interpretation": "Coarse frame brackets, especially first0-.094793s at speed1, are consistent with the largest interpolation mismatch; this does not yet rule out speed-dependent evaluation. No asset exported or runtime enabled.",
+  "operator_lifecycle": {
+    "post_cleanup_watchdog_updates": 120,
+    "responsive_after_capture": "Andynext Camera Tips response observed by root operator",
+    "quit": "Quit Game followed by Yes",
+    "native_exit": {
+      "schema": "pe-root-motion-exit-1",
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T16:30:14.496484+00:00"
+    },
+    "exit_sidecar_sha256": "d9daf624287f369ae0161f6aab64e192c55caef7f277421818114f18b3bcbf6d",
+    "screenshot_local": "rebuild/build/root03-after.png",
+    "no_zero_exit_claim": true
+  },
+  "all_authored_gaps_within_60hz": false,
+  "comparison_includes_all_measured_knots": true,
+  "comparison_method_update": {
+    "previous_60hz_only_maximum_m": 0.1568668013975876,
+    "current_grid": "Union of every observed authored timestamp in range plus60Hz grid and source end",
+    "reason": "The maximum norm of a piecewise-linear position difference occurs at a union knot;60Hz-only grid missed the coarse-onset peak. Raw capture unchanged."
+  }
+}

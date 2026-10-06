@@ -28,6 +28,11 @@ const PeHitboxDefinition *pe_hitboxes_get(const PeHitboxes *boxes,size_t index);
 bool pe_hitbox_pose(const PeHitboxes *boxes,const PeActor *actor,size_t index,
                     size_t clip,double seconds,PeVec3 root,float yaw,float scale,
                     PeHitboxCapsule *output);
+/* Blend all four authored bind points before constructing the capsule. This
+ * agrees with actor joint/vertex blending; it is not a blend of final radii. */
+bool pe_hitbox_pose_blend(const PeHitboxes *boxes,const PeActor *actor,size_t index,
+                          const PeActorBlendSample *samples,size_t count,
+                          PeVec3 root,float yaw,float scale,PeHitboxCapsule *output);
 /* Instantaneous source strict overlap (<, not <=): closest segment distance
  * versus sum of radii; degenerate sphere segments supported. No swept-history,
  * broadphase, trigger timing, permission, dedupe, damage, or mission effects.

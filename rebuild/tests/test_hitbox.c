@@ -15,10 +15,11 @@ static void u32(unsigned char*p,uint32_t v){for(int i=0;i<4;i++)p[i]=(unsigned c
 static void f32(unsigned char*p,float v){uint32_t b;memcpy(&b,&v,4);u32(p,b);}
 static bool write_file(const char*p,const unsigned char*b,size_t n){FILE*f=fopen(p,"wb");if(!f)return false;bool ok=fwrite(b,1,n,f)==n;return fclose(f)==0&&ok;}
 static void matrix(unsigned char*p,float x,float y){float m[12]={x,0,0,0,0,y,0,0,0,0,1,0};for(int i=0;i<12;i++)f32(p+i*4,m[i]);}
-static PeActor *fixture_actor(const char*path){
+static PeActor *fixture_actor(const char*path,bool rotate){
     unsigned char b[396]={0};memcpy(b,"PEAC",4);u32(b+4,1);u32(b+8,3);u32(b+12,3);u32(b+16,1);u32(b+20,1);
     for(int i=0;i<3;i++){f32(b+24+i*56+16,1);f32(b+24+i*56+32,1);}u32(b+196,1);u32(b+200,2);matrix(b+204,1,1);
     memcpy(b+252,"pose",5);f32(b+284,1);u32(b+288,2);f32(b+292,1);matrix(b+300,1,1);matrix(b+348,2,3);
+    if(rotate){f32(b+348,0);f32(b+352,-3);f32(b+364,2);f32(b+368,0);}
     CHECK(write_file(path,b,sizeof b));char error[128];return pe_actor_load(path,error,sizeof(error));
 }
 static void fixture_boxes(unsigned char*b,uint64_t hash){
@@ -40,12 +41,19 @@ static void contact_tests(void){
 }
 int pe_test_hitbox(void){
     failures=0;contact_tests();char path[]="/tmp/pe-hitbox-test-XXXXXX";int fd=mkstemp(path);CHECK(fd>=0);if(fd<0)return failures;close(fd);
-    PeActor*a=fixture_actor(path);CHECK(a);if(!a){unlink(path);return failures;}
+    PeActor*a=fixture_actor(path,false);CHECK(a);if(!a){unlink(path);return failures;}
     unsigned char bytes[137];fixture_boxes(bytes,pe_actor_skeleton_hash(a));CHECK(write_file(path,bytes,136));char error[128];PeHitboxes*b=pe_hitboxes_load(path,a,error,sizeof(error));CHECK(b&&!*error);
     if(b){
         CHECK(pe_hitboxes_count(b)==1&&pe_hitboxes_get(b,0)->damage_scale==2&&!pe_hitboxes_get(b,1));
         PeHitboxCapsule posed;CHECK(pe_hitbox_pose(b,a,0,0,.5,(PeVec3){10,20,30},90,2,&posed));
         CHECK(near(posed.a.x,10)&&near(posed.a.y,20)&&near(posed.a.z,30)&&near(posed.b.y,24)&&near(posed.radius,1.5f));
+        PeActorBlendSample blend[]={{0,0,1},{0,1,3}};PeHitboxCapsule blended;
+        CHECK(pe_hitbox_pose_blend(b,a,0,blend,2,(PeVec3){10,20,30},90,2,&blended));
+        CHECK(near(blended.b.y,25)&&near(blended.radius,1.75f));
+        blend[0].weight=0;blend[1].seconds=.5;
+        CHECK(pe_hitbox_pose_blend(b,a,0,blend,2,(PeVec3){10,20,30},90,2,&blended));CHECK(!memcmp(&blended,&posed,sizeof posed));
+        PeHitboxCapsule before=blended;blend[0].seconds=NAN;
+        CHECK(!pe_hitbox_pose_blend(b,a,0,blend,2,(PeVec3){0},0,1,&blended));CHECK(!memcmp(&before,&blended,sizeof blended));
         PeHitboxCapsule old=posed;CHECK(!pe_hitbox_pose(b,a,0,0,NAN,(PeVec3){0},0,1,&posed));CHECK(!memcmp(&old,&posed,sizeof(posed)));
         CHECK(!pe_hitbox_pose(b,a,1,0,0,(PeVec3){0},0,1,&posed));CHECK(!pe_hitbox_pose(b,a,0,0,0,(PeVec3){0},0,-1,&posed));pe_hitboxes_free(b);
     }
@@ -55,7 +63,17 @@ int pe_test_hitbox(void){
     for(size_t i=0;i<sizeof offsets/sizeof offsets[0];i++){unsigned char old[4];memcpy(old,bytes+offsets[i],4);u32(bytes+offsets[i],values[i]);CHECK(write_file(path,bytes,136));b=pe_hitboxes_load(path,a,error,sizeof(error));CHECK(!b);pe_hitboxes_free(b);memcpy(bytes+offsets[i],old,4);}
     fixture_boxes(bytes,pe_actor_skeleton_hash(a));u32(bytes+72,PE_HITBOX_DISABLED);memset(bytes+88,0,48);CHECK(write_file(path,bytes,136));b=pe_hitboxes_load(path,a,error,sizeof(error));CHECK(b);
     if(b){PeHitboxCapsule c={.radius=42},old=c;CHECK(!pe_hitbox_pose(b,a,0,0,0,(PeVec3){0},0,1,&c));CHECK(!memcmp(&c,&old,sizeof(c)));pe_hitboxes_free(b);}
-    pe_actor_free(a);unlink(path);
+    pe_actor_free(a);
+    /* Radius comes from the blended radius vector, not the average of the
+     * independently posed radii. A quarter-turn makes those observably differ. */
+    a=fixture_actor(path,true);CHECK(a);
+    if(a){fixture_boxes(bytes,pe_actor_skeleton_hash(a));CHECK(write_file(path,bytes,136));b=pe_hitboxes_load(path,a,error,sizeof error);CHECK(b);
+        if(b){PeActorBlendSample mix[]={{0,0,1},{0,1,3}};PeHitboxCapsule c;
+            CHECK(pe_hitbox_pose_blend(b,a,0,mix,2,(PeVec3){0},0,1,&c));
+            CHECK(near(c.radius,sqrtf(.125f*.125f+.75f*.75f))&&!near(c.radius,.875f));
+            CHECK(near(c.b.x,-2.25f)&&near(c.b.y,.25f));pe_hitboxes_free(b);}
+        pe_actor_free(a);}
+    unlink(path);
     const char*actual=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb";FILE*f=fopen(actual,"rb");if(f){fclose(f);
         a=pe_actor_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",error,sizeof(error));CHECK(a);b=pe_hitboxes_load(actual,a,error,sizeof(error));CHECK(b);
         if(b){CHECK(pe_hitboxes_count(b)==19);unsigned enabled=0,disabled=0,attacks=0;size_t clip=pe_actor_find_clip(a,"attack2");CHECK(clip!=PE_ACTOR_BIND_POSE);

@@ -1,0 +1,39 @@
+{
+  "evidence": "Physical native keyboard/mouse playtest, source-mapped route, read-only PECS v10 inspection. No combat was implemented or simulated.",
+  "accepted": {
+    "fixture": "rebuild/build/hunt-native-active.pesave",
+    "sha256": "ca8b9fc06f70a9e84a16a3a83b654968706b9f95863a8af78a2f725a376345a3",
+    "version": 10,
+    "source_player": [
+      -276.8061828613281,
+      22.501039505004883,
+      127.719970703125
+    ],
+    "hunt_state": 1,
+    "hunt_destination": [
+      -349.0,
+      19.5,
+      233.0
+    ],
+    "xz_distance": 127.65512838034691,
+    "deployed_count": 1
+  },
+  "arrived": {
+    "fixture": "rebuild/build/torch-release-check.pesave",
+    "sha256": "ba32b7317ffd6c5cb572b98e60d7e13293b7563679f9e734547401f5c46edfd3",
+    "version": 10,
+    "source_player": [
+      -343.5585021972656,
+      19.3206729888916,
+      222.07186889648438
+    ],
+    "hunt_state": 2,
+    "hunt_destination": [
+      -349.0,
+      19.5,
+      233.0
+    ],
+    "xz_distance": 12.20794609067343,
+    "deployed_count": 1
+  }
+}

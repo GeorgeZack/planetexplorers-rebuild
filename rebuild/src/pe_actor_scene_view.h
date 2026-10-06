@@ -26,6 +26,10 @@ bool pe_actor_scene_view_load(PeActorSceneView *view,const char *path,
  * Seconds>=0, yaw degrees, uniform scale(0,1000]. Does not own BeginMode3D. */
 bool pe_actor_scene_view_draw_clip(PeActorSceneView *view,size_t clip,double seconds,
                                    Vector3 position,float yaw,float scale,Color tint);
+/* Common ordered clip indices shared by all parts. Validate the full blend and
+ * every part before mutating pose buffers or issuing any draw. No allocations. */
+bool pe_actor_scene_view_draw_blend(PeActorSceneView *view,const PeActorBlendSample *samples,size_t count,
+                                    Vector3 position,float yaw,float scale,Color tint);
 bool pe_actor_scene_view_draw(PeActorSceneView *view,double seconds,
                               Vector3 position,float yaw,float scale,Color tint);
 /* Prepared CPU-only views can unload without a window; uploaded views require

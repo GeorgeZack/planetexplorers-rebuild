@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 import struct
 import tempfile
+from pe_actor_limits import PEAC_MAX_CLIPS
 
 import analyze_reference_bake as bake
 import analyze_reference_pose as pose
@@ -105,7 +106,7 @@ def drawn_hitbox(actor, source, placement):
 def clip_headers(data):
     if len(data) < 24: raise ValueError('Truncated body actor')
     magic, version, nv, ni, nj, count = struct.unpack_from('<4s5I', data)
-    if magic != b'PEAC' or version != 2 or not 1 <= count <= 32 or not 1 <= nj <= 256 or not 1 <= nv <= 1000000 or not 1 <= ni <= 3000000:
+    if magic != b'PEAC' or version != 2 or not 1 <= count <= PEAC_MAX_CLIPS or not 1 <= nj <= 256 or not 1 <= nv <= 1000000 or not 1 <= ni <= 3000000:
         raise ValueError('Expected bounded PEAC2 body actor')
     offset = 24+nv*56+ni*4+nj*48; headers = []
     for _ in range(count):

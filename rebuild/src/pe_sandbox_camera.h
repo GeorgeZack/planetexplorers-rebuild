@@ -34,4 +34,46 @@ void pe_sandbox_camera_init(PeSandboxCamera *camera);
  * Not a full CameraForge port: no activity-space evaluation, two-second clamp
  * recovery, original anchor, dynamic near-plane, rotation or query ownership. */
 bool pe_sandbox_camera_step(PeSandboxCamera *camera,PeSandboxCameraInput input);
+
+typedef enum {
+    PE_SANDBOX_CAMERA_FREE=0,
+    PE_SANDBOX_CAMERA_LOCKED=1,
+    PE_SANDBOX_CAMERA_FIRST_PERSON=2
+} PeSandboxCameraMode;
+typedef struct {
+    PeSandboxCameraMode mode;
+    bool right_tracking,right_dragged;
+    float right_seconds,right_motion;
+} PeSandboxCameraControls;
+typedef struct {
+    float dt,mouse_dx,mouse_dy;
+    bool focused,input_allowed,pointer_over_ui,captured;
+    bool free_cursor,cycle_pressed;
+    bool right_pressed,right_down,right_released;
+} PeSandboxCameraControlInput;
+typedef struct {
+    bool third_person,capture,look,world_input,pointer_cursor;
+    bool cycle_accepted,right_click;
+} PeSandboxCameraControlResult;
+
+/* Tutorial-compatible mode order/default. The host owns actual cursor capture,
+ * its warp suppression and the existing UI's Tab/free_cursor flag. Supply
+ * input_allowed AFTER the modal press/held/release gate; visible free mouse is
+ * not itself a modal. World movement/actions remain enabled without capture.
+ * A cycle resets the effective free_cursor override this frame; on accepted
+ * cycles the host must also clear its UI-owned flag.
+ * RMB tracking begins only on a fresh world press. Free-mode capture waits
+ * until3px accumulated motion or a .25s hold, preserving the screen pointer
+ * throughout a short stationary click. A short release (<.25s,
+ * matching tutorial stow) becomes right_click for interaction/stow. The native
+ * 3px accumulated-motion threshold additionally rejects quick drags; this is an
+ * explicit input adapter, not a recovered Unity threshold or the tutorial's
+ * immediate capture transition. UI/focus blocking,
+ * camera cycling or a missing release cancels that gesture without a click.
+ * Pointer hover blocks new capture/gestures, not keyboard world_input.
+ * Invalid inputs leave both state and result unchanged. */
+void pe_sandbox_camera_controls_init(PeSandboxCameraControls *controls);
+void pe_sandbox_camera_controls_cancel(PeSandboxCameraControls *controls);
+bool pe_sandbox_camera_controls_step(PeSandboxCameraControls *controls,
+    PeSandboxCameraControlInput input,PeSandboxCameraControlResult *result);
 #endif

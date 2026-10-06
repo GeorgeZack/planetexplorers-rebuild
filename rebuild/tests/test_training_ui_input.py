@@ -19,8 +19,8 @@ PREFIX = r"""
 #include <string.h>
 #include <stdio.h>
 typedef struct {float x,y;} Vector2;
-enum {MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT,KEY_C,KEY_Y,KEY_I,KEY_Q,KEY_B,KEY_T,KEY_ONE};
-static bool keys[16],left,right,down,released;
+enum {MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT,KEY_C,KEY_Y,KEY_I,KEY_Q,KEY_B,KEY_T,KEY_ONE=40,KEY_KP_1=80,KEY_ENTER=100,KEY_SPACE};
+static bool keys[128],left,right,down,released;
 static bool IsKeyPressed(int k){return keys[k];}
 static bool IsMouseButtonPressed(int k){return k==MOUSE_BUTTON_LEFT?left:right;}
 static bool IsMouseButtonDown(int k){(void)k;return down;}
@@ -30,10 +30,11 @@ static PeTraining training;
 static struct{PeTrainingUILayout layout;}ui;
 static Vector2 pointer;
 static Vector2 GetMousePosition(void){return pointer;}
-static bool menu_open,paused,inventory,log,dragging,equipment_tab;
+static bool menu_open,paused,inventory,log,dragging,equipment_tab,dialogue_input_consumed;
 static int inventory_tab,build_rotation;
 static float preview_yaw;
 static void frame(void){
+ int talk=pe_training_dialogue(&training);dialogue_input_consumed=false;
  bool ui_was_modal=training.character_open||training.replicator_open||training.kit_open||inventory||log||menu_open;
 """
 SUFFIX = r"""}
@@ -43,12 +44,23 @@ static void reset(int mission,unsigned dialogue){
  memset(&training,0,sizeof training);events();
  training.ready=true;training.hp=training.max_hp=500;training.stamina=100;
  training.tutorial=(PeTutorial){(unsigned)mission,3,15,0};training.dialogue_index=dialogue;
+ if(mission==PE_TUTORIAL_CAMERA)pe_tutorial_init(&training.tutorial);
  training.equipped_shovel=-1;
  menu_open=paused=inventory=log=dragging=equipment_tab=false;
  inventory_tab=build_rotation=0;preview_yaw=0;pointer=(Vector2){0};
  assert(pe_training_ui_layout(1280,720,&ui.layout));assert(pe_tutorial_valid(&training.tutorial));
 }
 int main(void){
+ /* Actual production response dispatch, both keyboards, and closing-frame
+    ownership: key1 must not also consume the assigned healing quickslot. */
+ reset(739,0);training.quickslot_item_id=916;training.juice_count=3;
+ keys[KEY_ONE+8]=true;frame();assert(dialogue_input_consumed&&pe_training_dialogue(&training)==300215);
+ events();keys[KEY_KP_1]=true;frame();assert(dialogue_input_consumed&&pe_training_dialogue(&training)==300258&&training.juice_count==3);
+ events();keys[KEY_ONE]=true;keys[KEY_B]=true;frame();
+ assert(dialogue_input_consumed&&!pe_training_dialogue(&training)&&training.juice_count==3&&!training.build_mode&&!training.juice_cooldown_ticks);
+ events();keys[KEY_ONE]=true;frame();assert(!dialogue_input_consumed&&training.juice_count==2);
+ reset(739,1);events();keys[KEY_ENTER]=true;frame();assert(dialogue_input_consumed&&!pe_training_dialogue(&training));
+ reset(739,1);events();left=true;pointer=(Vector2){500,500};frame();assert(dialogue_input_consumed&&!pe_training_dialogue(&training));
  /* Source kit741, actual storage receipt and singleton5-stack conservation. */
  reset(741,1);training.position=(PeVec3){7,1.5f,12};training.kit_open=training.kit_intro_seen=true;
  training.tutorial.stage_objectives=1;training.inventory_open=inventory=true;
@@ -156,9 +168,9 @@ int main(void) {
         source = (ROOT / "src/pe_training_view.c").read_text()
         window_first = source.index("        unsigned visible_windows=")
         window_last = source.index("        bool cancel_window_drag=", window_first)
-        first = source.index("                const bool menu_was_open=")
+        first = source.index("            unsigned response=0;")
         last = source.index("                bool interact=", first)
-        block = source[first:last]
+        block = source[first:last] + "\n            }\n"
         line = next(line for line in (ROOT / "Makefile").read_text().splitlines() if line.startswith("CORE = "))
         core = [str(ROOT / path) for path in line.split(" = ", 1)[1].split()]
         parent = ROOT / "build"

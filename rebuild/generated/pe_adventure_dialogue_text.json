@@ -166,6 +166,48 @@
       "npc_id": -9898,
       "speaker": 3,
       "text": "Oh thank you, thank you! We'll replicate the medicine right away. Our colonists will be up in no time! Here, take this as a sign of our appreciation."
+    },
+    {
+      "talk_id": 4101,
+      "localization_id": 3004101,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "So the supplies will be there soon?"
+    },
+    {
+      "talk_id": 4102,
+      "localization_id": 3004102,
+      "npc_id": -9898,
+      "speaker": 3,
+      "text": "Umm, about that. We've been too afraid to venture out too far to gather the materials. There have been a much heavier monster presence in the area recently, leading to several attacks before the virus outbreak. If you can help us subdue some of these animals, we can get back on schedule."
+    },
+    {
+      "talk_id": 4103,
+      "localization_id": 3004103,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "Okay."
+    },
+    {
+      "talk_id": 4104,
+      "localization_id": 3004104,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "Nope."
+    },
+    {
+      "talk_id": 4105,
+      "localization_id": 3004105,
+      "npc_id": -9999,
+      "speaker": 0,
+      "text": "I've subdued the animals that you've requested."
+    },
+    {
+      "talk_id": 4106,
+      "localization_id": 3004106,
+      "npc_id": -9898,
+      "speaker": 3,
+      "text": "Thank you! We can live in peace again! Here's something for your effort! I'll get our people to start..."
     }
   ],
   "missions": [
@@ -184,11 +226,32 @@
       "target_id": 4503
     },
     {
+      "id": 9075,
+      "title": "Bug Hunt",
+      "description": "Kill the animals causing problems near \"Town%\"004.",
+      "objective": "Bug Hunt",
+      "target_id": 4524
+    },
+    {
+      "id": 9127,
+      "title": "Bug Hunt",
+      "description": "Return to town and report in.",
+      "objective": "Return to town",
+      "target_id": 4525
+    },
+    {
       "id": 9072,
       "title": "Herb Collecting",
       "description": "Collect medical materials for the people in \"Town%\"004.",
       "objective": "Gather \"itemnum%\" units of \"itemid%\"",
       "target_id": 2531
+    },
+    {
+      "id": 9126,
+      "title": "Bug Hunt",
+      "description": "Kill the animals causing problems near \"Town%\"004.",
+      "objective": "Kill \"monsternum%\" \"monsterid%\"s",
+      "target_id": 1518
     }
   ]
 }

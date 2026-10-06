@@ -2,7 +2,10 @@
 """Bounded keyboard, pointer and capture driver for the local C application window.
 
 Uses reference_input's input transport, with a separate allowlisted-title and exact-
-executable selector. The original reference driver's selector is unchanged.
+executable selector. Clicks use the compositor virtual pointer: XTest absolute motion
+can leave the compositor pointer and Xwayland focus on a different window even after
+Hyprland reports the C window active. The shared helper moves inside the verified
+client before pressing and keeps the original 150ms click duration unchanged.
 Commands: --pid PID layout, shot FILE.png, key CHORD, click X Y, drag X Y X2 Y2.
 For captured gameplay: --pid PID hold left|right SECONDS (at most10s).
 For a hovered panel: --pid PID scroll STEPS (positive up, negative down;1–100 clicks).

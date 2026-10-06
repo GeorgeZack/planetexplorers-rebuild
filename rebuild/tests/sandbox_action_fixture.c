@@ -126,9 +126,9 @@ static unsigned char *read_file(const char *path,size_t *size){
     bool ok=data&&fread(data,1,(size_t)length,f)==(size_t)length;
     fclose(f);if(!ok){free(data);return NULL;}*size=(size_t)length;return data;
 }
-/* Explicit fixture-only v4 encoder: v5 retained the exact v4 payload layout.
- * Begin with a valid native save, then change only header version and player
- * position/checksum. The new position must be valid under the old geometry and
+/* Explicit fixture-only v4 encoder: strip later append-only save extensions
+ * with the shared historical fixture helper, then change player position and
+ * checksum. The new position must be valid under the old geometry and
  * overlap a live source trunk. This is a compatibility fixture, not corruption. */
 static bool migration_fixture(PeGame *g,PeGame *loaded,PeSandboxCollision *collision,const char *path){
     if(!path[0]||strlen(path)>3500||!initialize(g,collision,26))return false;
@@ -145,12 +145,12 @@ static bool migration_fixture(PeGame *g,PeGame *loaded,PeSandboxCollision *colli
     char *temporary=malloc(strlen(path)+24);if(!temporary)return false;
     sprintf(temporary,"%s.fixture-XXXXXX",path);int fd=mkstemp(temporary);
     if(fd<0){free(temporary);return false;}close(fd);
-    bool ok=pe_game_save(g,temporary,error,sizeof error);size_t size=0,after_size=0;
+    bool ok=pe_game_save(g,temporary,error,sizeof error)&&pe_test_save_pre_welcome(temporary,4);size_t size=0,after_size=0;
     unsigned char *data=ok?read_file(temporary,&size):NULL,*after=NULL;
-    ok=data&&memcmp(data,"PECS",4)==0&&read32(data+4)==5&&read32(data+8)==size-16&&
+    ok=data&&memcmp(data,"PECS",4)==0&&read32(data+4)==4&&read32(data+8)==size-16&&
         read32(data+12)==bytes_hash(data+16,size-16);
     if(ok){
-        write32(data+4,4);write_float(data+24,original.x);write_float(data+28,original.y);write_float(data+32,original.z);
+        write_float(data+24,original.x);write_float(data+28,original.y);write_float(data+32,original.z);
         write32(data+12,bytes_hash(data+16,size-16));
         FILE *f=fopen(temporary,"wb");ok=f!=NULL;
         if(f){ok=fwrite(data,1,size,f)==size;if(fclose(f))ok=false;}
@@ -174,7 +174,7 @@ static bool migration_fixture(PeGame *g,PeGame *loaded,PeSandboxCollision *colli
         printf("Controlled v4 migration fixture: original tree%d, intentionally positioned (%.6f,%.6f,%.6f).\n",tree,original.x,original.y,original.z);
         printf("Native load: %s Position (%.6f,%.6f,%.6f); original v4 file byte-identical, FNV32 %08x.\n",
             loaded->message,loaded->player.x,loaded->player.y,loaded->player.z,original_hash);
-        /* Verify v5 rewrite separately, retaining the requested v4 file. */
+        /* Verify the current-version rewrite separately, retaining the v4 file. */
         ok=pe_game_save(loaded,temporary,error,sizeof error)&&pe_game_load(g,temporary,error,sizeof error)&&
             memcmp(&loaded->player,&g->player,sizeof g->player)==0&&
             memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)==0;

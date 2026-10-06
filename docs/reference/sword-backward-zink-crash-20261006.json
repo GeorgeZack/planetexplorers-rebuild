@@ -1,0 +1,113 @@
+{
+  "schema": "pe-reference-render-diagnostic-1",
+  "date_local": "2026-10-06",
+  "timezone": "US/Central",
+  "pid": 2269587,
+  "faulting_tid": 2269611,
+  "thread_name": "PE_Client:zfq0",
+  "timeline": {
+    "steam_process_added_local": "15:56:55 CDT",
+    "fault_local": "15:57:08 CDT",
+    "core_recorded_local": "15:57:16 CDT",
+    "startup_seconds_approximately": 13,
+    "exit_observed_utc": "2026-10-06T20:57:16.545131+00:00"
+  },
+  "final_signal": "SIGABRT",
+  "launcher_returncode": -6,
+  "launch": {
+    "profile": "planet-explorers-bake-reference",
+    "force_gfx_direct": true,
+    "size": [
+      1280,
+      720
+    ],
+    "quality_level": 0,
+    "ocl": "Cpu",
+    "purpose": "Female SwordWB441/SwordRB708 clone-pose bake, not armed before failure",
+    "zink_configuration": "Operator reports process-local Mesa/Zink with NVIDIA Vulkan backend; launch metadata does not serialize environment. Core confirms Gallium and NVIDIA graphics libraries in the fault stack."
+  },
+  "capture": {
+    "arm_file_present": false,
+    "jsonl_present": false,
+    "qualified_pose_evidence": false
+  },
+  "fault": {
+    "frame": 4,
+    "pc": "0x73cf826ca9b3",
+    "library": "libnvidia-glcore.so.580.178.04",
+    "offset": "0xaca9b3",
+    "instruction": "mov 0x3c4(%rdi),%r13d",
+    "rdi": "0x0",
+    "effective_read_address": "0x3c4",
+    "nvidia_call_offsets": [
+      "0xaca9b3",
+      "0xd2b231",
+      "0xfa6012"
+    ],
+    "gallium_call_offsets": [
+      "0xe4c5f0",
+      "0x5dcc21",
+      "0x62784d"
+    ],
+    "signal_wrapper": "Original fault frame beneath Mono signal handler followed by abort; underlying signal number not independently recovered."
+  },
+  "all_thread_review": {
+    "threads": 49,
+    "main_thread": "Waiting in syscall reached through Gallium synchronization and the original executable.",
+    "other_workers": "Most inspected workers wait in libc condition synchronization; another Gallium worker is waiting through Gallium. No second independent fault established.",
+    "symbol_limit": "Original game, NVIDIA driver and Gallium private function names unresolved; no matching local Gallium debug file found."
+  },
+  "comparison": {
+    "prior_report": "shield-observer-crash-20261006.json",
+    "different_signature": true,
+    "detail": "Previous fault PC was generated /memfd:/.gl code, mov(%rsi),%edi with rsi0xc and NVIDIA callers b5aa2b/c78545/c785fe/c7865c/c799aa. This fault is inside the NVIDIA shared library itself, reached from Gallium."
+  },
+  "resource_check": {
+    "journal_local_interval": "15:55:30 through15:57:30 CDT",
+    "oom_gpu_xid_timeout_entries": 0,
+    "later_memory_available_GiB": 4.5,
+    "later_free_swap_GiB": 12,
+    "limit": "Post-crash memory snapshot, not a measurement at the failing instant. SIGABRT and inspected journal do not support an OOM-kill diagnosis.",
+    "packages": {
+      "mesa": "1:26.2.2-1",
+      "nvidia-580xx-utils": "580.178.04-1.1"
+    },
+    "package_timeline": "Both installed September15 per pacman log; no immediately preceding package transaction (latest recorded October1)."
+  },
+  "inference": "Graphics worker encounters a null input/object inside NVIDIA driver code on the Gallium path. Whether a driver defect, invalid upstream state, lifetime/race issue or prior corruption caused it is unresolved. Worker name alone does not prove a race or establish that synchronous-flush flags will fix it.",
+  "limits": "Startup failed before any target pose samples. This run disproves general crash-free Zink stability, not the separately documented successful playable Zink run. No inference of sampler causation; no game-save loss or checkpoint integrity claim without a before/after baseline.",
+  "core_handling": {
+    "extract_exit": 0,
+    "core_bytes": 2157883392,
+    "gdb_exit": 0,
+    "extracted_core_removed": true,
+    "elapsed_seconds": 7.745050608995371
+  },
+  "changes": "Read-only diagnosis; no desktop input, live-process calls, system settings, installed game files or saves changed. Fresh private build temporary directory and mode0600 extracted core removed after inspection; original system core preserved.",
+  "local_evidence": [
+    {
+      "path": "rebuild/build/sword-backward-bake/crash01-coredump.txt",
+      "sha256": "3d6b5b5f649fbc3f48c3184b0ba00b9cd121bf26f424923124fe16d9a5e17ae3"
+    },
+    {
+      "path": "rebuild/build/sword-backward-bake/crash01-gdb.txt",
+      "sha256": "a67e1d47db99a355f946dac09dc37ab19800f1d0aab0beb231edef7c4ff46274"
+    },
+    {
+      "path": "rebuild/build/sword-backward-bake/crash01-journal.txt",
+      "sha256": "836fcc9e0a6fa9a12fb6aa209829f35a9cf079430cf0be27403e6bcd5ad895b9"
+    },
+    {
+      "path": "rebuild/build/sword-backward-bake/crash01-inspection.json",
+      "sha256": "cdc79d8e2a98c919603d222ad44260c084bb0e09ddec75f1bcf5c15cf9f1e531"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-01.launch.json",
+      "sha256": "de07c0683e7277f477674c95c4841d50c473e057b710f91ce028767b9c5c4aa1"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-01.exit.json",
+      "sha256": "4f28ca2cdb32c2543320e8f72479c2e1668fe256e78d557070fadd2c55e62b81"
+    }
+  ]
+}

@@ -64,7 +64,7 @@ int pe_test_actor_scene(void){
     }
     /* Different clips within one actor are valid; every material must match
      * the complete ordered set, not just clip zero. */
-    unsigned char multi[252+33*144];size_t multi_size=clips_fixture(multi,2,2);CHECK(save(a,multi,multi_size));
+    unsigned char multi[252+(PE_ACTOR_MAX_CLIPS+1)*144];size_t multi_size=clips_fixture(multi,2,2);CHECK(save(a,multi,multi_size));
     clips_fixture(multi,2,12);CHECK(save(b,multi,multi_size));
     s=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(s&&!*error);
     if(s){
@@ -91,18 +91,18 @@ int pe_test_actor_scene(void){
     clips_fixture(multi,2,12);u32(multi+432,3);matrix(multi+540,24);
     CHECK(save(b,multi,588));s=pe_actor_scene_manifest_load(manifest,error,sizeof error);
     CHECK(!s&&strstr(error,"timings"));pe_actor_scene_manifest_free(s);
-    /* All 32 clip records survive preflight and ownership transfer. */
-    multi_size=clips_fixture(multi,32,2);u32(multi+4,2);CHECK(save(a,multi,multi_size));
-    clips_fixture(multi,32,12);u32(multi+4,2);CHECK(save(b,multi,multi_size));
-    s=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(s&&pe_actor_scene_clip_count(s)==32);
+    /* All64 clip records survive the fixed scene array and ownership transfer. */
+    multi_size=clips_fixture(multi,64,2);u32(multi+4,2);CHECK(save(a,multi,multi_size));
+    clips_fixture(multi,64,12);u32(multi+4,2);CHECK(save(b,multi,multi_size));
+    s=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(s&&pe_actor_scene_clip_count(s)==64);
     if(s){
-        CHECK(pe_actor_scene_find_clip(s,"clip_31")==31&&!pe_actor_scene_clip_at(s,32));
-        CHECK(pe_actor_scene_clip_at(s,31)->terminal_at_duration);
+        CHECK(pe_actor_scene_find_clip(s,"clip_63")==63&&!pe_actor_scene_clip_at(s,64));
+        CHECK(pe_actor_scene_clip_at(s,63)->terminal_at_duration);
         PeActor *owned=pe_actor_scene_take_actor(s,1);CHECK(owned&&pe_actor_scene_clip_matches(s,owned));
         pe_actor_scene_manifest_free(s);PeActorVertex pose;
-        CHECK(pe_actor_pose_vertex(owned,31,0,0,&pose)&&pose.position[0]==322);pe_actor_free(owned);
+        CHECK(pe_actor_pose_vertex(owned,63,0,0,&pose)&&pose.position[0]==642);pe_actor_free(owned);
     }
-    multi_size=clips_fixture(multi,33,12);CHECK(save(b,multi,multi_size));
+    multi_size=clips_fixture(multi,65,12);CHECK(save(b,multi,multi_size));
     s=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(!s);pe_actor_scene_manifest_free(s);
     fixture(bytes,2);CHECK(save(a,bytes,396));fixture(bytes,12);CHECK(save(b,bytes,396));
     const char *bad[]={"", "PEAS1\n", "PEAS2\na.peac diffuse.png\n", "PEAS1\n\n", "PEAS1\n../a.peac diffuse.png\n", "PEAS1\n/a.peac diffuse.png\n", "PEAS1\nsub/a.peac diffuse.png\n", "PEAS1\na.peac ../diffuse.png\n", "PEAS1\na.peac diffuse.png extra\n", "PEAS1\na.peac  diffuse.png\n", "PEAS1\na.peac\tdiffuse.png\n", "PEAS1\na.peac diffuse.jpg\n", "PEAS1\na.peac diffuse.png\na.peac diffuse.png\n", "PEAS1\nno.peac diffuse.png\n", "PEAS1\na.peac missing.png\n", "PEAS1\na.peac diffuse.png\n\n", "PEAS1\na.peac diff\303\251.png\n"};

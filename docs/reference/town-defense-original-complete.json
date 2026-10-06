@@ -1,0 +1,38 @@
+{
+  "schema": 1,
+  "evidence": "Read-only original archive decode; no native quest installed.",
+  "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save8",
+  "archive_guid": "08236787e9d4474db92f0c1856b3c11c",
+  "input_sha256": {
+    "MainAdventure/block45.arc": "0cd84893f6ffd4063d79162c19c230563d8566e96719c0e868823b1b6fe3101e",
+    "MainAdventure/index.arc": "5c598286dcf2c5bed053d61bd57f4150ca0a831f850f7398c5a17e6aa6faf5b2",
+    "MainAdventure/voxel.arc": "8793d7565427cb4eccd43906d24fdba3aec1572821fc5f587d4693fb2e2ba718",
+    "MainAdventure/water.arc": "17c22bdad9ee446ad60ad5dee82c64ec7bdf70da12339e95c803e148d86c1477",
+    "MainAdventure/world.arc": "06d29a27fabd09417badf5f9c7ac4fc4eddb3e81a6d75a63914e063968fc7cfa",
+    "index.arc": "2b8fd9922093073590d2a544c2e4110fea7661f56c7077ee73fabc278d22481c",
+    "world.arc": "43ba2aa96aa3fea7bf12597360f25fb9b3634a3a5921dfcc90f457172695d097"
+  },
+  "archives_unchanged": true,
+  "active_missions": {},
+  "completed_missions": {
+    "9027": 1,
+    "9028": 1,
+    "9029": 1,
+    "9030": 1,
+    "9031": 1,
+    "9032": 1,
+    "9072": 1,
+    "9075": 1,
+    "9126": 1,
+    "9127": 1,
+    "9077": 1
+  },
+  "top_mission_prefix_decoded_bytes": 180,
+  "random_missions": {},
+  "hunt_target": null,
+  "limitations": [
+    "Offsets are relative to ArchiveKeyAdRMRepository record, not whole archive file.",
+    "Bounds checks do not establish traversability, support, collision or complete spawn-area coverage.",
+    "No target is inferred if original9075 is not active."
+  ]
+}

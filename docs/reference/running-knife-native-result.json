@@ -1,0 +1,301 @@
+{
+  "schema": 1,
+  "kind": "bounded-native-running-knife-physical-check",
+  "date": "2026-10-06",
+  "operator": "Root desktop operator; support agent only inspected existing logs/files/screenshot",
+  "native_build": "rebuild/build/planet_explorers",
+  "settings": {
+    "mode": "Adventure sandbox",
+    "camera": "Free third person, recorded mode0",
+    "recording": "Foreground1280x720 silent CPU h26430Hz"
+  },
+  "sessions": [
+    {
+      "pid": 1944794,
+      "fixture": "rebuild/build/strafe-physical-start.pesave",
+      "fixture_scope": "Pre-existing staged4/4 hunt fixture; no combat completion credit from this run",
+      "frames": 11256,
+      "sandbox_result": 2,
+      "exit_code": 0,
+      "exit_flow": "Return to main menu, then Quit",
+      "swing_stages": 3,
+      "running_starts": 3,
+      "outgoing_contacts": 0,
+      "incoming_contacts": 0,
+      "logged_kills": 4,
+      "kill_limit": "All4already staged in loaded fixture",
+      "tools_swings": 0,
+      "resource_changes": 0,
+      "locomotion_mask": 3383,
+      "inputs": [
+        {
+          "time": 1791311115.0923374,
+          "input": "W2.4s with click at+0.8s"
+        },
+        {
+          "time": 1791311159.644419,
+          "input": "w2.4s, click after0.8s"
+        },
+        {
+          "time": 1791311163.0514803,
+          "input": "s3s only"
+        },
+        {
+          "time": 1791311167.0750422,
+          "input": "w2.4s, click after0.8s"
+        }
+      ],
+      "video": {
+        "path": "rebuild/build/running-next/video/segment-002.mkv",
+        "bytes": 3175028,
+        "sha256": "a7cb14ed0815266993d4ad0fe9ed5190b1b2b3e8c347e54d6c2ec32633349381",
+        "duration_seconds": 51.666
+      },
+      "observations": "Root reviewed motion contact sheet/video; bounded still shows running body/Knife lunge. Exact source trajectory and root/contact synchronization not inferred from still.",
+      "output_save_path": "rebuild/build/running-next/native-result.pesave",
+      "output_save_created": false
+    },
+    {
+      "pid": 1958917,
+      "fixture": "rebuild/build/hunt-host-second.pesave",
+      "fixture_scope": "Existing500HP/0kills test checkpoint; no HP/stat edits made in this run",
+      "frames": 5367,
+      "sandbox_result": 2,
+      "exit_code": 0,
+      "exit_flow": "Return to main menu, then Quit",
+      "swing_stages": 2,
+      "running_starts": 1,
+      "outgoing_contacts": 6,
+      "incoming_contacts": 8,
+      "logged_kills": 0,
+      "player_outcome": "Death observed; incoming hits also occurred during recorded idle before operator attack inputs",
+      "tools_swings": 0,
+      "resource_changes": 0,
+      "locomotion_mask": 3335,
+      "inputs": [
+        {
+          "time": 1791311384.3314056,
+          "input": "w2.6s; click at0.8s then chainclick"
+        },
+        {
+          "time": 1791311388.267925,
+          "input": "s2.6s; click at0.8s then chainclick"
+        },
+        {
+          "time": 1791311392.1960185,
+          "input": "w2.6s; click at0.8s then chainclick"
+        }
+      ],
+      "video": {
+        "path": "rebuild/build/running-next/hunt-video/segment-002.mkv",
+        "bytes": 2127542,
+        "sha256": "cff2f8989f3fe840d6d855310b5d44531ca4bacea2225eb08606eabde5d81122",
+        "duration_seconds": 29.066
+      },
+      "contact_limit": "Counts aggregate the running initialstage and its continuation. Do not attribute six contacts to408alone; no four-kill or partial-progress reload claim.",
+      "output_save_path": "rebuild/build/running-next/native-hunt-result.pesave",
+      "output_save_created": false
+    }
+  ],
+  "evidence": [
+    {
+      "path": "rebuild/build/running-next/native.log",
+      "bytes": 418,
+      "sha256": "713c77278a77ce540e193d8ee64927346b413462023364fa3dae82a1f7ba90b3"
+    },
+    {
+      "path": "rebuild/build/running-next/native-hunt.log",
+      "bytes": 417,
+      "sha256": "c8ea2c225ace3f2c063d048dabcb3e1b2df4aa00e3197784a399547908b42457"
+    },
+    {
+      "path": "rebuild/build/running-next/native.exit",
+      "bytes": 1,
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "rebuild/build/running-next/native-hunt.exit",
+      "bytes": 1,
+      "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "path": "rebuild/build/running-next/native-inputs.json",
+      "bytes": 305,
+      "sha256": "54b0c107d8b9ced929c4f05b5df6f1b85611df3a509c97ecc982ff26e37ce7df"
+    },
+    {
+      "path": "rebuild/build/running-next/native-hunt-inputs.json",
+      "bytes": 277,
+      "sha256": "e18c6c48ca8d67fc995e96bfe698a27b6d13ed2f725c50b100002021669e67e4"
+    },
+    {
+      "path": "rebuild/build/running-next/video/segments.jsonl",
+      "bytes": 630,
+      "sha256": "d4209e3b90dedf367bab816221b17fde792f21183784e9dfd928bebaae1fd5e2"
+    },
+    {
+      "path": "rebuild/build/running-next/hunt-video/segments.jsonl",
+      "bytes": 646,
+      "sha256": "94528d4535f94d1470d37a8c81f7bce64b40856d5708f334326afe05e25e9f96"
+    },
+    {
+      "path": "rebuild/build/running-next/native-session.py",
+      "bytes": 461,
+      "sha256": "8b18590760eedab76be7ad1fad6c419a6c42abbbf00d82cb4059bfb4c53a0785"
+    },
+    {
+      "path": "rebuild/build/running-next/native-hunt-session.py",
+      "bytes": 476,
+      "sha256": "aed8c063fee9439b5d3940457695814b018fafa711c71dcb575dfe9b5196844c"
+    },
+    {
+      "path": "docs/reference/running-knife-native-lunge.png",
+      "bytes": 744021,
+      "sha256": "6317bf19ebb5276c17707260dc5c5f12c9a17c32d7710f9caa54b59fad818861"
+    }
+  ],
+  "save_checks": {
+    "original_baseline": {
+      "path": "rebuild/build/running-attack-user-20261006-122231/save-hashes-before.json",
+      "bytes": 6212,
+      "sha256": "92876e5633729d08e4e3481f731e09ecfefb88353e33a4fb2e9c1942099e499c"
+    },
+    "original_files_checked": 63,
+    "original_changed_files": [],
+    "native_fixture_current_hashes": [
+      {
+        "path": "rebuild/build/strafe-physical-start.pesave",
+        "bytes": 22420596,
+        "sha256": "26a9d5963a3bd9d6e292b3590039d09052cf3c33e420fb98a3d400769e035c5e"
+      },
+      {
+        "path": "rebuild/build/hunt-host-second.pesave",
+        "bytes": 22420588,
+        "sha256": "4687ef957eb44417d3f7fb3d99cbc5d46f527d8ff61513e8f2ac9562bcd545fd"
+      }
+    ],
+    "native_limit": "Current fixture hashes recorded; no pre-run hash baseline was available for independent byte comparison. Operator issued no saves and each launch used a separate output path."
+  },
+  "separate_original_evidence": [
+    "running-knife-root06.json",
+    "running-knife-live03.json"
+  ],
+  "verification": {
+    "optimized": "verification-core.log: PASS0failures",
+    "sanitizer": "full-sanitize.log: ASan/UBSan detect_leaks1 exit0",
+    "focused_python_tests": 44,
+    "focused_python_skips": 0,
+    "tutorial15000": {
+      "status": "PASS",
+      "exit_code": 0,
+      "frames": 15000,
+      "mission": 756,
+      "npc_count": 9,
+      "npc_clock_seconds": 250,
+      "locomotion_mask": 3647,
+      "melee_starts": 8,
+      "melee_contacts": 24,
+      "hare_hp": 0,
+      "mining_swings": 5,
+      "mining_removals": 3,
+      "construction_added": 19,
+      "construction_removed": 1,
+      "construction_score": 50,
+      "scope": "Tutorial stationary progression regression; no tutorial running attacks",
+      "binary_scope": "Tutorial-only compatibility fix after sandbox physical sessions; no additional sandbox runtime change",
+      "evidence": [
+        {
+          "path": "rebuild/build/running-next/training-smoke.log",
+          "bytes": 3817,
+          "sha256": "5636f77152f759d9e4b8da8ba27c0592d762c2034afcea44343f3dfe8e13092d"
+        },
+        {
+          "path": "rebuild/build/running-next/training.exit",
+          "bytes": 1,
+          "sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+        },
+        {
+          "path": "rebuild/build/running-next/training-complete.png",
+          "bytes": 3560237,
+          "sha256": "cd85d524543cc6bb31c58d3ddd6136e7e5dc5c0045a8712ac032ecaed7a32c8e"
+        },
+        {
+          "path": "rebuild/build/running-next/first-training-smoke.log",
+          "bytes": 74,
+          "sha256": "4840cc0880c07fb786fa4a43ff370789adf0bd0eabe60d532cec431fe5ede11b"
+        },
+        {
+          "path": "rebuild/build/running-next/first-training.exit",
+          "bytes": 1,
+          "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+        }
+      ],
+      "executable": {
+        "path": "rebuild/build/planet_explorers",
+        "bytes": 2891832,
+        "sha256": "de07ffbc24e12fecf8957c3d41041e62f0e05b157f78ea7a4a69d54bf9f97168"
+      }
+    },
+    "full_make_test": {
+      "status": "all make test checks completed successfully after one fixture correction",
+      "initial_make_exit": 2,
+      "initial_failure": "test_baked_torch.py required equal total clip counts for body21 and torch20",
+      "fix": "Permit only appended RunSwordAttack408; preserve exact20 shared clocks and validate extra metadata",
+      "verification": {
+        "core": "PASS (0 failures), default build and current installed running assets",
+        "prerequisites": "All make test prerequisites passed",
+        "python_continuation": "44 recipe commands including corrected Torch suite, all exit0",
+        "optional_python_skips": 19,
+        "skips_are_passes": false,
+        "repeated_core": false,
+        "runtime_edits": false
+      },
+      "logs": {
+        "running-full-test.log": {
+          "sha256": "9c31b6d6f1e4c06a8ab3afab16ade28fe297c76880314a239f101d7b4f7617e0"
+        },
+        "running-torch-fixture.log": {
+          "sha256": "98522af8c440d707cd288a7573db27f425cd44b346d2d204716ee09c75db492f"
+        },
+        "running-python-tail.log": {
+          "sha256": "246db9f5c533f75d67157d4efddacf007fefb717833f94f001515ab4d1a9af4d"
+        },
+        "running-python-tail-completion.json": {
+          "sha256": "a3c0c294b80b239643ecf767566d76d40c7dc2a875a6fd137cc60cbcd6c760d8"
+        }
+      }
+    },
+    "content": "PASS: rebuild/build/running-next/check-content.log",
+    "cli": "PASS23cases: rebuild/build/running-next/cli.log",
+    "training_asset_clocks": "Optimized and ASan/UBSan with leak detection PASS; all seven installed scene-pair checks PASS",
+    "tutorial15000_first_attempt": {
+      "exit_code": 1,
+      "stage": "startup, before gameplay",
+      "failure": "strict21/20 body/axe total clip count",
+      "log": "rebuild/build/running-next/first-training-smoke.log",
+      "fix": "Allow only trailing body RunSwordAttack while keeping all shared clocks and action-pair checks strict",
+      "rerun": "PASS, exit0 after bounded tutorial-only compatibility correction"
+    },
+    "content_evidence": {
+      "path": "rebuild/build/running-next/check-content.log",
+      "bytes": 1110,
+      "sha256": "9af837c32889897289a511761f4643dbcd4f35a04a597283bf354887431a00e5"
+    },
+    "cli_evidence": {
+      "path": "rebuild/build/running-next/cli.log",
+      "bytes": 287,
+      "sha256": "1f2efd20385600b9810e19339e24f107a5cea7a5c3d6f7fbec429062166feccb"
+    }
+  },
+  "limits": [
+    "No exact full Unity motor/controller/blend/hit-response parity",
+    "No isolated count of contacts during stage408",
+    "No real four-kill completion/cleanup or partial-progress reload",
+    "Obstruction/cancellation/stationary regression not separately established by these two physical sessions"
+  ],
+  "tested_executable": {
+    "sha256": "19098b252cb991706821ecad5d1f415e8f18c0d69dd80690058fef78f03fc918",
+    "path": "rebuild/build/planet_explorers",
+    "note": "Sandbox physical sessions preceded tutorial-only asset compatibility fix"
+  }
+}

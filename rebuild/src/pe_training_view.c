@@ -21,9 +21,24 @@
 #include <string.h>
 #include <stdlib.h>
 
+_Static_assert(PE_LOCOMOTION_COUNT<=PE_ACTOR_BLEND_MAX,"locomotion blend capacity");
+
 static const Color accent_color = {228, 191, 107, 255};
 static Vector3 vector(PeVec3 p) { return (Vector3){p.x, p.y, p.z}; }
 static PeVec3 point(Vector3 p) { return (PeVec3){p.x, p.y, p.z}; }
+
+static bool draw_locomotion(PeActorSceneView *view,const PePlayerLocomotion *locomotion,Vector3 position,float yaw){
+    PePlayerLocomotionPose pose;if(!pe_player_locomotion_snapshot(locomotion,&pose))return false;
+    PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=0;
+    for(int i=0;i<PE_LOCOMOTION_COUNT;i++)if(pose.weights[i]>0)
+        samples[count++]=(PeActorBlendSample){pe_actor_scene_view_find_clip(view,pe_player_locomotion_name(i)),pose.seconds[i],(float)pose.weights[i]};
+    return pe_actor_scene_view_draw_blend(view,samples,count,position,yaw,1,WHITE);
+}
+static float movement_heading(float current,float target,float dt){
+    float delta=remainderf(target-current,360);
+    if(fabsf(delta)>150)delta=90;
+    return remainderf(current+delta*fminf(1,6*dt),360);
+}
 
 static void draw_marker(const PeTrainingUi *ui,Vector3 position,const char *label,Camera3D camera) {
     Vector3 delta=Vector3Subtract(position,camera.position);
@@ -138,9 +153,21 @@ static void draw_build_view(const TrainingBuildView *view) {
         DrawTriangle3D(vector(view->mesh.vertices[i].position),vector(view->mesh.vertices[i+1].position),vector(view->mesh.vertices[i+2].position),color);
     }
 }
-static bool matching_clocks(const PeActorSceneView *a,const PeActorSceneView *b) {
-    size_t count=pe_actor_scene_view_clip_count(a);
-    if(!count||count!=pe_actor_scene_view_clip_count(b))return false;
+static bool matching_clocks(const PeActorSceneView *a,const PeActorSceneView *b,bool allow_running_suffix) {
+    size_t count=pe_actor_scene_view_clip_count(a),other=pe_actor_scene_view_clip_count(b);
+    /* Shared sandbox recovery appends exact weapon-only leaves. Tutorial
+     * keeps every used prefix clock and never selects these extra poses. */
+    static const char *suffix[]={"RunSwordAttack","AttackIdle","SwordWF","SwordRF","SwordSprint",
+        "SwordJump","SwordFall","SwordLand","SwordRunJump","SwordRunFall","SwordRunLand","SwordWB","SwordRB"};
+    if(allow_running_suffix&&count>other&&(other==20||other==21)&&
+       (count==21||count==31||count==33)){
+        for(size_t i=20;i<count;i++){
+            const PeActorClip *extra=pe_actor_scene_view_clip_at(a,i);
+            if(!extra||strcmp(extra->name,suffix[i-20]))return false;
+        }
+        count=other;
+    }
+    if(!count||count!=other)return false;
     for(size_t i=0;i<count;i++) {
         const PeActorClip *x=pe_actor_scene_view_clip_at(a,i),*y=pe_actor_scene_view_clip_at(b,i);
         if(!x||!y||strcmp(x->name,y->name)||x->fps!=y->fps||x->duration!=y->duration||
@@ -166,9 +193,9 @@ static bool load_axe_views(const char *dir,PeActorSceneView *body,PeActorSceneVi
     }
     if((exists[1]!=exists[2])||((exists[1]||exists[2])&&!exists[0]))return false;
     for(unsigned i=0;i<3;i++)if(exists[i]&&!pe_actor_scene_view_load(views[i],paths[i],error,sizeof error))goto fail;
-    if(exists[0]&&(!body->loaded||!matching_clocks(body,axe)))goto fail;
+    if(exists[0]&&(!body->loaded||!matching_clocks(body,axe,true)))goto fail;
     if(exists[1]) {
-        if(!matching_clocks(cut_body,cut_axe)||pe_actor_scene_view_clip_count(cut_body)!=3)goto fail;
+        if(!matching_clocks(cut_body,cut_axe,false)||pe_actor_scene_view_clip_count(cut_body)!=3)goto fail;
         const char *clips[]={"Felling1","Felling2","Felling3"};
         for(unsigned i=0;i<3;i++) {
             cuts[i]=pe_actor_scene_view_find_clip(cut_body,clips[i]);
@@ -191,7 +218,7 @@ static bool load_shovel_views(const char *dir,PeActorSceneView *body,PeActorScen
     if(!count)return true;
     if(count!=4)return false;
     for(unsigned i=0;i<4;i++)if(!pe_actor_scene_view_load(&views[i],paths[i],error,sizeof error))goto fail;
-    if(!matching_clocks(body,&views[0])||!matching_clocks(body,&views[1])||!matching_clocks(&views[2],&views[3])||
+    if(!matching_clocks(body,&views[0],true)||!matching_clocks(body,&views[1],true)||!matching_clocks(&views[2],&views[3],false)||
        pe_actor_scene_view_clip_count(&views[2])!=3)goto fail;
     for(unsigned i=0;i<3;i++) {
         const char *clips[]={"Spade1","Spade2","Spade3"};
@@ -310,7 +337,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
             }
         }
         if(!pe_player_locomotion_init(&locomotion,durations)) {
-            fprintf(stderr,"Training player needs all six locomotion clips\n");
+            fprintf(stderr,"Training player needs all twelve directional locomotion clips\n");
             pe_actor_scene_view_unload(&stowed);pe_actor_scene_view_unload(&player);
             pe_actor_view_unload(&hare);pe_reference_unload(&knife);pe_reference_unload(&kit);
             pe_reference_unload(&reference);pe_scene_free(scene);CloseWindow();return 1;
@@ -336,13 +363,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 .attack=19,.stamina_reduce_percent=1,.target_hp=hare_motion.max_hp,
                 .target_max_hp=hare_motion.max_hp,.target_defense=hare_motion.defense};
             loaded=drawn_boxes&&hare_boxes&&pe_training_melee_init(&melee,&setup);
-            for(size_t i=0;loaded&&i<pe_actor_scene_view_clip_count(&player);i++) {
-                const PeActorClip *body=pe_actor_scene_view_clip_at(&player,i);
-                size_t other=pe_actor_scene_view_find_clip(&drawn_view,body->name);
-                const PeActorClip *blade=pe_actor_scene_view_clip_at(&drawn_view,other);
-                loaded=blade&&body->fps==blade->fps&&body->duration==blade->duration&&body->frames==blade->frames&&
-                    body->loop==blade->loop&&body->terminal_at_duration==blade->terminal_at_duration;
-            }
+            loaded=loaded&&matching_clocks(&player,&drawn_view,true);
         }
         if(!loaded) {
             fprintf(stderr,"Training melee needs matching baked body/drawn knife and hare hitboxes\n");
@@ -525,8 +546,11 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
         /* A Resume click/key belongs to the pause screen for its whole frame. */
         if(focused&&!paused&&!pause_was_active&&!smoke_frames&&!window_input_consumed) {
             Vector2 pointer=GetMousePosition();
-            if(talk&&(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_SPACE)||(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&pe_training_ui_contains(ui.layout.dialogue,pointer.x,pointer.y)))) {
-                pe_training_advance_dialogue(&training,talk);dialogue_input_consumed=true;
+            unsigned response=0;
+            for(int k=0;k<9;k++)if(IsKeyPressed(KEY_ONE+k)||IsKeyPressed(KEY_KP_1+k)){response=(unsigned)k+1;break;}
+            if(pe_training_dialogue_response(&training,response,IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_SPACE)||
+               (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)&&pe_training_ui_contains(ui.layout.dialogue,pointer.x,pointer.y)))) {
+                dialogue_input_consumed=true;
             }
             else if(!talk) {
                 const bool menu_was_open=menu_open;
@@ -935,15 +959,23 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 PeVec3 motion_velocity=training.velocity;
                 motion_velocity.x=(training.position.x-previous_position.x)/PE_TRAINING_DT;
                 motion_velocity.z=(training.position.z-previous_position.z)/PE_TRAINING_DT;
+                /* Free third person turns into travel. Captured camera modes
+                 * retain camera-facing body orientation so A/D can strafe. */
+                bool action_facing=(melee.ready&&melee.action.active)||
+                    training.dig.stage!=PE_DIG_IDLE||training.gathering.tree_stage!=PE_TREE_IDLE;
+                if(!action_facing&&training.camera_mode!=0)
+                    player_yaw=atan2f(sinf(yaw),-cosf(yaw))*RAD2DEG;
+                else if(!action_facing&&hypotf(motion_velocity.x,motion_velocity.z)>.05f)
+                    player_yaw=movement_heading(player_yaw,atan2f(motion_velocity.x,motion_velocity.z)*RAD2DEG,PE_TRAINING_DT);
                 if(animated_player) {
                     PePlayerLocomotionInput motion={.velocity=motion_velocity,
                         .grounded=training.grounded,.walk=input.walk,.sprint=training.sprinting,
-                        .jump_started=!was_jumping&&training.jumping};
+                        .jump_started=!was_jumping&&training.jumping,.directional=true,
+                        .local_right=motion_velocity.x*cosf(player_yaw*DEG2RAD)-motion_velocity.z*sinf(player_yaw*DEG2RAD),
+                        .local_forward=motion_velocity.x*sinf(player_yaw*DEG2RAD)+motion_velocity.z*cosf(player_yaw*DEG2RAD)};
                     if(!pe_player_locomotion_step(&locomotion,motion,PE_TRAINING_DT)){failed=true;quit=true;}
                     locomotion_seen|=1u<<locomotion.clip;
                 }
-                if(hypotf(motion_velocity.x,motion_velocity.z)>.05f)
-                    player_yaw=atan2f(motion_velocity.x,motion_velocity.z)*RAD2DEG;
                 if(hare.loaded&&training.tutorial.mission_id==PE_TUTORIAL_COMBAT&&(!melee.ready||melee.target_hp>0)) {
                     /* Leisure only: target acquisition and contact are not yet ported. */
                     if(!pe_hare_step(&hare_motion,scene,NULL)){failed=true;quit=true;}
@@ -1063,14 +1095,17 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 body_view=&shovel_views[2];clip=pe_actor_scene_view_find_clip(body_view,pe_training_dig_clip(&training.dig));
                 seconds=pe_training_dig_clip_seconds(&training.dig);
             }
-            if(!pe_actor_scene_view_draw_clip(body_view,clip,seconds,vector(training.position),player_yaw,1,WHITE))failed=true;
+            bool blending=animated_player&&!(melee.ready&&melee.action.active)&&cut_phase<0&&training.dig.stage==PE_DIG_IDLE;
+            if(!(blending?draw_locomotion(body_view,&locomotion,vector(training.position),player_yaw):
+                pe_actor_scene_view_draw_clip(body_view,clip,seconds,vector(training.position),player_yaw,1,WHITE)))failed=true;
         } else if(!player.loaded)draw_avatar(&training);
         if(training.axe_equipped&&training.axe_held&&axe_view.loaded&&training.camera_mode!=2) {
             PeActorSceneView *tool_view=&axe_view;
             size_t clip=pe_actor_scene_view_find_clip(&axe_view,pe_player_locomotion_name(locomotion.clip));
             double seconds=locomotion.seconds;
             if(cut_phase>=0&&cut_axe_view.loaded){tool_view=&cut_axe_view;clip=cut_clips[cut_phase];seconds=training.gathering.tree_time;}
-            if(!pe_actor_scene_view_draw_clip(tool_view,clip,seconds,vector(training.position),player_yaw,1,WHITE))failed=true;
+            if(!(animated_player&&cut_phase<0?draw_locomotion(tool_view,&locomotion,vector(training.position),player_yaw):
+                pe_actor_scene_view_draw_clip(tool_view,clip,seconds,vector(training.position),player_yaw,1,WHITE)))failed=true;
         }
         if(training.equipped_shovel>=0&&shovel_views[0].loaded&&training.camera_mode!=2) {
             PeActorSceneView *tool_view=&shovel_views[training.shovel_held?0:1];
@@ -1079,16 +1114,18 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 tool_view=&shovel_views[3];clip_name=pe_training_dig_clip(&training.dig);seconds=pe_training_dig_clip_seconds(&training.dig);
             }
             size_t clip=pe_actor_scene_view_find_clip(tool_view,clip_name);
-            if(!pe_actor_scene_view_draw_clip(tool_view,clip,seconds,vector(training.position),player_yaw,1,WHITE))failed=true;
+            if(!(animated_player&&training.dig.stage==PE_DIG_IDLE?draw_locomotion(tool_view,&locomotion,vector(training.position),player_yaw):
+                pe_actor_scene_view_draw_clip(tool_view,clip,seconds,vector(training.position),player_yaw,1,WHITE)))failed=true;
         }
         if(training.knife_equipped&&knife_drawn&&drawn_view.loaded&&training.camera_mode!=2) {
             size_t clip=melee.action.active?melee.knife_clip[melee.action.stage]:
                 pe_actor_scene_view_find_clip(&drawn_view,pe_player_locomotion_name(locomotion.clip));
             double seconds=melee.action.active?melee.action.clip_time:locomotion.seconds;
-            if(!pe_actor_scene_view_draw_clip(&drawn_view,clip,seconds,vector(training.position),player_yaw,1,WHITE))failed=true;
+            if(!(!animated_player||melee.action.active?pe_actor_scene_view_draw_clip(&drawn_view,clip,seconds,vector(training.position),player_yaw,1,WHITE):
+                draw_locomotion(&drawn_view,&locomotion,vector(training.position),player_yaw)))failed=true;
         } else if(training.knife_equipped&&stowed.loaded&&training.camera_mode!=2) {
-            if(!pe_actor_scene_view_draw_clip(&stowed,animated_stowed?stowed_clips[locomotion.clip]:0,
-                animated_stowed?locomotion.seconds:0,vector(training.position),player_yaw,1,WHITE))failed=true;
+            if(!(animated_stowed?draw_locomotion(&stowed,&locomotion,vector(training.position),player_yaw):
+                pe_actor_scene_view_draw_clip(&stowed,0,0,vector(training.position),player_yaw,1,WHITE)))failed=true;
         } else if(training.knife_equipped&&knife.loaded&&training.camera_mode!=2) {
             /* Waist proxy only: the source hand/waist skeleton is not loaded. */
             Vector3 waist=Vector3Add(vector(training.position),(Vector3){.35f*cosf(yaw),.95f,.35f*sinf(yaw)});
@@ -1211,9 +1248,9 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
            frame, training.tutorial.mission_id, training.tutorial.camera_objectives,
            training.tutorial.movement_objectives, training.position.x, training.position.y, training.position.z);
     printf("Training visuals: recovered diffuse room textures; %s.\n",
-           animated_player?"recovered starter character with six locomotion clips":
+           animated_player?"recovered starter character with twelve directional locomotion clips":
            (player.loaded?"recovered starter character at recorded idle pose":"temporary capsule avatar"));
-    if(animated_player)printf("Training locomotion: clip %s, seconds %.3f, exercised mask %u; discrete selection, sprint uses run fallback.\n",
+    if(animated_player)printf("Training locomotion: clip %s, seconds %.3f, exercised mask %u; smoothed pose weights, sprint uses run fallback.\n",
         pe_player_locomotion_name(locomotion.clip),locomotion.seconds,locomotion_seen);
     printf("Training items: Herbal Juice %d; kit transferred %d; Andy reached %d\n",training.juice_count,training.kit_transferred,training.andy_reached);
     printf("Training NPCs: %zu of %u recovered characters, idle clock %.3f\n",npcs.count,PE_TRAINING_NPC_COUNT,npcs.seconds);

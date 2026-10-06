@@ -66,9 +66,13 @@ static void synthetic_tests(void){
     const PeTrainingDialogue *first=pe_training_dialogue_entry(300215),*second=pe_training_dialogue_entry(300258);
     CHECK(first&&first->speaker_npc_id==9041&&strstr(first->english,"Welcome to the simulation deck!"));
     CHECK(second&&second->speaker_npc_id==-9995&&strstr(second->english,"Press F5"));
-    CHECK(pe_training_advance_dialogue(&t,300215)&&pe_training_dialogue(&t)==300258);
+    CHECK(pe_training_dialogue_response(&t,9,false)&&!memcmp(&t,&welcome,sizeof t));
+    CHECK(pe_training_dialogue_response(&t,0,false)&&!memcmp(&t,&welcome,sizeof t));
+    CHECK(pe_training_dialogue_response(&t,1,false)&&pe_training_dialogue(&t)==300258);
     welcome=t;CHECK(!pe_training_advance_dialogue(&t,300215)&&!pe_training_camera(&t,1)&&!memcmp(&t,&welcome,sizeof t));
-    CHECK(pe_training_advance_dialogue(&t,300258)&&!pe_training_dialogue(&t));
+    CHECK(pe_training_dialogue_response(&t,1,false)&&!pe_training_dialogue(&t));
+    welcome=t;CHECK(!pe_training_dialogue_response(&t,1,false)&&!memcmp(&t,&welcome,sizeof t));
+    CHECK(!pe_training_dialogue_response(NULL,1,true));
     CHECK(t.tutorial.mission_id==739&&t.tutorial.camera_objectives==0);
 
     CHECK(pe_training_camera(&t,1));CHECK(!pe_training_camera(&t,1));CHECK(t.tutorial.mission_id==739);

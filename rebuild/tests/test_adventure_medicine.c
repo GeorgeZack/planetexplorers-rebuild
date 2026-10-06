@@ -5,7 +5,7 @@
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"medicine:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static int slot(const PeGame *g,int id){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;return -1;}
-static void empty(PeGame *g){memset(&g->inventory,0,sizeof g->inventory);g->inventory.next_instance_id=1;}
+static void empty(PeGame *g){memset(g->inventory.slots,0,sizeof g->inventory.slots);}
 int pe_test_adventure_medicine(void){
     PeGame *g=calloc(1,sizeof *g);if(!g)return 1;
     CHECK(!pe_adventure_medicine_state_valid(NULL));CHECK(!pe_adventure_medicine_ready(NULL));

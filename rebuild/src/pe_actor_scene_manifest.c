@@ -103,7 +103,7 @@ PeActorSceneManifest *pe_actor_scene_manifest_load(const char *path,char *error,
            !(s->png[i]=png_snapshot(s->parts[i].diffuse,&s->png_size[i],&pixels))){fail(error,cap,"missing/invalid required actor or PNG");goto bad;}
         PeActor *actor=pe_actor_load(s->parts[i].actor,error,cap);if(!actor)goto bad;
         PeActorStats stats=pe_actor_stats(actor);total_vertices+=stats.vertices;total_indices+=stats.indices;
-        if(!stats.clips||stats.clips>PE_ACTOR_SCENE_MAX_CLIPS||total_vertices>1000000||total_indices>3000000){pe_actor_free(actor);fail(error,cap,"scene requires 1..32 clips per part within geometry budget");goto bad;}
+        if(!stats.clips||stats.clips>PE_ACTOR_SCENE_MAX_CLIPS||total_vertices>1000000||total_indices>3000000){pe_actor_free(actor);fail(error,cap,"scene requires 1..64 clips per part within geometry budget");goto bad;}
         /* Exact validated PEAC v1/v2 encoded size from the retained object. A
          * concurrent replacement after stat cannot under-report its budget. */
         total_bytes+=24+(uint64_t)stats.vertices*56+(uint64_t)stats.indices*4+

@@ -1,0 +1,76 @@
+{
+  "schema": 1,
+  "kind": "original-user-playtest-crash",
+  "time_local": "2026-10-06 08:10:31 CDT",
+  "pid": 1292077,
+  "faulting_tid": 1292091,
+  "final_signal": "SIGABRT",
+  "underlying_signal": "SIGSEGV reported by Mono",
+  "fault_instruction": "mov (%rsi),%edi",
+  "rsi": "0xc",
+  "pc": "0x41201b02",
+  "pc_mapping": "/memfd:/.glXXXXXX (deleted)",
+  "driver": "libnvidia-glcore.so.580.178.04",
+  "main_thread": "waiting in native synchronization",
+  "comparison": "Previous PID540553 has same fault instruction/RSI and matching NVIDIA caller offsets",
+  "oom_evidence": "No OOM kill in inspected08:08\u201308:11:30 journal interval",
+  "observer_loaded": false,
+  "observer_evidence": "Ordinary launch command; no pose shim or observation DLL listed in core mappings",
+  "cause_limit": "Graphics path implicated; precise driver-versus-game defect and recording contribution unresolved",
+  "video": "segment-012.mkv",
+  "video_duration_seconds": 155.7,
+  "video_decode_exit": 0,
+  "video_sha256": "c62078e7e8a7436d29f9f9cd9f2baa8c812ca633b2fe8c3617647eb62b667c62",
+  "raw_logs": "Kept in ignored rebuild/build/user-playtest-20261006; extracted core copy deleted",
+  "save_integrity": [
+    {
+      "reference": "hunt-original-save.json",
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save4",
+      "all_unchanged": true,
+      "files": {
+        "MainAdventure/block45.arc": true,
+        "MainAdventure/index.arc": true,
+        "MainAdventure/voxel.arc": true,
+        "MainAdventure/water.arc": true,
+        "MainAdventure/world.arc": true,
+        "index.arc": true,
+        "world.arc": true
+      }
+    },
+    {
+      "reference": "hunt-original-encounter.json",
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save5",
+      "all_unchanged": true,
+      "files": {
+        "MainAdventure/block45.arc": true,
+        "MainAdventure/index.arc": true,
+        "MainAdventure/voxel.arc": true,
+        "MainAdventure/water.arc": true,
+        "MainAdventure/world.arc": true,
+        "index.arc": true,
+        "world.arc": true
+      }
+    },
+    {
+      "reference": "hunt-original-return.json",
+      "save_directory": "/home/admin/.local/share/planet-explorers-hunt-reference/PlanetExplorers/GameSave/save6",
+      "all_unchanged": true,
+      "files": {
+        "MainAdventure/block45.arc": true,
+        "MainAdventure/index.arc": true,
+        "MainAdventure/voxel.arc": true,
+        "MainAdventure/water.arc": true,
+        "MainAdventure/world.arc": true,
+        "index.arc": true,
+        "world.arc": true
+      }
+    }
+  ],
+  "retry": {
+    "environment": {
+      "__GL_WRITE_TEXT_SECTION": "0"
+    },
+    "status": "Prepared only; not launched or verified",
+    "purpose": "Disable driver executable-memory optimizations for one process; isolate relevance of faulting .gl code path"
+  }
+}

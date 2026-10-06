@@ -42,11 +42,15 @@ bad:
 }
 static bool finite_point(PeVec3 p){return isfinite(p.x)&&isfinite(p.y)&&isfinite(p.z)&&fabsf(p.x)<=1000000&&fabsf(p.y)<=1000000&&fabsf(p.z)<=1000000;}
 bool pe_hitbox_pose(const PeHitboxes *b,const PeActor *a,size_t index,size_t clip,double seconds,PeVec3 root,float yaw,float scale,PeHitboxCapsule*out){
+    PeActorBlendSample sample={clip,seconds,1};
+    return pe_hitbox_pose_blend(b,a,index,&sample,1,root,yaw,scale,out);
+}
+bool pe_hitbox_pose_blend(const PeHitboxes *b,const PeActor *a,size_t index,const PeActorBlendSample *samples,size_t count,PeVec3 root,float yaw,float scale,PeHitboxCapsule*out){
     const PeHitboxDefinition*d=pe_hitboxes_get(b,index);
     if(!d||!a||!out||d->joint==PE_HITBOX_DISABLED||b->joints!=pe_actor_stats(a).joints||b->fingerprint!=pe_actor_skeleton_hash(a)||
        !finite_point(root)||!isfinite(yaw)||!isfinite(scale)||scale<=0||scale>1000)return false;
     float points[4][3];
-    for(int p=0;p<4;p++)if(!pe_actor_pose_joint_point(a,clip,seconds,d->joint,d->bind_points[p],points[p]))return false;
+    for(int p=0;p<4;p++)if(!pe_actor_pose_joint_point_blend(a,samples,count,d->joint,d->bind_points[p],points[p]))return false;
     double angle=remainder((double)yaw,360)*3.14159265358979323846/180,c=cos(angle),s=sin(angle),radius=0;
     PeVec3 transformed[2];
     for(int p=0;p<2;p++){

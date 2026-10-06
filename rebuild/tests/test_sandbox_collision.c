@@ -1,4 +1,5 @@
 #include "pe_sandbox_collision.h"
+#include "pe_hare_perception.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -120,6 +121,89 @@ static int tree_geometry(void){
     CHECK(!pe_tree_collision_valid(NULL));CHECK(!pe_tree_collision_sweep(&source,touching,r,h,(PeVec3){NAN,0,0}).hit);
     return failures;
 }
+static int tree_rays(void){
+    int failures=0;PeTreeCapsule tree={{20,12,20},1,7};
+    PeSceneHit hit=pe_tree_collision_ray(&tree,(PeVec3){10,12,20},(PeVec3){2,0,0},10);
+    CHECK(hit.hit&&hit.distance==9&&fabsf(hit.fraction-.9f)<1e-6f&&hit.position.x==19&&hit.normal.x==-1&&hit.triangle==UINT32_MAX);
+    CHECK(pe_tree_collision_ray(&tree,(PeVec3){10,12,20},(PeVec3){1,0,0},9).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){10,12,20},(PeVec3){1,0,0},nextafterf(9,0)).hit);
+    hit=pe_tree_collision_ray(&tree,(PeVec3){20,20,20},(PeVec3){0,-3,0},10);
+    CHECK(hit.hit&&hit.distance==4.5f&&hit.position.y==15.5f&&hit.normal.y==1);
+    hit=pe_tree_collision_ray(&tree,(PeVec3){20.6f,20,20},(PeVec3){0,-1,0},10);
+    CHECK(hit.hit&&fabsf(hit.distance-4.7f)<.00001f&&fabsf(hit.normal.x-.6f)<.00001f&&fabsf(hit.normal.y-.8f)<.00001f);
+    hit=pe_tree_collision_ray(&tree,(PeVec3){20,0,20},(PeVec3){0,1,0},20);
+    CHECK(hit.hit&&hit.distance==8.5f&&hit.normal.y==-1);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){10,16,20},(PeVec3){1,0,0},30).hit);
+    /* Exact ray tangency is distinct from a moving finite capsule. */
+    hit=pe_tree_collision_ray(&tree,(PeVec3){10,12,21},(PeVec3){1,0,0},20);
+    CHECK(hit.hit&&hit.distance==10&&hit.normal.z==1);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){10,12,nextafterf(21,INFINITY)},(PeVec3){1,0,0},20).hit);
+    hit=pe_tree_collision_ray(&tree,(PeVec3){10,15.5f,20},(PeVec3){1,0,0},20);
+    CHECK(hit.hit&&hit.distance==10&&hit.normal.y==1);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){20,12,20},(PeVec3){1,0,0},20).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){20,15,20},(PeVec3){0,1,0},20).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){19,12,20},(PeVec3){-1,0,0},20).hit);
+    hit=pe_tree_collision_ray(&tree,(PeVec3){19,12,20},(PeVec3){1,0,0},20);CHECK(hit.hit&&hit.distance==0);
+    hit=pe_tree_collision_ray(&tree,(PeVec3){19,12,20},(PeVec3){0,0,1},20);CHECK(hit.hit&&hit.distance==0);
+    PeTreeCapsule sphere={{20,12,20},1,2};hit=pe_tree_collision_ray(&sphere,(PeVec3){20,20,20},(PeVec3){0,-1,0},20);
+    CHECK(hit.hit&&hit.distance==7&&hit.normal.y==1);
+    CHECK(!pe_tree_collision_ray(NULL,(PeVec3){0},(PeVec3){1,0,0},20).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){NAN,0,0},(PeVec3){1,0,0},20).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){0},(PeVec3){INFINITY,0,0},20).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){0},(PeVec3){0},20).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){0},(PeVec3){1,0,0},INFINITY).hit);
+    CHECK(!pe_tree_collision_ray(&tree,(PeVec3){0},(PeVec3){1,0,0},0).hit);
+    return failures;
+}
+static bool perception_block(const void *context,PeVec3 origin,PeVec3 target,uint32_t mask,bool *blocked){
+    if(mask!=PE_HARE_PERCEPTION_BLOCK_MASK)return false;
+    PeVec3 direction={target.x-origin.x,target.y-origin.y,target.z-origin.z};
+    float distance=sqrtf(direction.x*direction.x+direction.y*direction.y+direction.z*direction.z);
+    *blocked=pe_sandbox_collision_ray_perception(context,origin,direction,distance).hit;return true;
+}
+static int perception_snapshot(PeSandboxCollision *c,PeWorld *w){
+    int failures=0;char error[128];plane(w,8);float floor=8+127.0f/255;
+    PeTreeCapsule trees[]={{{20,floor+3,20},1,7},{{26,floor+3,20},1,7}};
+    CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,trees,2,error,sizeof(error)));
+    PeVec3 origin={17,floor+1.5f,20},direction={3,0,0};
+    CHECK(!pe_sandbox_collision_ray_geometry(c,origin,direction,20).hit);
+    PeHarePerception perception;CHECK(pe_hare_perception_init(&perception,100,1));
+    PeHarePerceptionQueries queries={c,perception_block};
+    PeHarePerceptionTarget target={true,true,true,false,{27,floor,20},{27,floor+1.5f,20},.3f};
+    PeHareVisionPose sensor={origin,{1,0,0}};perception.vision_updates=19;perception.hearing_updates=15;
+    CHECK(pe_hare_perception_vision(&perception,(PeHareVisionConfig){20,60},sensor,target,&queries));
+    CHECK(pe_hare_perception_hearing(&perception,(PeHareHearingConfig){15,false},origin,target,&queries));
+    CHECK(!perception.visible&&!perception.heard); /* Actual ray occlusion reaches both source sensor caches. */
+    PeSceneHit hit=pe_sandbox_collision_ray_perception(c,origin,direction,20);
+    CHECK(hit.hit&&hit.distance==2&&hit.position.x==19&&hit.normal.x==-1&&hit.triangle==UINT32_MAX);
+    CHECK(!pe_sandbox_collision_ray_perception(c,origin,direction,nextafterf(2,0)).hit);
+    CHECK(pe_sandbox_collision_ray_perception(c,origin,direction,2).hit);
+    /* Interior first tree is ignored; a later tree still occludes the ray. */
+    hit=pe_sandbox_collision_ray_perception(c,(PeVec3){20,floor+1.5f,20},direction,20);
+    CHECK(hit.hit&&hit.distance==5&&hit.position.x==25);
+    /* A real box closer than a tree wins; clearing it restores tree contact. */
+    PeSandboxBox box={{18,floor,19},{18.1f,floor+4,21}};
+    CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,&box,1,trees,2,error,sizeof(error)));
+    hit=pe_sandbox_collision_ray_perception(c,origin,direction,20);CHECK(hit.hit&&hit.distance==1&&hit.triangle!=UINT32_MAX);
+    CHECK(pe_sandbox_collision_ray_geometry(c,origin,direction,20).hit);
+    CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,trees,2,error,sizeof(error)));
+    trees[0].center.x=30;CHECK(pe_sandbox_collision_ray_perception(c,origin,direction,20).distance==2); /* Borrowed inputs copied. */
+    CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,trees,2,error,sizeof(error)));
+    CHECK(pe_sandbox_collision_ray_perception(c,origin,direction,20).distance==8);
+    hit=pe_sandbox_collision_ray_perception(c,(PeVec3){10,floor+5,10},(PeVec3){0,-1,0},10);
+    CHECK(hit.hit&&fabsf(hit.distance-5)<.00001f&&hit.normal.y>.99f);
+    CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,NULL,0,error,sizeof(error)));
+    CHECK(!pe_sandbox_collision_ray_perception(c,origin,direction,20).hit);
+    perception.vision_updates=39;perception.hearing_updates=31;
+    CHECK(pe_hare_perception_vision(&perception,(PeHareVisionConfig){20,60},sensor,target,&queries));
+    CHECK(pe_hare_perception_hearing(&perception,(PeHareHearingConfig){15,false},origin,target,&queries));
+    CHECK(perception.visible&&perception.heard);
+    CHECK(!pe_sandbox_collision_ray_perception(c,(PeVec3){62,floor+10,20},(PeVec3){1,0,0},20).hit); /* No crop-wall fiction. */
+    CHECK(!pe_sandbox_collision_ray_perception(c,origin,(PeVec3){0},20).hit);
+    CHECK(!pe_sandbox_collision_ray_perception(c,origin,direction,NAN).hit);
+    CHECK(!pe_sandbox_collision_ray_perception(NULL,origin,direction,20).hit);
+    return failures;
+}
 static int tree_snapshot(PeSandboxCollision *c,PeWorld *w){
     int failures=0;char error[128];plane(w,8);float floor=8+127.0f/255;
     PeTreeCapsule trees[]={{{20,floor+3,20},1,7},{{26,floor+3,20},1,7}};
@@ -170,6 +254,6 @@ static int tree_snapshot(PeSandboxCollision *c,PeWorld *w){
 int pe_test_sandbox_collision(void){
     int failures=0;PeWorld *world=calloc(1,sizeof *world);PeSandboxCollision *c=pe_sandbox_collision_create();if(!world||!c){free(world);pe_sandbox_collision_free(c);return 1;}
     CHECK(pe_sandbox_collision_overlap(c,(PeVec3){20,20,20},.3f,1.8f));
-    failures+=lifecycle(c,world);failures+=geometry(c,world);failures+=movement(c,world);failures+=tree_geometry();failures+=tree_snapshot(c,world);
+    failures+=lifecycle(c,world);failures+=geometry(c,world);failures+=movement(c,world);failures+=tree_geometry();failures+=tree_rays();failures+=tree_snapshot(c,world);failures+=perception_snapshot(c,world);
     free(world);pe_sandbox_collision_free(c);return failures;
 }

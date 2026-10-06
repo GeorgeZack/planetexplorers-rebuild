@@ -70,7 +70,7 @@ PeActor *pe_actor_load(const char *path,char *error,size_t capacity) {
     a->stats.vertices=read_u32(&r); a->stats.indices=read_u32(&r);
     a->stats.joints=read_u32(&r); a->stats.clips=read_u32(&r);
     size_t nv=a->stats.vertices,ni=a->stats.indices,nj=a->stats.joints,nc=a->stats.clips;
-    if(!nv||nv>1000000||!ni||ni>3000000||ni%3||!nj||nj>MAX_JOINTS||!nc||nc>32) goto bad;
+    if(!nv||nv>1000000||!ni||ni>3000000||ni%3||!nj||nj>MAX_JOINTS||!nc||nc>PE_ACTOR_MAX_CLIPS) goto bad;
     if(nv*56+ni*4+nj*48+nc*48>size-r.offset) goto bad;
     a->vertices=calloc(nv,sizeof(Vertex)); a->indices=malloc(ni*sizeof(uint32_t));
     a->bind=malloc(nj*12*sizeof(float)); a->clips=calloc(nc,sizeof(Clip));
@@ -196,4 +196,76 @@ bool pe_actor_pose_joint_point(const PeActor *a,size_t clip,double seconds,size_
         result[k]=(float)value;
     }
     memcpy(output,result,sizeof(result));return true;
+}
+
+static bool blend_weights(const PeActor *a,const PeActorBlendSample *samples,size_t count,double *total,size_t *positive){
+    if(!a||!samples||!count||count>PE_ACTOR_BLEND_MAX)return false;
+    double sum=0;size_t active=0;
+    for(size_t i=0;i<count;i++){
+        if(!isfinite(samples[i].weight)||samples[i].weight<0||!isfinite(samples[i].seconds)||samples[i].seconds<0||
+           (samples[i].clip!=PE_ACTOR_BIND_POSE&&samples[i].clip>=a->stats.clips))return false;
+        sum+=samples[i].weight;if(samples[i].weight>0)active++;
+    }
+    if(!isfinite(sum)||sum<=0)return false;
+    *total=sum;*positive=active;return true;
+}
+bool pe_actor_blend_valid(const PeActor *a,const PeActorBlendSample *samples,size_t count){
+    double total;size_t positive;
+    if(!blend_weights(a,samples,count,&total,&positive))return false;
+    /* Actors are immutable validated palettes; prepare checks exact sampled
+     * normal transforms before any caller mutates a pose or submits drawing. */
+    Pose pose;
+    for(size_t i=0;i<count;i++)if(samples[i].weight>0&&!pose_prepare(a,samples[i].clip,samples[i].seconds,&pose,true))return false;
+    return true;
+}
+typedef struct { Pose poses[PE_ACTOR_BLEND_MAX];double weights[PE_ACTOR_BLEND_MAX];size_t count; } Blend;
+static bool blend_prepare(const PeActor *a,const PeActorBlendSample *samples,size_t count,Blend *b){
+    double total;size_t positive;
+    if(!blend_weights(a,samples,count,&total,&positive))return false;
+    b->count=0;
+    for(size_t i=0;i<count;i++)if(samples[i].weight>0){
+        size_t j=b->count++;
+        if(!pose_prepare(a,samples[i].clip,samples[i].seconds,&b->poses[j],true))return false;
+        b->weights[j]=(double)samples[i].weight/total;
+    }
+    return true;
+}
+static void vertex_blend(const Vertex *v,const Blend *b,PeActorVertex *out){
+    if(b->count==1){vertex_pose(v,&b->poses[0],out);return;}
+    double position[3]={0},normal[3]={0};PeActorVertex sample;
+    for(size_t i=0;i<b->count;i++){
+        vertex_pose(v,&b->poses[i],&sample);
+        for(int k=0;k<3;k++){position[k]+=b->weights[i]*sample.position[k];normal[k]+=b->weights[i]*sample.normal[k];}
+    }
+    double length=sqrt(normal[0]*normal[0]+normal[1]*normal[1]+normal[2]*normal[2]);
+    if(length<1e-10){
+        for(int k=0;k<3;k++)normal[k]=v->vertex.normal[k];
+        length=sqrt(normal[0]*normal[0]+normal[1]*normal[1]+normal[2]*normal[2]);
+    }
+    *out=v->vertex;
+    for(int k=0;k<3;k++){out->position[k]=(float)position[k];out->normal[k]=(float)(normal[k]/length);}
+}
+bool pe_actor_pose_blend(const PeActor *a,const PeActorBlendSample *samples,size_t count,PeActorVertex *out,size_t capacity){
+    if(!a||!out||capacity<a->stats.vertices)return false;
+    Blend b;if(!blend_prepare(a,samples,count,&b))return false;
+    for(size_t i=0;i<a->stats.vertices;i++)vertex_blend(a->vertices+i,&b,out+i);
+    return true;
+}
+bool pe_actor_pose_vertex_blend(const PeActor *a,const PeActorBlendSample *samples,size_t count,size_t vertex,PeActorVertex *out){
+    if(!a||!out||vertex>=a->stats.vertices)return false;
+    Blend b;if(!blend_prepare(a,samples,count,&b))return false;
+    vertex_blend(a->vertices+vertex,&b,out);return true;
+}
+bool pe_actor_pose_joint_point_blend(const PeActor *a,const PeActorBlendSample *samples,size_t count,size_t joint,const float point[3],float output[3]){
+    if(!a||!point||!output||joint>=a->stats.joints)return false;
+    double total;size_t positive;
+    if(!blend_weights(a,samples,count,&total,&positive))return false;
+    double sum[3]={0};float result[3]={0};
+    for(size_t i=0;i<count;i++)if(samples[i].weight>0){
+        if(!pe_actor_pose_joint_point(a,samples[i].clip,samples[i].seconds,joint,point,result))return false;
+        for(int k=0;k<3;k++)sum[k]+=(double)samples[i].weight/total*result[k];
+    }
+    /* Avoid extra arithmetic at the exact single-pose endpoint. */
+    if(positive>1)for(int k=0;k<3;k++)result[k]=(float)sum[k];
+    memcpy(output,result,sizeof result);return true;
 }

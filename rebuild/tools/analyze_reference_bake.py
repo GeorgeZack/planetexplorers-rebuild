@@ -4,6 +4,7 @@
 Standard library only. Does not launch Unity, evaluate clips or invent poses.
 """
 import argparse
+from pe_actor_limits import PEAC_MAX_CLIPS
 import json
 import math
 from pathlib import Path
@@ -66,7 +67,7 @@ def analyze(path, rig, retain=False):
                 if any(row[k] is not False for k in ('fireEvents','controllerAttached','applyRootMotion')): pose.fail('Bake isolation flags differ')
                 if row.get('sampleCountPolicy') not in (None,'ceil-f64-product-terminal-length'):pose.fail('Unknown sample count policy')
                 if row.get('cleanupPolicy') not in (None,'stop-disable-dispose','retain-inactive-per-clip-until-process-exit'):pose.fail('Unknown lifecycle policy')
-                if row.get('cleanupPolicy')=='retain-inactive-per-clip-until-process-exit' and row.get('maxRetainedGraphs')!=10:pose.fail('Invalid retained graph bound')
+                if row.get('cleanupPolicy')=='retain-inactive-per-clip-until-process-exit' and row.get('maxRetainedGraphs') not in (10,32):pose.fail('Invalid retained graph bound')
                 if not 1 <= pose.integer(row['sampleRate'],'rate') <= 60 or not 1 <= pose.integer(row['maxSamples'],'sample bound') <= 3600 or not 1 <= pose.integer(row['maxBytes'],'byte bound') <= pose.MAX_BYTES:
                     pose.fail('Invalid bake bounds')
                 header = row; continue
@@ -93,7 +94,7 @@ def analyze(path, rig, retain=False):
                 skeleton = row; mapping = mapping_for(rig,row); continue
             if skeleton is None: pose.fail('Missing skeleton')
             if kind == 'clip':
-                if active is not None or len(clips) >= 10 or row['index'] != len(clips): pose.fail('Invalid clip order/count')
+                if active is not None or len(clips) >= (header['maxRetainedGraphs'] if header.get('cleanupPolicy')=='retain-inactive-per-clip-until-process-exit' else 10) or row['index'] != len(clips): pose.fail('Invalid clip order/count')
                 if not isinstance(row['name'],str) or not row['name'].isascii() or not row['name'].isalnum() or len(row['name'])>31 or any(c['name']==row['name'] for c in clips): pose.fail('Invalid/duplicate clip name')
                 length = pose.finite_number(row['length'],'clip length')
                 if not 0 < length <= 10 or not 0 < pose.finite_number(row['sourceFrameRate'],'source rate') <= 120: pose.fail('Invalid clip timing')
@@ -203,7 +204,7 @@ def export_clip(directory, rig, rig_path, samples, report, clip):
 
 def combine_clips(directory, sources):
     """Combine validated writer outputs, sharing identical skin geometry once."""
-    if not 1 <= len(sources) <= 10: pose.fail('Invalid combined clip count')
+    if not 1 <= len(sources) <= PEAC_MAX_CLIPS: pose.fail('Invalid combined clip count')
     first_dir, first = sources[0]
     directory.mkdir()
     total_bytes = 0

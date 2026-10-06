@@ -67,3 +67,37 @@ PeSceneHit pe_tree_collision_sweep(const PeTreeCapsule *t,PeVec3 feet,float r,fl
         .normal={(float)n[0],(float)n[1],(float)n[2]},.triangle=UINT32_MAX};
     return hit;
 }
+
+/* Ray-specific roots retain tangency. Movement sweep roots above deliberately
+ * exclude it; a ray has no fabricated radius and no separating-contact guard. */
+static void ray_sphere(const double p[3],const double d[3],double cy,double radius,int sign,double *best){
+    double y=p[1]-cy,b=p[0]*d[0]+y*d[1]+p[2]*d[2];
+    double disc=b*b-(p[0]*p[0]+y*y+p[2]*p[2]-radius*radius);
+    if(disc<0)return;
+    double at=-b-sqrt(disc),hit_y=y+at*d[1];
+    if(at>=0&&at<*best&&sign*hit_y>=0)*best=at;
+}
+PeSceneHit pe_tree_collision_ray(const PeTreeCapsule *t,PeVec3 origin,PeVec3 direction,float range){
+    PeSceneHit hit={0};
+    if(!pe_tree_collision_valid(t)||!finite3(origin)||!finite3(direction)||!isfinite(range)||range<=0)return hit;
+    double length=hypot(hypot((double)direction.x,direction.y),direction.z);if(length==0)return hit;
+    double p[]={(double)origin.x-t->center.x,(double)origin.y-t->center.y,(double)origin.z-t->center.z};
+    double d[]={direction.x/length,direction.y/length,direction.z/length};
+    double half=t->height*.5-t->radius,radius=t->radius;
+    double y=p[1]-fmax(-half,fmin(half,p[1]));
+    /* Never substitute an exit for a source ray starting inside a collider. */
+    if(p[0]*p[0]+y*y+p[2]*p[2]<radius*radius)return hit;
+    double best=DBL_MAX,a=d[0]*d[0]+d[2]*d[2],b=p[0]*d[0]+p[2]*d[2];
+    double disc=b*b-a*(p[0]*p[0]+p[2]*p[2]-radius*radius);
+    if(a>0&&disc>=0){
+        double at=(-b-sqrt(disc))/a,cy=p[1]+at*d[1];
+        if(at>=0&&cy>=-half&&cy<=half)best=at;
+    }
+    ray_sphere(p,d,-half,radius,-1,&best);ray_sphere(p,d,half,radius,1,&best);
+    if(best>range)return hit;
+    double contact[]={p[0]+d[0]*best,p[1]+d[1]*best,p[2]+d[2]*best},normal[3];
+    axis_distance(contact,half,normal);
+    return(PeSceneHit){.hit=true,.distance=(float)best,.fraction=(float)(best/range),.triangle=UINT32_MAX,
+        .position={(float)(origin.x+d[0]*best),(float)(origin.y+d[1]*best),(float)(origin.z+d[2]*best)},
+        .normal={(float)normal[0],(float)normal[1],(float)normal[2]}};
+}

@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "kind": "original-shield-observer-prearm-crash-comparison",
+  "date_local": "2026-10-06",
+  "timezone": "US/Central",
+  "pid": 2194597,
+  "faulting_tid": 2194661,
+  "coredump_time_local": "2026-10-06 15:22:27 CDT",
+  "final_signal": "SIGABRT",
+  "underlying_fault": "Invalid near-null read at original signal frame6, recovered beneath Mono abort handler",
+  "fault_pc": "0x41b54b86",
+  "fault_instruction": "mov (%rsi),%edi",
+  "registers_at_fault_frame": {
+    "rax": "0x70f246015c40",
+    "rbx": "0x41d68000",
+    "rcx": "0x0",
+    "rdx": "0x70f2299cdb82",
+    "rsi": "0xc",
+    "rdi": "0x0",
+    "rbp": "0x41a80000",
+    "rsp": "0x70f2cea41318",
+    "r8": "0xa53",
+    "r9": "0x0",
+    "r10": "0x41de5d20",
+    "r11": "0x70f2299cfabe",
+    "r12": "0x70f2c0019d50",
+    "r13": "0x0",
+    "r14": "0x0",
+    "r15": "0x70f2299cdb80",
+    "rip": "0x41b54b86"
+  },
+  "fault_mapping": {
+    "name": "/memfd:/.glXXXXXX (deleted)",
+    "start": "0x41b54000",
+    "end_exclusive": "0x41b56000"
+  },
+  "caller_library": "/usr/lib/libnvidia-glcore.so.580.178.04",
+  "caller_offsets_frames_7_through_11": [
+    "0xb5aa2b",
+    "0xc78545",
+    "0xc785fe",
+    "0xc7865c",
+    "0xc799aa"
+  ],
+  "main_thread": "TID2194597 waits in libc synchronization reached from native executable; unresolved executable symbol names",
+  "threads_in_root_backtrace": 43,
+  "comparison": {
+    "prior_report": "reference-render-diagnostics-20261006.json",
+    "prior_pid": 1319444,
+    "same_fault_instruction": true,
+    "same_rsi": "0xc",
+    "all_five_caller_offsets_match": true,
+    "also_matches_previous_pid1292077": true
+  },
+  "launch": {
+    "profile": "planet-explorers-sandbox-reference",
+    "loaded_checkpoint": "manual slot1 Adventure (root operator observation)",
+    "force_gfx_direct": false,
+    "probe": "Read-only ReferencePoseProbe; no live Animator mutation or controller graph creation"
+  },
+  "capture": {
+    "path": ".local/share/planet-explorers-sandbox-reference/pose-captures/sword-shield-live-01.jsonl",
+    "sha256": "f799b8f0ec68f471c6ade0b8183786a729531af7e67d5dcbf54ef20671ae1b6e",
+    "records": [
+      "header",
+      "humanTraits"
+    ],
+    "pose_frames": 0,
+    "closed_end_record": false,
+    "armed": false,
+    "qualified_pose_evidence": false
+  },
+  "checkpoint_integrity": {
+    "baseline": "rebuild/build/starter-pair-next/reference-checkpoint-hashes.json",
+    "manual_slots": [
+      1,
+      2
+    ],
+    "directories": [
+      "save0",
+      "save1"
+    ],
+    "files_checked": 14,
+    "all_unchanged": true,
+    "changed": [],
+    "sha256_by_relative_save_path": {
+      "save0/world.arc": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220",
+      "save0/index.arc": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca",
+      "save0/MainAdventure/world.arc": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6",
+      "save0/MainAdventure/voxel.arc": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4",
+      "save0/MainAdventure/water.arc": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b",
+      "save0/MainAdventure/block45.arc": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21",
+      "save0/MainAdventure/index.arc": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae",
+      "save1/world.arc": "d3c472e6fd383f50053eaa98afb94ac416120e359dfa8927e8815c6484a27fd6",
+      "save1/index.arc": "894e1c7256c4a3270cf1aa2b0188b69309e25d17dfc2e452ff9aab13eecba643",
+      "save1/main/world.arc": "01845c58c261158d6a0f893996f2ceb7d98bd8073cda8bb5d70bd7a6d51c6b9b",
+      "save1/main/voxel.arc": "5a5eaa3ad895565efb1de18c17d1471c7778354cbdea6cf8e6a7395649f26ea9",
+      "save1/main/water.arc": "c305510265765544bb01740a74957f8d7fffbe96ab9519066eabef328338ed94",
+      "save1/main/block45.arc": "8c94cd0106669a9d3691937e1d31fe91faa96e7f3a29c9c27b9fc2185dc88f21",
+      "save1/main/index.arc": "6189624b593cb2ecb067707d8e8caf67e2c14e99caa2b0b0d531f5937ad6b919"
+    }
+  },
+  "resource_check": {
+    "kernel_journal_interval_local": "2026-10-06 15:19:00 through15:24:00",
+    "pattern": "oom|out of memory|killed process|segfault",
+    "matching_entries": 0,
+    "later_available_memory_GiB": 4.2,
+    "later_free_swap_GiB": 12,
+    "limit": "Snapshot is after crash, not a measurement at failure; no inspected OOM-kill evidence"
+  },
+  "inference": "Same near-null generated graphics-code failure signature as prior NVIDIA glcore failures. The unknown PC is in a generated .gl mapping rather than demonstrated Mono JIT code. Exact driver-versus-game defect remains unresolved; this does not prove probe causation or prove absence of observer overhead effects.",
+  "core_handling": "System core preserved. coredumpctl dump into a fresh private TemporaryDirectory under ignored build; extracted core mode0600. GDB read-only frame6/mapping inspection exit0; private directory and extracted core removed by context-manager cleanup.",
+  "changes": "No desktop input, live-process calls, system settings, original binaries or manual saves changed by this audit. Root separately prepares opt-in single-threaded rendering retry.",
+  "local_evidence_files": [
+    {
+      "path": "rebuild/build/starter-pair-next/original-crash-backtrace.txt",
+      "sha256": "45bbb45d45d2161ca3fa5d11b40acc246a86f99e3593a2c90020dfb5f445baa2"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/shield-crash-frame6-gdb.txt",
+      "sha256": "966efb5891857574548d81915c2db28dd2641d714b312ec65d4e794de516b181"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/reference-checkpoint-hashes.json",
+      "sha256": "454b86d82930df42d935b3469bbb66d50831d50625765dd6d9e436fcc21b1bd2"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/shield-crash-checkpoint-comparison.json",
+      "sha256": "9301548d976c61367067d81e28e32fd64cbf92a87ba01d931a3303b0580cbb07"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/shield-live01-player.log",
+      "sha256": "02d87a6bd4666747e9f40b022d0be5d772b797799793c09720060f2a195f6afa"
+    },
+    {
+      "path": "rebuild/build/starter-pair-next/shield-pose-launch.log",
+      "sha256": "f75841cece708c2649118e09b4387a83c2c9d101046f874d3d2398dfe51f1ef9"
+    }
+  ],
+  "underlying_signal": "SIGSEGV reported in retained shield-live01-player.log",
+  "single_threaded_retry": {
+    "pid": 2206672,
+    "faulting_tid": 2206672,
+    "coredump_time_local": "2026-10-06 15:28:43 CDT",
+    "final_signal": "SIGABRT",
+    "underlying_signal": "SIGSEGV in retained shield-live02-player.log",
+    "force_gfx_direct": true,
+    "force_gfx_direct_evidence": "Original command line in system core and live02.launch.json",
+    "fault_pc": "0x41b83b82",
+    "fault_instruction": "mov (%rsi),%edi",
+    "registers_at_fault_frame": {
+      "rax": "0x7a46fab94360",
+      "rbx": "0x41abc000",
+      "rcx": "0x0",
+      "rdx": "0x7a46c750d682",
+      "rsi": "0xc",
+      "rdi": "0x0",
+      "rbp": "0x41dbfbfc",
+      "rsp": "0x7fff482b1918",
+      "r8": "0xa35",
+      "r9": "0x0",
+      "r10": "0x41b39d20",
+      "r11": "0x7a46c750f5be",
+      "r12": "0x233b2930",
+      "r13": "0x0",
+      "r14": "0x0",
+      "r15": "0x7a46c750d680",
+      "rip": "0x41b83b82"
+    },
+    "fault_mapping": {
+      "name": "/memfd:/.glXXXXXX (deleted)",
+      "start": "0x41b83000",
+      "end_exclusive": "0x41b85000"
+    },
+    "caller_library": "/usr/lib/libnvidia-glcore.so.580.178.04",
+    "caller_offsets_frames_7_through_11": [
+      "0xb5aa2b",
+      "0xc78545",
+      "0xc785fe",
+      "0xc7865c",
+      "0xc799aa"
+    ],
+    "all_five_offsets_match_first_and_prior_failure": true,
+    "fault_thread_change": "This retry faults on main TID2206672; first run faulted on worker2194661. Both fault in generated .gl code reached from the same NVIDIA caller offsets.",
+    "threads_in_backtrace": 41,
+    "capture": {
+      "records": [
+        "header",
+        "humanTraits"
+      ],
+      "pose_frames": 0,
+      "closed_end_record": false,
+      "armed": false,
+      "sha256": "f799b8f0ec68f471c6ade0b8183786a729531af7e67d5dcbf54ef20671ae1b6e"
+    },
+    "checkpoint_integrity": {
+      "files_checked": 14,
+      "all_unchanged": true,
+      "changed": [],
+      "sha256_by_relative_save_path": {
+        "save0/world.arc": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220",
+        "save0/index.arc": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca",
+        "save0/MainAdventure/world.arc": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6",
+        "save0/MainAdventure/voxel.arc": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4",
+        "save0/MainAdventure/water.arc": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b",
+        "save0/MainAdventure/block45.arc": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21",
+        "save0/MainAdventure/index.arc": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae",
+        "save1/world.arc": "d3c472e6fd383f50053eaa98afb94ac416120e359dfa8927e8815c6484a27fd6",
+        "save1/index.arc": "894e1c7256c4a3270cf1aa2b0188b69309e25d17dfc2e452ff9aab13eecba643",
+        "save1/main/world.arc": "01845c58c261158d6a0f893996f2ceb7d98bd8073cda8bb5d70bd7a6d51c6b9b",
+        "save1/main/voxel.arc": "5a5eaa3ad895565efb1de18c17d1471c7778354cbdea6cf8e6a7395649f26ea9",
+        "save1/main/water.arc": "c305510265765544bb01740a74957f8d7fffbe96ab9519066eabef328338ed94",
+        "save1/main/block45.arc": "8c94cd0106669a9d3691937e1d31fe91faa96e7f3a29c9c27b9fc2185dc88f21",
+        "save1/main/index.arc": "6189624b593cb2ecb067707d8e8caf67e2c14e99caa2b0b0d531f5937ad6b919"
+      }
+    },
+    "resource_check": {
+      "kernel_journal_interval_local": "2026-10-06 15:26:00 through15:30:00",
+      "oom_or_matching_segmentation_entries": 0,
+      "later_available_memory_GiB": 4.6,
+      "later_free_swap_GiB": 12,
+      "limit": "After-crash memory snapshot; no OOM evidence found in inspected kernel journal interval"
+    },
+    "result": "Single-threaded rendering did not prevent this repeated failure. Prior bounded successful single-threaded launch was not a permanent fix. Exact underlying driver-versus-game defect remains unresolved.",
+    "core_handling": "Fresh private temporary build directory and mode0600 extracted core; read-only GDB all-thread/frame6/mapping inspection exit0; extracted core and directory removed before report write.",
+    "local_evidence_files": [
+      {
+        "path": "rebuild/build/starter-pair-next/shield-crash02-gdb.txt",
+        "sha256": "52be0a87847b54d557bfabddcd1e2d62980c8cd5ca116968055ada89c98496ef"
+      },
+      {
+        "path": "rebuild/build/starter-pair-next/shield-live02-player.log",
+        "sha256": "9d1f4217e8cdb2191a330d9cbf5d9da8c5419ddffe924eb6725556e6377bff63"
+      },
+      {
+        "path": "rebuild/build/starter-pair-next/shield-pose-launch02.log",
+        "sha256": "e6e0df5dd7b9a283d56a45b9c8e99fda153b75316ee6f007112aaeb4c0e3eb74"
+      }
+    ]
+  }
+}

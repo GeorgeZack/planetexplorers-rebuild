@@ -176,3 +176,52 @@ Use the now-running reference to record graphics configuration, world seed or au
 ## Controlled play after launch
 
 Automated input has completed the original camera, basic movement, location movement and storage interaction lessons. A full five-juice stack was transferred into inventory, and Andy requested the return trip. The [playtest log](PLAYTEST.md) records screenshots, the separate recovered C room preview, source-derived corrections, and remaining comparisons. This extends the launch-only evidence above; it does not establish completion of the whole tutorial.
+
+
+## October6 user playtest crash
+
+The [October6 crash evidence](reference/user-playtest-crash-20261006.json) and [playtest](PLAYTEST.md#october-6--user-operated-original-combat-and-graphics-crash) document the repeated native graphics-worker fault without an injected observation probe. Both inspected cores fault while dereferencing0xc in generated `.gl` code, with matching NVIDIA OpenGL580.178.04 caller offsets. This is not proof that a particular Unity action, asset, NVIDIA bug or external recording caused it. No OOM kill was logged in the inspected interval. Original manual slots5/6/7 remain byte-identical to their archived hashes.
+
+For the next **diagnostic comparison**, NVIDIA's installed README at `/usr/share/doc/nvidia/html/openglenvvariables.html` documents disabling executable-memory optimizations with `__GL_WRITE_TEXT_SECTION=0`; [NVIDIA's published documentation](https://download.nvidia.com/XFree86/Linux-x86_64/570.181/README/openglenvvariables.html) describes the same control. Because the faulting PC lies in generated `.gl` code, trying that control is an inference-based isolation step, not an established workaround. It changes only the launched process, leaves driver/system configuration untouched and may affect performance:
+
+```sh
+TMPDIR="$PWD/rebuild/build/compiler-tmp" __GL_WRITE_TEXT_SECTION=0   python3 rebuild/tools/launch_reference.py   --user-data /home/admin/.local/share/planet-explorers-hunt-reference
+```
+
+This variation was tested later on October6 (PID1319444) and crashed again while advancing the defense briefing. It is not an effective fix for that run. The third core repeats the same `mov (%rsi),%edi` dereference with RSI0xc in generated `/memfd:/.glXXXXXX` code. Its first five NVIDIA caller offsets match the user-play crash exactly. The [comparison report](reference/reference-render-diagnostics-20261006.json) records this evidence; the extracted private core copy was deleted. Local evidence is `rebuild/build/user-playtest-20261006/retry-no-execmem{,-player}.log`.
+
+
+## October6 single-threaded rendering diagnostic
+
+The optional launcher switch below inserts Unity's `-force-gfx-direct` before the valued game arguments. Never append that valueless switch at the end: the original `PECommandLine` reads the next token unconditionally and throws `IndexOutOfRangeException`. That argument-order failure was observed separately and is not a graphics crash.
+
+```sh
+TMPDIR="$PWD/rebuild/build/compiler-tmp" python3 rebuild/tools/launch_reference.py \
+  --user-data /home/admin/.local/share/planet-explorers-hunt-reference \
+  --single-threaded-rendering
+```
+
+**Observed, limited diagnostic success:** PID1335454 loaded preserved manual7, completed the return and defense briefings, saved new manual8 during defense preparation, and remained alive through both waves and mission completion. No player attacks were issued during defense. New manual9 preserves completion. Reloading manual8 returned to active defense with0/15 and two waves; a later frame showed the first wave starting. The operator then used Quit Game and its confirmation; launcher status143 is recorded rather than claiming a clean exit0. No graphics crash was seen during this launch, which included menu, pause and loading time. This one run does **not** prove long-term stability, fix ordinary Steam/Proton startup, or establish a particular driver bug. No system or driver configuration was changed. The source runtime log remains local at `rebuild/build/user-playtest-20261006/retry-gfx-direct-02.log`.
+
+[Active](reference/town-defense-original-active.json) and [complete](reference/town-defense-original-complete.json) archives preserve source identity and hashes. Earlier manual5–8 archives were unchanged when the completion audit ran. The completion archive lists9077 as complete and no active/random mission;9078/9079 were not automatically accepted. See the [Town Defense audit](audit/ADVENTURE_TOWN_DEFENSE.md).
+
+The later [shield observer comparison](reference/shield-observer-crash-20261006.json) reproduced the same generated OpenGL fault even with `-force-gfx-direct`; it is not a reliable crash fix. `reference_pose.py --single-threaded-rendering` now forwards that existing diagnostic option. A process-only `__GLX_VENDOR_LIBRARY_NAME=mesa LIBGL_ALWAYS_SOFTWARE=1` observer launch recorded187 frames under llvmpipe, but qualified no block poses and ran slowly. Its [bounded report](reference/shield-observer-software-20261006.json) establishes neither long-term stability nor repaired Steam/Proton startup. No system graphics settings were changed.
+
+## October6 Zink hardware-accelerated comparison
+
+After the user reported llvmpipe was too slow to interact with, a process-only [Zink](https://docs.mesa3d.org/drivers/zink.html) launch used OpenGL through Vulkan on the QuadroK1200. `glxinfo -B` reported `Accelerated: yes`; the original Player.log confirmed that same Zink GPU renderer, and the main menu rendered. Asked about responsiveness after loading manual1 `audit`, the user answered “Yes, playable now.” This is a usable workaround for the current test, not a measured frame-rate result or demonstrated permanent crash fix. See [bounded evidence](reference/shield-zink-workaround-20261006.json).
+
+```sh
+env -u LIBGL_ALWAYS_SOFTWARE \
+  __GLX_VENDOR_LIBRARY_NAME=mesa MESA_LOADER_DRIVER_OVERRIDE=zink \
+  GALLIUM_DRIVER=zink VK_DRIVER_FILES=/usr/share/vulkan/icd.d/nvidia_icd.json \
+  TMPDIR="$PWD/rebuild/build/compiler-tmp" \
+  python3 rebuild/tools/launch_reference.py --single-threaded-rendering \
+  --user-data /home/admin/.local/share/planet-explorers-sandbox-reference
+```
+
+The tested launch used `reference_pose.py --launch` with these same environment variables and an initially unarmed read-only observer; the command above is the ordinary launcher equivalent without capture. Do not start another instance over an active session. The paths require the already installed Mesa Zink and NVIDIA Vulkan ICD on this machine. No packages, system configuration or Steam launch preferences changed.
+
+The subsequent backward-clip sampler startup crashed before arming under the same Zink environment (PID2269587, signal6). The prior playable recording remains valid, but this recurrence rules out treating Zink as a reliable startup fix. The new stack crosses a Zink queue worker and NVIDIA driver code, distinct from the earlier generated `.gl` fault; diagnosis and a process-only synchronization comparison are separate evidence.
+
+A retry adding `ZINK_DEBUG=flushsync,nobgc` reached the tutorial and completed the48-sample Sword backward bake plus120 cleanup-survival frames. The operator advanced Andy dialogue, opened SYSTEM and used Quit Game→YES; launcher137/rawSIGKILL follows the known original self-kill pattern, not exit0. This one successful comparison does not identify the crash cause or prove synchronization flags are a permanent fix. The preceding [startup crash audit](reference/sword-backward-zink-crash-20261006.json) records a driver near-null read through Gallium with no inspected OOM evidence.

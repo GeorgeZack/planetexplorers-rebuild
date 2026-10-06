@@ -1,0 +1,85 @@
+{
+  "actor_sha256": "0961b92864b38d8f905a34287b0da53203a0ecf643d91b26f92fe69d0bc0eeaa",
+  "block_layers": [
+    11,
+    12,
+    13,
+    14,
+    16,
+    21
+  ],
+  "joints": 48,
+  "limitations": [
+    "Installed serialized sensor settings; live values may be changed by source scripts/buffs.",
+    "TransformDirection ignores scale. Export rejects nonconformal sampled head matrices; normalize posed axis-point minus origin.",
+    "Between samples the existing native affine palette interpolation remains an approximation to Unity rotation interpolation.",
+    "Sensor radius is an unscaled world distance. Outer root uniform scale applies to sensor origin, not radius.",
+    "This export does not add a perception ray, target permission, hostile target memory or combat behavior."
+  ],
+  "manifest_sha256": "7ccc02483688cba127821eb5129f7421449d230067671b7bd399438b8343018e",
+  "schema": 1,
+  "sensors": {
+    "PEHearing": {
+      "active": true,
+      "bind_origin": [
+        -3.155405844718699e-07,
+        -0.3001909749323696,
+        1.424032240655946
+      ],
+      "component": 3190093343559429235,
+      "enabled": true,
+      "game_object": 3967358664042968886,
+      "ignore_block": false,
+      "joint": 2,
+      "owner": "Bip01 Head",
+      "path": "Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+      "radius": 15.0,
+      "transform": -9012346613887982781
+    },
+    "PEVision": {
+      "active": true,
+      "angle": 60.0,
+      "axis": [
+        -0.5,
+        1.0,
+        0.0
+      ],
+      "bind_axis_point": [
+        9.259090459646046e-07,
+        -1.4178079323327375,
+        1.4545695521535524
+      ],
+      "bind_origin": [
+        -3.155405844718699e-07,
+        -0.3001909749323696,
+        1.424032240655946
+      ],
+      "component": 315025741553887200,
+      "enabled": true,
+      "game_object": 3967358664042968886,
+      "joint": 2,
+      "owner": "Bip01 Head",
+      "path": "Bone05/Bip01/Bip01 Pelvis/Bip01 Spine/Bip01 Spine1/Bip01 Neck/Bip01 Head",
+      "radius": 20.0,
+      "sampled_conformal_error": 2.377111109064245e-07,
+      "transform": -9012346613887982781
+    }
+  },
+  "skeleton_hash": "73c285d0b40445c8",
+  "source": "AssetBundles/Monster/m_lepus_hare.unity3d",
+  "source_sha256": "94409ad1bf9570048a52c42671986907e2a5ca131f55f73737e5b7d7cff76c35",
+  "sources": [
+    {
+      "path": "Assets/Scripts/Assist/PEVision.cs",
+      "sha256": "d44f453359fdf09d886f84b2136d30b8cce80268895cd1ba01fc3b62d379219b"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PEHearing.cs",
+      "sha256": "8ef241929d720a2b788b51355bc11da97f5d3d7d37f31faea99b471636ea0d3f"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PEPerception.cs",
+      "sha256": "6edfbb273d42a926dc1ba2e46be1d6955e61708ba5f5c164dac9bf31ff38936e"
+    }
+  ]
+}

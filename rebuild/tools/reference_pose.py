@@ -81,10 +81,12 @@ def main(argv=None):
     parser.add_argument('--seconds', type=int, default=20, choices=range(1, 121), metavar='1..120')
     parser.add_argument('--wait-seconds', type=int, default=900, choices=range(1, 1801), metavar='1..1800')
     parser.add_argument('--launch', action='store_true', help='explicitly start the original; default is offline build only')
+    parser.add_argument('--single-threaded-rendering', action='store_true',
+                        help='opt-in Unity -force-gfx-direct diagnostic; not a guaranteed crash fix')
     args = parser.parse_args(argv)
     try:
         game_dir, user_data = args.game_dir.expanduser().resolve(), args.user_data.expanduser().resolve()
-        command, environment = launch_reference.launch_command(game_dir, user_data)
+        command, environment = launch_reference.launch_command(game_dir, user_data,args.single_threaded_rendering)
         output, arm, stop, manifest = capture_paths(user_data, args.output.expanduser() if args.output else None)
         mono, shim, assembly = build(game_dir)
         if not args.launch:

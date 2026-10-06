@@ -1,0 +1,122 @@
+{
+  "schema": "pe-sword-backward-pose-result-1",
+  "date": "2026-10-06",
+  "evidence_scope": "Completed original isolated pose sampling plus offline export/native loader qualification; no installed assets or native gameplay changed",
+  "sources": [
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-02.jsonl",
+      "sha256": "be5a44902b0ffc4b90cfd72727cc2e5cbd2eb0eb500da4d624e831edcba18118",
+      "bytes": 1164841
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-02.launch.json",
+      "sha256": "4c86677b0e6795e083d3c292e1d384001fcd171d49f06097b95d1d397a210380",
+      "bytes": 4545
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-02.exit.json",
+      "sha256": "e3bebb891816932c099d2858ba3a4575d7ec51fbc3ee215c9b69e634d814c820",
+      "bytes": 249
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/starter-pair-unified-03/unified-manifest.json",
+      "sha256": "945d798c3dfad8d278195b1f0e5a99c1322d96e2c133c644e3cbe069ababf2c7",
+      "bytes": 11916
+    },
+    {
+      "path": "/home/admin/source/planetexplorers/rebuild/build/starter-pair-unified-02/unified-manifest.json",
+      "sha256": "5ab49d46e6b90998600ac5acdb19954bb6233e20aca95ab6c849795fd1ba4ecf",
+      "bytes": 7958
+    }
+  ],
+  "capture": {
+    "complete": true,
+    "samples": 48,
+    "clips": [
+      {
+        "name": "SwordWB",
+        "sourcePathId": 441,
+        "length": 0.800003052,
+        "sourceFrameRate": 30,
+        "samples": 26,
+        "isLooping": true,
+        "maximum_bone_matrix_change": 0.986338302,
+        "changing_bones": 42,
+        "maximum_bone_position_change_m": 0.5190515309491781
+      },
+      {
+        "name": "SwordRB",
+        "sourcePathId": 708,
+        "length": 0.666671753,
+        "sourceFrameRate": 30,
+        "samples": 22,
+        "isLooping": true,
+        "maximum_bone_matrix_change": 1.74515748,
+        "changing_bones": 42,
+        "maximum_bone_position_change_m": 0.7229002735838247
+      }
+    ],
+    "gender": "Female",
+    "avatar": "FemaleAvatar",
+    "mapped_body_bones": 42,
+    "missing_bones": [],
+    "maximum_hierarchy_matrix_error": 1.036414941313346e-06,
+    "runtime_pose_change": true,
+    "root_motion_validated": false,
+    "general_retargeting_validated": false
+  },
+  "lifecycle": {
+    "observed_by": "root desktop operator; separate from mathematical pose qualification",
+    "post_cleanup_updates_observed": 120,
+    "ui_sequence": [
+      "Andy Continue advanced Camera tips",
+      "Escape opened SYSTEM",
+      "QuitGame",
+      "YES"
+    ],
+    "exit_record": {
+      "schema": "pe-animator-bake-exit-1",
+      "capture": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-sword-backward-02.jsonl",
+      "returncode": -9,
+      "signal": 9,
+      "observed_utc": "2026-10-06T21:00:16.240527+00:00"
+    },
+    "launcher_returncode": 137,
+    "interpretation": "Known original self-kill pattern; not a zero exit",
+    "no_graphics_crash_observed_after_successful_launch": true,
+    "process_only_renderer_settings_reported_by_operator": "Zink with flushsync,nobgc; no general crash-fix claim",
+    "screenshot": {
+      "path": "/home/admin/source/planetexplorers/docs/reference/sword-backward-complete-menu.png",
+      "sha256": "658d4b91694ce1b34af34526891aa6bb7b22694bc4d291dc912af048f4f520f2",
+      "bytes": 904470
+    }
+  },
+  "stage": {
+    "path": "/home/admin/source/planetexplorers/rebuild/build/starter-pair-unified-03",
+    "counts": {
+      "body_clips": 33,
+      "defence_clips": 42,
+      "defence_actor_clip_counts": [
+        42
+      ]
+    },
+    "retained_body_prefix_clips": 31,
+    "retained_defence_prefix_clips": 40,
+    "preserved_geometry_inverse_binds_textures_capsules": true,
+    "maximum_new_defence_point_error_m": 1.0612942900760865e-07,
+    "installed": false
+  },
+  "validation": {
+    "analyzer": "passed: completed capture and matching launch identity/clocks",
+    "unified_tests": 7,
+    "backward_attachment_tests": 10,
+    "skips": 0,
+    "native_unified_all_frames": "passed optimized and ASan/UBSan with leak detection",
+    "scope": "Separate followup checks; root full project checks preceded backward tooling changes"
+  },
+  "limitations": [
+    "Original full blend graph, root motion, IK and masked shield-block layer are not reconstructed.",
+    "Downhill755 and distinct first-person Sword leaves remain unavailable.",
+    "No new native graphical/playability claim; stage is not installed."
+  ]
+}

@@ -2,3 +2,4 @@
 *.pesave
 *.pesave.tmp
 __pycache__/
+/screenshot*.png
