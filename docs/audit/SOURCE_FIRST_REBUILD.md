@@ -1,5 +1,7 @@
 # Source-first rebuild audit
 
+Current decision point: [the review at pushed checkpoint5ec481e3](SOURCE_FIRST_REVIEW.md) reassesses combat, progression and extraction after the recovery/contact/rotation work below. It prioritizes Revival Shot lifecycle and slow-movement attack admission, with quest planning and town transactions available in parallel. It also specifies what a prepared30-minute user recording can replace. Earlier baseline tables here remain historical findings, not a list of still-missing implementations.
+
 October 6, 2026. Baseline: private rebuild commit `25877e7f759538b7cd6a0358a0c71d2debbe20d4`. This audit inspects original C# code, serialized data, existing captures and the C implementation. It launches neither game. It is a prioritized parity audit, not an exhaustive verification of every Unity subsystem.
 
 Subsequent implementation: [passive recovery](PASSIVE_RECOVERY.md) now supplies the first work-order item in Adventure Sandbox, including its source eight-frame attribute gate and fresh/load lifecycle. Optimized core and focused sanitizer/host checks pass; physical recovery remains unverified. The subsequent [stamina/comfort increment](STAMINA_RECOVERY.md) implements the second item, with source pulse ordering and v16 comfort persistence. The baseline findings below remain the audit record; the next increment integrates [historical capsule contacts](MELEE_CAPSULE_HISTORY.md) for sandbox blades and hare forearms using offline-qualified collider centers. Its verification and remaining scheduling limits are recorded separately.

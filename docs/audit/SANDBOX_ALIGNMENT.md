@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+Latest source-only planning update: [review at pushed checkpoint5ec481e3](SOURCE_FIRST_REVIEW.md). Recovery, stamina, capsule history and contact playback are implemented; the next proposed bounded gameplay work is revival and walking-attack admission, with quest/economy extraction in parallel. Shield presentation and ordinary native hunt/reload acceptance remain separate gates. This audit adds no gameplay or physical coverage.
+
 Original audit and reference playtest: 2026-10-03, US/Central. That session changed no C gameplay; its 23:59 stopping deadline was session-specific. Implementation checkpoints dated 2026-10-05 and2026-10-06 are appended below. The original observations and work-order table remain historical evidence, with the checkpoint identifying which parts are now implemented.
 
 The October6 [source-first audit](SOURCE_FIRST_REBUILD.md) supplies the current prioritized follow-up: passive recovery/buff clocks, stamina cadence, historical capsule contacts, then equipment and progression integration. Its combat, economy/world and extraction reports identify work available directly from code/data and reserve original-game sessions for unresolved engine behavior, missing generated state and focused acceptance. The audit changes no gameplay and adds no physical coverage.
