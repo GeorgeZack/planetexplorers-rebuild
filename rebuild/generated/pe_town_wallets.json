@@ -1,0 +1,271 @@
+{
+  "schema": 1,
+  "scope": "Eight pinned Adventure vendor wallets; no sell/buyback or historical transaction reconstruction.",
+  "sources": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/NpcPackageCmpt.cs",
+      "sha256": "178c17b79fae0d73e2ab0de44603e0f90ae894d1285ec2e24cd87d457a869716"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PackageCmpt.cs",
+      "sha256": "f07291fa43b9ca3c35b437862f592a99defb5eb1ea1cdaf3634e6ac0c9041039"
+    },
+    {
+      "path": "Assets/PeWorld/PeMoney.cs",
+      "sha256": "8a527e35dc2529a07008458c349c25c38b93cd2597009e824bd5b1a5b5aadc68"
+    },
+    {
+      "path": "Assets/Scripts/Global/PETimer.cs",
+      "sha256": "e7b389b174eca7c778ff3d62729088eea51e5474b0d1244de20cabb5c209afd1"
+    },
+    {
+      "path": "Assets/Scripts/Global/UTimer.cs",
+      "sha256": "66b5a2ac795c1e06ba02bf992cedd7f5315cd1dd6aac944fc2b8be530bb9a843"
+    },
+    {
+      "path": "Assets/Scripts/Global/GameTime.cs",
+      "sha256": "bc77ce7abcf92dc2d706eacacc7fb90097cfb8ff2893647c260ef90c1cf38328"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UIShopWnd.cs",
+      "sha256": "b61cb1367e99b20b1d862d14ae7295fa44618fbeab43f91e4201ed419fc70f51"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemPak/SlotList.cs",
+      "sha256": "c2949a156c5dbd2b713619e732d96eb5d6d19e4e832c2ed7079db37f6aea50e7"
+    },
+    {
+      "path": "Assets/PeLauncher/PlayerTypeLoader.cs",
+      "sha256": "10bfc55e64fd4d93f61d4b1aea4945c3445dce0dc61cebb51e8832d11164825e"
+    },
+    {
+      "path": "Assets/PeLauncher/PeGameMgr.cs",
+      "sha256": "8c8a6ccfb35a19d50d17cca008a9cd58e49591cca3b087ed4f12000bb50e472a"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/index.arc",
+      "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/world.arc",
+      "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/index.arc",
+      "sha256": "5c69435879e0c39953a1d95fcab30026195145b28e42c9a4e21853fd73bbd440"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/world.arc",
+      "sha256": "0c015f99944af29f70aa665ef9004a36a53a9d220bc59fc16aacde166920309a"
+    },
+    {
+      "path": "rebuild/generated/pe_town_offers.json",
+      "sha256": "1d30c8869dde46006fbc02d77a3421555894b1ae6c206855915fbccf88175500"
+    }
+  ],
+  "source_region_guards": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/NpcPackageCmpt.cs",
+      "pattern": "public\\s+class\\s+AutoIncreaseMoney",
+      "canonical_body_sha256": "a0006c650d2c884a22cacc578ea2fee5ead551136c15379d20e8ffc3f25502f0"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/NpcPackageCmpt.cs",
+      "pattern": "public\\s+override\\s+void\\s+Serialize\\s*\\(",
+      "canonical_body_sha256": "d9b748f5f5042eff1689ef31d26045a2bf5b0db95f7fa0874f8f39a8d895faf8"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/NpcPackageCmpt.cs",
+      "pattern": "public\\s+override\\s+void\\s+Deserialize\\s*\\(",
+      "canonical_body_sha256": "abf826a6088c9453bc1b8e083fa643b5719f6ccb13231b861a20bd91e9b90d5b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/NpcPackageCmpt.cs",
+      "pattern": "public\\s+void\\s+InitAutoIncreaseMoney\\s*\\(",
+      "canonical_body_sha256": "ac7207d792c90a772871727a78f8d878d0c8b7fac541049cd1efb05d104d6f78"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/NpcPackageCmpt.cs",
+      "pattern": "public\\s+override\\s+void\\s+OnUpdate\\s*\\(",
+      "canonical_body_sha256": "b53ed150d8618785db3ae2ed50462ec6f9013febcdc9e3617e9cd77e54cba418"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PackageCmpt.cs",
+      "pattern": "public\\s+abstract\\s+class\\s+PackageCmpt",
+      "canonical_body_sha256": "9330e1ba270ff6fb2a4937a5847d002b5e8546e6d9885769f063e2f4e7d1e50e"
+    },
+    {
+      "path": "Assets/PeWorld/PeMoney.cs",
+      "pattern": "public\\s+class\\s+Money",
+      "canonical_body_sha256": "6b6269eebaac9649372aa9575abc9b90029f0487d213a49d70a3c2f9ac814c55"
+    },
+    {
+      "path": "Assets/Scripts/Global/PETimer.cs",
+      "pattern": "public\\s+PETimer\\s*\\(",
+      "canonical_body_sha256": "5db685407051f625942a6518c4feba1ae3d2050c709e52c685ec8f0f52dd47ab"
+    },
+    {
+      "path": "Assets/Scripts/Global/UTimer.cs",
+      "pattern": "public\\s+UTimer\\s*\\(",
+      "canonical_body_sha256": "daecba5bdf9442ae07f69cd3d46ade05bda430ad4c84c28e6c4e62bda86a3f27"
+    },
+    {
+      "path": "Assets/Scripts/Global/GameTime.cs",
+      "pattern": "void\\s+Start\\s*\\(",
+      "canonical_body_sha256": "f0a9eceaad56f660afa3de3d2daf8a38764c4a8b37dc2e8833b8fa15eb5202e8"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UIShopWnd.cs",
+      "pattern": "void\\s+Buy\\s*\\(",
+      "canonical_body_sha256": "31fa78e4fbbefc5cc03616ae420efe9142b625cf0aa4e07dd4dcc9cce71fab98"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemPak/SlotList.cs",
+      "pattern": "public\\s+byte\\[\\]\\s+Export\\s*\\(",
+      "canonical_body_sha256": "0603ff9e5af6ac88abf9424f62ca98bc0897906da920c9794b00edfce8766490"
+    },
+    {
+      "path": "Assets/PeLauncher/PlayerTypeLoader.cs",
+      "pattern": "public\\s+class\\s+SinglePlayerTypeLoader",
+      "canonical_body_sha256": "c316230bac314685515a602ab5ad0809216680a21dedaa281ba4de59614a5247"
+    },
+    {
+      "path": "Assets/PeLauncher/PeGameMgr.cs",
+      "pattern": "public\\s+enum\\s+ESceneMode",
+      "canonical_body_sha256": "2167bffb57c7757abb7803fa2db9e1653d778f183a872d54bdd6bf7d114530d6"
+    }
+  ],
+  "archives": {
+    "starting": {
+      "directory": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0",
+      "guid": "03f788c050bd5446a419dd567f0d980d",
+      "session": {
+        "seconds": 8838597.76837,
+        "speed": 12.0,
+        "play_seconds": 825,
+        "scene_mode": 1,
+        "digital": true,
+        "yird": "MainAdventure",
+        "game_name": null,
+        "uid": null
+      }
+    },
+    "route": {
+      "directory": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2",
+      "guid": "41361f4e2222ba4e834286f531bf166f",
+      "session": {
+        "seconds": 8844994.99223,
+        "speed": 12.0,
+        "play_seconds": 1357,
+        "scene_mode": 1,
+        "digital": true,
+        "yird": "MainAdventure",
+        "game_name": null,
+        "uid": null
+      }
+    }
+  },
+  "profiles": [
+    {
+      "entity_id": 20002,
+      "prototype_id": 141,
+      "initial_balance": 553,
+      "serialized_max": 2000,
+      "daily_increase": 342,
+      "initial_added": false,
+      "archive_profile": "starting",
+      "component_sha256": "c033631ec44647fd6a0f928a591bc5ede5d4ccfc12204ab5236eee69a72050fd"
+    },
+    {
+      "entity_id": 20011,
+      "prototype_id": 151,
+      "initial_balance": 584,
+      "serialized_max": 2000,
+      "daily_increase": 260,
+      "initial_added": false,
+      "archive_profile": "starting",
+      "component_sha256": "04dc6bada01c39542ccf9a4ba11147673df91a8e230b20099aaa7593f0ae4fd7"
+    },
+    {
+      "entity_id": 20014,
+      "prototype_id": 146,
+      "initial_balance": 587,
+      "serialized_max": 2000,
+      "daily_increase": 288,
+      "initial_added": false,
+      "archive_profile": "starting",
+      "component_sha256": "4b7cf385c3d0b736523e655184e6a1f41b330f692e9d028694b13f091ae2cddc"
+    },
+    {
+      "entity_id": 20028,
+      "prototype_id": 153,
+      "initial_balance": 2600,
+      "serialized_max": 10000,
+      "daily_increase": 1792,
+      "initial_added": false,
+      "archive_profile": "route",
+      "component_sha256": "8c76eaec2632974e28d03b35d581a1093344f78341a274b973bd1d72aa594105"
+    },
+    {
+      "entity_id": 20031,
+      "prototype_id": 158,
+      "initial_balance": 2075,
+      "serialized_max": 8000,
+      "daily_increase": 1181,
+      "initial_added": false,
+      "archive_profile": "route",
+      "component_sha256": "3e54121b5dec71a1c5799bb7c764fdcf4fec612e413f7bb045d66cf04f99fada"
+    },
+    {
+      "entity_id": 20032,
+      "prototype_id": 163,
+      "initial_balance": 2449,
+      "serialized_max": 8000,
+      "daily_increase": 1321,
+      "initial_added": false,
+      "archive_profile": "route",
+      "component_sha256": "9b26027901b764383b5626a5ea3c43eab8c83dac37796f4c4bc36fb1b47631e4"
+    },
+    {
+      "entity_id": 20033,
+      "prototype_id": 143,
+      "initial_balance": 3434,
+      "serialized_max": 10000,
+      "daily_increase": 1623,
+      "initial_added": false,
+      "archive_profile": "route",
+      "component_sha256": "dc6474e12b9536a73070a70389cb5ed6274b778b489668be5e03eca6c6cbd54e"
+    },
+    {
+      "entity_id": 20037,
+      "prototype_id": 148,
+      "initial_balance": 3090,
+      "serialized_max": 10000,
+      "daily_increase": 1558,
+      "initial_added": false,
+      "archive_profile": "route",
+      "component_sha256": "59ce109b91efca4b51c0eed231b002efeaedcf19f76dfac6180c5afe3fcb1ee8"
+    }
+  ],
+  "clock": {
+    "day_seconds": 93600,
+    "half_day_seconds": 46800,
+    "unit": "GameTime.Timer seconds, not realtime/scaled action clock",
+    "refill": "If second-in-day < half-day, clear added; else add daily increase if not added, then set added. No elapsed-day catch-up.",
+    "new_entity_initial_added": true,
+    "archived_latch_preserved": true
+  },
+  "semantics": {
+    "original_balance_type": "signed int32; exported profiles nonnegative",
+    "serialized_max_applied": false,
+    "ordinary_purchase_credits_vendor": true,
+    "source_credit_clamped": false,
+    "source_wallet_and_refill_serialized": true,
+    "buyback_persistence_qualified": false
+  },
+  "limitations": [
+    "This is source/archive extraction, not a new original or native gameplay observation.",
+    "Starting values are saved snapshots, not universal RNG results or current balances after later purchases.",
+    "Native overflow/old-save migration policies require explicit runtime adapters; old stock cannot reconstruct purchase history."
+  ]
+}

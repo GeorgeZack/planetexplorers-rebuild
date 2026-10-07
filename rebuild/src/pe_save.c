@@ -2,6 +2,7 @@
 #include "pe_game.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
+#include "pe_town_wallet.h"
 #include "pe_adventure_medicine.h"
 #include "pe_adventure_hunt.h"
 #include "pe_deployable.h"
@@ -15,7 +16,8 @@
 #include <unistd.h>
 
 #define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 16u
+#define SAVE_VERSION 17u
+_Static_assert(PE_TOWN_WALLET_CAPACITY==8&&PE_SAVE_V17_APPEND==100,"V17 appends eight identified wallet records");
 _Static_assert(PE_SAVE_V16_APPEND==4,"V16 appends only raw comfort");
 _Static_assert(PE_SAVE_V15_APPEND==4,"V15 appends only the shield reference");
 _Static_assert(PE_OUTFIT_SLOTS==3&&PE_SAVE_V14_APPEND==36,"V14 has exactly three 12-byte worn records");
@@ -33,6 +35,7 @@ static uint32_t checksum(const unsigned char *p,size_t n) {uint32_t h=2166136261
 static void err(char *out,size_t cap,const char *msg) {if(out&&cap)snprintf(out,cap,"%s",msg);}
 static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
 static bool valid(const PeGame *g,bool trees,bool outfit) {
+    if(!pe_town_wallet_state_valid(g))return false;
     if(outfit&&!pe_outfit_state_valid(g))return false;
     if(!pe_shield_state_valid(g))return false;
     if(!isfinite(g->comfort)||g->comfort<0||g->comfort>pe_stamina_recovery_source.comfort_max)return false;
@@ -221,6 +224,15 @@ static void encode(Stream *s,const PeGame *g) {
     put32(s,g->shield_instance_id);
     /* V16 retains every V15 byte; derived comfort effects and buff clocks are transient. */
     putf(s,g->comfort);
+    /* V17 retains the literal V16 payload. Stable source identities guard
+     * ordering; balances and the source daily-add latch have one owner. */
+    put32(s,PE_TOWN_WALLET_CAPACITY);
+    for(size_t i=0;i<PE_TOWN_WALLET_CAPACITY;i++){
+        const PeTownWalletSource *source=pe_town_wallet_source_at(i);
+        if(!source){s->ok=false;return;}
+        put32(s,source->entity_id);put32(s,g->town_wallet[i].balance);
+        put32(s,g->town_wallet[i].added?1u:0u);
+    }
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -334,7 +346,15 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
     }
     g->shield_instance_id=version>=15?get32(s):0;
     g->comfort=version>=16?getf(s):pe_stamina_recovery_source.initial_comfort;
-
+    if(version>=17){
+        if(get32(s)!=PE_TOWN_WALLET_CAPACITY){s->ok=false;return;}
+        for(size_t i=0;i<PE_TOWN_WALLET_CAPACITY;i++){
+            const PeTownWalletSource *source=pe_town_wallet_source_at(i);
+            uint32_t entity=get32(s),balance=get32(s),added=get32(s);
+            if(!source||entity!=source->entity_id||balance>INT32_MAX||added>1){s->ok=false;return;}
+            g->town_wallet[i]=(PeTownWallet){.balance=balance,.added=added!=0};
+        }
+    }
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");
@@ -372,7 +392,10 @@ bool pe_game_load(PeGame *g,const char *path,char *error,size_t capacity) {
         /* Old native actors displayed these clothes without owning their wear.
          * Validate every existing field first: allocating new IDs must never
          * launder a malformed counter, alias, inventory or collision state. */
-        if(ok&&version<14)ok=pe_outfit_init(next)&&pe_outfit_state_valid(next);}
+        if(ok&&version<14)ok=pe_outfit_init(next)&&pe_outfit_state_valid(next);
+        /* Older native saves never recorded vendor money. Archived profile
+         * defaults are the bounded migration, not reconstructed transactions. */
+        if(ok&&version<17)ok=pe_town_wallet_init(next)&&pe_town_wallet_state_valid(next);}
     if(ok&&version==4&&next->mode==PE_GAME_ADVENTURE){
         PeVec3 previous=next->player;
         PeSandboxCollision *collision=pe_sandbox_collision_create();

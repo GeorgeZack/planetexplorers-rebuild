@@ -1,8 +1,10 @@
 #include "pe_town_interaction.h"
+#include "pe_town_wallet.h"
 #include "../generated/pe_town_offers.h"
 #include "../generated/pe_adventure_settlement.h"
 #include <math.h>
 #include <stdio.h>
+#include <limits.h>
 
 static bool alive(const PeGame *g){return g&&g->mode==PE_GAME_ADVENTURE&&isfinite(g->hp)&&g->hp>0;}
 const PeTownOffer *pe_town_shop_offer_at(size_t i){return i<PE_TOWN_STOCK_CAPACITY?&pe_town_offers[i]:NULL;}
@@ -16,7 +18,7 @@ const PeTownOffer *pe_town_shop_offer(uint32_t entity,size_t index){
 }
 static int offer_index(uint32_t entity,int store){for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++)if(pe_town_offers[i].entity_id==entity&&pe_town_offers[i].store_id==store)return i;return -1;}
 bool pe_town_state_valid(const PeGame *g){
-    if(!g||!isfinite(g->game_seconds)||g->game_seconds<0)return false;
+    if(!g||!isfinite(g->game_seconds)||g->game_seconds<0||!pe_town_wallet_state_valid(g))return false;
     if(g->annot_complete&&(g->mode!=PE_GAME_ADVENTURE||!g->supplies_claimed||!g->arrival_complete||g->adventure_mission!=PE_ADVENTURE_SUPPLIES))return false;
     for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++){
         const PeTownStock *s=&g->town_stock[i];
@@ -46,9 +48,14 @@ bool pe_town_shop_buy(PeGame *g,uint32_t entity,int store,unsigned count){
     if(!s->initialized||count>s->remaining){snprintf(g->message,sizeof g->message,"Not enough stock.");return false;}
     uint64_t price=(uint64_t)o->price*count;
     if(price>g->money){snprintf(g->message,sizeof g->message,"Not enough currency.");return false;}
+    size_t vendor=0;
+    while(vendor<PE_TOWN_WALLET_CAPACITY&&pe_town_wallet_source_at(vendor)->entity_id!=entity)vendor++;
+    if(vendor==PE_TOWN_WALLET_CAPACITY||price>(uint32_t)INT32_MAX-g->town_wallet[vendor].balance)return false;
+    PeTownWallet wallet=g->town_wallet[vendor];wallet.balance+=(uint32_t)price;
     PeInventory staged=g->inventory;
     if(!pe_inventory_add(&staged,o->item_id,(int)count)){snprintf(g->message,sizeof g->message,"Inventory full.");return false;}
     g->inventory=staged;g->money-=(uint32_t)price;s->remaining-=count;
+    g->town_wallet[vendor]=wallet;
     const PeItemDef *item=pe_item_def(o->item_id);
     snprintf(g->message,sizeof g->message,"Bought %u %s for %u.",count,item?item->name:"items",(unsigned)price);
     return true;

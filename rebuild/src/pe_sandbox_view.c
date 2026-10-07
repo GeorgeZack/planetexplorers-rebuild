@@ -17,6 +17,7 @@
 #include "pe_sandbox_world_view.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
+#include "pe_town_wallet.h"
 #include "../generated/pe_adventure_population.h"
 #include "pe_reference.h"
 #include "pe_terrain_material_view.h"
@@ -335,6 +336,13 @@ static bool sandbox_health_frame(PeAttributeClock *clock,PeGame *game,double dt,
     *clock=next;game->passive_recovery=recovery;game->hp=hp;
     game->revival=revival;
     game->stamina_recovery=stamina;game->stamina=vitals.stamina;game->comfort=vitals.comfort;return true;
+}
+/* One observed world-clock update per active display frame, independent of
+ * player life, shop visibility and fixed-step catch-up. Native pause/focus
+ * policy applies; original entity activation/order is not reproduced. */
+static bool sandbox_wallet_frame(PeGame *game,bool focused,bool paused){
+    if(!game)return false;
+    return !focused||paused||pe_town_wallet_step(game);
 }
 static bool sandbox_revive_request(PeGame *game,const PeAttributeClock *clock){
     if(!game||!clock)return false;
@@ -796,6 +804,9 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
          * Contacts below notify at this same validated frame timestamp. */
         if(!sandbox_health_frame(&sandbox_attribute_clock,game,smoke_frames?PE_FIXED_DT:dt,focused,action.paused)){
             snprintf(error,sizeof error,"Invalid player recovery clock");result=1;break;
+        }
+        if(!sandbox_wallet_frame(game,focused,action.paused)){
+            snprintf(error,sizeof error,"Invalid or overflowing town wallet update");result=1;break;
         }
         if(action.revive&&focused&&!action.paused&&sandbox_revive_request(game,&sandbox_attribute_clock)){
             attack_pending=tool_drawn=placing_torch=autorun=jump_pending=false;

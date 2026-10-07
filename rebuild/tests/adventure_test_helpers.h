@@ -31,7 +31,8 @@ static inline bool pe_test_save_pre_welcome(const char *path,unsigned version){
     long size=ftell(file);if(size<20||size>800000){fclose(file);return false;}
     rewind(file);unsigned char *data=malloc((size_t)size);if(!data){fclose(file);return false;}
     bool ok=fread(data,1,(size_t)size,file)==(size_t)size;fclose(file);
-    if(ok&&data[4]>=6&&data[4]<=16&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+    if(ok&&data[4]>=6&&data[4]<=17&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+        if(data[4]>=17)size-=PE_SAVE_V17_APPEND;
         if(data[4]>=16)size-=PE_SAVE_V16_APPEND;
         if(data[4]>=15)size-=PE_SAVE_V15_APPEND;
         if(data[4]>=14)size-=PE_SAVE_V14_APPEND;

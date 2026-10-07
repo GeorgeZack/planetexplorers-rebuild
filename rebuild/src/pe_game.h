@@ -31,10 +31,14 @@
 #define PE_SAVE_V15_APPEND 4u
 /* V16 appends raw Comfort only. Recovery clocks/derived delay stay transient. */
 #define PE_SAVE_V16_APPEND 4u
+/* V17 retains v16 then stores count8 and eight entity/balance/latch records. */
+#define PE_SAVE_V17_APPEND 100u
 typedef struct { int item_id; uint32_t instance_id; float durability; PeVec3 position; unsigned quarter_turn; } PeDeployable;
 #define PE_TOWN_V8_STOCK_CAPACITY 17
 #define PE_TOWN_STOCK_CAPACITY 284
 typedef struct { bool initialized; unsigned remaining; double create_time; } PeTownStock;
+#define PE_TOWN_WALLET_CAPACITY 8
+typedef struct { uint32_t balance; bool added; } PeTownWallet;
 typedef enum { PE_GAME_LEGACY = 0, PE_GAME_ADVENTURE = 1 } PeGameMode;
 enum { PE_ADVENTURE_WELCOME_PAGES = 9, PE_ADVENTURE_ARRIVAL = 9031, PE_ADVENTURE_SUPPLIES = 9032 };
 typedef struct { int item_id; uint32_t instance_id; } PeQuickslot;
@@ -100,6 +104,7 @@ typedef struct PeGame {
     unsigned deployed_count;
     bool annot_complete; /* Source discovery4503 / completed mission9032. */
     PeTownStock town_stock[PE_TOWN_STOCK_CAPACITY]; /* Stable exported offer order. */
+    PeTownWallet town_wallet[PE_TOWN_WALLET_CAPACITY]; /* Stable source vendor order; one balance owner. */
     uint32_t money, scanner_mask;
     int known_recipe_count, known_recipes[PE_KNOWN_RECIPES];
     PeQuickslot quickslots[PE_QUICKSLOTS];

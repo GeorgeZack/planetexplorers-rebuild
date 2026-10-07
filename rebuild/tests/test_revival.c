@@ -203,7 +203,7 @@ static void save_progress(void){
     CHECK(pe_inventory_count(&loaded->inventory,937)==2);
     CHECK(pe_game_save(loaded,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));
     CHECK(pe_inventory_count(&loaded->inventory,937)==2&&loaded->hunt_kills==2);
-    FILE *file=fopen(path,"rb");CHECK(file);if(file){unsigned char h[8];CHECK(fread(h,1,8,file)==8&&h[4]==16&&h[5]==0);fclose(file);}
+    FILE *file=fopen(path,"rb");CHECK(file);if(file){unsigned char h[8];CHECK(fread(h,1,8,file)==8&&h[4]==17&&h[5]==0);fclose(file);}
     /* Invalid loads leave current recovery/game/world state untouched. */
     unsigned char *snapshot=malloc(sizeof *loaded);CHECK(snapshot);
     if(snapshot){

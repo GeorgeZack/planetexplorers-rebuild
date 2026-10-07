@@ -1,4 +1,5 @@
 #include "pe_game.h"
+#include "pe_town_wallet.h"
 #include "pe_shield.h"
 #include "pe_sword.h"
 #include "pe_tree_collision.h"
@@ -258,6 +259,7 @@ bool pe_game_init_mode(PeGame *g,uint32_t seed,PeGameMode mode){
     if(mode==PE_GAME_ADVENTURE&&!grant_items(&starter,pe_adventure_starter,pe_adventure_starter_count))return false;
     PeGame *staged=malloc(sizeof *staged);if(!staged)return false;
     pe_game_init(staged,seed);staged->mode=mode;
+    if(!pe_town_wallet_init(staged)){pe_game_destroy(staged);free(staged);return false;}
     if(mode==PE_GAME_ADVENTURE){
         PeSandboxCollision *collision=pe_sandbox_collision_create();char error[160];
         /* Settle against the pre-tree scene first, then escape only tree overlaps.

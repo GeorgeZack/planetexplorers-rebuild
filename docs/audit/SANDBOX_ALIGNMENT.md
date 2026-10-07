@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+The latest [wallet increment](TOWN_WALLETS.md) credits normal purchases to eight archived purses, preserves the source noon refill latch and adds PECSv17 persistence. No game launch was needed; selling/buyback and ordinary hunt acceptance remain separate work.
+
 ## Current walking-attack checkpoint
 
 [Grounded walking Knife attacks](SANDBOX_WALKING_KNIFE.md) now use source-derived Attack6–9 roots, recovered entirely offline from the pinned native arithmetic and serialized clips. Admission through speed4.5 permits held movement; action root motion owns the collision sweep, and running continuations use their retained outgoing ordinary intervals. The qualified group is installed locally. Focused optimized/sanitizer checks pass, including actual host dispatch and recovered-asset contact/movement tests. No new graphical or ordinary hunt test was performed. This supersedes earlier stationary-only/zero-root statements below, while preserving their historical evidence.
