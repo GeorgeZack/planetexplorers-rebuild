@@ -1,5 +1,7 @@
 #include "../generated/pe_stamina_recovery_source.h"
 #include "pe_sandbox_ui.h"
+#include "pe_ui_draw.h"
+#include "pe_ui_hud.h"
 #include "../generated/pe_revival_source.h"
 #include "pe_shield.h"
 #include "pe_town_wallet.h"
@@ -13,7 +15,11 @@
 #include "../generated/pe_adventure_settlement.h"
 #include <string.h>
 
-static const Color ink={236,246,255,255},blue={112,220,255,255},gold={220,226,112,255},dim={150,170,194,150};
+#define ink PE_UI_INK
+#define blue PE_UI_BLUE
+#define gold PE_UI_GOLD
+#define dim PE_UI_DIM
+static PeUiCanvas canvas(const PeSandboxUI *u){return (PeUiCanvas){u->assets,u->effects,&u->layout,(float)u->seconds,u->mouse_x,u->mouse_y};}
 /* Resolved names from the preserved Adventure reference fixture. Generated
  * population/name selection is not yet ported; never relabel tutorial NPCs. */
 static const PeAdventureDialogueBindings supplier_names={.player_name="You",.welcome_name="Westina",
@@ -26,44 +32,14 @@ static PeTrainingUIRect map(const PeSandboxUI *u,float x,float y,float w,float h
 static PeTrainingUIRect rel(const PeSandboxUI *u,PeTrainingUIRect p,float x,float y,float w,float h) {
     float z=u->layout.scale;return (PeTrainingUIRect){p.x+x*z,p.y+y*z,w*z,h*z};
 }
-static void sprite(const PeSandboxUI *u,const char *name,PeTrainingUIRect r,Color tint) {
-    if(name&&*name)pe_ui_sprite(u->assets,name,rect(r),tint,u->layout.scale);
-}
-static void effect(const PeSandboxUI *u,PeUiEffect role,PeTrainingUIRect r) {
-    pe_training_ui_shader_draw(u->effects,role,rect(r),(float)u->seconds,1,false);
-}
-static Font font(const PeSandboxUI *u,float size,bool bold) {
-    return size>=30?pe_ui_font_heading(u->assets):(size<=15?pe_ui_font_small(u->assets,bold):pe_ui_font(u->assets,bold));
-}
-static void text(const PeSandboxUI *u,const char *value,float x,float y,float size,Color tint,bool bold) {
-    DrawTextEx(font(u,size,bold),value,(Vector2){x,y},size*u->layout.scale,0,tint);
-}
-static void center(const PeSandboxUI *u,const char *value,PeTrainingUIRect r,float size,Color tint,bool bold) {
-    Vector2 m=MeasureTextEx(font(u,size,bold),value,size*u->layout.scale,0);
-    text(u,value,r.x+(r.w-m.x)*.5f,r.y+(r.h-m.y)*.5f,size,tint,bold);
-}
-static void clipped(const PeSandboxUI *u,const char *value,PeTrainingUIRect r,float size,Color tint,bool bold) {
-    BeginScissorMode((int)r.x,(int)r.y,(int)ceilf(r.w),(int)ceilf(r.h));
-    text(u,value,r.x,r.y,size,tint,bold);EndScissorMode();
-}
-static void wrapped_spaced(const PeSandboxUI *u,const char *value,PeTrainingUIRect r,float size,Color tint,float gap) {
-    char line[512]={0};size_t used=0;const char *p=value;float y=r.y,step=(size+gap)*u->layout.scale;
-    BeginScissorMode((int)r.x,(int)r.y,(int)ceilf(r.w),(int)ceilf(r.h));
-    while(*p&&y+size*u->layout.scale<=r.y+r.h) {
-        if(*p=='\n') {text(u,line,r.x,y,size,tint,false);used=0;line[0]=0;y+=step;p++;continue;}
-        while(*p==' ')p++;
-        size_t n=strcspn(p," \n");if(!n)continue;if(n>=sizeof line)break;
-        char next[512];int count=snprintf(next,sizeof next,"%s%s%.*s",line,used?" ":"",(int)n,p);
-        if(count<0||(size_t)count>=sizeof next)break;
-        if(used&&MeasureTextEx(font(u,size,false),next,size*u->layout.scale,0).x>r.w) {
-            text(u,line,r.x,y,size,tint,false);used=0;line[0]=0;y+=step;continue;
-        }
-        memcpy(line,next,(size_t)count+1);used=(size_t)count;p+=n;
-    }
-    if(used&&y+size*u->layout.scale<=r.y+r.h)text(u,line,r.x,y,size,tint,false);
-    EndScissorMode();
-}
-static void wrapped(const PeSandboxUI *u,const char *value,PeTrainingUIRect r,float size,Color tint){wrapped_spaced(u,value,r,size,tint,5);}
+static void sprite(const PeSandboxUI *u,const char *n,PeTrainingUIRect r,Color tint){PeUiCanvas c=canvas(u);pe_ui_draw_sprite(&c,n,r,tint);}
+static void effect(const PeSandboxUI *u,PeUiEffect fx,PeTrainingUIRect r){PeUiCanvas c=canvas(u);pe_ui_draw_effect(&c,fx,r);}
+static Font font(const PeSandboxUI *u,float size,bool bold){PeUiCanvas c=canvas(u);return pe_ui_draw_font(&c,size,bold);}
+static void text(const PeSandboxUI *u,const char *v,float x,float y,float size,Color tint,bool bold){PeUiCanvas c=canvas(u);pe_ui_draw_text(&c,v,x,y,size,tint,bold);}
+static void center(const PeSandboxUI *u,const char *v,PeTrainingUIRect r,float size,Color tint,bool bold){PeUiCanvas c=canvas(u);pe_ui_draw_center(&c,v,r,size,tint,bold);}
+static void clipped(const PeSandboxUI *u,const char *v,PeTrainingUIRect r,float size,Color tint,bool bold){BeginScissorMode((int)r.x,(int)r.y,(int)ceilf(r.w),(int)ceilf(r.h));text(u,v,r.x,r.y,size,tint,bold);EndScissorMode();}
+static void wrapped_spaced(const PeSandboxUI *u,const char *v,PeTrainingUIRect r,float size,Color tint,float gap){PeUiCanvas c=canvas(u);pe_ui_draw_wrap(&c,v,r,size,tint,false,gap);}
+static void wrapped(const PeSandboxUI *u,const char *v,PeTrainingUIRect r,float size,Color tint){wrapped_spaced(u,v,r,size,tint,5);}
 static float fraction(float n,float d) {return d>0?fminf(1,fmaxf(0,n/d)):0;}
 static void bar(const PeSandboxUI *u,const char *bg,const char *fill,PeTrainingUIRect r,float f,Color tint) {
     sprite(u,bg,r,WHITE);
@@ -71,30 +47,9 @@ static void bar(const PeSandboxUI *u,const char *bg,const char *fill,PeTrainingU
     BeginScissorMode((int)r.x,(int)r.y,(int)ceilf(r.w*fminf(1,f)),(int)ceilf(r.h));
     sprite(u,fill,r,tint);EndScissorMode();
 }
-static void item(const PeSandboxUI *u,int id,int count,PeTrainingUIRect r,bool box,Color tint) {
-    if(box)sprite(u,"itembox",r,WHITE);
-    const PeItemDef *d=pe_item_def(id);if(!d)return;
-    sprite(u,d->icon,r,tint);sprite(u,d->icon_overlay1,r,tint);sprite(u,d->icon_overlay2,r,tint);
-    if(count>1) {
-        char value[24];snprintf(value,sizeof value,"%d",count);
-        Vector2 extent=MeasureTextEx(font(u,14,false),value,14*u->layout.scale,0);
-        text(u,value,r.x+r.w-extent.x-2*u->layout.scale,r.y+r.h-15*u->layout.scale,14,gold,false);
-    }
-}
-static void button(const PeSandboxUI *u,PeTrainingUIRect r,const char *label,bool enabled) {
-    bool hover=pe_training_ui_contains(r,u->mouse_x,u->mouse_y);
-    sprite(u,"menulist",r,enabled?(hover?blue:WHITE):dim);
-    center(u,label,r,18,enabled?ink:dim,false);
-}
-static void panel(const PeSandboxUI *u,PeTrainingUIRect r,const char *title,PeUiEffect fx) {
-    sprite(u,fx==PE_UI_EFFECT_REPLICATOR||fx==PE_UI_EFFECT_MISSION?"bigbg":"midbg",r,WHITE);
-    sprite(u,fx==PE_UI_EFFECT_REPLICATOR||fx==PE_UI_EFFECT_MISSION?"bigbg":"midbg",r,(Color){0,33,255,77});
-    effect(u,fx,r);
-    sprite(u,"titilebg",rel(u,r,15,32,r.w/u->layout.scale-65,14),WHITE);
-    float title_x=fx==PE_UI_EFFECT_REPLICATOR?84:fx==PE_UI_EFFECT_MISSION?87:32;
-    float title_y=fx==PE_UI_EFFECT_REPLICATOR?14:fx==PE_UI_EFFECT_MISSION?16.5f:20;
-    text(u,title,r.x+title_x*u->layout.scale,r.y+title_y*u->layout.scale,32,(Color){159,197,234,255},false);
-}
+static void item(const PeSandboxUI *u,int id,int count,PeTrainingUIRect r,bool box,Color tint){PeUiCanvas c=canvas(u);pe_ui_draw_item(&c,id,count,r,box,tint);}
+static void button(const PeSandboxUI *u,PeTrainingUIRect r,const char *label,bool enabled){PeUiCanvas c=canvas(u);pe_ui_draw_button(&c,r,label,enabled);}
+static void panel(const PeSandboxUI *u,PeTrainingUIRect r,const char *title,PeUiEffect fx){PeUiCanvas c=canvas(u);pe_ui_draw_panel(&c,r,title,fx);}
 bool pe_sandbox_ui_load(PeSandboxUI *u,const char *root,char *error,size_t cap) {
     if(error&&cap)*error=0;
     if(!u||!root||!IsWindowReady()){if(error&&cap)snprintf(error,cap,"Sandbox UI requires an active window and asset directory");return false;}
@@ -174,36 +129,18 @@ void pe_sandbox_ui_prepare(PeSandboxUI *u,const PeGame *g) {
         BeginTextureMode(u->preview);ClearBackground(BLANK);u->draw_preview(u->preview_context,g);EndTextureMode();
     }
 }
-static void hud(const PeSandboxUI *u,const PeGame *g,bool building) {
-    const PeTrainingUILayout *l=&u->layout;float z=l->scale;
-    sprite(u,"shortbar1bg",map(u,217.5f,644,845,54,PE_UI_BOTTOM_CENTER),WHITE);
-    PeTrainingUIRect frame=map(u,217.5f,611,845,110,PE_UI_BOTTOM_CENTER);
-    sprite(u,"shortbar1",frame,WHITE);sprite(u,"shortbar1",frame,(Color){0,33,255,77});effect(u,PE_UI_EFFECT_FRAME,frame);
-    effect(u,PE_UI_EFFECT_HUD_SCAN,map(u,225,646,830,50,PE_UI_BOTTOM_CENTER));
-    bar(u,"bloodlan_6bg","bloodlan_6",l->health,fraction(g->hp,g->max_hp),WHITE);
-    float hp=fraction(g->hp,g->max_hp);
-    if(hp>0){BeginScissorMode((int)l->health.x,(int)l->health.y,(int)ceilf(l->health.w*hp),(int)ceilf(l->health.h));effect(u,PE_UI_EFFECT_HEALTH,l->health);EndScissorMode();}
-    bar(u,"bloodlan_7bg","bloodlan_7_1",l->stamina,fraction(g->stamina,g->stamina_max),(Color){65,131,185,255});
-    for(int k=0;k<9;k++) {
-        PeTrainingUIRect r=l->quickslots[k];
-        const int id=g->quickslots[k].item_id;int count=0;
-        for(int slot=0;slot<pe_inventory_capacity(&g->inventory);slot++) {
+static void hud(const PeSandboxUI *u,const PeGame *g,bool building){
+    PeUiCanvas c=canvas(u);PeUiHudView v={.health=g->hp,.health_max=g->max_hp,.stamina=g->stamina,.stamina_max=g->stamina_max,.building=building};
+    for(int k=0;k<PE_UI_QUICKSLOTS;k++){
+        int id=g->quickslots[k].item_id,count=0;
+        for(int slot=0;slot<pe_inventory_capacity(&g->inventory);slot++){
             const PeSlot *owned=&g->inventory.slots[slot];
             if(owned->count>0&&owned->item_id==id&&owned->instance_id==g->quickslots[k].instance_id)count+=owned->count;
         }
-        char number[4];snprintf(number,sizeof number,"%d",k+1);
-        text(u,number,r.x+4*z,r.y+2*z,14,(Color){220,225,235,130},true);
-        if(id)item(u,id,count,r,false,count?WHITE:dim);
-        float cooldown=pe_game_item_cooldown(g,id);
-        if(cooldown>0) {
-            DrawRectangleRec(rect(r),(Color){25,40,90,160});center(u,TextFormat("%.0f",ceilf(cooldown)),r,18,ink,true);
-        }
+        v.slots[k]=(PeUiQuickslotView){id,count,pe_game_item_cooldown(g,id)};
     }
-    sprite(u,"icons:itemhand",l->hand_slot,WHITE);
-    const PeSlot *tool=pe_game_equipped_tool(g);if(tool)item(u,tool->item_id,1,l->hand_slot,false,WHITE);
-    sprite(u,"icons:itemhand_get",l->hand_slot,WHITE);sprite(u,"buttonb",l->build_button,building?blue:WHITE);
-    if(pe_training_ui_contains(l->health,u->mouse_x,u->mouse_y))center(u,TextFormat("%.0f / %.0f",g->hp,g->max_hp),l->health,14,WHITE,true);
-    if(pe_training_ui_contains(l->stamina,u->mouse_x,u->mouse_y))text(u,TextFormat("Stamina %.0f / %.0f",g->stamina,g->stamina_max),l->stamina.x,l->stamina.y-20*z,14,ink,false);
+    const PeSlot *tool=pe_game_equipped_tool(g);v.hand_item_id=tool?tool->item_id:0;
+    pe_ui_hud_draw(&c,&v);
 }
 static void minimap(const PeSandboxUI *u,const PeGame *g) {
     int depth=pe_world_depth(&g->world),width=pe_world_width(&g->world);
@@ -242,28 +179,14 @@ static void minimap(const PeSandboxUI *u,const PeGame *g) {
     DrawCircleV((Vector2){px,py},3*z,WHITE);
     DrawLineEx((Vector2){px,py},(Vector2){px+sinf(g->yaw)*9*z,py+cosf(g->yaw)*9*z},2*z,blue);
     EndScissorMode();
-    sprite(u,"map_02",map(u,1089,0,158,200,PE_UI_TOP_RIGHT),(Color){205,245,255,120});
-    sprite(u,"map_01",map(u,1069,0,20,200,PE_UI_TOP_RIGHT),WHITE);
-    sprite(u,"map_03",map(u,1246,0,33,200,PE_UI_TOP_RIGHT),WHITE);
-    effect(u,PE_UI_EFFECT_MAP_LEFT,map(u,1069,0,20,208,PE_UI_TOP_RIGHT));
-    effect(u,PE_UI_EFFECT_MAP_RIGHT,map(u,1246,0,34,208,PE_UI_TOP_RIGHT));
-    sprite(u,"Icon_mission",map(u,1254,173,20,26,PE_UI_TOP_RIGHT),WHITE);
     double tod=fmod(g->game_seconds,PE_DAY_SECONDS);int hour=(int)(tod/3600),minute=(int)(tod/60)%60;
-    center(u,TextFormat("%02d:%02d",hour,minute),map(u,1090,179,156,18,PE_UI_TOP_RIGHT),14,ink,true);
     int ox=g->world.source?g->world.origin_x:0,oz=g->world.source?g->world.origin_z:0;
-    text(u,TextFormat("P: %.0f, %.0f",g->player.x+ox,g->player.z+oz),area.x,area.y+4*z,14,ink,false);
+    PeUiCanvas c=canvas(u);PeUiMinimapView v={true,true,g->player.x+ox,g->player.z+oz,hour,minute};
+    pe_ui_minimap_chrome_draw(&c,&v);
 }
 static void inventory(const PeSandboxUI *u,const PeGame *g) {
     const PeTrainingUILayout *l=&u->layout;float z=l->scale;PeTrainingUIRect p=l->inventory;
-    PeTrainingUIRect outer={p.x-4*z,p.y-3*z,384*z,576*z};panel(u,outer,"INVENTORY",PE_UI_EFFECT_INVENTORY);
-    sprite(u,"close1",l->inventory_close,(Color){165,185,255,255});
-    static const char *icons[]={"item","equipment","resource","armor","mission"};
-    sprite(u,"insidebox2",rel(u,p,13,56,349,35),WHITE);
-    for(int t=0;t<5;t++) {
-        char name[32];snprintf(name,sizeof name,"%s%s",icons[t],t==u->inventory_tab?"_1":"");
-        PeTrainingUIRect r=l->inventory_tabs[t];r.x+=(r.w-40*z)*.5f;r.y-=2*z;r.w=r.h=40*z;sprite(u,name,r,WHITE);
-    }
-    sprite(u,"insidebox2",rel(u,p,13,97,349,418),WHITE);
+    PeUiCanvas c=canvas(u);pe_ui_draw_inventory_frame(&c,false,u->inventory_tab);
     for(int k=0;k<PE_UI_INVENTORY_SLOTS;k++) {
         PeTrainingUIRect r=l->inventory_slots[k];int index=pe_sandbox_ui_inventory_slot(u,g,k);
         const PeSlot *s=index>=0?&g->inventory.slots[index]:NULL;item(u,s?s->item_id:0,s?s->count:0,r,true,WHITE);
@@ -271,10 +194,7 @@ static void inventory(const PeSandboxUI *u,const PeGame *g) {
     }
     int n=pe_sandbox_ui_inventory_count(u,g),pages=pe_sandbox_ui_inventory_pages(u,g);
     PeTrainingUIRect page=l->inventory_page;
-    static const char *arrows[]={"leftendbutton","leftbutton","rightbutton","rightendbutton"};
-    const float offset[]={0,25,105,130};
-    for(int i=0;i<4;i++)sprite(u,arrows[i],rel(u,page,offset[i],3,16,16),WHITE);
-    center(u,TextFormat("%d/%d",u->inventory_page+1,pages),rel(u,page,48,0,50,23),18,ink,true);
+    pe_ui_draw_pagination(&c,page,u->inventory_page+1,pages);
     text(u,TextFormat("Money: %u",g->money),p.x+24*z,p.y+531*z,14,gold,false);
     text(u,u->delete_armed?"Select an item to discard":u->split_armed?"Select a stack to split":"Drag: move / swap    Shift+drop: merge",p.x+17*z,p.y+507*z,13,dim,false);
     text(u,TextFormat("%d / %d",n,pe_inventory_category_capacity(&g->inventory,u->inventory_tab)),p.x+18*z,p.y+491*z,12,dim,false);
@@ -444,9 +364,8 @@ static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
     if(line&&!pe_adventure_dialogue_format(line->text,&names,value,sizeof value))return;
     if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE){
         const PeTrainingUILayout *l=&u->layout;
-        sprite(u,"talkbg",l->dialogue,WHITE);sprite(u,"talkbg",l->dialogue,(Color){0,33,255,77});effect(u,PE_UI_EFFECT_DIALOGUE,l->dialogue);
-        supplier_portrait(u,l->dialogue_portrait);sprite(u,"namebg",l->dialogue_name,WHITE);
-        center(u,supplier_names.annot_full_name,l->dialogue_name,18,ink,true);
+        PeUiCanvas c=canvas(u);pe_ui_draw_dialogue_frame(&c,supplier_names.annot_full_name);
+        supplier_portrait(u,l->dialogue_portrait);
         for(int row=0;row<9;row++){
             int index=pe_sandbox_ui_dialogue_choice_index(u,g,row);if(index<0)break;
             const PeAdventureDialogueLine *option=pe_adventure_dialogue_choice(&u->dialogue,g,(unsigned)index);
@@ -478,15 +397,11 @@ static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
             text(u,line?"2.  That's all.":"1.  That's all.",close.x,close.y,18,pe_training_ui_contains(close,u->mouse_x,u->mouse_y)?blue:ink,false);
     } else if(line) {
         const PeTrainingUILayout *l=&u->layout;
-        sprite(u,"talkbg",l->dialogue,WHITE);sprite(u,"talkbg",l->dialogue,(Color){0,33,255,77});
-        effect(u,PE_UI_EFFECT_DIALOGUE,l->dialogue);
+        PeUiCanvas c=canvas(u);const char *speaker=pe_adventure_dialogue_speaker(line,&supplier_names);
+        pe_ui_draw_dialogue_frame(&c,speaker?speaker:"");
         if(line->speaker!=PE_ADVENTURE_SPEAKER_PLAYER)supplier_portrait(u,l->dialogue_portrait);
-        sprite(u,"namebg",l->dialogue_name,WHITE);
-        const char *speaker=pe_adventure_dialogue_speaker(line,&supplier_names);
-        center(u,speaker?speaker:"",l->dialogue_name,18,ink,true);
-        wrapped_spaced(u,value,l->dialogue_text,17,ink,1);
-        text(u,"1. Continue",l->dialogue_next.x-105*l->scale,l->dialogue_next.y+26*l->scale,16,ink,false);
-        sprite(u,"btn_down",l->dialogue_next,pe_training_ui_contains(l->dialogue_next,u->mouse_x,u->mouse_y)?blue:WHITE);
+        pe_ui_draw_wrap(&c,value,l->dialogue_text,18,ink,true,2);
+        pe_ui_draw_continue(&c);
     }
 }
 static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
@@ -680,10 +595,9 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(!u||!u->loaded||!g)return;
     if(building)build_hud(u,g);else hud(u,g,false);
     minimap(u,g);
-    if(*pe_sandbox_ui_mission_title(g)) {
-        PeTrainingUIRect r=u->layout.mission_tracker;
-        wrapped(u,pe_sandbox_ui_mission_title(g),rel(u,r,18,-7,250,65),18,(Color){155,61,244,255});
-        wrapped(u,mission_goal(u,g),rel(u,r,18,57,233,120),18,ink);
+    if(*pe_sandbox_ui_mission_title(g)){
+        PeUiCanvas c=canvas(u);PeUiTrackerObjective objective={mission_goal(u,g),false};
+        PeUiTrackerView view={pe_sandbox_ui_mission_title(g),true,&objective,1};pe_ui_tracker_draw(&c,&view);
     }
     if(u->character_open)character(u,g);
     if(u->inventory_open)inventory(u,g);

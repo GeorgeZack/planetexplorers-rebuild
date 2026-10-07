@@ -1,0 +1,123 @@
+/* Paired actual UI renderers, staged presentation only. No gameplay host,
+ * controller, input routing, saves or source-game session is instantiated.
+ * Run only through the explicitly owned high-display supervisor. */
+#include "pe_training_ui.h"
+#include "pe_sandbox_ui.h"
+#include "pe_ui_hud.h"
+#include <errno.h>
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#ifndef PE_SOURCE_ROOT
+#define PE_SOURCE_ROOT "."
+#endif
+#define REQUIRE(x) do{if(!(x)){fprintf(stderr,"shared UI render:%d: %s\n",__LINE__,#x);exit(1);}}while(0)
+static void private_display_required(void){
+    const char *display=getenv("DISPLAY"),*owned=getenv("PE_UI_PRIVATE_DISPLAY");
+    REQUIRE(display&&owned&&!strcmp(display,owned)&&!getenv("WAYLAND_DISPLAY"));
+    REQUIRE(display[0]==':'&&display[1]>='0'&&display[1]<='9');
+    errno=0;char *end=NULL;long number=strtol(display+1,&end,10);
+    REQUIRE(!errno&&end&&!*end&&number>=100&&number<=999);
+}
+static Image export_screen(const char *directory,const char *name,int width,int height){
+    char path[2048];int n=snprintf(path,sizeof path,"%s/%s-%dx%d.png",directory,name,width,height);
+    REQUIRE(n>0&&(size_t)n<sizeof path);
+    Image image=LoadImageFromScreen();REQUIRE(image.data&&image.width==width&&image.height==height);
+    REQUIRE(ExportImage(image,path));return image;
+}
+static Image training_capture(PeTrainingUi *ui,const PeTraining *training,const char *directory,const char *name,int width,int height){
+    for(int frame=0;frame<3;frame++){
+        BeginDrawing();ClearBackground((Color){28,45,54,255});
+        pe_training_ui_draw(ui,training,(PeTrainingUiState){0});EndDrawing();
+    }
+    return export_screen(directory,name,width,height);
+}
+static Image sandbox_capture(PeSandboxUI *ui,const PeGame *game,const char *directory,const char *name,int width,int height){
+    for(int frame=0;frame<3;frame++){
+        Vector2 mouse=GetMousePosition();ui->mouse_x=mouse.x;ui->mouse_y=mouse.y;
+        BeginDrawing();ClearBackground((Color){28,45,54,255});pe_sandbox_ui_draw(ui,game,false);EndDrawing();
+    }
+    return export_screen(directory,name,width,height);
+}
+static void compare_hud(Image a,Image b,const PeTrainingUILayout *layout){
+    REQUIRE(a.width==b.width&&a.height==b.height);
+    /* Include the entire authored frame, beyond the smaller input hit area. */
+    PeTrainingUIRect r=pe_training_ui_map(layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER);
+    int x0=(int)fmaxf(0,floorf(r.x)),y0=(int)fmaxf(0,floorf(r.y));
+    int x1=(int)fminf(a.width,ceilf(r.x+r.w)),y1=(int)fminf(a.height,ceilf(r.y+r.h));
+    REQUIRE(x1>x0&&y1>y0);
+    Color *left=LoadImageColors(a),*right=LoadImageColors(b);REQUIRE(left&&right);
+    size_t different=0,checked=0;
+    for(int y=y0;y<y1;y++)for(int x=x0;x<x1;x++){
+        size_t k=(size_t)y*(size_t)a.width+(size_t)x;checked++;
+        if(memcmp(&left[k],&right[k],sizeof(Color))){
+            if(!different)fprintf(stderr,"first HUD mismatch (%d,%d): tutorial=%u,%u,%u,%u sandbox=%u,%u,%u,%u\n",x,y,left[k].r,left[k].g,left[k].b,left[k].a,right[k].r,right[k].g,right[k].b,right[k].a);
+            different++;
+        }
+    }
+    UnloadImageColors(left);UnloadImageColors(right);
+    printf("HUD_PIXELS size=%dx%d checked=%zu different=%zu\n",a.width,a.height,checked,different);fflush(stdout);
+    REQUIRE(different==0);
+}
+static int bag(const PeGame *g,int item){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==item&&g->inventory.slots[i].count>0)return i;
+    return -1;
+}
+static void tracker_capture(PeTrainingUi *ui,const char *directory,int width,int height){
+    PeUiCanvas canvas={ui->assets,ui->effects,&ui->layout,0,-100,-100};
+    const PeUiTrackerObjective goals[]={
+        {"The first objective begins below the complete wrapped heading.",false},
+        {"Completed objectives keep the same spacing and use the completed tint.",true}
+    };
+    const PeUiTrackerView tracker={"Long camera heading: third-person orbit and free pointer movement",true,goals,2};
+    for(int frame=0;frame<3;frame++){
+        BeginDrawing();ClearBackground((Color){28,45,54,255});
+        pe_ui_minimap_chrome_draw(&canvas,&(PeUiMinimapView){0});
+        float used=pe_ui_tracker_draw(&canvas,&tracker);
+        REQUIRE(used>0&&used<=ui->layout.mission_tracker.h+7*ui->layout.scale+.01f);
+        REQUIRE(ui->layout.mission_tracker.y-7*ui->layout.scale>=ui->layout.minimap.y+ui->layout.minimap.h);
+        EndDrawing();
+    }
+    Image result=export_screen(directory,"shared-long-tracker",width,height);UnloadImage(result);
+}
+int main(int argc,char **argv){
+    private_display_required();REQUIRE(argc==2&&DirectoryExists(argv[1]));
+    SetTraceLogLevel(LOG_WARNING);SetConfigFlags(FLAG_WINDOW_HIDDEN);
+    InitWindow(1280,720,"Private paired shared UI render fixture");REQUIRE(IsWindowReady());
+    SetMousePosition(-100,-100);HideCursor();
+    /* These are explicit draw fixtures, not accepted mission/save state. */
+    PeTraining *training=calloc(1,sizeof *training);PeGame *game=calloc(1,sizeof *game);
+    REQUIRE(training&&game&&pe_game_init_mode(game,911,PE_GAME_LEGACY));
+    *training=(PeTraining){.hp=200,.max_hp=500,.stamina=67,.equipped_shovel=-1,
+        .knife_owned=true,.knife_equipped=true,.quickslot_item_id=916,.juice_count=5,.juice_cooldown=3.2f};
+    game->hp=200;game->max_hp=500;game->stamina=67;game->stamina_max=100;game->juice_cooldown=3.2;
+    game->inventory=(PeInventory){.next_instance_id=1};game->equipped_instance_id=0;game->shield_instance_id=0;
+    memset(game->quickslots,0,sizeof game->quickslots);
+    REQUIRE(pe_inventory_add(&game->inventory,916,5)&&pe_inventory_add(&game->inventory,33,1));
+    int juice=bag(game,916),knife=bag(game,33);REQUIRE(juice>=0&&knife>=0);
+    game->quickslots[0]=(PeQuickslot){.item_id=916,.instance_id=game->inventory.slots[juice].instance_id};
+    game->equipped_instance_id=game->inventory.slots[knife].instance_id;
+    REQUIRE(pe_game_equipped_tool(game)&&pe_game_equipped_tool(game)->item_id==33);
+    PeTrainingUi tutorial={0};PeSandboxUI sandbox={0};char error[256];
+    REQUIRE(pe_training_ui_load(&tutorial,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    REQUIRE(pe_sandbox_ui_load(&sandbox,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    REQUIRE(tutorial.assets&&sandbox.assets);tutorial.seconds=sandbox.seconds=0;
+    const int sizes[][2]={{1280,720},{640,480},{320,240}};
+    for(size_t k=0;k<sizeof sizes/sizeof *sizes;k++){
+        int w=sizes[k][0],h=sizes[k][1];SetWindowSize(w,h);SetMousePosition(-100,-100);
+        pe_training_ui_resize(&tutorial);pe_sandbox_ui_resize(&sandbox,(float)w,(float)h);
+        pe_sandbox_ui_prepare(&sandbox,game);
+        Image a=training_capture(&tutorial,training,argv[1],"tutorial-hud",w,h);
+        Image b=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud",w,h);
+        compare_hud(a,b,&tutorial.layout);UnloadImage(a);UnloadImage(b);
+        training->inventory_open=sandbox.inventory_open=true;
+        a=training_capture(&tutorial,training,argv[1],"tutorial-inventory",w,h);
+        b=sandbox_capture(&sandbox,game,argv[1],"sandbox-inventory",w,h);
+        UnloadImage(a);UnloadImage(b);training->inventory_open=sandbox.inventory_open=false;
+        tracker_capture(&tutorial,argv[1],w,h);
+    }
+    pe_training_ui_unload(&tutorial);pe_sandbox_ui_unload(&sandbox);
+    pe_game_destroy(game);free(game);free(training);CloseWindow();
+    puts("paired staged shared UI captures complete; actual-host HUD pixels match");return 0;
+}

@@ -328,8 +328,29 @@ static void numbered_responses(void){
     assert(!pe_sandbox_pointer_release_gate(&gate,false,0));
     pe_game_destroy(g);free(g);
 }
+static void shared_chrome(void){
+    PeGame *g=calloc(1,sizeof *g);assert(g);assert(pe_game_init_mode(g,73,PE_GAME_ADVENTURE));
+    const float sizes[][2]={{1280,720},{640,360},{954,1048}};
+    for(unsigned k=0;k<sizeof sizes/sizeof sizes[0];k++){
+        PeSandboxUI u;pe_sandbox_ui_init(&u,sizes[k][0],sizes[k][1]);u.camera_cursor=true;
+        PeSandboxUIResult r=pe_sandbox_ui_route(&u,g,click(u.layout.health,false));
+        assert(u.character_open&&r.consume_world&&!r.npc_interaction);
+        PeSandboxUIInput i=input();i.escape=true;pe_sandbox_ui_route(&u,g,i);
+        r=pe_sandbox_ui_route(&u,g,click(u.layout.mission_button,false));
+        assert(u.missions_open&&r.consume_world&&!r.npc_interaction);
+        i=input();i.escape=true;pe_sandbox_ui_route(&u,g,i);
+        pe_sandbox_ui_route(&u,g,click(u.layout.menu_button,false));assert(u.menu_open);
+        r=pe_sandbox_ui_route(&u,g,click(u.layout.health,false));
+        assert(!u.menu_open&&!u.character_open&&r.consume_world);
+        PeSandboxPointerGate gate={0};assert(pe_sandbox_pointer_route(&gate,&r,1));
+        i=input();r=pe_sandbox_ui_route(&u,g,i);assert(pe_sandbox_pointer_route(&gate,&r,1)&&r.consume_world);
+        r=pe_sandbox_ui_route(&u,g,i);assert(pe_sandbox_pointer_route(&gate,&r,0)&&r.consume_world);
+        r=pe_sandbox_ui_route(&u,g,i);assert(!pe_sandbox_pointer_route(&gate,&r,0));
+    }
+    pe_game_destroy(g);free(g);
+}
 int main(void) {
-    medpack_use();
+    shared_chrome();medpack_use();
     /* A 150ms dialogue click outlives its closing frame. No frame in that
        hold, including release, may recapture or supply a held tool action. */
     PeSandboxPointerGate gate={0};

@@ -1,5 +1,6 @@
 """Staged rendering on an explicitly selected, owned high X display only."""
 from pathlib import Path
+import argparse
 import os
 import signal
 import subprocess
@@ -11,7 +12,11 @@ import native_private_input as private
 
 
 def main():
-    out = root/'rebuild/build/ui-details-captures'
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--shared',action='store_true',help='compare tutorial and sandbox shared UI')
+    args = parser.parse_args()
+    out = root/('rebuild/build/ui-shared-captures' if args.shared else 'rebuild/build/ui-details-captures')
+    binary = 'render_shared_ui' if args.shared else 'render_shop_details_ui'
     out.mkdir(exist_ok=True)
     server = None
     try:
@@ -23,7 +28,7 @@ def main():
                        LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe')
             print(f'Private Xvfb display {display}',flush=True)
             with (out/'render.log').open('w') as render_log:
-                result = subprocess.run([str(root/'rebuild/build/render_shop_details_ui'),str(out)],
+                result = subprocess.run([str(root/'rebuild/build'/binary),str(out)],
                     env=env,cwd=root,stdout=render_log,stderr=subprocess.STDOUT,timeout=180)
             print((out/'render.log').read_text())
             return result.returncode

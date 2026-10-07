@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PREFIX = r"""
 #include "pe_training.h"
 #include "pe_training_ui_layout.h"
+#include "pe_ui_input.h"
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
@@ -35,6 +36,7 @@ static int inventory_tab,build_rotation;
 static float preview_yaw;
 static void frame(void){
  int talk=pe_training_dialogue(&training);dialogue_input_consumed=false;
+ bool pointer_release_pending=false;
  bool ui_was_modal=training.character_open||training.replicator_open||training.kit_open||inventory||log||menu_open;
 """
 SUFFIX = r"""}
@@ -114,6 +116,15 @@ int main(void){
  released=true;pointer=(Vector2){353,671};frame();assert(!training.quickslot_item_id&&!dragging);
  reset(746,2);training.quickslot_item_id=916;training.juice_count=10;menu_open=true;keys[KEY_ONE]=true;
  left=true;pointer=(Vector2){1150,624};frame();assert(paused&&training.juice_count==10);
+ const float sizes[][2]={{1280,720},{640,360},{954,1048}};
+ for(unsigned k=0;k<sizeof sizes/sizeof sizes[0];k++){
+  reset(746,2);assert(pe_training_ui_layout(sizes[k][0],sizes[k][1],&ui.layout));
+  left=true;pointer=(Vector2){ui.layout.health.x+1,ui.layout.health.y+1};frame();assert(training.character_open);
+  reset(746,2);assert(pe_training_ui_layout(sizes[k][0],sizes[k][1],&ui.layout));
+  left=true;pointer=(Vector2){ui.layout.mission_button.x+1,ui.layout.mission_button.y+1};frame();assert(log);
+  reset(746,2);assert(pe_training_ui_layout(sizes[k][0],sizes[k][1],&ui.layout));
+  menu_open=true;left=true;pointer=(Vector2){ui.layout.health.x+1,ui.layout.health.y+1};frame();assert(!menu_open&&!training.character_open);
+ }
  puts("Actual core transactions through extracted UI routing: storage, tabs, drag/use, equip/unequip, craft conservation passed");return 0;
 }
 """
@@ -160,6 +171,64 @@ int main(void) {
             self.assertEqual(compiled.returncode, 0, compiled.stdout + compiled.stderr)
             ran = subprocess.run([str(binary)], capture_output=True, text=True, env=environment, timeout=60)
             self.assertEqual(ran.returncode, 0, ran.stdout + ran.stderr)
+
+    def test_actual_host_held_pointer_release(self):
+        compiler = shutil.which("cc")
+        if not compiler:
+            self.skipTest("C compiler unavailable")
+        source = (ROOT / "src/pe_training_view.c").read_text()
+        first = source.index("        unsigned pointer_buttons=0;")
+        last = source.index("        bool was_captured = captured;", first)
+        block = source[first:last]
+        world = next(line for line in source.splitlines() if "bool world_pointer=" in line)
+        dig = next(line for line in source.splitlines() if "bool dig_held=" in line)
+        harness = r"""
+#include "pe_ui_input.h"
+#include <assert.h>
+#include <stdio.h>
+typedef struct {float x,y;} Vector2;
+enum {MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT};
+static unsigned held;
+static bool IsMouseButtonDown(int button){return (held&(1u<<button))!=0;}
+static Vector2 GetMousePosition(void){return (Vector2){0};}
+static int ui;
+static bool pe_training_ui_pointer_over(const int *u,Vector2 p){(void)u;(void)p;return false;}
+static PeUiPointerGate pointer_gate;
+static struct {int camera_mode;bool build_mode,shovel_held;} training={.shovel_held=true};
+static bool focused=true,smoke_frames,paused,pause_was_active,modal,ui_was_modal;
+static bool window_input_consumed,dialogue_input_consumed,captured,free_cursor;
+static bool autorun,jump_pending,attack_pending;
+static int talk;
+static bool capture_allowed,dig_allowed;
+static void frame(void){
+""" + block + world + "\n" + dig + r"""
+ capture_allowed=want_capture;dig_allowed=dig_held;
+}
+int main(void){
+ for(unsigned button=1;button<=2;button++){
+  pointer_gate=(PeUiPointerGate){0};held=button;ui_was_modal=true;frame();
+  assert(!capture_allowed&&!dig_allowed&&pointer_gate.waiting_for_release);
+  ui_was_modal=false;
+  for(int i=0;i<3;i++){frame();assert(!capture_allowed&&!dig_allowed);}
+  held=0;frame();assert(!capture_allowed&&!dig_allowed&&!pointer_gate.waiting_for_release);
+  held=button;frame();assert(button==1?dig_allowed:capture_allowed);
+ }
+ puts("Production tutorial held-pointer gate blocks dig/capture through release");
+}
+"""
+        with tempfile.TemporaryDirectory(prefix="ui-pointer-", dir=ROOT / "build") as folder:
+            temporary = Path(folder)
+            cfile, binary = temporary / "pointer.c", temporary / "pointer"
+            cfile.write_text(harness)
+            environment = os.environ.copy()
+            environment["TMPDIR"] = str(temporary)
+            command = [compiler,"-std=c11","-Wall","-Wextra","-Wpedantic","-Werror",
+                       "-fsanitize=address,undefined","-I"+str(ROOT/"src"),str(cfile),
+                       str(ROOT/"src/pe_ui_input.c"),str(ROOT/"src/pe_training_ui_layout.c"),"-lm","-o",str(binary)]
+            result = subprocess.run(command,capture_output=True,text=True,env=environment,timeout=60)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
+            result = subprocess.run([str(binary)],capture_output=True,text=True,env=environment,timeout=60)
+            self.assertEqual(result.returncode,0,result.stdout+result.stderr)
 
     def test_actual_input_routes_and_transactions(self):
         compiler = shutil.which("cc")

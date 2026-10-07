@@ -14,7 +14,7 @@ enum { PE_UI_INVENTORY_SLOTS=42, PE_UI_STORAGE_SLOTS=30,
 typedef struct {
     float width, height, scale;
     PeTrainingUIRect hud, hand_slot, build_button, quickslots[PE_UI_QUICKSLOTS];
-    PeTrainingUIRect health, stamina, minimap, mission_tracker, notification;
+    PeTrainingUIRect health, stamina, minimap, mission_tracker, notification, mission_button;
     PeTrainingUIRect minimap_texture, minimap_clip, minimap_player;
     PeTrainingUIRect dialogue, dialogue_portrait, dialogue_name, dialogue_text, dialogue_next;
     PeTrainingUIRect mission, mission_close;

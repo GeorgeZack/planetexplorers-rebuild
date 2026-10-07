@@ -23,26 +23,13 @@ static PeTrainingUIRect relative(const PeSandboxUI *u,PeTrainingUIRect p,float x
     return (PeTrainingUIRect){p.x+x*s,p.y+y*s,w*s,h*s};
 }
 bool pe_sandbox_pointer_release_gate(PeSandboxPointerGate *gate,bool ui_owned,unsigned buttons_down) {
-    if(!gate)return true;
-    if(ui_owned&&buttons_down){gate->waiting_for_release=true;gate->actions_only=false;}
-    bool blocked=gate->waiting_for_release;
-    if(!buttons_down){gate->waiting_for_release=false;gate->actions_only=false;}
-    return blocked;
+    bool actions=false;
+    return pe_ui_pointer_route(gate,&ui_owned,&actions,buttons_down);
 }
 bool pe_sandbox_pointer_route(PeSandboxPointerGate *gate,PeSandboxUIResult *r,unsigned buttons){
-    if(!gate||!r)return true;
-    if((r->consume_world||r->consume_actions)&&buttons){
-        if(!gate->waiting_for_release)gate->actions_only=!r->consume_world;
-        else if(r->consume_world)gate->actions_only=false;
-        gate->waiting_for_release=true;
-    }
-    bool blocked=gate->waiting_for_release;
-    if(blocked){
-        if(gate->actions_only)r->consume_actions=true;
-        else r->consume_world=true;
-        r->npc_interaction=false;r->camera_cycle_allowed=false;
-    }
-    if(!buttons){gate->waiting_for_release=false;gate->actions_only=false;}
+    if(!r)return true;
+    bool blocked=pe_ui_pointer_route(gate,&r->consume_world,&r->consume_actions,buttons);
+    if(blocked){r->npc_interaction=false;r->camera_cycle_allowed=false;}
     return blocked;
 }
 void pe_sandbox_ui_init(PeSandboxUI *u,float w,float h) {
@@ -806,16 +793,18 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     }
     if(cursor&&!u->building&&hit(u->layout.hud,i))r.consume_actions=true;
     if(cursor&&(hit(u->layout.minimap,i)||hit(u->layout.menu_button,i)))r.consume_world=true;
-    if(i.left_pressed&&cursor&&hit(u->layout.menu_button,i)){u->menu_open=!u->menu_open;r.consume_world=true;}
-    if(u->menu_open&&i.left_pressed)for(int b=0;b<PE_UI_MENU_ITEMS;b++)if(hit(u->layout.menu_items[b],i)) {
+    PeUiChromeResult chrome=pe_ui_chrome_click(&u->layout,i.mouse_x,i.mouse_y,
+        i.left_pressed&&cursor,u->menu_open,!before&&!panel(u)&&!u->building&&!i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&!i.tab);
+    u->menu_open=chrome.menu_open;
+    if(chrome.action>=0){
         close_panels(u);
-        if(b==0)u->inventory_open=true;
-        if(b==1)u->character_open=true;
-        if(b==2)u->replicator_open=true;
-        if(b==3)u->missions_open=true;
-        if(b==4)u->paused=true;
-        r.consume_world=true;goto done;
+        if(chrome.action==0)u->inventory_open=true;
+        if(chrome.action==1)u->character_open=true;
+        if(chrome.action==2)u->replicator_open=true;
+        if(chrome.action==3)u->missions_open=true;
+        if(chrome.action==4)u->paused=true;
     }
+    if(chrome.consume_press){r.consume_world=true;goto done;}
     if(u->menu_open)goto done;
     if(u->building&&!panel(u)&&!u->dragging) {
         if(!r.consume_world&&(i.undo_build||i.redo_build)){

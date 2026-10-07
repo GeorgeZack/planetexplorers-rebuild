@@ -5,6 +5,7 @@
 #include "pe_town_interaction.h"
 #include "pe_ui_assets.h"
 #include "pe_training_ui_layout.h"
+#include "pe_ui_input.h"
 #include "pe_training_ui_shader.h"
 
 /* Presentation only. All possessions, equipment, recipes and quickslots live
@@ -121,7 +122,7 @@ typedef struct {
 /* A UI-owned press remains owned until every mouse button is released. The
  * release frame is consumed too; cursor recapture may start on the next frame.
  * Kept outside PeGame so no held desktop input crosses a save/load boundary. */
-typedef struct { bool waiting_for_release,actions_only; } PeSandboxPointerGate;
+typedef PeUiPointerGate PeSandboxPointerGate;
 bool pe_sandbox_pointer_release_gate(PeSandboxPointerGate *gate,bool ui_owned,unsigned buttons_down);
 /* Preserve action-only or full-modal press ownership through release. A real
  * modal escalates ownership; an action-only press never freezes simulation. */

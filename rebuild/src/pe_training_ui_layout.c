@@ -72,6 +72,7 @@ bool pe_training_ui_layout(float width,float height,PeTrainingUILayout *out) {
     for (int i=0;i<PE_UI_QUICKSLOTS;i++)
         l.quickslots[i]=rect(&l,bottom,i<4?329+51*i:748+51*(i-4),647,48,48);
     R(health,bottom,558,648,164,30); R(stamina,bottom,571,678.5f,138,9);
+    R(mission_button,right,1254,173,20,26);
     R(minimap,right,1069,0,210,208); R(mission_tracker,right,994,224,282,309);
     R(notification,left,42,0,520,64);
     /* UIMinMapCtrl.UpdateMapPos runtime 190x200, centered at(-96,-101)

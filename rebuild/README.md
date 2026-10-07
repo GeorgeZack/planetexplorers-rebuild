@@ -1,5 +1,20 @@
 # Planet Explorers C rebuild
 
+## Review batch: shared tutorial and sandbox UI
+
+Both modes now use one normal HUD, minimap border/decorations and quest tracker renderer. Shared text, inventory/dialogue frames and menu shortcuts follow the same owners; mission/map contents still reflect each mode. Click health for Character or the minimap mission icon for Missions. Movable panels retain header dragging and viewport clamping. [Ownership and paired checks](../docs/audit/SHARED_UI.md) are required for future common UI changes.
+
+Run `./rebuild/build/planet_explorers` from the repository root and select Tutorial or Sandbox in the main menu. Compare both at the same size, then shrink the window: inspect the HUD, minimap and wrapped quest title; drag Inventory/Character and test their close buttons. A modal's closing mouse press must not start a world action while held. This manual review is ready; ordinary interactive acceptance remains separate from automated captures.
+
+```sh
+make -C rebuild ui-shared-test sandbox-ui-test
+make -C rebuild ui-shared-render-capture
+```
+
+The capture target stages both real UI renderers at 1280×720, 640×480 and 320×240, compares matching HUD pixels and exports images under `rebuild/build/ui-shared-captures`. It uses the qualified private high display and never injects desktop input. Fixtures do not play either game or alter saves.
+
+Next implementation target: qualify and integrate camera-only collision queries with consistent pointer/near-camera projection. A useful later manual check is orbiting close to terrain/buildings in all F5 modes while checking cursor targeting. Town Defense9077 remains gated.
+
 The latest review batch adds Restoration Bandage924 use, typed shop quantities and item-detail tooltips. The existing camp repair service and these changes can be reviewed together using the checklist below. Saves remain PECSv20. [Ordinary hunt acceptance](../docs/audit/HUNT_ORDINARY_ACCEPTANCE.md) now passes earned four-kill combat, partial reload and the return/reward flow; it used an isolated native display without requiring user play. A source-derived camera geometry evaluator is also tested offline; the live camera still uses its existing geometry adapter.
 
 ## Review batch: shop details, bandages and repair

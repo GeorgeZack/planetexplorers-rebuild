@@ -8,6 +8,7 @@
 #include "pe_training_build.h"
 #include "pe_training_npc_view.h"
 #include "pe_training_ui.h"
+#include "pe_ui_input.h"
 #include "pe_training_text.h"
 #include "pe_actor_view.h"
 #include "pe_actor_scene_view.h"
@@ -419,6 +420,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     double actor_seconds=0;
     float player_yaw=30.0f;
     bool inventory=false,log=false,dragging=false,equipment_tab=false,menu_open=false;
+    PeUiPointerGate pointer_gate={0};
     int inventory_tab=0;
     float preview_yaw=0;
     bool extended_smoke=smoke_frames>=1200;
@@ -504,6 +506,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     while (!WindowShouldClose() && !quit) {
         pe_training_ui_resize(&ui);
         bool dialogue_input_consumed=false;
+        bool pointer_release_pending=pointer_gate.waiting_for_release;
         const bool pause_was_active=paused;
         float dt = smoke_frames ? PE_TRAINING_DT : fminf(GetFrameTime(), .1f);
         bool focused=smoke_frames||IsWindowFocused();
@@ -557,26 +560,19 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 const bool left_pressed=IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
                 const bool right_pressed_now=IsMouseButtonPressed(MOUSE_BUTTON_RIGHT);
                 bool left_available=left_pressed;
-                int menu_action=-1;
-                if(left_pressed){
-                    if(menu_was_open)menu_action=pe_training_ui_hit(ui.layout.menu_items,PE_UI_MENU_ITEMS,pointer.x,pointer.y);
-                    bool menu_button=pe_training_ui_contains(ui.layout.menu_button,pointer.x,pointer.y);
-                    if(menu_button)menu_open=!menu_open;
-                    else if(menu_open)menu_open=false;
-                    /* Closing/clicking a popup owns this press, even when its
-                       destination lies on a control underneath the popup. */
-                    if(menu_was_open||menu_button)left_available=false;
-                    if(left_available&&log&&pe_training_ui_contains(ui.layout.mission_close,pointer.x,pointer.y)){
-                        log=false;left_available=false;
-                    }
+                PeUiChromeResult chrome=pe_ui_chrome_click(&ui.layout,pointer.x,pointer.y,
+                    left_pressed,menu_open,!ui_was_modal&&!pointer_release_pending);
+                int menu_action=chrome.action;
+                menu_open=chrome.menu_open;
+                if(chrome.consume_press)left_available=false;
+                if(left_available&&log&&pe_training_ui_contains(ui.layout.mission_close,pointer.x,pointer.y)){
+                    log=false;left_available=false;
                 }
                 if(menu_action==4)paused=true;
-                bool character_action=IsKeyPressed(KEY_C)||menu_action==1||
-                    (!ui_was_modal&&left_available&&pe_training_ui_contains(ui.layout.health,pointer.x,pointer.y));
+                bool character_action=IsKeyPressed(KEY_C)||menu_action==1;
                 bool replicator_action=IsKeyPressed(KEY_Y)||menu_action==2;
                 bool inventory_action=IsKeyPressed(KEY_I)||menu_action==0;
-                bool mission_action=IsKeyPressed(KEY_Q)||menu_action==3||
-                    (!ui_was_modal&&left_available&&pe_training_ui_contains(pe_training_ui_map(&ui.layout,(PeTrainingUIRect){1254,173,20,26},PE_UI_TOP_RIGHT),pointer.x,pointer.y));
+                bool mission_action=IsKeyPressed(KEY_Q)||menu_action==3;
                 bool panel_action=character_action||replicator_action||inventory_action||mission_action||menu_action>=0;
                 if(!paused&&character_action){
                     if(training.character_open)pe_training_close_character(&training);
@@ -658,8 +654,8 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                     else if(training.equipped_shovel>=0)pe_training_unequip_shovel(&training);
                 }
                 if(!paused&&!menu_open&&(IsKeyPressed(KEY_ONE)||(right_available&&quickslot_visible&&pe_training_ui_contains(ui.layout.quickslots[0],pointer.x,pointer.y))))pe_training_use_quickslot(&training);
-                bool interact=!paused&&!training.character_open&&!menu_open&&!training.replicator_open&&!inventory&&!log&&!training.kit_open&&IsKeyPressed(KEY_E);
-                if(!paused&&right_available&&!training.character_open&&!training.replicator_open&&!training.kit_open&&!inventory&&!log&&!ui_was_modal&&!pe_training_ui_pointer_over(&ui,pointer)) {
+                bool interact=!pointer_release_pending&&!paused&&!training.character_open&&!menu_open&&!training.replicator_open&&!inventory&&!log&&!training.kit_open&&IsKeyPressed(KEY_E);
+                if(!pointer_release_pending&&!paused&&right_available&&!training.character_open&&!training.replicator_open&&!training.kit_open&&!inventory&&!log&&!ui_was_modal&&!pe_training_ui_pointer_over(&ui,pointer)) {
                     Vector2 cursor=captured?(Vector2){GetScreenWidth()/2.0f,GetScreenHeight()/2.0f}:GetMousePosition();
                     Ray ray=GetScreenToWorldRay(cursor,camera_for(&training,scene,yaw,pitch));
                     BoundingBox box=training.tutorial.mission_id==PE_TUTORIAL_STORAGE?
@@ -687,7 +683,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                         if(nearest>=0)pe_training_begin_herb(&training,(unsigned)nearest);
                     }
                 }
-                if(!paused&&!training.character_open&&!menu_open&&!training.replicator_open&&!training.kit_open&&!inventory&&!log) {
+                if(!pointer_release_pending&&!paused&&!training.character_open&&!menu_open&&!training.replicator_open&&!training.kit_open&&!inventory&&!log) {
                     if(IsKeyPressed(KEY_F5)){pe_training_camera(&training,(training.camera_mode+1)%3);free_cursor=false;}
                     if(IsKeyPressed(KEY_TAB))free_cursor=!free_cursor;
                     if(IsKeyPressed(KEY_Z))walk=!walk;
@@ -719,7 +715,13 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
         if(!focused||paused||modal||!training.build_mode)build_pending=false;
         if(modal){autorun=false;jump_pending=false;attack_pending=false;pe_training_melee_cancel(&melee);pe_training_dig_cancel(&training.dig);}
         if(!training.knife_equipped){knife_drawn=false;pe_training_melee_cancel(&melee);}
-        bool want_capture=focused&&!smoke_frames&&!paused&&!pause_was_active&&!modal&&!ui_was_modal&&
+        unsigned pointer_buttons=0;
+        for(int button=0;button<7;button++)if(IsMouseButtonDown(button))pointer_buttons|=1u<<button;
+        bool pointer_world=!focused||paused||pause_was_active||modal||ui_was_modal||window_input_consumed||dialogue_input_consumed;
+        bool pointer_actions=!captured&&pe_training_ui_pointer_over(&ui,GetMousePosition());
+        bool pointer_blocked=pe_ui_pointer_route(&pointer_gate,&pointer_world,&pointer_actions,pointer_buttons);
+        if(pointer_world){autorun=false;jump_pending=false;attack_pending=false;}
+        bool want_capture=!pointer_blocked&&focused&&!smoke_frames&&!paused&&!pause_was_active&&!modal&&!ui_was_modal&&
             (captured||!pe_training_ui_pointer_over(&ui,GetMousePosition()))&&
             ((training.camera_mode==0&&IsMouseButtonDown(MOUSE_BUTTON_RIGHT))||(training.camera_mode!=0&&!free_cursor));
         bool was_captured = captured;
@@ -748,7 +750,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 if (frame == 25) jump_pending = true;
                 if (frame == 45) autorun = true;
                 if (frame == 60) pe_training_camera(&training, 0);
-            } else if(!modal) {
+            } else if(!modal&&!pointer_world) {
                 forward = (float)(IsKeyDown(KEY_W) - IsKeyDown(KEY_S));
                 side = (float)(IsKeyDown(KEY_D) - IsKeyDown(KEY_A));
                 sprint = IsKeyDown(KEY_LEFT_SHIFT);
@@ -757,7 +759,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
             }
             if (autorun && !forward && !side) forward = 1;
             PeTrainingInput input = {0};
-            bool world_pointer=!ui_was_modal&&!dialogue_input_consumed&&(captured||!pe_training_ui_pointer_over(&ui,GetMousePosition()));
+            bool world_pointer=!pointer_world&&!pointer_actions&&!pointer_blocked&&!ui_was_modal&&!dialogue_input_consumed&&(captured||!pe_training_ui_pointer_over(&ui,GetMousePosition()));
             bool dig_held=world_pointer&&!smoke_frames&&!modal&&!talk&&!training.build_mode&&training.shovel_held&&IsMouseButtonDown(MOUSE_BUTTON_LEFT);
             bool build_request=world_pointer&&!smoke_frames&&!modal&&!talk&&training.build_mode&&IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
             bool build_subtract=IsKeyDown(KEY_LEFT_ALT)||IsKeyDown(KEY_RIGHT_ALT);

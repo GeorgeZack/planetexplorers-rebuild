@@ -1,4 +1,6 @@
 #include "pe_training_ui.h"
+#include "pe_ui_draw.h"
+#include "pe_ui_hud.h"
 #include "pe_training_view.h"
 #include "pe_training_text.h"
 #include "pe_training_npc.h"
@@ -10,40 +12,17 @@
 #include <stdio.h>
 #include <string.h>
 
-static const Color ink={236,246,255,255},blue={112,220,255,255},gold={220,226,112,255};
+#define ink PE_UI_INK
+#define blue PE_UI_BLUE
+#define gold PE_UI_GOLD
+static PeUiCanvas canvas(const PeTrainingUi *u){Vector2 m=GetMousePosition();return(PeUiCanvas){u->assets,u->effects,&u->layout,(float)u->seconds,m.x,m.y};}
 static Rectangle rect(PeTrainingUIRect r){return (Rectangle){r.x,r.y,r.w,r.h};}
 static PeTrainingUIRect map(PeTrainingUi *u,float x,float y,float w,float h,PeTrainingUIAnchor a){return pe_training_ui_map(&u->layout,(PeTrainingUIRect){x,y,w,h},a);}
-static void sprite(PeTrainingUi *u,const char *name,PeTrainingUIRect r,Color tint){
-    if(!pe_ui_sprite(u->assets,name,rect(r),tint,u->layout.scale))DrawRectangleRec(rect(r),(Color){36,62,105,210});
-}
-static void effect(PeTrainingUi *u,PeUiEffect role,PeTrainingUIRect r){pe_training_ui_shader_draw(u->effects,role,rect(r),(float)u->seconds,1,false);}
-static void text(PeTrainingUi *u,const char *s,float x,float y,float size,Color color,bool bold){
-    DrawTextEx(size<=15?pe_ui_font_small(u->assets,bold):pe_ui_font(u->assets,bold),s,(Vector2){x,y},size*u->layout.scale,0,color);
-}
-static void center(PeTrainingUi *u,const char *s,PeTrainingUIRect r,float size,Color color,bool bold){
-    Vector2 measure=MeasureTextEx(size<=15?pe_ui_font_small(u->assets,bold):pe_ui_font(u->assets,bold),s,size*u->layout.scale,0);
-    text(u,s,r.x+(r.w-measure.x)*.5f,r.y+(r.h-measure.y)*.5f,size,color,bold);
-}
-static float wrap(PeTrainingUi *u,const char *s,PeTrainingUIRect r,float size,Color color,bool bold){
-    if(!s)return 0;
-    Font font=size<=15?pe_ui_font_small(u->assets,bold):pe_ui_font(u->assets,bold);float px=size*u->layout.scale,step=(size+2)*u->layout.scale,y=r.y;
-    char line[1024]={0};size_t used=0;
-    while(*s&&y+px<=r.y+r.h+.5f){
-        const char *end=s;while(*end&&*end!=' '&&*end!='\n')end++;
-        size_t n=(size_t)(end-s);if(n>sizeof line-2)n=sizeof line-2;
-        char measured[2048];snprintf(measured,sizeof measured,"%s%.*s",line,(int)n,s);
-        if(used&&(used+n+2>=sizeof line||MeasureTextEx(font,measured,px,0).x>r.w)){
-            DrawTextEx(font,line,(Vector2){r.x,y},px,0,color);y+=step;used=0;
-        }
-        if(y+px>r.y+r.h+.5f)break;
-        memcpy(line+used,s,n);used+=n;line[used]=0;s=end;
-        if(*s=='\n'){DrawTextEx(font,line,(Vector2){r.x,y},px,0,color);y+=step;used=0;s++;}
-        else if(*s==' '){if(used<sizeof line-2)line[used++]=' ';s++;}
-        line[used]=0;
-    }
-    if(used&&y+px<=r.y+r.h+.5f){DrawTextEx(font,line,(Vector2){r.x,y},px,0,color);y+=step;}
-    return y-r.y;
-}
+static void sprite(PeTrainingUi *u,const char *n,PeTrainingUIRect r,Color tint){PeUiCanvas c=canvas(u);pe_ui_draw_sprite(&c,n,r,tint);}
+static void effect(PeTrainingUi *u,PeUiEffect fx,PeTrainingUIRect r){PeUiCanvas c=canvas(u);pe_ui_draw_effect(&c,fx,r);}
+static void text(PeTrainingUi *u,const char *v,float x,float y,float size,Color tint,bool bold){PeUiCanvas c=canvas(u);pe_ui_draw_text(&c,v,x,y,size,tint,bold);}
+static void center(PeTrainingUi *u,const char *v,PeTrainingUIRect r,float size,Color tint,bool bold){PeUiCanvas c=canvas(u);pe_ui_draw_center(&c,v,r,size,tint,bold);}
+static float wrap(PeTrainingUi *u,const char *v,PeTrainingUIRect r,float size,Color tint,bool bold){PeUiCanvas c=canvas(u);return pe_ui_draw_wrap(&c,v,r,size,tint,bold,2);}
 static const char *title(const PeTraining *t){const PeTrainingUiMissionText *m=pe_training_ui_mission_text(t->tutorial.mission_id);return m?m->title:"";}
 bool pe_training_ui_load(PeTrainingUi *u,const char *dir,char *error,size_t cap){
     if(!u||!dir)return false;
@@ -68,43 +47,18 @@ void pe_training_ui_resize(PeTrainingUi *u){if(u)pe_training_ui_windows_layout((
 bool pe_training_ui_pointer_over(const PeTrainingUi *u,Vector2 p){
     return u&&(pe_training_ui_contains(u->layout.hud,p.x,p.y)||pe_training_ui_contains(u->layout.minimap,p.x,p.y)||pe_training_ui_contains(u->layout.mission_tracker,p.x,p.y)||pe_training_ui_contains(u->layout.menu_button,p.x,p.y));
 }
-static void panel(PeTrainingUi *u,PeTrainingUIRect r,const char *label){
-    sprite(u,"midbg",r,WHITE);sprite(u,"midbg",r,(Color){0,33,255,77});
-    float z=u->layout.scale;
-    sprite(u,"titilebg",(PeTrainingUIRect){r.x+15*z,r.y+32*z,r.w-65*z,14*z},WHITE);
-    /* UISwitchFont.MakePixelPerfect resets the authored 37px title to32. */
-    DrawTextEx(pe_ui_font_heading(u->assets),label,(Vector2){r.x+32*z,r.y+20*z},32*z,0,(Color){159,197,234,255});
-}
+static void panel(PeTrainingUi *u,PeTrainingUIRect r,const char *label){PeUiCanvas c=canvas(u);pe_ui_draw_panel(&c,r,label,PE_UI_EFFECT_INVENTORY);}
 static void slot(PeTrainingUi *u,PeTrainingUIRect r,const char *icon,unsigned count,bool equipped){
     sprite(u,"itembox",r,WHITE);
     if(icon){sprite(u,icon,r,WHITE);if(count>1)text(u,TextFormat("%u",count),r.x+r.w-20*u->layout.scale,r.y+r.h-15*u->layout.scale,14,gold,false);}
     if(equipped)sprite(u,"itemhand_get",r,blue);
     Vector2 mouse=GetMousePosition();if(pe_training_ui_contains(r,mouse.x,mouse.y))DrawRectangleLinesEx(rect(r),u->layout.scale,blue);
 }
-static void pagination(PeTrainingUi *u,PeTrainingUIRect r,const char *pages){
-    float z=u->layout.scale;
-    const char *icons[]={"leftendbutton","leftbutton","rightbutton","rightendbutton"};float x[]={0,25,105,130};
-    for(unsigned i=0;i<4;i++)sprite(u,icons[i],(PeTrainingUIRect){r.x+x[i]*z,r.y+3*z,16*z,16*z},(Color){200,220,240,180});
-    center(u,pages,(PeTrainingUIRect){r.x+48*z,r.y,50*z,r.h},18,ink,true);
-}
 static void inventory(PeTrainingUi *u,const PeTraining *t,int tab,bool storage){
     PeTrainingUILayout *l=&u->layout;float z=l->scale;PeTrainingUIRect p=storage?l->storage:l->inventory;
-    PeTrainingUIRect outer={p.x-4*z,p.y-(storage?4:3)*z,384*z,(storage?460:576)*z};
-    sprite(u,"midbg",outer,WHITE);sprite(u,"midbg",outer,(Color){0,33,255,77});
-    effect(u,storage?PE_UI_EFFECT_STORAGE:PE_UI_EFFECT_INVENTORY,(PeTrainingUIRect){outer.x,outer.y,385*z,(storage?460:578)*z});
-    sprite(u,"titilebg",(PeTrainingUIRect){p.x+12*z,p.y+(storage?24:34)*z,314*z,14*z},WHITE);
-    DrawTextEx(pe_ui_font_heading(u->assets),storage?"STORAGE":"INVENTORY",(Vector2){p.x+28*z,p.y+(storage?15:17)*z},32*z,0,(Color){159,197,234,255});
-    sprite(u,"close1",storage?l->storage_close:l->inventory_close,(Color){165,185,255,255});
-    PeTrainingUIRect *tabs=storage?l->storage_tabs:l->inventory_tabs;
-    sprite(u,"insidebox2",(PeTrainingUIRect){p.x+13*z,tabs[0].y,p.w-26*z,35*z},WHITE);
-    static const char *icons[]={"item","equipment","resource","armor","mission"};
-    for(unsigned i=0;i<(storage?4u:5u);i++) {
-        char selected[64];snprintf(selected,sizeof selected,"%s%s",icons[i],i==(storage?0u:(unsigned)tab)?"_1":"");
-        sprite(u,selected,(PeTrainingUIRect){tabs[i].x+(tabs[i].w-40*z)*.5f,tabs[i].y-2*z,40*z,40*z},WHITE);
-    }
+    PeUiCanvas c=canvas(u);pe_ui_draw_inventory_frame(&c,storage,storage?0:tab);
     PeTrainingUIRect *slots=storage?l->storage_slots:l->inventory_slots;
     unsigned total=storage?PE_UI_STORAGE_SLOTS:PE_UI_INVENTORY_SLOTS;
-    PeTrainingUIRect content={p.x+13*z,slots[0].y-24*z,p.w-26*z,storage?326*z:418*z};sprite(u,storage?"insidebox1":"insidebox2",content,WHITE);
     for(unsigned i=0;i<total;i++)slot(u,slots[i],NULL,0,false);
     if(storage)effect(u,PE_UI_EFFECT_STORAGE_SCAN,(PeTrainingUIRect){p.x-1.5f*z,p.y+98*z,378*z,326*z});
     if(storage){if(!t->kit_transferred)slot(u,slots[0],"drug_hot01",5,false);}
@@ -119,82 +73,41 @@ static void inventory(PeTrainingUi *u,const PeTraining *t,int tab,bool storage){
         if(t->gathering.wood)slot(u,slots[0],"build_wood",t->gathering.wood,false);
         if(t->gathering.dirt)slot(u,slots[1],"build_soil",t->gathering.dirt,false);
     }
-    pagination(u,storage?l->storage_page:l->inventory_page,storage?"1/1":"1/10");
+    pe_ui_draw_pagination(&c,storage?l->storage_page:l->inventory_page,1,1);
     if(!storage){
         const char *tools[]={"icohe","icocai","icodelete"};for(unsigned i=0;i<3;i++)sprite(u,tools[i],(PeTrainingUIRect){p.x+(267+34*i)*z,p.y+p.h-46*z,25*z,27*z},(Color){210,232,255,150});
     }
 }
 static void hud(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState state){
-    PeTrainingUILayout *l=&u->layout;float z=l->scale;
-    sprite(u,"shortbar1bg",map(u,217.5f,644,845,54,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"shortbar1",map(u,217.5f,611,845,110,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"shortbar1",map(u,217.5f,611,845,110,PE_UI_BOTTOM_CENTER),(Color){0,33,255,77});
-    effect(u,PE_UI_EFFECT_FRAME,map(u,218,611,844,110,PE_UI_BOTTOM_CENTER));
-    effect(u,PE_UI_EFFECT_HUD_SCAN,map(u,225,646,830,50,PE_UI_BOTTOM_CENTER));
-    sprite(u,"bloodlan_6bg",map(u,558,648,164,30,PE_UI_BOTTOM_CENTER),WHITE);
-    PeTrainingUIRect hp=map(u,558,648,164,30,PE_UI_BOTTOM_CENTER);
-    BeginScissorMode((int)hp.x,(int)hp.y,(int)ceilf(hp.w*Clamp(t->hp/t->max_hp,0,1)),(int)ceilf(hp.h));sprite(u,"bloodlan_6",hp,WHITE);effect(u,PE_UI_EFFECT_HEALTH,hp);EndScissorMode();
-    PeTrainingUIRect stamina=map(u,571,678.5f,138,9,PE_UI_BOTTOM_CENTER);sprite(u,"bloodlan_7bg",stamina,WHITE);
-    BeginScissorMode((int)stamina.x,(int)stamina.y,(int)ceilf(stamina.w*Clamp(t->stamina/100,0,1)),(int)ceilf(stamina.h));sprite(u,"bloodlan_7_1",stamina,(Color){65,131,185,255});EndScissorMode();
-    sprite(u,"face3",map(u,535,620,12,13,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"tili",map(u,734,620,12,13,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"bloodlan_11bg",map(u,551,626,64,5,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"bloodlan_12bg",map(u,666,625,64,5,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"bloodlan_8bg",map(u,426,704,87,4,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"bloodlan_9bg",map(u,767,704,87,4,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"arr3",map(u,535,695,20,20,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"arr5",map(u,723,695,20,20,PE_UI_BOTTOM_CENTER),WHITE);
-    for(unsigned i=0;i<PE_UI_QUICKSLOTS;i++){
-        PeTrainingUIRect r=l->quickslots[i];
-        text(u,TextFormat("%u",i+1),r.x+r.w*.4f,r.y+18*z,15,(Color){205,211,214,75},true);
-        if(i==0&&t->quickslot_item_id==916){
-            sprite(u,"drug_hot01",r,t->juice_count?WHITE:GRAY);
-            text(u,TextFormat("%d",t->juice_count),r.x+r.w-18*z,r.y+r.h-14*z,13,gold,false);
-            if(t->juice_cooldown>0){DrawRectangleRec(rect(r),(Color){32,55,110,130});center(u,TextFormat("%.0f",ceilf(t->juice_cooldown)),r,18,ink,true);}
-        }
-    }
-    sprite(u,"icons:itemhand",l->hand_slot,WHITE);
-    const char *weapon=t->knife_equipped?"ax_knife":(t->axe_equipped?"safety_axe":(t->equipped_shovel>=0?"shovel_wood":NULL));
-    if(weapon)sprite(u,weapon,l->hand_slot,WHITE);
-    sprite(u,"icons:itemhand_get",l->hand_slot,WHITE);
-    sprite(u,"buttonb",l->build_button,t->build_mode?blue:WHITE);
-    text(u,"1",map(u,250,678,0,0,PE_UI_BOTTOM_CENTER).x,map(u,250,678,0,0,PE_UI_BOTTOM_CENTER).y,14,gold,false);
-    sprite(u,"Triangle_btn_Up_on",map(u,233,676,16,16,PE_UI_BOTTOM_CENTER),(Color){200,220,240,180});
-    sprite(u,"Triangle_btn_bottom_on",map(u,261,676,16,16,PE_UI_BOTTOM_CENTER),(Color){200,220,240,180});
-    (void)state;
+    PeUiCanvas c=canvas(u);PeUiHudView v={.health=t->hp,.health_max=t->max_hp,.stamina=t->stamina,.stamina_max=100,.building=t->build_mode};
+    if(t->quickslot_item_id==916)v.slots[0]=(PeUiQuickslotView){916,t->juice_count,t->juice_cooldown};
+    v.hand_item_id=t->knife_equipped?33:t->axe_equipped?1527:t->equipped_shovel>=0?12:0;
+    pe_ui_hud_draw(&c,&v);(void)state;
 }
 static void tracker(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState state){
     const PeTrainingUiMissionText *mission=pe_training_ui_mission_text(t->tutorial.mission_id);
     if(!mission||!*mission->title||(t->tutorial.mission_id==739&&t->dialogue_index<2))return;
-    PeTrainingUIRect r=u->layout.mission_tracker;float z=u->layout.scale;
-    text(u,mission->title,r.x+17*z,r.y-7*z,18,mission->mission_type==1?(Color){155,61,244,255}:(Color){55,203,244,255},true);
-    float y=r.y+25*z;
+    size_t count=mission->objective_count+(t->tutorial.mission_id==PE_TUTORIAL_RECEIVERS?1:0);
+    PeUiTrackerObjective goals[count?count:1];char labels[count?count:1][1024];
     for(size_t i=0;i<mission->objective_count;i++){
         const PeTrainingUiObjectiveText *o=pe_training_ui_mission_objective(t->tutorial.mission_id,i);
-        bool done=pe_tutorial_objective_done(&t->tutorial,o->target_id);
-        unsigned count=done?1u:0u;
-        if(o->kind==1)count=t->combat_kill_entity_id?1u:0u;
-        else if(o->kind==2)count=o->item_id==916?(unsigned)(t->juice_count>0?t->juice_count:0):pe_training_gathering_count(&t->gathering,o->item_id);
-        char label[1024];
-        if(o->max_count>0)snprintf(label,sizeof label,"%s %u/%u",o->text,count,o->max_count);
-        else snprintf(label,sizeof label,"%s",o->text);
-        /* Runtime MissionTrackNode uses UIFont18_talk, width233, and
-           variable-height objective text, including three-line goals. */
-        y+=wrap(u,label,(PeTrainingUIRect){r.x+18*z,y,233*z,fmaxf(0,r.y+r.h-y)},18,done?(Color){180,180,180,255}:WHITE,true)+5*z;
+        bool done=pe_tutorial_objective_done(&t->tutorial,o->target_id);unsigned n=done?1u:0u;
+        if(o->kind==1)n=t->combat_kill_entity_id?1u:0u;
+        else if(o->kind==2)n=o->item_id==916?(unsigned)(t->juice_count>0?t->juice_count:0):pe_training_gathering_count(&t->gathering,o->item_id);
+        if(o->max_count>0)snprintf(labels[i],sizeof labels[i],"%s %u/%u",o->text,n,o->max_count);else snprintf(labels[i],sizeof labels[i],"%s",o->text);
+        goals[i]=(PeUiTrackerObjective){labels[i],done};
     }
-    if(t->tutorial.mission_id==PE_TUTORIAL_RECEIVERS)text(u,TextFormat("%u / 50",state.receivers_blocked),r.x+12*z,y,15,ink,false);
+    if(count>mission->objective_count){snprintf(labels[count-1],sizeof labels[0],"%u / 50",state.receivers_blocked);goals[count-1]=(PeUiTrackerObjective){labels[count-1],false};}
+    PeUiCanvas c=canvas(u);PeUiTrackerView v={mission->title,mission->mission_type==1,goals,count};pe_ui_tracker_draw(&c,&v);
 }
 static void dialogue(PeTrainingUi *u,const PeTraining *t){
     int id=pe_training_dialogue(t);if(!id)return;
     PeTrainingUILayout *l=&u->layout;const PeTrainingDialogue *entry=pe_training_dialogue_entry(id);
     bool tips=entry&&entry->speaker_npc_id==-9995,player=entry&&entry->speaker_npc_id==-9999;
-    PeTrainingUIRect bg=map(u,215,465,850,150,PE_UI_BOTTOM_CENTER);
-    sprite(u,"talkbg",bg,WHITE);sprite(u,"talkbg",bg,(Color){0,33,255,77});effect(u,PE_UI_EFFECT_DIALOGUE,bg);
-    sprite(u,tips||player?"npc_big_Unknown":"npc_big_Andy",map(u,230,453,130,130,PE_UI_BOTTOM_CENTER),WHITE);
-    sprite(u,"namebg",l->dialogue_name,WHITE);center(u,tips?"Tips":(player?"You":"Andy"),l->dialogue_name,18,ink,true);
-    wrap(u,pe_training_dialogue_text(id),l->dialogue_text,18,ink,true);
-    text(u,"1. Continue",l->dialogue_next.x-105*l->scale,l->dialogue_next.y+26*l->scale,16,ink,false);
-    sprite(u,"btn_down",l->dialogue_next,CheckCollisionPointRec(GetMousePosition(),rect(l->dialogue_next))?blue:(Color){220,220,220,255});
+    PeUiCanvas c=canvas(u);pe_ui_draw_dialogue_frame(&c,tips?"Tips":player?"You":"Andy");
+    sprite(u,tips||player?"npc_big_Unknown":"npc_big_Andy",l->dialogue_portrait,WHITE);
+    pe_ui_draw_wrap(&c,pe_training_dialogue_text(id),l->dialogue_text,18,ink,true,2);
+    pe_ui_draw_continue(&c);
 }
 static void character(PeTrainingUi *u,const PeTraining *t){
     PeTrainingUILayout *l=&u->layout;float z=l->scale;PeTrainingUIRect r=l->equipment;
@@ -271,18 +184,7 @@ void pe_training_ui_draw(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState s
     pe_training_ui_resize(u);
     hud(u,t,state);tracker(u,t,state);
     if(u->minimap.id&&u->assets)pe_training_ui_minimap_draw(&u->map,u->assets,u->minimap,&u->layout,t->position,state.heading,u->seconds);
-    sprite(u,"map_02",map(u,1089,0,158,200,PE_UI_TOP_RIGHT),(Color){205,245,255,120});
-    sprite(u,"map_01",map(u,1069,0,20,200,PE_UI_TOP_RIGHT),WHITE);
-    sprite(u,"map_01",map(u,1069,0,20,200,PE_UI_TOP_RIGHT),(Color){0,33,255,120});
-    sprite(u,"map_03",map(u,1246,0,33,200,PE_UI_TOP_RIGHT),WHITE);
-    sprite(u,"map_03",map(u,1246,0,33,200,PE_UI_TOP_RIGHT),(Color){0,33,255,120});
-    effect(u,PE_UI_EFFECT_MAP_LEFT,map(u,1069,0,20,208,PE_UI_TOP_RIGHT));
-    effect(u,PE_UI_EFFECT_MAP_RIGHT,map(u,1246,0,34,208,PE_UI_TOP_RIGHT));
-    effect(u,PE_UI_EFFECT_MAP_SCAN,map(u,1094,0,148,208,PE_UI_TOP_RIGHT));
-    sprite(u,"mapeye",map(u,1253,4,22,22,PE_UI_TOP_RIGHT),WHITE);
-    sprite(u,"maplight1",map(u,1253,29,22,22,PE_UI_TOP_RIGHT),WHITE);
-    sprite(u,"NpcTalkHistoryBtn",map(u,1253,148,22,22,PE_UI_TOP_RIGHT),WHITE);
-    sprite(u,"Icon_mission",map(u,1254,173,20,26,PE_UI_TOP_RIGHT),WHITE);
+    PeUiCanvas c=canvas(u);PeUiMinimapView map_view={0};pe_ui_minimap_chrome_draw(&c,&map_view);
     if(t->kit_open)inventory(u,t,0,true);
     if(t->character_open)character(u,t);
     if(t->inventory_open||t->kit_open)inventory(u,t,state.inventory_tab,false);
@@ -304,7 +206,6 @@ void pe_training_ui_draw(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState s
     if(state.paused){
         DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(),Fade(BLACK,.48f));
         PeTrainingUIRect r=map(u,425,220,430,280,PE_UI_CENTER);panel(u,r,"PAUSED");
-        effect(u,PE_UI_EFFECT_INVENTORY,r);
         static const char *labels[]={"Resume  [Esc]","Main Menu  [M]","Quit  [Q]"};
         Vector2 pointer=GetMousePosition();
         for(int i=0;i<3;i++) {
