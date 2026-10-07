@@ -1,0 +1,2520 @@
+{
+  "schema": 1,
+  "scope": "One archived camp repair machine; source-qualified metadata, no gameplay service or PECS format change.",
+  "sources": [
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UIRepairWnd.cs",
+      "sha256": "1f78d87aefc87d7dee8ee8ff57a73dca39244801011cc80586130a412ac227ca"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/Widget/SelectItem_N.cs",
+      "sha256": "92f7ceab4c6858cc4deac9e480935a1f0c75eb70f5e9e96820514b89c7dfccce"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemObj.cs",
+      "sha256": "d7704733cafc8fdb2a8ae853e089459df6185fb1498e904f22ee3b3dbeb2e00a"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemData.cs",
+      "sha256": "66d6203e0c910c7dcd805318dbddfa4bdb205b6e1d189d28de865670a7a8b2ab"
+    },
+    {
+      "path": "Assets/Scripts/Items/OperatableItem/OperatableItemRepairMachine.cs",
+      "sha256": "b3d3a9fe60452f8e30c9611798d70b1c3a1c8e1afc66c64bfe156ccc6f439c2f"
+    },
+    {
+      "path": "Assets/Scripts/Items/OperatableItem/OperatableItem.cs",
+      "sha256": "2b1c548c2fa22ef587543d622a5fb6240eadc54f13fc595b654f0c6ee832c111"
+    },
+    {
+      "path": "Assets/Scripts/MousePicker/MousePickable.cs",
+      "sha256": "2786964932ead1336f4523f368b8877d1acffaed723874d9f921507949001e5a"
+    },
+    {
+      "path": "Assets/Scripts/MousePicker/MousePickableChildCollider.cs",
+      "sha256": "d9bc02b5f5069ed83e0f02987d9698d453556d983589587477fcafd1c0b62f0d"
+    },
+    {
+      "path": "Assets/Scripts/Global/UTimer.cs",
+      "sha256": "66b5a2ac795c1e06ba02bf992cedd7f5315cd1dd6aac944fc2b8be530bb9a843"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony/CounterScript.cs",
+      "sha256": "81fe1cd6eb3e161c82210fb01e95a18a6be9e6e258fdc955be6dc2c32af3bac0"
+    },
+    {
+      "path": "Assets/Scripts/Colony/ColonyBase.cs",
+      "sha256": "e9a426c030ff101a7ba3945c55c82c3fb977149bdb77a0f442aaeea42ff097a2"
+    },
+    {
+      "path": "Assets/PeLauncher/PeArchiveMgrs.cs",
+      "sha256": "2e4bc73aa27385aee9d6396ca331629986158a78796a9c0de0be3d0cb4d79c0f"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSDataMgr.cs",
+      "sha256": "a37fec228fd851e8559a507ffc9b64dbc5bc9e2ae17f2b17f0a6eaa1686c69b7"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSDataInst.cs",
+      "sha256": "feb67d8c979eb45609681af7624646fdacd17e91ea0ee14cc62a62df15814ff8"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSRecordData.cs",
+      "sha256": "b667d66f05f08871e80f7c3c0f0af1600087fadcf81fce66216b3c0a2a7537aa"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSConst.cs",
+      "sha256": "f295f9d081fbd0c2ae1838a8bbb1467497e2bba21693e4daf4e6d0f88da713d0"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSClodMgr.cs",
+      "sha256": "df5e2b948744569c637263d96a01cf3b5a8e3eabb883790baeae42fd53bba523"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSInfo.cs",
+      "sha256": "ab5f160f66ed29010ff650e6e38553631e4076a03eecb94f03deb263a9503872"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSMain.cs",
+      "sha256": "1bbb573b5f07b8d780ec3f40b9f5d483d220f08539eda67914604852f2aba284"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSNoMgCreator.cs",
+      "sha256": "f20710444ed904f81c44e2c8d19c9f567cf20d69c3861946872f15f380ffd893"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSRepair.cs",
+      "sha256": "00e1611d26cac6ba8afcf713e2f3a8fa2a61320574b8f4e1b6844a2349da1f41"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSCommon.cs",
+      "sha256": "cd7757f15d58520e350f02e73a3b95d0301fde4fb69e53b92818859de89793a6"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/EntityObjects/CSEntityObject.cs",
+      "sha256": "be0666d75858e4713044d6ec7b3cee26b2b8041c2720a62b845cad3bee9db3b3"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/EntityObjects/CSRepairObject.cs",
+      "sha256": "8358d34dbba2c4d1495d02bc344f50f1707f2e71bcc66bc20a41bcbe0014e90e"
+    },
+    {
+      "path": "Assets/Resources/Prefab/Item/Scene/RepairMachine_Static.prefab",
+      "sha256": "268d4ddbefaa4d3b8cc846b5fdd97be378716c1070c6d2c1cdbae47091a8d237"
+    },
+    {
+      "path": "Assets/Resources/Prefab/Item/Furniture/Building/RepairMachine.prefab",
+      "sha256": "ab560f1ebd2c018c1db2d3432ed0624d5c16bf22115b60c399cab50ff3dd98f2"
+    },
+    {
+      "path": "Assets/Scripts/Items/OperatableItem/OperatableItemRepairMachine.cs.meta",
+      "sha256": "e0abd3d5c5563e576ddf37d521dfa8d28df0baeb029e7f3d97edc6ab3da4998c"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/EntityObjects/CSRepairObject.cs.meta",
+      "sha256": "8c10afc03096653168ea5482a56fae4d8af83d93d5d2cb325171032506378f6a"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemManager.cs",
+      "sha256": "39de5d06becf84fd99b5af56f6121dee0ee1642b1e4e358af2e4e629ad409ade"
+    },
+    {
+      "path": "Assets/Scripts/PETools/PEMath.cs",
+      "sha256": "3f1aad65bb9928affcc3ad60c3ad7f4518abe3cf7f56f41aab9d4119433cbf3a"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSElectric.cs",
+      "sha256": "7d927252bce2b6a8933ab08e0abed20af7839268a2d939a30a3228c31f3774db"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSWorkerMachine.cs",
+      "sha256": "229644918554519e3f7cb767d2d0fda4720a47901031c05ff8049197c8c7261d"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSEntity.cs",
+      "sha256": "0b7da4e19cc61cad16b88c1498af8fe664f8a64547dd9da95bf9383ddd912093"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/index.arc",
+      "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/world.arc",
+      "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/index.arc",
+      "sha256": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/world.arc",
+      "sha256": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/voxel.arc",
+      "sha256": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/water.arc",
+      "sha256": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/MainAdventure/block45.arc",
+      "sha256": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/index.arc",
+      "sha256": "5c69435879e0c39953a1d95fcab30026195145b28e42c9a4e21853fd73bbd440"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/world.arc",
+      "sha256": "0c015f99944af29f70aa665ef9004a36a53a9d220bc59fc16aacde166920309a"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/MainAdventure/index.arc",
+      "sha256": "d6113bc10bb71e511670a16a04b9ca90f0354a8887977343897ecd6d0803dd9f"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/MainAdventure/world.arc",
+      "sha256": "21da9cf0582805359f7d2da5ce714608181b06c6c741ea85c4db173154ca1668"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/MainAdventure/voxel.arc",
+      "sha256": "715e57d73ef7d80a4accdbf4b3bda00429aeda317257959ff7ededbd9b359e6a"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/MainAdventure/water.arc",
+      "sha256": "479386d34496f3bda3778df753388902cfc24fb2fd7993b5aef831c1d4452afa"
+    },
+    {
+      "path": "/home/admin/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2/MainAdventure/block45.arc",
+      "sha256": "2d25fc57e2c879e95148cb5f8fca3a303f5d9f9a62baea86302d593a4610c826"
+    },
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    },
+    {
+      "path": "rebuild/generated/content_manifest.json",
+      "sha256": "80aca0e69fc5bdde77e90103051b216b98d7a558d8ae1f37008ad507d342ced5"
+    },
+    {
+      "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/AssetBundles/Item/RepairMachine_Static.unity3d",
+      "sha256": "e267a1b55e0e174da80af090dbefc8a39c6451a8e705a5637e182085acc570ee"
+    }
+  ],
+  "source_file_guards": {
+    "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UIRepairWnd.cs": "1f78d87aefc87d7dee8ee8ff57a73dca39244801011cc80586130a412ac227ca",
+    "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/Widget/SelectItem_N.cs": "92f7ceab4c6858cc4deac9e480935a1f0c75eb70f5e9e96820514b89c7dfccce",
+    "Assets/Scripts/Items/ItemObj.cs": "d7704733cafc8fdb2a8ae853e089459df6185fb1498e904f22ee3b3dbeb2e00a",
+    "Assets/Scripts/Items/ItemData.cs": "66d6203e0c910c7dcd805318dbddfa4bdb205b6e1d189d28de865670a7a8b2ab",
+    "Assets/Scripts/Items/OperatableItem/OperatableItemRepairMachine.cs": "b3d3a9fe60452f8e30c9611798d70b1c3a1c8e1afc66c64bfe156ccc6f439c2f",
+    "Assets/Scripts/Items/OperatableItem/OperatableItem.cs": "2b1c548c2fa22ef587543d622a5fb6240eadc54f13fc595b654f0c6ee832c111",
+    "Assets/Scripts/MousePicker/MousePickable.cs": "2786964932ead1336f4523f368b8877d1acffaed723874d9f921507949001e5a",
+    "Assets/Scripts/MousePicker/MousePickableChildCollider.cs": "d9bc02b5f5069ed83e0f02987d9698d453556d983589587477fcafd1c0b62f0d",
+    "Assets/Scripts/Global/UTimer.cs": "66b5a2ac795c1e06ba02bf992cedd7f5315cd1dd6aac944fc2b8be530bb9a843",
+    "Assets/Scripts/WuYiqiu/Colony/CounterScript.cs": "81fe1cd6eb3e161c82210fb01e95a18a6be9e6e258fdc955be6dc2c32af3bac0",
+    "Assets/Scripts/Colony/ColonyBase.cs": "e9a426c030ff101a7ba3945c55c82c3fb977149bdb77a0f442aaeea42ff097a2",
+    "Assets/PeLauncher/PeArchiveMgrs.cs": "2e4bc73aa27385aee9d6396ca331629986158a78796a9c0de0be3d0cb4d79c0f",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSDataMgr.cs": "a37fec228fd851e8559a507ffc9b64dbc5bc9e2ae17f2b17f0a6eaa1686c69b7",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSDataInst.cs": "feb67d8c979eb45609681af7624646fdacd17e91ea0ee14cc62a62df15814ff8",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSRecordData.cs": "b667d66f05f08871e80f7c3c0f0af1600087fadcf81fce66216b3c0a2a7537aa",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSConst.cs": "f295f9d081fbd0c2ae1838a8bbb1467497e2bba21693e4daf4e6d0f88da713d0",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSClodMgr.cs": "df5e2b948744569c637263d96a01cf3b5a8e3eabb883790baeae42fd53bba523",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSInfo.cs": "ab5f160f66ed29010ff650e6e38553631e4076a03eecb94f03deb263a9503872",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSMain.cs": "1bbb573b5f07b8d780ec3f40b9f5d483d220f08539eda67914604852f2aba284",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/CSNoMgCreator.cs": "f20710444ed904f81c44e2c8d19c9f567cf20d69c3861946872f15f380ffd893",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSRepair.cs": "00e1611d26cac6ba8afcf713e2f3a8fa2a61320574b8f4e1b6844a2349da1f41",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSCommon.cs": "cd7757f15d58520e350f02e73a3b95d0301fde4fb69e53b92818859de89793a6",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/EntityObjects/CSEntityObject.cs": "be0666d75858e4713044d6ec7b3cee26b2b8041c2720a62b845cad3bee9db3b3",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/EntityObjects/CSRepairObject.cs": "8358d34dbba2c4d1495d02bc344f50f1707f2e71bcc66bc20a41bcbe0014e90e",
+    "Assets/Resources/Prefab/Item/Scene/RepairMachine_Static.prefab": "268d4ddbefaa4d3b8cc846b5fdd97be378716c1070c6d2c1cdbae47091a8d237",
+    "Assets/Resources/Prefab/Item/Furniture/Building/RepairMachine.prefab": "ab560f1ebd2c018c1db2d3432ed0624d5c16bf22115b60c399cab50ff3dd98f2",
+    "Assets/Scripts/Items/OperatableItem/OperatableItemRepairMachine.cs.meta": "e0abd3d5c5563e576ddf37d521dfa8d28df0baeb029e7f3d97edc6ab3da4998c",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/EntityObjects/CSRepairObject.cs.meta": "8c10afc03096653168ea5482a56fae4d8af83d93d5d2cb325171032506378f6a",
+    "Assets/Scripts/Items/ItemManager.cs": "39de5d06becf84fd99b5af56f6121dee0ee1642b1e4e358af2e4e629ad409ade",
+    "Assets/Scripts/PETools/PEMath.cs": "3f1aad65bb9928affcc3ad60c3ad7f4518abe3cf7f56f41aab9d4119433cbf3a",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSElectric.cs": "7d927252bce2b6a8933ab08e0abed20af7839268a2d939a30a3228c31f3774db",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSWorkerMachine.cs": "229644918554519e3f7cb767d2d0fda4720a47901031c05ff8049197c8c7261d",
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSEntity.cs": "0b7da4e19cc61cad16b88c1498af8fe664f8a64547dd9da95bf9383ddd912093"
+  },
+  "source_prefab": {
+    "game_object_path_id": 100048,
+    "repair_component_path_id": 11400002,
+    "operate_component_path_id": 11400000,
+    "scripts": {
+      "repair": "054102e63e89ead43bb95aa118079982",
+      "operate": "f2b95665b47ad85499b1d2cb1e2fb568"
+    },
+    "object_type": 5,
+    "item_id_field": 0,
+    "ordinary_repair_prototype": 1130,
+    "work_transforms": 0,
+    "power_field": 0,
+    "layer": 13,
+    "collider": {
+      "path_id": 6500000,
+      "kind": "BoxCollider",
+      "center": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "size": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "trigger": false
+    }
+  },
+  "installed_prefab": {
+    "game_object_path_id": 5272855295632875899,
+    "repair_component_path_id": 7000867702593108574,
+    "operate_component_path_id": 6424481666651604853,
+    "object_type": 5,
+    "item_id_field": 0,
+    "work_transforms": 0
+  },
+  "archives": [
+    {
+      "profile": "starting",
+      "guid": "03f788c050bd5446a419dd567f0d980d",
+      "entity_id": 20006,
+      "doodad_prototype": 145,
+      "pose": {
+        "position": [
+          -613.5,
+          29.5,
+          404.0
+        ],
+        "rotation": [
+          0.0,
+          1.0,
+          0.0,
+          -4.371138828673793e-08
+        ]
+      },
+      "resource": "Item/RepairMachine_Static.unity3d",
+      "record_sha256": "9266defc4ef289aa0846241db6e04090981bf4cce71db976d9bde9b6e483b075",
+      "record_bytes": 326,
+      "version": 16102100,
+      "creators": [
+        {
+          "id": 0,
+          "type": 0,
+          "siege": [
+            0,
+            0.0,
+            0.0
+          ],
+          "objects": [],
+          "colony_money": 5000
+        },
+        {
+          "id": 10000,
+          "type": 1,
+          "siege": [
+            0,
+            0.0,
+            0.0
+          ],
+          "objects": [
+            {
+              "data_type": 34,
+              "entity_id": 20007,
+              "item_id": 0,
+              "alive": false,
+              "name": "",
+              "position": [
+                -611.0,
+                29.5,
+                404.0
+              ],
+              "durability": 4500.0,
+              "maintenance": [
+                0.0,
+                -1.0,
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "bounds": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "data_type": 5,
+              "entity_id": 20006,
+              "item_id": 0,
+              "alive": false,
+              "name": "Repair Machine",
+              "position": [
+                -613.5,
+                29.5,
+                404.0
+              ],
+              "durability": 3500.0,
+              "maintenance": [
+                0.0,
+                -1.0,
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "bounds": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "job": {
+                "item_instance_id": -1,
+                "current_seconds": 0.0,
+                "final_seconds": -1.0
+              }
+            }
+          ],
+          "colony_money": 5000
+        }
+      ],
+      "repair": {
+        "data_type": 5,
+        "entity_id": 20006,
+        "item_id": 0,
+        "alive": false,
+        "name": "Repair Machine",
+        "position": [
+          -613.5,
+          29.5,
+          404.0
+        ],
+        "durability": 3500.0,
+        "maintenance": [
+          0.0,
+          -1.0,
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "bounds": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "job": {
+          "item_instance_id": -1,
+          "current_seconds": 0.0,
+          "final_seconds": -1.0
+        }
+      }
+    },
+    {
+      "profile": "route",
+      "guid": "41361f4e2222ba4e834286f531bf166f",
+      "entity_id": 20006,
+      "doodad_prototype": 145,
+      "pose": {
+        "position": [
+          -613.5,
+          29.5,
+          404.0
+        ],
+        "rotation": [
+          0.0,
+          1.0,
+          0.0,
+          -4.371138828673793e-08
+        ]
+      },
+      "resource": "Item/RepairMachine_Static.unity3d",
+      "record_sha256": "9a67861d6199b10acb78bd113ffc0a15e47d06ae961971f66c02424b413f9854",
+      "record_bytes": 326,
+      "version": 16102100,
+      "creators": [
+        {
+          "id": 0,
+          "type": 0,
+          "siege": [
+            0,
+            0.0,
+            0.0
+          ],
+          "objects": [],
+          "colony_money": 5000
+        },
+        {
+          "id": 10000,
+          "type": 1,
+          "siege": [
+            0,
+            0.0,
+            0.0
+          ],
+          "objects": [
+            {
+              "data_type": 34,
+              "entity_id": 20007,
+              "item_id": 0,
+              "alive": true,
+              "name": "",
+              "position": [
+                -611.0,
+                29.5,
+                404.0
+              ],
+              "durability": 4500.0,
+              "maintenance": [
+                0.0,
+                -1.0,
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "bounds": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ]
+            },
+            {
+              "data_type": 5,
+              "entity_id": 20006,
+              "item_id": 0,
+              "alive": true,
+              "name": "Repair Machine",
+              "position": [
+                -613.5,
+                29.5,
+                404.0
+              ],
+              "durability": 3500.0,
+              "maintenance": [
+                0.0,
+                -1.0,
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "bounds": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "job": {
+                "item_instance_id": -1,
+                "current_seconds": 0.0,
+                "final_seconds": -1.0
+              }
+            }
+          ],
+          "colony_money": 5000
+        }
+      ],
+      "repair": {
+        "data_type": 5,
+        "entity_id": 20006,
+        "item_id": 0,
+        "alive": true,
+        "name": "Repair Machine",
+        "position": [
+          -613.5,
+          29.5,
+          404.0
+        ],
+        "durability": 3500.0,
+        "maintenance": [
+          0.0,
+          -1.0,
+          0.0,
+          0.0,
+          -1.0
+        ],
+        "bounds": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "job": {
+          "item_instance_id": -1,
+          "current_seconds": 0.0,
+          "final_seconds": -1.0
+        }
+      }
+    }
+  ],
+  "catalog": {
+    "catalog_item_count": 341,
+    "repair_component_count": 71,
+    "qualified": [
+      {
+        "item_id": 1,
+        "name": "Wood Sword",
+        "durability_max": 2369,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7c06b67b7e18ae8e3b1d8f393287b320efe091aa67fad5aa690818842624743c"
+      },
+      {
+        "item_id": 2,
+        "name": "Stone Sword",
+        "durability_max": 2859,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 280,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7cfde072b95ea78e7c7291f1f4e8dbba444c0a20249c9a2ae57ad28b9a1f3f1d"
+      },
+      {
+        "item_id": 4,
+        "name": "Iron Sword",
+        "durability_max": 4578,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "0262b7980625662e187ed57eecf120118f4c1820643020def6fdf8bf7aca9586"
+      },
+      {
+        "item_id": 6,
+        "name": "Silver Sword",
+        "durability_max": 5029,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 274,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "4984958c881977ac4329cb0889fc6ebe5537cc5996258d1e83b1c2c40761069e"
+      },
+      {
+        "item_id": 12,
+        "name": "Wood Shovel",
+        "durability_max": 3553,
+        "component_class": 7,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "2fdbec478669accb52e78189e0b952e66a423bc4f39ade7cb43e8eaadb1b751e"
+      },
+      {
+        "item_id": 14,
+        "name": "Copper Shovel",
+        "durability_max": 4986,
+        "component_class": 7,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 273,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "dc0ba5b7913bcd48720732f9eeb328ba826c400e61b16cea1339bc20725b045e"
+      },
+      {
+        "item_id": 19,
+        "name": "Wood Pickaxe",
+        "durability_max": 3553,
+        "component_class": 8,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "4ae1ee14f95f240e79086cf9f2f201453fae5e8856a5bdd4fdfe990b03d32ad4"
+      },
+      {
+        "item_id": 20,
+        "name": "Stone Pickaxe",
+        "durability_max": 4289,
+        "component_class": 8,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 280,
+            "count": 2
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "ed3804c9d3f4043e812506d8edbab424c3286e4f221362a1b27b0ee49774ffeb"
+      },
+      {
+        "item_id": 21,
+        "name": "Copper Pickaxe",
+        "durability_max": 4986,
+        "component_class": 8,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 273,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "09ebcc162b63f04959d493bb678e260baa5dc4b4b7ab5faed00a15a3abd4153a"
+      },
+      {
+        "item_id": 26,
+        "name": "Wood Axe",
+        "durability_max": 3553,
+        "component_class": 9,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "444405217eb38664f66fa61e0e0b943c61a57d6f8527550e06a6cebe150dc547"
+      },
+      {
+        "item_id": 28,
+        "name": "Copper Axe",
+        "durability_max": 5178,
+        "component_class": 9,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 273,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "d5e047d00376fd352e7b2a74b033262ca5e75d9b5e59b0155a028f67967fdb3b"
+      },
+      {
+        "item_id": 34,
+        "name": "Wood Shield",
+        "durability_max": 4312,
+        "component_class": 18,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7435de9f5a057eb88eeccaf8c3729e8e0d3fce50bba38ac64d9d570e64fd2ec3"
+      },
+      {
+        "item_id": 37,
+        "name": "Iron Shield",
+        "durability_max": 9156,
+        "component_class": 18,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "adda424b0352c74cee85cebcf3fd4d6d54e604ef1184ad0cff6eb1f546a16266"
+      },
+      {
+        "item_id": 39,
+        "name": "Silver Shield",
+        "durability_max": 10059,
+        "component_class": 18,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 274,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "fafb35622d6fe8b364ffa840b84620e4cd1a3878e1247333dfa812b104f3d107"
+      },
+      {
+        "item_id": 43,
+        "name": "Wood Bow",
+        "durability_max": 3288,
+        "component_class": 10,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "210c048f5884ca830a55305677e7985f7774160c8476f41d28e5b1597143c4cc"
+      },
+      {
+        "item_id": 44,
+        "name": "Bronze Bow",
+        "durability_max": 3895,
+        "component_class": 10,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 273,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "29f4cdf3abd70d4823437bb536498ecb6f76d6c81e6d09b3d8c2d24f3ce30d8d"
+      },
+      {
+        "item_id": 45,
+        "name": "Iron Bow",
+        "durability_max": 4615,
+        "component_class": 10,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "4fd951f3df18cc0565a138ad423a1cd009c3a8717d15b78322a4256dd59c1fd7"
+      },
+      {
+        "item_id": 54,
+        "name": "Hand Gun Type 01",
+        "durability_max": 4315,
+        "component_class": 11,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "GunAmmo",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "dc586ddc90db150dc75139dc0ec5420947d32826c30c236f4ad3b6e03a36399c"
+      },
+      {
+        "item_id": 58,
+        "name": "Flare Gun",
+        "durability_max": 5000,
+        "component_class": 11,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "GunAmmo",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "8daa95ce316881c7c4c04a0663c50387f97d1074288161b38a00356380a2e86f"
+      },
+      {
+        "item_id": 68,
+        "name": "Fertilizer Sprayer",
+        "durability_max": 100,
+        "component_class": 12,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "GunAmmo",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 980,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "1f7536198aaa3fda00996a362f10142d6b5be513f1137c23dd1f16940957f4ba"
+      },
+      {
+        "item_id": 69,
+        "name": "Organic Fertilizer Sprayer",
+        "durability_max": 100,
+        "component_class": 12,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "GunAmmo",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 980,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "8c77046a2463041ff7ef67b75ddc257747b9aa223d07d73b8c05e7b7f2e11694"
+      },
+      {
+        "item_id": 70,
+        "name": "Water Pitcher",
+        "durability_max": 100,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 980,
+            "count": 1
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "e38d435a33a83027a76f1bed2152d6f91494f965c7c13da85eaeeea94509e454"
+      },
+      {
+        "item_id": 71,
+        "name": "Mobile Water Pump",
+        "durability_max": 100,
+        "component_class": 12,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "GunAmmo",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 980,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "40e03b4b528a86dcf9036a3d81dccb788f757a2c8813e86c526df9cb6515acab"
+      },
+      {
+        "item_id": 76,
+        "name": "Iron Helmet\u2640",
+        "durability_max": 3656,
+        "component_class": 1,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "b557a79aa42949a9dc23f1f07de4ec7961d578aa67d1fffe6ac4b9407b8f0309"
+      },
+      {
+        "item_id": 79,
+        "name": "Steel Helmet\u2640",
+        "durability_max": 4170,
+        "component_class": 1,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "437ea837ffcb3c4a2d52c3f656fa866ab8d887764bcf2a31cfcf054c9ba03be9"
+      },
+      {
+        "item_id": 87,
+        "name": "Iron Helmet\u2642",
+        "durability_max": 3656,
+        "component_class": 1,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "c366fc92a48830582fb45ad8cdf369d85f4ba1521e5df334087e4c97263dcd30"
+      },
+      {
+        "item_id": 90,
+        "name": "Steel Helmet\u2642",
+        "durability_max": 4170,
+        "component_class": 1,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "38eabcf127f9c4ed31e93993298930a515c1022c707077e6c7b9c9d320452b84"
+      },
+      {
+        "item_id": 95,
+        "name": "Issued Overalls\u2640",
+        "durability_max": 2156,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1006,
+            "count": 2
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "64f22341de627e067c500451122a045de4c57bf4e03646f55fb763a513a53e95"
+      },
+      {
+        "item_id": 99,
+        "name": "Iron Armor\u2640",
+        "durability_max": 5222,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "75f8a40492e8d13ef034befc4a2c3b03fdbb1cebcae4808e253f31b75974ae75"
+      },
+      {
+        "item_id": 102,
+        "name": "Steel Armor\u2640",
+        "durability_max": 5958,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "ee81d5cb36748ef8b4ca71d660a069df5ecbf8cc5b21f1733a0f50ae7ab174ed"
+      },
+      {
+        "item_id": 106,
+        "name": "Guard Armor\u2640",
+        "durability_max": 4578,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "350381bba52ab33eb8d6860ebbe9e13dff49fcdb8233d5cb10b22ecb328486f1"
+      },
+      {
+        "item_id": 117,
+        "name": "Iron Armor\u2642",
+        "durability_max": 5222,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "fec81bf9be515e242b4f37dcdbec03f31cfe08681a64607ff296331118167b04"
+      },
+      {
+        "item_id": 120,
+        "name": "Steel Armor\u2642",
+        "durability_max": 5958,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7620f0e1e304a1b74f7ab64aa87ebc7b832a3bd675d43005548d70bca8cb315b"
+      },
+      {
+        "item_id": 124,
+        "name": "Guard Armor\u2642",
+        "durability_max": 4578,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "bd692d5b9893c281734d075cddf351061abf256169ce72cf802c0cd640ac3152"
+      },
+      {
+        "item_id": 131,
+        "name": "Issued Pants\u2640",
+        "durability_max": 2156,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1006,
+            "count": 2
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "e9fc6acac63415180cf3b992a6e9fb2c9827779f5695c95b2b98f0af54653ad2"
+      },
+      {
+        "item_id": 135,
+        "name": "Iron Pants\u2640",
+        "durability_max": 5222,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "4566ee9f2a80656d8f16289d33990c51ecea4791810272b131a4d704af8e7acf"
+      },
+      {
+        "item_id": 138,
+        "name": "Steel Pants\u2640",
+        "durability_max": 5958,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "c033b9c6c1239a0ec99277c7ec52a9683eb4ff6593bf169240f155b3f8f3a39d"
+      },
+      {
+        "item_id": 142,
+        "name": "Guard Pants\u2640",
+        "durability_max": 4578,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "2f89da4fad66f24f10ae33ab01020d93d4d91a29606da7a33fe62e3f53d8db5f"
+      },
+      {
+        "item_id": 153,
+        "name": "Iron Pants\u2642",
+        "durability_max": 5222,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "d71455651a1d1ccdc33ef482e5b77b2a4652bf73acbf3e7ee3cc413187964277"
+      },
+      {
+        "item_id": 156,
+        "name": "Steel Pants\u2642",
+        "durability_max": 5958,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7a088b99e5e857f9c266ff208a117b24fe1069747096faa1ae9f16b7797b9095"
+      },
+      {
+        "item_id": 160,
+        "name": "Guard Pants\u2642",
+        "durability_max": 4578,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "86b176beb03c9b958ab284d438d74a41350d6d06c55057f6f8baf48937c533d6"
+      },
+      {
+        "item_id": 175,
+        "name": "Guard Gloves\u2640",
+        "durability_max": 2746,
+        "component_class": 3,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 2
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "21e5f77466dceb12def877a499b41b8776f087dc9ea050bcefa9ffa4f89794b7"
+      },
+      {
+        "item_id": 186,
+        "name": "Guard Gloves\u2642",
+        "durability_max": 2746,
+        "component_class": 3,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 2
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7e05af895587ec3e3bfba362da459cd05a811cda5b15232386768720ba8587ed"
+      },
+      {
+        "item_id": 192,
+        "name": "Issued Shoes\u2640",
+        "durability_max": 862,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1006,
+            "count": 1
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "7de9b9c0f3ecb493254f62d3420fc988725261d132fc6f83faf73f7a3c9417f0"
+      },
+      {
+        "item_id": 196,
+        "name": "Iron Boots\u2640",
+        "durability_max": 2089,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "5a6e8ce92ec697b9069d37658b10fba9a20ea4638d73ae57ccc072a3ab0a585c"
+      },
+      {
+        "item_id": 199,
+        "name": "Steel Boots\u2640",
+        "durability_max": 2383,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 3
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "23fc81868fe71c619d85f557e04e8ddb3f5878698d5776dfbca8d26208549e0e"
+      },
+      {
+        "item_id": 203,
+        "name": "Guard Boots\u2640",
+        "durability_max": 1831,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 3
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "dd79f701d4df6bed38ba547db4fc78fe6c1d14eef276990bd1054caed9b0e58b"
+      },
+      {
+        "item_id": 214,
+        "name": "Iron Boots\u2642",
+        "durability_max": 2089,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "fea4e5bc275304d0de880fb991f67def94e2f71353d83afb4d9c17e25a8fcb8d"
+      },
+      {
+        "item_id": 217,
+        "name": "Steel Boots\u2642",
+        "durability_max": 2383,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 3
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "592e305eb3c597c4898f0ba8c053f4efa6eefa90740376f2c082089929cd1f32"
+      },
+      {
+        "item_id": 221,
+        "name": "Guard Boots\u2642",
+        "durability_max": 1831,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1000,
+            "count": 3
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "eaddd49e92a26ee3dbf13d4f863fe01b5e7efd59f13b2c247d76c5de7e94527b"
+      },
+      {
+        "item_id": 1362,
+        "name": "Steel Sword",
+        "durability_max": 6071,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 272,
+            "count": 9
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "6ccce88e88c0072aea87749145a5ffb5fd7bd9a5377d2c85bc958e5561e66776"
+      },
+      {
+        "item_id": 1365,
+        "name": "SC Helmet Type1\u2640",
+        "durability_max": 6192,
+        "component_class": 1,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "ed37eb0d24cac93e4f14e3845d7a795bc6958b0194914f6f132fe52f2fb4c843"
+      },
+      {
+        "item_id": 1366,
+        "name": "SC Clothing Type1\u2640",
+        "durability_max": 4166,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "9d6dc701d4bc1850b10986c4801bf58aa19fc322974c399bf51b2f764dd05838"
+      },
+      {
+        "item_id": 1367,
+        "name": "SC Pants Type1\u2640",
+        "durability_max": 4166,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "95fda6896b7e117194063ac0c4255af23853c250387d976dba00dd279fc24fee"
+      },
+      {
+        "item_id": 1368,
+        "name": "SC Gloves Type1\u2640",
+        "durability_max": 2607,
+        "component_class": 3,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "a349558050c71c3c7872149369d0f4dc9ca914b253a3eabf3595e10ae1c35bd3"
+      },
+      {
+        "item_id": 1369,
+        "name": "SC Shoes Type1\u2640",
+        "durability_max": 1666,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "d54d12f952ea047c127f165aa2c62d3d7ffd975871cd88d5d91eea9ff243340e"
+      },
+      {
+        "item_id": 1370,
+        "name": "SC Helmet Type1\u2642",
+        "durability_max": 6192,
+        "component_class": 1,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "306343bc4ec833b53b8e587dd2fd3c72176d7522f06724ab8ad7f99e242cd79d"
+      },
+      {
+        "item_id": 1371,
+        "name": "SC Clothing Type1\u2642",
+        "durability_max": 4166,
+        "component_class": 2,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "ee7558d2485c903a06d23505fa11f0dacbc02a48baf6d12aaefc8cf8227280d8"
+      },
+      {
+        "item_id": 1372,
+        "name": "SC Pants Type1\u2642",
+        "durability_max": 4166,
+        "component_class": 15,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "77d0a730e8110e0f8e81a9e9b7c5bd36e334372c0e60e16d3cbcae34c4bf1ffc"
+      },
+      {
+        "item_id": 1373,
+        "name": "SC Gloves Type1\u2642",
+        "durability_max": 2607,
+        "component_class": 3,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "0b2fdb4e61e55788834429bee43fc63aa33aa8dbdb6a51a728e25251b14ee6c6"
+      },
+      {
+        "item_id": 1374,
+        "name": "SC Shoes Type1\u2642",
+        "durability_max": 1666,
+        "component_class": 16,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipDefence"
+        ],
+        "materials": [
+          {
+            "item_id": 1008,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "cbfaba8a2c69c45c040e3b096fe00ae710e39a6d50edf25de2c53111c3611f02"
+      },
+      {
+        "item_id": 1563,
+        "name": "Iron Dagger",
+        "durability_max": 3452,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 271,
+            "count": 8
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "71bbf1ea4ffe01f7cacb8bf5ba9f545785c98f3fe9910e5b8783af01fbfd3def"
+      },
+      {
+        "item_id": 1565,
+        "name": "Silver Dagger",
+        "durability_max": 5526,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 274,
+            "count": 7
+          }
+        ],
+        "missing_materials": [],
+        "eligible": true,
+        "exclusion": null,
+        "source_row_sha256": "321c52d680077dd5e6b393cefa6eb2b9e9e3773ea01f2d643aa1764899b139e2"
+      }
+    ],
+    "excluded": [
+      {
+        "item_id": 33,
+        "name": "Knife",
+        "durability_max": 100,
+        "component_class": 5,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "source camp UI requires a nonempty repair material list",
+        "source_row_sha256": "20fd2e208afadf4a402aad7bb019c822362cb1382e5cafa60e9445e4cda16614"
+      },
+      {
+        "item_id": 67,
+        "name": "Rope Gun",
+        "durability_max": 100,
+        "component_class": 11,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "GunAmmo",
+          "EquipAttack"
+        ],
+        "materials": [],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "source camp UI requires a nonempty repair material list",
+        "source_row_sha256": "667c16bdb721b2fd43c18017b80a744748fa82bae2dad420e9e81a072602b334"
+      },
+      {
+        "item_id": 365,
+        "name": "Artillery Cannon",
+        "durability_max": 100,
+        "component_class": 25,
+        "components": [
+          "Repair",
+          "RecycleReplicate",
+          "LifeLimit",
+          "Drag",
+          "Instantiate",
+          "Tower"
+        ],
+        "materials": [
+          {
+            "item_id": 1111,
+            "count": 1
+          }
+        ],
+        "missing_materials": [
+          1111
+        ],
+        "eligible": false,
+        "exclusion": "unmodeled LifeLimit",
+        "source_row_sha256": "1f806210cfdbad07a2d69f1b20ad2adb92e09c635fb948532159f9d71fcacf0d"
+      },
+      {
+        "item_id": 370,
+        "name": "Sentry Type 01",
+        "durability_max": 100,
+        "component_class": 26,
+        "components": [
+          "Repair",
+          "RecycleReplicate",
+          "LifeLimit",
+          "Drag",
+          "Instantiate",
+          "Tower",
+          "GunAmmo"
+        ],
+        "materials": [
+          {
+            "item_id": 273,
+            "count": 9
+          }
+        ],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "unmodeled LifeLimit",
+        "source_row_sha256": "699e9171363dbabdada2dd82b4d2d2954196cd04ab14b812b7674c6d26639f6a"
+      },
+      {
+        "item_id": 1473,
+        "name": "Axe Hilt",
+        "durability_max": 100,
+        "component_class": 84,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleCreation",
+          "Durability",
+          "InstantiateCreation",
+          "EquipAttack"
+        ],
+        "materials": [],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "creation requires separately qualified classification",
+        "source_row_sha256": "7ebc97dc976da1cd03a55c1753326b64de3ec2091583b4a7108d3d6a1a2ba62f"
+      },
+      {
+        "item_id": 1474,
+        "name": "Self Bow Grip",
+        "durability_max": 100,
+        "component_class": 85,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleCreation",
+          "Durability",
+          "InstantiateCreation",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 5
+          }
+        ],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "creation requires separately qualified classification",
+        "source_row_sha256": "f3c221f8ab4a80bc7aa3a20f6537a39afba3458396169c3dade595ea3a44c3d2"
+      },
+      {
+        "item_id": 1475,
+        "name": "Compound Bow Grip",
+        "durability_max": 100,
+        "component_class": 85,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleCreation",
+          "Durability",
+          "InstantiateCreation",
+          "EquipAttack"
+        ],
+        "materials": [
+          {
+            "item_id": 279,
+            "count": 4
+          }
+        ],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "creation requires separately qualified classification",
+        "source_row_sha256": "d1a2ad418977bcd2c42e87f65f166fb111ffb0be0d6c0d0650b757d1ec5f194c"
+      },
+      {
+        "item_id": 1527,
+        "name": "Safety Axe",
+        "durability_max": 100,
+        "component_class": 9,
+        "components": [
+          "Property",
+          "Strengthen",
+          "Repair",
+          "RecycleReplicate",
+          "Durability",
+          "Instantiate",
+          "EquipAttack"
+        ],
+        "materials": [],
+        "missing_materials": [],
+        "eligible": false,
+        "exclusion": "source camp UI requires a nonempty repair material list",
+        "source_row_sha256": "e276b3bd27d9842f5b8fcaec934f0b9d2e0b1d1e803c05edc820dd3a3c32f2ba"
+      }
+    ],
+    "colony_info": {
+      "id": "1130",
+      "durability": "3500",
+      "repairtime": "300",
+      "deletetime": "1000",
+      "power": "255",
+      "workerscnt": "0",
+      "_property": "60",
+      "worksound": "1672"
+    },
+    "repair_prototype": {
+      "pin": "40070004",
+      "_name": "\u4fee\u7406\u5de5\u5177",
+      "_engName": "repair machine",
+      "id": "1130",
+      "_nameID": "2111527",
+      "_engExplain": "2101527",
+      "_dragnameID": "2111527",
+      "_typeId": "28",
+      "_WeaponType": "0",
+      "_setUp": "0",
+      "_modelPath": "Prefab/Item/Furniture/Building/M_RepairMachine",
+      "_logicPath": "Prefab/Item/Furniture/Building/RepairMachine_Logic",
+      "_iconId": "element_building_030101,leftup_putdown,0",
+      "_effectSound": "0",
+      "_placeSound": "926",
+      "_explain": "0",
+      "_bindNode": "0",
+      "_replacePos": "0",
+      "_position": "0",
+      "_property": "0",
+      "_random": "0",
+      "_repairMax": "272,20",
+      "_strengthen": "0",
+      "buffId": "0",
+      "skillId": "0",
+      "_taskId": "0",
+      "_function": "52",
+      "currency_value": "416",
+      "currency_value2": "1853",
+      "_oprationType": "1",
+      "disappear_time": "-1",
+      "_durability": "100",
+      "_repair": "0",
+      "stacking_num": "1",
+      "sex": "0",
+      "tab": "0",
+      "path": "0",
+      "bind": "0",
+      "sort": "10711",
+      "editor_path": "0",
+      "learn": "0",
+      "bundle": "0",
+      "publish": "1",
+      "category": "Base Parts",
+      "itemlv": "60",
+      "servericon": "element_building_030101",
+      "turret_id": "0",
+      "durDec": "1",
+      "HpMax": "100",
+      "Hp": "100",
+      "StaminaMax": "0",
+      "Stamina": "0",
+      "StaminaReducePercent": "0",
+      "StaminaRecoverSpeed": "0",
+      "StaminaRecoverDelay": "0",
+      "ComfortMax": "0",
+      "Comfort": "0",
+      "ComfortReducePercent": "0",
+      "ComfortRecoverSpeed": "0",
+      "OxygenMax": "0",
+      "Oxygen": "0",
+      "OxygenReducePercent": "0",
+      "OxygenRecoverSpeed": "0",
+      "HungerMax": "0",
+      "Hunger": "0",
+      "HungerReducePercent": "0",
+      "HungerRecoverSpeed": "0",
+      "Energy": "0",
+      "EnergyMax": "0",
+      "ResDamage": "0",
+      "ResRange": "0",
+      "ResBouns": "0",
+      "AtkRange": "0",
+      "Atk": "0",
+      "CritPercent": "0",
+      "Def": "0",
+      "RigidMax": "0",
+      "Rigid": "0",
+      "RigidRecoverSpeed": "0",
+      "Shield": "0",
+      "ShieldMax": "0",
+      "ShieldMeleeProtect": "0",
+      "ShieldRigidProtect": "0",
+      "EnableShieldBlock": "0",
+      "RunSpeed": "0",
+      "WalkSpeed": "0",
+      "JumpHeight": "0",
+      "WeightUpUnderWater": "0",
+      "HitflyMax": "0",
+      "Hitfly": "0",
+      "HitflyRecoverSpeed": "0",
+      "Clean": "0",
+      "CleanRecover": "0",
+      "Food_Cereals": "0",
+      "Food_Meat": "0",
+      "Food_Bean": "0",
+      "Food_Fruit": "0",
+      "Food_Energy": "0",
+      "DebuffPercent01": "0",
+      "DebuffReduce01": "0",
+      "DebuffPercent02": "0",
+      "DebuffReduce02": "0",
+      "DebuffPercent03": "0",
+      "DebuffReduce03": "0",
+      "DebuffPercent04": "0",
+      "DebuffReduce04": "0",
+      "DebuffPercent05": "0",
+      "DebuffReduce05": "0",
+      "DebuffPercent06": "0",
+      "DebuffReduce06": "0",
+      "DebuffPercent07": "0",
+      "DebuffReduce07": "0",
+      "DebuffPercent08": "0",
+      "DebuffReduce08": "0",
+      "DebuffPercent09": "0",
+      "DebuffReduce09": "0",
+      "DebuffPercent10": "0",
+      "DebuffReduce10": "0",
+      "ThresholdWhacked": "0",
+      "ThresholdRepulsed": "0",
+      "ThresholdWentfly": "0",
+      "ThresholdKnocked": "0",
+      "Exp": "0",
+      "CutDamage": "0",
+      "CutBouns": "0",
+      "SwordMultiple": "0",
+      "ShieldMultiple": "0",
+      "AxeMultiple": "0",
+      "BowMultiple": "0",
+      "GunMultiple": "0",
+      "ForceScale": "0",
+      "AttNum": "0",
+      "ExpMax": "10000",
+      "SprintSpeed": "3",
+      "RotationSpeed": "120",
+      "VisualRadius": "50",
+      "VisualAngle": "60",
+      "ListenRadius": "30",
+      "RetreatSpeed": ".5",
+      "DefaultPlayerID": "0",
+      "CampID": "0",
+      "DeleteTime": "10",
+      "InjuredState": "0",
+      "DamageID": "0",
+      "HPRecover": "0",
+      "item_editor_type": "32",
+      "is_formula": "0"
+    }
+  },
+  "semantics": {
+    "creator_id": 10000,
+    "data_type": 5,
+    "ordinary_repair_prototype": 1130,
+    "base_seconds": 60,
+    "qualified_workers": 0,
+    "cost": "ceil(base material count * 1 * (1 - durability/max)); active UI has no epsilon early return",
+    "start_gate": "Repair exists and !PeFloatRangeNum.IsCurrentMax(); absolute deficit < PEMath.Epsilon counts as full",
+    "time": "base * pow(.82,worker_count) * product(1-worker_skill); qualified camp has zero assigned workers",
+    "ticks_per_second": 100000,
+    "timer": "Per enabled CounterScript display Update: remaining ticks += trunc(float(-1 * dt * 100000)); completion at <=0; independent of accelerated world clock",
+    "insert": "Transfer the same instance out of its former owner; busy machine rejects insertion/extraction; source equipment origin can unequip",
+    "replace": "Same category exchanges instances; otherwise return old only after CanAdd succeeds, then insert new",
+    "cancel": "StopCounter sets current0/final-1, destroys counter, retains item and does not refund consumed materials",
+    "close": "OnClose clears UI binding only; item and job remain owned by machine; distance>8 closes UI",
+    "complete": "Optional UI callback then Repairing->Repair.Do; same instance set to maximum, remains in machine; repeated Do is idempotent",
+    "saved": "CSDataMgr MainAdventure creator10000 -> CSRepairData entity20006: independent item instance ID/current/final; ItemMgr separately saves actual item",
+    "restore": "CSRepair.CreateData resolves stored instance via ItemMgr and restarts nonnegative final counter; empty -1 final does not start",
+    "limitation": "Both archived jobs are empty. Source establishes restart path; no observed nonempty/partial job save or exact cross-MonoBehaviour update order is claimed."
+  },
+  "exclusions": [
+    "No LifeLimit, creation, worker colony, arbitrary repair machine placement, service UI, inventory transfer or save integration is enabled.",
+    "Knife33 and SafetyAxe1527 have no source repair materials and must not receive free repairs.",
+    "Native atomic preflight/commit, bag-only admission and pause/clock scheduling require explicit implementation policies.",
+    "Source and installed static machine components agree; rendered active machine animation remains outside this metadata extraction."
+  ]
+}

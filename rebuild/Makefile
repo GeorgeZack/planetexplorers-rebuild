@@ -29,7 +29,7 @@ $(BUILD)/planet_explorers: $(FRONTEND) src/pe_reference.h src/pe_training_view.h
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(FRONTEND) $(CORE) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 $(BUILD)/test_core: tests/adventure_test_helpers.h $(TESTS) $(CORE) $(HEADERS) | $(BUILD)
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(TESTS) $(CORE) -o $@ $(LZ4_LIBS) -lm
-test: inventory-discard-test adventure-mission-events-test camera-environment-test sandbox-camera-environment-host-test town-defense-spawn-test sandbox-inventory-ui-test sandbox-vegetation-host-test vegetation-view-test sandbox-build-history-host-test sandbox-shop-trade-ui-test sandbox-wallet-host-test sandbox-revival-host-test humanoid-rotation-test sandbox-stamina-host-test sandbox-health-host-test sandbox-equipment-host-test hunt-consume-test training-asset-clocks-test actor-blend-test town-defense-clock-test terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
+test: camp-repair-test inventory-discard-test adventure-mission-events-test camera-environment-test sandbox-camera-environment-host-test town-defense-spawn-test sandbox-inventory-ui-test sandbox-vegetation-host-test vegetation-view-test sandbox-build-history-host-test sandbox-shop-trade-ui-test sandbox-wallet-host-test sandbox-revival-host-test humanoid-rotation-test sandbox-stamina-host-test sandbox-health-host-test sandbox-equipment-host-test hunt-consume-test training-asset-clocks-test actor-blend-test town-defense-clock-test terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
 	./$(BUILD)/test_core
 	python3 tests/test_adventure_settlement_export.py
 	python3 tests/test_adventure_settlement_assets.py
@@ -497,3 +497,12 @@ $(BUILD)/test_inventory_discard: tests/test_inventory_discard.c src/pe_sandbox_u
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_inventory_discard.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
 inventory-discard-test: $(BUILD)/test_inventory_discard
 	./$(BUILD)/test_inventory_discard
+
+.PHONY: camp-repair-test camp-repair-source-check
+$(BUILD)/test_camp_repair: tests/test_camp_repair.c src/pe_camp_repair.c src/pe_camp_repair.h src/pe_inventory.c generated/pe_content.c generated/pe_camp_repair_source.h $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) -DPE_CAMP_REPAIR_TEST_MAIN tests/test_camp_repair.c src/pe_camp_repair.c src/pe_inventory.c generated/pe_content.c -o $@ -lm
+camp-repair-test: $(BUILD)/test_camp_repair
+	./$(BUILD)/test_camp_repair
+camp-repair-source-check:
+	$(UNITY_PYTHON) tools/export_camp_repair.py --check
+	$(UNITY_PYTHON) tests/test_camp_repair_export.py

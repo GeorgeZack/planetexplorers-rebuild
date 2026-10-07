@@ -66,6 +66,8 @@ The pure API accepts finite display intervals[0,1]; no gameplay catch-up tick ma
 
 Still unported are the source animated camera anchor, FOV/near-plane-radius search, visibility rings, dynamic near clip, clamp rise, YawPitchFinding, and the full graph's blends and alternate camera branches. The existing wheel-notch conversion and free-pointer gesture are native input adapters. This increment establishes the portable evaluator, targets, lock ordering and clocks, not full visual camera parity. Host geometry integration and its limitations are recorded separately by the host owner.
 
+The subsequent [camera geometry qualification](CAMERA_GEOMETRY_GATE.md) recovers the active.8m near clip, full ring/rise arithmetic and projection ordering. CPU probes expose initial-overlap and picking-origin differences in the current backend. It defines the smallest safe pure-evaluator increment without changing runtime geometry or requiring manual play.
+
 ## Verification
 
 [test_camera_environment.c](../../rebuild/tests/test_camera_environment.c) passes optimized strict C11 and ASan/UBSan with leak detection. It checks66 normalized tree-excluding rays; clear, uniformly enclosed, subminimum, zero-distance and corridor geometry; failed-query atomicity; activity target convergence and construction bounds; clamp/wheel ordering; hold renewal and release; distinct hold/damping intervals; below-minimum recovery; modal/pause/first-person gates; and malformed-state atomicity.

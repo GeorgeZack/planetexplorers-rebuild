@@ -843,3 +843,12 @@ The [Gather audit](audit/GATHER_ACTION_GATE.md) also checked335 recovered actor 
 The final aggregate in `rebuild/build/offline-next-final.log` exited0: optimized frontend, full optimized core (0 failures), inventory UI, general sandbox UI, shop trade UI, discard and mission-event tests, all content regeneration checks and26 CLI tests. This is a full core run plus selected relevant suites, not a new complete `make test` run. The general inventory/save/harvest cases are included in that core run.
 
 Focused discard, mission-event and actual follow-up learning/crafting tests also pass ASan/UBSan with leak detection enabled. Source tests pass with zero skips: four inventory, seven mission-event, nineteen content and eleven trade exporter tests. New item icons and overlays already exist in the recovered atlas. Rendered confirmation layout and visual camera feel remain untested; no original game, graphical rebuild or desktop input was used.
+
+
+## October 7 — offline camp repair and camera geometry qualification
+
+[Camp repair](audit/CAMP_REPAIR.md) now has guarded source/installed/archive metadata for existing machine20006 and63 ordinary material profiles. Its disconnected owner transfers an exact bag instance, quotes/debits materials atomically, runs a60-second per-display truncated clock, cancels without refund and restores durability once. Its snapshots are value contracts, not a PECS extension; no live interaction or repair UI is enabled.
+
+`make -C rebuild camp-repair-test camp-repair-source-check` passes. The focused native owner also passes ASan/UBSan with leak detection, and all ten UnityPy-backed source tests pass with zero skips. All63 quotes and current transaction cases are covered; no current profile supplies cross-category or multiple-material coverage. Original partial-job reload and animated machine presentation remain unobserved. The source check requires the qualified local UnityPy/reference inputs and fails rather than calling an unavailable decoder a pass.
+
+[Camera geometry qualification](audit/CAMERA_GEOMETRY_GATE.md) decodes the active.8m near plane, auxiliary near-camera pass and exact ring/sphere/rise math. A reproducible CPU-only probe passes strict optimized and ASan/UBSan/leak checks, confirming native initial-overlap and pointer-ray-origin behavior. Nearby Unity5.3 primary documentation is identified as version-limited evidence. No geometry/projection runtime change is inferred from this audit. No original game, graphical window or desktop input was used for either increment.
