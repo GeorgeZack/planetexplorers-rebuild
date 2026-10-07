@@ -139,7 +139,7 @@ Keep this file focused on durable working rules. Update the project map when mod
 
 ## Git remotes and attribution
 
-The private rebuild repository is [GeorgeZack/planetexplorers-rebuild](https://github.com/GeorgeZack/planetexplorers-rebuild). Keep `origin` pointing to the original [pathea-games/planetexplorers](https://github.com/pathea-games/planetexplorers) reference; `rebuild` is the writable project remote, with `main` as the rebuild branch. Preserve [NOTICE.md](NOTICE.md) and the original Pathea Games terms in README. Do not commit recovered runtime assets, installed Steam binaries, local player saves or build outputs; source provenance and bounded reference screenshots belong in docs.
+The private rebuild repository is [GeorgeZack/planetexplorers-rebuild](https://github.com/GeorgeZack/planetexplorers-rebuild). Keep `origin` pointing to the original [pathea-games/planetexplorers](https://github.com/pathea-games/planetexplorers) reference; `rebuild` is the writable project remote, with `master` as the rebuild branch and GitHub default. The original local Unity reference is retained as `unity-reference-master` tracking `origin/master`; do not switch the rebuild default back to `main`. Preserve [NOTICE.md](NOTICE.md) and the original Pathea Games terms in README. Do not commit recovered runtime assets, installed Steam binaries, local player saves or build outputs; source provenance and bounded reference screenshots belong in docs.
 
 ## Reference settlement
 
