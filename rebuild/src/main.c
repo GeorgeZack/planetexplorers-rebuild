@@ -8,6 +8,7 @@
 #include "pe_sandbox_view.h"
 #include "pe_app_menu.h"
 #include "pe_settlement.h"
+#include "pe_vegetation.h"
 #include <raylib.h>
 #include <raymath.h>
 #include <math.h>
@@ -62,6 +63,7 @@ static void usage(const char *name) {
            "       [--smoke-panel inventory|crafting|character|missions|building] [--reference-room FILE.obj]\n"
            "       [--training-room ASSET_DIRECTORY] [--reference-actor FILE.peac]\n"
            "       [--reference-actor-scene FILE.peas] [--sandbox | --main-menu] [--assets DIR]\n"
+           "       [--vegetation-examples] Add a fixed sample patch near the current player once.\n"
            "WASD move, mouse look, E gather, LMB dig, RMB build, X recover,\n"
            "1-9 quickslots, B build mode, V shape, T rotate, G brush, Y craft, I inventory,\n"
            "C character, Q missions, Tab cursor, F5 camera, F9 save, F10 load, Esc pause.\n",name);
@@ -113,12 +115,13 @@ int main(int argc,char **argv) {
     int smoke_frames=0;
     const char *save_path="planet_explorers.pesave",*screenshot=NULL,*terrain_path=NULL,*load_path=NULL,*smoke_panel=NULL,*reference_path=NULL,*training_path=NULL,*actor_path=NULL,*actor_scene_path=NULL;
     int origin[3]={0};bool origin_given=false,save_given=false;
-    bool direct=false,main_menu=false;
+    bool direct=false,main_menu=false,vegetation_examples=false;
     const char *assets=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
     for(int i=1;i<argc;i++) {
         if(!strcmp(argv[i],"--help")) {usage(argv[0]);return 0;}
         if(!strcmp(argv[i],"--sandbox")){direct=true;continue;}
         if(!strcmp(argv[i],"--main-menu")){main_menu=true;continue;}
+        if(!strcmp(argv[i],"--vegetation-examples")){vegetation_examples=true;continue;}
         if(i+1>=argc) {usage(argv[0]);return 2;}
         const char *option=argv[i++],*value=argv[i];
         if(!strcmp(option,"--seed") || !strcmp(option,"--smoke")) {
@@ -149,6 +152,9 @@ int main(int argc,char **argv) {
     if(load_path&&!save_given)save_path=load_path;
     if(screenshot && !smoke_frames) {fprintf(stderr,"--screenshot requires --smoke FRAMES\n");return 2;}
     if(origin_given&&!terrain_path){fprintf(stderr,"--origin requires --terrain FILE\n");return 2;}
+    if(vegetation_examples&&(main_menu||training_path||reference_path||actor_path||actor_scene_path)){
+        fprintf(stderr,"--vegetation-examples requires the sandbox route\n");return 2;
+    }
     if((main_menu&&direct)||((main_menu||direct)&&(training_path||reference_path||actor_path||actor_scene_path))||
        (main_menu&&(terrain_path||load_path||smoke_panel))){fprintf(stderr,"Conflicting application routes\n");return 2;}
     if(actor_scene_path) {
@@ -180,7 +186,7 @@ int main(int argc,char **argv) {
     }
     PeGame *game=NULL;int result=0;char error[256]={0};
     if(!pe_settlement_configure(assets,error,sizeof error)){fprintf(stderr,"%s\n",error);return 1;}
-    bool open_menu=main_menu||(!direct&&!smoke_frames&&!load_path&&!terrain_path);
+    bool open_menu=main_menu||(!direct&&!vegetation_examples&&!smoke_frames&&!load_path&&!terrain_path);
     if(!open_menu) {
         game=calloc(1,sizeof *game);
         if(!game||!pe_game_init_mode(game,seed,PE_GAME_ADVENTURE)){destroy_game(game);return 1;}
@@ -192,6 +198,10 @@ int main(int argc,char **argv) {
         }
         if(!load_path&&!terrain_path&&!pe_settlement_start(game,error,sizeof error)){
             fprintf(stderr,"Settlement failed: %s\n",error);destroy_game(game);return 1;
+        }
+        if((vegetation_examples||(!load_path&&!terrain_path))&&!pe_vegetation_install_fixture(game,game->player)){
+            fprintf(stderr,"Vegetation examples need an Adventure world with enough supported space near the player.\n");
+            destroy_game(game);return 1;
         }
         result=pe_sandbox_view(game,assets,save_path,smoke_frames,smoke_panel,screenshot);
         if(result!=2){destroy_game(game);return result;}
@@ -218,6 +228,9 @@ int main(int argc,char **argv) {
             }
             if(choice==PE_APP_NEW_SANDBOX&&!pe_settlement_start(next,error,sizeof error)){
                 destroy_game(next);snprintf(notice,sizeof notice,"Settlement failed: %.210s",error);continue;
+            }
+            if(choice==PE_APP_NEW_SANDBOX&&!pe_vegetation_install_fixture(next,next->player)){
+                destroy_game(next);snprintf(notice,sizeof notice,"Could not place the vegetation examples safely.");continue;
             }
             destroy_game(game);game=next;
         }

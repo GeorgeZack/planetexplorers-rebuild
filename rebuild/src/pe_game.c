@@ -1,5 +1,6 @@
 #include "pe_game.h"
 #include "pe_build_history.h"
+#include "pe_vegetation.h"
 #include "pe_town_wallet.h"
 #include "pe_shield.h"
 #include "pe_sword.h"
@@ -197,7 +198,7 @@ bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
     if(!g||!world||world->source>1||!pe_world_depth(world)||!finite3(preferred))return false;
     if(world->source==0)for(size_t i=0;i<pe_world_voxel_count(world);i++)if(pe_world_data_const(world)[i].material>PE_MAT_GRASS)return false;
     PeGame *next=calloc(1,sizeof *next);if(!next)return false;
-    *next=*g;memset(&next->world,0,sizeof next->world);pe_build_history_clear(next);
+    *next=*g;memset(&next->world,0,sizeof next->world);pe_build_history_clear(next);pe_vegetation_clear(next);
     if(!pe_world_clone(&next->world,world)){free(next);return false;}next->block_count=0;next->tree_count=0;next->cell_count=0;
     next->deployed_count=0;memset(next->deployed,0,sizeof next->deployed);
     memset(next->blocks,0,sizeof next->blocks);memset(next->trees,0,sizeof next->trees);memset(next->cells,0,sizeof next->cells);

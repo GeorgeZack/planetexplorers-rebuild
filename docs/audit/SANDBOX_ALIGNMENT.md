@@ -1,6 +1,6 @@
 # Sandbox alignment: implementation work order and live reference
 
-The latest [wallet increment](TOWN_WALLETS.md) credits normal purchases to eight archived purses, preserves the source noon refill latch and adds PECSv17 persistence. No game launch was needed; selling/buyback and ordinary hunt acceptance remain separate work.
+The latest [fixed vegetation patch](SANDBOX_VEGETATION.md) adds two trees, six harvestable herbs and two decorative plants near new-sandbox spawn, plus an explicit option for old saves. Wild assets and rules are recovered offline; PECSv18 retains depletion. Procedural spawning and regrowth remain deferred. [Selling/buyback](TOWN_SELL_BUYBACK.md) and [construction undo/redo](CONSTRUCTION_HISTORY.md) are also implemented. These increments have no new physical acceptance; ordinary hunt completion remains a separate check.
 
 ## Current walking-attack checkpoint
 

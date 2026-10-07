@@ -19,6 +19,8 @@
 #include "pe_town_interaction.h"
 #include "pe_town_wallet.h"
 #include "pe_build_history.h"
+#include "pe_vegetation.h"
+#include "pe_vegetation_view.h"
 #include "../generated/pe_adventure_population.h"
 #include "pe_reference.h"
 #include "pe_terrain_material_view.h"
@@ -357,6 +359,30 @@ static bool sandbox_build_history_apply(PeGame *game,const PeSandboxUI *ui,
     bool changed=action.undo_build?pe_build_history_undo(game):action.redo_build?pe_build_history_redo(game):false;
     return !changed||pe_game_collision_update(game,collision,error,capacity);
 }
+typedef struct {
+    unsigned index;
+    float distance,other_distance;
+    bool enabled,available,requested,modal_priority;
+    const PeSandboxMelee *melee;
+    const PeSandboxActions *tool;
+} SandboxVegetationInput;
+/* A gathering attempt owns this action press, including rejection. It does
+ * not borrow tutorial gather clocks or pause movement/other creatures. */
+static bool sandbox_vegetation_interact(PeGame *game,const PeSandboxCollision *collision,
+    SandboxVegetationInput input,PeSandboxUIResult *action,PeSandboxPointerGate *pointer,unsigned buttons){
+    if(!game||!collision||!action||!pointer||!input.melee||!input.tool||!input.enabled||!input.available||!input.requested||input.modal_priority||
+       !action->npc_interaction||action->consume_world||action->consume_actions||action->paused||
+       input.index>=game->vegetation.count||!isfinite(input.distance)||input.distance<0||
+       isnan(input.other_distance)||input.distance>=input.other_distance)return false;
+    /* DBActionRelation Gather requires SwordAttack/Dig/Fell masks false.
+     * Reject while their native owners run; do not cancel or freeze them. */
+    if(!input.melee->action.active&&!input.melee->tick_pending&&input.tool->stage==PE_SANDBOX_ACTION_IDLE)
+        pe_vegetation_harvest(game,input.index,collision);
+    else snprintf(game->message,sizeof game->message,"Finish the current tool or weapon action before gathering.");
+    action->consume_actions=true;action->npc_interaction=false;action->camera_cycle_allowed=false;
+    pe_sandbox_pointer_route(pointer,action,buttons);
+    return true;
+}
 static bool sandbox_revive_request(PeGame *game,const PeAttributeClock *clock){
     if(!game||!clock)return false;
     /* The native actor currently has no ragdoll, ride or Fall action owner.
@@ -445,6 +471,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     SetWindowMinSize(1000,700);SetTargetFPS(60);SetExitKey(KEY_NULL);
     char error[256]={0};int result=0,frame=0;
     PeDeployableView deploy_view={0};
+    PeVegetationView *vegetation_view=NULL;
     PeActorView hunt_view={0};PeActor *player_defence=NULL;PeHitboxes *hare_boxes=NULL,*player_boxes=NULL;
     PeHuntCombat hunt={0};bool hunt_assets=false,hunt_attempted=false,return_prompted=false;
     PeTerrainMaterialView surface={0};PeReferenceModel settlement={0};bool settlement_route=false;
@@ -470,7 +497,12 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
        !pe_game_collision_update(game,collision,error,sizeof error)||
        !pe_sandbox_ui_load(&ui,assets,error,sizeof error)||
        !pe_deployable_view_load(&deploy_view,assets,error,sizeof error)) {
-        fprintf(stderr,"Sandbox initialization failed: %s\n",error);result=1;goto cleanup;
+       fprintf(stderr,"Sandbox initialization failed: %s\n",error);result=1;goto cleanup;
+    }
+    vegetation_view=pe_vegetation_view_load(assets,error,sizeof error);
+    if(!vegetation_view||(game->vegetation.installed&&!pe_vegetation_view_available(vegetation_view))){
+        if(vegetation_view)snprintf(error,sizeof error,"This vegetation patch requires recovered sandbox-vegetation assets.");
+        fprintf(stderr,"Sandbox vegetation initialization failed: %s\n",error);result=1;goto cleanup;
     }
     if(game->mode==PE_GAME_ADVENTURE&&pe_sandbox_collision_overlap(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)) {
         snprintf(error,sizeof error,"Player overlaps world geometry");result=1;goto cleanup;
@@ -663,6 +695,9 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(!loaded)snprintf(game->message,sizeof game->message,"%.159s",error);
             if(loaded&&(!pe_game_collision_update(game,collision,error,sizeof error)||
                 (game->mode==PE_GAME_ADVENTURE&&pe_sandbox_collision_overlap(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)))){result=1;break;}
+            if(loaded&&game->vegetation.installed&&!pe_vegetation_view_available(vegetation_view)){
+                snprintf(error,sizeof error,"Loaded vegetation requires recovered sandbox-vegetation assets.");result=1;break;
+            }
         }
         if(loaded){mesh_revision=game->world.revision-1;load_town_name(&ui,game,assets);pe_sandbox_ui_set_resident_markers(&ui,NULL,0);PollInputEvents();continue;}
         if(!sandbox_build_history_apply(game,&ui,action,focused&&!resized&&!host_cancelled_modal&&!pointer_was_owned,
@@ -787,9 +822,21 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             PeSceneHit obstruction=pe_sandbox_collision_ray_geometry(collision,pv(pick.position),pv(pick.direction),100);
             pe_deployable_pick(game,pv(pick.position),pv(pick.direction),obstruction.hit?obstruction.distance:INFINITY,&picked_deploy,&deploy_distance);
         }
+        unsigned picked_plant=PE_MAX_PLANTS;float plant_distance=INFINITY;
+        if(!build_mode&&!placing_torch&&pe_vegetation_view_available(vegetation_view)){
+            Ray pick=source_ray(interaction_point,aim_camera);
+            PeSceneHit obstruction=pe_sandbox_collision_ray_geometry(collision,pv(pick.position),pv(pick.direction),100);
+            pe_vegetation_pick(game,pv(pick.position),pv(pick.direction),obstruction.hit?obstruction.distance:INFINITY,&picked_plant,&plant_distance);
+        }
         bool auto_welcome=!welcome_prompted&&welcome_visible&&game->welcome_page<PE_ADVENTURE_WELCOME_PAGES&&
             Vector3Distance(rv(game->player),rv(welcome.position))<=9;
         bool npc_right=right_click||(ui.free_cursor&&IsMouseButtonPressed(MOUSE_BUTTON_RIGHT));
+        SandboxVegetationInput plant_input={.index=picked_plant,.distance=plant_distance,.other_distance=fminf(nearest_npc,deploy_distance),
+            .enabled=focused&&!loaded&&!build_mode&&!placing_torch,.available=pe_vegetation_view_available(vegetation_view),
+            .requested=IsKeyPressed(KEY_E)||npc_right,.modal_priority=auto_welcome,.melee=&melee,.tool=&tool_action};
+        if(sandbox_vegetation_interact(game,collision,plant_input,&action,&pointer_gate,pointer_buttons)){
+            action_input=false;right_click=false;attack_pending=false;
+        }
         int open_role=auto_welcome?1:((IsKeyPressed(KEY_E)||npc_right)?picked_role:0);
         bool opened=false;PeAdventureNpc *selected=NULL;
         if(focused&&!loaded&&!build_mode&&!placing_torch&&action.npc_interaction){
@@ -1065,6 +1112,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         for(int i=0;i<PE_WORLD_MAX_REGIONS;i++)if(terrain->loaded[i])DrawModel(terrain->model[i],(Vector3){0},1,WHITE);
         if(pe_settlement_matches(&game->world))pe_reference_draw(&settlement);
         if(!pe_sandbox_world_view_draw_trees(world_view,game)){snprintf(error,sizeof error,"Tree rendering failed");result=1;}
+        if(!pe_vegetation_view_draw(vegetation_view,game)){snprintf(error,sizeof error,"Vegetation rendering failed");result=1;}
         for(int i=0;i<game->block_count;i++)draw_block(game->blocks[i]);
         for(int i=0;i<game->cell_count;i++)draw_cell(&game->cells[i]);
         profile_stage(&profile,PROFILE_ACTOR_DRAW);
@@ -1107,15 +1155,16 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(!game->world.source)DrawCube((Vector3){31.5f,5.5f,31.5f},63,.06f,63,(Color){54,132,149,170});
         source_end_3d();
         profile_stage(&profile,PROFILE_UI_DRAW);
+        bool npc_nearest=nearest_npc<=fminf(deploy_distance,plant_distance);
         if(supplier_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
             PeVec3 p=supplier.position;Vector2 pos=source_screen((Vector3){p.x,p.y+supplier_view.label_height,p.z},camera);
-            const char *prompt=picked_role==2&&action.npc_interaction?"Eitai  [RMB / E]":"Eitai";
+            const char *prompt=picked_role==2&&npc_nearest&&action.npc_interaction?"Eitai  [RMB / E]":"Eitai";
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->supplies_claimed?LIGHTGRAY:YELLOW);
         }
         if(welcome_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
             PeVec3 p=welcome.position;Vector2 pos=source_screen((Vector3){p.x,p.y+welcome_view.label_height,p.z},camera);
-            const char *prompt=picked_role==1&&action.npc_interaction?"Westina  [RMB / E]":"Westina";
+            const char *prompt=picked_role==1&&npc_nearest&&action.npc_interaction?"Westina  [RMB / E]":"Westina";
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->welcome_page<PE_ADVENTURE_WELCOME_PAGES?YELLOW:LIGHTGRAY);
         }
@@ -1123,11 +1172,18 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             PeVec3 p=residents[i].npc.position;
             if(Vector3Distance(rv(p),rv(game->player))>40||Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))<=0)continue;
             Vector2 screen=source_screen((Vector3){p.x,p.y+residents[i].view.label_height,p.z},camera);
-            char label[180];snprintf(label,sizeof label,"%s%s",pe_adventure_population_sources[i].name,picked_resident==i&&action.npc_interaction?"  [RMB / E]":"");
+            char label[180];snprintf(label,sizeof label,"%s%s",pe_adventure_population_sources[i].name,picked_resident==i&&npc_nearest&&action.npc_interaction?"  [RMB / E]":"");
             Font f=pe_ui_font(ui.assets,false);Vector2 size=MeasureTextEx(f,label,18,0);
             DrawTextEx(f,label,(Vector2){screen.x-size.x*.5f,screen.y},18,0,picked_resident==i?YELLOW:LIGHTGRAY);
         }
-        if(picked_deploy&&action.npc_interaction&&!ui.town_open)DrawTextEx(pe_ui_font(ui.assets,false),"Torch  [RMB / E]",(Vector2){GetScreenWidth()*.5f-70,GetScreenHeight()*.5f+30},18,0,YELLOW);
+        if(picked_deploy&&deploy_distance<=plant_distance&&deploy_distance<nearest_npc&&action.npc_interaction&&!ui.town_open)DrawTextEx(pe_ui_font(ui.assets,false),"Torch  [RMB / E]",(Vector2){GetScreenWidth()*.5f-70,GetScreenHeight()*.5f+30},18,0,YELLOW);
+        if(picked_plant<game->vegetation.count&&!game->vegetation.plants[picked_plant].depleted&&
+           plant_distance<fminf(nearest_npc,deploy_distance)&&action.npc_interaction&&!ui.town_open){
+            const PePlantSource *source=pe_vegetation_source(game->vegetation.plants[picked_plant].prototype_id);
+            const PeItemDef *item=source?pe_item_def(source->item_id):NULL;
+            DrawTextEx(pe_ui_font(ui.assets,false),TextFormat("%s  [RMB / E]",item?item->name:"Herb"),
+                (Vector2){GetScreenWidth()*.5f-90,GetScreenHeight()*.5f+30},18,0,YELLOW);
+        }
         pe_sandbox_ui_draw(&ui,game,build_mode);
         if(smoke_frames&&frame+1>=smoke_frames&&screenshot) {
             rlDrawRenderBatchActive();
@@ -1159,6 +1215,7 @@ cleanup:
     pe_hitboxes_free(hare_boxes);pe_hitboxes_free(player_boxes);pe_actor_free(player_defence);pe_actor_view_unload(&hunt_view);
     pe_hitboxes_free(knife_capsule);pe_hitboxes_free(sword_capsule);pe_root_motion_free(running_motion);pe_sword_root_motion_free(ordinary_motion);
     pe_deployable_view_unload(&deploy_view);
+    pe_vegetation_view_unload(vegetation_view);
     pe_reference_unload(&settlement);
     pe_sandbox_world_view_unload(world_view);pe_sandbox_actor_unload(actor);pe_sandbox_ui_unload(&ui);
     for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)pe_adventure_npc_view_unload(&residents[i].view);

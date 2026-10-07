@@ -37,6 +37,11 @@ typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPAC
 #define PE_SAVE_V16_APPEND 4u
 /* V17 retains v16 then stores count8 and eight entity/balance/latch records. */
 #define PE_SAVE_V17_APPEND 100u
+/* V18 retains v17, then fixture flag/count and32 prototype/XYZ/depletion records. */
+#define PE_SAVE_V18_APPEND 648u
+#define PE_MAX_PLANTS 32
+typedef struct { uint32_t prototype_id; PeVec3 position; bool depleted; } PePlant;
+typedef struct { bool installed; unsigned count; PePlant plants[PE_MAX_PLANTS]; } PeVegetation;
 typedef struct { int item_id; uint32_t instance_id; float durability; PeVec3 position; unsigned quarter_turn; } PeDeployable;
 #define PE_TOWN_V8_STOCK_CAPACITY 17
 #define PE_TOWN_STOCK_CAPACITY 284
@@ -99,6 +104,7 @@ typedef struct PeGame {
     PeBuildHistory build_history;
     PeTree trees[PE_MAX_TREES];
     int tree_count;
+    PeVegetation vegetation;
     uint32_t gathered, crafted, built;
     char message[160];
     PeGameMode mode;

@@ -2,6 +2,7 @@
 #include "pe_build_history.h"
 #include "pe_town_trade.h"
 #include "pe_game.h"
+#include "pe_vegetation.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
 #include "pe_town_wallet.h"
@@ -18,7 +19,8 @@
 #include <unistd.h>
 
 #define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 17u
+#define SAVE_VERSION 18u
+_Static_assert(PE_MAX_PLANTS==32&&PE_SAVE_V18_APPEND==648,"V18 appends bounded vegetation records");
 _Static_assert(PE_TOWN_WALLET_CAPACITY==8&&PE_SAVE_V17_APPEND==100,"V17 appends eight identified wallet records");
 _Static_assert(PE_SAVE_V16_APPEND==4,"V16 appends only raw comfort");
 _Static_assert(PE_SAVE_V15_APPEND==4,"V15 appends only the shield reference");
@@ -37,6 +39,7 @@ static uint32_t checksum(const unsigned char *p,size_t n) {uint32_t h=2166136261
 static void err(char *out,size_t cap,const char *msg) {if(out&&cap)snprintf(out,cap,"%s",msg);}
 static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
 static bool valid(const PeGame *g,bool trees,bool outfit) {
+    if(!pe_vegetation_state_valid(g))return false;
     if(!pe_town_wallet_state_valid(g))return false;
     if(outfit&&!pe_outfit_state_valid(g))return false;
     if(!pe_shield_state_valid(g))return false;
@@ -235,6 +238,13 @@ static void encode(Stream *s,const PeGame *g) {
         put32(s,source->entity_id);put32(s,g->town_wallet[i].balance);
         put32(s,g->town_wallet[i].added?1u:0u);
     }
+    /* V18 preserves the complete V17 payload; fixed example vegetation is
+     * separate from the existing tree owner and never regenerated on load. */
+    put32(s,g->vegetation.installed?1u:0u);put32(s,g->vegetation.count);
+    for(unsigned i=0;i<PE_MAX_PLANTS;i++){
+        const PePlant *p=&g->vegetation.plants[i];
+        put32(s,p->prototype_id);putvec(s,p->position);put32(s,p->depleted?1u:0u);
+    }
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -355,6 +365,15 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
             uint32_t entity=get32(s),balance=get32(s),added=get32(s);
             if(!source||entity!=source->entity_id||balance>INT32_MAX||added>1){s->ok=false;return;}
             g->town_wallet[i]=(PeTownWallet){.balance=balance,.added=added!=0};
+        }
+    }
+    if(version>=18){
+        uint32_t installed=get32(s),count=get32(s);
+        if(installed>1||count>PE_MAX_PLANTS){s->ok=false;return;}
+        g->vegetation.installed=installed!=0;g->vegetation.count=count;
+        for(unsigned i=0;i<PE_MAX_PLANTS;i++){
+            PePlant *p=&g->vegetation.plants[i];p->prototype_id=get32(s);p->position=getvec(s);
+            uint32_t depleted=get32(s);if(depleted>1){s->ok=false;return;}p->depleted=depleted!=0;
         }
     }
 }

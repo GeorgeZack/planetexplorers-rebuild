@@ -52,7 +52,7 @@ int pe_test_town_trade_save(void){
     CHECK(pe_town_trade_count(copy,20002)==0&&copy->money==money&&copy->inventory.next_instance_id==next);
     CHECK(copy->town_wallet[0].balance==wallet.balance&&copy->town_wallet[0].added==wallet.added);
     CHECK(slot_for(copy,12)<0); /* Sold item must not reappear on reload. */
-    /* New transient state must not change the v17 wire format: resaving the
+    /* New transient state must not change the current wire format: resaving the
      * loaded checkpoint reproduces the same authoritative payload exactly. */
     FILE *f=fopen(path,"rb");unsigned char *before=NULL;long length=0;
     CHECK(f!=NULL);

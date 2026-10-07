@@ -82,8 +82,8 @@ static void save_load(void){
     CHECK(pe_game_init_mode(g,943,PE_GAME_ADVENTURE));g->hp=100;
     PeAttributeClock clock={.seconds=100};CHECK(sandbox_health_frame(&clock,g,0,true,false));
     sandbox_health_contacts(g,0,1);CHECK(g->passive_recovery.last_hurt==100);
-    CHECK(pe_game_save(g,path,error,sizeof error));first=read_file(path,&n);CHECK(first&&first[4]==17);
-    /* Transient time/frame/phase is absent from the current V17 payload. */
+    CHECK(pe_game_save(g,path,error,sizeof error));first=read_file(path,&n);CHECK(first&&first[4]==18);
+    /* Transient time/frame/phase is absent from the current V18 payload. */
     g->passive_recovery=(PePassiveRecovery){.loaded=true};
     CHECK(pe_game_save(g,path,error,sizeof error));second=read_file(path,&m);
     CHECK(first&&second&&n==m&&!memcmp(first,second,n));
@@ -119,5 +119,5 @@ int main(void){
     PeGame *g=calloc(1,sizeof *g);CHECK(g);if(!g)return 1;
     pe_game_init(g,942);frame_gate(g);contacts(g);pe_game_destroy(g);free(g);save_load();
     if(failures)return 1;
-    puts("sandbox health host: display cadence, catch-up isolation, admitted-zero hurt, death, pause/focus and current V17 load lifecycle passed");return 0;
+    puts("sandbox health host: display cadence, catch-up isolation, admitted-zero hurt, death, pause/focus and current V18 load lifecycle passed");return 0;
 }

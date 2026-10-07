@@ -11,6 +11,11 @@ class LaunchValidation(unittest.TestCase):
         self.assertEqual(result.returncode,code,result.stdout+result.stderr)
         self.assertIn(needle,result.stdout+result.stderr)
     def test_help(self):self.run_case(['--help'],0,'--terrain')
+    def test_vegetation_help(self):self.run_case(['--help'],0,'--vegetation-examples')
+    def test_vegetation_route_conflicts(self):
+        for route in [['--main-menu'],['--training-room','unused'],['--reference-room','unused'],['--reference-actor','unused'],['--reference-actor-scene','unused']]:
+            with self.subTest(route=route):self.run_case(['--vegetation-examples',*route],2,'requires the sandbox route')
+    def test_vegetation_missing_save(self):self.run_case(['--vegetation-examples','--load','/does/not/exist.pesave'],1,'Load failed')
     def test_app_routes_conflict(self):self.run_case(['--main-menu','--sandbox'],2,'Conflicting application routes')
     def test_menu_load_conflict(self):self.run_case(['--main-menu','--load','unused.pesave'],2,'Conflicting application routes')
     def test_sandbox_training_conflict(self):self.run_case(['--sandbox','--training-room','unused'],2,'Conflicting application routes')

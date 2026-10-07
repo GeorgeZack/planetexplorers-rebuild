@@ -1,0 +1,352 @@
+{
+  "format_version": 1,
+  "sources": [
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    },
+    {
+      "path": "Assets/PeLauncher/Resources/VETreeProtos.prefab",
+      "sha256": "0ba32b30fe8fc0807979125fdb34263aefaef43d3cac9f2d64c3fd5f7d9f585b"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree15_grasslandC.prefab",
+      "sha256": "bf47779449ef367ca79deb0ace4be11b0e634b241c5ce1460899048c9a143d0f"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree08_grassland.prefab",
+      "sha256": "e2a99107b676bf6aec1952cf5cd86e487067cc717118532280a4e4bfd5ed7f19"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree09_grassland.prefab",
+      "sha256": "8a4b5fbf6c9e9c095cd7bcb4773d8ef66919b25df8ea4f0f4fdfdf7b6fa0ddc2"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree16_grassland.prefab",
+      "sha256": "2a637cfdee93ad4c50557fe487ce255505c5b625190ad6cd3f1b90b861a2b6a4"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Gather.cs",
+      "sha256": "a6a4b7b4ac0df03497db6064262609bb46ecb674f3002c24241164838cd2ffb3"
+    },
+    {
+      "path": "Assets/Scripts/ZhouXun/Random SubTerrain/RSubTerrainMgr.cs",
+      "sha256": "fa4904fa3272ed848b4c8031241a111b28d7fc4e8d99d3864fcaa2c7f39b2e51"
+    },
+    {
+      "path": "Assets/Scripts/NaturalRes/NaturalRes.cs",
+      "sha256": "35c272c17d30fa2f349e8779f09c55d6ab370616635b6b9f5a765282d92d1b93"
+    },
+    {
+      "path": "Assets/Scripts/BuildNDig/DigTerrainManager.cs",
+      "sha256": "66ad667305b4ed154b86d7e424134e556baed97efd75b8754f1580d6ae14c900"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntitySubTerrain.cs",
+      "sha256": "0e4031aace9c6b576ae98da3f229db38165cb1a0d060acf2022f059c9f2117cb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "sha256": "f6f52e21dda703433c4add331bb1d8779c989f4b6ecaf093b0373d565b975da7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "sha256": "84a63a50d399e76077a4bb11aef7c1821334a9a2e3e9b4141fa507d6d539ea6b"
+    }
+  ],
+  "plants": [
+    {
+      "prototype_id": 15,
+      "prefab": "Assets/Prefabs/tree-Ambient-Occlusion/tree15_grasslandC.prefab",
+      "model": "plant-15",
+      "triangles": 522,
+      "minimum": [
+        -0.37289829552173615,
+        -0.11479967832565308,
+        -0.3285984396934509
+      ],
+      "maximum": [
+        0.3728983849287033,
+        0.9400627017021179,
+        0.31728029251098633
+      ],
+      "cutoff": 0.6499999761581421,
+      "fixture_item_id": 238,
+      "fixture_count": 2,
+      "harvestable": true,
+      "resource_contract": {
+        "type": "10",
+        "durability": "255",
+        "production": "238,100;0.03,943,100;",
+        "fixed_num": "2",
+        "self_num": "0",
+        "gather_skill": "10007"
+      },
+      "source_mesh_guid": "eafb7152fc8f2f64b87c4cba2f6d9984",
+      "source_mesh_path_id": 4300000,
+      "installed_game_object": 18563,
+      "installed_mesh": 7004,
+      "installed_file": "resources.assets",
+      "installed_mesh_sha256": "76dbe66854b3c4466ccee23eaf18413f79b567efdf3bdf36a4303a88105589ff",
+      "installed_material_sha256": "4362d72a13e08c57eb24dd8ef68085bbbd46659e0ea3ab904c6999e359ca13bb",
+      "installed_texture_sha256": "b27e11db5e985917b3a637e62c0bdde18386ff50083ab29cc8efd899c8ec03d2",
+      "installed_shader_sha256": "76e8edb160964b39a31faececde24f177cd9a075e2d3aa6c6350263dc00292ce",
+      "obj_sha256": "3d1eb95d4eebbe563b1fc44ca8301a0f22248d27e3b472269bb0b0c10fb3e7f1",
+      "mtl_sha256": "c7e990ab5c185b8b4d1305dc444f623874002ff4410e47b8162c65ff9e14441c",
+      "two_sided": true,
+      "resource": {
+        "ID": "1015",
+        "name": "\u8349\u836f(\u8349\u539f\u690d\u72696)",
+        "level": "0",
+        "illustration": "11200007",
+        "type": "10",
+        "durability": "255",
+        "production": "238,100;0.03,943,100;",
+        "fixed_num": "2",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      }
+    },
+    {
+      "prototype_id": 37,
+      "prefab": "Assets/Prefabs/tree-Ambient-Occlusion/tree08_grassland.prefab",
+      "model": "plant-37",
+      "triangles": 165,
+      "minimum": [
+        -0.5677318572998047,
+        -0.051777809858322144,
+        -0.5666250288486481
+      ],
+      "maximum": [
+        0.5662540197372437,
+        1.0357666313648224,
+        0.5673609673976898
+      ],
+      "cutoff": 0.6499999761581421,
+      "fixture_item_id": 235,
+      "fixture_count": 3,
+      "harvestable": true,
+      "resource_contract": {
+        "type": "10",
+        "durability": "255",
+        "production": "235,70,1583,100;0.1,388,50,940,75,1583,100;",
+        "fixed_num": "3",
+        "self_num": "0",
+        "gather_skill": "10007"
+      },
+      "source_mesh_guid": "c1444f8ad9217a44e881e4c2b2a94465",
+      "source_mesh_path_id": 4300000,
+      "installed_game_object": 18545,
+      "installed_mesh": 6807,
+      "installed_file": "resources.assets",
+      "installed_mesh_sha256": "b7f94b4b291c1b6b746678f11fa7c5c20c30b87d6fb0e494725a1269a08d873b",
+      "installed_material_sha256": "4362d72a13e08c57eb24dd8ef68085bbbd46659e0ea3ab904c6999e359ca13bb",
+      "installed_texture_sha256": "b27e11db5e985917b3a637e62c0bdde18386ff50083ab29cc8efd899c8ec03d2",
+      "installed_shader_sha256": "76e8edb160964b39a31faececde24f177cd9a075e2d3aa6c6350263dc00292ce",
+      "obj_sha256": "d058cc4aaa9baf011695b87795e8bef95bf10f2809221ebb04bc312461959ad4",
+      "mtl_sha256": "c7e990ab5c185b8b4d1305dc444f623874002ff4410e47b8162c65ff9e14441c",
+      "two_sided": true,
+      "resource": {
+        "ID": "1037",
+        "name": "\u8349\u836f(\u90c1\u91d1\u9999)",
+        "level": "0",
+        "illustration": "0",
+        "type": "10",
+        "durability": "255",
+        "production": "235,70,1583,100;0.1,388,50,940,75,1583,100;",
+        "fixed_num": "3",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      }
+    },
+    {
+      "prototype_id": 40,
+      "prefab": "Assets/Prefabs/tree-Ambient-Occlusion/tree09_grassland.prefab",
+      "model": "plant-40",
+      "triangles": 647,
+      "minimum": [
+        -1.4945176839828491,
+        -0.08550143241882324,
+        -1.0266589522361755
+      ],
+      "maximum": [
+        1.3110183477401733,
+        1.4378069639205933,
+        0.9934425950050354
+      ],
+      "cutoff": 0.6499999761581421,
+      "fixture_item_id": 239,
+      "fixture_count": 4,
+      "harvestable": true,
+      "resource_contract": {
+        "type": "10",
+        "durability": "255",
+        "production": "239,70,1583,100;0.1,388,50,944,75,1583,100;",
+        "fixed_num": "4",
+        "self_num": "0",
+        "gather_skill": "10007"
+      },
+      "source_mesh_guid": "d3c2ffbe4006edc42ab6bd7184373489",
+      "source_mesh_path_id": 4300000,
+      "installed_game_object": 18548,
+      "installed_mesh": 6896,
+      "installed_file": "resources.assets",
+      "installed_mesh_sha256": "1a903b2fa4a4120e3ef9ce71af437840b30dacae59a83273e44e957447a75e01",
+      "installed_material_sha256": "4362d72a13e08c57eb24dd8ef68085bbbd46659e0ea3ab904c6999e359ca13bb",
+      "installed_texture_sha256": "b27e11db5e985917b3a637e62c0bdde18386ff50083ab29cc8efd899c8ec03d2",
+      "installed_shader_sha256": "76e8edb160964b39a31faececde24f177cd9a075e2d3aa6c6350263dc00292ce",
+      "obj_sha256": "7cb80e5e43c54437c3d9ae0771e71e9323c204e7f5208674bdcfb7ddf766178c",
+      "mtl_sha256": "c7e990ab5c185b8b4d1305dc444f623874002ff4410e47b8162c65ff9e14441c",
+      "two_sided": true,
+      "resource": {
+        "ID": "1040",
+        "name": "\u8349\u836f(\u5411\u65e5\u8475)",
+        "level": "0",
+        "illustration": "0",
+        "type": "10",
+        "durability": "255",
+        "production": "239,70,1583,100;0.1,388,50,944,75,1583,100;",
+        "fixed_num": "4",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      }
+    },
+    {
+      "prototype_id": 146,
+      "prefab": "Assets/Prefabs/tree-Ambient-Occlusion/tree16_grassland.prefab",
+      "model": "plant-146",
+      "triangles": 2282,
+      "minimum": [
+        -0.34211355447769165,
+        -0.20074651390314102,
+        -0.018277212977409363
+      ],
+      "maximum": [
+        0.2889757752418518,
+        0.204245887696743,
+        0.24768169224262238
+      ],
+      "cutoff": 0.6499999761581421,
+      "fixture_item_id": 0,
+      "fixture_count": 0,
+      "harvestable": false,
+      "resource_contract": {
+        "type": "10",
+        "durability": "255",
+        "production": "1006,50,1583,100;;",
+        "fixed_num": "3",
+        "self_num": "0",
+        "gather_skill": "10007"
+      },
+      "source_mesh_guid": "d3e592e6c701bfe418b6f3a85116de7c",
+      "source_mesh_path_id": 4300000,
+      "installed_game_object": 18566,
+      "installed_mesh": 6897,
+      "installed_file": "resources.assets",
+      "installed_mesh_sha256": "48b7e4e35e45ffa8784aa334c0f7147a30fb901c08bdda3286e2f0f62365168d",
+      "installed_material_sha256": "4362d72a13e08c57eb24dd8ef68085bbbd46659e0ea3ab904c6999e359ca13bb",
+      "installed_texture_sha256": "b27e11db5e985917b3a637e62c0bdde18386ff50083ab29cc8efd899c8ec03d2",
+      "installed_shader_sha256": "76e8edb160964b39a31faececde24f177cd9a075e2d3aa6c6350263dc00292ce",
+      "obj_sha256": "b0585d879e8bf6d0b7d073b323e9dfb692b48fc1487b1e4e14e00afee8575e21",
+      "mtl_sha256": "c7e990ab5c185b8b4d1305dc444f623874002ff4410e47b8162c65ff9e14441c",
+      "two_sided": true,
+      "resource": {
+        "ID": "1146",
+        "name": "\u666e\u901a\u690d\u7269",
+        "level": "0",
+        "illustration": "0",
+        "type": "10",
+        "durability": "255",
+        "production": "1006,50,1583,100;;",
+        "fixed_num": "3",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      }
+    }
+  ],
+  "action_relation": {
+    "ActionType": "32",
+    "Name": "Gather",
+    "PauseAction": "40",
+    "EndAction": "4,12,13,15,28,47,58",
+    "EndImmediately": "1,2,3,14,30,31,42,45,49,50,60,61",
+    "Ground": "0",
+    "InAir": "0",
+    "InWater": "0",
+    "Rotate": "2",
+    "Sprint": "0",
+    "Jump": "0",
+    "Repulsed": "2",
+    "Wentfly": "2",
+    "Knocked": "2",
+    "Death": "2",
+    "GetUp": "2",
+    "Revive": "2",
+    "Step": "2",
+    "HoldEquip": "0",
+    "SwordAttack": "2",
+    "HoldShield": "0",
+    "Halt": "2",
+    "Fall": "2",
+    "GunHold": "0",
+    "GunReload": "2",
+    "GunShoot": "2",
+    "BowHold": "0",
+    "BowShoot": "2",
+    "BowReload": "2",
+    "Sleep": "2",
+    "Eat": "2",
+    "HoldAimEquip": "0",
+    "Dig": "2",
+    "Fell": "2",
+    "Gather": "0",
+    "PickUpItem": "2",
+    "GetOnVehicle": "0",
+    "JetPack": "0",
+    "Parachute": "0",
+    "Glider": "2",
+    "Climb": "0",
+    "Build": "2",
+    "HoldFlashlight": "0",
+    "Stuned": "2",
+    "Pump": "2",
+    "Sit": "2",
+    "Operation": "2",
+    "Draw": "2",
+    "Throw": "2",
+    "Lie": "2",
+    "GetOnTrain": "2",
+    "Cutscene": "2",
+    "Whacked": "2",
+    "Cure": "2",
+    "HeavyEquipment": "0",
+    "DrillingDig": "2",
+    "Hand": "2",
+    "Leisure": "0",
+    "RopeGunShoot": "2",
+    "Abnormal": "2",
+    "Ride": "2"
+  },
+  "source_gather": {
+    "requested_range": 3,
+    "effective_horizontal_range": 2,
+    "range_inclusive": true,
+    "scan_floor_cell_radius": 2,
+    "source_skill": 20110003,
+    "type": 10
+  },
+  "adapters": [
+    "Fixed manually selected fixtures, no random world generation.",
+    "Primary-only deterministic fixture harvest:15 gives238x2,37 gives235x3,40 gives239x4. Source70% alternatives and optional seed drops are omitted.",
+    "146 is decorative only although original resource1146 is gatherable.",
+    "Unit native instance transform, immediate native gathering; no full source animation/skill/timing claim."
+  ]
+}
