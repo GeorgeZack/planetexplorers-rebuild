@@ -20,7 +20,9 @@ def fixture():
     clip=dict(m_Name='Attack6',m_Legacy=False,m_Compressed=False,m_PositionCurves=[],
               m_RotationCurves=[],m_CompressedRotationCurves=[],m_ScaleCurves=[],m_PPtrCurves=[],
               m_ClipBindingConstant=dict(genericBindings=bindings),
-              m_MuscleClip=dict(**tool.FLAGS,m_StartTime=0,m_StopTime=1,m_CycleOffset=0,
+              m_MuscleClip=dict(**tool.FLAGS,m_IndexArray=[-1]*7+list(range(127))+[-1]*21,m_StartX=dict(
+                  t=dict(x=10,y=1,z=-20,w=0),q=dict(x=0,y=0,z=0,w=1),
+                  s=dict(x=1,y=1,z=1,w=1)),m_StartTime=0,m_StopTime=1,m_CycleOffset=0,
                                m_OrientationOffsetY=0,m_Level=0,m_Clip=dict(data=dict(
                 m_StreamedClip=dict(curveCount=0),m_DenseClip=dict(m_FrameCount=31,m_CurveCount=127,
                 m_SampleRate=30,m_BeginTime=0,m_SampleArray=samples),m_ConstantClip=dict(data=[])))))
@@ -58,6 +60,21 @@ class RootTests(unittest.TestCase):
         self.assertEqual(tool.candidate(tool.decode(c,a),1),[.5,0,1])
         c['m_ClipBindingConstant']['genericBindings'][-1]['path']=0
         with self.assertRaises(ValueError):tool.decode(c,a)
+    def test_native_index_table_is_authoritative(self):
+        for index,value in [(0,0),(7,1),(8,-1),(133,125)]:
+            c,a=fixture();c['m_MuscleClip']['m_IndexArray'][index]=value
+            with self.assertRaises(ValueError):tool.decode(c,a)
+    def test_start_transform_predicate(self):
+        for key,axis,value in [('s','x',2),('q','w',2),('t','x',float('nan')),('t','w',1)]:
+            c,a=fixture();c['m_MuscleClip']['m_StartX'][key][axis]=value
+            with self.assertRaises(ValueError):tool.decode(c,a)
+    def test_nonidentity_start_basis_and_common_translation_cancel(self):
+        for angle in [-3,-2,-1,0,1,2,3]:
+            q=[0,math.sin(angle/2),0,math.cos(angle/2)]
+            for offset in [[0,0,0],[50,-3,20],[-10,500,-2]]:
+                self.assertEqual(tool.algebraic_basis_delta(q,[10,1,-20],[9,8,-18],offset),[-1,0,2])
+        for bad in [[1,0,0,0],[0,0,0,0],[0,float('nan'),0,1]]:
+            with self.assertRaises(ValueError):tool.algebraic_basis_delta(bad,[0]*3,[0]*3,[0]*3)
     def test_bad_scale_and_clock_rejected(self):
         for scale in [0,-1,float('nan'),float('inf'),11]:
             c,a=fixture();a['m_Avatar']['m_Human']['data']['m_Scale']=scale

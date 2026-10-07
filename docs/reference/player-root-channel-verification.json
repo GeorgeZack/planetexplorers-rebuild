@@ -4,7 +4,7 @@
   "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
   "capture": "/home/admin/.local/share/planet-explorers-strafe-reference/pose-captures/female-running-root-06.jsonl",
   "capture_sha256": "b6ccd0199470a14b10182943d18db566409a03d27029a65bea657a06e63a43b4",
-  "verifier_sha256": "87aed14bf24c3fda2c8c9f661f1bd45e0fc66a34126c89aeebd1fc99e69aa841",
+  "verifier_sha256": "16d92eb37249cb6c799085d2c61bc6b3bb6c169a3c33140f897cb014abacedf5",
   "dependency_sha256": {
     "export_reference_player.py": "9c45c9b34067807b99a402d636ab0a9300d61deb09d16ea27e7c7563c6c0212b",
     "analyze_reference_root_motion.py": "1892bedfe7d76c3031936fa70a6fa4813f6f5472072d79241ab076568defc80f"
@@ -12,6 +12,11 @@
   "native": {
     "elf_sha256": "1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6",
     "ranges": [
+      {
+        "begin": "0xb998c6",
+        "end_exclusive": "0xb998da",
+        "sha256": "b640a49ba84f41786d2738385d7dced896f031df05cf8d9ff7eedab75ef903b1"
+      },
       {
         "begin": "0xb99b53",
         "end_exclusive": "0xb99be5",
@@ -21,6 +26,76 @@
         "begin": "0xc1ffd0",
         "end_exclusive": "0xc200da",
         "sha256": "b2988f0131ebc6c000b751773100c18e8d545ed12436c6e7ca98e30b42197c72"
+      },
+      {
+        "begin": "0xc227e0",
+        "end_exclusive": "0xc228bd",
+        "sha256": "b199021da94e8141f3d21dc6007b89e7e3d6ca262f18b526bcce1357cae473fd"
+      },
+      {
+        "begin": "0xc237f3",
+        "end_exclusive": "0xc23801",
+        "sha256": "d641a75254700e2743843b18ff8c36c20304bed2ad43d0dd809bd3878b2ed748"
+      },
+      {
+        "begin": "0xc25678",
+        "end_exclusive": "0xc256a4",
+        "sha256": "26f480ce545dfe62f952067233e3e5aac935e54ef3ed290b123ef79aa693ff3c"
+      },
+      {
+        "begin": "0xc27310",
+        "end_exclusive": "0xc27387",
+        "sha256": "7eea1cfc17bb7ad571c71cbe9d24ee1171e172d29f46bfcbac4cdc4199d7ef6f"
+      },
+      {
+        "begin": "0xc25378",
+        "end_exclusive": "0xc254c8",
+        "sha256": "d239ba95d623e32571f33d67103a96dbdefeb06601ff492623bcad025bf66f19"
+      },
+      {
+        "begin": "0xc24f1d",
+        "end_exclusive": "0xc25064",
+        "sha256": "f5c7b40397cf3b55896a4c6110495309d671ec7e1081ad704d163d0a97c58ea5"
+      },
+      {
+        "begin": "0xc27260",
+        "end_exclusive": "0xc272f5",
+        "sha256": "a8685fe8aa521ae7659a0f5a779dd7e849a290cd02a70534cc5a84273996fb64"
+      },
+      {
+        "begin": "0xc24c18",
+        "end_exclusive": "0xc24d2d",
+        "sha256": "b16fdc66efc4174e8da2a39c25c84abb4a0b61e32a8739470dc458090048eeee"
+      },
+      {
+        "begin": "0xc24b3b",
+        "end_exclusive": "0xc24c14",
+        "sha256": "4130a60f5753adf73355577918e1e3886b455d18a0fe853a17525dc22bf2eb9d"
+      },
+      {
+        "begin": "0xc1f830",
+        "end_exclusive": "0xc1f843",
+        "sha256": "5e324c53aa3852fad751d8c7f1320c9e85a559704d0b2e081bbee8197e87a065"
+      },
+      {
+        "begin": "0xbc6e05",
+        "end_exclusive": "0xbc7000",
+        "sha256": "fa5792740c2bb75f588e25f13670a12b7a181fc867eef8208350638c2e0a249c"
+      },
+      {
+        "begin": "0xbc7c70",
+        "end_exclusive": "0xbc7c8c",
+        "sha256": "e4ec046b347f70b3fa20a3ea4ffea29bd6962b00fb00730f5efb63eeceea230c"
+      },
+      {
+        "begin": "0xc51ec0",
+        "end_exclusive": "0xc51ef5",
+        "sha256": "625196c309d593a0364bd33cf418264acc8042092b3d1e204cace66028e9a957"
+      },
+      {
+        "begin": "0xbc4920",
+        "end_exclusive": "0xbc4939",
+        "sha256": "ff1961e0c0b6bfdb066e4430f5a9c429fb585f38dcadca584ecedb29cfd0c0dd"
       },
       {
         "begin": "0xc251d3",
@@ -81,8 +156,9 @@
         "index_offset": "0x51c"
       }
     ],
-    "evidence": "c1ffd0 samples RootT attributes7\u20139 through c2c470 and packs translation. Named serialized flags; humanoid branch copies baseline root quaternion and Y, preserves XZ. Animator humanScale resolves Human+0x1c0; c04492 loads this value and c044be multiplies a translation vector before c01b60 transform composition.",
-    "remaining_static_link": "Final root-delta composition call-chain and transform basis have not been independently replayed; numerical comparison below covers the actual408 identity-clone case."
+    "evidence": "Previous RootT is sampled at c22887 and current RootT read at c27310. The no-Motion path cancels StartX yaw under KeepOriginalOrientation, bakes orientation/Y, retains XZ, and c24ccb subtracts previous from current. c24b7b divides displacement by its interval; c1f830 reconstructs displacement. bc6e10..bc6e48 applies Human+0x1c0 and actor scale; bc6eef..bc6fff applies actor basis once and stores Animator+0x1c0..0x1c8. Registered deltaPosition getter c51ec0/bc4920 returns those fields.",
+    "bounded_scope": "One unblended, unmirrored humanoid clip, no Motion0\u20136, exact listed importer flags, unit clip/actor scales, nonloop playback. Controller layer aggregation, transitions, matching/warping and motor/collision are outside this proof.",
+    "remaining_static_link": null
   },
   "avatar_id": 777,
   "human_scale": 0.9932681322097778,
@@ -106,6 +182,35 @@
         "m_HeightFromFeet": false,
         "m_Mirror": false
       },
+      "start_transform": {
+        "t": {
+          "x": -0.0015275173354893923,
+          "y": 0.9758543372154236,
+          "z": -0.002078097313642502,
+          "w": 0.0
+        },
+        "q": {
+          "x": 0.005554394796490669,
+          "y": 0.3343982994556427,
+          "z": 0.008569151163101196,
+          "w": 0.9423766136169434
+        },
+        "s": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0,
+          "w": 1.0
+        }
+      },
+      "root_scalar_indices": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
       "end_action": 0.7091259360313416,
       "candidate_at_action_end": [
         0.08295589042266092,
@@ -167,6 +272,35 @@
         "m_HeightFromFeet": false,
         "m_Mirror": false
       },
+      "start_transform": {
+        "t": {
+          "x": 0.05242903158068657,
+          "y": 0.6570944786071777,
+          "z": 0.005613480694591999,
+          "w": 0.0
+        },
+        "q": {
+          "x": 0.3664923906326294,
+          "y": -0.7737299203872681,
+          "z": 0.11864659190177917,
+          "w": 0.5029397010803223
+        },
+        "s": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0,
+          "w": 1.0
+        }
+      },
+      "root_scalar_indices": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
       "end_action": 0.8369432091712952,
       "candidate_at_action_end": [
         0.3941421071266965,
@@ -228,6 +362,35 @@
         "m_HeightFromFeet": false,
         "m_Mirror": false
       },
+      "start_transform": {
+        "t": {
+          "x": 0.45229044556617737,
+          "y": 0.5968271493911743,
+          "z": -0.10645730793476105,
+          "w": 0.0
+        },
+        "q": {
+          "x": 0.2547658383846283,
+          "y": 0.8271548748016357,
+          "z": -0.30975207686424255,
+          "w": 0.39365315437316895
+        },
+        "s": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0,
+          "w": 1.0
+        }
+      },
+      "root_scalar_indices": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
       "end_action": 0.8732097148895264,
       "candidate_at_action_end": [
         -0.32515847891865757,
@@ -289,6 +452,35 @@
         "m_HeightFromFeet": false,
         "m_Mirror": false
       },
+      "start_transform": {
+        "t": {
+          "x": 0.30753815174102783,
+          "y": 0.6689687967300415,
+          "z": -0.11949077993631363,
+          "w": 0.0
+        },
+        "q": {
+          "x": 0.023518770933151245,
+          "y": -0.7541073560714722,
+          "z": 0.3222188353538513,
+          "w": 0.5717902779579163
+        },
+        "s": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0,
+          "w": 1.0
+        }
+      },
+      "root_scalar_indices": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
       "end_action": 0.5349509716033936,
       "candidate_at_action_end": [
         -0.21671629453103838,
@@ -350,6 +542,35 @@
         "m_HeightFromFeet": false,
         "m_Mirror": false
       },
+      "start_transform": {
+        "t": {
+          "x": 0.018185941502451897,
+          "y": 0.9191113710403442,
+          "z": 0.12807120382785797,
+          "w": 0.0
+        },
+        "q": {
+          "x": -0.2530253231525421,
+          "y": -0.054037172347307205,
+          "z": 0.036600951105356216,
+          "w": -0.9652557373046875
+        },
+        "s": {
+          "x": 1.0,
+          "y": 1.0,
+          "z": 1.0,
+          "w": 1.0
+        }
+      },
+      "root_scalar_indices": [
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
       "end_action": 1.1680725812911987,
       "candidate_at_action_end": [
         -0.09822579702071275,
@@ -457,11 +678,682 @@
       ]
     }
   ],
+  "isolated_arithmetic": {
+    "scope": "Call-free arithmetic only: source projection/product/normalize/rotate; no Animator or ELF initialization",
+    "routines": [
+      {
+        "name": "project",
+        "start": "0xc1dc20",
+        "end_exclusive": "0xc1dd5b",
+        "sha256": "e9844006478388791e5665aa43b0aed9da571a63cf6f3c553e4f5b3b68af7f10",
+        "relocations": [
+          {
+            "instruction": "0xc1dc26",
+            "constant": "0x16fee10",
+            "sha256": "5f3c8b9a8f3315d236ae24bb97e22326b2397050eb8bc8078e924c8795e406a0"
+          },
+          {
+            "instruction": "0xc1dc38",
+            "constant": "0x1684c60",
+            "sha256": "6855960ee428276148fc8745625c44bde7ae835a9e2fa181cc917af9bcad0d6a"
+          },
+          {
+            "instruction": "0xc1dc44",
+            "constant": "0x16fee00",
+            "sha256": "e6f5977890faecbaaeae2be9a6d83aabe8eb65ee982895f61c751ab0e1c7321c"
+          },
+          {
+            "instruction": "0xc1dc5e",
+            "constant": "0x1684c60",
+            "sha256": "6855960ee428276148fc8745625c44bde7ae835a9e2fa181cc917af9bcad0d6a"
+          },
+          {
+            "instruction": "0xc1dca9",
+            "constant": "0x168c140",
+            "sha256": "34885ea2ef8490886fae553c8ce7ffb5a27563825e5f6ce02784875d1ace0e47"
+          },
+          {
+            "instruction": "0xc1dcfa",
+            "constant": "0x16fb440",
+            "sha256": "b6f8b05a7f43e714b2ab52ae201371c4caf2b2ea35f21eb1a699e739f0966075"
+          },
+          {
+            "instruction": "0xc1dd07",
+            "constant": "0x16fc6c0",
+            "sha256": "08f6f382bedc5e88c89eb7f2d592ee77ab0cb22638ca6a3b22b753bf476a2a0e"
+          },
+          {
+            "instruction": "0xc1dd13",
+            "constant": "0x16fee20",
+            "sha256": "f184e6bb505882a540c51366151356f09989c1fff462b226c219e3932e91cb4d"
+          },
+          {
+            "instruction": "0xc1dd33",
+            "constant": "0x16fb430",
+            "sha256": "6e61409fbe1daa29609667028dfcedcbe5a0f391de561d8a6ea03143d27e4753"
+          },
+          {
+            "instruction": "0xc1dd3a",
+            "constant": "0x16d1b50",
+            "sha256": "369e786dd8667d126b8eecc3feb9037096f2ad846fef5dcb8459410470c695e9"
+          },
+          {
+            "instruction": "0xc1dd47",
+            "constant": "0x16fb450",
+            "sha256": "1dc5c8e021c663cd8f7ecf1fb0c6d4112bc8d7f3c9e0095cd26bd7af7b8d7f13"
+          }
+        ],
+        "prefix_inherited_constant": null
+      },
+      {
+        "name": "product",
+        "start": "0xc1a7a0",
+        "end_exclusive": "0xc1a7fb",
+        "sha256": "7c265d53c22ecd068b3ebd7d8c608ed830bb9d45d5d2af007abf0a26da007a11",
+        "relocations": [
+          {
+            "instruction": "0xc1a7eb",
+            "constant": "0x16fc6c0",
+            "sha256": "08f6f382bedc5e88c89eb7f2d592ee77ab0cb22638ca6a3b22b753bf476a2a0e"
+          }
+        ],
+        "prefix_inherited_constant": null
+      },
+      {
+        "name": "rotate",
+        "start": "0xc1a740",
+        "end_exclusive": "0xc1a798",
+        "sha256": "21121d58f758313ff8064c22b89d84f5bd61980ed155b9464cff9881f4274660",
+        "relocations": [
+          {
+            "instruction": "0xc1a75d",
+            "constant": "0x1684c10",
+            "sha256": "d0737abfd3abdacfeb15d559e28c2f0b3662a7aa03ac5b7a58afc422110db75a"
+          }
+        ],
+        "prefix_inherited_constant": null
+      },
+      {
+        "name": "normalize",
+        "start": "0xc1dd1a",
+        "end_exclusive": "0xc1dd5b",
+        "sha256": "15287b44629fb62d09fce3e44951560a875da577352040042f1878a5f2529767",
+        "relocations": [
+          {
+            "instruction": "0xc1dd33",
+            "constant": "0x16fb430",
+            "sha256": "6e61409fbe1daa29609667028dfcedcbe5a0f391de561d8a6ea03143d27e4753"
+          },
+          {
+            "instruction": "0xc1dd3a",
+            "constant": "0x16d1b50",
+            "sha256": "369e786dd8667d126b8eecc3feb9037096f2ad846fef5dcb8459410470c695e9"
+          },
+          {
+            "instruction": "0xc1dd47",
+            "constant": "0x16fb450",
+            "sha256": "1dc5c8e021c663cd8f7ecf1fb0c6d4112bc8d7f3c9e0095cd26bd7af7b8d7f13"
+          }
+        ],
+        "prefix_inherited_constant": {
+          "address": "0x16fb440",
+          "sha256": "b6f8b05a7f43e714b2ab52ae201371c4caf2b2ea35f21eb1a699e739f0966075"
+        }
+      }
+    ],
+    "operand_order_check": {
+      "product": [
+        -0.0,
+        -0.0,
+        1.0,
+        0.0
+      ],
+      "rotation": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.3499999940395355,
+          0.0,
+          1.399999976158142,
+          0.0
+        ]
+      ],
+      "normalization": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ]
+    },
+    "cases": [
+      {
+        "start_q": [
+          0.005554394796490669,
+          0.3343982994556427,
+          0.008569151163101196,
+          0.9423766136169434
+        ],
+        "projected_q": [
+          0.0,
+          0.3344157636165619,
+          0.0,
+          0.9424257874488831
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0.3664923906326294,
+          -0.7737299203872681,
+          0.11864659190177917,
+          0.5029397010803223
+        ],
+        "projected_q": [
+          -0.0,
+          -0.8384361267089844,
+          -0.0,
+          0.5450000762939453
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -2.9802318834981634e-08,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 8.940696716308594e-08,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            -5.960463766996327e-08,
+            0.0
+          ],
+          [
+            5.960463766996327e-08,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.34999990463256836,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0.2547658383846283,
+          0.8271548748016357,
+          -0.30975207686424255,
+          0.39365315437316895
+        ],
+        "projected_q": [
+          0.0,
+          0.9029580950737,
+          -0.0,
+          0.42972883582115173
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0.023518770933151245,
+          -0.7541073560714722,
+          0.3222188353538513,
+          0.5717902779579163
+        ],
+        "projected_q": [
+          -0.0,
+          -0.7968394756317139,
+          -0.0,
+          0.6041911840438843
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          -0.2530253231525421,
+          -0.054037172347307205,
+          0.036600951105356216,
+          -0.9652557373046875
+        ],
+        "projected_q": [
+          -0.0,
+          -0.05589471384882927,
+          0.0,
+          -0.9984366297721863
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          -0.9974949866040544,
+          0,
+          0.0707372016677029
+        ],
+        "projected_q": [
+          -0.0,
+          -0.9974949955940247,
+          -0.0,
+          0.07073719799518585
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          -0.8414709848078965,
+          0,
+          0.5403023058681398
+        ],
+        "projected_q": [
+          -0.0,
+          -0.8414710164070129,
+          -0.0,
+          0.5403023362159729
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          -0.479425538604203,
+          0,
+          0.8775825618903728
+        ],
+        "projected_q": [
+          -0.0,
+          -0.4794255495071411,
+          -0.0,
+          0.8775825500488281
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          0.0,
+          0,
+          1.0
+        ],
+        "projected_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          0.479425538604203,
+          0,
+          0.8775825618903728
+        ],
+        "projected_q": [
+          -0.0,
+          0.4794255495071411,
+          -0.0,
+          0.8775825500488281
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          0.8414709848078965,
+          0,
+          0.5403023058681398
+        ],
+        "projected_q": [
+          -0.0,
+          0.8414710164070129,
+          -0.0,
+          0.5403023362159729
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      },
+      {
+        "start_q": [
+          0,
+          0.9974949866040544,
+          0,
+          0.0707372016677029
+        ],
+        "projected_q": [
+          -0.0,
+          0.9974949955940247,
+          -0.0,
+          0.07073719799518585
+        ],
+        "baked_basis_q": [
+          -0.0,
+          -0.0,
+          -0.0,
+          1.0
+        ],
+        "maximum_planar_vector_error": 0.0,
+        "rotated_vectors": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ]
+      }
+    ],
+    "source_case_clip_ids": [
+      231,
+      240,
+      247,
+      254,
+      408
+    ],
+    "synthetic_case_yaw_radians": [
+      -3,
+      -2,
+      -1,
+      0,
+      1,
+      2,
+      3
+    ],
+    "maximum_measured_basis_residual_m": 8.940696716308594e-08,
+    "interpretation": "Real-algebra cancellation is established by the static branch chain; float normalization/product can leave a measured residual, reported without a tunable tolerance. The source-channel formula is not asserted bit-identical to those operations."
+  },
   "running_oracle_qualified": true,
   "ordinary_clips_observed_sequentially": false,
+  "ordinary_source_extraction_qualified": true,
   "ordinary_runtime_motion_qualified": false,
   "formula": "(linearly_sampled_RootT.xz(t)-RootT.xz(0))*Avatar.Human.m_Scale; Y=0",
-  "scope": "All four ordinary clips pass the exact bounded source-data predicate. Transfer of408 numerical agreement to them remains explicitly inferred until the complete extraction path is proven; this report creates no runtime asset.",
+  "scope": "All four ordinary clips pass the exact bounded source-data predicate and static unblended source-to-delta chain. Starting-basis cancellation is independently replayed with call-free native arithmetic. This qualifies source extraction, not observed ordinary playback or runtime integration, and creates no runtime asset.",
   "limitations": [
     "No layer/state-transition/root blend or source motor/collision evaluation.",
     "Double-precision dense interpolation is diagnostic, not bit-identical Unity arithmetic.",

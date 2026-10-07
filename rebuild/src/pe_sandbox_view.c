@@ -10,6 +10,7 @@
 #include "pe_sandbox_melee.h"
 #include "pe_sword_variant.h"
 #include "pe_running_attack_motion.h"
+#include "pe_sword_root_motion.h"
 #include "pe_hunt_combat.h"
 #include "pe_actor_view.h"
 #include "pe_sandbox_camera.h"
@@ -348,6 +349,18 @@ static bool sandbox_hunt_runs(const PeSandboxUI *ui,PeSandboxUIResult action){
     /* The get-up modal owns player input, not the other actors' clocks. */
     return !action.consume_world||ui->revival_open;
 }
+static bool sandbox_melee_motion(const PeRootMotion *running,const PeSwordRootMotion *ordinary,
+    const PeCombatInterval *interval,PeVec3 velocity,double yaw,double dt,PeVec3 *request){
+    if(!interval||!interval->valid||!request||!isfinite(interval->from)||!isfinite(interval->to)||
+       interval->from<0||interval->from>interval->to||!isfinite(dt)||dt<=0||!isfinite(yaw)||
+       !isfinite(velocity.x)||!isfinite(velocity.y)||!isfinite(velocity.z)||
+       !pe_combat_variant_clip(interval->gender,interval->view,interval->variant,interval->stage))return false;
+    if(interval->variant==PE_COMBAT_RUNNING&&interval->stage==0)
+        return pe_running_attack_motion_request(running,interval,velocity,yaw,dt,request);
+    if(ordinary)return pe_sword_root_motion_request(ordinary,interval,velocity,yaw,dt,request);
+    /* Earlier asset groups retain their explicit stationary zero-root adapter. */
+    *request=(PeVec3){0};return true;
+}
 static void sandbox_health_contacts(PeGame *game,uint64_t previous_hits,uint64_t committed_hits){
     if(game&&committed_hits!=previous_hits&&game->mode==PE_GAME_ADVENTURE)
         pe_passive_recovery_hurt(&game->passive_recovery,game->hp);
@@ -428,8 +441,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     Vector2 right_press_pointer={0};
     bool tool_drawn=false;uint32_t tool_instance=0;uint64_t tool_edits=0;
     bool placing_torch=false,attack_pending=false;
-    PeRootMotion *running_motion=NULL;
-    PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0;
+    PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;
+    PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0;
     bool captured=false,walk=false,autorun=false,jump_pending=false,third_person=true,build_mode=false;
     if(!terrain||!collision||!pe_terrain_material_view_load(&surface,assets,error,sizeof error)||
        !update_terrain(&game->world,terrain,&triangles,&surface)||
@@ -483,6 +496,33 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 setup.running_motion_ready=true;
                 if(!pe_sandbox_melee_init(&blade_templates[k],&setup)){
                     snprintf(error,sizeof error,"Running blade source clocks unavailable");result=1;goto cleanup;
+                }
+            }
+            melee=blade_templates[0];
+        }
+    }
+    {char path[4096];
+        int n=snprintf(path,sizeof path,"%s/player-sword-motion/sword-root.pesr",assets);
+        if(n<0||(size_t)n>=sizeof path){snprintf(error,sizeof error,"Ordinary motion path too long");result=1;goto cleanup;}
+        if(FileExists(path)){
+            ordinary_motion=pe_sword_root_motion_load(path,error,sizeof error);
+            if(!ordinary_motion){result=1;goto cleanup;}
+            for(unsigned k=0;k<2;k++)if(blade_templates[k].ready){
+                PeSandboxMeleeSetup setup=blade_templates[k].setup;
+                static const char *names[]={"Attack6","Attack7","Attack8","Attack9"};
+                for(unsigned stage=0;stage<4;stage++){
+                    const PeCombatClip *source=pe_combat_clip(setup.gender,PE_COMBAT_THIRD_PERSON,stage);
+                    const PeActorClip *body=pe_actor_clip(setup.body,pe_actor_find_clip(setup.body,names[stage]));
+                    const PeActorClip *defence=pe_actor_clip(player_defence,pe_actor_find_clip(player_defence,names[stage]));
+                    if(!source||!body||!defence||body->duration!=pe_sword_root_motion_duration(ordinary_motion,(uint32_t)source->path_id)||
+                       body->duration!=defence->duration||body->fps!=defence->fps||body->frames!=defence->frames||
+                       body->loop||defence->loop||body->terminal_at_duration!=defence->terminal_at_duration){
+                        snprintf(error,sizeof error,"Ordinary blade motion requires matching source body/blade/defence clocks");result=1;goto cleanup;
+                    }
+                }
+                setup.ordinary_motion_ready=true;
+                if(!pe_sandbox_melee_init(&blade_templates[k],&setup)){
+                    snprintf(error,sizeof error,"Ordinary blade source clocks unavailable");result=1;goto cleanup;
                 }
             }
             melee=blade_templates[0];
@@ -830,9 +870,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 .movement_present=true,.in_air=!game->grounded,.motor_present=true},&attack_branch);
             bool running_press=!melee.action.active&&melee.setup.running_motion_ready&&branch_valid&&attack_branch==PE_SWORD_VARIANT_RUNNING;
             bool running_active=melee.action.active&&melee.action.variant==PE_COMBAT_RUNNING;
+            bool ordinary_press=!melee.action.active&&melee.setup.ordinary_motion_ready&&branch_valid&&attack_branch==PE_SWORD_VARIANT_ORDINARY;
+            bool ordinary_active=melee.action.active&&melee.setup.ordinary_motion_ready&&melee.action.variant==PE_COMBAT_STATIONARY;
             if((attack_pending||melee.action.active)&&(!game->grounded||jump_pending||
-               (!running_active&&!running_press&&(fabsf(input.move_x)+fabsf(input.move_z)>.001f||hypotf(game->velocity.x,game->velocity.z)>.05f)))){
-                if(attack_pending&&!melee.action.active)snprintf(game->message,sizeof game->message,"Use the knife standing still or running on the ground; sprint and airborne attacks are unavailable.");
+               (!running_active&&!running_press&&!ordinary_press&&!ordinary_active&&(fabsf(input.move_x)+fabsf(input.move_z)>.001f||hypotf(game->velocity.x,game->velocity.z)>.05f)))){
+                if(attack_pending&&!melee.action.active)snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
                 attack_pending=false;pe_sandbox_melee_cancel(&melee);
             }
             accumulator+=smoke_frames?PE_FIXED_DT:dt;int steps=0;bool hunt_fixed_pose=false;
@@ -850,8 +892,12 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     .scaled_time=(float)sandbox_attribute_clock.seconds};
                 if(attack_pending&&melee.ready){
                     if(melee.action.active)pe_sandbox_melee_queue(&melee,melee_gate);
-                    else if(pe_sandbox_melee_begin(&melee,melee_gate,&game->stamina)){pe_sandbox_actor_face_camera(actor,game);melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;}
-                    else snprintf(game->message,sizeof game->message,"Use the knife standing still or running on the ground in third person; sprint and airborne attacks are unavailable.");
+                    else if(pe_sandbox_melee_begin(&melee,melee_gate,&game->stamina)){
+                        pe_sandbox_actor_face_camera(actor,game);melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;
+                        walking_starts+=melee.action.variant==PE_COMBAT_STATIONARY&&melee.setup.ordinary_motion_ready&&
+                            (melee_gate.move_requested||hypotf(melee_gate.velocity.x,melee_gate.velocity.z)>.05f);
+                    }
+                    else snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
                 }
                 attack_pending=false;
                 bool melee_stamina_lock=melee.ready&&melee.action.active;
@@ -862,10 +908,10 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 }
                 bool action_motion=attack_interval.valid;
                 PeVec3 motion_request={0};
-                if(action_motion&&attack_interval.variant==PE_COMBAT_RUNNING&&attack_interval.stage==0&&
-                   !pe_running_attack_motion_request(running_motion,&attack_interval,game->velocity,
+                if(action_motion&&
+                   !sandbox_melee_motion(running_motion,ordinary_motion,&attack_interval,game->velocity,
                       pe_sandbox_actor_yaw(actor,game),PE_SANDBOX_MELEE_DT,&motion_request)){
-                    snprintf(error,sizeof error,"Invalid qualified running knife motion");result=1;break;
+                    snprintf(error,sizeof error,"Invalid qualified blade motion");result=1;break;
                 }
                 PeSandboxActionInput use={.enabled=world_input&&!build_mode&&third_person&&timed_tool&&
                     game->grounded&&!jump_pending&&fabsf(input.move_x)+fabsf(input.move_z)<.001f&&
@@ -1082,8 +1128,9 @@ cleanup:
     printf("Sandbox knife: %llu swing stages; hunt contacts %llu outgoing, %llu incoming; kills %u/4\n",(unsigned long long)melee_swings,
         (unsigned long long)hunt.hare_hits,(unsigned long long)hunt.player_hits,game->hunt_kills);
     printf("Sandbox running knife: %llu starts; qualified motion %s\n",(unsigned long long)running_starts,running_motion?"available":"unavailable");
+    printf("Sandbox walking blade: %llu starts; source motion %s\n",(unsigned long long)walking_starts,ordinary_motion?"available":"unavailable");
     pe_hitboxes_free(hare_boxes);pe_hitboxes_free(player_boxes);pe_actor_free(player_defence);pe_actor_view_unload(&hunt_view);
-    pe_hitboxes_free(knife_capsule);pe_hitboxes_free(sword_capsule);pe_root_motion_free(running_motion);
+    pe_hitboxes_free(knife_capsule);pe_hitboxes_free(sword_capsule);pe_root_motion_free(running_motion);pe_sword_root_motion_free(ordinary_motion);
     pe_deployable_view_unload(&deploy_view);
     pe_reference_unload(&settlement);
     pe_sandbox_world_view_unload(world_view);pe_sandbox_actor_unload(actor);pe_sandbox_ui_unload(&ui);

@@ -1,5 +1,11 @@
 # Sandbox alignment: implementation work order and live reference
 
+## Current walking-attack checkpoint
+
+[Grounded walking Knife attacks](SANDBOX_WALKING_KNIFE.md) now use source-derived Attack6–9 roots, recovered entirely offline from the pinned native arithmetic and serialized clips. Admission through speed4.5 permits held movement; action root motion owns the collision sweep, and running continuations use their retained outgoing ordinary intervals. The qualified group is installed locally. Focused optimized/sanitizer checks pass, including actual host dispatch and recovered-asset contact/movement tests. No new graphical or ordinary hunt test was performed. This supersedes earlier stationary-only/zero-root statements below, while preserving their historical evidence.
+
+Immediate physical checks remain walk→attack/combo/collision presentation, Revival Shot acceptance, four earned hunt kills and partial-progress reload. Further source work can proceed independently; see [source-first review](SOURCE_FIRST_REVIEW.md).
+
 The [sword policy increment](SWORD_MOTION_POLICY.md) centralizes source branch selection and horizontal movement requests, fixes a verified float-boundary classification and passes focused source/asset integration checks. Slow-walking attacks still await ordinary root-motion extraction; no game was launched.
 
 The subsequent [Revival Shot increment](SANDBOX_REVIVAL.md) implements item937's dedicated Adventure death flow, keeps the hunt cohort/progress and adds source recovery remount/contact grace. PECSv16 remains unchanged. Upright presentation is an explicit adapter; no new graphical/native hunt acceptance is claimed.

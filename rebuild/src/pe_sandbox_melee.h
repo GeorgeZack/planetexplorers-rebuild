@@ -17,6 +17,9 @@ typedef struct {
     /* Explicit host qualification of immutable female408 root data; default
      * false keeps running disabled. Does not load or own a motion curve. */
     bool running_motion_ready;
+    /* Complete qualified female ordinary source-root group, not a zero-root
+     * fallback. Host owns the four immutable curves and their motion sweep. */
+    bool ordinary_motion_ready;
     /* Source-qualified entity collider-bounds center. The general helper keeps
      * instantaneous compatibility unless the caller opts into this contract. */
     bool history_enabled;
@@ -68,9 +71,9 @@ bool pe_sandbox_melee_init(PeSandboxMelee *host,const PeSandboxMeleeSetup *setup
 /* Stationary grounded third-person Knife33 or Wood Sword1: horizontal speed<=.05,
  * no requested movement. Binds the action to exact equipped/drawn instance.
  * Opted-in running uses actual full velocity magnitude >4.5 and <=7. Speed7
- * still runs; >7 is unsupported sprint. Other moving stationary starts remain
- * unsupported. Running eligibility is selected once; its own changing speed
- * and held movement do not reclassify/cancel the admitted skill.
+ * still runs; >7 is unsupported sprint. Opted-in ordinary source motion admits
+ * walking through exactly4.5. Eligibility is selected once; root-produced speed
+ * and held movement do not reclassify/cancel either qualified admitted skill.
  * Source low-stamina starts remain allowed; unsupported starts debit nothing. */
 bool pe_sandbox_melee_begin(PeSandboxMelee *host,PeSandboxMeleeGate gate,float *stamina);
 bool pe_sandbox_melee_queue(PeSandboxMelee *host,PeSandboxMeleeGate gate);

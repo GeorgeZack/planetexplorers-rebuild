@@ -15,7 +15,8 @@ static bool gate_common(const PeSandboxMelee *h,PeSandboxMeleeGate g){
 }
 static bool stationary_allowed(PeSandboxMeleeGate g){return !g.move_requested&&hypot(g.velocity.x,g.velocity.z)<=.05;}
 static bool action_allowed(const PeSandboxMelee *h,PeSandboxMeleeGate g){
-    return gate_common(h,g)&&(h->action.variant==PE_COMBAT_RUNNING?h->setup.running_motion_ready:stationary_allowed(g));
+    return gate_common(h,g)&&(h->action.variant==PE_COMBAT_RUNNING?h->setup.running_motion_ready:
+        (h->setup.ordinary_motion_ready||stationary_allowed(g)));
 }
 static bool begin_variant(const PeSandboxMelee *h,PeSandboxMeleeGate g,PeCombatVariant *variant){
     if(!gate_common(h,g))return false;
@@ -24,14 +25,15 @@ static bool begin_variant(const PeSandboxMelee *h,PeSandboxMeleeGate g,PeCombatV
         .in_air=!g.grounded,.motor_present=true,.spine_in_water=g.in_water},&selected))return false;
     if(selected==PE_SWORD_VARIANT_RUNNING){if(!h->setup.running_motion_ready)return false;*variant=PE_COMBAT_RUNNING;return true;}
     if(selected!=PE_SWORD_VARIANT_ORDINARY)return false;
-    if(!stationary_allowed(g))return false;
+    if(!h->setup.ordinary_motion_ready&&!stationary_allowed(g))return false;
     *variant=PE_COMBAT_STATIONARY;return true;
 }
 static bool setup_valid(const PeSandboxMeleeSetup *s){
     return s&&s->body&&s->drawn_weapon&&s->drawn_capsule&&s->player_id&&
         pe_combat_item_animation_speed(s->weapon_item_id,100)>0&&
         pe_combat_clip(s->gender,PE_COMBAT_THIRD_PERSON,0)&&scalar(s->attack,1000000)&&scalar(s->stamina_reduce_percent,1000)&&
-        (!s->history_enabled||point(s->history_local_center,1000000));
+        (!s->history_enabled||point(s->history_local_center,1000000))&&
+        (!s->ordinary_motion_ready||s->gender==PE_COMBAT_FEMALE);
 }
 static bool valid(const PeSandboxMelee *h){
     if(!h||h->effected_count>PE_COMBAT_TARGET_CAPACITY)return false;

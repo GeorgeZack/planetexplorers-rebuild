@@ -16,11 +16,11 @@ Detailed current reviews:
 
 ## Next implementation order
 
-Subsequent implementation: [the bounded Revival Shot lifecycle](SANDBOX_REVIVAL.md) now connects the dedicated transaction, death modal, recovery remount and transient contact grace. Ragdoll/get-up presentation and physical acceptance remain open. The table below retains the audit's proposed order; walking-attack admission is the next source implementation target.
+Subsequent implementation: [the bounded Revival Shot lifecycle](SANDBOX_REVIVAL.md) now connects the dedicated transaction, death modal, recovery remount and transient contact grace. Ragdoll/get-up presentation and physical acceptance remain open. The table below retains the audit's proposed order; [walking-attack admission and ordinary root motion](SANDBOX_WALKING_KNIFE.md) are also implemented with focused checks; physical acceptance remains pending.
 
 These are proposed increments, not features delivered by this documentation change. The order favors useful supported gameplay over expanding the list of visible but unusable content.
 
-Further implementation: [sword branch/movement policy](SWORD_MOTION_POLICY.md) now shares the source selector between display input and core admission and factors the horizontal request. The4,101-case offline magnitude oracle fixes one strict-boundary discrepancy. Ordinary moving admission remains gated on its own root-motion data.
+Further implementation: [sword branch/movement policy](SWORD_MOTION_POLICY.md) now shares the source selector between display input and core admission and factors the horizontal request. The4,101-case offline magnitude oracle fixes one strict-boundary discrepancy. The follow-up source proof and PESR1 export now supply ordinary moving admission and combo displacement; no new original session was needed.
 
 | Order | Deliverable | What can be done offline | Remaining acceptance or dependency |
 |---|---|---|---|

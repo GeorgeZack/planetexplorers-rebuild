@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Offline root-channel evidence against the preserved running408 engine oracle.
 
-Does not start Unity, create a motion asset, or qualify ordinary clip playback.
-Exact native branch evidence is hashed separately from numerical extrapolation.
+Does not start Unity, create a motion asset, or claim observed ordinary playback.
+Qualifies bounded source extraction through static branches, call-free arithmetic
+replay in a limited child, and the preserved independent running engine oracle.
 """
 import argparse
 import hashlib
@@ -10,6 +11,8 @@ import json
 import math
 from pathlib import Path
 import struct
+import subprocess
+import sys
 
 from export_reference_player import packed_channels
 from analyze_reference_root_motion import analyze
@@ -25,7 +28,14 @@ FLAGS = dict(m_LoopTime=False, m_LoopBlend=False, m_LoopBlendOrientation=True,
              m_KeepOriginalPositionXZ=False, m_HeightFromFeet=False, m_Mirror=False)
 # Named serializer, humanoid root orientation/Y/XZ masks, humanScale getter,
 # and the human-scale multiplication before final transform composition.
-RANGES = [(0xb99b53, 0xb99be5), (0xc1ffd0, 0xc200da),
+RANGES = [(0xb998c6, 0xb998da), (0xb99b53, 0xb99be5), (0xc1ffd0, 0xc200da),
+          (0xc227e0, 0xc228bd), (0xc237f3, 0xc23801),
+          (0xc25678, 0xc256a4), (0xc27310, 0xc27387),
+          (0xc25378, 0xc254c8), (0xc24f1d, 0xc25064),
+          (0xc27260, 0xc272f5), (0xc24c18, 0xc24d2d),
+          (0xc24b3b, 0xc24c14), (0xc1f830, 0xc1f843),
+          (0xbc6e05, 0xbc7000), (0xbc7c70, 0xbc7c8c),
+          (0xc51ec0, 0xc51ef5), (0xbc4920, 0xbc4939),
           (0xc251d3, 0xc252cd),
           (0xc54680, 0xc546af), (0xc51e60, 0xc51e86),
           (0xbc96f0, 0xbc9721), (0xbae650, 0xbae68d),
@@ -41,6 +51,165 @@ def finite(value):
     return type(value) in (int, float) and math.isfinite(value)
 
 
+def algebraic_basis_delta(start_yaw, previous, current, common_offset):
+    """Exact-real algebra model of the inspected branches, not engine arithmetic.
+
+    KeepOriginalOrientation: adjustment = identity * inverse(start_yaw).
+    LoopBlendOrientation: every root Q = adjustment * start_yaw = identity.
+    Common root offsets cancel; PositionY is baked. Actor yaw is downstream.
+    """
+    if (len(start_yaw) != 4 or len(previous) != 3 or len(current) != 3 or
+            len(common_offset) != 3 or any(not finite(v) for v in
+            list(start_yaw)+list(previous)+list(current)+list(common_offset)) or
+            abs(sum(v*v for v in start_yaw)-1) > 1e-6 or
+            start_yaw[0] != 0 or start_yaw[2] != 0):
+        raise ValueError('Expected normalized planar quaternion and finite float3 values')
+    # Explicit cancellation is intentional: avoids large-offset cancellation error
+    # in this real-algebra illustration. Native floating-point replay is separate.
+    return [current[0]-previous[0], 0, current[2]-previous[2]]
+
+
+class NativeRootArithmetic:
+    """Four reviewed call-free arithmetic slices; no ELF loader or engine state.
+
+    Used only by a CPU/time-bounded child process. Every copied instruction and
+    RIP constant is checked against the pinned ELF before a private RX mapping.
+    """
+    SLICES = {'project': (0xc1dc20, 0xc1dd5b, b'', 2),
+              'product': (0xc1a7a0, 0xc1a7fb, b'', 3),
+              'rotate': (0xc1a740, 0xc1a798, b'', 3),
+              # The slice inherits XMM2=source normalization coefficient3.
+              'normalize': (0xc1dd1a, 0xc1dd5b,
+                            bytes.fromhex('0f 28 06 0f 28 15')+struct.pack('<i', 2048-10), 2)}
+
+    def __init__(self, binary):
+        import ctypes as C
+        import mmap
+        import platform
+        import re
+        if sys.platform != 'linux' or platform.machine() != 'x86_64' or C.sizeof(C.c_void_p) != 8:
+            raise ValueError('Arithmetic replay requires Linux x86-64 SysV')
+        libc = C.CDLL(None, use_errno=True)
+        libc.fegetround.restype = C.c_int
+        if libc.fegetround() != 0:
+            raise ValueError('Arithmetic replay requires round-to-nearest')
+        raw = Path(binary).read_bytes()
+        if hashlib.sha256(raw).hexdigest() != ELF_SHA:
+            raise ValueError('Binary SHA mismatch: no executable mapping created')
+        self.functions, self.mappings, self.provenance = {}, [], []
+        for name, (start, end, prefix, argc) in self.SLICES.items():
+            code = bytearray(mmap.PAGESIZE)
+            body = raw[start-0x400000:end-0x400000]
+            code[:len(prefix)] = prefix
+            code[len(prefix):len(prefix)+len(body)] = body
+            if name == 'normalize':
+                code[2048:2064] = raw[0x16fb440-0x400000:0x16fb450-0x400000]
+            assembly = subprocess.run(['objdump', '-d', '--insn-width=16',
+                f'--start-address={start}', f'--stop-address={end}', str(binary)],
+                check=True, capture_output=True, text=True, timeout=5).stdout
+            covered, cursor, constants, relocations = 0, 1024, {}, []
+            for line in assembly.splitlines():
+                match = re.match(r'^\s*([0-9a-f]+):\s+((?:[0-9a-f]{2}\s+)+)\s*(.*)$', line)
+                if not match:
+                    continue
+                pc, instruction, text = int(match[1], 16), bytes.fromhex(match[2]), match[3]
+                if pc != start+covered or instruction != raw[pc-0x400000:pc-0x400000+len(instruction)]:
+                    raise ValueError('Arithmetic disassembly coverage differs')
+                covered += len(instruction)
+                if re.match(r'(call|j\w+|syscall|int)\b', text) or (
+                        text.startswith('ret') and covered != end-start):
+                    raise ValueError('Unexpected arithmetic control transfer')
+                if '(%rip)' in text:
+                    target = int(re.search(r'#\s+([0-9a-f]+)', text)[1], 16)
+                    # pshufd carries an immediate byte after its RIP displacement.
+                    displacement = len(instruction)-(5 if text.startswith('pshufd') else 4)
+                    if pc+len(instruction)+struct.unpack_from('<i', instruction, displacement)[0] != target:
+                        raise ValueError('Unexpected RIP operand layout')
+                    if not 0x1680000 <= target < 0x1700000:
+                        raise ValueError('Arithmetic must read only inspected rodata')
+                    if target not in constants:
+                        constants[target] = cursor
+                        code[cursor:cursor+16] = raw[target-0x400000:target-0x400000+16]
+                        cursor += 16
+                    at = len(prefix)+pc-start
+                    struct.pack_into('<i', code, at+displacement,
+                                     constants[target]-(at+len(instruction)))
+                    relocations.append(dict(instruction=hex(pc), constant=hex(target),
+                        sha256=hashlib.sha256(raw[target-0x400000:target-0x400000+16]).hexdigest()))
+            if covered != end-start or body[-1] != 0xc3 or cursor > len(code):
+                raise ValueError('Invalid bounded arithmetic range')
+            memory = mmap.mmap(-1, len(code), prot=mmap.PROT_READ | mmap.PROT_WRITE)
+            memory.write(code)
+            address = C.addressof(C.c_char.from_buffer(memory))
+            libc.mprotect.argtypes = [C.c_void_p, C.c_size_t, C.c_int]
+            libc.mprotect.restype = C.c_int
+            if libc.mprotect(address, len(code), mmap.PROT_READ | mmap.PROT_EXEC):
+                memory.close()
+                raise OSError(C.get_errno(), 'mprotect RX failed')
+            self.mappings.append(memory)
+            self.functions[name] = C.CFUNCTYPE(None, *([C.c_void_p]*argc))(address)
+            self.provenance.append(dict(name=name, start=hex(start), end_exclusive=hex(end),
+                sha256=hashlib.sha256(body).hexdigest(), relocations=relocations,
+                prefix_inherited_constant=None if name != 'normalize' else dict(address='0x16fb440',
+                    sha256=hashlib.sha256(raw[0x16fb440-0x400000:0x16fb450-0x400000]).hexdigest())))
+
+    def call(self, name, *inputs):
+        import ctypes as C
+        if any(len(v) != 4 or any(not finite(x) or abs(x)>100 for x in v) for v in inputs):
+            raise ValueError('Arithmetic input outside finite bounded float4 contract')
+        buffers = [C.create_string_buffer(31) for _ in range(len(inputs)+1)]
+        addresses = [(C.addressof(b)+15)&~15 for b in buffers]
+        for address, values in zip(addresses[1:], inputs):
+            C.memmove(address, struct.pack('<4f', *values), 16)
+        self.functions[name](*addresses)
+        result = list(struct.unpack('<4f', C.string_at(addresses[0], 16)))
+        if not all(finite(v) for v in result):
+            raise ValueError('Nonfinite arithmetic replay result')
+        return result
+
+
+def arithmetic_worker(binary, quaternions):
+    import resource
+    resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
+    resource.setrlimit(resource.RLIMIT_CPU, (5, 5))
+    if not isinstance(quaternions, list) or len(quaternions) > 32:
+        raise ValueError('At most32 arithmetic cases')
+    oracle = NativeRootArithmetic(binary)
+    # Exact integer-valued cases verify operand order and rotation handedness.
+    product = oracle.call('product', [1,0,0,0], [0,1,0,0])
+    rotated = oracle.call('rotate', [0,1,0,0], [1,0,2,0])
+    normalized = oracle.call('normalize', [0,0,0,2])
+    if product != [0,0,1,0] or rotated != [-1,0,-2,0] or normalized != [0,0,0,1]:
+        raise ValueError('Native arithmetic operand order differs from traced algebra')
+    results = []
+    for q in quaternions:
+        if len(q) != 4 or any(not finite(v) for v in q) or abs(sum(v*v for v in q)-1)>1e-4:
+            raise ValueError('Expected normalized source quaternion')
+        projected = oracle.call('project', q)
+        inverse = [-projected[0], -projected[1], -projected[2], projected[3]]
+        adjustment = oracle.call('normalize', oracle.call('product', [0,0,0,1], inverse))
+        basis = oracle.call('normalize', oracle.call('product', adjustment, projected))
+        conjugate = [-basis[0], -basis[1], -basis[2], basis[3]]
+        vectors = [list(struct.unpack('<4f', struct.pack('<4f', *v))) for v in
+                   [[1,0,0,0], [0,0,1,0], [-.35,0,1.4,0]]]
+        rotated = [oracle.call('rotate', conjugate, v) for v in vectors]
+        results.append(dict(start_q=q, projected_q=projected, baked_basis_q=basis,
+            maximum_planar_vector_error=max(math.dist(a,b) for a,b in zip(vectors,rotated)),
+            rotated_vectors=rotated))
+    return dict(scope='Call-free arithmetic only: source projection/product/normalize/rotate; no Animator or ELF initialization',
+                routines=oracle.provenance,
+                operand_order_check=dict(product=product, rotation=rotated, normalization=normalized),
+                cases=results)
+
+
+def replay_arithmetic(binary, quaternions):
+    result = subprocess.run([sys.executable, __file__, '--arithmetic-worker', str(binary)],
+        input=json.dumps(quaternions, allow_nan=False), capture_output=True, text=True, timeout=15)
+    if result.returncode:
+        raise ValueError('Bounded arithmetic child failed: '+result.stderr[-2000:])
+    return json.loads(result.stdout)
+
+
 def decode(clip, avatar):
     """Bounded scalar decoder; deliberately rejects other importer branches."""
     m = clip['m_MuscleClip']
@@ -54,6 +223,11 @@ def decode(clip, avatar):
     if any(clip.get(k) for k in ('m_PositionCurves', 'm_RotationCurves',
                                'm_CompressedRotationCurves', 'm_ScaleCurves', 'm_PPtrCurves')):
         raise ValueError('Unexpected ordinary transform curves')
+    start = m['m_StartX']
+    if (any(not finite(start[key].get(axis)) for key in ('t', 'q', 's') for axis in 'xyzw') or
+            any(start['s'][axis] != 1 for axis in 'xyzw') or start['t']['w'] != 0 or
+            abs(sum(start['q'][axis]**2 for axis in 'xyzw')-1) > 1e-4):
+        raise ValueError('Unsupported start transform: require finite normalized quaternion and unit scale')
     ch = packed_channels(clip, avatar)
     human = [b for b in ch['bindings'] if b['kind'] == 'humanoid_scalar_unretargeted']
     attrs = [b['binding']['attribute'] for b in human]
@@ -61,6 +235,11 @@ def decode(clip, avatar):
             any(b['kind'] != 'humanoid_scalar_unretargeted' and
                 (b['kind'] != 'direct_transform' or not b['binding']['path']) for b in ch['bindings'])):
         raise ValueError('Require exact Root/goal/muscle binding closure, no Motion channels')
+    indices = m['m_IndexArray']
+    if (not isinstance(indices, list) or len(indices) != 155 or
+            any(type(v) is not int for v in indices) or indices[:7] != [-1]*7 or
+            any(indices[b['binding']['attribute']] != b['scalar_offset'] for b in human)):
+        raise ValueError('Native index table does not match decoded scalar binding layout')
     if (not finite(ch['sample_rate']) or ch['sample_rate'] != 30 or
             not finite(ch['begin_time']) or abs(ch['begin_time']) > 1e-6 or
             not finite(ch['stop_time']) or not 0 < ch['stop_time'] <= 10 or
@@ -73,7 +252,8 @@ def decode(clip, avatar):
     roots = {b['binding']['attribute']: [v[0] for v in b['samples']]
              for b in human if b['binding']['attribute'] < 14}
     return dict(name=clip['m_Name'], duration=ch['stop_time'], rate=ch['sample_rate'],
-                begin=ch['begin_time'], count=ch['frame_count'], scale=scale, roots=roots)
+                begin=ch['begin_time'], count=ch['frame_count'], scale=scale, roots=roots,
+                start_transform=start, root_scalar_indices=indices[7:14])
 
 
 def scalar(curve, attribute, seconds):
@@ -144,8 +324,9 @@ def native_evidence(binary):
                 clip_flag_offsets={name: hex(offset) for offset, _, name in names},
                 y_selection_mask=list(struct.unpack_from('<4I', raw, 0x16fc7b0-0x400000)),
                 root_translation_indices=[dict(attribute=i, index_offset=hex(0x4f8+4*i)) for i in (7,8,9)],
-                evidence='c1ffd0 samples RootT attributes7–9 through c2c470 and packs translation. Named serialized flags; humanoid branch copies baseline root quaternion and Y, preserves XZ. Animator humanScale resolves Human+0x1c0; c04492 loads this value and c044be multiplies a translation vector before c01b60 transform composition.',
-                remaining_static_link='Final root-delta composition call-chain and transform basis have not been independently replayed; numerical comparison below covers the actual408 identity-clone case.')
+                evidence='Previous RootT is sampled at c22887 and current RootT read at c27310. The no-Motion path cancels StartX yaw under KeepOriginalOrientation, bakes orientation/Y, retains XZ, and c24ccb subtracts previous from current. c24b7b divides displacement by its interval; c1f830 reconstructs displacement. bc6e10..bc6e48 applies Human+0x1c0 and actor scale; bc6eef..bc6fff applies actor basis once and stores Animator+0x1c0..0x1c8. Registered deltaPosition getter c51ec0/bc4920 returns those fields.',
+                bounded_scope='One unblended, unmirrored humanoid clip, no Motion0–6, exact listed importer flags, unit clip/actor scales, nonloop playback. Controller layer aggregation, transitions, matching/warping and motor/collision are outside this proof.',
+                remaining_static_link=None)
 
 
 def verify(game, capture):
@@ -173,21 +354,34 @@ def verify(game, capture):
             raise ValueError('Expected one source action-end event')
         clips.append(dict(id=id, name=name, duration=curve['duration'], dense_frames=curve['count'],
                           rate=curve['rate'], begin=curve['begin'], flags=FLAGS,
+                          start_transform=curve['start_transform'],
+                          root_scalar_indices=curve['root_scalar_indices'],
                           end_action=events[0], candidate_at_action_end=candidate(curve, events[0]),
                           candidate_at_clip_end=candidate(curve, curve['duration']),
                           raw_root_ranges={k: [min(v), max(v)] for k, v in curve['roots'].items()}))
     rows = [json.loads(line) for line in Path(capture).read_text().splitlines()]
     comparisons = [dict(trial=i, **compare(curves[408], [r for r in rows if r.get('type') == 'sample' and r['trial'] == i])) for i in (0, 1)]
+    source_quaternions = [[curves[i]['start_transform']['q'][k] for k in 'xyzw'] for i in CLIPS]
+    synthetic_quaternions = [[0,math.sin(a/2),0,math.cos(a/2)] for a in (-3,-2,-1,0,1,2,3)]
+    arithmetic = replay_arithmetic(game/'PE_Client.x86_64', source_quaternions+synthetic_quaternions)
+    arithmetic['source_case_clip_ids'] = list(CLIPS)
+    arithmetic['synthetic_case_yaw_radians'] = [-3,-2,-1,0,1,2,3]
+    arithmetic['maximum_measured_basis_residual_m'] = max(c['maximum_planar_vector_error'] for c in arithmetic['cases'])
+    arithmetic['interpretation'] = ('Real-algebra cancellation is established by the static branch chain; '
+        'float normalization/product can leave a measured residual, reported without a tunable tolerance. '
+        'The source-channel formula is not asserted bit-identical to those operations.')
     return dict(schema='pe-player-root-channel-verification-1', source_asset=str(asset),
                 asset_sha256=ASSET_SHA, capture=str(capture), capture_sha256=CAPTURE_SHA,
                 verifier_sha256=digest(__file__),
                 dependency_sha256={name: digest(Path(__file__).with_name(name)) for name in
                     ('export_reference_player.py', 'analyze_reference_root_motion.py')}, native=native, avatar_id=777,
                 human_scale=curves[408]['scale'], clips=clips, running_comparisons=comparisons,
+                isolated_arithmetic=arithmetic,
                 running_oracle_qualified=True, ordinary_clips_observed_sequentially=False,
+                ordinary_source_extraction_qualified=True,
                 ordinary_runtime_motion_qualified=False,
                 formula='(linearly_sampled_RootT.xz(t)-RootT.xz(0))*Avatar.Human.m_Scale; Y=0',
-                scope='All four ordinary clips pass the exact bounded source-data predicate. Transfer of408 numerical agreement to them remains explicitly inferred until the complete extraction path is proven; this report creates no runtime asset.',
+                scope='All four ordinary clips pass the exact bounded source-data predicate and static unblended source-to-delta chain. Starting-basis cancellation is independently replayed with call-free native arithmetic. This qualifies source extraction, not observed ordinary playback or runtime integration, and creates no runtime asset.',
                 limitations=['No layer/state-transition/root blend or source motor/collision evaluation.',
                              'Double-precision dense interpolation is diagnostic, not bit-identical Unity arithmetic.',
                              'Raw RootQ is a humanoid body input. Same sampled root quaternion is selected by bake-orientation branch; do not apply body yaw a second time.',
@@ -195,6 +389,12 @@ def verify(game, capture):
 
 
 def main():
+    if len(sys.argv) == 3 and sys.argv[1] == '--arithmetic-worker':
+        request = sys.stdin.read(16385)
+        if len(request) > 16384:
+            raise ValueError('Oversized arithmetic request')
+        print(json.dumps(arithmetic_worker(Path(sys.argv[2]), json.loads(request)), allow_nan=False))
+        return 0
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--game-dir', type=Path, default=Path.home()/'.local/share/Steam/steamapps/common/Planet Explorers')
     p.add_argument('--capture', type=Path, default=Path.home()/'.local/share/planet-explorers-strafe-reference/pose-captures/female-running-root-06.jsonl')

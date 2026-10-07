@@ -1,5 +1,7 @@
 # Sword branch selection and shared movement request
 
+Subsequent checkpoint: [grounded walking attacks](SANDBOX_WALKING_KNIFE.md) now qualify, export and integrate ordinary Attack6–9 root motion, including running continuations. The remaining-extraction statements below describe this earlier policy checkpoint; visual acceptance and ordinary hunt completion remain open.
+
 October 6, 2026. Source-derived and implemented in C, with offline numerical and recovered-asset tests. Neither game was launched. This advances the walking-attack work in [the source-first review](SOURCE_FIRST_REVIEW.md); slow-walking attacks are not enabled by this increment.
 
 ## One source selector
