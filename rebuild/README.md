@@ -135,7 +135,7 @@ The six starting buildings use `export_adventure_settlement_assets.py`; the earl
 python3 rebuild/tools/export_adventure_route.py --capture /absolute/capture.pevx --coverage
 # Install only a complete, validated observation and its source town names.
 python3 rebuild/tools/export_adventure_route.py --capture /absolute/capture.pevx
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_adventure_route_assets.py \
+rebuild/build/unity-tools/bin/python rebuild/tools/export_adventure_route_assets.py \
   --save-dir /absolute/isolated-profile/PlanetExplorers/GameSave/save1
 ```
 
@@ -157,9 +157,9 @@ Adventure requires `adventure-welcome/recording.peas`, `adventure-supplier/recor
 Both locally installed groups already exist. Westina uses the archived role1 entity20008/RandomNpc17 with nine parts, iron armor and stowed copper sword/shield. See the [welcome audit](../docs/audit/ADVENTURE_WELCOME.md). To reproduce it only when the destination is absent, use the optional UnityPy environment described under asset recovery:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_adventure_supplier.py \
+rebuild/build/unity-tools/bin/python rebuild/tools/export_adventure_supplier.py \
   --output rebuild/build/reference-assets/adventure-supplier
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_adventure_supplier.py --npc welcome \
+rebuild/build/unity-tools/bin/python rebuild/tools/export_adventure_supplier.py --npc welcome \
   --output rebuild/build/reference-assets/adventure-welcome
 ```
 
@@ -169,10 +169,10 @@ Generated dialogue and collision data can be checked without a graphical window:
 
 ```sh
 python3 rebuild/tools/export_adventure_dialogue.py --check
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_adventure_npc_collider.py --check
+rebuild/build/unity-tools/bin/python rebuild/tools/export_adventure_npc_collider.py --check
 python3 rebuild/tests/test_adventure_dialogue_export.py
 python3 rebuild/tests/test_adventure_supplier.py
-/tmp/pe-asset-tools/bin/python rebuild/tests/test_adventure_npc_collider.py
+rebuild/build/unity-tools/bin/python rebuild/tests/test_adventure_npc_collider.py
 make -C rebuild build/test_core
 ./rebuild/build/test_core
 ```
@@ -186,9 +186,9 @@ Sandbox terrain now uses the original six diffuse atlases,84 source material slo
 The assets are installed on this machine under `rebuild/build/reference-assets/terrain`. To recover or verify them using the optional offline UnityPy/Pillow environment:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_terrain_assets.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_terrain_assets.py
 make -C rebuild terrain-material-test
-make -C rebuild terrain-assets-check terrain-asset-test ASSET_PYTHON=/tmp/pe-asset-tools/bin/python
+make -C rebuild terrain-assets-check terrain-asset-test ASSET_PYTHON="$PWD/rebuild/build/unity-tools/bin/python"
 ```
 
 The C game loads ordinary PNGs and has no Unity dependency. Unsupported imported material IDs render magenta instead of silently choosing another material. The recovered normal atlases are retained for future shader work; the inspected source OpenGL shader itself uses geometric normals for lighting.
@@ -256,12 +256,11 @@ It targets only the original client title/executable, releases held keys, and va
 The installed training room and six resource-tool bundles can be converted without Unity. The optional exporter requires UnityPy 1.25.4 in a separate environment:
 
 ```sh
-python3 -m venv /tmp/pe-asset-tools
-/tmp/pe-asset-tools/bin/python -m pip install UnityPy==1.25.4
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_assets.py
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_assets.py --asset training-kit
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_assets.py --asset training-knife
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_actor.py
+make -C rebuild unity-tools   # pinned venv in rebuild/build/unity-tools
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_assets.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_assets.py --asset training-kit
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_assets.py --asset training-knife
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_actor.py
 ./rebuild/build/planet_explorers --reference-room rebuild/build/reference-assets/room.obj
 ```
 
@@ -351,7 +350,7 @@ The export contains 2,474 sprite records across three original PNG atlases, eigh
 For a fresh UI destination, recover assets with the optional UnityPy/Pillow environment used by the other source exporters:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_training_ui.py \
+rebuild/build/unity-tools/bin/python rebuild/tools/export_training_ui.py \
   --output rebuild/build/reference-assets/ui
 python3 rebuild/tools/export_training_ui_text.py --check
 ./rebuild/build/planet_explorers --training-room rebuild/build/reference-assets
@@ -379,7 +378,7 @@ The preview supports 1 for idle, 2 for run, Left/Right to select any clip, R to 
 The optional player exporter recovers the default male/female modular meshes, diffuse textures, skin weights, inverse binds and Avatar data into a separate ignored directory:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_player.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_player.py
 ```
 
 Output defaults to `rebuild/build/reference-player/`. This produces static Avatar-default-pose OBJs and decoded Attack6 scalar data, not a playable animated character. Headless recovery and repeatability tests pass. Subsequent original-runtime pose capture and isolated clip baking now supply the animated training character described below. See [player asset recovery](../docs/audit/PLAYER_ASSET_RECOVERY.md) for exact source identities, mathematical checks and the unresolved humanoid retargeting step.
@@ -453,8 +452,9 @@ python3 rebuild/tools/playtest_sandbox_actions.py
 This bounded Hyprland/Xwayland playtest launches only the local C rebuild, creates isolated shovel/pickaxe/felling fixtures, holds left mouse for eight seconds per action, saves through F9 and verifies resource changes, tool-instance identity and wear. It releases input and closes its owned windows on failure. Use one desktop operator and leave input undisturbed during the run. Default artifacts are fixture/result saves, logs, screenshots and `result.json` under `rebuild/build/sandbox-action-playtest`; `--output-dir DIR` selects another destination. It does not load or overwrite a normal user save. The physical-input tool playtest passed with the source 6 m camera fixture: two shovel swings consumed 10 durability and produced 2 dirt; one pickaxe Mine strike consumed 5 durability and produced 2 dirt; six wood-axe swings consumed 30 durability, depleted tree7 and produced 8 wood. All three retained the same tool instance and unrelated possessions. The pickaxe fixture loses its valid target after that sample is removed; held input does not imply further resource edits. See the [playtest record](../docs/PLAYTEST.md) for artifacts and the separate target-preview inspection status. This validates the bounded C fixtures, not original-game animation or resource parity.
 
 ```sh
-make -C rebuild test
-make -C rebuild sanitize
+make -C rebuild check          # parallel build + run of everything `test` covers
+make -C rebuild -j"$(nproc)" test
+make -C rebuild check-sanitize  # ASan/UBSan/leaks, one process per core suite
 make -C rebuild check-content
 make -C rebuild cli-test
 make -C rebuild asset-test
@@ -462,6 +462,8 @@ make -C rebuild sandbox-world-test
 make -C rebuild sandbox-camera-test
 make -C rebuild smoke
 ```
+
+The core and test sources compile once into `build/obj` with compiler-generated header dependencies, and every test binary links `build/obj/core/libpe_core.a`; pass `-j` so objects build in parallel. `check` runs `tools/run_tests.py`, which takes the plan from `make -n test`, builds stale binaries in parallel, runs each command concurrently (one process per core suite), continues past failures, writes per-command logs to `build/test-logs/` and totals unittest skips. Use `python3 rebuild/tools/run_tests.py -k NAME` or `rebuild/build/test_core NAME...` (`--list` shows names) to iterate on one suite. A new core suite is one `PE_TEST(name)` line in `tests/test_core_list.h` for `int pe_test_name(void)` in `tests/test_name.c`. `make -C rebuild compile-commands` writes `compile_commands.json` for clangd/clang-tidy. UnityPy-backed checks use the pinned `make -C rebuild unity-tools` environment when present.
 
 `test` runs C world, marching-cubes, original-file reader, Block45, gameplay, persistence and initial tutorial suites, plus content, launcher, reference-input and asset-conversion Python tests. The installed-asset repeatability test is optional and runs when UnityPy and the installation are available. `asset-test` checks the guarded model parser without opening a graphics context, but links raylib. `sandbox-world-test` checks recovered tree loading, ownership/cleanup, depletion visibility and interaction-ray behavior through headless graphics stubs. `sandbox-camera-test` checks the independently verified Unity 5.2 damping values, frame-rate variation, overshoot, pause/input gates and normal/build bounds. `sandbox-ui-test` covers real inventory actions and build-toolbar/modal input ownership; `sandbox-inventory-ui-test` adds category paging, split/exchange/merge/sort, exact-slot ownership and narrow-window control geometry; `sandbox-actor-test` checks shared action pose clocks and exact tool groups. These headless checks are also included in `test`; they do not substitute for graphical inspection. Launcher tests cover isolated settings, repeat-launch quality reset, backups, malformed XML, and process arguments/environment. Fixtures cover source geometry/rotations, original terrain samples, malformed compressed files, movement, tool wear, stamina recovery, primary yields, pending crafting/cancellation, grouped construction transactions, save migration, and semantic tampering with recomputed checksums. `sanitize` runs the C suites under AddressSanitizer and UndefinedBehaviorSanitizer with leak detection. `check-content` verifies both generated database content and marching-cubes tables. `cli-test` exercises argument validation and startup failures.
 
@@ -620,7 +622,7 @@ The 3600-frame fixture first completes the normal tutorial interaction sequence.
 The optional exporter recovers all five original herb meshes and the tree at their authored world transforms. Using the isolated UnityPy environment described above, write a fresh output directory (skip the export if these assets already exist):
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_training_gathering_assets.py \
+rebuild/build/unity-tools/bin/python rebuild/tools/export_training_gathering_assets.py \
   --output rebuild/build/reference-assets/gathering
 ./rebuild/build/planet_explorers --training-room rebuild/build/reference-assets \
   --smoke 6000 --screenshot /tmp/pe-training-herbs.png
@@ -643,7 +645,7 @@ These optional assets use closed, locally generated original-Unity captures. Fol
 Recover the safety axe and build the separate cutting body:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_axe.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_axe.py
 python3 rebuild/tools/analyze_reference_bake.py \
   "$HOME/.local/share/planet-explorers-bake-reference/pose-captures/female-clips-08.jsonl" \
   --rig rebuild/build/reference-player-starter/player-female-starter-rig.json \
@@ -672,7 +674,7 @@ The cutting body/axe pair is required together and requires a matching locomotio
 Recover the wooden shovel and separate digging body:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_shovel.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_shovel.py
 python3 rebuild/tools/analyze_reference_bake.py \
   "$HOME/.local/share/planet-explorers-bake-reference/pose-captures/female-clips-09.jsonl" \
   --rig rebuild/build/reference-player-starter/player-female-starter-rig.json \
@@ -713,15 +715,15 @@ The sandbox reuses the installed cutting/shovel body and tool groups above. Its 
 The sandbox also requires `sandbox-world/tree.obj`, its material/texture and `tree-collider.pesc`. First recover `gathering` with the herb/tree exporter described above, then run:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_sandbox_world_assets.py
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_sandbox_world_assets.py --check
+rebuild/build/unity-tools/bin/python rebuild/tools/export_sandbox_world_assets.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_sandbox_world_assets.py --check
 ```
 
 This creates a fresh `rebuild/build/reference-assets/sandbox-world` directory, rebasing the recovered tree out of its tutorial placement into source-local meters. It verifies the matching source capsule and preserves provenance hashes. `--check` validates an existing export without rewriting it. All provisional sandbox trees share this model, while saved positions and remaining resource state determine placement and visibility. The capsule supports axe interaction rays and Adventure movement collision; depleted trees are excluded, and camera obstruction queries retain the original tree exclusion. The headless collision constants are checked into `generated/pe_tree_collider.h` and use the same source decoder as the visual PESC. They do not depend on recovered graphics or Unity at runtime. Regenerate or verify them with the optional UnityPy environment:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_tree_collision.py
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_tree_collision.py --check
+rebuild/build/unity-tools/bin/python rebuild/tools/export_tree_collision.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_tree_collision.py --check
 ```
 
 The check verifies the generated header and, when present, byte-identical `sandbox-world/tree-collider.pesc` source values. It requires the repository source prefab but no installed game. Normal native compilation does not need UnityPy.
@@ -729,7 +731,7 @@ The check verifies the generated header and, when present, byte-identical `sandb
 Wood Axe26 uses its own original mesh. After the body and cutting scenes above are installed, generate these fresh outputs; do not relabel the Safety Axe scene:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_reference_axe.py --item-id 26
+rebuild/build/unity-tools/bin/python rebuild/tools/export_reference_axe.py --item-id 26
 python3 rebuild/tools/export_baked_axe.py \
   "$HOME/.local/share/planet-explorers-bake-reference/pose-captures/female-clips-02.jsonl" \
   --rig rebuild/build/reference-player-starter/player-female-starter-rig.json \
@@ -777,7 +779,7 @@ The puzzle evaluates50 source rays against the nearest layer12 receiver, terrain
 Optional original receiver meshes and indicator textures can be recovered locally:
 
 ```sh
-/tmp/pe-asset-tools/bin/python rebuild/tools/export_training_build_assets.py
+rebuild/build/unity-tools/bin/python rebuild/tools/export_training_build_assets.py
 make -C rebuild training-building-smoke
 ```
 

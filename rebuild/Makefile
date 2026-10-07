@@ -9,12 +9,67 @@ HEADERS = src/pe_camera_query.h generated/pe_camera_query_source.h src/pe_camera
 UI_SHARED = src/pe_ui_history.c src/pe_ui_draw.c src/pe_ui_hud.c
 FRONTEND = src/pe_ui_settings.c $(UI_SHARED) src/pe_vegetation_view.c src/pe_deployable_view.c src/pe_terrain_material_view.c src/pe_adventure_npc_view.c src/pe_sandbox_world_view.c src/pe_app_menu.c src/pe_sandbox_view.c src/pe_sandbox_actor.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/main.c src/pe_reference.c src/pe_training_view.c src/pe_training_terrain_view.c src/pe_training_npc_view.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_shader.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_ui_assets.c src/pe_actor_view.c src/pe_actor_scene.c src/pe_actor_scene_view.c
 HEADERS += $(wildcard src/*.h generated/*.h)
-TESTS = tests/test_hunt_loot.c tests/test_hunt_loot_save.c tests/test_hunt_targeting.c tests/test_melee_facing.c tests/test_conversation_history.c tests/test_conversation_history_save.c tests/test_ui_input.c tests/test_bandage.c tests/test_camp_repair_save.c tests/test_followup_catalog.c tests/test_hare_pounce.c tests/test_inventory.c tests/test_inventory_save.c tests/test_harvest.c tests/test_vegetation.c tests/test_vegetation_save.c tests/test_build_history.c tests/test_build_history_save.c tests/test_town_trade.c tests/test_town_trade_save.c tests/test_town_wallet.c tests/test_town_wallet_save.c tests/test_sword_root_motion.c tests/test_sword_walking.c tests/test_sword_variant.c tests/test_sword_motion.c tests/test_revival.c tests/test_attack_playback.c tests/test_shield_action.c tests/test_capsule_history.c tests/test_stamina_recovery.c tests/test_stamina_save.c tests/test_passive_recovery.c tests/test_shield.c tests/test_shield_save.c tests/test_outfit.c tests/test_outfit_save.c tests/test_hunt_lifecycle.c tests/test_running_attack_pipeline.c tests/test_running_attack_motion.c tests/test_root_motion.c tests/test_sword_targeting.c tests/test_v13_save.c tests/test_hunt_return.c tests/test_v12_save.c tests/test_hunt_combat.c tests/test_hare_skill.c tests/test_hunt_encounter.c tests/test_hare_perception.c tests/test_v11_save.c tests/test_hare_route.c tests/test_hare_damage.c tests/test_sandbox_melee.c tests/test_v10_save.c tests/test_adventure_hunt.c tests/test_deployable.c tests/test_medicine_save.c tests/test_adventure_medicine.c tests/test_adventure_population.c tests/test_town_interaction.c tests/test_settlement.c tests/test_world_depth.c tests/test_adventure_welcome.c tests/test_adventure_dialogue.c tests/test_adventure_npc.c tests/test_sandbox_actions.c tests/test_sandbox_collision.c tests/test_main.c tests/test_world.c tests/test_mesh.c tests/test_legacy.c tests/test_block.c tests/test_game.c tests/test_tutorial.c tests/test_scene_collision.c tests/test_training.c tests/test_player_locomotion.c tests/test_training_melee.c tests/test_training_tree_hit.c tests/test_training_dig.c tests/test_training_terrain.c tests/test_training_build.c tests/test_training_receiver.c tests/test_training_npc.c tests/test_training_ui_layout.c tests/test_training_gathering.c tests/test_actor.c tests/test_hare.c tests/test_combat.c tests/test_knife_contact.c tests/test_hare_attack.c tests/test_hitbox.c tests/test_actor_scene.c
+TESTS = tests/test_main.c tests/test_block.c $(shell sed -n 's|^PE_TEST(\(.*\))$$|tests/test_\1.c|p' tests/test_core_list.h)
 BUILD = build
-RAYLIB_CFLAGS = $(shell $(PKG_CONFIG) --cflags raylib)
-LZ4_CFLAGS = $(shell $(PKG_CONFIG) --cflags liblz4)
-LZ4_LIBS = $(shell $(PKG_CONFIG) --libs liblz4)
-RAYLIB_LIBS = $(shell $(PKG_CONFIG) --libs raylib)
+RAYLIB_CFLAGS := $(shell $(PKG_CONFIG) --cflags raylib)
+LZ4_CFLAGS := $(shell $(PKG_CONFIG) --cflags liblz4)
+LZ4_LIBS := $(shell $(PKG_CONFIG) --libs liblz4)
+RAYLIB_LIBS := $(shell $(PKG_CONFIG) --libs raylib)
+
+# Object build. CORE and the core tests compile once into per-profile object
+# directories with compiler-generated header dependencies; every binary that
+# previously recompiled $(CORE) from source now links $(CORE_LIB). Use
+# `make -j$(JOBS)` (or `make check`) to compile objects in parallel.
+.DEFAULT_GOAL := all
+JOBS ?= $(shell nproc 2>/dev/null || echo 2)
+OBJ = $(BUILD)/obj
+CORE_OBJ_FLAGS = $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -ffunction-sections -fdata-sections
+FRONTEND_OBJ_FLAGS = $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS)
+SANITIZE_FLAGS = -std=c11 -g -O1 -Wall -Wextra -Wpedantic -fno-omit-frame-pointer -fsanitize=address,undefined
+SANITIZE_OBJ_FLAGS = $(CPPFLAGS) $(LZ4_CFLAGS) $(SANITIZE_FLAGS)
+CORE_OBJS = $(patsubst %.c,$(OBJ)/core/%.o,$(CORE))
+TEST_OBJS = $(patsubst %.c,$(OBJ)/core/%.o,$(TESTS))
+FRONTEND_OBJS = $(patsubst %.c,$(OBJ)/frontend/%.o,$(FRONTEND))
+SANITIZE_OBJS = $(patsubst %.c,$(OBJ)/sanitize/%.o,$(TESTS) $(CORE))
+CORE_LIB = $(OBJ)/core/libpe_core.a
+# $(1) object directory, $(2) name of its flags variable. The .flags stamp is
+# refreshed while parsing and changes only when the command line does, so a
+# CFLAGS override rebuilds objects and a dry run reports only real staleness.
+define OBJECT_RULES
+$$(shell mkdir -p $(1); echo '$$(CC) $$($(2))' | cmp -s - $(1)/.flags || echo '$$(CC) $$($(2))' > $(1)/.flags)
+$(1)/%.o: %.c $(1)/.flags
+	@mkdir -p $$(@D)
+	$$(CC) $$($(2)) -MMD -MP -c $$< -o $$@
+endef
+$(eval $(call OBJECT_RULES,$(OBJ)/core,CORE_OBJ_FLAGS))
+$(eval $(call OBJECT_RULES,$(OBJ)/frontend,FRONTEND_OBJ_FLAGS))
+$(eval $(call OBJECT_RULES,$(OBJ)/sanitize,SANITIZE_OBJ_FLAGS))
+$(CORE_LIB): $(CORE_OBJS)
+	@rm -f $@
+	$(AR) rcs $@ $(CORE_OBJS)
+-include $(shell find $(OBJ) -name '*.d' 2>/dev/null)
+# Asset-backed checks need UnityPy. `make unity-tools` creates the pinned
+# environment under build/, which both variables then prefer; without it they
+# fall back to python3 and UnityPy-dependent tests skip (skips are not passes).
+UNITY_PYTHON ?= $(if $(wildcard build/unity-tools/bin/python),build/unity-tools/bin/python,python3)
+ASSET_PYTHON ?= $(UNITY_PYTHON)
+.PHONY: unity-tools adventure-npc-collider-check
+unity-tools:
+	python3 -m venv build/unity-tools
+	build/unity-tools/bin/python -m pip install -r tools/requirements-unity.txt
+adventure-npc-collider-check:
+	$(UNITY_PYTHON) tools/export_adventure_npc_collider.py --check
+	$(UNITY_PYTHON) tests/test_adventure_npc_collider.py
+.PHONY: check check-sanitize compile-commands
+# Parallel build and run of everything `make test` covers; continues past
+# failures and totals skips. See tools/run_tests.py --help.
+check:
+	python3 tools/run_tests.py --jobs $(JOBS) $(CHECK_ARGS)
+check-sanitize:
+	python3 tools/run_tests.py --jobs $(JOBS) $(CHECK_ARGS) sanitize
+compile-commands:
+	python3 tools/run_tests.py --compile-commands
+
 .PHONY: all test sanitize content check-content run clean smoke training-smoke training-npcs-smoke training-sequence-smoke training-combat-smoke training-gathering-smoke training-crafting-smoke training-mining-smoke training-building-smoke actor-smoke cli-test asset-test ui-asset-test
 all: $(BUILD)/planet_explorers
 
@@ -26,10 +81,10 @@ index-test:
 
 $(BUILD):
 	mkdir -p $@
-$(BUILD)/planet_explorers: $(FRONTEND) src/pe_reference.h src/pe_training_view.h src/pe_training_terrain_view.h src/pe_training_npc_view.h src/pe_training_ui.h src/pe_training_ui_minimap.h src/pe_training_ui_shader.h src/pe_training_ui_replicator.h src/pe_training_ui_mission.h generated/pe_training_ui_text.h src/pe_ui_assets.h src/pe_actor_view.h src/pe_actor_scene_view.h $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(FRONTEND) $(CORE) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
-$(BUILD)/test_core: tests/adventure_test_helpers.h $(TESTS) $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(TESTS) $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/planet_explorers: $(FRONTEND_OBJS) $(CORE_LIB)
+	$(CC) $(CFLAGS) $(FRONTEND_OBJS) $(CORE_LIB) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+$(BUILD)/test_core: $(TEST_OBJS) $(CORE_LIB)
+	$(CC) $(CFLAGS) $(TEST_OBJS) $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 test: camera-geometry-test shop-quantity-details-ui-test camp-repair-test camp-repair-interaction-test sandbox-repair-ui-test sandbox-repair-host-test inventory-discard-test adventure-mission-events-test camera-environment-test sandbox-camera-environment-host-test town-defense-spawn-test sandbox-inventory-ui-test sandbox-vegetation-host-test vegetation-view-test sandbox-build-history-host-test sandbox-shop-trade-ui-test sandbox-wallet-host-test sandbox-revival-host-test humanoid-rotation-test sandbox-stamina-host-test sandbox-health-host-test sandbox-equipment-host-test hunt-consume-test training-asset-clocks-test actor-blend-test town-defense-clock-test terrain-material-test $(BUILD)/test_core ui-asset-test sandbox-ui-test sandbox-actor-test sandbox-world-test sandbox-camera-test
 	./$(BUILD)/test_core
 	python3 tests/test_adventure_settlement_export.py
@@ -123,8 +178,9 @@ test: camera-geometry-test shop-quantity-details-ui-test camp-repair-test camp-r
 	python3 tests/test_training_ui_input.py
 	python3 tests/test_training_npc_analysis.py
 	python3 tests/test_reference_npc_bake.py
-sanitize: | $(BUILD)
-	$(CC) $(CPPFLAGS) -std=c11 -g -O1 -Wall -Wextra -Wpedantic -fno-omit-frame-pointer -fsanitize=address,undefined $(TESTS) $(CORE) -o $(BUILD)/test_sanitize $(LZ4_LIBS) -lm
+$(BUILD)/test_sanitize: $(SANITIZE_OBJS)
+	$(CC) $(SANITIZE_FLAGS) $(SANITIZE_OBJS) -o $@ $(LZ4_LIBS) -lm
+sanitize: $(BUILD)/test_sanitize
 	ASAN_OPTIONS='$(ASAN_OPTIONS)' ./$(BUILD)/test_sanitize
 content:
 	python3 tools/export_content.py
@@ -161,8 +217,8 @@ run: all
 clean:
 	rm -rf $(BUILD)
 
-$(BUILD)/smoke_fixture: tests/smoke_fixture.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/smoke_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/smoke_fixture: tests/smoke_fixture.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/smoke_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 smoke: all $(BUILD)/smoke_fixture
 	./$(BUILD)/smoke_fixture $(BUILD)/smoke-fixture.pesave
 	./$(BUILD)/planet_explorers --load $(BUILD)/smoke-fixture.pesave --smoke 90 --smoke-panel inventory --screenshot $(BUILD)/smoke-inventory.png
@@ -193,16 +249,16 @@ $(BUILD)/test_sandbox_actor: tests/test_sandbox_actor.c src/pe_inventory.c gener
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_actor.c src/pe_inventory.c generated/pe_content.c src/pe_sandbox_actor.c src/pe_player_locomotion.c src/pe_combat.c -o $@ -lm
 sandbox-actor-test: $(BUILD)/test_sandbox_actor
 	./$(BUILD)/test_sandbox_actor
-$(BUILD)/test_sandbox_ui: tests/test_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_sandbox_ui.h tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_ui.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_ui: tests/test_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_sandbox_ui.h tests/adventure_test_helpers.h $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 sandbox-ui-test: $(BUILD)/test_sandbox_ui
 	./$(BUILD)/test_sandbox_ui
 menu-smoke: all
 	./$(BUILD)/planet_explorers --main-menu --smoke 30 --screenshot $(BUILD)/smoke-main-menu.png
 
 .PHONY: adventure-smoke
-$(BUILD)/adventure_fixture: tests/adventure_fixture.c tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/adventure_fixture: tests/adventure_fixture.c tests/adventure_test_helpers.h $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 adventure-smoke: all $(BUILD)/adventure_fixture
 	./$(BUILD)/adventure_fixture $(BUILD)/adventure-fixture.pesave $(BUILD)/adventure-airborne.pesave
 	./$(BUILD)/planet_explorers --load $(BUILD)/adventure-fixture.pesave --smoke 90 --smoke-panel character --screenshot $(BUILD)/smoke-adventure-character.png
@@ -256,8 +312,8 @@ $(BUILD)/test_sandbox_world_view: tests/test_sandbox_world_view.c src/pe_sandbox
 sandbox-world-test: $(BUILD)/test_sandbox_world_view
 	./$(BUILD)/test_sandbox_world_view
 
-$(BUILD)/sandbox_action_fixture: tests/sandbox_action_fixture.c tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/sandbox_action_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/sandbox_action_fixture: tests/sandbox_action_fixture.c tests/adventure_test_helpers.h $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/sandbox_action_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 .PHONY: sandbox-action-fixtures
 sandbox-action-fixtures: $(BUILD)/sandbox_action_fixture
 	./$(BUILD)/sandbox_action_fixture $(BUILD)/sandbox-dig-action.pesave $(BUILD)/sandbox-fell-action.pesave
@@ -269,8 +325,8 @@ sandbox-camera-test: $(BUILD)/test_sandbox_camera
 	./$(BUILD)/test_sandbox_camera
 
 # Test-only funded saves for physical town UI and Annot completion checks.
-$(BUILD)/adventure_town_fixture: tests/adventure_town_fixture.c tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_town_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/adventure_town_fixture: tests/adventure_town_fixture.c tests/adventure_test_helpers.h $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_town_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 .PHONY: adventure-town-fixtures adventure-shop-fixture adventure-annot-fixture
 adventure-shop-fixture: $(BUILD)/adventure_town_fixture
 	./$(BUILD)/adventure_town_fixture --shop $(BUILD)/adventure-shop-fixture.pesave
@@ -278,8 +334,8 @@ adventure-annot-fixture: $(BUILD)/adventure_town_fixture
 	./$(BUILD)/adventure_town_fixture --annot $(BUILD)/adventure-annot-fixture.pesave
 adventure-town-fixtures: adventure-shop-fixture adventure-annot-fixture
 
-$(BUILD)/adventure_supplier_fixture: tests/adventure_supplier_fixture.c tests/adventure_test_helpers.h $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_supplier_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/adventure_supplier_fixture: tests/adventure_supplier_fixture.c tests/adventure_test_helpers.h $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_supplier_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 
 .PHONY: terrain-material-test
 $(BUILD)/test_terrain_material: tests/test_terrain_material.c src/pe_terrain_material.c src/pe_terrain_material.h generated/pe_terrain_materials.h | $(BUILD)
@@ -291,7 +347,6 @@ terrain-material-test: $(BUILD)/test_terrain_material $(BUILD)/test_terrain_mate
 	./$(BUILD)/test_terrain_material_view
 
 # Optional offline UnityPy/Pillow environment; never needed by the C runtime.
-ASSET_PYTHON ?= python3
 
 # Modern sword/shield metadata is a foundation, not enabled runtime equipment.
 # Binary source-prefab validation requires the optional UnityPy environment.
@@ -304,14 +359,14 @@ terrain-asset-test:
 	$(ASSET_PYTHON) tests/test_terrain_assets.py
 terrain-assets-check:
 	$(ASSET_PYTHON) tools/export_terrain_assets.py --check
-$(BUILD)/terrain_material_fixture: tests/terrain_material_fixture.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/terrain_material_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
-$(BUILD)/adventure_route_fixture: tests/adventure_route_fixture.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_route_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/terrain_material_fixture: tests/terrain_material_fixture.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/terrain_material_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/adventure_route_fixture: tests/adventure_route_fixture.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_route_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 
 # Existing physically reached checkpoint; no fixture grants or position edits.
-$(BUILD)/adventure_medicine_fixture: tests/adventure_medicine_fixture.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_medicine_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/adventure_medicine_fixture: tests/adventure_medicine_fixture.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/adventure_medicine_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 .PHONY: adventure-medicine-fixture
 adventure-medicine-fixture: $(BUILD)/adventure_medicine_fixture
 	./$(BUILD)/adventure_medicine_fixture --prepare $(BUILD)/annot-route-graphical-final.pesave $(BUILD)/medicine-ready.pesave > $(BUILD)/medicine-headless.json
@@ -330,20 +385,20 @@ town-defense-clock-test: $(BUILD)/test_town_defense_clock
 .PHONY: hunt-consume-test
 $(BUILD)/hunt_consume_host.inc: tests/test_hunt_consume_host.py src/pe_sandbox_view.c | $(BUILD)
 	python3 tests/test_hunt_consume_host.py --output $@
-$(BUILD)/test_hunt_consume: tests/test_hunt_consume.c $(BUILD)/hunt_consume_host.inc src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) -I$(BUILD) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_hunt_consume.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_hunt_consume: tests/test_hunt_consume.c $(BUILD)/hunt_consume_host.inc src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) -I$(BUILD) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_hunt_consume.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 hunt-consume-test: $(BUILD)/test_hunt_consume
 	@./$(BUILD)/test_hunt_consume; result=$$?; if [ $$result -eq 77 ]; then echo "hunt consume: asset-dependent regression SKIPPED (not passed)"; elif [ $$result -ne 0 ]; then exit $$result; fi
 
 .PHONY: sandbox-health-host-test
-$(BUILD)/test_sandbox_health_host: tests/test_sandbox_health_host.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_health_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_health_host: tests/test_sandbox_health_host.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_health_host.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-health-host-test: $(BUILD)/test_sandbox_health_host
 	./$(BUILD)/test_sandbox_health_host
 
 .PHONY: sandbox-stamina-host-test
-$(BUILD)/test_sandbox_stamina_host: tests/test_sandbox_stamina_host.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_stamina_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_stamina_host: tests/test_sandbox_stamina_host.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_stamina_host.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-stamina-host-test: $(BUILD)/test_sandbox_stamina_host
 	./$(BUILD)/test_sandbox_stamina_host
 
@@ -372,50 +427,49 @@ humanoid-rotation-test: $(BUILD)/test_human_rotation_math
 	python3 tests/test_humanoid_rotation_probe.py
 
 .PHONY: sandbox-revival-host-test
-$(BUILD)/test_sandbox_revival_host: tests/test_sandbox_revival_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_revival_host.c src/pe_sandbox_ui_input.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_revival_host: tests/test_sandbox_revival_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_revival_host.c src/pe_sandbox_ui_input.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-revival-host-test: $(BUILD)/test_sandbox_revival_host
 	./$(BUILD)/test_sandbox_revival_host
 
 .PHONY: sword-policy-test
-$(BUILD)/test_sword_policy: tests/test_sword_policy_main.c tests/test_sword_variant.c tests/test_sword_motion.c tests/test_running_attack_motion.c tests/test_sandbox_melee.c tests/test_running_attack_pipeline.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_sword_policy_main.c tests/test_sword_variant.c tests/test_sword_motion.c tests/test_running_attack_motion.c tests/test_sandbox_melee.c tests/test_running_attack_pipeline.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sword_policy: tests/test_sword_policy_main.c tests/test_sword_variant.c tests/test_sword_motion.c tests/test_running_attack_motion.c tests/test_sandbox_melee.c tests/test_running_attack_pipeline.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_sword_policy_main.c tests/test_sword_variant.c tests/test_sword_motion.c tests/test_running_attack_motion.c tests/test_sandbox_melee.c tests/test_running_attack_pipeline.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 sword-policy-test: $(BUILD)/test_sword_policy
 	./$(BUILD)/test_sword_policy
 
 # These prefab checks require UnityPy, like the existing animation exporters.
-UNITY_PYTHON ?= $(if $(wildcard build/unity-tools/bin/python),build/unity-tools/bin/python,python3)
 .PHONY: sword-source-check
 sword-source-check:
 	$(UNITY_PYTHON) tools/export_sword_variant.py --check
 	$(UNITY_PYTHON) tests/test_sword_variant_export.py
 
 .PHONY: sword-walking-test sandbox-sword-motion-host-test
-$(BUILD)/test_sword_walking: tests/test_sword_walking_main.c tests/test_sword_root_motion.c tests/test_sword_walking.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_sword_walking_main.c tests/test_sword_root_motion.c tests/test_sword_walking.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sword_walking: tests/test_sword_walking_main.c tests/test_sword_root_motion.c tests/test_sword_walking.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_sword_walking_main.c tests/test_sword_root_motion.c tests/test_sword_walking.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 sword-walking-test: $(BUILD)/test_sword_walking
 	./$(BUILD)/test_sword_walking
 	python3 tests/test_player_root_channels.py
 	python3 tests/test_sword_root_export.py
-$(BUILD)/test_sandbox_sword_motion_host: tests/test_sandbox_sword_motion_host.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_sword_motion_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_sword_motion_host: tests/test_sandbox_sword_motion_host.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_sword_motion_host.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-sword-motion-host-test: $(BUILD)/test_sandbox_sword_motion_host
 	./$(BUILD)/test_sandbox_sword_motion_host
 
 .PHONY: town-wallet-test sandbox-wallet-host-test
-$(BUILD)/test_town_wallet: tests/test_town_wallet_main.c tests/test_town_wallet.c tests/test_town_wallet_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_town_wallet_main.c tests/test_town_wallet.c tests/test_town_wallet_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_town_wallet: tests/test_town_wallet_main.c tests/test_town_wallet.c tests/test_town_wallet_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_town_wallet_main.c tests/test_town_wallet.c tests/test_town_wallet_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 town-wallet-test: $(BUILD)/test_town_wallet
 	./$(BUILD)/test_town_wallet
 	python3 tests/test_town_wallet_export.py
-$(BUILD)/test_sandbox_wallet_host: tests/test_sandbox_wallet_host.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_wallet_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_wallet_host: tests/test_sandbox_wallet_host.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_wallet_host.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-wallet-host-test: $(BUILD)/test_sandbox_wallet_host
 	./$(BUILD)/test_sandbox_wallet_host
 
 .PHONY: hunt-save-inspector hunt-save-inspector-test native-private-input-test
-$(BUILD)/inspect_hunt_save: tools/inspect_hunt_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tools/inspect_hunt_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/inspect_hunt_save: tools/inspect_hunt_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tools/inspect_hunt_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 hunt-save-inspector: $(BUILD)/inspect_hunt_save
 
 hunt-save-inspector-test:
@@ -428,53 +482,53 @@ native-private-input-test:
 test: hunt-save-inspector-test native-private-input-test
 
 .PHONY: town-trade-test
-$(BUILD)/test_town_trade: tests/test_town_trade_main.c tests/test_town_trade.c tests/test_town_trade_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_town_trade_main.c tests/test_town_trade.c tests/test_town_trade_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_town_trade: tests/test_town_trade_main.c tests/test_town_trade.c tests/test_town_trade_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_town_trade_main.c tests/test_town_trade.c tests/test_town_trade_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 town-trade-test: $(BUILD)/test_town_trade
 	./$(BUILD)/test_town_trade
 	python3 tests/test_town_trade_export.py
 
 .PHONY: sandbox-shop-trade-ui-test
-$(BUILD)/test_sandbox_shop_trade_ui: tests/test_sandbox_shop_trade_ui.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_shop_trade_ui.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_shop_trade_ui: tests/test_sandbox_shop_trade_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_shop_trade_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 sandbox-shop-trade-ui-test: $(BUILD)/test_sandbox_shop_trade_ui
 	./$(BUILD)/test_sandbox_shop_trade_ui
 
 .PHONY: build-history-test sandbox-build-history-host-test
-$(BUILD)/test_build_history: tests/test_build_history_main.c tests/test_build_history.c tests/test_build_history_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_build_history_main.c tests/test_build_history.c tests/test_build_history_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_build_history: tests/test_build_history_main.c tests/test_build_history.c tests/test_build_history_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_build_history_main.c tests/test_build_history.c tests/test_build_history_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 build-history-test: $(BUILD)/test_build_history
 	./$(BUILD)/test_build_history
 	python3 tests/test_build_history_export.py
-$(BUILD)/test_sandbox_build_history_host: tests/test_sandbox_build_history_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_build_history_host.c src/pe_sandbox_ui_input.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_build_history_host: tests/test_sandbox_build_history_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_build_history_host.c src/pe_sandbox_ui_input.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-build-history-host-test: $(BUILD)/test_sandbox_build_history_host
 	./$(BUILD)/test_sandbox_build_history_host
 
 .PHONY: vegetation-test sandbox-vegetation-host-test
-$(BUILD)/test_vegetation: tests/test_vegetation_main.c tests/test_vegetation.c tests/test_vegetation_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_vegetation_main.c tests/test_vegetation.c tests/test_vegetation_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_vegetation: tests/test_vegetation_main.c tests/test_vegetation.c tests/test_vegetation_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_vegetation_main.c tests/test_vegetation.c tests/test_vegetation_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 vegetation-test: $(BUILD)/test_vegetation
 	./$(BUILD)/test_vegetation
-$(BUILD)/vegetation_fixture: tests/vegetation_fixture.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/vegetation_fixture.c $(CORE) -o $@ $(LZ4_LIBS) -lm
-$(BUILD)/test_sandbox_vegetation_host: tests/test_sandbox_vegetation_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_vegetation_host.c src/pe_sandbox_ui_input.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/vegetation_fixture: tests/vegetation_fixture.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/vegetation_fixture.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_vegetation_host: tests/test_sandbox_vegetation_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_vegetation_host.c src/pe_sandbox_ui_input.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-vegetation-host-test: $(BUILD)/test_sandbox_vegetation_host
 	./$(BUILD)/test_sandbox_vegetation_host
 .PHONY: vegetation-view-test
-$(BUILD)/test_vegetation_view: tests/test_vegetation_view.c src/pe_vegetation_view.c src/pe_reference.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_vegetation_view.c src/pe_vegetation_view.c src/pe_reference.c $(CORE) -Wl,--gc-sections -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+$(BUILD)/test_vegetation_view: tests/test_vegetation_view.c src/pe_vegetation_view.c src/pe_reference.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_vegetation_view.c src/pe_vegetation_view.c src/pe_reference.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 vegetation-view-test: $(BUILD)/test_vegetation_view
 	./$(BUILD)/test_vegetation_view; result=$$?; test $$result -eq 0 -o $$result -eq 77
 
 .PHONY: sandbox-inventory-ui-test inventory-test
-$(BUILD)/test_inventory_ui: tests/test_inventory_ui.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_inventory_ui.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_inventory_ui: tests/test_inventory_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_inventory_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 sandbox-inventory-ui-test: $(BUILD)/test_inventory_ui
 	./$(BUILD)/test_inventory_ui
-$(BUILD)/test_inventory: tests/test_inventory_main.c tests/test_inventory.c tests/test_inventory_save.c tests/test_harvest.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_inventory_main.c tests/test_inventory.c tests/test_inventory_save.c tests/test_harvest.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_inventory: tests/test_inventory_main.c tests/test_inventory.c tests/test_inventory_save.c tests/test_harvest.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_inventory_main.c tests/test_inventory.c tests/test_inventory_save.c tests/test_harvest.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 inventory-test: $(BUILD)/test_inventory
 	./$(BUILD)/test_inventory
 
@@ -483,8 +537,8 @@ $(BUILD)/test_camera_environment: tests/test_camera_environment.c src/pe_sandbox
 	$(CC) $(CPPFLAGS) $(CFLAGS) tests/test_camera_environment.c src/pe_sandbox_camera.c -o $@ -lm
 camera-environment-test: $(BUILD)/test_camera_environment
 	./$(BUILD)/test_camera_environment
-$(BUILD)/test_sandbox_camera_environment_host: tests/test_sandbox_camera_environment_host.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_camera_environment_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_camera_environment_host: tests/test_sandbox_camera_environment_host.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_camera_environment_host.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-camera-environment-host-test: $(BUILD)/test_sandbox_camera_environment_host
 	./$(BUILD)/test_sandbox_camera_environment_host
 $(BUILD)/test_town_defense_spawn: tests/test_town_defense_spawn.c src/pe_town_defense_spawn.c src/pe_town_defense_spawn.h src/pe_town_defense_clock.c $(HEADERS) | $(BUILD)
@@ -505,8 +559,8 @@ adventure-mission-events-test: $(BUILD)/test_adventure_mission_events
 	./$(BUILD)/test_adventure_mission_events
 
 .PHONY: inventory-discard-test
-$(BUILD)/test_inventory_discard: tests/test_inventory_discard.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_inventory_discard.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_inventory_discard: tests/test_inventory_discard.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_inventory_discard.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 inventory-discard-test: $(BUILD)/test_inventory_discard
 	./$(BUILD)/test_inventory_discard
 
@@ -520,33 +574,33 @@ camp-repair-source-check:
 	$(UNITY_PYTHON) tests/test_camp_repair_export.py
 
 .PHONY: camp-repair-save-test camp-repair-interaction-test sandbox-repair-ui-test sandbox-repair-host-test
-$(BUILD)/test_camp_repair_save: tests/test_camp_repair_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_CAMP_REPAIR_SAVE_TEST_MAIN tests/test_camp_repair_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_camp_repair_save: tests/test_camp_repair_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_CAMP_REPAIR_SAVE_TEST_MAIN tests/test_camp_repair_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 camp-repair-save-test: $(BUILD)/test_camp_repair_save
 	./$(BUILD)/test_camp_repair_save
-$(BUILD)/test_camp_repair_interaction: tests/test_camp_repair_interaction.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_camp_repair_interaction.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_camp_repair_interaction: tests/test_camp_repair_interaction.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_camp_repair_interaction.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 camp-repair-interaction-test: $(BUILD)/test_camp_repair_interaction
 	cd .. && rebuild/$(BUILD)/test_camp_repair_interaction --installed
-$(BUILD)/test_sandbox_repair_host: tests/test_sandbox_repair_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_repair_host.c src/pe_sandbox_ui_input.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_repair_host: tests/test_sandbox_repair_host.c src/pe_sandbox_view.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_repair_host.c src/pe_sandbox_ui_input.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-repair-host-test: $(BUILD)/test_sandbox_repair_host
 	./$(BUILD)/test_sandbox_repair_host
 
-$(BUILD)/test_sandbox_repair_ui: tests/test_sandbox_repair_ui.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_repair_ui.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_repair_ui: tests/test_sandbox_repair_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_sandbox_repair_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 sandbox-repair-ui-test: $(BUILD)/test_sandbox_repair_ui
 	./$(BUILD)/test_sandbox_repair_ui
 
 .PHONY: shop-quantity-details-ui-test
-$(BUILD)/test_shop_quantity_details_ui: tests/test_shop_quantity_details_ui.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_shop_quantity_details_ui.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_shop_quantity_details_ui: tests/test_shop_quantity_details_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/test_shop_quantity_details_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 shop-quantity-details-ui-test: $(BUILD)/test_shop_quantity_details_ui
 	./$(BUILD)/test_shop_quantity_details_ui
 
 .PHONY: bandage-test camera-geometry-test camera-geometry-source-check
-$(BUILD)/test_bandage: tests/test_bandage.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_BANDAGE_TEST_MAIN tests/test_bandage.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_bandage: tests/test_bandage.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_BANDAGE_TEST_MAIN tests/test_bandage.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 bandage-test: $(BUILD)/test_bandage
 	./$(BUILD)/test_bandage
 $(BUILD)/test_camera_geometry: tests/test_camera_geometry.c src/pe_camera_geometry.c src/pe_camera_geometry.h generated/pe_camera_geometry_source.h | $(BUILD)
@@ -560,8 +614,8 @@ camera-geometry-source-check:
 # Optional staged rendering on a private Xvfb display; never part of make test.
 # Requires the locally extracted Xvfb described in SHOP_QUANTITY_AND_ITEM_DETAILS.
 .PHONY: shop-details-render-capture
-$(BUILD)/render_shop_details_ui: tests/render_shop_details_ui.c $(UI_SHARED) src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_ui_assets.c src/pe_training_ui_shader.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(LZ4_CFLAGS) tests/render_shop_details_ui.c $(UI_SHARED) src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_ui_assets.c src/pe_training_ui_shader.c $(CORE) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+$(BUILD)/render_shop_details_ui: tests/render_shop_details_ui.c $(UI_SHARED) src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_ui_assets.c src/pe_training_ui_shader.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(LZ4_CFLAGS) tests/render_shop_details_ui.c $(UI_SHARED) src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_ui_assets.c src/pe_training_ui_shader.c $(CORE_LIB) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 shop-details-render-capture: $(BUILD)/render_shop_details_ui
 	python3 tests/run_private_ui_capture.py
 
@@ -575,14 +629,14 @@ test: ui-shared-test
 
 .PHONY: ui-shared-render-capture
 UI_RENDER_HOSTS = src/pe_ui_settings.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/pe_ui_assets.c src/pe_training_ui_shader.c
-$(BUILD)/render_shared_ui: tests/render_shared_ui.c $(UI_SHARED) $(UI_RENDER_HOSTS) $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(LZ4_CFLAGS) tests/render_shared_ui.c $(UI_SHARED) $(UI_RENDER_HOSTS) $(CORE) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+$(BUILD)/render_shared_ui: tests/render_shared_ui.c $(UI_SHARED) $(UI_RENDER_HOSTS) $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(LZ4_CFLAGS) tests/render_shared_ui.c $(UI_SHARED) $(UI_RENDER_HOSTS) $(CORE_LIB) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 ui-shared-render-capture: $(BUILD)/render_shared_ui
 	python3 tests/run_private_ui_capture.py --shared
 
 .PHONY: conversation-ui-test
-$(BUILD)/test_conversation_ui: tests/test_conversation_ui.c src/pe_sandbox_ui_input.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(LZ4_CFLAGS) tests/test_conversation_ui.c src/pe_sandbox_ui_input.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_conversation_ui: tests/test_conversation_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) $(LZ4_CFLAGS) tests/test_conversation_ui.c src/pe_sandbox_ui_input.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 conversation-ui-test: $(BUILD)/test_conversation_ui
 	./$(BUILD)/test_conversation_ui
 test: conversation-ui-test
@@ -620,8 +674,8 @@ test: camera-query-test
 check-content: camera-query-source-check
 
 .PHONY: sandbox-blade-facing-test
-$(BUILD)/test_sandbox_blade_facing: tests/test_sandbox_blade_facing.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_blade_facing.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_blade_facing: tests/test_sandbox_blade_facing.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_blade_facing.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-blade-facing-test: $(BUILD)/test_sandbox_blade_facing
 	./$(BUILD)/test_sandbox_blade_facing
 test: sandbox-blade-facing-test
@@ -661,12 +715,12 @@ settings-render-capture: $(BUILD)/render_app_settings
 	python3 tests/run_private_ui_capture.py --settings
 
 .PHONY: hunt-loot-test hunt-loot-combat-test hunt-loot-source-check
-$(BUILD)/test_hunt_loot: tests/test_hunt_loot.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_HUNT_LOOT_TEST_MAIN tests/test_hunt_loot.c $(CORE) -o $@ $(LZ4_LIBS) -lm
-$(BUILD)/test_hunt_loot_save: tests/test_hunt_loot_save.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_HUNT_LOOT_SAVE_TEST_MAIN tests/test_hunt_loot_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
-$(BUILD)/test_hunt_loot_combat: tests/test_hunt_loot_combat.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_HUNT_LOOT_COMBAT_TEST_MAIN tests/test_hunt_loot_combat.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_hunt_loot: tests/test_hunt_loot.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_HUNT_LOOT_TEST_MAIN tests/test_hunt_loot.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_hunt_loot_save: tests/test_hunt_loot_save.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_HUNT_LOOT_SAVE_TEST_MAIN tests/test_hunt_loot_save.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_hunt_loot_combat: tests/test_hunt_loot_combat.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) -DPE_HUNT_LOOT_COMBAT_TEST_MAIN tests/test_hunt_loot_combat.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 hunt-loot-test: $(BUILD)/test_hunt_loot $(BUILD)/test_hunt_loot_save $(BUILD)/test_hunt_loot_combat
 	./$(BUILD)/test_hunt_loot
 	./$(BUILD)/test_hunt_loot_save
@@ -680,25 +734,25 @@ test: hunt-loot-combat-test
 check-content: hunt-loot-source-check
 
 .PHONY: hunt-loot-render-capture
-$(BUILD)/render_hunt_loot: tests/render_hunt_loot.c src/pe_sandbox_view.c $(CORE) $(HEADERS) src/pe_ui_draw.c src/pe_ui_assets.c | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/render_hunt_loot.c src/pe_ui_draw.c src/pe_ui_assets.c $(CORE) -Wl,--gc-sections -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+$(BUILD)/render_hunt_loot: tests/render_hunt_loot.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) src/pe_ui_draw.c src/pe_ui_assets.c | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/render_hunt_loot.c src/pe_ui_draw.c src/pe_ui_assets.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 hunt-loot-render-capture: $(BUILD)/render_hunt_loot
 	python3 tests/run_private_ui_capture.py --loot
 
 .PHONY: hunt-loot-markers-test
-$(BUILD)/test_hunt_loot_markers: tests/test_hunt_loot_markers.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_hunt_loot_markers.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_hunt_loot_markers: tests/test_hunt_loot_markers.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_hunt_loot_markers.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 hunt-loot-markers-test: $(BUILD)/test_hunt_loot_markers
 	./$(BUILD)/test_hunt_loot_markers
 test: hunt-loot-markers-test
 
 .PHONY: debug-test sandbox-debug-host-test
-$(BUILD)/test_debug: tests/test_debug.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_debug.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_debug: tests/test_debug.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/test_debug.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
 debug-test: $(BUILD)/test_debug
 	./$(BUILD)/test_debug
-$(BUILD)/test_sandbox_debug_host: tests/test_sandbox_debug_host.c src/pe_sandbox_view.c $(CORE) $(HEADERS) | $(BUILD)
-	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_debug_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
+$(BUILD)/test_sandbox_debug_host: tests/test_sandbox_debug_host.c src/pe_sandbox_view.c $(CORE_LIB) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_debug_host.c $(CORE_LIB) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-debug-host-test: $(BUILD)/test_sandbox_debug_host
 	./$(BUILD)/test_sandbox_debug_host
 test: debug-test sandbox-debug-host-test

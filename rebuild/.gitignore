@@ -3,3 +3,4 @@
 *.pesave.tmp
 __pycache__/
 /screenshot*.png
+/compile_commands.json

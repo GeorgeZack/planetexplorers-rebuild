@@ -92,12 +92,14 @@ Torch10 is the first supported purchased deployable. `pe_deployable` owns exact 
 Run checks relevant to the change from the repository root:
 
 ```sh
-make -C rebuild
-make -C rebuild test
-make -C rebuild sanitize
+make -C rebuild -j"$(nproc)"
+make -C rebuild check
+make -C rebuild check-sanitize
 make -C rebuild check-content
 make -C rebuild cli-test
 ```
+
+`check` is the parallel form of `make test` ([run_tests.py](rebuild/tools/run_tests.py)): it reports every failure and the skip total instead of stopping at the first error; `-k NAME` or `build/test_core NAME` runs one suite. `check-sanitize` runs the same registry under ASan/UBSan with one leak-scanned process per suite; `make sanitize` remains the single-process form. Sources compile once into `build/obj` and binaries link `libpe_core.a`, so never reintroduce `$(CORE)` source lists into a test rule. Register a core suite with one `PE_TEST(name)` line in `tests/test_core_list.h`. UnityPy checks use `build/unity-tools` (`make -C rebuild unity-tools`) when present.
 
 Choose the relevant subset; documentation-only changes need link/claim checks, not an automatic full graphics rerun. Some checks use recovered assets under `rebuild/build/reference-assets`, and asset-dependent skips are not passes. Graphics changes need an appropriate smoke/manual check. The full supported tutorial progression uses `make -C rebuild training-building-smoke` (15,000 frames); the NPC survey uses `training-npcs-smoke`. Consult the Makefile and README for smaller fixtures and prerequisites.
 
@@ -155,4 +157,4 @@ Route observation uses `reference_terrain_route.py`; installation uses `export_a
 
 ## Melee capsule-history ownership
 
-Sandbox blade history belongs to `PeSandboxMelee`; each hunt hare owns four authored attack-part histories in `PeHuntCombat`. `pe_capsule_history` implements previous/current source sampling against current defence capsules, including the previous-only single-sample case and first source-order overlap. Keep history advancement outside target/guide dedupe; missed, ineligible and already-hit targets must not freeze an active trigger. The general contact helpers retain an explicit instantaneous path for legacy callers; the sandbox enables history using exported player/hare collider centers, not movement capsule dimensions or bone origins. History is transient and unsaved; PECS remainsv16. Native60Hz cadence and activation pinning are explicit scheduling adapters; original PhysX candidate/effected-trigger ordering remains unrecovered. The4096-sample bound fails closed, never truncates. See [capsule audit](docs/audit/MELEE_CAPSULE_HISTORY.md); verify source centers with `make -C rebuild capsule-history-source-check ASSET_PYTHON=/absolute/path/to/unitypy/python`.
+Sandbox blade history belongs to `PeSandboxMelee`; each hunt hare owns four authored attack-part histories in `PeHuntCombat`. `pe_capsule_history` implements previous/current source sampling against current defence capsules, including the previous-only single-sample case and first source-order overlap. Keep history advancement outside target/guide dedupe; missed, ineligible and already-hit targets must not freeze an active trigger. The general contact helpers retain an explicit instantaneous path for legacy callers; the sandbox enables history using exported player/hare collider centers, not movement capsule dimensions or bone origins. History is transient and unsaved; it added no save field. Native60Hz cadence and activation pinning are explicit scheduling adapters; original PhysX candidate/effected-trigger ordering remains unrecovered. The4096-sample bound fails closed, never truncates. See [capsule audit](docs/audit/MELEE_CAPSULE_HISTORY.md); verify source centers with `make -C rebuild capsule-history-source-check ASSET_PYTHON=/absolute/path/to/unitypy/python`.

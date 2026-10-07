@@ -79,7 +79,9 @@ def hashes(root):
     for group in GROUPS:
         for p in sorted((root/group).rglob('*')):
             if p.is_symlink():raise ValueError('Linked staged asset')
-            if p.is_file():result[str(p.relative_to(root))]=digest(p)
+            # PEAM1 sidecars are installed and verified by export_actor_materials.py,
+            # not by this group; every file this exporter writes stays pinned.
+            if p.is_file() and not p.name.endswith('.peas.materials'):result[str(p.relative_to(root))]=digest(p)
     return result
 
 
