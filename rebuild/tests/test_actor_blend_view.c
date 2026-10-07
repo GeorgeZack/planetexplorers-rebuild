@@ -2,6 +2,7 @@
  * intercepted submissions; no window, GL context or installed assets. */
 #define _POSIX_C_SOURCE 200809L
 #include "pe_actor_scene_view.h"
+#include <rlgl.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +10,19 @@
 #include <unistd.h>
 static int failures,draws,updates;
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"blend view:%d: %s\n",__LINE__,#x);failures++;}}while(0)
+/* These fixtures intentionally retain legacy materials. Link the shared draw
+ * boundary, but fail if blending starts requiring shader/GL-state operations.
+ * Qualified material values and cull restoration have separate GPU checks. */
+static void unexpected_material_api(const char *name){
+    fprintf(stderr,"blend view: legacy draw called %s\n",name);failures++;
+}
+void SetShaderValue(Shader shader,int location,const void *value,int type){
+    (void)shader;(void)location;(void)value;(void)type;unexpected_material_api("SetShaderValue");
+}
+void rlDrawRenderBatchActive(void){unexpected_material_api("rlDrawRenderBatchActive");}
+void rlEnableBackfaceCulling(void){unexpected_material_api("rlEnableBackfaceCulling");}
+void rlDisableBackfaceCulling(void){unexpected_material_api("rlDisableBackfaceCulling");}
+void *rlGetProcAddress(const char *name){(void)name;unexpected_material_api("rlGetProcAddress");return NULL;}
 static void u32(unsigned char*p,uint32_t v){for(int i=0;i<4;i++)p[i]=(unsigned char)(v>>(8*i));}
 static void f32(unsigned char*p,float v){uint32_t bits;memcpy(&bits,&v,4);u32(p,bits);}
 static void matrix(unsigned char*p,float x){const float m[12]={1,0,0,x,0,1,0,0,0,0,1,0};for(int i=0;i<12;i++)f32(p+4*i,m[i]);}

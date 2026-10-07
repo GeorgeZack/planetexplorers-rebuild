@@ -1,5 +1,9 @@
 # Planet Explorers project map
 
+[Actor materials](docs/audit/ACTOR_MATERIALS.md): `export_actor_materials.py` recovers alpha/culling policy into optional source-bound sidecars; `pe_actor_scene_manifest` validates them and the shared actor views apply cutouts to both hosts. Existing meshes, textures and animation groups remain unchanged.
+
+[Adventure debug tools](docs/audit/DEBUG_TOOLS.md): `pe_debug` owns atomic medicine/supply/hunt-skip commands; `pe_ui_settings` owns the session toggle and shared controls; `pe_sandbox_view` admits requests and resets transient owners after travel. These are explicit cheats, with no new save format or automatic save.
+
 The private rebuild uses `master` as its working/default branch on remote `rebuild`. Local `unity-reference-master` preserves the original source reference tracking `origin/master`.
 
 [Hunt loot](docs/audit/HUNT_LOOT.md): `pe_hunt_loot` owns source rolls, saved world-item identities, whole-stack pickup and expiry; `pe_hunt_loot_combat` commits actual contact deaths with their drops. PECSv22 appends this state without changing the v21 payload. `export_hunt_loot.py` guards the active source path, database and prefab; the sandbox host supplies readonly icon clusters through shared UI primitives.

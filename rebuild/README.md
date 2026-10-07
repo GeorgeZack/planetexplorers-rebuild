@@ -1,5 +1,9 @@
 # Planet Explorers C rebuild
 
+Hairline/eye transparency now uses recovered source alpha/culling rules in the shared actor renderer. The local sidecars are installed; restart the rebuilt game to see the correction. After replacing actor assets, regenerate their metadata using the [actor material recovery instructions](../docs/audit/ACTOR_MATERIALS.md#export-and-installation).
+
+**Unblock testing:** in Adventure, open **Esc → Settings → Debug tools: ON**. Choose **Give 5 Herbal Drinks** to finish the current Naoko turn-in, **Combat supplies + heal**, or **Skip to hare hunt** to equip the Knife and go straight to combat. Back/Esc returns to Pause; Resume continues play. Nothing saves automatically. The toggle resets when you leave the host. Sword/Shield remain unavailable; these tools use the supported Knife. [Scope and safeguards](../docs/audit/DEBUG_TOOLS.md).
+
 Hunt hares now drop source-derived loot. Walk within four metres while alive to collect it automatically; a full inventory leaves complete stacks on the ground. Uncollected drops survive saving/loading and hunt completion. Saves are now **PECSv22**; older saves load with no retroactive drops. Nearby ground icons are a bounded presentation adapter. [Loot rules and limits](../docs/audit/HUNT_LOOT.md).
 
 **Esc → Settings** in either game mode, or Main Menu → Settings, has **Camera-facing attacks**, OFF by default. Turn it ON to aim free-mouse third-person attacks along the camera in both sandbox and tutorial. Change it while paused, then use Back/Esc to return to Pause and Resume; it applies immediately to subsequent attacks without leaving the session. Settings save automatically outside world saves; restart any already-running older executable to use the update.

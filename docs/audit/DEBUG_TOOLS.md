@@ -1,0 +1,19 @@
+# In-game Adventure debug tools
+
+User-requested testing conveniences, deliberately outside source gameplay progression. Open **Esc → Settings → Debug tools: ON** in Adventure. The toggle is session-local and defaults OFF; it is unavailable in the main menu, tutorial and Legacy host. All controls remain owned by the shared `pe_ui_settings` renderer/input owner.
+
+- **Give 5 Herbal Drinks** tops up item917 to five. It does not accept/finish the mission, spend resources, learn recipes or grant quest rewards. The active Herb Collecting objective becomes ready; use the existing Naoko conversation and final acknowledgment to complete it.
+- **Combat supplies + heal** tops up one Knife33,20 Portable Medpacks925,20 Herbal Juices916 and5 Revival Shots937, and restores HP/stamina. Existing higher counts, equipment selection, wear, cooldowns and encounter progress stay intact. Instant recovery clears the transient revival pose/grace owner; this is a cheat, not ordinary revival or healing.
+- **Skip to hare hunt** supplies the same kit, equips a usable Knife, explicitly marks the earlier prerequisites skipped, settles the player on the qualified hunt destination and enables the ordinary six-hare encounter in free-mouse third person. The skipped welcome/supplies/medicine rewards are not fabricated. Existing partial hunt credit is retained; finished/rewarded hunts cannot be reset. Ordinary remaining-cohort recreation follows the existing load policy.
+
+Nothing saves automatically. Back/Esc returns to Pause; Resume returns to gameplay. After leaving the menus, use the ordinary F9 save if wanted. Debug changes themselves use the existing PECSv22 game fields, while the toggle, request and notice are not saved. A debug-modified checkpoint must not be described as ordinary earned progress in an audit.
+
+`pe_debug` stages owning game clones and commits only the complete transaction. Insufficient bag capacity, identity exhaustion, broken/missing usable Knife, unsupported worlds and blocked hunt terrain preserve the original game, including messages, RNG, item identities, pending loot, camp repair and construction history. A source route and supported arrival surface are required; no terrain is invented or replaced.
+
+The sandbox host separately checks loaded Knife/defence/hare assets and prepares a read-only encounter preview before allowing travel. Successful travel shares the normal load path's camera/action/encounter/NPC reset, exits construction, remains paused and does not save. Medicine and supplies keep the current encounter and action clocks. Settings requests are single-use and require the open, enabled Adventure panel, focus and Pause. Disabled/stale/unfocused requests are consumed without changing the game; keyboard and held/release pointer ownership cannot fall through into combat or shortcuts.
+
+The original quest title **Herb Collecting** asks for five **Herbal Drinks**, not five generic herb pickups. The ordinary path accepts Naoko's Herbal Drink Script, learns the formula, obtains its ingredients (the bounded Annot shop supports them), crafts five drinks and turns them in. The fixed example plants are not a complete original-world herb distribution. These debug conveniences let testing continue without extending that world-generation scope.
+
+Wood Sword/Shield remain unavailable for ordinary use pending qualified animation/block integration. Debug tools supply the currently supported Knife and do not bypass those presentation/contact gates.
+
+Verification commands: `make -C rebuild debug-test sandbox-debug-host-test app-menu-settings-test ui-shared-test sandbox-ui-test`. Settings captures use `make -C rebuild settings-render-capture` through the owned high-display supervisor. Final results and evidence limits are recorded in [PLAYTEST](../PLAYTEST.md).

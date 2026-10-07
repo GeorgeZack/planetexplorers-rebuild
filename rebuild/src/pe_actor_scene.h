@@ -5,9 +5,16 @@
 #define PE_ACTOR_SCENE_MAX_CLIPS PE_ACTOR_MAX_CLIPS
 #define PE_ACTOR_SCENE_PATH_CAPACITY 4096u
 typedef struct PeActorSceneManifest PeActorSceneManifest;
+typedef enum { PE_ACTOR_ALPHA_LEGACY=0, PE_ACTOR_ALPHA_OPAQUE=1, PE_ACTOR_ALPHA_CUTOUT=2 } PeActorAlphaMode;
+typedef struct {
+    PeActorAlphaMode alpha_mode;
+    float cutoff,alpha_scale;
+    bool two_sided;
+} PeActorMaterial;
 typedef struct {
     char actor[PE_ACTOR_SCENE_PATH_CAPACITY];
     char diffuse[PE_ACTOR_SCENE_PATH_CAPACITY];
+    PeActorMaterial material;
 } PeActorScenePart;
 /* Headless preflight. PEAS1 + 1..64 ASCII basename pairs, no traversal or
  * duplicate actor. Every required file must be regular, every actor valid with
@@ -15,6 +22,9 @@ typedef struct {
  * every PNG envelope bounded. Arbitrary clip names are supported.
  * PNG decompression is deferred to the graphical adapter before InitWindow.
  * Retains the exact loaded actors and PNG bytes; later disk changes are ignored.
+ * Optional <path>.materials PEAM1 rows bind source alpha/cull policies to the
+ * exact ordered basenames and retained PNG hashes. Missing means legacy;
+ * malformed present metadata rejects the whole scene. Policies are retained.
  * Limits: actor+PNG bytes512MiB, vertices1M, indices3M, texture pixels64M.
  * Bounds combine all clip-zero first-frame posed vertices in the shared model space. */
 PeActorSceneManifest *pe_actor_scene_manifest_load(const char *path,char *error,size_t capacity);

@@ -1,6 +1,7 @@
 #ifndef PE_ACTOR_VIEW_H
 #define PE_ACTOR_VIEW_H
 #include "pe_actor.h"
+#include "pe_actor_scene.h"
 #include <raylib.h>
 
 typedef struct {
@@ -8,6 +9,8 @@ typedef struct {
     PeActorVertex *pose;
     Model model;
     Texture2D texture;
+    PeActorMaterial material; /* Source policy; scene owns the borrowed shader. */
+    int cutoff_location,alpha_location;
     bool loaded;
 } PeActorView;
 /* Zero initialize. Requires an active graphics context. Actor validation occurs

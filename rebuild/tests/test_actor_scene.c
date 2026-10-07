@@ -40,8 +40,38 @@ int pe_test_actor_scene(void){
     const unsigned char image[]={137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,1,0,0,0,1,8,4,0,0,0,181,28,12,2,0,0,0,11,73,68,65,84,120,218,99,100,248,15,0,1,5,1,1,39,24,227,102,0,0,0,0,73,69,78,68,174,66,96,130};
     CHECK(save(png,image,sizeof image));
     const char *valid="PEAS1\na.peac diffuse.png\nb.peac diffuse.png\n";CHECK(save(manifest,valid,strlen(valid)));char error[256];
+    char material_path[540],material_text[1024];snprintf(material_path,sizeof material_path,"%s.materials",manifest);
+    uint64_t image_hash=UINT64_C(14695981039346656037);
+    for(size_t i=0;i<sizeof image;i++){image_hash^=image[i];image_hash*=UINT64_C(1099511628211);}
+    snprintf(material_text,sizeof material_text,"PEAM1\na.peac diffuse.png cutout 0.6 1 1 %016llx\nb.peac diffuse.png opaque 0 1 0 %016llx\n",(unsigned long long)image_hash,(unsigned long long)image_hash);
+    CHECK(save(material_path,material_text,strlen(material_text)));
+    PeActorSceneManifest *qualified=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(qualified&&!*error);
+    if(qualified){
+        const PeActorMaterial *hair=&pe_actor_scene_part(qualified,0)->material,*opaque=&pe_actor_scene_part(qualified,1)->material;
+        CHECK(hair->alpha_mode==PE_ACTOR_ALPHA_CUTOUT&&hair->cutoff==.6f&&hair->alpha_scale==1&&hair->two_sided);
+        CHECK(opaque->alpha_mode==PE_ACTOR_ALPHA_OPAQUE&&!opaque->cutoff&&opaque->alpha_scale==1&&!opaque->two_sided);
+        CHECK(unlink(material_path)==0);CHECK(hair->cutoff==.6f); /* Snapshot, never reread during upload. */
+        pe_actor_scene_manifest_free(qualified);
+    }
+    const char *bad_material_rows[]={
+        "a.peac diffuse.png cutout nan 1 1", "a.peac diffuse.png cutout 1.1 1 1",
+        "a.peac diffuse.png cutout .6 -0 1", "a.peac diffuse.png cutout .6 1 2",
+        "a.peac diffuse.png opaque .6 1 0", "a.peac diffuse.png legacy 0 1 0",
+        "b.peac diffuse.png cutout .6 1 1", "a.peac other.png cutout .6 1 1",
+        "a.peac diffuse.png unknown 0 1 0"
+    };
+    for(size_t i=0;i<sizeof bad_material_rows/sizeof *bad_material_rows;i++){
+        snprintf(material_text,sizeof material_text,"PEAM1\n%s %016llx\nb.peac diffuse.png opaque 0 1 0 %016llx\n",bad_material_rows[i],(unsigned long long)image_hash,(unsigned long long)image_hash);
+        CHECK(save(material_path,material_text,strlen(material_text)));
+        qualified=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(!qualified&&strstr(error,"material metadata"));pe_actor_scene_manifest_free(qualified);
+    }
+    snprintf(material_text,sizeof material_text,"PEAM1\na.peac diffuse.png cutout .6 1 1 %016llx\nb.peac diffuse.png opaque 0 1 0 %016llx\n",(unsigned long long)(image_hash^1),(unsigned long long)image_hash);
+    CHECK(save(material_path,material_text,strlen(material_text)));qualified=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(!qualified);pe_actor_scene_manifest_free(qualified);
+    CHECK(save(material_path,"PEAM1\n",6));qualified=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(!qualified);pe_actor_scene_manifest_free(qualified);
+    CHECK(unlink(material_path)==0);
     PeActorSceneManifest *s=pe_actor_scene_manifest_load(manifest,error,sizeof error);CHECK(s&&!*error);
     if(s){CHECK(pe_actor_scene_part_count(s)==2);CHECK(!strcmp(pe_actor_scene_part(s,0)->actor,a));CHECK(!pe_actor_scene_part(s,2));
+        CHECK(pe_actor_scene_part(s,0)->material.alpha_mode==PE_ACTOR_ALPHA_LEGACY);
         const PeActorClip *clip=pe_actor_scene_clip(s);CHECK(!strcmp(clip->name,"arbitrary_capture")&&clip->frames==2&&clip->fps==1&&!clip->loop);
         float min[3],max[3];CHECK(pe_actor_scene_bounds(s,min,max));CHECK(min[0]==2&&max[0]==13&&min[1]==0&&max[1]==1);
         PeActor *actor=pe_actor_load(a,error,sizeof error);CHECK(actor&&pe_actor_scene_clip_matches(s,actor));pe_actor_free(actor);

@@ -1,16 +1,18 @@
 #include "pe_actor_scene_view.h"
+#include <rlgl.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 static void set_error(char *error,size_t cap,const char *text){if(error&&cap)snprintf(error,cap,"%s",text);}
-static bool empty(const PeActorSceneView *v){return v&&!v->manifest&&!v->parts&&!v->images&&!v->count&&!v->loaded;}
+static bool empty(const PeActorSceneView *v){return v&&!v->manifest&&!v->parts&&!v->images&&!v->count&&!v->loaded&&!v->material_shader.id;}
 void pe_actor_scene_view_unload(PeActorSceneView *v){
     if(!v)return;
     for(size_t i=0;i<v->count;i++){
         if(v->parts)pe_actor_view_unload(&v->parts[i]);
         if(v->images&&v->images[i].data)UnloadImage(v->images[i]);
     }
+    if(v->material_shader.id&&v->material_shader.id!=rlGetShaderIdDefault())UnloadShader(v->material_shader);
     free(v->parts);free(v->images);pe_actor_scene_manifest_free(v->manifest);memset(v,0,sizeof *v);
 }
 size_t pe_actor_scene_view_part_count(const PeActorSceneView *v){return v?v->count:0;}
@@ -44,9 +46,30 @@ bool pe_actor_scene_view_upload(PeActorSceneView *v,char *error,size_t cap){
     set_error(error,cap,"");
     if(!v||!v->manifest||!v->parts||!v->images||!v->count||v->loaded){set_error(error,cap,"actor scene upload requires a prepared view");return false;}
     if(!IsWindowReady()){set_error(error,cap,"actor scene upload requires a graphics context");pe_actor_scene_view_unload(v);return false;}
+    bool qualified=false;
+    for(size_t i=0;i<v->count;i++)qualified|=pe_actor_scene_part(v->manifest,i)->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY;
+    int cutoff=-1,alpha=-1;
+    if(qualified){
+        v->material_shader=LoadShaderFromMemory(NULL,
+            "#version 330\n"
+            "in vec2 fragTexCoord; in vec4 fragColor; uniform sampler2D texture0; uniform vec4 colDiffuse;\n"
+            "uniform float cutoff; uniform float alphaScale; out vec4 finalColor;\n"
+            "void main(){vec4 texel=texture(texture0,fragTexCoord);"
+            "if(texel.a*alphaScale<cutoff)discard;"
+            "finalColor=vec4(texel.rgb*colDiffuse.rgb*fragColor.rgb,colDiffuse.a*fragColor.a);}\n");
+        cutoff=GetShaderLocation(v->material_shader,"cutoff");alpha=GetShaderLocation(v->material_shader,"alphaScale");
+        if(!v->material_shader.id||v->material_shader.id==rlGetShaderIdDefault()||cutoff<0||alpha<0){
+            set_error(error,cap,"source actor alpha shader unavailable");pe_actor_scene_view_unload(v);return false;
+        }
+    }
     for(size_t i=0;i<v->count;i++){
         if(!pe_actor_view_adopt(&v->parts[i],pe_actor_scene_take_actor(v->manifest,i),&v->images[i],error,cap)){
             pe_actor_scene_view_unload(v);return false;
+        }
+        v->parts[i].material=pe_actor_scene_part(v->manifest,i)->material;
+        if(v->parts[i].material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY){
+            v->parts[i].model.materials[0].shader=v->material_shader;
+            v->parts[i].cutoff_location=cutoff;v->parts[i].alpha_location=alpha;
         }
         UnloadImage(v->images[i]);v->images[i]=(Image){0};
     }

@@ -1,6 +1,7 @@
 #include "pe_actor_view.h"
 #include "pe_hitbox.h"
 #include "pe_hare_attack.h"
+#include <rlgl.h>
 #include <math.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -18,6 +19,32 @@ static bool png_bounded(const char *path) {
     uint32_t w=(uint32_t)h[16]<<24|(uint32_t)h[17]<<16|(uint32_t)h[18]<<8|h[19];
     uint32_t height=(uint32_t)h[20]<<24|(uint32_t)h[21]<<16|(uint32_t)h[22]<<8|h[23];
     return w&&height&&w<=8192&&height<=8192&&(uint64_t)w*height<=16777216;
+}
+static bool draw_material(PeActorView *v,Vector3 pos,float yaw,float scale,Color tint){
+    bool restore_culling=false;
+    if(v->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY){
+        float cutoff=v->material.alpha_mode==PE_ACTOR_ALPHA_CUTOUT?v->material.cutoff:0;
+        float alpha=v->material.alpha_scale;
+        SetShaderValue(v->model.materials[0].shader,v->cutoff_location,&cutoff,SHADER_UNIFORM_FLOAT);
+        SetShaderValue(v->model.materials[0].shader,v->alpha_location,&alpha,SHADER_UNIFORM_FLOAT);
+        if(v->material.two_sided){
+            /* Restore the caller's actual enable state, including private
+             * previews and the hosts' reflected-projection culling policy. */
+            typedef unsigned char (*IsEnabled)(unsigned int);
+            static IsEnabled query;
+            if(!query){void *address=rlGetProcAddress("glIsEnabled");
+                _Static_assert(sizeof query==sizeof address,"OpenGL function pointer width");
+                memcpy(&query,&address,sizeof query);}
+            if(!query)return false;
+            rlDrawRenderBatchActive();restore_culling=query(0x0B44)!=0; /* GL_CULL_FACE */
+            rlDisableBackfaceCulling();
+        }
+    }
+    DrawModelEx(v->model,pos,(Vector3){0,1,0},yaw,(Vector3){scale,scale,scale},tint);
+    if(v->material.two_sided&&v->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY){
+        rlDrawRenderBatchActive();if(restore_culling)rlEnableBackfaceCulling();
+    }
+    return true;
 }
 void pe_actor_view_unload(PeActorView *v) {
     if(!v)return;
@@ -81,8 +108,7 @@ bool pe_actor_view_draw(PeActorView *v,size_t clip,double seconds,Vector3 pos,fl
     }
     UpdateMeshBuffer(*m,0,m->vertices,(int)(s.indices*3*sizeof(float)),0);
     UpdateMeshBuffer(*m,2,m->normals,(int)(s.indices*3*sizeof(float)),0);
-    DrawModelEx(v->model,pos,(Vector3){0,1,0},yaw,(Vector3){scale,scale,scale},tint);
-    return true;
+    return draw_material(v,pos,yaw,scale,tint);
 }
 bool pe_actor_view_draw_blend(PeActorView *v,const PeActorBlendSample *samples,size_t count,Vector3 pos,float yaw,float scale,Color tint){
     if(!v||!v->loaded||!v->actor||!v->pose||v->model.meshCount<1||!v->model.meshes||
@@ -96,8 +122,7 @@ bool pe_actor_view_draw_blend(PeActorView *v,const PeActorBlendSample *samples,s
     }
     UpdateMeshBuffer(*m,0,m->vertices,(int)(s.indices*3*sizeof(float)),0);
     UpdateMeshBuffer(*m,2,m->normals,(int)(s.indices*3*sizeof(float)),0);
-    DrawModelEx(v->model,pos,(Vector3){0,1,0},yaw,(Vector3){scale,scale,scale},tint);
-    return true;
+    return draw_material(v,pos,yaw,scale,tint);
 }
 
 int pe_actor_preview(const char *peac,int smoke,const char *screenshot) {

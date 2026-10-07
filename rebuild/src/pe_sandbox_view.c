@@ -643,6 +643,35 @@ static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *d
     }
     *out=next;return true;
 }
+/* Settings owns the request frame. Consume requests once, including stale or
+ * unfocused requests, without admitting any underlying action/save shortcut. */
+static PeDebugAction sandbox_debug_command(PeUiSettings *settings,PeGame *game,
+    bool focused,bool paused,bool hunt_ready){
+    PeDebugAction requested=settings->debug_request;
+    settings->debug_request=PE_DEBUG_NONE;
+    if(requested==PE_DEBUG_NONE||!focused||!paused||!settings->open||
+       !settings->debug_available||!settings->debug_enabled||game->mode!=PE_GAME_ADVENTURE)return PE_DEBUG_NONE;
+    if(requested==PE_DEBUG_START_HUNT&&!hunt_ready){
+        snprintf(settings->debug_notice,sizeof settings->debug_notice,"Combat assets or encounter geometry are unavailable.");
+        return PE_DEBUG_NONE;
+    }
+    char error[256]={0};
+    if(!pe_debug_apply(game,requested,error,sizeof error)){
+        snprintf(settings->debug_notice,sizeof settings->debug_notice,"%.159s",error);
+        return PE_DEBUG_NONE;
+    }
+    snprintf(settings->debug_notice,sizeof settings->debug_notice,"%.159s",game->message);
+    return requested;
+}
+/* Successful debug hunt travel must be ready for combat even when invoked
+ * from construction or first person. Pause/Settings retain input ownership;
+ * ordinary loads and supply top-ups preserve their existing mode behavior. */
+static void sandbox_debug_hunt_controls(PeSandboxUI *ui,PeSandboxCameraControls *camera,
+    bool *third_person,bool *build_mode){
+    pe_sandbox_camera_controls_init(camera);
+    *third_person=true;*build_mode=false;ui->building=false;ui->free_cursor=false;
+}
+
 int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     int smoke_frames,const char *smoke_panel,const char *screenshot) {
     PeUiSettings settings;pe_ui_settings_init(&settings);
@@ -858,6 +887,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         profile_stage(&profile,PROFILE_UI_ROUTE);
         /* Settings is a child of Pause. Its closing frame stays owned and
          * cannot also resume, save/load, recapture the mouse or start actions. */
+        settings.debug_available=game->mode==PE_GAME_ADVENTURE;
         bool settings_consumed=pe_ui_settings_update(&settings,!smoke_frames&&IsWindowFocused());
         PeSandboxUIResult action=settings_consumed?
             (PeSandboxUIResult){.consume_world=true,.cursor_visible=true,.paused=true}:
@@ -885,17 +915,30 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(action.rotate_build)build_rotation=(build_rotation+1)%4;
         action.cursor_visible=pe_sandbox_ui_cursor(&ui);
         bool loaded=false;
+        bool debug_hunt_ready=hunt_assets&&blade_templates[0].ready&&pe_sandbox_actor_hold_ready(actor,33);
+        if(settings.debug_request==PE_DEBUG_START_HUNT&&settings.open&&settings.debug_enabled&&
+           settings.debug_available&&focused&&action.paused&&debug_hunt_ready&&game->hunt_state<PE_HUNT_RETURN_PENDING){
+            PeHuntCombat preview={0};char debug_error[256];
+            debug_hunt_ready=pe_hunt_combat_prepare(&preview,&game->world,collision,hunt_view.actor,hare_boxes,
+                player_defence,player_boxes,game->hunt_kills,debug_error,sizeof debug_error);
+        }
+        PeDebugAction debug_action=sandbox_debug_command(&settings,game,focused,action.paused,debug_hunt_ready);
         if(action.save) {
             bool ok=pe_game_save(game,save_path,error,sizeof error);
             snprintf(game->message,sizeof game->message,"%.159s",ok?"World saved.":error);
         }
-        if(action.load) {
-            loaded=pe_game_load(game,save_path,error,sizeof error);
+        if(action.load||debug_action==PE_DEBUG_START_HUNT) {
+            loaded=debug_action==PE_DEBUG_START_HUNT||pe_game_load(game,save_path,error,sizeof error);
             if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
             if(!loaded)snprintf(game->message,sizeof game->message,"%.159s",error);
+            if(loaded&&debug_action==PE_DEBUG_START_HUNT){
+                sandbox_debug_hunt_controls(&ui,&camera_controls,&third_person,&build_mode);
+                fprintf(stderr,"Sandbox debug: skipped to hunt; kills=%u, player=%.6f,%.6f,%.6f\n",
+                    game->hunt_kills,game->player.x,game->player.y,game->player.z);
+            }
             if(loaded&&(!pe_game_collision_update(game,collision,error,sizeof error)||
                 (game->mode==PE_GAME_ADVENTURE&&pe_sandbox_collision_overlap(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)))){result=1;break;}
             if(loaded&&game->vegetation.installed&&!pe_vegetation_view_available(vegetation_view)){

@@ -16,8 +16,9 @@ def main():
     parser.add_argument('--shared',action='store_true',help='compare tutorial and sandbox shared UI')
     parser.add_argument('--settings',action='store_true',help='render and exercise shared main-menu settings')
     parser.add_argument('--loot',action='store_true',help='render staged hunt loot icons')
+    parser.add_argument('--materials',action='store_true',help='verify actor alpha materials and capture portraits')
     args = parser.parse_args()
-    if sum((args.shared,args.settings,args.loot))>1: parser.error('select one capture type')
+    if sum((args.shared,args.settings,args.loot,args.materials))>1: parser.error('select one capture type')
     out = root/('rebuild/build/ui-shared-captures' if args.shared else 'rebuild/build/ui-details-captures')
     binary = 'render_shared_ui' if args.shared else 'render_shop_details_ui'
     if args.settings:
@@ -26,6 +27,9 @@ def main():
     if args.loot:
         out=root/'rebuild/build/hunt-loot-captures'
         binary='render_hunt_loot'
+    if args.materials:
+        out=root/'rebuild/build/actor-material-captures'
+        binary='render_actor_materials'
     out.mkdir(exist_ok=True)
     server = None
     try:

@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+Current user review additions: [Adventure debug tools](DEBUG_TOOLS.md) provide optional medicine, combat supplies and explicit hunt travel from in-game Settings, with no automatic saves. These are testing cheats, not source progression. [Actor alpha materials](ACTOR_MATERIALS.md) correct foreground hair/eye depth holes in both hosts using recovered source material policy. Sword/Shield remain gated; the next combat parity target remains reaction lifecycle/motor qualification below.
+
 Current gameplay increment: [hare loot](HUNT_LOOT.md) connects real hunt deaths to independent persistent drops, source-derived rolls and automatic whole-stack pickup. PECSv22 preserves prior save payloads. No new Steam session is needed for this contract; original drop visuals remain an explicit adapter. Next bounded combat parity work is source reaction lifecycle/motor qualification, followed by reaction poses; shield composition, pounce and9077 remain separate gates.
 
 Current QoL addition: [Camera-facing attacks](MELEE_TARGET_FACING.md#optional-camera-facing-attacks) is an optional, default-OFF setting in main menu and both in-game Pause menus for free third person in both hosts. It preserves sandbox nearby-target assistance and does not enable Sword/Shield. Settings persist independently of PECSv21.

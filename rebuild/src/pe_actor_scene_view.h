@@ -8,6 +8,7 @@ typedef struct {
     PeActorSceneManifest *manifest;
     PeActorView *parts;
     Image *images;
+    Shader material_shader;
     size_t count;
     bool loaded;
 } PeActorSceneView;

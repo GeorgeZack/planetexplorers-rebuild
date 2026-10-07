@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 #include "pe_actor_scene.h"
 #include <math.h>
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +37,47 @@ static unsigned char *png_snapshot(const char *path,size_t *length,uint64_t *pix
     uint32_t w=be32(h+16),height=be32(h+20);
     if(!w||!height||w>8192||height>8192||(uint64_t)w*height>16777216){free(h);return NULL;}
     *pixels=(uint64_t)w*height;*length=(size_t)size;return h;
+}
+/* Optional source-qualified material metadata leaves PEAS1 and its old clients
+ * intact. Exact row order/names and PNG byte hash prevent stale retargeting.
+ * Missing metadata retains the legacy diffuse adapter; malformed present data
+ * must never silently become that adapter. */
+static bool materials_load(PeActorSceneManifest *s,const char *path){
+    char sidecar[PE_ACTOR_SCENE_PATH_CAPACITY];
+    int n=snprintf(sidecar,sizeof sidecar,"%s.materials",path);
+    if(n<0||(size_t)n>=sizeof sidecar)return false;
+    struct stat st;if(lstat(sidecar,&st))return errno==ENOENT;
+    uint64_t size;if(!regular_size(sidecar,65536,&size)||size<6)return false;
+    FILE *f=fopen(sidecar,"rb");if(!f)return false;
+    char *data=malloc((size_t)size+1);if(!data){fclose(f);return false;}
+    bool ok=fread(data,1,(size_t)size,f)==size&&fgetc(f)==EOF&&!ferror(f);fclose(f);data[size]=0;
+    if(!ok||memchr(data,0,(size_t)size)){free(data);return false;}
+    for(size_t i=0;i<size;i++)if((unsigned char)data[i]>126||((unsigned char)data[i]<32&&data[i]!='\n')){free(data);return false;}
+    char *line=data;size_t row=0;
+    while(*line){
+        char *next=strchr(line,'\n');if(next)*next++=0;else next=line+strlen(line);
+        if(!row){if(strcmp(line,"PEAM1")){ok=false;break;}}
+        else {
+            if(row>s->count){ok=false;break;}
+            char actor[256],png[256],mode[16],extra;float cutoff,alpha;unsigned two;
+            unsigned long long expected;
+            if(sscanf(line,"%255s %255s %15s %f %f %u %llx %c",actor,png,mode,&cutoff,&alpha,&two,&expected,&extra)!=7||
+               !isfinite(cutoff)||!isfinite(alpha)||cutoff<0||cutoff>1||alpha<0||alpha>1||signbit(cutoff)||signbit(alpha)||two>1){ok=false;break;}
+            PeActorScenePart *p=&s->parts[row-1];const char *a=strrchr(p->actor,'/'),*b=strrchr(p->diffuse,'/');
+            if(strcmp(actor,a?a+1:p->actor)||strcmp(png,b?b+1:p->diffuse)){ok=false;break;}
+            PeActorAlphaMode policy;
+            if(!strcmp(mode,"legacy")&&!cutoff&&!alpha&&!two)policy=PE_ACTOR_ALPHA_LEGACY;
+            else if(!strcmp(mode,"opaque")&&!cutoff&&alpha==1)policy=PE_ACTOR_ALPHA_OPAQUE;
+            else if(!strcmp(mode,"cutout"))policy=PE_ACTOR_ALPHA_CUTOUT;
+            else {ok=false;break;}
+            uint64_t hash=UINT64_C(14695981039346656037);
+            for(size_t i=0;i<s->png_size[row-1];i++){hash^=s->png[row-1][i];hash*=UINT64_C(1099511628211);}
+            if(hash!=(uint64_t)expected){ok=false;break;}
+            p->material=(PeActorMaterial){policy,cutoff,alpha,two!=0};
+        }
+        row++;line=next;
+    }
+    free(data);return ok&&row==s->count+1;
 }
 void pe_actor_scene_manifest_free(PeActorSceneManifest *s){
     if(!s)return;
@@ -125,6 +167,7 @@ PeActorSceneManifest *pe_actor_scene_manifest_load(const char *path,char *error,
         }
         first=false;free(vertices);s->actors[i]=actor;
     }
+    if(!materials_load(s,path)){fail(error,cap,"invalid actor material metadata");goto bad;}
     free(bytes);return s;
 bad:free(bytes);pe_actor_scene_manifest_free(s);return NULL;
 }

@@ -19,10 +19,12 @@
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"app-menu-settings:%d %s\n",__LINE__,#c);failures++;}}while(0)
 typedef struct {int key,key2;bool click;float x,y;void (*prepare)(void);} Input;
-typedef struct {bool settings,on,off,error;unsigned menu_labels;} Drawn;
+typedef struct {bool settings,on,off,error,debug_on,debug_off,debug_warning,notice_end;unsigned menu_labels,debug_actions,notice_lines;} Drawn;
 static Input inputs[32];static Drawn drawn[32];
 static int frame,frame_count,width=1280,height=720,closed;
 static bool tutorial_available=true,prepared,focused=true;
+static bool scissored;
+static Rectangle scissor;
 static char settings_path[512];
 
 static float scale(void){return fminf(width/1280.f,height/720.f);}
@@ -65,6 +67,8 @@ void DrawRectangleGradientH(int x,int y,int w,int h,Color a,Color b){(void)x;(vo
 void DrawRectangleGradientV(int x,int y,int w,int h,Color a,Color b){(void)x;(void)y;(void)w;(void)h;(void)a;(void)b;}
 void DrawRectangle(int x,int y,int w,int h,Color c){(void)x;(void)y;(void)w;(void)h;(void)c;}
 void DrawRectangleRec(Rectangle r,Color c){(void)c;CHECK(r.x>=0&&r.y>=0&&r.x+r.width<=width+.01f&&r.y+r.height<=height+.01f);}
+void BeginScissorMode(int x,int y,int w,int h){CHECK(!scissored);scissored=true;scissor=(Rectangle){x,y,w,h};CHECK(x>=0&&y>=0&&x+w<=width&&y+h<=height);}
+void EndScissorMode(void){CHECK(scissored);scissored=false;}
 void DrawCircleV(Vector2 v,float r,Color c){(void)v;(void)r;(void)c;}
 void DrawCircleGradient(Vector2 v,float r,Color a,Color b){(void)v;(void)r;(void)a;(void)b;}
 void DrawEllipse(int x,int y,float w,float h,Color c){(void)x;(void)y;(void)w;(void)h;(void)c;}
@@ -74,12 +78,23 @@ Color Fade(Color c,float a){c.a=(unsigned char)(255*a);return c;}
 Vector2 MeasureTextEx(Font f,const char *t,float size,float spacing){(void)f;(void)spacing;return (Vector2){strlen(t)*size*.5f,size};}
 void DrawTextEx(Font f,const char *text,Vector2 p,float size,float spacing,Color color){
     (void)color;Vector2 measured=MeasureTextEx(f,text,size,spacing);
-    CHECK(p.x>=0&&p.y>=0&&p.x+measured.x<=width+.01f&&p.y+measured.y<=height+.01f);
+    float right=p.x+measured.x;
+    if(scissored){
+        CHECK(fabsf(size-16*scale())<.01f); /* Notice stays readable instead of shrinking to one line. */
+        CHECK(p.y>=scissor.y&&p.y+measured.y<=scissor.y+scissor.height+.01f);
+        right=fminf(right,scissor.x+scissor.width);drawn[frame].notice_lines++;
+        if(strstr(text,"preserved."))drawn[frame].notice_end=true;
+    }
+    CHECK(p.x>=0&&p.y>=0&&right<=width+.01f&&p.y+measured.y<=height+.01f);
     if(!strcmp(text,"Settings")){if(drawn[frame].menu_labels<5)drawn[frame].menu_labels++;else drawn[frame].settings=true;}
     else if(!strcmp(text,"Continue Sandbox")||!strcmp(text,"New Sandbox")||!strcmp(text,"Tutorial")||!strcmp(text,"Quit"))drawn[frame].menu_labels++;
     if(!strcmp(text,"Camera-facing attacks: ON")){drawn[frame].on=true;drawn[frame].settings=true;}
     if(!strcmp(text,"Camera-facing attacks: OFF")){drawn[frame].off=true;drawn[frame].settings=true;}
     if(strstr(text,"Settings could not be read or saved"))drawn[frame].error=true;
+    if(!strcmp(text,"Debug tools: ON"))drawn[frame].debug_on=true;
+    if(!strcmp(text,"Debug tools: OFF"))drawn[frame].debug_off=true;
+    if(!strcmp(text,"Give 5 Herbal Drinks")||!strcmp(text,"Combat supplies + heal")||!strcmp(text,"Skip to hare hunt"))drawn[frame].debug_actions++;
+    if(!strcmp(text,"Debug actions change this game. Resume, then F9 to save."))drawn[frame].debug_warning=true;
 }
 void rlDrawRenderBatchActive(void){}
 Image LoadImageFromScreen(void){return (Image){0};}
@@ -166,6 +181,81 @@ int main(void){
     inputs[0].key=KEY_ESCAPE;
     CHECK(pe_ui_settings_update(&panel,true)&&!panel.open);
     CHECK(!pe_ui_settings_update(&panel,true));
+
+    /* No gameplay context: old geometry/navigation has no debug entry, even
+     * if a caller accidentally leaves an enabled flag/request behind. */
+    reset(1,800,450);pe_ui_settings_init(&panel);pe_ui_settings_open(&panel);
+    CHECK(!panel.debug_available&&!panel.debug_enabled&&panel.debug_request==PE_DEBUG_NONE);
+    panel.debug_enabled=true;panel.debug_request=PE_DEBUG_MEDICINE;
+    CHECK(pe_ui_settings_update(&panel,true)&&!panel.debug_enabled&&panel.debug_request==PE_DEBUG_NONE);
+    pe_ui_settings_draw(&panel,(PeUiAssets *)(uintptr_t)1);
+    CHECK(!drawn[0].debug_on&&!drawn[0].debug_off&&!drawn[0].debug_actions&&!drawn[0].debug_warning);
+    inputs[0].key=KEY_DOWN;
+    CHECK(pe_ui_settings_update(&panel,true)&&panel.selected==1);
+    inputs[0].key=KEY_ENTER;CHECK(pe_ui_settings_update(&panel,true)&&!panel.open);
+
+    /* Adventure capability exposes an OFF session toggle. Camera file I/O
+     * readiness is irrelevant to debug commands; the host owns execution. */
+    reset(1,640,360);pe_ui_settings_init(&panel);panel.debug_available=true;panel.ready=false;
+    pe_ui_settings_open(&panel);before=panel;pe_ui_settings_draw(&panel,(PeUiAssets *)(uintptr_t)1);
+    CHECK(!memcmp(&panel,&before,sizeof panel)&&drawn[0].debug_off&&!drawn[0].debug_actions&&drawn[0].debug_warning);
+    inputs[0].key=KEY_DOWN;CHECK(pe_ui_settings_update(&panel,true)&&panel.selected==1);
+    CHECK(pe_ui_settings_update(&panel,true)&&panel.selected==5); /* OFF skips all command rows. */
+    inputs[0].key=KEY_UP;CHECK(pe_ui_settings_update(&panel,true)&&panel.selected==1);
+    inputs[0].key=0;click_at(0,640,360); /* Hidden medicine row cannot grant. */
+    CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==PE_DEBUG_NONE&&!panel.debug_enabled);
+    inputs[0]=(Input){.key=KEY_ENTER};
+    CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_enabled&&panel.debug_request==PE_DEBUG_NONE);
+    CHECK(!saved_value()); /* Session toggle did not overwrite camera preference. */
+
+    const PeDebugAction commands[]={PE_DEBUG_MEDICINE,PE_DEBUG_COMBAT_SUPPLIES,PE_DEBUG_START_HUNT};
+    for(unsigned i=0;i<3;i++){
+        inputs[0]=(Input){.key=KEY_DOWN};CHECK(pe_ui_settings_update(&panel,true)&&panel.selected==(int)i+2);
+        inputs[0]=(Input){.key=KEY_ENTER};CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==commands[i]&&panel.open);
+        inputs[0]=(Input){0};CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==PE_DEBUG_NONE); /* Held/released means no fresh press. */
+        inputs[0]=(Input){.key=KEY_SPACE};CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==PE_DEBUG_NONE);
+    }
+    /* Fresh pointer commands share the same rows as drawing. Suppressed input
+     * and focus loss clear stale requests instead of replaying them later. */
+    for(unsigned i=0;i<3;i++){
+        inputs[0]=(Input){0};click_at(0,640,360+48*i);
+        CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==commands[i]);
+        CHECK(pe_ui_settings_update(&panel,false)&&panel.debug_request==PE_DEBUG_NONE);
+        panel.debug_request=commands[i];focused=false;
+        CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==PE_DEBUG_NONE);focused=true;
+    }
+    inputs[0]=(Input){0};click_at(0,640,309);
+    panel.debug_request=PE_DEBUG_START_HUNT;
+    CHECK(pe_ui_settings_update(&panel,true)&&!panel.debug_enabled&&panel.debug_request==PE_DEBUG_NONE&&panel.selected==1);
+    panel.selected=4;inputs[0]=(Input){.key=KEY_ENTER};
+    CHECK(pe_ui_settings_update(&panel,true)&&panel.debug_request==PE_DEBUG_NONE&&!panel.debug_enabled); /* Invalid disabled selection cannot dispatch. */
+    panel.debug_enabled=true;panel.debug_request=PE_DEBUG_MEDICINE;inputs[0]=(Input){.key=KEY_ESCAPE};
+    CHECK(pe_ui_settings_update(&panel,true)&&!panel.open&&panel.debug_enabled&&panel.debug_request==PE_DEBUG_NONE);
+    CHECK(!pe_ui_settings_update(&panel,true));
+    panel.debug_request=PE_DEBUG_MEDICINE;pe_ui_settings_open(&panel);CHECK(panel.debug_request==PE_DEBUG_NONE);
+    inputs[0]=(Input){0};click_at(0,640,622);
+    CHECK(pe_ui_settings_update(&panel,true)&&!panel.open&&panel.debug_request==PE_DEBUG_NONE);
+    panel.debug_available=false;panel.debug_request=PE_DEBUG_START_HUNT;
+    CHECK(!pe_ui_settings_update(&panel,true)&&!panel.debug_enabled&&panel.debug_request==PE_DEBUG_NONE);
+
+    /* Both states and a maximal bounded notice fit normal and small windows;
+     * this checks actual draw coordinates, without replacing font inspection. */
+    const int debug_sizes[][2]={{1280,720},{800,450},{640,360}};
+    for(unsigned i=0;i<3;i++)for(unsigned enabled=0;enabled<2;enabled++){
+        reset(1,debug_sizes[i][0],debug_sizes[i][1]);pe_ui_settings_init(&panel);
+        panel.debug_available=true;panel.debug_enabled=enabled;pe_ui_settings_open(&panel);
+        memset(panel.debug_notice,'W',sizeof panel.debug_notice-1);panel.debug_notice[sizeof panel.debug_notice-1]=0;
+        before=panel;pe_ui_settings_draw(&panel,(PeUiAssets *)(uintptr_t)1);
+        CHECK(!memcmp(&panel,&before,sizeof panel));
+        CHECK(drawn[0].debug_on==(bool)enabled&&drawn[0].debug_off==!enabled&&drawn[0].debug_actions==(enabled?3u:0u)&&drawn[0].debug_warning);
+        CHECK(drawn[0].notice_lines==1&&!scissored); /* Oversized tokens are clipped by the shared renderer. */
+        drawn[0]=(Drawn){0};
+        snprintf(panel.debug_notice,sizeof panel.debug_notice,"This hunt is already completed. Start a new Adventure to use this shortcut; your existing hunt progress and rewards have been preserved.");
+        before=panel;pe_ui_settings_draw(&panel,(PeUiAssets *)(uintptr_t)1);
+        CHECK(!memcmp(&panel,&before,sizeof panel)&&!scissored);
+        CHECK(drawn[0].notice_lines>=2&&drawn[0].notice_lines<=3&&drawn[0].notice_end);
+    }
+    pe_ui_settings_init(&panel);CHECK(!panel.debug_enabled&&!panel.debug_available&&panel.debug_request==PE_DEBUG_NONE&&!saved_value());
 
     CHECK(unlink(settings_path)==0);CHECK(rmdir(directory)==0);
     printf("app menu settings checks: %s\n",failures?"FAIL":"PASS");
