@@ -771,3 +771,10 @@ The optional [SHA-pinned arithmetic replay](../docs/audit/UNITY5_CURVE_EVALUATOR
 ### Offline humanoid rotation research
 
 `make -C rebuild humanoid-rotation-test` from the root runs the experimental C arithmetic and CPU-only channel/mapping/provenance tests. The [697-pose comparison](../docs/audit/HUMANOID_ROTATION_PROOF.md) uses existing captures, source muscle channels, exact Avatar axes and source loop-pose correction. It still reports12 unresolved limb bones and does not install gameplay assets. [Oracle instructions](../docs/audit/UNITY5_HUMAN_ROTATION.md) describe the optional SHA-pinned arithmetic replay without engine initialization.
+
+
+### Vendor selling and buyback
+
+Open an archived vendor's Shop, then choose Buy, Sell or Buyback. Scroll the list, select an item and quantity, and use the action button. Selling worn equipment preserves its identity and condition for repurchase. Unequip selected weapons/tools first. Buyback lists survive closing the shop but clear when you load or start a new game; saving alone does not clear them. Player and vendor funds persist normally in PECSv17. The native limit is32 buyback entries per vendor; unsupported condition-dependent items cannot be sold.
+
+`make -C rebuild town-trade-test sandbox-shop-trade-ui-test` from the repository root checks transactions, save/session lifecycle and modal input without opening a graphics context. See [the trade contract](../docs/audit/TOWN_SELL_BUYBACK.md) for source evidence and pending graphical acceptance.

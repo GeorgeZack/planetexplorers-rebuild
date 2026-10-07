@@ -371,3 +371,8 @@ The next source-only target is sword/shield action integration and contact playb
 ## October6 — contact playback and shield source rules
 
 [Contact playback](ATTACK_PLAYBACK.md) now uses the source player's0.65s curve, qualified through offline installed-engine arithmetic, and separate trigger/skill dedupe. One authoritative interval drives blade/body/defence/root motion; same-display catch-up retains pre-contact response. [Shield action admission](SHIELD_ACTION.md) is tested but disconnected; ordinary shielding stays gated on composed poses. No save change or physical-play claim accompanies these rules. Next source-only work is a bounded humanoid retargeting/composition proof against existing bakes and three preserved shield evaluations; see the [work order](SOURCE_FIRST_REBUILD.md). Four ordinary kills and partial-kill physical reload remain outstanding.
+
+
+## October6 — source-only selling and buyback
+
+The [trade increment](TOWN_SELL_BUYBACK.md) adds Buy/Sell/Buyback shop tabs, source condition prices, exact equipment transfer and vendor-funded sales. The per-vendor repurchase pool is transient; PECSv17 remains unchanged. Unsupported LifeLimit prices fail closed. No desktop input or new graphics session accompanies this work. Four ordinary kills and partial-hunt reload remain pending user testing; this independent economy work does not satisfy that gate.

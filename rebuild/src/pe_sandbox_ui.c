@@ -2,6 +2,7 @@
 #include "pe_sandbox_ui.h"
 #include "../generated/pe_revival_source.h"
 #include "pe_shield.h"
+#include "pe_town_wallet.h"
 #include "pe_adventure_medicine.h"
 #include "pe_adventure_hunt.h"
 #include <math.h>
@@ -481,27 +482,38 @@ static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
     PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);float z=u->layout.scale;
     panel(u,p,"SHOP",PE_UI_EFFECT_INVENTORY);sprite(u,"close1",pe_sandbox_ui_shop_button(u,4),WHITE);
     text(u,u->town_name,p.x+180*z,p.y+29*z,20,ink,true);
-    text(u,TextFormat("Currency: %u",g->money),p.x+24*z,p.y+65*z,18,gold,false);
-    text(u,"Price     Stock",p.x+425*z,p.y+65*z,16,dim,false);
-    for(int row=0;row<8&&row+u->shop_scroll<(int)pe_town_shop_count(u->town_entity);row++){
-        const PeTownOffer *o=pe_town_shop_offer(u->town_entity,(size_t)(row+u->shop_scroll));const PeItemDef *d=pe_item_def(o->item_id);
-        PeTrainingUIRect r=pe_sandbox_ui_shop_row(u,(int)row);unsigned stock=pe_town_shop_stock(g,u->town_entity,o->store_id);
-        sprite(u,"insidebox2",r,WHITE);if(row+u->shop_scroll==u->shop_selection)DrawRectangleRec(rect(r),(Color){64,139,205,65});
-        item(u,o->item_id,0,(PeTrainingUIRect){r.x+2*z,r.y+2*z,32*z,32*z},false,stock?WHITE:dim);
-        clipped(u,d?d->name:"",(PeTrainingUIRect){r.x+42*z,r.y+8*z,350*z,24*z},16,stock?ink:dim,false);
-        text(u,TextFormat("%u",o->price),r.x+410*z,r.y+8*z,16,gold,false);
-        text(u,TextFormat("%u",stock),r.x+510*z,r.y+8*z,16,stock?ink:dim,false);
+    static const char *tabs[]={"Buy","Sell","Buyback"};
+    for(int tab=0;tab<3;tab++){
+        PeTrainingUIRect r=pe_sandbox_ui_shop_tab(u,(PeSandboxShopMode)tab);button(u,r,tabs[tab],true);
+        if(u->shop_mode==(PeSandboxShopMode)tab)DrawRectangleRec(rect(r),(Color){64,139,205,65});
     }
-    const PeTownOffer *o=u->shop_selection<0?NULL:pe_town_shop_offer(u->town_entity,(size_t)u->shop_selection);
-    unsigned stock=o?pe_town_shop_stock(g,u->town_entity,o->store_id):0;
-    bool can=o&&u->shop_quantity&&u->shop_quantity<=stock&&(uint64_t)o->price*u->shop_quantity<=g->money;
+    uint32_t wallet=0;bool have_wallet=pe_town_wallet_balance(g,u->town_entity,&wallet);
+    text(u,TextFormat("Your currency: %u",g->money),p.x+24*z,p.y+94*z,16,gold,false);
+    text(u,have_wallet?TextFormat("Vendor currency: %u",wallet):"Vendor currency unavailable",p.x+300*z,p.y+94*z,16,gold,false);
+    int count=pe_sandbox_ui_shop_count(u,g);
+    for(int row=0;row<8&&row+u->shop_scroll<count;row++){
+        PeSandboxShopRow entry;if(!pe_sandbox_ui_shop_item(u,g,row+u->shop_scroll,&entry))continue;
+        const PeItemDef *d=pe_item_def(entry.item.item_id);
+        PeTrainingUIRect r=pe_sandbox_ui_shop_row(u,row);unsigned stock=(unsigned)entry.item.count;
+        sprite(u,"insidebox2",r,WHITE);if(row+u->shop_scroll==u->shop_selection)DrawRectangleRec(rect(r),(Color){64,139,205,65});
+        item(u,entry.item.item_id,0,(PeTrainingUIRect){r.x+2*z,r.y+2*z,28*z,28*z},false,entry.eligible?WHITE:dim);
+        clipped(u,d?d->name:"",(PeTrainingUIRect){r.x+38*z,r.y+6*z,360*z,22*z},16,entry.eligible?ink:dim,false);
+        text(u,entry.eligible?TextFormat("%u",entry.unit_price):"--",r.x+410*z,r.y+6*z,16,entry.eligible?gold:dim,false);
+        text(u,TextFormat("x%u",stock),r.x+510*z,r.y+6*z,16,entry.eligible?ink:dim,false);
+    }
+    if(!count)center(u,u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"No items to buy back.":"No items to trade.",rel(u,p,24,190,580,40),18,dim,false);
+    PeSandboxShopRow selected={0};bool have=pe_sandbox_ui_shop_item(u,g,u->shop_selection,&selected);
+    unsigned stock=have?(unsigned)selected.item.count:0;
+    bool can=pe_sandbox_ui_shop_can_trade(u,g);
+    const char *action=u->shop_mode==PE_SANDBOX_SHOP_SELL?"Sell":u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buy back":"Buy";
     button(u,pe_sandbox_ui_shop_button(u,0),"-",u->shop_quantity>1);
     center(u,TextFormat("%u",u->shop_quantity),rel(u,p,60,408,58,30),18,ink,true);
     button(u,pe_sandbox_ui_shop_button(u,1),"+",u->shop_quantity<stock);
-    button(u,pe_sandbox_ui_shop_button(u,2),o?TextFormat("Buy - %u",o->price*u->shop_quantity):"Buy",can);
+    button(u,pe_sandbox_ui_shop_button(u,2),have&&selected.eligible?TextFormat("%s - %llu",action,(unsigned long long)selected.unit_price*u->shop_quantity):action,can);
     button(u,pe_sandbox_ui_shop_button(u,3),"Back",true);
-    wrapped(u,g->message,rel(u,p,24,450,580,45),16,ink);
-    text(u,TextFormat("%d-%d of %d - Scroll to browse - Buy only",u->shop_scroll+1,(int)fminf(u->shop_scroll+8,(float)pe_town_shop_count(u->town_entity)),(int)pe_town_shop_count(u->town_entity)),p.x+24*z,p.y+496*z,15,ink,false);
+    text(u,u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buyback clears when you load or start a new game.":"Unit price shown beside each item.",p.x+24*z,p.y+391*z,14,dim,false);
+    wrapped(u,have&&!selected.eligible?selected.reason:g->message,rel(u,p,24,450,580,45),16,ink);
+    text(u,TextFormat("%d-%d of %d - Scroll to browse",count?u->shop_scroll+1:0,(int)fminf(u->shop_scroll+8,(float)count),count),p.x+24*z,p.y+496*z,15,ink,false);
 }
 static void tooltip(const PeSandboxUI *u,const PeGame *g) {
     if(u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;

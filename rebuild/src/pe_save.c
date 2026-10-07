@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_town_trade.h"
 #include "pe_game.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
@@ -76,7 +77,7 @@ static bool valid(const PeGame *g,bool trees,bool outfit) {
        fabsf(g->velocity.x)>1000||fabsf(g->velocity.y)>1000||fabsf(g->velocity.z)>1000||
        g->block_count<0||g->block_count>PE_MAX_BLOCKS||g->tree_count<0||g->tree_count>PE_MAX_TREES||
        g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS) return false;
-    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g)||!pe_adventure_medicine_state_valid(g)||!pe_adventure_hunt_state_valid(g)||!pe_deployable_state_valid(g))return false;
+    if(g->world.source>1||!pe_world_data_const(&g->world)||!pe_town_state_valid(g)||!pe_town_trade_state_valid(g)||!pe_adventure_medicine_state_valid(g)||!pe_adventure_hunt_state_valid(g)||!pe_deployable_state_valid(g))return false;
     if(g->world.source==0)for(size_t i=0;i<pe_world_voxel_count(&g->world);i++)if(pe_world_data_const(&g->world)[i].material>PE_MAT_GRASS)return false;
     if(!g->inventory.next_instance_id||!g->rng_state||
        !isfinite(g->stamina)||!isfinite(g->stamina_max)||!isfinite(g->stamina_regen)||

@@ -728,3 +728,21 @@ Evidence is under `rebuild/build/town-wallet-core/verification.json`, `town-wall
 The [focused acceptance guide](audit/HUNT_ACCEPTANCE.md) now supplies a byte-identical isolated copy of the preserved earned0/4 checkpoint and a tracked read-only native save inspector. Current-loader inspection confirms500HP, Defence12 through the documented old-save migration,8 Medpacks,10 Juices,10 Revival Shots and the intended quickslots. Source/baseline/working SHA256 remains`2b7f763da6bd453da8fb8102a914983e1913c625211803f5151648120ee0ca6f`; no fields were edited or resaved. Build, JSON parsing, expected state and missing-save/usage failure checks passed. The stale walking/running restrictions in the user-facing controls were corrected to match the already implemented behavior.
 
 No graphics, desktop input, ordinary kill or partial-progress reload occurred. The pending desktop coordination question remains unanswered; the user retains control. The guide distinguishes a user-run session from agent operation after a handoff. This preparation does not replace the remaining physical acceptance gate or extend the goal with unrelated economy work.
+
+
+## October 6 — source-derived vendor selling and buyback (no graphics)
+
+The [trade implementation](audit/TOWN_SELL_BUYBACK.md) adds atomic vendor-funded sales, source component-selected prices, exact worn-instance repurchase and Buy/Sell/Buyback tabs. [The source audit](audit/TOWN_SELL_BUYBACK_SOURCE.md) records the Adventure currency field, Repair condition binding, zero-value consumables, source buyback purse asymmetry and session-only evidence. No original/native executable was launched for this increment, no desktop input was sent and no user save was changed.
+
+Executed from the repository root with `TMPDIR=$PWD/rebuild/build/compiler-tmp`:
+
+- Optimized `make -s -C rebuild -j2 all town-trade-test`: exit0; focused transaction/lifecycle C checks report0 failures, exporter11 tests pass with0 skips.
+- Final `make -s -C rebuild -j2 test check-content cli-test`: exit0; complete optimized core0 failures, source/generated checks pass and23 CLI tests pass. Broader Python tests retain51 optional skips; these are not passes.
+- Full `make -s -C rebuild sanitize` with default `ASAN_OPTIONS=detect_leaks=1`: exit0, complete core0 failures, including the new transaction and save/session tests.
+- Focused UI ASan/UBSan with `ASAN_OPTIONS=detect_leaks=1`, a separate `BUILD=build/town-trade-check/sanitized` and instrumented CFLAGS: exit0, real shop input/core transaction test passes with no graphics/assets/skips.
+
+The tests cover worn/exhausted durable identity, source rounding and vendor-credit asymmetry, partial stack sale/repurchase, zero-value transfers, equipped/shield refusal, unsupported LifeLimit prices, both purse limits, full bag/list rollback and cross-owner aliases. The lifecycle suite checks clone/move/world replacement, save-with-live-buyback, failed-load retention, successful-load clearing and identical v17 serialized bytes after round trip. The actual UI router checks both currencies through transactions, modal digits/closing-frame held-release ownership, close/reopen/vendor isolation, row compaction/scrolling, dragging and800×600 geometry. These are headless checks, not rendered layout acceptance.
+
+During development, the first build exposed an include preceding the existing POSIX feature macro; its order was corrected before final compilation. One UI test initially assumed a zero-money player could not buy back Juice916; the source price is zero, so the final test asserts success and uses a worn Knife for the insufficient-funds case. The completed optimized and focused sanitizer runs use that corrected test. Local logs are ignored under `rebuild/build/town-trade-check`.
+
+Graphical acceptance and ordinary four-hare completion/partial-progress reload remain pending. The trade audit contains a short disposable-checkpoint checklist for the user's next manual session. Buyback clears on load/new game, while money and the completed sale remain saved; the UI explicitly states this boundary.

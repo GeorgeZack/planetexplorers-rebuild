@@ -52,6 +52,10 @@ typedef struct { int item_id; uint32_t instance_id; } PeQuickslot;
 /* Non-stack items have stable IDs; durable equipment preserves wear per instance. */
 typedef struct { int item_id, count; uint32_t instance_id; float durability; } PeSlot;
 typedef struct { PeSlot slots[PE_INVENTORY_SLOTS]; uint32_t next_instance_id; } PeInventory;
+/* Source repurchase lists are session-only. Never serialize these records;
+ * each unstackable remains the sole owner of its original instance/wear. */
+#define PE_TOWN_BUYBACK_CAPACITY 32
+typedef struct { unsigned count; PeSlot slots[PE_TOWN_BUYBACK_CAPACITY]; } PeTownBuyback;
 /* Integer minimum corner of a one-meter construction proxy. */
 typedef struct { int x,y,z,item_id; } PeBlock;
 typedef struct { PeVec3 position; int remaining; float health; } PeTree;
@@ -105,6 +109,7 @@ typedef struct PeGame {
     bool annot_complete; /* Source discovery4503 / completed mission9032. */
     PeTownStock town_stock[PE_TOWN_STOCK_CAPACITY]; /* Stable exported offer order. */
     PeTownWallet town_wallet[PE_TOWN_WALLET_CAPACITY]; /* Stable source vendor order; one balance owner. */
+    PeTownBuyback town_buyback[PE_TOWN_WALLET_CAPACITY]; /* Transient, same stable vendor order. */
     uint32_t money, scanner_mask;
     int known_recipe_count, known_recipes[PE_KNOWN_RECIPES];
     PeQuickslot quickslots[PE_QUICKSLOTS];

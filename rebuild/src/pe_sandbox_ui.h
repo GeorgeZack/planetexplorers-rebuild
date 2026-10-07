@@ -30,6 +30,14 @@ typedef struct {
     int selected_item; /* Explicit resource quickslot selection, otherwise0. */
 } PeSandboxUIResult;
 typedef struct { uint32_t entity_id; PeVec3 position; } PeSandboxMapNpc;
+typedef enum {PE_SANDBOX_SHOP_BUY,PE_SANDBOX_SHOP_SELL,PE_SANDBOX_SHOP_BUYBACK} PeSandboxShopMode;
+typedef struct {
+    PeSlot item;
+    int bag_slot,store_id;
+    uint32_t unit_price;
+    bool eligible;
+    const char *reason;
+} PeSandboxShopRow;
 typedef void (*PeSandboxUIPreview)(void *context,const PeGame *game);
 typedef struct {
     PeUiAssets *assets;
@@ -49,6 +57,7 @@ typedef struct {
     uint32_t deploy_get_ticks; /* UTimer: 100,000 ticks/s, commit strictly >200,000. */
     char town_name[129],start_town_name[129];
     int shop_selection,shop_scroll;
+    PeSandboxShopMode shop_mode;
     unsigned shop_quantity;
     float shop_offset_x,shop_offset_y,shop_grab_x,shop_grab_y;
     PeAdventureDialogue dialogue;
@@ -144,6 +153,10 @@ int pe_sandbox_ui_dialogue_choice_index(const PeSandboxUI *ui,const PeGame *game
 PeTrainingUIRect pe_sandbox_ui_supplier_close(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_shop_panel(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_shop_row(const PeSandboxUI *ui,int row);
+PeTrainingUIRect pe_sandbox_ui_shop_tab(const PeSandboxUI *ui,PeSandboxShopMode mode);
+int pe_sandbox_ui_shop_count(const PeSandboxUI *ui,const PeGame *game);
+bool pe_sandbox_ui_shop_item(const PeSandboxUI *ui,const PeGame *game,int index,PeSandboxShopRow *out);
+bool pe_sandbox_ui_shop_can_trade(const PeSandboxUI *ui,const PeGame *game);
 PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *ui,int button); /* minus,plus,buy,back,close */
 void pe_sandbox_ui_cancel_town(PeSandboxUI *ui);
 bool pe_sandbox_ui_open_deployable(PeSandboxUI *ui,const PeGame *game,uint32_t instance_id);

@@ -1,6 +1,6 @@
 # Source-first audit after the walking-attack checkpoint
 
-Subsequent implementation: [vendor wallets and normal-purchase credit](TOWN_WALLETS.md) now have a source exporter, runtime owner and PECSv17 persistence. The recommendations below describe the audit baseline; selling/buyback remain the next economy increment.
+Subsequent implementation: [vendor wallets and normal-purchase credit](TOWN_WALLETS.md) now have a source exporter, runtime owner and PECSv17 persistence. The recommendations below describe the audit baseline; [selling/buyback](TOWN_SELL_BUYBACK.md) now add source-priced transactions and shop tabs, with graphical acceptance pending.
 
 October 6, 2026. Baseline `3791d89e763586a5cd3bc7684c6462592288572a` was committed and verified on private `rebuild/main`; the working tree was clean before these audit documents. The checkpoint includes offline ordinary-root extraction and walking Knife integration. Focused optimized, ASan/UBSan/leak, content, host and23 CLI checks passed. Neither original nor native gameplay was launched for this audit.
 

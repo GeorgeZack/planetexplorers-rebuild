@@ -1,6 +1,6 @@
 # Archived vendor wallets and purchase credit
 
-October6,2026. Follow-up to the [source-first checkpoint audit](SOURCE_FIRST_CHECKPOINT_REVIEW.md). The C sandbox now owns the eight archived vendor purses, credits a normal purchase atomically and applies the source observed-update refill latch. This is implemented source-derived behavior; no original or native graphical session was run. Selling, buyback and repair remain subsequent features.
+October6,2026. Follow-up to the [source-first checkpoint audit](SOURCE_FIRST_CHECKPOINT_REVIEW.md). The C sandbox now owns the eight archived vendor purses, credits a normal purchase atomically and applies the source observed-update refill latch. This is implemented source-derived behavior; no original or native graphical session was run. Subsequent [selling and buyback](TOWN_SELL_BUYBACK.md) now use these purses; repair remains unimplemented.
 
 ## Source and extraction
 

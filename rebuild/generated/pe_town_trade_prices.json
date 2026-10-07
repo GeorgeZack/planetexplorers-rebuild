@@ -1,0 +1,3393 @@
+{
+  "format_version": 1,
+  "scope": "Current native catalog; Adventure source sell and buyback metadata.",
+  "sources": [
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemObj.cs",
+      "sha256": "d7704733cafc8fdb2a8ae853e089459df6185fb1498e904f22ee3b3dbeb2e00a"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UIShopWnd.cs",
+      "sha256": "b61cb1367e99b20b1d862d14ae7295fa44618fbeab43f91e4201ed419fc70f51"
+    },
+    {
+      "path": "Assets/Scripts/Mission/StroyManager.cs",
+      "sha256": "152a755f05ef4ee7ae7206128e5f93db24f6d1a6f86d13926abbf16b2346ddeb"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemData.cs",
+      "sha256": "66d6203e0c910c7dcd805318dbddfa4bdb205b6e1d189d28de865670a7a8b2ab"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemManager.cs",
+      "sha256": "39de5d06becf84fd99b5af56f6121dee0ee1642b1e4e358af2e4e629ad409ade"
+    }
+  ],
+  "contract": {
+    "currency_column": "currency_value2",
+    "condition": "Repair: Durability before LifeLimit; absent factor gives1",
+    "unit_price": "(int)(base * (0.8f * factor + 0.2f))",
+    "quantity_order": "truncate unit price before multiplying quantity",
+    "buyback_vendor_credit": "unadjusted base currency times quantity",
+    "buyback_persistence_qualified": false
+  },
+  "prices": [
+    {
+      "item_id": 1,
+      "base_currency": 42,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 2,
+      "base_currency": 100,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 4,
+      "base_currency": 340,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 6,
+      "base_currency": 459,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 10,
+      "base_currency": 56,
+      "factor": "FULL",
+      "component_class": 77,
+      "components": [
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Drag",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 12,
+      "base_currency": 42,
+      "factor": "DURABILITY",
+      "component_class": 7,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 14,
+      "base_currency": 239,
+      "factor": "DURABILITY",
+      "component_class": 7,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 19,
+      "base_currency": 42,
+      "factor": "DURABILITY",
+      "component_class": 8,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 20,
+      "base_currency": 75,
+      "factor": "DURABILITY",
+      "component_class": 8,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 21,
+      "base_currency": 239,
+      "factor": "DURABILITY",
+      "component_class": 8,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 26,
+      "base_currency": 42,
+      "factor": "DURABILITY",
+      "component_class": 9,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 28,
+      "base_currency": 239,
+      "factor": "DURABILITY",
+      "component_class": 9,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 33,
+      "base_currency": 14,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 34,
+      "base_currency": 50,
+      "factor": "DURABILITY",
+      "component_class": 18,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 37,
+      "base_currency": 425,
+      "factor": "DURABILITY",
+      "component_class": 18,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 39,
+      "base_currency": 598,
+      "factor": "DURABILITY",
+      "component_class": 18,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 43,
+      "base_currency": 64,
+      "factor": "DURABILITY",
+      "component_class": 10,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 44,
+      "base_currency": 261,
+      "factor": "DURABILITY",
+      "component_class": 10,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 45,
+      "base_currency": 362,
+      "factor": "DURABILITY",
+      "component_class": 10,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 49,
+      "base_currency": 1,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 50,
+      "base_currency": 7,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 51,
+      "base_currency": 41,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 53,
+      "base_currency": 65,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 54,
+      "base_currency": 443,
+      "factor": "DURABILITY",
+      "component_class": 11,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "GunAmmo",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 58,
+      "base_currency": 926,
+      "factor": "DURABILITY",
+      "component_class": 11,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "GunAmmo",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 65,
+      "base_currency": 957,
+      "factor": "FULL",
+      "component_class": 75,
+      "components": [
+        "JetPkg",
+        "EnergySmall",
+        "RecycleReplicate",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 66,
+      "base_currency": 627,
+      "factor": "FULL",
+      "component_class": 14,
+      "components": [
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 67,
+      "base_currency": 383,
+      "factor": "DURABILITY",
+      "component_class": 11,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "GunAmmo",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 68,
+      "base_currency": 645,
+      "factor": "DURABILITY",
+      "component_class": 12,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "GunAmmo",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 69,
+      "base_currency": 645,
+      "factor": "DURABILITY",
+      "component_class": 12,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "GunAmmo",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 70,
+      "base_currency": 103,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 71,
+      "base_currency": 694,
+      "factor": "DURABILITY",
+      "component_class": 12,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "GunAmmo",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 72,
+      "base_currency": 588,
+      "factor": "FULL",
+      "component_class": 76,
+      "components": [
+        "RecycleReplicate",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 73,
+      "base_currency": 26,
+      "factor": "FULL",
+      "component_class": 14,
+      "components": [
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 74,
+      "base_currency": 336,
+      "factor": "FULL",
+      "component_class": 14,
+      "components": [
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 76,
+      "base_currency": 390,
+      "factor": "DURABILITY",
+      "component_class": 1,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 79,
+      "base_currency": 487,
+      "factor": "DURABILITY",
+      "component_class": 1,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 84,
+      "base_currency": 336,
+      "factor": "FULL",
+      "component_class": 14,
+      "components": [
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 87,
+      "base_currency": 390,
+      "factor": "DURABILITY",
+      "component_class": 1,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 90,
+      "base_currency": 487,
+      "factor": "DURABILITY",
+      "component_class": 1,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 95,
+      "base_currency": 21,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 99,
+      "base_currency": 651,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 102,
+      "base_currency": 785,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 106,
+      "base_currency": 875,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 117,
+      "base_currency": 651,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 120,
+      "base_currency": 785,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 124,
+      "base_currency": 875,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 131,
+      "base_currency": 21,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 135,
+      "base_currency": 651,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 138,
+      "base_currency": 785,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 142,
+      "base_currency": 875,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 153,
+      "base_currency": 651,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 156,
+      "base_currency": 785,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 160,
+      "base_currency": 875,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 167,
+      "base_currency": 785,
+      "factor": "FULL",
+      "component_class": 17,
+      "components": [
+        "EnergySmall",
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 169,
+      "base_currency": 785,
+      "factor": "FULL",
+      "component_class": 17,
+      "components": [
+        "EnergySmall",
+        "Property",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 175,
+      "base_currency": 380,
+      "factor": "DURABILITY",
+      "component_class": 3,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 186,
+      "base_currency": 380,
+      "factor": "DURABILITY",
+      "component_class": 3,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 192,
+      "base_currency": 12,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 196,
+      "base_currency": 317,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 199,
+      "base_currency": 373,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 203,
+      "base_currency": 495,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 214,
+      "base_currency": 317,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 217,
+      "base_currency": 373,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 221,
+      "base_currency": 495,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 228,
+      "base_currency": 656,
+      "factor": "FULL",
+      "component_class": 4,
+      "components": [
+        "EnergySmall",
+        "RecycleReplicate",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 229,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 233,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 234,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 235,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 236,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 237,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 238,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 239,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 240,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 241,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 242,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 243,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 244,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 245,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 246,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 247,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 248,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 249,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 250,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 251,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 252,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 253,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 254,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 255,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 256,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 257,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 263,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 268,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 269,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 270,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 271,
+      "base_currency": 27,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 272,
+      "base_currency": 36,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 273,
+      "base_currency": 19,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 274,
+      "base_currency": 33,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 275,
+      "base_currency": 46,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 276,
+      "base_currency": 48,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 277,
+      "base_currency": 24,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 278,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 279,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 280,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 281,
+      "base_currency": 70,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 282,
+      "base_currency": 6,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 283,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 21,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 284,
+      "base_currency": 25,
+      "factor": "FULL",
+      "component_class": 24,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 285,
+      "base_currency": 46,
+      "factor": "FULL",
+      "component_class": 24,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 286,
+      "base_currency": 54,
+      "factor": "FULL",
+      "component_class": 24,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 287,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 20,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 290,
+      "base_currency": 12,
+      "factor": "FULL",
+      "component_class": 22,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 293,
+      "base_currency": 21,
+      "factor": "FULL",
+      "component_class": 20,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 308,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 20,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 309,
+      "base_currency": 304,
+      "factor": "FULL",
+      "component_class": 20,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 310,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 23,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 311,
+      "base_currency": 28,
+      "factor": "FULL",
+      "component_class": 23,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 312,
+      "base_currency": 12,
+      "factor": "FULL",
+      "component_class": 20,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 313,
+      "base_currency": 56,
+      "factor": "FULL",
+      "component_class": 20,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 365,
+      "base_currency": 2877,
+      "factor": "LIFE_LIMIT",
+      "component_class": 25,
+      "components": [
+        "Repair",
+        "RecycleReplicate",
+        "LifeLimit",
+        "Drag",
+        "Instantiate",
+        "Tower"
+      ]
+    },
+    {
+      "item_id": 370,
+      "base_currency": 2642,
+      "factor": "LIFE_LIMIT",
+      "component_class": 26,
+      "components": [
+        "Repair",
+        "RecycleReplicate",
+        "LifeLimit",
+        "Drag",
+        "Instantiate",
+        "Tower",
+        "GunAmmo"
+      ]
+    },
+    {
+      "item_id": 373,
+      "base_currency": 2656,
+      "factor": "FULL",
+      "component_class": 19,
+      "components": [
+        "RecycleReplicate",
+        "LifeLimit",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 384,
+      "base_currency": 58,
+      "factor": "FULL",
+      "component_class": 30,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 385,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 30,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 386,
+      "base_currency": 126,
+      "factor": "FULL",
+      "component_class": 31,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 387,
+      "base_currency": 12,
+      "factor": "FULL",
+      "component_class": 31,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 388,
+      "base_currency": 12,
+      "factor": "FULL",
+      "component_class": 31,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 389,
+      "base_currency": 119,
+      "factor": "FULL",
+      "component_class": 31,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 391,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 31,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 392,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 31,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 406,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 408,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 412,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 414,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 418,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 420,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 424,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 427,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 433,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 446,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 447,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 458,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 461,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 462,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 463,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 464,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 471,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 474,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 504,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 510,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 511,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 512,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 516,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 519,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 520,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 521,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 522,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 523,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 524,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 525,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 526,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 528,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 529,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 531,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 532,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 552,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 554,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 557,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 588,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 590,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 591,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 592,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 593,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 594,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 595,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 596,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 597,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 605,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 609,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 612,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 613,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 618,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 665,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 701,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 732,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 747,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 748,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 768,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 769,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 771,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 786,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 787,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 866,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 876,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 877,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 878,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 916,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 917,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 924,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 925,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 937,
+      "base_currency": 34,
+      "factor": "FULL",
+      "component_class": 55,
+      "components": [
+        "Property",
+        "RecycleReplicate",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 973,
+      "base_currency": 320,
+      "factor": "FULL",
+      "component_class": 79,
+      "components": [
+        "MetalScan",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 974,
+      "base_currency": 800,
+      "factor": "FULL",
+      "component_class": 79,
+      "components": [
+        "MetalScan",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 975,
+      "base_currency": 2000,
+      "factor": "FULL",
+      "component_class": 79,
+      "components": [
+        "MetalScan",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 976,
+      "base_currency": 171,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 979,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 980,
+      "base_currency": 33,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 982,
+      "base_currency": 32,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 983,
+      "base_currency": 32,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 984,
+      "base_currency": 32,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 986,
+      "base_currency": 33,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 987,
+      "base_currency": 34,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 988,
+      "base_currency": 32,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 989,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 990,
+      "base_currency": 12,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 991,
+      "base_currency": 172,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 992,
+      "base_currency": 24,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 995,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1000,
+      "base_currency": 28,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1001,
+      "base_currency": 17,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1002,
+      "base_currency": 6,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1003,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1004,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1005,
+      "base_currency": 21,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1006,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1007,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1008,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1009,
+      "base_currency": 21,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1010,
+      "base_currency": 32,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1011,
+      "base_currency": 50,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1012,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1015,
+      "base_currency": 9,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1017,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1024,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1025,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1026,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1027,
+      "base_currency": 4,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1032,
+      "base_currency": 42,
+      "factor": "FULL",
+      "component_class": 52,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1033,
+      "base_currency": 945,
+      "factor": "FULL",
+      "component_class": 52,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1034,
+      "base_currency": 2128,
+      "factor": "FULL",
+      "component_class": 52,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1036,
+      "base_currency": 35,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1037,
+      "base_currency": 34,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1038,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1145,
+      "base_currency": 42,
+      "factor": "FULL",
+      "component_class": 32,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1146,
+      "base_currency": 42,
+      "factor": "FULL",
+      "component_class": 32,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1147,
+      "base_currency": 199,
+      "factor": "FULL",
+      "component_class": 32,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1148,
+      "base_currency": 42,
+      "factor": "FULL",
+      "component_class": 33,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1149,
+      "base_currency": 134,
+      "factor": "FULL",
+      "component_class": 33,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1150,
+      "base_currency": 199,
+      "factor": "FULL",
+      "component_class": 33,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1151,
+      "base_currency": 213,
+      "factor": "FULL",
+      "component_class": 34,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1152,
+      "base_currency": 387,
+      "factor": "FULL",
+      "component_class": 35,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1154,
+      "base_currency": 193,
+      "factor": "FULL",
+      "component_class": 36,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1157,
+      "base_currency": 2077,
+      "factor": "FULL",
+      "component_class": 38,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1158,
+      "base_currency": 688,
+      "factor": "FULL",
+      "component_class": 38,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1159,
+      "base_currency": 180,
+      "factor": "FULL",
+      "component_class": 39,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1160,
+      "base_currency": 135,
+      "factor": "FULL",
+      "component_class": 39,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1161,
+      "base_currency": 58,
+      "factor": "FULL",
+      "component_class": 39,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1162,
+      "base_currency": 758,
+      "factor": "FULL",
+      "component_class": 40,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1167,
+      "base_currency": 58,
+      "factor": "FULL",
+      "component_class": 41,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1172,
+      "base_currency": 693,
+      "factor": "FULL",
+      "component_class": 42,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1195,
+      "base_currency": 1487,
+      "factor": "FULL",
+      "component_class": 56,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1362,
+      "base_currency": 1118,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1365,
+      "base_currency": 390,
+      "factor": "DURABILITY",
+      "component_class": 1,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1366,
+      "base_currency": 525,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1367,
+      "base_currency": 525,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1368,
+      "base_currency": 256,
+      "factor": "DURABILITY",
+      "component_class": 3,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1369,
+      "base_currency": 323,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1370,
+      "base_currency": 390,
+      "factor": "DURABILITY",
+      "component_class": 1,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1371,
+      "base_currency": 525,
+      "factor": "DURABILITY",
+      "component_class": 2,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1372,
+      "base_currency": 525,
+      "factor": "DURABILITY",
+      "component_class": 15,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1373,
+      "base_currency": 256,
+      "factor": "DURABILITY",
+      "component_class": 3,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1374,
+      "base_currency": 323,
+      "factor": "DURABILITY",
+      "component_class": 16,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipDefence"
+      ]
+    },
+    {
+      "item_id": 1401,
+      "base_currency": 2,
+      "factor": "FULL",
+      "component_class": 13,
+      "components": [
+        "0"
+      ]
+    },
+    {
+      "item_id": 1420,
+      "base_currency": 1134,
+      "factor": "FULL",
+      "component_class": 80,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1425,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1457,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1458,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1459,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1460,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1461,
+      "base_currency": 33,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1462,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1463,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1464,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1465,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1466,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1467,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1473,
+      "base_currency": 63,
+      "factor": "DURABILITY",
+      "component_class": 84,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleCreation",
+        "Durability",
+        "InstantiateCreation",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1474,
+      "base_currency": 107,
+      "factor": "DURABILITY",
+      "component_class": 85,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleCreation",
+        "Durability",
+        "InstantiateCreation",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1475,
+      "base_currency": 747,
+      "factor": "DURABILITY",
+      "component_class": 85,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleCreation",
+        "Durability",
+        "InstantiateCreation",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1479,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1481,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1482,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1486,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1488,
+      "base_currency": 683,
+      "factor": "FULL",
+      "component_class": 80,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1491,
+      "base_currency": 733,
+      "factor": "FULL",
+      "component_class": 80,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1494,
+      "base_currency": 1045,
+      "factor": "FULL",
+      "component_class": 80,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1497,
+      "base_currency": 0,
+      "factor": "FULL",
+      "component_class": 27,
+      "components": [
+        "Property",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1507,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1518,
+      "base_currency": 2270,
+      "factor": "FULL",
+      "component_class": 44,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1519,
+      "base_currency": 2655,
+      "factor": "FULL",
+      "component_class": 44,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1520,
+      "base_currency": 2910,
+      "factor": "FULL",
+      "component_class": 44,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1527,
+      "base_currency": 15,
+      "factor": "DURABILITY",
+      "component_class": 9,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1534,
+      "base_currency": 955,
+      "factor": "FULL",
+      "component_class": 89,
+      "components": [
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1540,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1550,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 21,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1551,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1563,
+      "base_currency": 680,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1565,
+      "base_currency": 919,
+      "factor": "DURABILITY",
+      "component_class": 5,
+      "components": [
+        "Property",
+        "Strengthen",
+        "Repair",
+        "RecycleReplicate",
+        "Durability",
+        "Instantiate",
+        "EquipAttack"
+      ]
+    },
+    {
+      "item_id": 1578,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1579,
+      "base_currency": 2880,
+      "factor": "FULL",
+      "component_class": 79,
+      "components": [
+        "MetalScan",
+        "Consume"
+      ]
+    },
+    {
+      "item_id": 1582,
+      "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1583,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1584,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1728,
+      "base_currency": 399,
+      "factor": "FULL",
+      "component_class": 32,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1731,
+      "base_currency": 159,
+      "factor": "FULL",
+      "component_class": 32,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1740,
+      "base_currency": 268,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1741,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1742,
+      "base_currency": 128,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    }
+  ],
+  "limitations": [
+    "LifeLimit requires unsupported instance HP and must not substitute native durability.",
+    "No original or native runtime observation is established by this export."
+  ]
+}
