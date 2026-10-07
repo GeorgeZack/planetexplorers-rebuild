@@ -24,13 +24,19 @@ ACTION = 'Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs'
 EQUIP = 'Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs'
 TRIGGER = 'Assets/Scripts/Attack/PEAttackTrigger.cs'
 CREATOR = 'Assets/PeWorld/PeEntityCreator.cs'
-SOURCE_FILES = (PREFAB, ACTION, EQUIP, EQUIP+'.meta', TRIGGER, CREATOR)
+PLAYER = 'Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs'
+SETTINGS = 'Assets/Scripts/Lilj/SystemSettingData.cs'
+SOURCE_FILES = (PREFAB, ACTION, EQUIP, EQUIP+'.meta', TRIGGER, CREATOR, PLAYER, SETTINGS)
 CONTRACTS = (
     (ACTION, 'playback_formula', r'void\s+UpdateAnimSpeed\s*\(', 'e339d530cf759f8bf7f7fe0dad928cb88582aeb8ee89a92d0a66601908182fa4'),
     (ACTION, 'contact_stamp', r'void\s+OnHitTrigger\s*\(', 'da53e74104d39211fca308fe15bb5022f4d880f480f34ed7d2baea2e4780fa33'),
     (ACTION, 'action_update_order', r'public\s+override\s+bool\s+Update\s*\(', '6c73f8cf99cf79294275cce6db44335f4e4aebf98dee562a1d004f1d3e36da44'),
     (TRIGGER, 'trigger_before_skill', r'void\s+OnHit\s*\(PEDefenceTrigger', 'f20b6c9f183872850aecbe2c92680b805581ffab366ee03d94da557ce842757d'),
     (CREATOR, 'player_creation', r'public\s+PeEntity\s+CreatePlayer\s*\(', '428c45f261426f1b68146920dc107c17786f10ba7c0d44af7b8543e2bc3c9adc'),
+    (PLAYER, 'input_attack_direction', r'void\s+UpdateOtherAction\s*\(', 'bf1c093b9cefe61d53060fa3d97b81c96b0f13318a4fc22de95b53a9ccadebac'),
+    (ACTION, 'initial_attack_direction', r'public\s+override\s+void\s+DoAction\s*\(', '1b1d3545ed3b0b5ddbfe1df63091df0320374522c251f48db9234190633a9715'),
+    (ACTION, 'continued_attack_direction', r'public\s+bool\s+CheckContinueAttack\s*\(', '258d19a41fdcc51b293b8e6e400beecfc24f8cb7792b597237394626761fa271'),
+    (ACTION, 'attack_facing_update', r'bool\s+UpdateSkillState\s*\(', '97f3cd0ce820e913238f98a22fddff1adb11d042295c3132ab9c33d00a864c4b'),
 )
 # Exact IEEE754 source-prefab values; tangentMode is editor metadata, absent
 # from installed runtime keys. Stored slopes remain authoritative.
@@ -45,7 +51,9 @@ KEY_FIELDS = ('time', 'value', 'inSlope', 'outSlope', 'tangentMode')
 
 
 def validate_sources(root):
-    texts = {p: uncomment((root/p).read_text(encoding='utf-8-sig')) for p in (ACTION, EQUIP, TRIGGER, CREATOR)}
+    # Legacy MainPlayer comments contain non-UTF8 bytes; contracted methods
+    # use ASCII tokens. Provenance continues to hash the exact original bytes.
+    texts = {p: uncomment((root/p).read_text(encoding='utf-8-sig',errors='replace')) for p in (ACTION, EQUIP, TRIGGER, CREATOR, PLAYER, SETTINGS)}
     for path, label, pattern, expected in CONTRACTS:
         if hashlib.sha256(body(texts[path], pattern).encode()).hexdigest() != expected:
             raise ValueError(label+' source contract changed')
@@ -54,6 +62,7 @@ def validate_sources(root):
         EQUIP: ('[SerializeField]Action_SwordAttackm_SwordAttack;', 'm_SwordAttack.m_UseStamina=isMainPlayer;', 'm_MotionMgr.AddAction(m_SwordAttack);'),
         CREATOR: ('publicconststringPlayerPrefabPath="EntityPlayer";',),
         ACTION: ('floatanimScaleStartTime;',),
+        SETTINGS: ('publicboolAttackWhithMouseDir=false;',),
     }.items():
         if any(s not in compact[path] for s in fragments):
             raise ValueError('Player action binding changed: '+path)
@@ -77,7 +86,7 @@ def qualify(objects, guid):
         raise ValueError('Player contact playback keys/tangents changed')
     if curve['m_PreInfinity']!=2 or curve['m_PostInfinity']!=2 or action['animScaleTime']!=struct.unpack('<f',struct.pack('<f',.65))[0]:
         raise ValueError('Player playback duration/infinity changed')
-    if action['m_PauseActions']!=[] or action['m_MoveAttackSpeed']!=4.5 or action['m_SprintAttackSpeed']!=7:
+    if action['m_PauseActions']!=[] or action['m_MoveAttackSpeed']!=4.5 or action['m_SprintAttackSpeed']!=7 or action['m_RotateAcc']!=60:
         raise ValueError('Supported player attack selection changed')
     return dict(component_path_id=pid, game_object_path_id=100000, script_guid=guid,
                 action_field='m_SwordAttack', duration_seconds=action['animScaleTime'],
@@ -146,6 +155,11 @@ def build_outputs(root=ROOT):
             binary_sha256='1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6',
             compared_points=4109, exact_float_matches=4109,
             scope='Separate isolated replay of call-free native selector/coefficient/Horner instructions on Linux x86-64; static-disassembly clamp dispatch. No initialized engine or gameplay execution.'),
+        facing=dict(rotate_acceleration=d['action']['m_RotateAcc'],class_default_rotate_acceleration=3,
+            mouse_direction_default=False,attack_direction='normalized accepted movement; zero falls back to body forward',
+            no_target_rotation='Quaternion.Lerp(current, LookRotation(attack direction), rotate acceleration * Time.deltaTime)',
+            active_target_rotation='Immediate horizontal LookRotation of frozen stage target direction',
+            qualification='C# branches and serialized source/optional installed binding; no native Quaternion.Lerp execution.'),
         rule=dict(low_stamina_factor=.9,minimum_base_speed=.5,maximum_base_speed=1.5,
             elapsed='float(Time.time - animScaleStartTime)', curve_parameter='elapsed / duration_seconds',
             response_active='elapsed < duration_seconds', clamp_before_curve=True, clamp_after_curve=False,
@@ -169,7 +183,8 @@ typedef struct {float duration_seconds;int pre_infinity,post_infinity;
 static const PeAttackPlaybackKey pe_attack_playback_keys[PE_ATTACK_PLAYBACK_KEY_COUNT]={
 '''
     header+=''.join('    {'+','.join(f(k[field]) for field in KEY_FIELDS[:4])+','+str(k['tangentMode'])+'},\n' for k in keys)
-    header+='};\nstatic const PeAttackPlaybackSource pe_attack_playback_source={'+f(d['duration_seconds'])+',2,2,.9f,.5f,1.5f};\n#endif\n'
+    header+='};\nstatic const PeAttackPlaybackSource pe_attack_playback_source={'+f(d['duration_seconds'])+',2,2,.9f,.5f,1.5f};\n'
+    header+='#define PE_SWORD_ROTATE_ACCELERATION '+f(d['action']['m_RotateAcc'])+'\n#endif\n'
     return {'pe_attack_playback_source.h':header.encode(), 'pe_attack_playback_source.json':(json.dumps(manifest,indent=2)+'\n').encode()}
 
 

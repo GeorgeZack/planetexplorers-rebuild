@@ -1,0 +1,227 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab",
+      "sha256": "1e518e5af9afd09d89e16a3a2dd776abd42846143ff6b40e409fdf4bb08ae441"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "sha256": "6e30c2baf434ca14b29d10b30141985c3b2a64578298634b2c66ab1891ec1e10"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs.meta",
+      "sha256": "80a2dbe920b7ce1a6b60df1cd260c626dd28abba3ca03fac97691394df9dba02"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Param/BeatParam.cs",
+      "sha256": "cd93169de106fc8174940f6a27a1ff597149cf72cced061f39a4d88028412af4"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Param/BeatParam.cs.meta",
+      "sha256": "b380a03ce3300f9905c2fc6cc609d0fe716bc75fa4e356c963273066c1ea0195"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewRoot.cs",
+      "sha256": "db21d9369c8d975bbdc5efb48438c317db004d2c914088045c371cff7360151f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewRoot.cs.meta",
+      "sha256": "f2161d69412565867c9e06be515f47c1c9c96b269c8fa8431c0c2582837278a8"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AvatarCmpt.cs",
+      "sha256": "fb640294118faa17356cc3648c59039cb9a80341c5bf0b660c0e844189097d9d"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "sha256": "a74c7a07590895fda1ba0769bb6a96d115e0e0bfdb4c594710b4cff3e74757a9"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkTriggerEvent.cs",
+      "sha256": "f6e439e4b0b87c5689907847759a05146703fa7ba866a9be09b04ba0e7d2e278"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEffect.cs",
+      "sha256": "6ac51b93608b27ad65f25c5d886eef3f94d06c3a598783dafb6121ff45f5f872"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "sha256": "f6f52e21dda703433c4add331bb1d8779c989f4b6ecaf093b0373d565b975da7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    }
+  ],
+  "binding": {
+    "model_component": 11471154,
+    "view_component": 11424092,
+    "entity_component": 11400038,
+    "curves": {
+      "m_AngleThresholdScale": {
+        "m_Curve": [
+          {
+            "time": 0.0,
+            "value": 1.0,
+            "inSlope": 0.0,
+            "outSlope": 0.0,
+            "tangentMode": 0
+          },
+          {
+            "time": 90.0,
+            "value": 0.9850000739097595,
+            "inSlope": 0.0,
+            "outSlope": 0.0,
+            "tangentMode": 0
+          },
+          {
+            "time": 180.0,
+            "value": 0.9970000386238098,
+            "inSlope": 0.0,
+            "outSlope": 0.0,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_AngleForceScale": {
+        "m_Curve": [
+          {
+            "time": 0.0,
+            "value": 1.0,
+            "inSlope": 0.0,
+            "outSlope": 0.0,
+            "tangentMode": 0
+          },
+          {
+            "time": 90.0,
+            "value": 0.9900000691413879,
+            "inSlope": 0.0,
+            "outSlope": 0.0,
+            "tangentMode": 0
+          },
+          {
+            "time": 180.0,
+            "value": 1.0,
+            "inSlope": 0.0,
+            "outSlope": 0.0,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      }
+    },
+    "air_scale": 0.5
+  },
+  "player_thresholds": {
+    "ThresholdWhacked": "250",
+    "ThresholdRepulsed": "400",
+    "ThresholdWentfly": "750",
+    "ThresholdKnocked": "1750"
+  },
+  "shield_buff": {
+    "_id": "30200177",
+    "_name": "\u76fe\u9632",
+    "_icon": "0",
+    "_desc": "2300000",
+    "_type": "10003",
+    "_priority": "0",
+    "_stackLimit": "1",
+    "_timeActive": "-1",
+    "_timeInterval": "0",
+    "_eff": "0",
+    "_effBeg": "0",
+    "_effEnd": "0",
+    "_mods": "exp,1,target.raws[70]=250;#exp,1,target.raws[71]=300;#exp,1,target.raws[72]=9999;#exp,1,target.raws[73]=9999",
+    "_AttType": "\u4e34\u65f6\u5c5e\u6027"
+  },
+  "effect": {
+    "_id": "57",
+    "_seId": "0",
+    "_effId": "0",
+    "_camEffId": "0",
+    "_anms": "0",
+    "_spEff": "True",
+    "_emitId": "0",
+    "_procEff": "0"
+  },
+  "triggers": [
+    {
+      "_id": "10100",
+      "_cond": "colinfo",
+      "_modsCaster": "0",
+      "_modsTarget": "exp,29,target.raws[29]=-1;#exp,1,target.expFunc.TryGetHurt(caster.sums[25]*caster.sums[25]/(target.sums[27]+caster.sums[25])*(target.sums[35]==1?(1-target.sums[33]):1)*(target.expFunc.RandIn(caster.sums[26])?2:1),0.1f)",
+      "_force": "100",
+      "_effOnHitCaster": "0",
+      "_effOnHitTarget": "57"
+    },
+    {
+      "_id": "10400",
+      "_cond": "colinfo",
+      "_modsCaster": "0",
+      "_modsTarget": "exp,29,target.raws[29]=-1;#exp,1,target.expFunc.TryGetHurt(caster.sums[25]*caster.sums[25]/(target.sums[27]+caster.sums[25])*(target.sums[35]==1?(1-target.sums[33]):1)*(target.expFunc.RandIn(caster.sums[26])?2:1));caster.raws[74]+=0.1f",
+      "_force": "400",
+      "_effOnHitCaster": "0",
+      "_effOnHitTarget": "57"
+    },
+    {
+      "_id": "10250",
+      "_cond": "colinfo",
+      "_modsCaster": "0",
+      "_modsTarget": "exp,29,target.raws[29]=-1;#exp,1,target.expFunc.TryGetHurt(caster.sums[25]*caster.sums[25]/(target.sums[27]+caster.sums[25])*(target.sums[35]==1?(1-target.sums[33]):1)*(target.expFunc.RandIn(caster.sums[26])?2:1));caster.raws[74]+=0.1f",
+      "_force": "250",
+      "_effOnHitCaster": "0",
+      "_effOnHitTarget": "57"
+    }
+  ],
+  "method_guards": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "pattern": "void\\s+ApplyMoveEffect\\s*\\(",
+      "sha256": "f16ea238ae2415af3396ffa506fe629797df06e855d89f4052213644da1945e9"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "pattern": "void\\s+ApplyForce\\s*\\(",
+      "sha256": "65b5e91c219de72ee83d0ef64730886b6fc2bf7698525c529a61b1f6d332de63"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "pattern": "public\\s+override\\s+void\\s+ApplyRepelEff\\s*\\(",
+      "sha256": "302374ae2ad2e0017ddd612d2a065204b09eee467e71efa6d3a412bc12ac0a96"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkTriggerEvent.cs",
+      "pattern": "public\\s+bool\\s+Exec\\s*\\(",
+      "sha256": "f840c3e802520f521eeff8d2c030e5ba9fcd1fe0738df9a8b4e56a47a7d867f3"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEffect.cs",
+      "pattern": "public\\s+void\\s+Apply\\s*\\(",
+      "sha256": "6561eb27d5429ea2598b5ce05451ed28e50cb0c8ff7a5b27d4171539c08520d5"
+    }
+  ],
+  "scope": "Disconnected female-player decision only; no action admission, force movement, IK, ragdoll, Rigid mutation or shield input.",
+  "order": [
+    "caller resolves permission and Vector3.Angle",
+    "evaluate angle threshold curve",
+    "multiply force by angle force curve",
+    "multiply threshold scale by .5 only when InAir",
+    "strict ordered threshold comparisons",
+    "Knocked and Wentfly both request Wentfly"
+  ],
+  "interpolation": "Finite unweighted Hermite arithmetic follows the separately qualified Unity5 SSE polynomial; no engine evaluated this new reaction selector.",
+  "threshold_owner": "Caller supplies current summed attributes. Exported base and mounted shield-buff values are snapshots, not automatic buff lifecycle or cancellation.",
+  "hit_ik": "Null and Repulsed call ApplyHitEffect, whose randomness and IK curves are outside this decision slice."
+}

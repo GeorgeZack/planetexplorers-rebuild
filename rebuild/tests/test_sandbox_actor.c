@@ -422,6 +422,15 @@ int main(void) {
     CHECK(same_angle(pe_sandbox_actor_yaw(a,g),turned));
     pe_sandbox_actor_facing_lock(a,false);pe_sandbox_actor_update(a,.05f,g);
     CHECK(same_angle(pe_sandbox_actor_yaw(a,g),180-g->yaw*RAD2DEG));
+    /* Melee heading is shared by visible body/attachment/defence snapshot;
+     * it cannot rotate the camera or escape the active action lock. */
+    float camera_before=g->yaw;
+    CHECK(pe_sandbox_actor_face_yaw(a,407));
+    pe_sandbox_actor_facing_lock(a,true);pe_sandbox_actor_update(a,.05f,g);draw(a,g);
+    CHECK(same_angle(draws[0].yaw,47)&&same_angle(draws[1].yaw,47)&&g->yaw==camera_before);
+    CHECK(pe_sandbox_actor_body_pose(a,g,&lateral_before)&&same_angle(lateral_before.yaw,47));
+    CHECK(!pe_sandbox_actor_face_yaw(a,NAN)&&same_angle(pe_sandbox_actor_yaw(a,g),47));
+    CHECK(!pe_sandbox_actor_face_yaw(NULL,0));pe_sandbox_actor_facing_lock(a,false);
     /* Explicit face-camera is available to align an authoritative action. */
     pe_sandbox_actor_facing_mode(a,true);g->yaw=.4f;pe_sandbox_actor_face_camera(a,g);
     CHECK(same_angle(pe_sandbox_actor_yaw(a,g),180-g->yaw*RAD2DEG));

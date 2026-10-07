@@ -1,0 +1,21 @@
+{
+  "schema": 1,
+  "source": "/home/admin/source/planetexplorers/rebuild/build/hunt-private-20261007-02/partial-before-load.pesave",
+  "baseline_sha256": "222bd1add75a11731c449ea08879a6ab0fa1cee767b0038054e32e7fae4a2057",
+  "binary_sha256": "924cacc903e89e6f975c63e053915c173a731a31dda24984d38b05bacb671cc8",
+  "scope": "Ordinary native private-display facing/contact check, not original difficulty parity",
+  "display": ":104",
+  "frames": 6647,
+  "host_result": 2,
+  "stop": "Explicit supervisor SIGTERM after return to main menu",
+  "selected_start_frame": 5785,
+  "selected_entity": 2146483653,
+  "selected_body_yaw_degrees": -86.298637,
+  "camera_yaw_radians": -1.801262,
+  "final_encounter_outgoing_contacts": 28,
+  "final_encounter_incoming_contacts": 10,
+  "new_kills": 0,
+  "source_and_baseline_unchanged": true,
+  "desktop_socket_identities_unchanged": true,
+  "desktop_connection_after": true
+}

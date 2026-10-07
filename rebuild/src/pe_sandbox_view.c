@@ -9,6 +9,8 @@
 #include "pe_sandbox_actions.h"
 #include "pe_sandbox_melee.h"
 #include "pe_sword_variant.h"
+#include "pe_melee_facing.h"
+#include "pe_hunt_targeting.h"
 #include "pe_running_attack_motion.h"
 #include "pe_sword_root_motion.h"
 #include "pe_hunt_combat.h"
@@ -541,6 +543,51 @@ static void sandbox_blade_rebind(PeSandboxMelee *blade,const PeSandboxMelee *mod
     PeAttackPlayback playback=blade->playback;
     pe_sandbox_melee_cancel(blade);*blade=*model;blade->playback=playback;
 }
+typedef struct {
+    uint32_t instance;
+    unsigned stage;
+    bool active,queued;
+    PeVec3 direction,queued_movement;
+    PeSwordTargetResult target;
+} SandboxBladeFacing;
+/* Source default AttackWhithMouseDir=false. Freeze acquired direction for one
+ * stage; target motion never continuously steers an active swing. Stable hunt
+ * order and fixed-tick/next-stage acquisition are documented native adapters.
+ * Stage action, stamina and facing together: a bad target pose cannot charge a
+ * failed start. The outgoing interval keeps its old stage heading on combos. */
+static bool sandbox_blade_tick(PeSandboxMelee *blade,SandboxBladeFacing *facing,
+    const PeHuntEncounter *encounter,PeSandboxMeleeGate gate,bool pressed,
+    PeVec3 movement,PeVec3 position,float yaw,float *stamina,
+    PeCombatInterval *interval,float *new_yaw,bool *began,bool *rejected){
+    if(!blade||!facing||!stamina||!interval||!new_yaw||!began||!rejected||!isfinite(yaw))return false;
+    PeVec3 checked_direction;
+    if(!pe_melee_facing_direction(movement,yaw,&checked_direction))return false;
+    PeSandboxMelee next=*blade;SandboxBladeFacing look=*facing;
+    float energy=*stamina,heading=yaw;bool started=false,denied=false;
+    if(!next.action.active)look=(SandboxBladeFacing){0};
+    if(pressed){
+        if(next.action.active){
+            /* ResetAction updates m_PreDir on every admitted attack request,
+             * even after the combo is already queued or outside its window. */
+            pe_sandbox_melee_queue(&next,gate);look.queued=true;look.queued_movement=movement;
+        }else if(pe_sandbox_melee_begin(&next,gate,&energy))started=true;
+        else denied=true;
+    }
+    PeCombat entering=next.action;uint32_t instance=next.instance_id;
+    PeCombatInterval span;
+    if(!pe_sandbox_melee_advance(&next,gate,&energy)||!pe_sandbox_melee_interval(&next,&span))return false;
+    if(span.valid&&entering.active){
+        if(!look.active||look.instance!=instance||look.stage!=entering.stage){
+            PeVec3 request=look.active&&look.instance==instance&&look.queued?look.queued_movement:movement;
+            if(!pe_melee_facing_direction(request,yaw,&look.direction)||
+               !pe_hunt_target_acquire(encounter,position,look.direction,&look.target))return false;
+            look.active=true;look.instance=instance;look.stage=entering.stage;look.queued=false;
+        }
+        if(!pe_melee_facing_yaw(yaw,look.direction,&look.target,PE_SANDBOX_MELEE_DT,&heading))return false;
+    }
+    if(!next.action.active)look=(SandboxBladeFacing){0};
+    *blade=next;*facing=look;*stamina=energy;*interval=span;*new_yaw=heading;*began=started;*rejected=denied;return true;
+}
 static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *defence,const PeSandboxMelee *melee,PeHuntCombatPlayer *out){
     if(!pe_outfit_state_valid(game))return false;
     PeSandboxBodyPose pose;if(!pe_sandbox_actor_body_pose(actor,game,&pose))return false;
@@ -600,6 +647,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     bool placing_torch=false,attack_pending=false;
     PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;
     PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0;
+    SandboxBladeFacing blade_facing={0};
     bool captured=false,walk=false,autorun=false,jump_pending=false,third_person=true,build_mode=false;
     if(!terrain||!collision||!pe_terrain_material_view_load(&surface,assets,error,sizeof error)||
        !update_terrain(&game->world,terrain,&triangles,&surface)||
@@ -798,7 +846,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(action.load) {
             loaded=pe_game_load(game,save_path,error,sizeof error);
-            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
+            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
@@ -843,7 +891,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             action.consume_world=true;action.npc_interaction=false;
             camera_control.world_input=false;camera_control.capture=false;
             pe_sandbox_pointer_release_gate(&pointer_gate,true,pointer_buttons);
-            pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);
+            pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
             snprintf(game->message,sizeof game->message,"Camera: %s",camera_controls.mode==PE_SANDBOX_CAMERA_FREE?
                 "third person, free mouse (hold RMB to look)":camera_controls.mode==PE_SANDBOX_CAMERA_LOCKED?
                 "third person, mouse look":"first person");
@@ -864,7 +912,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         bool right_click=action_input&&camera_control.right_click;
         const PeSlot *equipped=pe_game_equipped_tool(game);
         uint32_t current_instance=equipped?equipped->instance_id:0;
-        if(current_instance!=tool_instance){attack_pending=false;sandbox_blade_rebind(&melee,&blade_templates[equipped&&equipped->item_id==1&&blade_templates[1].ready?1:0]);placing_torch=false;tool_instance=current_instance;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);}
+        if(current_instance!=tool_instance){attack_pending=false;sandbox_blade_rebind(&melee,&blade_templates[equipped&&equipped->item_id==1&&blade_templates[1].ready?1:0]);blade_facing=(SandboxBladeFacing){0};placing_torch=false;tool_instance=current_instance;tool_drawn=false;pe_sandbox_actions_cancel(&tool_action);}
         bool torch_tool=equipped&&equipped->item_id==PE_TORCH_ITEM;
         bool knife_tool=equipped&&(equipped->item_id==33||equipped->item_id==1);
         bool knife_ready=knife_tool&&sandbox_blade_owned(equipped,&melee)&&game->mode==PE_GAME_ADVENTURE&&
@@ -897,7 +945,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         /* Clear immediately even on frames without a simulation tick. Modal
          * closure still owns its press through the shared pointer-release gate. */
         if(!world_input||build_mode||!third_person||game->hp<=0||!knife_ready){
-            attack_pending=false;pe_sandbox_melee_cancel(&melee);if(knife_tool)tool_drawn=false;
+            attack_pending=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};if(knife_tool)tool_drawn=false;
         }
         profile_stage(&profile,PROFILE_QUERIES);
         PeSandboxCameraInput camera_input={.dt=smoke_frames?PE_FIXED_DT:dt,
@@ -976,7 +1024,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(opened){
             if(selected)selected->yaw=atan2f(game->player.x-selected->position.x,game->player.z-selected->position.z)*RAD2DEG;
-            world_input=false;action_input=false;autorun=false;jump_pending=false;tool_drawn=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);
+            world_input=false;action_input=false;autorun=false;jump_pending=false;tool_drawn=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
             action.consume_world=true;action.cursor_visible=true;
             pe_sandbox_pointer_release_gate(&pointer_gate,true,pointer_buttons);
             if(captured){EnableCursor();captured=false;}HideCursor();
@@ -998,7 +1046,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(action.revive&&focused&&!action.paused&&sandbox_revive_request(game,&sandbox_attribute_clock)){
             attack_pending=tool_drawn=placing_torch=autorun=jump_pending=false;
             build_mode=ui.building=false;accumulator=0;
-            pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);
+            pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
             pe_sandbox_actor_reset_motion(actor,game);
             /* Preserve the actual cohort, injuries, kill count and encounter
              * clock. Revival must not reload or replace surviving creatures. */
@@ -1028,7 +1076,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 if(IsKeyPressed(KEY_E))interact(game);
                 dig_cooldown=fmaxf(0,dig_cooldown-dt);
                 if(!build_mode) {
-                    if(IsKeyPressed(KEY_R)||right_click){placing_torch=false;tool_drawn=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);}
+                    if(IsKeyPressed(KEY_R)||right_click){placing_torch=false;tool_drawn=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);}
                     else if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)){
                         if(placing_torch){
                             if(pe_deployable_place(game,collision,current_instance,pv(aim.position),pv(aim.direction))){
@@ -1073,7 +1121,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if((attack_pending||melee.action.active)&&(!game->grounded||jump_pending||
                (!running_active&&!running_press&&!ordinary_press&&!ordinary_active&&(fabsf(input.move_x)+fabsf(input.move_z)>.001f||hypotf(game->velocity.x,game->velocity.z)>.05f)))){
                 if(attack_pending&&!melee.action.active)snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
-                attack_pending=false;pe_sandbox_melee_cancel(&melee);
+                attack_pending=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};
             }
             accumulator+=smoke_frames?PE_FIXED_DT:dt;int steps=0;bool hunt_fixed_pose=false;
             while(accumulator>=PE_FIXED_DT&&steps++<6) {
@@ -1088,22 +1136,28 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     .equipped_instance_id=knife_item?knife_item->instance_id:0,
                     .drawn_instance_id=tool_drawn&&owns_knife?knife_item->instance_id:0,.velocity=game->velocity,
                     .scaled_time=(float)sandbox_attribute_clock.seconds};
-                if(attack_pending&&melee.ready){
-                    if(melee.action.active)pe_sandbox_melee_queue(&melee,melee_gate);
-                    else if(pe_sandbox_melee_begin(&melee,melee_gate,&game->stamina)){
-                        pe_sandbox_actor_face_camera(actor,game);melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;
-                        walking_starts+=melee.action.variant==PE_COMBAT_STATIONARY&&melee.setup.ordinary_motion_ready&&
-                            (melee_gate.move_requested||hypotf(melee_gate.velocity.x,melee_gate.velocity.z)>.05f);
-                    }
-                    else snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
-                }
-                attack_pending=false;
                 bool melee_stamina_lock=melee.ready&&melee.action.active;
-                PeCombatInterval attack_interval={0};
-                if(melee.ready&&(!pe_sandbox_melee_advance(&melee,melee_gate,&game->stamina)||
-                   !pe_sandbox_melee_interval(&melee,&attack_interval))){
-                    snprintf(error,sizeof error,"Invalid sandbox knife action clock");result=1;break;
+                PeCombatInterval attack_interval={0};bool began=false,rejected=false;
+                float attack_yaw=pe_sandbox_actor_yaw(actor,game);
+                if(melee.ready&&(!sandbox_blade_tick(&melee,&blade_facing,&hunt.encounter,melee_gate,attack_pending,
+                    (PeVec3){input.move_x,0,input.move_z},game->player,attack_yaw,&game->stamina,
+                    &attack_interval,&attack_yaw,&began,&rejected)||
+                    !pe_sandbox_actor_face_yaw(actor,attack_yaw))){
+                    snprintf(error,sizeof error,"Invalid sandbox blade facing/action clock");result=1;break;
                 }
+                if(began){
+                    melee_stamina_lock=true;melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;
+                    walking_starts+=melee.action.variant==PE_COMBAT_STATIONARY&&melee.setup.ordinary_motion_ready&&
+                        (melee_gate.move_requested||hypotf(melee_gate.velocity.x,melee_gate.velocity.z)>.05f);
+                    if(combat_trace&&combat_trace_lines<4096){
+                        fprintf(stderr,"Blade start: frame=%d target=%llu selected=%d yaw=%.6f camera=%.6f direction=%.6f,%.6f,%.6f\n",
+                            frame,(unsigned long long)blade_facing.target.view_id,(int)blade_facing.target.selected,
+                            attack_yaw,game->yaw,blade_facing.direction.x,blade_facing.direction.y,blade_facing.direction.z);
+                        combat_trace_lines++;
+                    }
+                }
+                if(rejected)snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
+                attack_pending=false;
                 bool action_motion=attack_interval.valid;
                 PeVec3 motion_request={0};
                 if(action_motion&&
@@ -1194,7 +1248,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                         if(combat_update.advance==PE_COMBAT_NEXT_STAGE)melee_swings++;
                         if(completed){game->hunt_state=PE_HUNT_RETURN_PENDING;snprintf(game->message,sizeof game->message,"Four hares defeated. Return to town and report in.");}
                         else if(game->hunt_kills!=before)snprintf(game->message,sizeof game->message,"Lepus hares defeated: %u/4",game->hunt_kills);
-                        if(game->hp<=0){attack_pending=false;tool_drawn=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);
+                        if(game->hp<=0){attack_pending=false;tool_drawn=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
                             snprintf(game->message,sizeof game->message,"You have died. Use a Revival Shot or load a saved game.");}
                     }
                 }

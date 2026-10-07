@@ -38,6 +38,8 @@ void pe_sandbox_actor_facing_lock(PeSandboxActor *actor,bool locked);
 void pe_sandbox_actor_reset_motion(PeSandboxActor *actor,const PeGame *game);
 void pe_sandbox_actor_face_camera(PeSandboxActor *actor,const PeGame *game);
 float pe_sandbox_actor_yaw(const PeSandboxActor *actor,const PeGame *game);
+/* World body heading only; camera yaw/pitch remain owned by PeGame. */
+bool pe_sandbox_actor_face_yaw(PeSandboxActor *actor,float yaw_degrees);
 /* Host owns BeginMode3D; reads the same transient body yaw as contact queries. */
 void pe_sandbox_actor_draw(PeSandboxActor *actor,const PeGame *game);
 /* Read-only exact body selection shared with world rendering. clip is borrowed

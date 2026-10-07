@@ -24,6 +24,14 @@
     {
       "path": "Assets/PeWorld/PeEntityCreator.cs",
       "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs",
+      "sha256": "12612b0abc184af2e92f5c77345679d2ecbb6ea29da6ff6653c6233f1c504b57"
+    },
+    {
+      "path": "Assets/Scripts/Lilj/SystemSettingData.cs",
+      "sha256": "bbaf09f6410f42a00583469b13ab02f4e4bdcb26fc69750a39992df26a190159"
     }
   ],
   "binding": {
@@ -80,7 +88,11 @@
     "contact_stamp": "da53e74104d39211fca308fe15bb5022f4d880f480f34ed7d2baea2e4780fa33",
     "action_update_order": "6c73f8cf99cf79294275cce6db44335f4e4aebf98dee562a1d004f1d3e36da44",
     "trigger_before_skill": "f20b6c9f183872850aecbe2c92680b805581ffab366ee03d94da557ce842757d",
-    "player_creation": "428c45f261426f1b68146920dc107c17786f10ba7c0d44af7b8543e2bc3c9adc"
+    "player_creation": "428c45f261426f1b68146920dc107c17786f10ba7c0d44af7b8543e2bc3c9adc",
+    "input_attack_direction": "bf1c093b9cefe61d53060fa3d97b81c96b0f13318a4fc22de95b53a9ccadebac",
+    "initial_attack_direction": "1b1d3545ed3b0b5ddbfe1df63091df0320374522c251f48db9234190633a9715",
+    "continued_attack_direction": "258d19a41fdcc51b293b8e6e400beecfc24f8cb7792b597237394626761fa271",
+    "attack_facing_update": "97f3cd0ce820e913238f98a22fddff1adb11d042295c3132ab9c33d00a864c4b"
   },
   "engine_api": {
     "unity_engine_sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
@@ -97,6 +109,15 @@
     "compared_points": 4109,
     "exact_float_matches": 4109,
     "scope": "Separate isolated replay of call-free native selector/coefficient/Horner instructions on Linux x86-64; static-disassembly clamp dispatch. No initialized engine or gameplay execution."
+  },
+  "facing": {
+    "rotate_acceleration": 60.0,
+    "class_default_rotate_acceleration": 3,
+    "mouse_direction_default": false,
+    "attack_direction": "normalized accepted movement; zero falls back to body forward",
+    "no_target_rotation": "Quaternion.Lerp(current, LookRotation(attack direction), rotate acceleration * Time.deltaTime)",
+    "active_target_rotation": "Immediate horizontal LookRotation of frozen stage target direction",
+    "qualification": "C# branches and serialized source/optional installed binding; no native Quaternion.Lerp execution."
   },
   "rule": {
     "low_stamina_factor": 0.9,

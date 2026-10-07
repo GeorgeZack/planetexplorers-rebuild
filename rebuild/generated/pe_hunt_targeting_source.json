@@ -1,0 +1,547 @@
+{
+  "axis": 2,
+  "center": [
+    0.0,
+    0.5,
+    0.0
+  ],
+  "collider": -2101344497280277659,
+  "component": -1768499269866288629,
+  "force_conflict": true,
+  "hare_player_id": 4,
+  "height": 3.069999933242798,
+  "layer": 25,
+  "limitations": [
+    "Stable encounter slot order replaces unobserved Physics.OverlapSphere ordering.",
+    "Inclusive analytic sphere/capsule overlap replaces PhysX broadphase; no movement capsule substitution.",
+    "Present living pinned cohort only; no ragdolls, reputation/aggro inference, LOS, full aim IK or target tracking.",
+    "Player query is source EntityPlayer prefab; existing installed equivalence proof is separate."
+  ],
+  "parts": [
+    {
+      "bind_points": [
+        [
+          -3.022990192672574e-07,
+          -0.33099566267275166,
+          1.4427691513159489
+        ],
+        [
+          -1.4918550043148937e-07,
+          -0.4216264781203556,
+          1.4005074736497545
+        ],
+        [
+          -3.155405844718699e-07,
+          -0.3001909749323696,
+          1.424032240655946
+        ],
+        [
+          -1.417289142664053e-07,
+          -0.1734058826124878,
+          1.1521396862724231
+        ]
+      ],
+      "center": false,
+      "joint": 2,
+      "name": "Head1"
+    },
+    {
+      "bind_points": [
+        [
+          -2.5077900146974367e-08,
+          -0.03224102314967242,
+          1.0587464741951969
+        ],
+        [
+          1.226144891012005e-07,
+          0.07549230936380871,
+          0.7787580878989284
+        ],
+        [
+          -2.5077900146974367e-08,
+          -0.03224102314967242,
+          1.0587464741951969
+        ],
+        [
+          1.5215300216345063e-07,
+          0.09703900155213707,
+          0.722760343885231
+        ]
+      ],
+      "center": true,
+      "joint": 4,
+      "name": "Body1"
+    },
+    {
+      "bind_points": [
+        [
+          -0.31637172063457925,
+          -0.18080995598092936,
+          1.154286022708365
+        ],
+        [
+          -0.40457847798197266,
+          -0.199856468421648,
+          1.0221618343197374
+        ],
+        [
+          -0.2777812673756801,
+          -0.17247710745330674,
+          1.2120903505140055
+        ],
+        [
+          -0.18957451002828665,
+          -0.1534305950125881,
+          1.3442145389026332
+        ]
+      ],
+      "center": false,
+      "joint": 7,
+      "name": "LUpper"
+    },
+    {
+      "bind_points": [
+        [
+          0.3659875969918791,
+          -0.1915245236043939,
+          1.0799660283208876
+        ],
+        [
+          0.45419428949167484,
+          -0.21057127339960469,
+          0.9478418515025688
+        ],
+        [
+          0.2777809044920834,
+          -0.1724777738091831,
+          1.2120902051392064
+        ],
+        [
+          0.18957421199228772,
+          -0.15343102401397232,
+          1.3442143819575252
+        ]
+      ],
+      "center": false,
+      "joint": 31,
+      "name": "RUpper"
+    },
+    {
+      "bind_points": [
+        [
+          -0.4901674388548607,
+          -0.2729614336900343,
+          0.8732060438040719
+        ],
+        [
+          -0.6427926152578965,
+          -0.5144812909053139,
+          0.5653527571993071
+        ],
+        [
+          -0.4501941773369261,
+          -0.20970623135862818,
+          0.9538342876143319
+        ],
+        [
+          -0.41022091581899156,
+          -0.14645102902722207,
+          1.0344625314245919
+        ]
+      ],
+      "center": false,
+      "joint": 13,
+      "name": "LForearm"
+    },
+    {
+      "bind_points": [
+        [
+          0.4901667571468705,
+          -0.27296266115054213,
+          0.8732062738046305
+        ],
+        [
+          0.6427912762675463,
+          -0.5144829378233674,
+          0.5653529515360041
+        ],
+        [
+          0.45019366777432046,
+          -0.2097073489612046,
+          0.9538345269554259
+        ],
+        [
+          0.4102205784017704,
+          -0.14645203677186708,
+          1.0344627801062214
+        ]
+      ],
+      "center": false,
+      "joint": 35,
+      "name": "RForearm"
+    },
+    {
+      "bind_points": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "center": false,
+      "joint": 4294967295,
+      "name": "LForearm_M"
+    },
+    {
+      "bind_points": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "center": false,
+      "joint": 4294967295,
+      "name": "RForearm_M"
+    },
+    {
+      "bind_points": [
+        [
+          -0.33065486225545254,
+          -0.03424360871595772,
+          0.6104566793947239
+        ],
+        [
+          -0.3648163184581662,
+          -0.148390340214379,
+          0.44982194981615975
+        ],
+        [
+          -0.32040642310393413,
+          4.1838770392654823e-07,
+          0.6586471090396918
+        ],
+        [
+          -0.28966110946721946,
+          0.10273248694179676,
+          0.8032183800222644
+        ]
+      ],
+      "center": false,
+      "joint": 0,
+      "name": "LThigh"
+    },
+    {
+      "bind_points": [
+        [
+          0.33065473151699853,
+          -0.034244492770725055,
+          0.6104566746169433
+        ],
+        [
+          0.36481583398745265,
+          -0.14839134476942323,
+          0.44982199488152774
+        ],
+        [
+          0.32040639848518176,
+          -4.2951697225290797e-07,
+          0.6586470893089633
+        ],
+        [
+          0.2896614032075323,
+          0.10273174748738056,
+          0.8032183154326977
+        ]
+      ],
+      "center": false,
+      "joint": 30,
+      "name": "RThigh"
+    },
+    {
+      "bind_points": [
+        [
+          -0.3557325435658098,
+          -0.1270778558668152,
+          0.3285232957018793
+        ],
+        [
+          -0.26612317319582535,
+          0.1485095713036028,
+          0.3174897052840874
+        ],
+        [
+          -0.38972230553449816,
+          -0.2316110203384558,
+          0.332708450785687
+        ],
+        [
+          -0.4237120675031865,
+          -0.3361441848100964,
+          0.3368936058694947
+        ]
+      ],
+      "center": false,
+      "joint": 10,
+      "name": "LCalf"
+    },
+    {
+      "bind_points": [
+        [
+          0.3557321845896222,
+          -0.12707891524934606,
+          0.3285233116874858
+        ],
+        [
+          0.2661236884383566,
+          0.14850876629436624,
+          0.31748961389524216
+        ],
+        [
+          0.38972161495809904,
+          -0.2316121762074109,
+          0.33270850749953473
+        ],
+        [
+          0.4237110453265759,
+          -0.33614543716547574,
+          0.3368937033115837
+        ]
+      ],
+      "center": false,
+      "joint": 32,
+      "name": "RCalf"
+    },
+    {
+      "bind_points": [
+        [
+          2.505934845864981e-08,
+          0.31594229733867507,
+          0.5401138589798662
+        ],
+        [
+          7.103341800563907e-08,
+          0.47151491924547284,
+          0.4495757386218625
+        ],
+        [
+          -1.8360612033839744e-08,
+          0.16901257883720414,
+          0.6256220954215155
+        ],
+        [
+          -6.17805725263293e-08,
+          0.02208286033573323,
+          0.7111303318631648
+        ]
+      ],
+      "center": false,
+      "joint": 8,
+      "name": "Tail1"
+    },
+    {
+      "bind_points": [
+        [
+          5.422413764439697e-08,
+          0.4698028691010837,
+          0.40704249213709953
+        ],
+        [
+          8.637772556714165e-08,
+          0.7983726299846696,
+          0.37635192977310394
+        ],
+        [
+          3.711481421055768e-08,
+          0.4355563243873647,
+          0.47050251931059717
+        ],
+        [
+          1.9576491941537204e-08,
+          0.25633643862914024,
+          0.4872428275664131
+        ]
+      ],
+      "center": false,
+      "joint": 18,
+      "name": "Tail2"
+    },
+    {
+      "bind_points": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "center": false,
+      "joint": 4294967295,
+      "name": "Tail3"
+    }
+  ],
+  "player_id": 1,
+  "player_query": {
+    "angle": 115.0,
+    "height": 1.5,
+    "mask": 33554432,
+    "radius": 3.0
+  },
+  "player_query_sources": [
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs",
+      "sha256": "dc4854aa4b5b45adb2b64597ec81c03b6b5591627b79b5c2f9c3961405cc38eb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs",
+      "sha256": "457e76b2e674a076705d784a0b25ae2a56d84434f1227dcee1822054a6acfc9c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs.meta",
+      "sha256": "0d7f8c3ff2674f40ece69d8d02ee49df70dcaa0ef9d2c272b87eb2030000b224"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+      "sha256": "238d3a50ab81caa3afc338234111670637556bbd4083ef3073774e0f25b8b4f8"
+    },
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs",
+      "sha256": "12612b0abc184af2e92f5c77345679d2ecbb6ea29da6ff6653c6233f1c504b57"
+    },
+    {
+      "path": "Assets/Scripts/Lilj/SystemSettingData.cs",
+      "sha256": "bbaf09f6410f42a00583469b13ab02f4e4bdcb26fc69750a39992df26a190159"
+    }
+  ],
+  "radius": 1.2000000476837158,
+  "schema": "pe-hunt-targeting-1",
+  "skeleton_hash": "73c285d0b40445c8",
+  "source": "AssetBundles/Monster/m_lepus_hare.unity3d",
+  "source_contracts": [
+    {
+      "label": "ordered_target_selection",
+      "method_sha256": "a69dfd976f1ffdde5318e509609973d80de4b777196ac9c3c49c91e14b7a3485",
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs"
+    },
+    {
+      "label": "ordered_defence_priority",
+      "method_sha256": "3cd453e3a0dd66f44e61315811d5105577b58de4de14afb37dfbe123a45f7a42",
+      "path": "Assets/Scripts/Attack/PEDefenceTrigger.cs"
+    },
+    {
+      "label": "capsule_closest_point",
+      "method_sha256": "abf9a92946122c695c34efae775b57c44604d38b0692cdd8c0dbea178b41faee",
+      "path": "Assets/Scripts/Attack/PECapsuleTrigger.cs"
+    },
+    {
+      "label": "force_conflict",
+      "method_sha256": "55af9a5bc9bac2b5e06ab96488891664778470fe54071a08f92a613d0f6db7a3",
+      "path": "Assets/Scripts/Force/ForceSetting.cs"
+    },
+    {
+      "label": "directional_force_alliance",
+      "method_sha256": "faf51e862d183d95e635029cfc1307ed8c07992afbdc6e255ad8d802a1daf41a",
+      "path": "Assets/Scripts/Force/ForceSetting.cs"
+    },
+    {
+      "label": "adventure_load_chain",
+      "method_sha256": "3041e1ac11d199e52fee1a6e726e1ce0449080b239045eea89ece0a2a1e4842b",
+      "path": "Assets/PeLauncher/SingleGame.cs"
+    },
+    {
+      "label": "scenario_fresh_restore_force_binding",
+      "method_sha256": "786464822a52f2b4c8f3a7f1846997919a1744a1278e8920e712a0499fbc480e",
+      "path": "Assets/PeLauncher/PeGameLoader.cs"
+    },
+    {
+      "label": "adventure_scenario_dispatch",
+      "method_sha256": "f69175857bac58c03a9c946714b88cc1f122d1a757485a51cd8d6549cccaaddc",
+      "path": "Assets/PeLauncher/PeGameLoader.cs"
+    }
+  ],
+  "source_sha256": "94409ad1bf9570048a52c42671986907e2a5ca131f55f73737e5b7d7cff76c35",
+  "sources": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs",
+      "sha256": "dc4854aa4b5b45adb2b64597ec81c03b6b5591627b79b5c2f9c3961405cc38eb"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEDefenceTrigger.cs",
+      "sha256": "b1b151ec32ea6558a2d00db4917a2316f841de956933d9bc17e8362dc2e39671"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PECapsuleTrigger.cs",
+      "sha256": "cd314c58d1a065bb679fd78cd061a5375a12289dacc5aaf7943d12da956a6f4f"
+    },
+    {
+      "path": "Assets/Scripts/Force/ForceSetting.cs",
+      "sha256": "15345f3a5fd5ba85aff27b678f62b03667b4e0e2c5050313f180995cf31d5c8c"
+    },
+    {
+      "path": "Assets/PeLauncher/SingleGame.cs",
+      "sha256": "5a0cc4a8c50b30db259474d614107a7b32352212aa695a3b467892c12edd0447"
+    },
+    {
+      "path": "Assets/PeLauncher/PeGameLoader.cs",
+      "sha256": "8aab505f2a3de5950ab146eeaa645a994e16cab3f4d25c43426e5bee2b112bfd"
+    },
+    {
+      "path": "Assets/Resources/ForceSetting/ForceSettings_Story.xml",
+      "sha256": "26c110fea150e2ebd96cfe0b1d80ae3a23606fe9b8eebc733ea66995766cb5c4"
+    }
+  ],
+  "transform": 5682115552912406982,
+  "view_transform": 1752844016538949710
+}

@@ -22,7 +22,7 @@ class SourceGuards(unittest.TestCase):
             root=Path(directory)
             for p in e.SOURCE_FILES:
                 target=root/p;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes((e.ROOT/p).read_bytes())
-            target=root/path;text=target.read_text(encoding='utf-8-sig');self.assertIn(old,text)
+            target=root/path;text=target.read_text(encoding='utf-8-sig',errors='replace');self.assertIn(old,text)
             target.write_text(text.replace(old,new,1))
             with self.assertRaises(ValueError):e.validate_sources(root)
 
@@ -34,6 +34,10 @@ class SourceGuards(unittest.TestCase):
     def test_adding_action_reset_rejected(self):self.mutate(e.ACTION,'UpdateAnimSpeed();','animScaleStartTime = Time.time; UpdateAnimSpeed();')
     def test_registered_player_action_required(self):self.mutate(e.EQUIP,'m_MotionMgr.AddAction(m_SwordAttack);','m_MotionMgr.AddAction(m_TwoHandWeaponAttack);')
     def test_actual_player_resource_required(self):self.mutate(e.CREATOR,'PlayerPrefabPath = "EntityPlayer"','PlayerPrefabPath = "EntityNpc"')
+    def test_default_input_direction_required(self):self.mutate(e.SETTINGS,'AttackWhithMouseDir = false','AttackWhithMouseDir = true')
+    def test_movement_direction_required(self):self.mutate(e.PLAYER,'mEquip.SwordAttack (m_MoveDir.normalized)','mEquip.SwordAttack (GetMouseClickDir ())')
+    def test_quaternion_lerp_required(self):self.mutate(e.ACTION,'Quaternion.Lerp(trans.rotation, Quaternion.LookRotation(m_AttackDir), m_RotateAcc * Time.deltaTime)','Quaternion.Slerp(trans.rotation, Quaternion.LookRotation(m_AttackDir), m_RotateAcc * Time.deltaTime)')
+    def test_fallback_body_forward_required(self):self.mutate(e.ACTION,'m_AttackDir = trans.forward;','m_AttackDir = Vector3.forward;')
 
 
 @unittest.skipUnless(HAVE_UNITY,'optional UnityPy unavailable')
@@ -61,6 +65,14 @@ class PrefabGuards(unittest.TestCase):
         with self.assertRaises(ValueError):e.qualify(objects,self.guid)
 
     def test_duration_change_rejected(self):self.changed(lambda x:x[11400022]['data']['m_SwordAttack'].__setitem__('animScaleTime',.15))
+    def test_serialized_facing_acceleration_not_class_default(self):
+        d=e.qualify(self.objects,self.guid)
+        self.assertEqual(d['action']['m_RotateAcc'],60)
+        j=json.loads(e.build_outputs()['pe_attack_playback_source.json'])
+        self.assertEqual(j['facing']['rotate_acceleration'],60)
+        self.assertFalse(j['facing']['mouse_direction_default'])
+        self.assertIn(b'#define PE_SWORD_ROTATE_ACCELERATION 60.0f',e.build_outputs()['pe_attack_playback_source.h'])
+    def test_rotate_acceleration_change_rejected(self):self.changed(lambda x:x[11400022]['data']['m_SwordAttack'].__setitem__('m_RotateAcc',3))
     def test_tangent_change_rejected(self):self.changed(lambda x:x[11400022]['data']['m_SwordAttack']['animScaleCurve']['m_Curve'][2].__setitem__('outSlope',0))
     def test_wrap_change_rejected(self):self.changed(lambda x:x[11400022]['data']['m_SwordAttack']['animScaleCurve'].__setitem__('m_PostInfinity',1))
     def test_disabled_component_rejected(self):self.changed(lambda x:x[11400022]['data'].__setitem__('m_Enabled',0))

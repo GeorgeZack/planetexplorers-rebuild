@@ -13,4 +13,5 @@ static const PeAttackPlaybackKey pe_attack_playback_keys[PE_ATTACK_PLAYBACK_KEY_
     {0.999511063f,0.999989212f,0.0f,0.0f,0},
 };
 static const PeAttackPlaybackSource pe_attack_playback_source={0.649999976f,2,2,.9f,.5f,1.5f};
+#define PE_SWORD_ROTATE_ACCELERATION 60.0f
 #endif

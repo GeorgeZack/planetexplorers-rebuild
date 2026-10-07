@@ -1,5 +1,7 @@
 # Planet Explorers C rebuild
 
+Adventure blade attacks now use movement direction (or current body facing while idle) and bounded source-based nearby-hare targeting. The camera stays independent; target assistance freezes for each stage. See [combat scope and adapters](../docs/audit/MELEE_TARGET_FACING.md). Wood Sword/Shield activation remains gated on qualified blocking presentation.
+
 Conversation history is available from the speech-bubble icon on the minimap in both modes. It keeps the latest20 unique messages, supports scrolling/scrollbar dragging and Clear, and persists with sandbox saves (PECSv21). Older saves start with an empty log; tutorial history lasts for that session. [Contract and controls](../docs/audit/CONVERSATION_HISTORY.md). The [Adventure camera update](../docs/audit/CAMERA_ALIGNMENT.md) integrates camera-only wall queries and shares the rendered pose with cursor targeting; its close-rendering and timing adapters are documented.
 
 ## Review batch: shared tutorial and sandbox UI

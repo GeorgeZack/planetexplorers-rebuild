@@ -43,7 +43,10 @@ def extract():
     contact = block(fixed, 'if(sandbox_hunt_runs(&ui,action)){')
     assert 'pe_hunt_combat_step' in contact
     cancel = block(text, 'if(!world_input||build_mode||!third_person||game->hp<=0||!knife_ready){')
+    facing = block(text, 'typedef struct {\n    uint32_t instance;\n    unsigned stage;') + ' SandboxBladeFacing;'
     return '''/* Generated from production pe_sandbox_view.c; do not edit. */
+#include "pe_sword_targeting.h"
+''' + facing + '''
 static PeInput host_motion(PeGame *game, PeSandboxUIResult action,
     PeSandboxCameraControlResult camera_control, PeSandboxMelee *blade,
     bool *drawn, bool *new_action, bool *pending) {
@@ -53,8 +56,10 @@ static PeInput host_motion(PeGame *game, PeSandboxUIResult action,
     bool build_mode=false,third_person=camera_control.third_person,knife_ready=true,knife_tool=true;
     bool autorun=false,jump_pending=false,walk=false;
     PeSandboxMelee melee=*blade;
+    SandboxBladeFacing blade_facing={0};
     if(action.consume_actions)attack_pending=false;
 ''' + cancel + '\n    PeInput input={0};\n' + movement + '''
+    (void)blade_facing; /* Dedicated blade-facing host tests own this state. */
     *blade=melee;*drawn=tool_drawn;*new_action=action_input;*pending=attack_pending;
     return input;
 }

@@ -266,6 +266,10 @@ bool pe_sandbox_actor_set_melee(PeSandboxActor *a,uint32_t instance,bool held,co
 float pe_sandbox_actor_yaw(const PeSandboxActor *a,const PeGame *g){
     return a&&a->have_facing?a->body_yaw*RAD2DEG:g?180-g->yaw*RAD2DEG:0;
 }
+bool pe_sandbox_actor_face_yaw(PeSandboxActor *a,float yaw){
+    if(!a||!a->ok||!isfinite(yaw))return false;
+    a->body_yaw=remainderf(yaw,360)*DEG2RAD;a->have_facing=true;return true;
+}
 void pe_sandbox_actor_facing_mode(PeSandboxActor *a,bool free_pointer){if(a)a->free_facing=free_pointer;}
 void pe_sandbox_actor_facing_lock(PeSandboxActor *a,bool locked){if(a)a->facing_locked=locked;}
 void pe_sandbox_actor_face_camera(PeSandboxActor *a,const PeGame *g){
