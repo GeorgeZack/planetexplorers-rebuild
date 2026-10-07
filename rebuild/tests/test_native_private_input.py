@@ -1,4 +1,5 @@
 """Pure argument/provenance/mocked-input tests. Never open any X display."""
+from contextlib import nullcontext
 from dataclasses import replace
 import importlib.util
 import io
@@ -53,13 +54,13 @@ class PrivateInputTests(unittest.TestCase):
     def state(self):
         directory=Path('/isolated/new-session')
         token='a'*32
-        session={'schema':1,'directory':str(directory),'display':':91','token':token,'deadline':1000,
+        session={'schema':1,'directory':str(directory),'display':':191','token':token,'deadline':1000,
                  'supervisor':101,'supervisor_start':'111','server':102,'server_start':'222','game':103,'game_start':'333'}
         progress=str(directory/'progress.pesave')
         records={
             101:m.Process('111',1,str(Path(sys.executable).resolve()),('python','helper'),{}),
-            102:m.Process('222',101,str(m.XVFB.resolve()),(str(m.XVFB),'-displayfd','7',*m.SERVER_TAIL),{}),
-            103:m.Process('333',101,str(m.BINARY.resolve()),(str(m.BINARY),'--sandbox','--load',progress,'--save',progress),{'DISPLAY':':91','PE_NATIVE_PRIVATE_SESSION':token}),
+            102:m.Process('222',101,str(m.XVFB.resolve()),(str(m.XVFB),':191',*m.SERVER_TAIL),{}),
+            103:m.Process('333',101,str(m.BINARY.resolve()),(str(m.BINARY),'--sandbox','--load',progress,'--save',progress),{'DISPLAY':':191','PE_NATIVE_PRIVATE_SESSION':token}),
         }
         return directory,session,records
     def test_process_guard_valid_owned_chain(self):
@@ -69,16 +70,16 @@ class PrivateInputTests(unittest.TestCase):
         directory,session,records=self.state()
         changes=[(103,{'start':'444'}),(102,{'exe':'/usr/bin/Xwayland'}),(103,{'parent':999}),
                  (103,{'environment':{'DISPLAY':':0','PE_NATIVE_PRIVATE_SESSION':'a'*32}}),
-                 (103,{'environment':{'DISPLAY':':91','WAYLAND_DISPLAY':'wayland-1','PE_NATIVE_PRIVATE_SESSION':'a'*32}}),
-                 (103,{'environment':{'DISPLAY':':91','WAYLAND_DISPLAY':'','PE_NATIVE_PRIVATE_SESSION':'a'*32}}),
-                 (103,{'environment':{'DISPLAY':':91'}}),
+                 (103,{'environment':{'DISPLAY':':191','WAYLAND_DISPLAY':'wayland-1','PE_NATIVE_PRIVATE_SESSION':'a'*32}}),
+                 (103,{'environment':{'DISPLAY':':191','WAYLAND_DISPLAY':'','PE_NATIVE_PRIVATE_SESSION':'a'*32}}),
+                 (103,{'environment':{'DISPLAY':':191'}}),
                  (103,{'argv':(*records[103].argv,'--smoke','100')}),
                  (102,{'argv':('/usr/bin/Xvfb',':0')}),(101,{'start':'reused'})]
         for pid,change in changes:
             with self.subTest(pid=pid,change=change), self.assertRaises(m.ToolError):
                 bad=dict(records);bad[pid]=replace(bad[pid],**change)
                 m.validate_processes(session,directory,bad.__getitem__,now=500)
-        for changes in ({'display':''},{'display':'localhost:0'},{'deadline':499},{'deadline':float('nan')},{'directory':'/other'},{'schema':2}):
+        for changes in ({'display':':0'},{'display':':99'}, {'display':''},{'display':'localhost:0'},{'deadline':499},{'deadline':float('nan')},{'directory':'/other'},{'schema':2}):
             with self.subTest(changes=changes),self.assertRaises(m.ToolError):
                 m.validate_processes({**session,**changes},directory,records.__getitem__,now=500)
     def test_button_does_not_warp_and_releases_on_interruption(self):
@@ -112,31 +113,24 @@ class PrivateInputTests(unittest.TestCase):
         self.assertLessEqual(now[0],.35)
         self.assertEqual(target.events,[('button',1,True),('button',1,False),('button',1,True),('button',1,False)])
         self.assertFalse(any(e[0]=='absolute' for e in target.events))
-    def test_unique_directory_baseline_and_displayfd_lifetime(self):
+    def test_unique_directory_baseline_and_owned_explicit_server(self):
         with tempfile.TemporaryDirectory() as name:
             base=Path(name);binary=base/'game';xvfb=base/'Xvfb';source=base/'source.pesave';out=base/'new-session'
             for path in (binary,xvfb):path.write_bytes(b'executable');path.chmod(0o700)
-            source.write_bytes(b'PECS'+b'\0'*28);original=source.read_bytes();fds=[];real_pipe=os.pipe
-            def pipe():
-                pair=real_pipe();fds.extend(pair);return pair
+            source.write_bytes(b'PECS'+b'\0'*28);original=source.read_bytes()
             class Child:
                 def __init__(self,pid,kind):self.pid=pid;self.kind=kind;self.returncode=None
                 def poll(self):
-                    if self.kind=='game':os.fstat(fds[0]);self.returncode=0
+                    if self.kind=='game':self.returncode=0
                     return self.returncode
-                def terminate(self):self.returncode=-15
                 def kill(self):self.returncode=-9
-                def wait(self,timeout=None):
-                    # Both children must exit while the displayfd read end is live.
-                    os.fstat(fds[0]);self.returncode=0 if self.returncode is None else self.returncode;return self.returncode
+                def wait(self,timeout=None):return self.returncode
             server,game=Child(102,'server'),Child(103,'game')
             def popen(argv,**kwargs):
-                if argv[0]==str(xvfb):
-                    os.write(kwargs['pass_fds'][0],b'91\n');return server
                 self.assertEqual(argv,[str(binary),'--sandbox','--load',str(out/'progress.pesave'),'--save',str(out/'progress.pesave')])
-                self.assertEqual(kwargs['env']['DISPLAY'],':91');self.assertNotIn('WAYLAND_DISPLAY',kwargs['env']);return game
+                self.assertEqual(kwargs['env']['DISPLAY'],':191');self.assertNotIn('WAYLAND_DISPLAY',kwargs['env']);return game
             proc=lambda pid:SimpleNamespace(start=str(pid))
-            with patch.object(m,'BINARY',binary),patch.object(m,'XVFB',xvfb),patch.object(m.os,'pipe',pipe),patch.object(m.subprocess,'Popen',popen),patch.object(m,'process',proc),patch('sys.stdout',new=io.StringIO()):
+            with patch.object(m,'BINARY',binary),patch.object(m,'XVFB',xvfb),patch.object(m,'start_private_server',return_value=(server,':191')),patch.object(m.subprocess,'Popen',popen),patch.object(m,'process',proc),patch('sys.stdout',new=io.StringIO()):
                 self.assertEqual(m.start(out,source,10),0)
                 with self.assertRaises(FileExistsError):m.start(out,source,10)
             self.assertEqual(source.read_bytes(),original)
@@ -144,7 +138,7 @@ class PrivateInputTests(unittest.TestCase):
             self.assertEqual((out/'progress.pesave').read_bytes(),original)
             self.assertEqual((out/'baseline.pesave').stat().st_mode&0o777,0o444)
             self.assertEqual(json.loads((out/'session.json').read_text())['baseline_sha256'],m.digest(source))
-            with self.assertRaises(OSError):os.fstat(fds[0])
+            self.assertEqual(server.returncode,-9)
             self.assertTrue(json.loads((out/'inputs.jsonl').read_text().splitlines()[-1])['baseline_unchanged'])
     def test_load_rejects_changed_baseline_without_connecting(self):
         with tempfile.TemporaryDirectory() as name:
@@ -152,6 +146,84 @@ class PrivateInputTests(unittest.TestCase):
             (directory/'session.json').write_text(json.dumps({'baseline_sha256':'0'*64}))
             with patch.object(m,'validate_processes'),patch.object(m,'XInput',side_effect=AssertionError('must never connect')):
                 with self.assertRaises(m.ToolError):m.load_checked(directory)
+
+class DisplayIsolationTests(unittest.TestCase):
+    def test_candidates_exclude_inherited_locks_and_both_socket_names(self):
+        for inherited in (':191',':191.0','unix:191','hostname:191.0'):
+            self.assertFalse(m.display_available(191,inherited=inherited,exists=lambda p:False,unix_text=''))
+        for path in ('/tmp/.X191-lock','/tmp/.X191_-lock','/tmp/.X11-unix/X191','/tmp/.X11-unix/X191_'):
+            self.assertFalse(m.display_available(191,inherited='',exists=lambda p:p==path,unix_text=''))
+        for path in ('/tmp/.X11-unix/X191','/tmp/.X11-unix/X191_','@/tmp/.X11-unix/X191','@/tmp/.X11-unix/X191_'):
+            table='Num RefCount Protocol Flags Type St Inode Path\n000: 2 0 10000 1 01 123 '+path+'\n'
+            self.assertFalse(m.display_available(191,inherited='',exists=lambda p:False,unix_text=table))
+        self.assertTrue(m.display_available(191,inherited=':190',exists=lambda p:False,unix_text=''))
+        for number in (0,99,1000):
+            with self.assertRaises(m.ToolError):m.display_available(number,inherited='',exists=lambda p:False,unix_text='')
+    def test_explicit_high_startup_serialization_and_sanitized_environment(self):
+        events=[];now=[0.]
+        child=SimpleNamespace(pid=500,poll=lambda:None)
+        from contextlib import contextmanager
+        @contextmanager
+        def lock():
+            events.append('locked')
+            try:yield
+            finally:events.append('unlocked')
+        def available(number):
+            self.assertEqual(events[-1],'locked');return number==102
+        def popen(argv,**kwargs):
+            self.assertEqual(argv,[str(m.XVFB),':102',*m.SERVER_TAIL])
+            self.assertNotIn('pass_fds',kwargs)
+            self.assertNotIn('DISPLAY',kwargs['env']);self.assertNotIn('WAYLAND_DISPLAY',kwargs['env'])
+            self.assertTrue(kwargs['start_new_session']);self.assertTrue(callable(kwargs['preexec_fn']))
+            events.append('spawned');return child
+        with patch.object(m,'private_launch_lock',lock),patch.object(m,'display_available',available),patch.object(m.subprocess,'Popen',popen),patch.object(m,'owned_server_ready',side_effect=[False,True]),patch.dict(os.environ,{'DISPLAY':':191','WAYLAND_DISPLAY':'wayland-private-fixture'}):
+            self.assertEqual(m.start_private_server(io.StringIO(),clock=lambda:now[0],sleep=lambda dt:now.__setitem__(0,now[0]+dt)),(child,':102'))
+        self.assertEqual(events,['locked','spawned','unlocked'])
+        self.assertGreater(now[0],0)
+    def test_failed_or_timed_out_startup_reaps_only_spawned_child(self):
+        class Child:
+            pid=500
+            def __init__(self,code=None):self.code=code
+            def poll(self):return self.code
+        for child,ready in ((Child(1),False),(Child(),False),(Child(),m.ToolError('foreign listener'))):
+            now=[0.]
+            def readiness(*args):
+                if isinstance(ready,Exception):raise ready
+                return ready
+            with patch.object(m,'private_launch_lock',return_value=nullcontext()),patch.object(m,'display_available',return_value=True),patch.object(m.subprocess,'Popen',return_value=child),patch.object(m,'owned_server_ready',readiness),patch.object(m,'end_owned_children') as cleanup:
+                with self.assertRaises(m.ToolError):
+                    m.start_private_server(io.StringIO(),clock=lambda:now[0],sleep=lambda dt:now.__setitem__(0,now[0]+1))
+                cleanup.assert_called_once_with(child)
+            self.assertLessEqual(now[0],15)
+        with patch.object(m,'private_launch_lock',return_value=nullcontext()),patch.object(m,'display_available',return_value=False),patch.object(m.subprocess,'Popen') as popen:
+            with self.assertRaises(m.ToolError):m.start_private_server(io.StringIO())
+            popen.assert_not_called()
+    def test_readiness_requires_owned_live_peer_and_never_sends_protocol(self):
+        from unittest.mock import MagicMock
+        child=SimpleNamespace(pid=500,poll=lambda:None)
+        for pid in (500,501):
+            probe=MagicMock();probe.__enter__.return_value=probe
+            probe.getsockopt.return_value=m.struct.pack('3i',pid,os.getuid(),os.getgid())
+            with patch.object(m.socket,'socket',return_value=probe):
+                if pid==500:self.assertTrue(m.owned_server_ready(child,':191'))
+                else:
+                    with self.assertRaises(m.ToolError):m.owned_server_ready(child,':191')
+            probe.connect.assert_called_once_with('/tmp/.X11-unix/X191')
+            probe.send.assert_not_called();probe.sendall.assert_not_called()
+        with patch.object(m.socket,'socket') as connect:
+            with self.assertRaises(m.ToolError):m.owned_server_ready(SimpleNamespace(pid=500,poll=lambda:1),':191')
+            with self.assertRaises(m.ToolError):m.owned_server_ready(child,':0')
+            connect.assert_not_called()
+    def test_per_user_lock_never_unlinks_and_rejects_foreign_owner(self):
+        with tempfile.TemporaryFile() as stream:
+            with patch.object(m.os,'open',side_effect=lambda *args:os.dup(stream.fileno())) as opened,patch.object(m.fcntl,'flock') as flock:
+                with m.private_launch_lock():pass
+            self.assertEqual(opened.call_args.args[0],Path('/tmp')/f'pe-native-private-launch-{os.getuid()}.lock')
+            self.assertTrue(opened.call_args.args[1]&os.O_NOFOLLOW)
+            self.assertEqual(flock.call_args.args[1],m.fcntl.LOCK_EX|m.fcntl.LOCK_NB)
+            with patch.object(m.os,'open',side_effect=lambda *args:os.dup(stream.fileno())),patch.object(m.os,'fstat',return_value=SimpleNamespace(st_uid=os.getuid()+1,st_mode=0)):
+                with self.assertRaises(m.ToolError):
+                    with m.private_launch_lock():pass
 
 class LifecycleTests(unittest.TestCase):
     def session(self):

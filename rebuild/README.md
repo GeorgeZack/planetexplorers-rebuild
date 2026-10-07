@@ -49,6 +49,8 @@ Adventure stamina now recovers in source-timed pulses. Comfort gradually decreas
 
 Adventure Sandbox now includes the source low-health recovery rule: below 33% HP, going at least four seconds without a hit allows periodic recovery of 1% maximum HP. Recovery stops at or above the threshold and cannot revive a dead player. This increment has source and headless coverage; an on-screen retreat/recovery check remains pending. See [recovery lifecycle and timing limits](../docs/audit/PASSIVE_RECOVERY.md).
 
+On the current machine, the packaged raylib uses X11 through **Xwayland inside the Wayland desktop**. Seeing an X11 backend does not mean the desktop switched to Xorg. Normal launches inherit your session environment; do not point them at a private test display. The [October7 test-display collision](../docs/audit/PRIVATE_DISPLAY_COLLISION.md) is repaired and the automated launchers now reserve checked high display numbers. Native Wayland rendering is not claimed by this build.
+
 Requirements: a C11 compiler, Make, pkg-config, raylib and LZ4 development files, and a graphical display/OpenGL driver. Python 3 with its standard-library SQLite module is needed for content regeneration and exporter tests. Headless core tests require LZ4 but not raylib or a display. Persistence currently uses POSIX APIs; Linux is the development platform.
 
 From the repository root:
@@ -830,4 +832,4 @@ Run `make -C rebuild camp-repair-test camp-repair-save-test camp-repair-interact
 
 ### Isolated automated native acceptance
 
-[The private-input supervisor](../docs/audit/NATIVE_PRIVATE_INPUT.md) starts the normal game on a dedicated Xvfb display using an unchanged copy of an earned checkpoint. It provides bounded ordinary input, screenshots and a journal without taking the user desktop. It does not fabricate gameplay or launch the Steam original. Run `make -C rebuild hunt-save-inspector-test native-private-input-test` for21 focused tooling cases; these targets never open graphics. Actual private sessions are explicit operator actions.
+[The private-input supervisor](../docs/audit/NATIVE_PRIVATE_INPUT.md) starts the normal game on a dedicated Xvfb display using an unchanged copy of an earned checkpoint. It provides bounded ordinary input, screenshots and a journal without taking the user desktop. It does not fabricate gameplay or launch the Steam original. Run `make -C rebuild hunt-save-inspector-test native-private-input-test` for26 focused tooling cases; these targets never open graphics. Actual private sessions are explicit operator actions.

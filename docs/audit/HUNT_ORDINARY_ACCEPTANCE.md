@@ -1,5 +1,7 @@
 # Ordinary native hunt acceptance — October 7, 2026
 
+**Isolation correction:** subsequent user launch failure exposed a [display socket collision](PRIVATE_DISPLAY_COLLISION.md) caused by the old test launcher. The gameplay input went to its owned test server, but server startup did affect the desktop Xwayland socket. Earlier claims that the desktop was wholly untouched were too broad. The socket is restored and both tracked launchers now exclude occupied/low displays; the recorded hunt results are unchanged.
+
 The C rebuild now has observed ordinary-input coverage of an earned first kill, partial-progress save/load, four total kills, encounter cleanup, return travel, one-time rewards and resumed ending dialogue. This closes the remaining ordinary hunt gate in [the acceptance plan](HUNT_ACCEPTANCE.md). It does not establish original-game difficulty or animation parity.
 
 ## Execution and provenance

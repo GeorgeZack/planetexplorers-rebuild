@@ -1,35 +1,41 @@
+"""Staged rendering on an explicitly selected, owned high X display only."""
 from pathlib import Path
 import os
-import select
+import signal
 import subprocess
 import sys
 
 root = Path(__file__).resolve().parents[2]
-out = root / 'rebuild/build/ui-details-captures'
-out.mkdir(exist_ok=True)
-read_fd, write_fd = os.pipe()
-with (out / 'xvfb.log').open('w') as log:
-    server = subprocess.Popen([str(root / 'rebuild/build/private-xvfb/usr/bin/Xvfb'), '-displayfd', str(write_fd), '-screen', '0', '1280x720x24', '-nolisten', 'tcp', '-noreset', '-ac'], pass_fds=(write_fd,), stdout=log, stderr=log)
-    os.close(write_fd)
+sys.path.insert(0,str(root/'rebuild/tools'))
+import native_private_input as private
+
+
+def main():
+    out = root/'rebuild/build/ui-details-captures'
+    out.mkdir(exist_ok=True)
+    server = None
     try:
-        if not select.select([read_fd], [], [], 15)[0]:
-            raise RuntimeError('Private Xvfb did not announce its display')
-        number = os.read(read_fd, 128).decode().strip()
-        if not number.isdecimal():
-            raise RuntimeError(f'Invalid private display: {number!r}')
-        env = os.environ.copy()
-        env.pop('WAYLAND_DISPLAY', None)
-        env.update(DISPLAY=':' + number, PE_UI_PRIVATE_DISPLAY=':' + number, LIBGL_ALWAYS_SOFTWARE='1', GALLIUM_DRIVER='llvmpipe')
-        print(f'Private Xvfb display :{number}', flush=True)
-        with (out / 'render.log').open('w') as render_log:
-            result = subprocess.run([str(root / 'rebuild/build/render_shop_details_ui'), str(out)], env=env, cwd=root, stdout=render_log, stderr=subprocess.STDOUT, timeout=180)
-        print((out / 'render.log').read_text())
-        sys.exit(result.returncode)
+        with (out/'xvfb.log').open('w') as log:
+            server,display = private.start_private_server(log)
+            env = os.environ.copy()
+            env.pop('WAYLAND_DISPLAY',None)
+            env.update(DISPLAY=display,PE_UI_PRIVATE_DISPLAY=display,
+                       LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe')
+            print(f'Private Xvfb display {display}',flush=True)
+            with (out/'render.log').open('w') as render_log:
+                result = subprocess.run([str(root/'rebuild/build/render_shop_details_ui'),str(out)],
+                    env=env,cwd=root,stdout=render_log,stderr=subprocess.STDOUT,timeout=180)
+            print((out/'render.log').read_text())
+            return result.returncode
     finally:
-        os.close(read_fd)
-        server.terminate()
-        try:
-            server.wait(timeout=10)
-        except subprocess.TimeoutExpired:
-            server.kill()
-            server.wait()
+        private.end_owned_children(server)
+
+
+if __name__ == '__main__':
+    private.install_signal_handlers()
+    try:
+        private.set_parent_death(signal.SIGHUP,os.getppid())
+        sys.exit(main())
+    except (private.ToolError,OSError,ValueError,subprocess.SubprocessError) as error:
+        print(f'private-ui-capture: {error}',file=sys.stderr)
+        sys.exit(1)

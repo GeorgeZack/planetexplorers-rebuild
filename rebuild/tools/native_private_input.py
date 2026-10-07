@@ -11,7 +11,10 @@ import json
 import math
 import os
 from pathlib import Path
-import select
+import re
+import socket
+import stat
+import struct
 import signal
 import subprocess
 import sys
@@ -28,6 +31,7 @@ INPUT_ACTIONS = frozenset(('key','click','button','burst','look'))
 SETUP_LEASE_SECONDS, RELEASE_GRACE_SECONDS = 5.0, 1.0
 MAX_LEASE_SECONDS = MAX_HOLD + .12 + RELEASE_GRACE_SECONDS
 WATCHDOG_INTERVAL = .05
+MIN_PRIVATE_DISPLAY, MAX_PRIVATE_DISPLAY = 100, 999
 SERVER_TAIL = ['-screen', '0', '1280x720x24', '-nolisten', 'tcp', '-noreset', '-ac']
 KEYS = set('abcdefghijklmnopqrstuvwxyz0123456789') | {
     'Escape', 'Return', 'space', 'Tab', 'BackSpace', 'Shift_L', 'Control_L', 'Alt_L',
@@ -94,12 +98,97 @@ def process(pid):
     return Process(fields[19], int(fields[1]), os.readlink(p / 'exe'),
                    tuple(v.decode(errors='replace') for v in (p / 'cmdline').read_bytes().split(b'\0') if v), environ)
 
+def private_display_number(display):
+    require(isinstance(display,str) and re.fullmatch(r':[0-9]+',display) is not None,
+            'Not an explicit private X display')
+    number=int(display[1:])
+    require(MIN_PRIVATE_DISPLAY<=number<=MAX_PRIVATE_DISPLAY,'Private display must be in100–999')
+    return number
+
+def display_available(number,inherited=None,exists=os.path.lexists,unix_text=None):
+    require(type(number) is int and MIN_PRIVATE_DISPLAY<=number<=MAX_PRIVATE_DISPLAY,'Unsafe private display number')
+    inherited=os.environ.get('DISPLAY','') if inherited is None else inherited
+    match=re.search(r':([0-9]+)(?:\.[0-9]+)?$',inherited)
+    if match and int(match[1])==number:
+        return False
+    paths={f'/tmp/.X11-unix/X{number}',f'/tmp/.X11-unix/X{number}_'}
+    locks={f'/tmp/.X{number}-lock',f'/tmp/.X{number}_-lock'}
+    if any(exists(path) for path in paths|locks):
+        return False
+    # Include stale-but-still-bound filesystem sockets as well as abstract
+    # sockets: Xwayland can retain XN and XN_ listeners after path unlinking.
+    unix_text=Path('/proc/net/unix').read_text() if unix_text is None else unix_text
+    for line in unix_text.splitlines()[1:]:
+        columns=line.split(maxsplit=7)
+        if len(columns)==8 and columns[7].removeprefix('@') in paths:
+            return False
+    return True
+
+@contextmanager
+def private_launch_lock():
+    # Stable per-user lock shared by both tools, not an X lock/socket. Never
+    # delete it, and never follow a preexisting symlink or foreign owner.
+    path=Path('/tmp')/f'pe-native-private-launch-{os.getuid()}.lock'
+    fd=os.open(path,os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
+    try:
+        value=os.fstat(fd)
+        require(value.st_uid==os.getuid() and stat.S_ISREG(value.st_mode),'Foreign private-launch lock')
+        try:
+            fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise ToolError('Another private server launch is active') from None
+        yield
+    finally:
+        os.close(fd)
+
+def owned_server_ready(server,display):
+    number=private_display_number(display)
+    require(server.poll() is None,'Private Xvfb exited during startup')
+    # A connection alone is insufficient: a competing server must never be
+    # accepted as ours. No protocol/input bytes are sent by this readiness probe.
+    with socket.socket(socket.AF_UNIX,socket.SOCK_STREAM) as probe:
+        probe.settimeout(.1)
+        try:
+            probe.connect(f'/tmp/.X11-unix/X{number}')
+        except (FileNotFoundError,ConnectionRefusedError,TimeoutError):
+            return False
+        pid,uid,_=struct.unpack('3i',probe.getsockopt(socket.SOL_SOCKET,socket.SO_PEERCRED,struct.calcsize('3i')))
+        require(pid==server.pid and uid==os.getuid(),'Private display listener belongs to another process')
+    require(server.poll() is None,'Private Xvfb exited during readiness probe')
+    return True
+
+def start_private_server(log,clock=time.monotonic,sleep=time.sleep):
+    server=None
+    with private_launch_lock():
+        number=next((n for n in range(MIN_PRIVATE_DISPLAY,MAX_PRIVATE_DISPLAY+1) if display_available(n)),None)
+        require(number is not None,'No unused high private display is available')
+        display=f':{number}'
+        env=os.environ.copy()
+        env.pop('DISPLAY',None);env.pop('WAYLAND_DISPLAY',None)
+        try:
+            # Explicit display honors X server lock ownership. Never use
+            # displayfd autodiscovery or remove any foreign X lock/socket.
+            server=subprocess.Popen([str(XVFB),display,*SERVER_TAIL],env=env,
+                stdout=log,stderr=subprocess.STDOUT,start_new_session=True,
+                preexec_fn=child_parent_death(os.getpid()))
+            deadline=clock()+15
+            while True:
+                require(server.poll() is None,'Private Xvfb exited during startup')
+                if owned_server_ready(server,display):
+                    return server,display
+                require(clock()<deadline,'Private Xvfb startup timed out')
+                sleep(.05)
+        except BaseException:
+            if server is not None:
+                end_owned_children(server)
+            raise
+
 def validate_processes(session, directory, read_process=process, now=None):
     """Pure injectable provenance checks; tests supply synthetic /proc records."""
     require(isinstance(session,dict), 'Malformed session registry')
     require(session.get('schema') == 1 and session.get('directory') == str(directory), 'Session directory/schema mismatch')
     display = session.get('display', '')
-    require(isinstance(display, str) and display.startswith(':') and display[1:].isdecimal() and len(display) <= 7, 'Not an explicit private X display')
+    private_display_number(display)
     token = session.get('token', '')
     require(isinstance(token, str) and len(token) == 32 and all(c in '0123456789abcdef' for c in token), 'Invalid private session token')
     deadline = session.get('deadline')
@@ -113,7 +202,7 @@ def validate_processes(session, directory, read_process=process, now=None):
         current[role] = value
     require(current['game'].parent == session['supervisor'] and current['server'].parent == session['supervisor'], 'Processes are no longer children of their owning supervisor')
     command = current['server'].argv
-    require(len(command) == 3 + len(SERVER_TAIL) and command[0] == str(XVFB) and command[1] == '-displayfd' and command[2].isdecimal() and list(command[3:]) == SERVER_TAIL, 'Server is not the dedicated displayfd Xvfb child')
+    require(command == (str(XVFB),display,*SERVER_TAIL), 'Server is not the dedicated explicit-display Xvfb child')
     progress = str(directory / 'progress.pesave')
     require(current['game'].argv == (str(BINARY), '--sandbox', '--load', progress, '--save', progress), 'Game was not launched with the ordinary private progress copy')
     environment = current['game'].environment
@@ -169,7 +258,7 @@ class XInput:
         bind(self.t, 'XTestFakeButtonEvent', [D,C.c_uint,I,U])
         bind(self.t, 'XTestFakeMotionEvent', [D,I,I,I,U])
         bind(self.t, 'XTestFakeRelativeMotionEvent', [D,I,I,U])
-        require(session.get('display', '').startswith(':'), 'Explicit private display required')
+        private_display_number(session.get('display',''))
         self.display = self.x.XOpenDisplay(session['display'].encode())
         require(self.display, 'Cannot open the owned private X display')
         try:
@@ -454,27 +543,18 @@ def start(directory, baseline, lifetime):
     (directory/'command.lock').touch()
     baseline_hash = hashlib.sha256(data).hexdigest()
     server = game = None
-    read_fd = write_fd = None
     session = None
     try:
         with (directory/'xvfb.log').open('w') as server_log, (directory/'native.log').open('w') as game_log:
-            read_fd, write_fd = os.pipe()
-            server = subprocess.Popen([str(XVFB),'-displayfd',str(write_fd),*SERVER_TAIL],pass_fds=(write_fd,),stdout=server_log,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=child_parent_death(os.getpid()))
-            os.close(write_fd)
-            write_fd = None
-            require(select.select([read_fd],[],[],15)[0], 'Private Xvfb startup timed out')
-            number = os.read(read_fd,128).decode().strip()
-            require(number.isdecimal() and len(number)<=6, 'Private Xvfb did not provide a display number')
-            # This read end MUST remain open until the game and server exit.
-            # Xvfb may write its displayfd again after a client disconnects.
+            server,display = start_private_server(server_log)
             token = uuid.uuid4().hex
             env = os.environ.copy()
             env.pop('WAYLAND_DISPLAY',None)
-            env.update(DISPLAY=':'+number,PE_NATIVE_PRIVATE_SESSION=token,LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe',PE_SANDBOX_COMBAT_TRACE='1',TMPDIR=str(ROOT/'rebuild/build/compiler-tmp'))
+            env.update(DISPLAY=display,PE_NATIVE_PRIVATE_SESSION=token,LIBGL_ALWAYS_SOFTWARE='1',GALLIUM_DRIVER='llvmpipe',PE_SANDBOX_COMBAT_TRACE='1',TMPDIR=str(ROOT/'rebuild/build/compiler-tmp'))
             (ROOT/'rebuild/build/compiler-tmp').mkdir(exist_ok=True)
             progress = str(directory/'progress.pesave')
             game = subprocess.Popen([str(BINARY),'--sandbox','--load',progress,'--save',progress],cwd=ROOT,env=env,stdout=game_log,stderr=subprocess.STDOUT,start_new_session=True,preexec_fn=child_parent_death(os.getpid()))
-            session = {'schema':1,'directory':str(directory),'display':':'+number,'token':token,'deadline':time.monotonic()+lifetime,'lifetime':lifetime,'source':str(baseline),'baseline_sha256':baseline_hash,'binary_sha256':digest(BINARY)}
+            session = {'schema':1,'directory':str(directory),'display':display,'token':token,'deadline':time.monotonic()+lifetime,'lifetime':lifetime,'source':str(baseline),'baseline_sha256':baseline_hash,'binary_sha256':digest(BINARY)}
             for role, pid in [('supervisor',os.getpid()),('server',server.pid),('game',game.pid)]:
                 session[role], session[role+'_start'] = pid, process(pid).start
             (directory/'session.json').write_text(json.dumps(session,indent=2)+'\n')
@@ -488,10 +568,6 @@ def start(directory, baseline, lifetime):
         try:
             end_owned_children(game,server)
         finally:
-            if write_fd is not None:
-                os.close(write_fd)
-            if read_fd is not None:
-                os.close(read_fd)
             append_log(directory,{'action':'supervisor-exit','game_returncode':game.returncode if game else None,'baseline_unchanged':digest(directory/'baseline.pesave')==baseline_hash})
 
 def stop_owned(session, directory):
