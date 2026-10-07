@@ -412,10 +412,19 @@ $(BUILD)/test_sandbox_wallet_host: tests/test_sandbox_wallet_host.c src/pe_sandb
 sandbox-wallet-host-test: $(BUILD)/test_sandbox_wallet_host
 	./$(BUILD)/test_sandbox_wallet_host
 
-.PHONY: hunt-save-inspector
+.PHONY: hunt-save-inspector hunt-save-inspector-test native-private-input-test
 $(BUILD)/inspect_hunt_save: tools/inspect_hunt_save.c $(CORE) $(HEADERS) | $(BUILD)
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tools/inspect_hunt_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
 hunt-save-inspector: $(BUILD)/inspect_hunt_save
+
+hunt-save-inspector-test:
+	python3 tests/test_hunt_save_inspector.py
+
+native-private-input-test:
+	python3 tests/test_native_private_input.py
+
+# Pure/subprocess tool checks only; ordinary graphical acceptance is opt-in.
+test: hunt-save-inspector-test native-private-input-test
 
 .PHONY: town-trade-test
 $(BUILD)/test_town_trade: tests/test_town_trade_main.c tests/test_town_trade.c tests/test_town_trade_save.c $(CORE) $(HEADERS) | $(BUILD)

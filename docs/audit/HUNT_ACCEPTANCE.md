@@ -1,6 +1,6 @@
 # Ordinary four-hare acceptance session
 
-Prepared October6,2026 against runtime commit2009c2d0. This is the remaining live acceptance gate for the numbered-conversation/hunt goal. The conversation shortcuts are implemented and physically checked; the subsequent source-derived wallet increment is implemented and pushed. Four kills earned in ordinary native play and an actual partial-progress reload remain unverified. A passing arranged test or edited kill counter does not close this gate.
+Prepared October6,2026 against runtime commit2009c2d0. **Completed October7** through ordinary input in isolated native displays: [earned hunt acceptance](HUNT_ORDINARY_ACCEPTANCE.md) records partial reload, four kills, cleanup, return rewards and dialogue reload. The preparation below is retained for repeat testing. The conversation shortcuts and subsequent source-derived parity increments are also implemented. Arranged tests and edited counters do not establish ordinary acceptance.
 
 ## Prepared native checkpoint
 
@@ -10,9 +10,9 @@ The current loader reports hunt travel,0/4 kills, HP500/500, clothing Defence12,
 
 `session.json` records hashes/provenance and `start-inspection.json` records effective loaded state. These files and the saves remain ignored local evidence, not repository content. This prepared state is a pre-combat checkpoint, not a completed quest fixture.
 
-## Launch only when the desktop is available
+## Desktop launch or isolated native testing
 
-The user currently owns the desktop. The pending coordination question has no answer; no elapsed time is treated as a handoff. Either the user runs this command, or the agent runs it after the user returns desktop control. From the repository root:
+For a user-desktop session, coordinate ownership before injecting input. Automated native acceptance can instead use the dedicated [private-input supervisor](NATIVE_PRIVATE_INPUT.md), which creates its own display. The following command is for a coordinated desktop session, from the repository root:
 
 ```sh
 PE_SANDBOX_COMBAT_TRACE=1 ./rebuild/build/planet_explorers --sandbox \
@@ -35,7 +35,7 @@ Do not overwrite the baseline or claim success from the final count alone. Prese
 
 ## Read-only inspection
 
-The tracked helper loads with the same state validation and migrations as the current game, prints numeric JSON and destroys its temporary state. It does not advance simulation or write saves:
+Schema2 includes all active inventory categories and player orientation/motion. The tracked helper loads with the same state validation and migrations as the current game, prints numeric JSON and destroys its temporary state. It does not advance simulation or write saves:
 
 ```sh
 make -C rebuild hunt-save-inspector

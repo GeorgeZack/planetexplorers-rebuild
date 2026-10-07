@@ -1,0 +1,1544 @@
+{
+  "schema": 1,
+  "runtime_commit": "2ea0f288013836c95a4b07d2e718bef1cb5eea42",
+  "binary_sha256": "824cc5a82f7a05e900b490e6a9175368a1e99647982a88b166e2c5196a53c88a",
+  "checkpoints": [
+    {
+      "path": "rebuild/build/hunt-private-20261007-02/start.pesave",
+      "sha256": "2b7f763da6bd453da8fb8102a914983e1913c625211803f5151648120ee0ca6f"
+    },
+    {
+      "path": "rebuild/build/hunt-private-20261007-02/earned-arrival.pesave",
+      "sha256": "d2d9cb42f92247ce41b80a65d85a3a73cb322e7f214d732e92818771d018b851"
+    },
+    {
+      "path": "rebuild/build/hunt-private-20261007-02/partial-before-load.pesave",
+      "sha256": "222bd1add75a11731c449ea08879a6ab0fa1cee767b0038054e32e7fae4a2057",
+      "inspection": {
+        "schema": 2,
+        "interpretation": "current-loader",
+        "mode": 1,
+        "hunt_state": 2,
+        "hunt_kills": 1,
+        "pending_return_talk": 0,
+        "source_position": [
+          -363.1993408203125,
+          19.345035552978516,
+          237.03353881835938
+        ],
+        "hunt_destination": [
+          -349,
+          19.5,
+          233
+        ],
+        "hp": 223.993683,
+        "max_hp": 500,
+        "stamina": 85,
+        "comfort": 403.501984,
+        "game_seconds": 8852295.001102276,
+        "money": 325,
+        "equipped_instance": 1,
+        "outfit_defense": 12,
+        "medpacks": 6,
+        "juice": 8,
+        "revival_shots": 8,
+        "medpack_cooldown": 0,
+        "juice_cooldown": 3.516666666666584,
+        "reward_scripts": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "outfit": [
+          {
+            "item_id": 95,
+            "instance_id": 31,
+            "durability": 2023.92517
+          },
+          {
+            "item_id": 131,
+            "instance_id": 32,
+            "durability": 2023.92517
+          },
+          {
+            "item_id": 192,
+            "instance_id": 33,
+            "durability": 729.925049
+          }
+        ],
+        "yaw": -1.8012625,
+        "pitch": -0.391999632,
+        "velocity": [
+          0.00459763408,
+          0,
+          -0.0141461771
+        ],
+        "grounded": true,
+        "inventory_capacity": 1680,
+        "inventory_categorized": true,
+        "inventory": [
+          {
+            "slot": 0,
+            "category": 0,
+            "item_id": 973,
+            "count": 1,
+            "instance_id": 5,
+            "durability": 100
+          },
+          {
+            "slot": 1,
+            "category": 0,
+            "item_id": 974,
+            "count": 1,
+            "instance_id": 6,
+            "durability": 100
+          },
+          {
+            "slot": 2,
+            "category": 0,
+            "item_id": 975,
+            "count": 1,
+            "instance_id": 7,
+            "durability": 100
+          },
+          {
+            "slot": 3,
+            "category": 0,
+            "item_id": 1579,
+            "count": 1,
+            "instance_id": 8,
+            "durability": 100
+          },
+          {
+            "slot": 4,
+            "category": 0,
+            "item_id": 916,
+            "count": 8,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 5,
+            "category": 0,
+            "item_id": 937,
+            "count": 8,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 6,
+            "category": 0,
+            "item_id": 925,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 7,
+            "category": 0,
+            "item_id": 554,
+            "count": 1,
+            "instance_id": 29,
+            "durability": 100
+          },
+          {
+            "slot": 8,
+            "category": 0,
+            "item_id": 1550,
+            "count": 1,
+            "instance_id": 19,
+            "durability": 100
+          },
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 421,
+            "category": 1,
+            "item_id": 1527,
+            "count": 1,
+            "instance_id": 2,
+            "durability": 100
+          },
+          {
+            "slot": 422,
+            "category": 1,
+            "item_id": 73,
+            "count": 1,
+            "instance_id": 3,
+            "durability": 100
+          },
+          {
+            "slot": 423,
+            "category": 1,
+            "item_id": 70,
+            "count": 1,
+            "instance_id": 4,
+            "durability": 100
+          },
+          {
+            "slot": 424,
+            "category": 1,
+            "item_id": 228,
+            "count": 1,
+            "instance_id": 9,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3553
+          },
+          {
+            "slot": 426,
+            "category": 1,
+            "item_id": 19,
+            "count": 1,
+            "instance_id": 11,
+            "durability": 3553
+          },
+          {
+            "slot": 427,
+            "category": 1,
+            "item_id": 26,
+            "count": 1,
+            "instance_id": 12,
+            "durability": 3553
+          },
+          {
+            "slot": 428,
+            "category": 1,
+            "item_id": 1,
+            "count": 1,
+            "instance_id": 13,
+            "durability": 2369
+          },
+          {
+            "slot": 429,
+            "category": 1,
+            "item_id": 34,
+            "count": 1,
+            "instance_id": 14,
+            "durability": 4312
+          },
+          {
+            "slot": 430,
+            "category": 1,
+            "item_id": 43,
+            "count": 1,
+            "instance_id": 15,
+            "durability": 3288
+          },
+          {
+            "slot": 840,
+            "category": 2,
+            "item_id": 229,
+            "count": 400,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 200,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 5,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 6,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 7,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 8,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 9,
+            "item_id": 0,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    {
+      "path": "rebuild/build/hunt-private-20261007-02/partial-after-load.pesave",
+      "sha256": "222bd1add75a11731c449ea08879a6ab0fa1cee767b0038054e32e7fae4a2057",
+      "inspection": {
+        "schema": 2,
+        "interpretation": "current-loader",
+        "mode": 1,
+        "hunt_state": 2,
+        "hunt_kills": 1,
+        "pending_return_talk": 0,
+        "source_position": [
+          -363.1993408203125,
+          19.345035552978516,
+          237.03353881835938
+        ],
+        "hunt_destination": [
+          -349,
+          19.5,
+          233
+        ],
+        "hp": 223.993683,
+        "max_hp": 500,
+        "stamina": 85,
+        "comfort": 403.501984,
+        "game_seconds": 8852295.001102276,
+        "money": 325,
+        "equipped_instance": 1,
+        "outfit_defense": 12,
+        "medpacks": 6,
+        "juice": 8,
+        "revival_shots": 8,
+        "medpack_cooldown": 0,
+        "juice_cooldown": 3.516666666666584,
+        "reward_scripts": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "outfit": [
+          {
+            "item_id": 95,
+            "instance_id": 31,
+            "durability": 2023.92517
+          },
+          {
+            "item_id": 131,
+            "instance_id": 32,
+            "durability": 2023.92517
+          },
+          {
+            "item_id": 192,
+            "instance_id": 33,
+            "durability": 729.925049
+          }
+        ],
+        "yaw": -1.8012625,
+        "pitch": -0.391999632,
+        "velocity": [
+          0.00459763408,
+          0,
+          -0.0141461771
+        ],
+        "grounded": true,
+        "inventory_capacity": 1680,
+        "inventory_categorized": true,
+        "inventory": [
+          {
+            "slot": 0,
+            "category": 0,
+            "item_id": 973,
+            "count": 1,
+            "instance_id": 5,
+            "durability": 100
+          },
+          {
+            "slot": 1,
+            "category": 0,
+            "item_id": 974,
+            "count": 1,
+            "instance_id": 6,
+            "durability": 100
+          },
+          {
+            "slot": 2,
+            "category": 0,
+            "item_id": 975,
+            "count": 1,
+            "instance_id": 7,
+            "durability": 100
+          },
+          {
+            "slot": 3,
+            "category": 0,
+            "item_id": 1579,
+            "count": 1,
+            "instance_id": 8,
+            "durability": 100
+          },
+          {
+            "slot": 4,
+            "category": 0,
+            "item_id": 916,
+            "count": 8,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 5,
+            "category": 0,
+            "item_id": 937,
+            "count": 8,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 6,
+            "category": 0,
+            "item_id": 925,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 7,
+            "category": 0,
+            "item_id": 554,
+            "count": 1,
+            "instance_id": 29,
+            "durability": 100
+          },
+          {
+            "slot": 8,
+            "category": 0,
+            "item_id": 1550,
+            "count": 1,
+            "instance_id": 19,
+            "durability": 100
+          },
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 421,
+            "category": 1,
+            "item_id": 1527,
+            "count": 1,
+            "instance_id": 2,
+            "durability": 100
+          },
+          {
+            "slot": 422,
+            "category": 1,
+            "item_id": 73,
+            "count": 1,
+            "instance_id": 3,
+            "durability": 100
+          },
+          {
+            "slot": 423,
+            "category": 1,
+            "item_id": 70,
+            "count": 1,
+            "instance_id": 4,
+            "durability": 100
+          },
+          {
+            "slot": 424,
+            "category": 1,
+            "item_id": 228,
+            "count": 1,
+            "instance_id": 9,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3553
+          },
+          {
+            "slot": 426,
+            "category": 1,
+            "item_id": 19,
+            "count": 1,
+            "instance_id": 11,
+            "durability": 3553
+          },
+          {
+            "slot": 427,
+            "category": 1,
+            "item_id": 26,
+            "count": 1,
+            "instance_id": 12,
+            "durability": 3553
+          },
+          {
+            "slot": 428,
+            "category": 1,
+            "item_id": 1,
+            "count": 1,
+            "instance_id": 13,
+            "durability": 2369
+          },
+          {
+            "slot": 429,
+            "category": 1,
+            "item_id": 34,
+            "count": 1,
+            "instance_id": 14,
+            "durability": 4312
+          },
+          {
+            "slot": 430,
+            "category": 1,
+            "item_id": 43,
+            "count": 1,
+            "instance_id": 15,
+            "durability": 3288
+          },
+          {
+            "slot": 840,
+            "category": 2,
+            "item_id": 229,
+            "count": 400,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 200,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 5,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 6,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 7,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 8,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 9,
+            "item_id": 0,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    {
+      "path": "rebuild/build/hunt-private-20261007-03/earned-four.pesave",
+      "sha256": "2d79db02376fb3743c2d018ef22bc0f9024e5a787ac7f1bf3172785287dc2eac",
+      "inspection": {
+        "schema": 2,
+        "interpretation": "current-loader",
+        "mode": 1,
+        "hunt_state": 3,
+        "hunt_kills": 4,
+        "pending_return_talk": 0,
+        "source_position": [
+          -394.11126708984375,
+          22.677030563354492,
+          245.38595581054688
+        ],
+        "hunt_destination": [
+          -349,
+          19.5,
+          233
+        ],
+        "hp": 256.5,
+        "max_hp": 500,
+        "stamina": 70,
+        "comfort": 347.255981,
+        "game_seconds": 8852827.801130064,
+        "money": 325,
+        "equipped_instance": 1,
+        "outfit_defense": 12,
+        "medpacks": 4,
+        "juice": 6,
+        "revival_shots": 6,
+        "medpack_cooldown": 0,
+        "juice_cooldown": 2.0166666666665893,
+        "reward_scripts": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "outfit": [
+          {
+            "item_id": 95,
+            "instance_id": 31,
+            "durability": 1858.09167
+          },
+          {
+            "item_id": 131,
+            "instance_id": 32,
+            "durability": 1858.09167
+          },
+          {
+            "item_id": 192,
+            "instance_id": 33,
+            "durability": 564.091492
+          }
+        ],
+        "yaw": -1.8012625,
+        "pitch": -0.391999632,
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "grounded": true,
+        "inventory_capacity": 1680,
+        "inventory_categorized": true,
+        "inventory": [
+          {
+            "slot": 0,
+            "category": 0,
+            "item_id": 973,
+            "count": 1,
+            "instance_id": 5,
+            "durability": 100
+          },
+          {
+            "slot": 1,
+            "category": 0,
+            "item_id": 974,
+            "count": 1,
+            "instance_id": 6,
+            "durability": 100
+          },
+          {
+            "slot": 2,
+            "category": 0,
+            "item_id": 975,
+            "count": 1,
+            "instance_id": 7,
+            "durability": 100
+          },
+          {
+            "slot": 3,
+            "category": 0,
+            "item_id": 1579,
+            "count": 1,
+            "instance_id": 8,
+            "durability": 100
+          },
+          {
+            "slot": 4,
+            "category": 0,
+            "item_id": 916,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 5,
+            "category": 0,
+            "item_id": 937,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 6,
+            "category": 0,
+            "item_id": 925,
+            "count": 4,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 7,
+            "category": 0,
+            "item_id": 554,
+            "count": 1,
+            "instance_id": 29,
+            "durability": 100
+          },
+          {
+            "slot": 8,
+            "category": 0,
+            "item_id": 1550,
+            "count": 1,
+            "instance_id": 19,
+            "durability": 100
+          },
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 421,
+            "category": 1,
+            "item_id": 1527,
+            "count": 1,
+            "instance_id": 2,
+            "durability": 100
+          },
+          {
+            "slot": 422,
+            "category": 1,
+            "item_id": 73,
+            "count": 1,
+            "instance_id": 3,
+            "durability": 100
+          },
+          {
+            "slot": 423,
+            "category": 1,
+            "item_id": 70,
+            "count": 1,
+            "instance_id": 4,
+            "durability": 100
+          },
+          {
+            "slot": 424,
+            "category": 1,
+            "item_id": 228,
+            "count": 1,
+            "instance_id": 9,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3553
+          },
+          {
+            "slot": 426,
+            "category": 1,
+            "item_id": 19,
+            "count": 1,
+            "instance_id": 11,
+            "durability": 3553
+          },
+          {
+            "slot": 427,
+            "category": 1,
+            "item_id": 26,
+            "count": 1,
+            "instance_id": 12,
+            "durability": 3553
+          },
+          {
+            "slot": 428,
+            "category": 1,
+            "item_id": 1,
+            "count": 1,
+            "instance_id": 13,
+            "durability": 2369
+          },
+          {
+            "slot": 429,
+            "category": 1,
+            "item_id": 34,
+            "count": 1,
+            "instance_id": 14,
+            "durability": 4312
+          },
+          {
+            "slot": 430,
+            "category": 1,
+            "item_id": 43,
+            "count": 1,
+            "instance_id": 15,
+            "durability": 3288
+          },
+          {
+            "slot": 840,
+            "category": 2,
+            "item_id": 229,
+            "count": 400,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 200,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 5,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 6,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 7,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 8,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 9,
+            "item_id": 0,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    {
+      "path": "rebuild/build/hunt-private-20261007-03/reward-4106.pesave",
+      "sha256": "2ca64412022b7dc3dbbc9fa8be5a3ebe67eb91e3319436c5401ff61a2f6d80a8",
+      "inspection": {
+        "schema": 2,
+        "interpretation": "current-loader",
+        "mode": 1,
+        "hunt_state": 5,
+        "hunt_kills": 4,
+        "pending_return_talk": 4106,
+        "source_position": [
+          -268.0845947265625,
+          22.4813232421875,
+          140.4308319091797
+        ],
+        "hunt_destination": [
+          -349,
+          19.5,
+          233
+        ],
+        "hp": 346.5,
+        "max_hp": 500,
+        "stamina": 100,
+        "comfort": 336.845978,
+        "game_seconds": 8853736.00117743,
+        "money": 325,
+        "equipped_instance": 1,
+        "outfit_defense": 12,
+        "medpacks": 4,
+        "juice": 6,
+        "revival_shots": 6,
+        "medpack_cooldown": 0,
+        "juice_cooldown": 0,
+        "reward_scripts": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "outfit": [
+          {
+            "item_id": 95,
+            "instance_id": 31,
+            "durability": 1858.09167
+          },
+          {
+            "item_id": 131,
+            "instance_id": 32,
+            "durability": 1858.09167
+          },
+          {
+            "item_id": 192,
+            "instance_id": 33,
+            "durability": 564.091492
+          }
+        ],
+        "yaw": 0.874737322,
+        "pitch": -0.391999632,
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "grounded": true,
+        "inventory_capacity": 1680,
+        "inventory_categorized": true,
+        "inventory": [
+          {
+            "slot": 0,
+            "category": 0,
+            "item_id": 973,
+            "count": 1,
+            "instance_id": 5,
+            "durability": 100
+          },
+          {
+            "slot": 1,
+            "category": 0,
+            "item_id": 974,
+            "count": 1,
+            "instance_id": 6,
+            "durability": 100
+          },
+          {
+            "slot": 2,
+            "category": 0,
+            "item_id": 975,
+            "count": 1,
+            "instance_id": 7,
+            "durability": 100
+          },
+          {
+            "slot": 3,
+            "category": 0,
+            "item_id": 1579,
+            "count": 1,
+            "instance_id": 8,
+            "durability": 100
+          },
+          {
+            "slot": 4,
+            "category": 0,
+            "item_id": 916,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 5,
+            "category": 0,
+            "item_id": 937,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 6,
+            "category": 0,
+            "item_id": 925,
+            "count": 4,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 7,
+            "category": 0,
+            "item_id": 554,
+            "count": 1,
+            "instance_id": 29,
+            "durability": 100
+          },
+          {
+            "slot": 8,
+            "category": 0,
+            "item_id": 1550,
+            "count": 1,
+            "instance_id": 19,
+            "durability": 100
+          },
+          {
+            "slot": 9,
+            "category": 0,
+            "item_id": 592,
+            "count": 1,
+            "instance_id": 34,
+            "durability": 100
+          },
+          {
+            "slot": 10,
+            "category": 0,
+            "item_id": 593,
+            "count": 1,
+            "instance_id": 35,
+            "durability": 100
+          },
+          {
+            "slot": 11,
+            "category": 0,
+            "item_id": 594,
+            "count": 1,
+            "instance_id": 36,
+            "durability": 100
+          },
+          {
+            "slot": 12,
+            "category": 0,
+            "item_id": 595,
+            "count": 1,
+            "instance_id": 37,
+            "durability": 100
+          },
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 421,
+            "category": 1,
+            "item_id": 1527,
+            "count": 1,
+            "instance_id": 2,
+            "durability": 100
+          },
+          {
+            "slot": 422,
+            "category": 1,
+            "item_id": 73,
+            "count": 1,
+            "instance_id": 3,
+            "durability": 100
+          },
+          {
+            "slot": 423,
+            "category": 1,
+            "item_id": 70,
+            "count": 1,
+            "instance_id": 4,
+            "durability": 100
+          },
+          {
+            "slot": 424,
+            "category": 1,
+            "item_id": 228,
+            "count": 1,
+            "instance_id": 9,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3553
+          },
+          {
+            "slot": 426,
+            "category": 1,
+            "item_id": 19,
+            "count": 1,
+            "instance_id": 11,
+            "durability": 3553
+          },
+          {
+            "slot": 427,
+            "category": 1,
+            "item_id": 26,
+            "count": 1,
+            "instance_id": 12,
+            "durability": 3553
+          },
+          {
+            "slot": 428,
+            "category": 1,
+            "item_id": 1,
+            "count": 1,
+            "instance_id": 13,
+            "durability": 2369
+          },
+          {
+            "slot": 429,
+            "category": 1,
+            "item_id": 34,
+            "count": 1,
+            "instance_id": 14,
+            "durability": 4312
+          },
+          {
+            "slot": 430,
+            "category": 1,
+            "item_id": 43,
+            "count": 1,
+            "instance_id": 15,
+            "durability": 3288
+          },
+          {
+            "slot": 840,
+            "category": 2,
+            "item_id": 229,
+            "count": 400,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 200,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 5,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 6,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 7,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 8,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 9,
+            "item_id": 0,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    {
+      "path": "rebuild/build/hunt-private-20261007-03/completed.pesave",
+      "sha256": "9a28960b3894bab1b89c1128b78772d98ce49ebac5b98b3fec1b9e8a9e49e0d2",
+      "inspection": {
+        "schema": 2,
+        "interpretation": "current-loader",
+        "mode": 1,
+        "hunt_state": 6,
+        "hunt_kills": 4,
+        "pending_return_talk": 0,
+        "source_position": [
+          -268.0845947265625,
+          22.4813232421875,
+          140.4308319091797
+        ],
+        "hunt_destination": [
+          -349,
+          19.5,
+          233
+        ],
+        "hp": 346.5,
+        "max_hp": 500,
+        "stamina": 100,
+        "comfort": 331.987976,
+        "game_seconds": 8854157.001199387,
+        "money": 325,
+        "equipped_instance": 1,
+        "outfit_defense": 12,
+        "medpacks": 4,
+        "juice": 6,
+        "revival_shots": 6,
+        "medpack_cooldown": 0,
+        "juice_cooldown": 0,
+        "reward_scripts": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "outfit": [
+          {
+            "item_id": 95,
+            "instance_id": 31,
+            "durability": 1858.09167
+          },
+          {
+            "item_id": 131,
+            "instance_id": 32,
+            "durability": 1858.09167
+          },
+          {
+            "item_id": 192,
+            "instance_id": 33,
+            "durability": 564.091492
+          }
+        ],
+        "yaw": 0.874737322,
+        "pitch": -0.391999632,
+        "velocity": [
+          0,
+          0,
+          0
+        ],
+        "grounded": true,
+        "inventory_capacity": 1680,
+        "inventory_categorized": true,
+        "inventory": [
+          {
+            "slot": 0,
+            "category": 0,
+            "item_id": 973,
+            "count": 1,
+            "instance_id": 5,
+            "durability": 100
+          },
+          {
+            "slot": 1,
+            "category": 0,
+            "item_id": 974,
+            "count": 1,
+            "instance_id": 6,
+            "durability": 100
+          },
+          {
+            "slot": 2,
+            "category": 0,
+            "item_id": 975,
+            "count": 1,
+            "instance_id": 7,
+            "durability": 100
+          },
+          {
+            "slot": 3,
+            "category": 0,
+            "item_id": 1579,
+            "count": 1,
+            "instance_id": 8,
+            "durability": 100
+          },
+          {
+            "slot": 4,
+            "category": 0,
+            "item_id": 916,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 5,
+            "category": 0,
+            "item_id": 937,
+            "count": 6,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 6,
+            "category": 0,
+            "item_id": 925,
+            "count": 4,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 7,
+            "category": 0,
+            "item_id": 554,
+            "count": 1,
+            "instance_id": 29,
+            "durability": 100
+          },
+          {
+            "slot": 8,
+            "category": 0,
+            "item_id": 1550,
+            "count": 1,
+            "instance_id": 19,
+            "durability": 100
+          },
+          {
+            "slot": 9,
+            "category": 0,
+            "item_id": 592,
+            "count": 1,
+            "instance_id": 34,
+            "durability": 100
+          },
+          {
+            "slot": 10,
+            "category": 0,
+            "item_id": 593,
+            "count": 1,
+            "instance_id": 35,
+            "durability": 100
+          },
+          {
+            "slot": 11,
+            "category": 0,
+            "item_id": 594,
+            "count": 1,
+            "instance_id": 36,
+            "durability": 100
+          },
+          {
+            "slot": 12,
+            "category": 0,
+            "item_id": 595,
+            "count": 1,
+            "instance_id": 37,
+            "durability": 100
+          },
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 421,
+            "category": 1,
+            "item_id": 1527,
+            "count": 1,
+            "instance_id": 2,
+            "durability": 100
+          },
+          {
+            "slot": 422,
+            "category": 1,
+            "item_id": 73,
+            "count": 1,
+            "instance_id": 3,
+            "durability": 100
+          },
+          {
+            "slot": 423,
+            "category": 1,
+            "item_id": 70,
+            "count": 1,
+            "instance_id": 4,
+            "durability": 100
+          },
+          {
+            "slot": 424,
+            "category": 1,
+            "item_id": 228,
+            "count": 1,
+            "instance_id": 9,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3553
+          },
+          {
+            "slot": 426,
+            "category": 1,
+            "item_id": 19,
+            "count": 1,
+            "instance_id": 11,
+            "durability": 3553
+          },
+          {
+            "slot": 427,
+            "category": 1,
+            "item_id": 26,
+            "count": 1,
+            "instance_id": 12,
+            "durability": 3553
+          },
+          {
+            "slot": 428,
+            "category": 1,
+            "item_id": 1,
+            "count": 1,
+            "instance_id": 13,
+            "durability": 2369
+          },
+          {
+            "slot": 429,
+            "category": 1,
+            "item_id": 34,
+            "count": 1,
+            "instance_id": 14,
+            "durability": 4312
+          },
+          {
+            "slot": 430,
+            "category": 1,
+            "item_id": 43,
+            "count": 1,
+            "instance_id": 15,
+            "durability": 3288
+          },
+          {
+            "slot": 840,
+            "category": 2,
+            "item_id": 229,
+            "count": 400,
+            "instance_id": 0,
+            "durability": 0
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 200,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 5,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 6,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 7,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 8,
+            "item_id": 0,
+            "instance_id": 0
+          },
+          {
+            "key": 9,
+            "item_id": 0,
+            "instance_id": 0
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,828 @@
+{"time": 1791382719.1512349, "action": "start", "display": ":0", "server": 4134181, "server_start": "13768524", "game": 4134187, "game_start": "13768533", "source": "/home/admin/source/planetexplorers/rebuild/build/hunt-acceptance-20261006/start.pesave", "sha256": "2b7f763da6bd453da8fb8102a914983e1913c625211803f5151648120ee0ca6f", "binary_sha256": "824cc5a82f7a05e900b490e6a9175368a1e99647982a88b166e2c5196a53c88a"}
+{"time": 1791382726.2390351, "action": "key", "args": ["Escape"]}
+{"time": 1791382726.9828026, "action": "shot", "file": "initial.png"}
+{"time": 1791382764.7467353, "action": "shot", "file": "ready.png"}
+{"time": 1791382777.0560951, "action": "key", "args": ["F9"]}
+{"time": 1791382777.4883323, "action": "key", "args": ["Escape"]}
+{"time": 1791382778.3363228, "action": "shot", "file": "paused-start.png"}
+{"time": 1791382809.9839523, "action": "key", "args": ["Escape", "1"]}
+{"time": 1791382811.6298895, "action": "shot", "file": "pause-test.png"}
+{"time": 1791382873.2151368, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791382873.9921908, "action": "key", "args": ["F5", ".5"]}
+{"time": 1791382874.773371, "action": "look", "args": ["1000", "0"]}
+{"time": 1791382877.0661125, "action": "look", "args": ["173", "0"]}
+{"time": 1791382877.6952581, "action": "key", "args": ["w", "5"]}
+{"time": 1791382883.3429708, "action": "shot", "file": "travel-01.png"}
+{"time": 1791382921.9095778, "action": "key", "args": ["F9", ".5"]}
+{"time": 1791382947.917185, "action": "key", "args": ["a", "2"]}
+{"time": 1791382950.195218, "action": "key", "args": ["w", "5"]}
+{"time": 1791382955.8455229, "action": "shot", "file": "travel-02.png"}
+{"time": 1791382983.8670099, "action": "key", "args": ["d", "1"]}
+{"time": 1791382985.175185, "action": "key", "args": ["w", "5"]}
+{"time": 1791382990.557812, "action": "key", "args": ["w", "5"]}
+{"time": 1791382996.4938982, "action": "shot", "file": "travel-03.png"}
+{"time": 1791383026.7707028, "action": "click", "args": ["640", "450", "1", ".3"]}
+{"time": 1791383027.479174, "action": "key", "args": ["w", "5"]}
+{"time": 1791383032.8246918, "action": "key", "args": ["w", "3.5"]}
+{"time": 1791383036.7221758, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383038.4075994, "action": "shot", "file": "arrival-paused.png"}
+{"time": 1791383076.6359043, "action": "click", "args": ["640", "347", "1", ".5"]}
+{"time": 1791383118.9958997, "action": "shot", "file": "after-save-click.png"}
+{"time": 1791383169.586994, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383170.3883739, "action": "look", "args": ["-900", "-420"]}
+{"time": 1791383172.6014752, "action": "key", "args": ["w", "5"]}
+{"time": 1791383177.9697468, "action": "key", "args": ["w", "4"]}
+{"time": 1791383182.320022, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383183.7714221, "action": "shot", "file": "travel-04-paused.png"}
+{"time": 1791383215.3231413, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383216.226666, "action": "key", "args": ["w", "2"]}
+{"time": 1791383218.6923425, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383220.01383, "action": "shot", "file": "encounter-paused.png"}
+{"time": 1791383285.5860357, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383286.463337, "action": "key", "args": ["3", ".2"]}
+{"time": 1791383287.0536926, "action": "burst", "args": ["5"]}
+{"time": 1791383287.0539799, "action": "button", "button": 1, "down": true}
+{"time": 1791383287.1551366, "action": "button", "button": 1, "down": false}
+{"time": 1791383287.2554152, "action": "button", "button": 1, "down": true}
+{"time": 1791383287.3556683, "action": "button", "button": 1, "down": false}
+{"time": 1791383287.456608, "action": "button", "button": 1, "down": true}
+{"time": 1791383287.5568624, "action": "button", "button": 1, "down": false}
+{"time": 1791383287.6576648, "action": "button", "button": 1, "down": true}
+{"time": 1791383287.7598996, "action": "button", "button": 1, "down": false}
+{"time": 1791383287.8601437, "action": "button", "button": 1, "down": true}
+{"time": 1791383287.9604104, "action": "button", "button": 1, "down": false}
+{"time": 1791383288.0606716, "action": "button", "button": 1, "down": true}
+{"time": 1791383288.161563, "action": "button", "button": 1, "down": false}
+{"time": 1791383288.2618144, "action": "button", "button": 1, "down": true}
+{"time": 1791383288.3645074, "action": "button", "button": 1, "down": false}
+{"time": 1791383288.4647546, "action": "button", "button": 1, "down": true}
+{"time": 1791383288.566269, "action": "button", "button": 1, "down": false}
+{"time": 1791383288.6665163, "action": "button", "button": 1, "down": true}
+{"time": 1791383288.7673924, "action": "button", "button": 1, "down": false}
+{"time": 1791383288.8676844, "action": "button", "button": 1, "down": true}
+{"time": 1791383288.9732747, "action": "button", "button": 1, "down": false}
+{"time": 1791383289.0735257, "action": "button", "button": 1, "down": true}
+{"time": 1791383289.1752393, "action": "button", "button": 1, "down": false}
+{"time": 1791383289.275491, "action": "button", "button": 1, "down": true}
+{"time": 1791383289.3757317, "action": "button", "button": 1, "down": false}
+{"time": 1791383289.475994, "action": "button", "button": 1, "down": true}
+{"time": 1791383289.5762486, "action": "button", "button": 1, "down": false}
+{"time": 1791383289.6779675, "action": "button", "button": 1, "down": true}
+{"time": 1791383289.7786758, "action": "button", "button": 1, "down": false}
+{"time": 1791383289.8789415, "action": "button", "button": 1, "down": true}
+{"time": 1791383289.9805396, "action": "button", "button": 1, "down": false}
+{"time": 1791383290.0807753, "action": "button", "button": 1, "down": true}
+{"time": 1791383290.181029, "action": "button", "button": 1, "down": false}
+{"time": 1791383290.281278, "action": "button", "button": 1, "down": true}
+{"time": 1791383290.3824136, "action": "button", "button": 1, "down": false}
+{"time": 1791383290.4827104, "action": "button", "button": 1, "down": true}
+{"time": 1791383290.5837562, "action": "button", "button": 1, "down": false}
+{"time": 1791383290.6840057, "action": "button", "button": 1, "down": true}
+{"time": 1791383290.7841992, "action": "button", "button": 1, "down": false}
+{"time": 1791383290.885465, "action": "button", "button": 1, "down": true}
+{"time": 1791383290.9857395, "action": "button", "button": 1, "down": false}
+{"time": 1791383291.0864098, "action": "button", "button": 1, "down": true}
+{"time": 1791383291.1866546, "action": "button", "button": 1, "down": false}
+{"time": 1791383291.2874079, "action": "button", "button": 1, "down": true}
+{"time": 1791383291.3876522, "action": "button", "button": 1, "down": false}
+{"time": 1791383291.488413, "action": "button", "button": 1, "down": true}
+{"time": 1791383291.5886717, "action": "button", "button": 1, "down": false}
+{"time": 1791383291.6889129, "action": "button", "button": 1, "down": true}
+{"time": 1791383291.7903774, "action": "button", "button": 1, "down": false}
+{"time": 1791383291.8906, "action": "button", "button": 1, "down": true}
+{"time": 1791383291.9908414, "action": "button", "button": 1, "down": false}
+{"time": 1791383292.4656043, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383294.1174805, "action": "shot", "file": "combat-01-paused.png"}
+{"time": 1791383327.2720578, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383328.16717, "action": "key", "args": ["2", ".2"]}
+{"time": 1791383328.8681335, "action": "burst", "args": ["3.5"]}
+{"time": 1791383328.8683653, "action": "button", "button": 1, "down": true}
+{"time": 1791383328.9714713, "action": "button", "button": 1, "down": false}
+{"time": 1791383329.0720594, "action": "button", "button": 1, "down": true}
+{"time": 1791383329.1736643, "action": "button", "button": 1, "down": false}
+{"time": 1791383329.2739725, "action": "button", "button": 1, "down": true}
+{"time": 1791383329.3748868, "action": "button", "button": 1, "down": false}
+{"time": 1791383329.4772081, "action": "button", "button": 1, "down": true}
+{"time": 1791383329.5774202, "action": "button", "button": 1, "down": false}
+{"time": 1791383329.6794112, "action": "button", "button": 1, "down": true}
+{"time": 1791383329.779667, "action": "button", "button": 1, "down": false}
+{"time": 1791383329.881004, "action": "button", "button": 1, "down": true}
+{"time": 1791383329.9812489, "action": "button", "button": 1, "down": false}
+{"time": 1791383330.0833688, "action": "button", "button": 1, "down": true}
+{"time": 1791383330.1836207, "action": "button", "button": 1, "down": false}
+{"time": 1791383330.2843332, "action": "button", "button": 1, "down": true}
+{"time": 1791383330.3856351, "action": "button", "button": 1, "down": false}
+{"time": 1791383330.4870694, "action": "button", "button": 1, "down": true}
+{"time": 1791383330.5873358, "action": "button", "button": 1, "down": false}
+{"time": 1791383330.6875918, "action": "button", "button": 1, "down": true}
+{"time": 1791383330.7883828, "action": "button", "button": 1, "down": false}
+{"time": 1791383330.8886416, "action": "button", "button": 1, "down": true}
+{"time": 1791383330.9888983, "action": "button", "button": 1, "down": false}
+{"time": 1791383331.0891573, "action": "button", "button": 1, "down": true}
+{"time": 1791383331.1902463, "action": "button", "button": 1, "down": false}
+{"time": 1791383331.2905152, "action": "button", "button": 1, "down": true}
+{"time": 1791383331.390785, "action": "button", "button": 1, "down": false}
+{"time": 1791383331.4914148, "action": "button", "button": 1, "down": true}
+{"time": 1791383331.5924819, "action": "button", "button": 1, "down": false}
+{"time": 1791383331.6927347, "action": "button", "button": 1, "down": true}
+{"time": 1791383331.7929814, "action": "button", "button": 1, "down": false}
+{"time": 1791383331.8966777, "action": "button", "button": 1, "down": true}
+{"time": 1791383331.9970582, "action": "button", "button": 1, "down": false}
+{"time": 1791383332.0985792, "action": "button", "button": 1, "down": true}
+{"time": 1791383332.200062, "action": "button", "button": 1, "down": false}
+{"time": 1791383332.300314, "action": "button", "button": 1, "down": true}
+{"time": 1791383332.4005742, "action": "button", "button": 1, "down": false}
+{"time": 1791383332.9510775, "action": "key", "args": ["Escape", ".5"]}
+{"time": 1791383334.4686372, "action": "shot", "file": "combat-02-paused.png"}
+{"time": 1791383382.9220936, "action": "key", "args": ["1", ".15"]}
+{"time": 1791383383.3531117, "action": "key", "args": ["2", ".15"]}
+{"time": 1791383383.7841988, "action": "burst", "args": ["2.5"]}
+{"time": 1791383383.7844312, "action": "button", "button": 1, "down": true}
+{"time": 1791383383.8847032, "action": "button", "button": 1, "down": false}
+{"time": 1791383383.98502, "action": "button", "button": 1, "down": true}
+{"time": 1791383384.085481, "action": "button", "button": 1, "down": false}
+{"time": 1791383384.186242, "action": "button", "button": 1, "down": true}
+{"time": 1791383384.2864964, "action": "button", "button": 1, "down": false}
+{"time": 1791383384.3867474, "action": "button", "button": 1, "down": true}
+{"time": 1791383384.4870677, "action": "button", "button": 1, "down": false}
+{"time": 1791383384.5873907, "action": "button", "button": 1, "down": true}
+{"time": 1791383384.6876543, "action": "button", "button": 1, "down": false}
+{"time": 1791383384.7882802, "action": "button", "button": 1, "down": true}
+{"time": 1791383384.888593, "action": "button", "button": 1, "down": false}
+{"time": 1791383384.9889514, "action": "button", "button": 1, "down": true}
+{"time": 1791383385.0894592, "action": "button", "button": 1, "down": false}
+{"time": 1791383385.1906254, "action": "button", "button": 1, "down": true}
+{"time": 1791383385.292625, "action": "button", "button": 1, "down": false}
+{"time": 1791383385.3934221, "action": "button", "button": 1, "down": true}
+{"time": 1791383385.493706, "action": "button", "button": 1, "down": false}
+{"time": 1791383385.5953677, "action": "button", "button": 1, "down": true}
+{"time": 1791383385.6964989, "action": "button", "button": 1, "down": false}
+{"time": 1791383385.796758, "action": "button", "button": 1, "down": true}
+{"time": 1791383385.897628, "action": "button", "button": 1, "down": false}
+{"time": 1791383385.9980917, "action": "button", "button": 1, "down": true}
+{"time": 1791383386.0984943, "action": "button", "button": 1, "down": false}
+{"time": 1791383386.1988885, "action": "button", "button": 1, "down": true}
+{"time": 1791383386.299765, "action": "button", "button": 1, "down": false}
+{"time": 1791383386.743464, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383387.7017603, "action": "shot", "file": "combat-03-paused.png"}
+{"time": 1791383473.195389, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383473.6240892, "action": "look", "args": ["-931", "-420"]}
+{"time": 1791383475.7785041, "action": "key", "args": ["w", "5"]}
+{"time": 1791383481.057878, "action": "key", "args": ["w", "5"]}
+{"time": 1791383486.3352115, "action": "key", "args": ["w", "2"]}
+{"time": 1791383488.6145303, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383489.45892, "action": "shot", "file": "reapproach-paused.png"}
+{"time": 1791383526.5224202, "action": "click", "args": ["640", "347", "1", ".4"]}
+{"time": 1791383529.9485817, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383530.4799726, "action": "key", "args": ["3", ".4"]}
+{"time": 1791383531.2529187, "action": "burst", "args": ["3"]}
+{"time": 1791383531.2531261, "action": "button", "button": 1, "down": true}
+{"time": 1791383531.3533692, "action": "button", "button": 1, "down": false}
+{"time": 1791383531.453605, "action": "button", "button": 1, "down": true}
+{"time": 1791383531.5538628, "action": "button", "button": 1, "down": false}
+{"time": 1791383531.6543221, "action": "button", "button": 1, "down": true}
+{"time": 1791383531.755215, "action": "button", "button": 1, "down": false}
+{"time": 1791383531.8578372, "action": "button", "button": 1, "down": true}
+{"time": 1791383531.958465, "action": "button", "button": 1, "down": false}
+{"time": 1791383532.0587432, "action": "button", "button": 1, "down": true}
+{"time": 1791383532.1590855, "action": "button", "button": 1, "down": false}
+{"time": 1791383532.2605538, "action": "button", "button": 1, "down": true}
+{"time": 1791383532.3608418, "action": "button", "button": 1, "down": false}
+{"time": 1791383532.4618022, "action": "button", "button": 1, "down": true}
+{"time": 1791383532.5620406, "action": "button", "button": 1, "down": false}
+{"time": 1791383532.6622949, "action": "button", "button": 1, "down": true}
+{"time": 1791383532.7633955, "action": "button", "button": 1, "down": false}
+{"time": 1791383532.863627, "action": "button", "button": 1, "down": true}
+{"time": 1791383532.9638667, "action": "button", "button": 1, "down": false}
+{"time": 1791383533.0641913, "action": "button", "button": 1, "down": true}
+{"time": 1791383533.1644108, "action": "button", "button": 1, "down": false}
+{"time": 1791383533.2665815, "action": "button", "button": 1, "down": true}
+{"time": 1791383533.3674216, "action": "button", "button": 1, "down": false}
+{"time": 1791383533.4679747, "action": "button", "button": 1, "down": true}
+{"time": 1791383533.5688953, "action": "button", "button": 1, "down": false}
+{"time": 1791383533.6691518, "action": "button", "button": 1, "down": true}
+{"time": 1791383533.7710216, "action": "button", "button": 1, "down": false}
+{"time": 1791383533.871256, "action": "button", "button": 1, "down": true}
+{"time": 1791383533.971525, "action": "button", "button": 1, "down": false}
+{"time": 1791383534.071769, "action": "button", "button": 1, "down": true}
+{"time": 1791383534.1720161, "action": "button", "button": 1, "down": false}
+{"time": 1791383534.6424735, "action": "key", "args": ["2", ".4"]}
+{"time": 1791383535.3779893, "action": "burst", "args": ["2"]}
+{"time": 1791383535.3782108, "action": "button", "button": 1, "down": true}
+{"time": 1791383535.479413, "action": "button", "button": 1, "down": false}
+{"time": 1791383535.5796647, "action": "button", "button": 1, "down": true}
+{"time": 1791383535.6799219, "action": "button", "button": 1, "down": false}
+{"time": 1791383535.7801945, "action": "button", "button": 1, "down": true}
+{"time": 1791383535.8804078, "action": "button", "button": 1, "down": false}
+{"time": 1791383535.9817038, "action": "button", "button": 1, "down": true}
+{"time": 1791383536.081955, "action": "button", "button": 1, "down": false}
+{"time": 1791383536.1843646, "action": "button", "button": 1, "down": true}
+{"time": 1791383536.284603, "action": "button", "button": 1, "down": false}
+{"time": 1791383536.3848472, "action": "button", "button": 1, "down": true}
+{"time": 1791383536.485121, "action": "button", "button": 1, "down": false}
+{"time": 1791383536.5853891, "action": "button", "button": 1, "down": true}
+{"time": 1791383536.6856272, "action": "button", "button": 1, "down": false}
+{"time": 1791383536.7858698, "action": "button", "button": 1, "down": true}
+{"time": 1791383536.88696, "action": "button", "button": 1, "down": false}
+{"time": 1791383536.9872265, "action": "button", "button": 1, "down": true}
+{"time": 1791383537.0881467, "action": "button", "button": 1, "down": false}
+{"time": 1791383537.1884055, "action": "button", "button": 1, "down": true}
+{"time": 1791383537.2893872, "action": "button", "button": 1, "down": false}
+{"time": 1791383537.7207825, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383538.8733802, "action": "shot", "file": "combat-04-paused.png"}
+{"time": 1791383648.6494534, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383649.2124808, "action": "key", "args": ["Shift_L+w", "4"]}
+{"time": 1791383653.5887778, "action": "key", "args": ["3", ".4"]}
+{"time": 1791383654.3267353, "action": "burst", "args": ["2"]}
+{"time": 1791383654.3269594, "action": "button", "button": 1, "down": true}
+{"time": 1791383654.4271853, "action": "button", "button": 1, "down": false}
+{"time": 1791383654.5285578, "action": "button", "button": 1, "down": true}
+{"time": 1791383654.6294274, "action": "button", "button": 1, "down": false}
+{"time": 1791383654.7297008, "action": "button", "button": 1, "down": true}
+{"time": 1791383654.8299303, "action": "button", "button": 1, "down": false}
+{"time": 1791383654.931081, "action": "button", "button": 1, "down": true}
+{"time": 1791383655.0313625, "action": "button", "button": 1, "down": false}
+{"time": 1791383655.133032, "action": "button", "button": 1, "down": true}
+{"time": 1791383655.23446, "action": "button", "button": 1, "down": false}
+{"time": 1791383655.3361893, "action": "button", "button": 1, "down": true}
+{"time": 1791383655.4364226, "action": "button", "button": 1, "down": false}
+{"time": 1791383655.536672, "action": "button", "button": 1, "down": true}
+{"time": 1791383655.6369348, "action": "button", "button": 1, "down": false}
+{"time": 1791383655.7379463, "action": "button", "button": 1, "down": true}
+{"time": 1791383655.8381941, "action": "button", "button": 1, "down": false}
+{"time": 1791383655.9384515, "action": "button", "button": 1, "down": true}
+{"time": 1791383656.038701, "action": "button", "button": 1, "down": false}
+{"time": 1791383656.1389437, "action": "button", "button": 1, "down": true}
+{"time": 1791383656.2391744, "action": "button", "button": 1, "down": false}
+{"time": 1791383656.6703506, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383658.080061, "action": "shot", "file": "combat-05-paused.png"}
+{"time": 1791383707.022475, "action": "key", "args": ["Escape", ".1"]}
+{"time": 1791383707.410478, "action": "burst", "args": ["2"]}
+{"time": 1791383707.4106624, "action": "button", "button": 1, "down": true}
+{"time": 1791383707.5109472, "action": "button", "button": 1, "down": false}
+{"time": 1791383707.611226, "action": "button", "button": 1, "down": true}
+{"time": 1791383707.7115428, "action": "button", "button": 1, "down": false}
+{"time": 1791383707.811812, "action": "button", "button": 1, "down": true}
+{"time": 1791383707.9120836, "action": "button", "button": 1, "down": false}
+{"time": 1791383708.0123982, "action": "button", "button": 1, "down": true}
+{"time": 1791383708.112864, "action": "button", "button": 1, "down": false}
+{"time": 1791383708.2131636, "action": "button", "button": 1, "down": true}
+{"time": 1791383708.3135128, "action": "button", "button": 1, "down": false}
+{"time": 1791383708.4138305, "action": "button", "button": 1, "down": true}
+{"time": 1791383708.514156, "action": "button", "button": 1, "down": false}
+{"time": 1791383708.6144958, "action": "button", "button": 1, "down": true}
+{"time": 1791383708.7148056, "action": "button", "button": 1, "down": false}
+{"time": 1791383708.8151004, "action": "button", "button": 1, "down": true}
+{"time": 1791383708.9153807, "action": "button", "button": 1, "down": false}
+{"time": 1791383709.0157094, "action": "button", "button": 1, "down": true}
+{"time": 1791383709.1160233, "action": "button", "button": 1, "down": false}
+{"time": 1791383709.2162912, "action": "button", "button": 1, "down": true}
+{"time": 1791383709.3165855, "action": "button", "button": 1, "down": false}
+{"time": 1791383710.5023627, "action": "shot", "file": "combat-06.png"}
+{"time": 1791383756.4165754, "action": "key", "args": ["1", ".5"]}
+{"time": 1791383757.8452485, "action": "shot", "file": "revival-key.png"}
+{"time": 1791383780.4306688, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383826.7625227, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383827.186181, "action": "key", "args": ["2", ".4"]}
+{"time": 1791383827.9673264, "action": "look", "args": ["-1000", "0"]}
+{"time": 1791383830.2857132, "action": "look", "args": ["-309", "0"]}
+{"time": 1791383831.190997, "action": "key", "args": ["w", "3"]}
+{"time": 1791383834.476953, "action": "key", "args": ["3", ".4"]}
+{"time": 1791383835.230883, "action": "burst", "args": ["3"]}
+{"time": 1791383835.2311518, "action": "button", "button": 1, "down": true}
+{"time": 1791383835.3330483, "action": "button", "button": 1, "down": false}
+{"time": 1791383835.4332962, "action": "button", "button": 1, "down": true}
+{"time": 1791383835.5335696, "action": "button", "button": 1, "down": false}
+{"time": 1791383835.6338403, "action": "button", "button": 1, "down": true}
+{"time": 1791383835.7340918, "action": "button", "button": 1, "down": false}
+{"time": 1791383835.836051, "action": "button", "button": 1, "down": true}
+{"time": 1791383835.9362733, "action": "button", "button": 1, "down": false}
+{"time": 1791383836.0365102, "action": "button", "button": 1, "down": true}
+{"time": 1791383836.136812, "action": "button", "button": 1, "down": false}
+{"time": 1791383836.237133, "action": "button", "button": 1, "down": true}
+{"time": 1791383836.3390262, "action": "button", "button": 1, "down": false}
+{"time": 1791383836.439279, "action": "button", "button": 1, "down": true}
+{"time": 1791383836.5395715, "action": "button", "button": 1, "down": false}
+{"time": 1791383836.6399462, "action": "button", "button": 1, "down": true}
+{"time": 1791383836.7402096, "action": "button", "button": 1, "down": false}
+{"time": 1791383836.841447, "action": "button", "button": 1, "down": true}
+{"time": 1791383836.9418726, "action": "button", "button": 1, "down": false}
+{"time": 1791383837.0421145, "action": "button", "button": 1, "down": true}
+{"time": 1791383837.1423585, "action": "button", "button": 1, "down": false}
+{"time": 1791383837.242614, "action": "button", "button": 1, "down": true}
+{"time": 1791383837.3439834, "action": "button", "button": 1, "down": false}
+{"time": 1791383837.4442213, "action": "button", "button": 1, "down": true}
+{"time": 1791383837.5474994, "action": "button", "button": 1, "down": false}
+{"time": 1791383837.647719, "action": "button", "button": 1, "down": true}
+{"time": 1791383837.747946, "action": "button", "button": 1, "down": false}
+{"time": 1791383837.8481848, "action": "button", "button": 1, "down": true}
+{"time": 1791383837.9484642, "action": "button", "button": 1, "down": false}
+{"time": 1791383838.050001, "action": "button", "button": 1, "down": true}
+{"time": 1791383838.1503303, "action": "button", "button": 1, "down": false}
+{"time": 1791383838.5305927, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383839.4044876, "action": "shot", "file": "combat-07-paused.png"}
+{"time": 1791383903.9750316, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383904.4786634, "action": "key", "args": ["s", "2"]}
+{"time": 1791383906.7828455, "action": "look", "args": ["1000", "0"]}
+{"time": 1791383909.164824, "action": "look", "args": ["309", "0"]}
+{"time": 1791383910.1240199, "action": "burst", "args": ["3"]}
+{"time": 1791383910.1242287, "action": "button", "button": 1, "down": true}
+{"time": 1791383910.226424, "action": "button", "button": 1, "down": false}
+{"time": 1791383910.3266659, "action": "button", "button": 1, "down": true}
+{"time": 1791383910.4274135, "action": "button", "button": 1, "down": false}
+{"time": 1791383910.5281062, "action": "button", "button": 1, "down": true}
+{"time": 1791383910.6283424, "action": "button", "button": 1, "down": false}
+{"time": 1791383910.7285912, "action": "button", "button": 1, "down": true}
+{"time": 1791383910.8293402, "action": "button", "button": 1, "down": false}
+{"time": 1791383910.9295595, "action": "button", "button": 1, "down": true}
+{"time": 1791383911.030395, "action": "button", "button": 1, "down": false}
+{"time": 1791383911.1306427, "action": "button", "button": 1, "down": true}
+{"time": 1791383911.2309084, "action": "button", "button": 1, "down": false}
+{"time": 1791383911.331785, "action": "button", "button": 1, "down": true}
+{"time": 1791383911.4320881, "action": "button", "button": 1, "down": false}
+{"time": 1791383911.5323436, "action": "button", "button": 1, "down": true}
+{"time": 1791383911.6332717, "action": "button", "button": 1, "down": false}
+{"time": 1791383911.7335374, "action": "button", "button": 1, "down": true}
+{"time": 1791383911.8338091, "action": "button", "button": 1, "down": false}
+{"time": 1791383911.934105, "action": "button", "button": 1, "down": true}
+{"time": 1791383912.0343397, "action": "button", "button": 1, "down": false}
+{"time": 1791383912.1345916, "action": "button", "button": 1, "down": true}
+{"time": 1791383912.235006, "action": "button", "button": 1, "down": false}
+{"time": 1791383912.3355293, "action": "button", "button": 1, "down": true}
+{"time": 1791383912.4360228, "action": "button", "button": 1, "down": false}
+{"time": 1791383912.5364213, "action": "button", "button": 1, "down": true}
+{"time": 1791383912.636713, "action": "button", "button": 1, "down": false}
+{"time": 1791383912.7374072, "action": "button", "button": 1, "down": true}
+{"time": 1791383912.8377085, "action": "button", "button": 1, "down": false}
+{"time": 1791383912.9384246, "action": "button", "button": 1, "down": true}
+{"time": 1791383913.038678, "action": "button", "button": 1, "down": false}
+{"time": 1791383913.4480517, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791383914.6130452, "action": "shot", "file": "combat-08-paused.png"}
+{"time": 1791384193.393086, "action": "click", "args": ["640", "395", "1", ".4"]}
+{"time": 1791384199.3439217, "action": "shot", "file": "reload-again.png"}
+{"time": 1791384206.3251524, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384206.8467774, "action": "key", "args": ["3", ".2"]}
+{"time": 1791384207.3664935, "action": "burst", "args": ["5"]}
+{"time": 1791384207.3666756, "action": "button", "button": 1, "down": true}
+{"time": 1791384207.4669595, "action": "button", "button": 1, "down": false}
+{"time": 1791384207.5672812, "action": "button", "button": 1, "down": true}
+{"time": 1791384207.6675558, "action": "button", "button": 1, "down": false}
+{"time": 1791384207.7678573, "action": "button", "button": 1, "down": true}
+{"time": 1791384207.8681145, "action": "button", "button": 1, "down": false}
+{"time": 1791384207.9684517, "action": "button", "button": 1, "down": true}
+{"time": 1791384208.0693731, "action": "button", "button": 1, "down": false}
+{"time": 1791384208.169702, "action": "button", "button": 1, "down": true}
+{"time": 1791384208.2700644, "action": "button", "button": 1, "down": false}
+{"time": 1791384208.370361, "action": "button", "button": 1, "down": true}
+{"time": 1791384208.4706726, "action": "button", "button": 1, "down": false}
+{"time": 1791384208.570974, "action": "button", "button": 1, "down": true}
+{"time": 1791384208.6712084, "action": "button", "button": 1, "down": false}
+{"time": 1791384208.7715137, "action": "button", "button": 1, "down": true}
+{"time": 1791384208.871801, "action": "button", "button": 1, "down": false}
+{"time": 1791384208.9720974, "action": "button", "button": 1, "down": true}
+{"time": 1791384209.072429, "action": "button", "button": 1, "down": false}
+{"time": 1791384209.1727414, "action": "button", "button": 1, "down": true}
+{"time": 1791384209.2730112, "action": "button", "button": 1, "down": false}
+{"time": 1791384209.3732731, "action": "button", "button": 1, "down": true}
+{"time": 1791384209.4735548, "action": "button", "button": 1, "down": false}
+{"time": 1791384209.5738347, "action": "button", "button": 1, "down": true}
+{"time": 1791384209.6741083, "action": "button", "button": 1, "down": false}
+{"time": 1791384209.7744133, "action": "button", "button": 1, "down": true}
+{"time": 1791384209.875163, "action": "button", "button": 1, "down": false}
+{"time": 1791384209.975427, "action": "button", "button": 1, "down": true}
+{"time": 1791384210.075713, "action": "button", "button": 1, "down": false}
+{"time": 1791384210.1760235, "action": "button", "button": 1, "down": true}
+{"time": 1791384210.2762961, "action": "button", "button": 1, "down": false}
+{"time": 1791384210.376749, "action": "button", "button": 1, "down": true}
+{"time": 1791384210.4770648, "action": "button", "button": 1, "down": false}
+{"time": 1791384210.5776317, "action": "button", "button": 1, "down": true}
+{"time": 1791384210.6779022, "action": "button", "button": 1, "down": false}
+{"time": 1791384210.7781835, "action": "button", "button": 1, "down": true}
+{"time": 1791384210.8785028, "action": "button", "button": 1, "down": false}
+{"time": 1791384210.9787567, "action": "button", "button": 1, "down": true}
+{"time": 1791384211.0790427, "action": "button", "button": 1, "down": false}
+{"time": 1791384211.179305, "action": "button", "button": 1, "down": true}
+{"time": 1791384211.2795527, "action": "button", "button": 1, "down": false}
+{"time": 1791384211.3798606, "action": "button", "button": 1, "down": true}
+{"time": 1791384211.480196, "action": "button", "button": 1, "down": false}
+{"time": 1791384211.5804398, "action": "button", "button": 1, "down": true}
+{"time": 1791384211.6806722, "action": "button", "button": 1, "down": false}
+{"time": 1791384211.7809205, "action": "button", "button": 1, "down": true}
+{"time": 1791384211.8812048, "action": "button", "button": 1, "down": false}
+{"time": 1791384211.9814754, "action": "button", "button": 1, "down": true}
+{"time": 1791384212.0817604, "action": "button", "button": 1, "down": false}
+{"time": 1791384212.1820827, "action": "button", "button": 1, "down": true}
+{"time": 1791384212.282505, "action": "button", "button": 1, "down": false}
+{"time": 1791384212.6897876, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384217.576455, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384218.8635974, "action": "shot", "file": "revival-second.png"}
+{"time": 1791384226.6678033, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384227.1298566, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384227.9420564, "action": "burst", "args": ["2"]}
+{"time": 1791384227.9422317, "action": "button", "button": 1, "down": true}
+{"time": 1791384228.0424466, "action": "button", "button": 1, "down": false}
+{"time": 1791384228.142773, "action": "button", "button": 1, "down": true}
+{"time": 1791384228.2430623, "action": "button", "button": 1, "down": false}
+{"time": 1791384228.3433511, "action": "button", "button": 1, "down": true}
+{"time": 1791384228.4435809, "action": "button", "button": 1, "down": false}
+{"time": 1791384228.5439117, "action": "button", "button": 1, "down": true}
+{"time": 1791384228.6442006, "action": "button", "button": 1, "down": false}
+{"time": 1791384228.7444546, "action": "button", "button": 1, "down": true}
+{"time": 1791384228.8447175, "action": "button", "button": 1, "down": false}
+{"time": 1791384228.9449596, "action": "button", "button": 1, "down": true}
+{"time": 1791384229.0452347, "action": "button", "button": 1, "down": false}
+{"time": 1791384229.1454942, "action": "button", "button": 1, "down": true}
+{"time": 1791384229.245788, "action": "button", "button": 1, "down": false}
+{"time": 1791384229.3460867, "action": "button", "button": 1, "down": true}
+{"time": 1791384229.4464395, "action": "button", "button": 1, "down": false}
+{"time": 1791384229.5467632, "action": "button", "button": 1, "down": true}
+{"time": 1791384229.6470706, "action": "button", "button": 1, "down": false}
+{"time": 1791384229.747399, "action": "button", "button": 1, "down": true}
+{"time": 1791384229.8476918, "action": "button", "button": 1, "down": false}
+{"time": 1791384230.270614, "action": "key", "args": ["2", ".2"]}
+{"time": 1791384230.7894337, "action": "burst", "args": ["4"]}
+{"time": 1791384230.789737, "action": "button", "button": 1, "down": true}
+{"time": 1791384230.8899949, "action": "button", "button": 1, "down": false}
+{"time": 1791384230.9904413, "action": "button", "button": 1, "down": true}
+{"time": 1791384231.0907304, "action": "button", "button": 1, "down": false}
+{"time": 1791384231.191006, "action": "button", "button": 1, "down": true}
+{"time": 1791384231.291233, "action": "button", "button": 1, "down": false}
+{"time": 1791384231.3915174, "action": "button", "button": 1, "down": true}
+{"time": 1791384231.4918075, "action": "button", "button": 1, "down": false}
+{"time": 1791384231.5930135, "action": "button", "button": 1, "down": true}
+{"time": 1791384231.6937523, "action": "button", "button": 1, "down": false}
+{"time": 1791384231.7940395, "action": "button", "button": 1, "down": true}
+{"time": 1791384231.894317, "action": "button", "button": 1, "down": false}
+{"time": 1791384231.994604, "action": "button", "button": 1, "down": true}
+{"time": 1791384232.0948975, "action": "button", "button": 1, "down": false}
+{"time": 1791384232.19522, "action": "button", "button": 1, "down": true}
+{"time": 1791384232.2955108, "action": "button", "button": 1, "down": false}
+{"time": 1791384232.3957837, "action": "button", "button": 1, "down": true}
+{"time": 1791384232.4960208, "action": "button", "button": 1, "down": false}
+{"time": 1791384232.5963519, "action": "button", "button": 1, "down": true}
+{"time": 1791384232.69667, "action": "button", "button": 1, "down": false}
+{"time": 1791384232.7969813, "action": "button", "button": 1, "down": true}
+{"time": 1791384232.8972547, "action": "button", "button": 1, "down": false}
+{"time": 1791384232.9975533, "action": "button", "button": 1, "down": true}
+{"time": 1791384233.0978186, "action": "button", "button": 1, "down": false}
+{"time": 1791384233.1981096, "action": "button", "button": 1, "down": true}
+{"time": 1791384233.2984028, "action": "button", "button": 1, "down": false}
+{"time": 1791384233.3986776, "action": "button", "button": 1, "down": true}
+{"time": 1791384233.498951, "action": "button", "button": 1, "down": false}
+{"time": 1791384233.5992255, "action": "button", "button": 1, "down": true}
+{"time": 1791384233.6995451, "action": "button", "button": 1, "down": false}
+{"time": 1791384233.799798, "action": "button", "button": 1, "down": true}
+{"time": 1791384233.9000878, "action": "button", "button": 1, "down": false}
+{"time": 1791384234.0004504, "action": "button", "button": 1, "down": true}
+{"time": 1791384234.1007824, "action": "button", "button": 1, "down": false}
+{"time": 1791384234.201025, "action": "button", "button": 1, "down": true}
+{"time": 1791384234.3013747, "action": "button", "button": 1, "down": false}
+{"time": 1791384234.4017115, "action": "button", "button": 1, "down": true}
+{"time": 1791384234.5027144, "action": "button", "button": 1, "down": false}
+{"time": 1791384234.6029665, "action": "button", "button": 1, "down": true}
+{"time": 1791384234.7034829, "action": "button", "button": 1, "down": false}
+{"time": 1791384235.1256287, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384242.357741, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384242.82576, "action": "key", "args": ["3", ".2"]}
+{"time": 1791384243.35232, "action": "burst", "args": ["2"]}
+{"time": 1791384243.3525577, "action": "button", "button": 1, "down": true}
+{"time": 1791384243.4528193, "action": "button", "button": 1, "down": false}
+{"time": 1791384243.5531397, "action": "button", "button": 1, "down": true}
+{"time": 1791384243.6534376, "action": "button", "button": 1, "down": false}
+{"time": 1791384243.7537246, "action": "button", "button": 1, "down": true}
+{"time": 1791384243.8540273, "action": "button", "button": 1, "down": false}
+{"time": 1791384243.9543355, "action": "button", "button": 1, "down": true}
+{"time": 1791384244.054604, "action": "button", "button": 1, "down": false}
+{"time": 1791384244.1549265, "action": "button", "button": 1, "down": true}
+{"time": 1791384244.2551994, "action": "button", "button": 1, "down": false}
+{"time": 1791384244.3554833, "action": "button", "button": 1, "down": true}
+{"time": 1791384244.4557607, "action": "button", "button": 1, "down": false}
+{"time": 1791384244.5560586, "action": "button", "button": 1, "down": true}
+{"time": 1791384244.6563637, "action": "button", "button": 1, "down": false}
+{"time": 1791384244.7578082, "action": "button", "button": 1, "down": true}
+{"time": 1791384244.8580678, "action": "button", "button": 1, "down": false}
+{"time": 1791384244.9583912, "action": "button", "button": 1, "down": true}
+{"time": 1791384245.058903, "action": "button", "button": 1, "down": false}
+{"time": 1791384245.1592224, "action": "button", "button": 1, "down": true}
+{"time": 1791384245.2595427, "action": "button", "button": 1, "down": false}
+{"time": 1791384245.6913114, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384259.4129856, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384259.8865228, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384260.7002168, "action": "burst", "args": ["2"]}
+{"time": 1791384260.7004774, "action": "button", "button": 1, "down": true}
+{"time": 1791384260.8007782, "action": "button", "button": 1, "down": false}
+{"time": 1791384260.9010422, "action": "button", "button": 1, "down": true}
+{"time": 1791384261.0013666, "action": "button", "button": 1, "down": false}
+{"time": 1791384261.1016178, "action": "button", "button": 1, "down": true}
+{"time": 1791384261.2019231, "action": "button", "button": 1, "down": false}
+{"time": 1791384261.3021924, "action": "button", "button": 1, "down": true}
+{"time": 1791384261.402496, "action": "button", "button": 1, "down": false}
+{"time": 1791384261.5028226, "action": "button", "button": 1, "down": true}
+{"time": 1791384261.6030712, "action": "button", "button": 1, "down": false}
+{"time": 1791384261.7033794, "action": "button", "button": 1, "down": true}
+{"time": 1791384261.803673, "action": "button", "button": 1, "down": false}
+{"time": 1791384261.9039583, "action": "button", "button": 1, "down": true}
+{"time": 1791384262.0042362, "action": "button", "button": 1, "down": false}
+{"time": 1791384262.1045287, "action": "button", "button": 1, "down": true}
+{"time": 1791384262.204822, "action": "button", "button": 1, "down": false}
+{"time": 1791384262.3051586, "action": "button", "button": 1, "down": true}
+{"time": 1791384262.4055088, "action": "button", "button": 1, "down": false}
+{"time": 1791384262.505777, "action": "button", "button": 1, "down": true}
+{"time": 1791384262.6060352, "action": "button", "button": 1, "down": false}
+{"time": 1791384263.0337386, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384271.400949, "action": "shot", "file": "earned-one-paused.png"}
+{"time": 1791384271.5500424, "action": "click", "args": ["640", "347", "1", ".4"]}
+{"time": 1791384287.3303945, "action": "click", "args": ["640", "395", "1", ".4"]}
+{"time": 1791384292.2595136, "action": "shot", "file": "partial-loaded.png"}
+{"time": 1791384292.4021637, "action": "click", "args": ["640", "347", "1", ".4"]}
+{"time": 1791384346.892569, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384347.3648956, "action": "key", "args": ["2", ".2"]}
+{"time": 1791384347.885104, "action": "look", "args": ["890", "0"]}
+{"time": 1791384350.0133457, "action": "key", "args": ["w", "2"]}
+{"time": 1791384352.3551128, "action": "key", "args": ["3", ".2"]}
+{"time": 1791384352.8946931, "action": "burst", "args": ["4"]}
+{"time": 1791384352.8949373, "action": "button", "button": 1, "down": true}
+{"time": 1791384352.9952312, "action": "button", "button": 1, "down": false}
+{"time": 1791384353.0954623, "action": "button", "button": 1, "down": true}
+{"time": 1791384353.197448, "action": "button", "button": 1, "down": false}
+{"time": 1791384353.2977176, "action": "button", "button": 1, "down": true}
+{"time": 1791384353.3979833, "action": "button", "button": 1, "down": false}
+{"time": 1791384353.4983323, "action": "button", "button": 1, "down": true}
+{"time": 1791384353.5987165, "action": "button", "button": 1, "down": false}
+{"time": 1791384353.6990414, "action": "button", "button": 1, "down": true}
+{"time": 1791384353.7993786, "action": "button", "button": 1, "down": false}
+{"time": 1791384353.8996494, "action": "button", "button": 1, "down": true}
+{"time": 1791384353.9999409, "action": "button", "button": 1, "down": false}
+{"time": 1791384354.1002252, "action": "button", "button": 1, "down": true}
+{"time": 1791384354.20056, "action": "button", "button": 1, "down": false}
+{"time": 1791384354.3008807, "action": "button", "button": 1, "down": true}
+{"time": 1791384354.401201, "action": "button", "button": 1, "down": false}
+{"time": 1791384354.501499, "action": "button", "button": 1, "down": true}
+{"time": 1791384354.6018157, "action": "button", "button": 1, "down": false}
+{"time": 1791384354.7022135, "action": "button", "button": 1, "down": true}
+{"time": 1791384354.802526, "action": "button", "button": 1, "down": false}
+{"time": 1791384354.9028008, "action": "button", "button": 1, "down": true}
+{"time": 1791384355.003385, "action": "button", "button": 1, "down": false}
+{"time": 1791384355.1036658, "action": "button", "button": 1, "down": true}
+{"time": 1791384355.20392, "action": "button", "button": 1, "down": false}
+{"time": 1791384355.3042424, "action": "button", "button": 1, "down": true}
+{"time": 1791384355.404525, "action": "button", "button": 1, "down": false}
+{"time": 1791384355.5048559, "action": "button", "button": 1, "down": true}
+{"time": 1791384355.6051354, "action": "button", "button": 1, "down": false}
+{"time": 1791384355.7054129, "action": "button", "button": 1, "down": true}
+{"time": 1791384355.8081615, "action": "button", "button": 1, "down": false}
+{"time": 1791384355.9084082, "action": "button", "button": 1, "down": true}
+{"time": 1791384356.0086832, "action": "button", "button": 1, "down": false}
+{"time": 1791384356.108953, "action": "button", "button": 1, "down": true}
+{"time": 1791384356.2092094, "action": "button", "button": 1, "down": false}
+{"time": 1791384356.3094447, "action": "button", "button": 1, "down": true}
+{"time": 1791384356.4096932, "action": "button", "button": 1, "down": false}
+{"time": 1791384356.5099766, "action": "button", "button": 1, "down": true}
+{"time": 1791384356.6102152, "action": "button", "button": 1, "down": false}
+{"time": 1791384356.7105236, "action": "button", "button": 1, "down": true}
+{"time": 1791384356.8108068, "action": "button", "button": 1, "down": false}
+{"time": 1791384357.2235217, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384368.9761002, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384369.443868, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384370.2630224, "action": "burst", "args": ["2"]}
+{"time": 1791384370.263187, "action": "button", "button": 1, "down": true}
+{"time": 1791384370.363404, "action": "button", "button": 1, "down": false}
+{"time": 1791384370.4642553, "action": "button", "button": 1, "down": true}
+{"time": 1791384370.5646024, "action": "button", "button": 1, "down": false}
+{"time": 1791384370.6648433, "action": "button", "button": 1, "down": true}
+{"time": 1791384370.7650783, "action": "button", "button": 1, "down": false}
+{"time": 1791384370.8653147, "action": "button", "button": 1, "down": true}
+{"time": 1791384370.965549, "action": "button", "button": 1, "down": false}
+{"time": 1791384371.0658166, "action": "button", "button": 1, "down": true}
+{"time": 1791384371.1661644, "action": "button", "button": 1, "down": false}
+{"time": 1791384371.266502, "action": "button", "button": 1, "down": true}
+{"time": 1791384371.3667734, "action": "button", "button": 1, "down": false}
+{"time": 1791384371.4670866, "action": "button", "button": 1, "down": true}
+{"time": 1791384371.567372, "action": "button", "button": 1, "down": false}
+{"time": 1791384371.6677215, "action": "button", "button": 1, "down": true}
+{"time": 1791384371.767998, "action": "button", "button": 1, "down": false}
+{"time": 1791384371.8682327, "action": "button", "button": 1, "down": true}
+{"time": 1791384371.968475, "action": "button", "button": 1, "down": false}
+{"time": 1791384372.0688019, "action": "button", "button": 1, "down": true}
+{"time": 1791384372.1692383, "action": "button", "button": 1, "down": false}
+{"time": 1791384372.5952873, "action": "look", "args": ["620", "0"]}
+{"time": 1791384374.2260604, "action": "key", "args": ["2", ".2"]}
+{"time": 1791384374.853594, "action": "burst", "args": ["3"]}
+{"time": 1791384374.853828, "action": "button", "button": 1, "down": true}
+{"time": 1791384374.95513, "action": "button", "button": 1, "down": false}
+{"time": 1791384375.0553937, "action": "button", "button": 1, "down": true}
+{"time": 1791384375.1557453, "action": "button", "button": 1, "down": false}
+{"time": 1791384375.2590463, "action": "button", "button": 1, "down": true}
+{"time": 1791384375.3598258, "action": "button", "button": 1, "down": false}
+{"time": 1791384375.4600954, "action": "button", "button": 1, "down": true}
+{"time": 1791384375.5636098, "action": "button", "button": 1, "down": false}
+{"time": 1791384375.6638696, "action": "button", "button": 1, "down": true}
+{"time": 1791384375.7641623, "action": "button", "button": 1, "down": false}
+{"time": 1791384375.8649564, "action": "button", "button": 1, "down": true}
+{"time": 1791384375.9661708, "action": "button", "button": 1, "down": false}
+{"time": 1791384376.0670457, "action": "button", "button": 1, "down": true}
+{"time": 1791384376.1673803, "action": "button", "button": 1, "down": false}
+{"time": 1791384376.2690175, "action": "button", "button": 1, "down": true}
+{"time": 1791384376.3695354, "action": "button", "button": 1, "down": false}
+{"time": 1791384376.4704127, "action": "button", "button": 1, "down": true}
+{"time": 1791384376.5728629, "action": "button", "button": 1, "down": false}
+{"time": 1791384376.6740408, "action": "button", "button": 1, "down": true}
+{"time": 1791384376.774373, "action": "button", "button": 1, "down": false}
+{"time": 1791384376.8747358, "action": "button", "button": 1, "down": true}
+{"time": 1791384376.9750533, "action": "button", "button": 1, "down": false}
+{"time": 1791384377.0755575, "action": "button", "button": 1, "down": true}
+{"time": 1791384377.1761067, "action": "button", "button": 1, "down": false}
+{"time": 1791384377.2768939, "action": "button", "button": 1, "down": true}
+{"time": 1791384377.3820224, "action": "button", "button": 1, "down": false}
+{"time": 1791384377.483417, "action": "button", "button": 1, "down": true}
+{"time": 1791384377.5837224, "action": "button", "button": 1, "down": false}
+{"time": 1791384377.6840422, "action": "button", "button": 1, "down": true}
+{"time": 1791384377.7843099, "action": "button", "button": 1, "down": false}
+{"time": 1791384378.2222817, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384398.5928829, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384399.1126268, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384399.9372847, "action": "burst", "args": ["2"]}
+{"time": 1791384399.9374583, "action": "button", "button": 1, "down": true}
+{"time": 1791384400.03807, "action": "button", "button": 1, "down": false}
+{"time": 1791384400.138388, "action": "button", "button": 1, "down": true}
+{"time": 1791384400.2386782, "action": "button", "button": 1, "down": false}
+{"time": 1791384400.3389475, "action": "button", "button": 1, "down": true}
+{"time": 1791384400.4392974, "action": "button", "button": 1, "down": false}
+{"time": 1791384400.5395582, "action": "button", "button": 1, "down": true}
+{"time": 1791384400.6399152, "action": "button", "button": 1, "down": false}
+{"time": 1791384400.7401927, "action": "button", "button": 1, "down": true}
+{"time": 1791384400.8403878, "action": "button", "button": 1, "down": false}
+{"time": 1791384400.9406996, "action": "button", "button": 1, "down": true}
+{"time": 1791384401.0410025, "action": "button", "button": 1, "down": false}
+{"time": 1791384401.1413493, "action": "button", "button": 1, "down": true}
+{"time": 1791384401.2416303, "action": "button", "button": 1, "down": false}
+{"time": 1791384401.3419225, "action": "button", "button": 1, "down": true}
+{"time": 1791384401.4422228, "action": "button", "button": 1, "down": false}
+{"time": 1791384401.5425265, "action": "button", "button": 1, "down": true}
+{"time": 1791384401.6428242, "action": "button", "button": 1, "down": false}
+{"time": 1791384401.743149, "action": "button", "button": 1, "down": true}
+{"time": 1791384401.8449702, "action": "button", "button": 1, "down": false}
+{"time": 1791384402.262382, "action": "key", "args": ["2", ".2"]}
+{"time": 1791384402.7742364, "action": "key", "args": ["3", ".2"]}
+{"time": 1791384403.2932808, "action": "burst", "args": ["4"]}
+{"time": 1791384403.2934601, "action": "button", "button": 1, "down": true}
+{"time": 1791384403.3937597, "action": "button", "button": 1, "down": false}
+{"time": 1791384403.4941308, "action": "button", "button": 1, "down": true}
+{"time": 1791384403.5944853, "action": "button", "button": 1, "down": false}
+{"time": 1791384403.6948085, "action": "button", "button": 1, "down": true}
+{"time": 1791384403.7951217, "action": "button", "button": 1, "down": false}
+{"time": 1791384403.89549, "action": "button", "button": 1, "down": true}
+{"time": 1791384403.9957278, "action": "button", "button": 1, "down": false}
+{"time": 1791384404.096014, "action": "button", "button": 1, "down": true}
+{"time": 1791384404.1963162, "action": "button", "button": 1, "down": false}
+{"time": 1791384404.2966568, "action": "button", "button": 1, "down": true}
+{"time": 1791384404.3969367, "action": "button", "button": 1, "down": false}
+{"time": 1791384404.4971738, "action": "button", "button": 1, "down": true}
+{"time": 1791384404.5974505, "action": "button", "button": 1, "down": false}
+{"time": 1791384404.6976907, "action": "button", "button": 1, "down": true}
+{"time": 1791384404.797979, "action": "button", "button": 1, "down": false}
+{"time": 1791384404.8982933, "action": "button", "button": 1, "down": true}
+{"time": 1791384404.9985256, "action": "button", "button": 1, "down": false}
+{"time": 1791384405.0993526, "action": "button", "button": 1, "down": true}
+{"time": 1791384405.199659, "action": "button", "button": 1, "down": false}
+{"time": 1791384405.2999458, "action": "button", "button": 1, "down": true}
+{"time": 1791384405.400229, "action": "button", "button": 1, "down": false}
+{"time": 1791384405.500456, "action": "button", "button": 1, "down": true}
+{"time": 1791384405.6007345, "action": "button", "button": 1, "down": false}
+{"time": 1791384405.7010036, "action": "button", "button": 1, "down": true}
+{"time": 1791384405.8013604, "action": "button", "button": 1, "down": false}
+{"time": 1791384405.9018984, "action": "button", "button": 1, "down": true}
+{"time": 1791384406.0022004, "action": "button", "button": 1, "down": false}
+{"time": 1791384406.1025052, "action": "button", "button": 1, "down": true}
+{"time": 1791384406.2027833, "action": "button", "button": 1, "down": false}
+{"time": 1791384406.3030539, "action": "button", "button": 1, "down": true}
+{"time": 1791384406.403369, "action": "button", "button": 1, "down": false}
+{"time": 1791384406.5041504, "action": "button", "button": 1, "down": true}
+{"time": 1791384406.605332, "action": "button", "button": 1, "down": false}
+{"time": 1791384406.7055957, "action": "button", "button": 1, "down": true}
+{"time": 1791384406.8058329, "action": "button", "button": 1, "down": false}
+{"time": 1791384406.9061422, "action": "button", "button": 1, "down": true}
+{"time": 1791384407.0063896, "action": "button", "button": 1, "down": false}
+{"time": 1791384407.1066546, "action": "button", "button": 1, "down": true}
+{"time": 1791384407.2069204, "action": "button", "button": 1, "down": false}
+{"time": 1791384407.6333055, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384415.5860403, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384416.058134, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384416.8764975, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384418.022963, "action": "shot", "file": "check-revive-now.png"}
+{"time": 1791384425.9300587, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384426.3999798, "action": "key", "args": ["2", ".3"]}
+{"time": 1791384427.02335, "action": "key", "args": ["3", ".2"]}
+{"time": 1791384427.5462062, "action": "burst", "args": ["4"]}
+{"time": 1791384427.5465071, "action": "button", "button": 1, "down": true}
+{"time": 1791384427.6468105, "action": "button", "button": 1, "down": false}
+{"time": 1791384427.747083, "action": "button", "button": 1, "down": true}
+{"time": 1791384427.8473997, "action": "button", "button": 1, "down": false}
+{"time": 1791384427.9476738, "action": "button", "button": 1, "down": true}
+{"time": 1791384428.048482, "action": "button", "button": 1, "down": false}
+{"time": 1791384428.1487374, "action": "button", "button": 1, "down": true}
+{"time": 1791384428.2489986, "action": "button", "button": 1, "down": false}
+{"time": 1791384428.3493538, "action": "button", "button": 1, "down": true}
+{"time": 1791384428.4497006, "action": "button", "button": 1, "down": false}
+{"time": 1791384428.5499656, "action": "button", "button": 1, "down": true}
+{"time": 1791384428.650239, "action": "button", "button": 1, "down": false}
+{"time": 1791384428.7505376, "action": "button", "button": 1, "down": true}
+{"time": 1791384428.850802, "action": "button", "button": 1, "down": false}
+{"time": 1791384428.9510307, "action": "button", "button": 1, "down": true}
+{"time": 1791384429.0512552, "action": "button", "button": 1, "down": false}
+{"time": 1791384429.1515431, "action": "button", "button": 1, "down": true}
+{"time": 1791384429.252512, "action": "button", "button": 1, "down": false}
+{"time": 1791384429.3527772, "action": "button", "button": 1, "down": true}
+{"time": 1791384429.4530723, "action": "button", "button": 1, "down": false}
+{"time": 1791384429.553388, "action": "button", "button": 1, "down": true}
+{"time": 1791384429.653654, "action": "button", "button": 1, "down": false}
+{"time": 1791384429.7539198, "action": "button", "button": 1, "down": true}
+{"time": 1791384429.8543057, "action": "button", "button": 1, "down": false}
+{"time": 1791384429.9546287, "action": "button", "button": 1, "down": true}
+{"time": 1791384430.0549307, "action": "button", "button": 1, "down": false}
+{"time": 1791384430.1551812, "action": "button", "button": 1, "down": true}
+{"time": 1791384430.2562237, "action": "button", "button": 1, "down": false}
+{"time": 1791384430.356475, "action": "button", "button": 1, "down": true}
+{"time": 1791384430.45674, "action": "button", "button": 1, "down": false}
+{"time": 1791384430.5570161, "action": "button", "button": 1, "down": true}
+{"time": 1791384430.6573071, "action": "button", "button": 1, "down": false}
+{"time": 1791384430.75768, "action": "button", "button": 1, "down": true}
+{"time": 1791384430.858388, "action": "button", "button": 1, "down": false}
+{"time": 1791384430.9586358, "action": "button", "button": 1, "down": true}
+{"time": 1791384431.0588808, "action": "button", "button": 1, "down": false}
+{"time": 1791384431.159199, "action": "button", "button": 1, "down": true}
+{"time": 1791384431.2594638, "action": "button", "button": 1, "down": false}
+{"time": 1791384431.359732, "action": "button", "button": 1, "down": true}
+{"time": 1791384431.459993, "action": "button", "button": 1, "down": false}
+{"time": 1791384431.898649, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384447.1703765, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384447.6563156, "action": "key", "args": ["1", ".5"]}
+{"time": 1791384448.4727414, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384457.2199945, "action": "key", "args": ["Escape", ".15"]}
+{"time": 1791384457.6914847, "action": "burst", "args": ["3"]}
+{"time": 1791384457.6917305, "action": "button", "button": 1, "down": true}
+{"time": 1791384457.7919884, "action": "button", "button": 1, "down": false}
+{"time": 1791384457.8923218, "action": "button", "button": 1, "down": true}
+{"time": 1791384457.9925852, "action": "button", "button": 1, "down": false}
+{"time": 1791384458.0929132, "action": "button", "button": 1, "down": true}
+{"time": 1791384458.1931953, "action": "button", "button": 1, "down": false}
+{"time": 1791384458.293443, "action": "button", "button": 1, "down": true}
+{"time": 1791384458.3937016, "action": "button", "button": 1, "down": false}
+{"time": 1791384458.4939353, "action": "button", "button": 1, "down": true}
+{"time": 1791384458.5943027, "action": "button", "button": 1, "down": false}
+{"time": 1791384458.6946173, "action": "button", "button": 1, "down": true}
+{"time": 1791384458.794905, "action": "button", "button": 1, "down": false}
+{"time": 1791384458.8951907, "action": "button", "button": 1, "down": true}
+{"time": 1791384458.995437, "action": "button", "button": 1, "down": false}
+{"time": 1791384459.0956929, "action": "button", "button": 1, "down": true}
+{"time": 1791384459.196022, "action": "button", "button": 1, "down": false}
+{"time": 1791384459.2962816, "action": "button", "button": 1, "down": true}
+{"time": 1791384459.3965812, "action": "button", "button": 1, "down": false}
+{"time": 1791384459.4968612, "action": "button", "button": 1, "down": true}
+{"time": 1791384459.5971284, "action": "button", "button": 1, "down": false}
+{"time": 1791384459.6976101, "action": "button", "button": 1, "down": true}
+{"time": 1791384459.7978916, "action": "button", "button": 1, "down": false}
+{"time": 1791384459.8981633, "action": "button", "button": 1, "down": true}
+{"time": 1791384459.9985216, "action": "button", "button": 1, "down": false}
+{"time": 1791384460.098787, "action": "button", "button": 1, "down": true}
+{"time": 1791384460.1991, "action": "button", "button": 1, "down": false}
+{"time": 1791384460.299435, "action": "button", "button": 1, "down": true}
+{"time": 1791384460.399739, "action": "button", "button": 1, "down": false}
+{"time": 1791384460.500022, "action": "button", "button": 1, "down": true}
+{"time": 1791384460.6003306, "action": "button", "button": 1, "down": false}
+{"time": 1791384461.0156965, "action": "key", "args": ["2", ".3"]}
+{"time": 1791384461.616217, "action": "burst", "args": ["3"]}
+{"time": 1791384461.6164136, "action": "button", "button": 1, "down": true}
+{"time": 1791384461.7166545, "action": "button", "button": 1, "down": false}
+{"time": 1791384461.8169706, "action": "button", "button": 1, "down": true}
+{"time": 1791384461.9172328, "action": "button", "button": 1, "down": false}
+{"time": 1791384462.0175827, "action": "button", "button": 1, "down": true}
+{"time": 1791384462.1178677, "action": "button", "button": 1, "down": false}
+{"time": 1791384462.2182193, "action": "button", "button": 1, "down": true}
+{"time": 1791384462.31845, "action": "button", "button": 1, "down": false}
+{"time": 1791384462.4187443, "action": "button", "button": 1, "down": true}
+{"time": 1791384462.5190463, "action": "button", "button": 1, "down": false}
+{"time": 1791384462.6193233, "action": "button", "button": 1, "down": true}
+{"time": 1791384462.719588, "action": "button", "button": 1, "down": false}
+{"time": 1791384462.8210046, "action": "button", "button": 1, "down": true}
+{"time": 1791384462.921333, "action": "button", "button": 1, "down": false}
+{"time": 1791384463.021568, "action": "button", "button": 1, "down": true}
+{"time": 1791384463.121828, "action": "button", "button": 1, "down": false}
+{"time": 1791384463.2221062, "action": "button", "button": 1, "down": true}
+{"time": 1791384463.3223708, "action": "button", "button": 1, "down": false}
+{"time": 1791384463.4226015, "action": "button", "button": 1, "down": true}
+{"time": 1791384463.5228565, "action": "button", "button": 1, "down": false}
+{"time": 1791384463.623148, "action": "button", "button": 1, "down": true}
+{"time": 1791384463.7234714, "action": "button", "button": 1, "down": false}
+{"time": 1791384463.8237538, "action": "button", "button": 1, "down": true}
+{"time": 1791384463.9240499, "action": "button", "button": 1, "down": false}
+{"time": 1791384464.0242906, "action": "button", "button": 1, "down": true}
+{"time": 1791384464.1245425, "action": "button", "button": 1, "down": false}
+{"time": 1791384464.2247987, "action": "button", "button": 1, "down": true}
+{"time": 1791384464.3250709, "action": "button", "button": 1, "down": false}
+{"time": 1791384464.4253397, "action": "button", "button": 1, "down": true}
+{"time": 1791384464.525579, "action": "button", "button": 1, "down": false}
+{"time": 1791384464.944146, "action": "key", "args": ["Escape", ".2"]}
+{"time": 1791384471.5879834, "action": "click", "args": ["640", "395", "1", ".4"]}
+{"time": 1791384491.6545277, "action": "shot", "file": "checkpoint-end.png"}
+{"time": 1791384492.2741253, "action": "stop"}

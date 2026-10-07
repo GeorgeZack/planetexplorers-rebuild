@@ -13,7 +13,7 @@ int main(int argc,char **argv){
     if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
         fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;
     }
-    printf("{\"schema\":1,\"interpretation\":\"current-loader\",\"mode\":%u,"
+    printf("{\"schema\":2,\"interpretation\":\"current-loader\",\"mode\":%u,"
         "\"hunt_state\":%u,\"hunt_kills\":%u,\"pending_return_talk\":%d,"
         "\"source_position\":[%.17g,%.17g,%.17g],\"hunt_destination\":[%.9g,%.9g,%.9g],"
         "\"hp\":%.9g,\"max_hp\":%.9g,\"stamina\":%.9g,\"comfort\":%.9g,"
@@ -30,11 +30,15 @@ int main(int argc,char **argv){
         pe_inventory_count(&g->inventory,593),pe_inventory_count(&g->inventory,594),pe_inventory_count(&g->inventory,595));
     for(unsigned i=0;i<PE_OUTFIT_SLOTS;i++)printf("%s{\"item_id\":%d,\"instance_id\":%u,\"durability\":%.9g}",
         i?",":"",g->outfit.items[i].item_id,g->outfit.items[i].instance_id,(double)g->outfit.items[i].durability);
-    printf("],\"inventory\":[");bool comma=false;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count){
+    printf("],\"yaw\":%.9g,\"pitch\":%.9g,\"velocity\":[%.9g,%.9g,%.9g],"
+        "\"grounded\":%s,\"inventory_capacity\":%d,\"inventory_categorized\":%s,\"inventory\":[",
+        (double)g->yaw,(double)g->pitch,(double)g->velocity.x,(double)g->velocity.y,(double)g->velocity.z,
+        g->grounded?"true":"false",pe_inventory_capacity(&g->inventory),g->inventory.categorized?"true":"false");
+    bool comma=false;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count){
         const PeSlot *s=&g->inventory.slots[i];
-        printf("%s{\"slot\":%d,\"item_id\":%d,\"count\":%d,\"instance_id\":%u,\"durability\":%.9g}",
-            comma?",":"",i,s->item_id,s->count,s->instance_id,(double)s->durability);comma=true;
+        printf("%s{\"slot\":%d,\"category\":%d,\"item_id\":%d,\"count\":%d,\"instance_id\":%u,\"durability\":%.9g}",
+            comma?",":"",i,pe_item_def(s->item_id)->tab,s->item_id,s->count,s->instance_id,(double)s->durability);comma=true;
     }
     printf("],\"quickslots\":[");
     for(int i=0;i<PE_QUICKSLOTS;i++)printf("%s{\"key\":%d,\"item_id\":%d,\"instance_id\":%u}",
