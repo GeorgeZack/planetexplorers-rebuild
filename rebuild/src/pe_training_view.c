@@ -4,7 +4,7 @@
 #include "pe_player_locomotion.h"
 #include "pe_training_melee.h"
 #include "pe_melee_facing.h"
-#include "pe_preferences.h"
+#include "pe_ui_settings.h"
 #include "pe_training_tree_hit.h"
 #include "pe_training_terrain_view.h"
 #include "pe_training_build.h"
@@ -238,10 +238,7 @@ fail:
 }
 
 int pe_training_view(const char *asset_dir, int smoke_frames, const char *screenshot) {
-    PePreferences preferences={0};char settings_path[4096],settings_error[256];
-    if(!pe_preferences_default_path(settings_path,sizeof settings_path,settings_error,sizeof settings_error)||
-       !pe_preferences_load(&preferences,settings_path,settings_error,sizeof settings_error))
-        fprintf(stderr,"Settings: %s (using defaults)\n",settings_error);
+    PeUiSettings settings;pe_ui_settings_init(&settings);
     char model_path[4096], collision_path[4096], kit_path[4096], knife_path[4096], actor_path[4096], actor_texture[4096], player_path[4096], idle_path[4096], stowed_path[4096], error[256];
     if (!asset_dir || !*asset_dir || smoke_frames < 0 || (screenshot && !smoke_frames)) {
         fprintf(stderr, "Invalid training view arguments\n");
@@ -516,6 +513,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
         const bool pause_was_active=paused;
         float dt = smoke_frames ? PE_TRAINING_DT : fminf(GetFrameTime(), .1f);
         bool focused=smoke_frames||IsWindowFocused();
+        bool settings_consumed=pe_ui_settings_update(&settings,focused&&!smoke_frames);
         if(!focused){ui.history.scroll_dragging=false;dragging=false;autorun=false;jump_pending=false;attack_pending=false;pe_training_melee_cancel(&melee);pe_training_dig_cancel(&training.dig);}
         if(focused&&!paused&&training.tutorial.mission_id==PE_TUTORIAL_INVENTORY&&!training.inventory_lesson_accepted)
             pe_training_accept_inventory_lesson(&training);
@@ -526,7 +524,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
         int talk=pe_training_dialogue(&training);
         bool history_was_open=ui.history.open;
         bool ui_was_modal=ui.history.open||talk||training.kit_open||inventory||log||training.replicator_open||training.character_open||menu_open;
-        if(focused&&!smoke_frames&&IsKeyPressed(KEY_ESCAPE)) {
+        if(focused&&!smoke_frames&&!settings_consumed&&IsKeyPressed(KEY_ESCAPE)) {
             if(paused)paused=false;
             else if(ui.history.open){ui.history.open=false;ui.history.scroll_dragging=false;}
             else if(menu_open)menu_open=false;
@@ -536,13 +534,14 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
             else if(inventory||log){pe_training_close_inventory(&training);inventory=false;log=false;dragging=false;}
             else paused=!paused;
         }
-        if(focused&&paused&&!smoke_frames) {
+        if(focused&&paused&&!smoke_frames&&!settings_consumed) {
             Vector2 pointer=GetMousePosition();
             int command=pe_training_pause_command(&ui.layout,pointer.x,pointer.y,
                 IsMouseButtonPressed(MOUSE_BUTTON_LEFT),IsKeyPressed(KEY_M),IsKeyPressed(KEY_Q));
             if(command==1)paused=false;
             if(command==2){return_main=true;quit=true;}
             if(command==3)quit=true;
+            if(command==4)pe_ui_settings_open(&settings);
             if(quit)break;
         }
         unsigned visible_windows=((inventory||training.kit_open)?1u<<PE_UI_WINDOW_INVENTORY:0)|
@@ -977,7 +976,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                          * preference; captured modes retain camera facing. */
                         PeVec3 base=training.camera_mode==0?(PeVec3){input.move_x,0,input.move_z}:
                             (PeVec3){sinf(yaw),0,-cosf(yaw)};
-                        if(!pe_melee_facing_request(base,preferences.camera_facing_attacks,training.camera_mode==0,yaw,&request)||
+                        if(!pe_melee_facing_request(base,settings.preferences.camera_facing_attacks,training.camera_mode==0,yaw,&request)||
                            !pe_melee_facing_direction(request,player_yaw,&direction)){
                             failed=true;quit=true;break;
                         }
@@ -1207,6 +1206,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
             .melee_ready=melee.ready,.knife_drawn=knife_drawn,.hare_hp=melee.target_hp,.heading=player_yaw,
             .menu=menu_open,.cursor_visible=focused&&!captured&&IsCursorOnScreen(),
             .receivers_blocked=50u-(unsigned)__builtin_popcountll(building->result.receiver_mask)});
+        pe_ui_settings_draw(&settings,ui.assets);
         if(extended_smoke&&screenshot&&!storage_ui_written&&training.kit_open&&!training.kit_transferred) {
             storage_ui_written=true;if(!capture_training_frame(screenshot,"-storage-ui.png"))failed=true;
         }

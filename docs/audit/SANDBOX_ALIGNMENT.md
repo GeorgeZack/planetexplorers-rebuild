@@ -1,6 +1,6 @@
 # Sandbox alignment: implementation work order and live reference
 
-Current QoL addition: [Camera-facing attacks](MELEE_TARGET_FACING.md#optional-camera-facing-attacks) is an optional, default-OFF main-menu setting for free third person in both hosts. It preserves sandbox nearby-target assistance and does not enable Sword/Shield. Settings persist independently of PECSv21.
+Current QoL addition: [Camera-facing attacks](MELEE_TARGET_FACING.md#optional-camera-facing-attacks) is an optional, default-OFF setting in main menu and both in-game Pause menus for free third person in both hosts. It preserves sandbox nearby-target assistance and does not enable Sword/Shield. Settings persist independently of PECSv21.
 
 October7 current combat follow-through: [target acquisition and facing](MELEE_TARGET_FACING.md) now connect the source default movement/body direction and exact hare query/defence geometry to the Knife host. [Reaction decisions](HIT_REACTION.md) are extracted/tested but disconnected. Masked shield composition and reaction pose/motor qualification remain separate gates; no damage rebalance or new original session is implied.
 

@@ -624,9 +624,9 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     }
     if(u->paused) {
         DrawRectangle(0,0,(int)u->layout.width,(int)u->layout.height,(Color){0,0,0,145});
-        panel(u,map(u,425,200,430,320,PE_UI_CENTER),"PAUSED",PE_UI_EFFECT_INVENTORY);
-        static const char *labels[]={"Resume","Save game","Load game","Return to main menu"};
-        for(int k=0;k<4;k++)button(u,pe_sandbox_ui_pause_button(u,k),labels[k],true);
+        panel(u,map(u,425,200,430,360,PE_UI_CENTER),"PAUSED",PE_UI_EFFECT_INVENTORY);
+        static const char *labels[]={"Resume","Save game","Load game","Return to main menu","Settings"};
+        for(int k=0;k<5;k++)button(u,pe_sandbox_ui_pause_button(u,k),labels[k],true);
     }
     if(pe_sandbox_ui_cursor(u)&&!u->dragging)sprite(u,"mouse",(PeTrainingUIRect){u->mouse_x,u->mouse_y,40*u->layout.scale,40*u->layout.scale},WHITE);
 }

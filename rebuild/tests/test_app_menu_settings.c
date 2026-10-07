@@ -5,6 +5,7 @@
 #include "pe_app_menu.h"
 #include "pe_preferences.h"
 #include "pe_ui_assets.h"
+#include "pe_ui_settings.h"
 #include <raylib.h>
 #include <rlgl.h>
 #include <math.h>
@@ -21,12 +22,12 @@ typedef struct {int key,key2;bool click;float x,y;void (*prepare)(void);} Input;
 typedef struct {bool settings,on,off,error;unsigned menu_labels;} Drawn;
 static Input inputs[32];static Drawn drawn[32];
 static int frame,frame_count,width=1280,height=720,closed;
-static bool tutorial_available=true,prepared;
+static bool tutorial_available=true,prepared,focused=true;
 static char settings_path[512];
 
 static float scale(void){return fminf(width/1280.f,height/720.f);}
 static Vector2 screen_point(float x,float y){float s=scale();return (Vector2){(width-1280*s)/2+x*s,(height-720*s)/2+y*s};}
-static void reset(int count,int w,int h){memset(inputs,0,sizeof inputs);memset(drawn,0,sizeof drawn);frame=0;frame_count=count;width=w;height=h;closed=0;prepared=false;tutorial_available=true;}
+static void reset(int count,int w,int h){memset(inputs,0,sizeof inputs);memset(drawn,0,sizeof drawn);frame=0;frame_count=count;width=w;height=h;closed=0;prepared=false;tutorial_available=true;focused=true;}
 static void click_at(int f,float x,float y){inputs[f].click=true;inputs[f].x=x;inputs[f].y=y;}
 static bool saved_value(void){PePreferences p={0};char error[128];CHECK(pe_preferences_load(&p,settings_path,error,sizeof error));return p.camera_facing_attacks;}
 static void remove_blocking_directory(void){CHECK(rmdir(settings_path)==0);}
@@ -42,7 +43,7 @@ void EnableCursor(void){}
 void HideCursor(void){}
 void ShowCursor(void){}
 void CloseWindow(void){closed++;}
-bool IsWindowFocused(void){return true;}
+bool IsWindowFocused(void){return focused;}
 bool WindowShouldClose(void){if(frame>=frame_count)return true;if(!prepared){prepared=true;if(inputs[frame].prepare)inputs[frame].prepare();}return false;}
 int GetScreenWidth(void){return width;}
 int GetScreenHeight(void){return height;}
@@ -104,7 +105,7 @@ int main(void){
     inputs[9].key=KEY_UP;inputs[10].key=KEY_ENTER;
     CHECK(pe_app_menu("unused",true,false,NULL,0,NULL)==PE_APP_TUTORIAL);
     CHECK(frame==11&&closed==1);
-    CHECK(drawn[3].off&&drawn[4].off&&drawn[5].off&&drawn[6].on);
+    CHECK(drawn[3].off&&drawn[4].off&&drawn[5].on&&drawn[6].on);
     CHECK(!drawn[7].settings&&!drawn[8].settings);
     CHECK(saved_value());
 
@@ -118,7 +119,7 @@ int main(void){
     click_at(6,1100,165);
     CHECK(pe_app_menu("unused",true,false,NULL,0,NULL)==PE_APP_CONTINUE_SANDBOX);
     CHECK(frame==7&&closed==1);
-    CHECK(drawn[0].on&&drawn[1].on&&drawn[2].on&&drawn[3].off);
+    CHECK(drawn[0].on&&drawn[1].on&&drawn[2].off&&drawn[3].off);
     CHECK(!drawn[4].settings&&!drawn[5].settings&&!saved_value());
 
     /* Back's click is not admitted by the underlying menu; a fresh press is
@@ -127,8 +128,8 @@ int main(void){
     click_at(3,1100,355);inputs[4].key=KEY_DOWN;inputs[5].key=KEY_ENTER;
     inputs[7].key=KEY_ESCAPE;
     CHECK(pe_app_menu("unused",true,false,NULL,0,NULL)==PE_APP_QUIT);
-    CHECK(frame==8&&closed==1&&drawn[0].off&&drawn[1].off&&!drawn[2].settings);
-    CHECK(drawn[3].off&&drawn[5].off&&!drawn[6].settings&&!saved_value());
+    CHECK(frame==8&&closed==1&&drawn[0].off&&!drawn[1].settings&&!drawn[2].settings);
+    CHECK(drawn[3].off&&!drawn[5].settings&&!drawn[6].settings&&!saved_value());
 
     /* Existing directory: load and replacement fail. OFF remains displayed;
      * removing the obstruction permits a fresh retry to persist ON. */
@@ -148,6 +149,23 @@ int main(void){
     CHECK(pe_app_menu("unused",false,false,NULL,0,NULL)==PE_APP_QUIT&&drawn[1].on);
     reset(1,1280,720);inputs[0].key=KEY_ENTER;
     CHECK(pe_app_menu("unused",false,false,NULL,0,NULL)==PE_APP_NEW_SANDBOX);
+
+    /* Shared submodal owner can be called by either paused host. Suppressed
+     * opening input and focus loss retain ownership without changing anything;
+     * drawing is read-only, and closing returns ownership for that frame. */
+    reset(1,800,450);PeUiSettings panel;pe_ui_settings_init(&panel);
+    CHECK(!panel.open&&panel.ready&&panel.preferences.camera_facing_attacks);
+    CHECK(!pe_ui_settings_update(&panel,true));pe_ui_settings_open(&panel);
+    inputs[0].key=KEY_ENTER;PeUiSettings before=panel;
+    CHECK(pe_ui_settings_update(&panel,false)&&!memcmp(&panel,&before,sizeof panel));
+    focused=false;
+    CHECK(pe_ui_settings_update(&panel,true)&&!memcmp(&panel,&before,sizeof panel));
+    focused=true;pe_ui_settings_draw(&panel,(PeUiAssets *)(uintptr_t)1);
+    CHECK(!memcmp(&panel,&before,sizeof panel));
+    CHECK(pe_ui_settings_update(&panel,true)&&!panel.preferences.camera_facing_attacks&&!saved_value());
+    inputs[0].key=KEY_ESCAPE;
+    CHECK(pe_ui_settings_update(&panel,true)&&!panel.open);
+    CHECK(!pe_ui_settings_update(&panel,true));
 
     CHECK(unlink(settings_path)==0);CHECK(rmdir(directory)==0);
     printf("app menu settings checks: %s\n",failures?"FAIL":"PASS");

@@ -1,6 +1,6 @@
 # Planet Explorers project map
 
-[Attack preference](docs/audit/MELEE_TARGET_FACING.md#optional-camera-facing-attacks): `pe_preferences` owns user configuration outside world saves, `pe_app_menu` owns the shared Settings entry, and `pe_melee_facing_request` supplies the optional free-third-person camera direction to both hosts. Default OFF; Sword/Shield activation remains gated.
+[Attack preference](docs/audit/MELEE_TARGET_FACING.md#optional-camera-facing-attacks): `pe_preferences` owns user configuration outside world saves, `pe_ui_settings` owns the shared Settings view/input in main menu and both Pause menus, and `pe_melee_facing_request` supplies the optional free-third-person camera direction to both hosts. Default OFF; Sword/Shield activation remains gated.
 
 October7 combat follow-through: [Adventure target/facing](docs/audit/MELEE_TARGET_FACING.md) connects `pe_hunt_targeting` and `pe_melee_facing` to the existing Knife host; camera orientation stays independent. [Hit-reaction decisions](docs/audit/HIT_REACTION.md) remain disconnected pending reaction pose/motor qualification.
 

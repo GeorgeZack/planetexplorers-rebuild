@@ -346,7 +346,9 @@ PeTrainingUIRect pe_sandbox_ui_quantity(const PeSandboxUI *u,int b) {
     return relative(u,u->layout.replicator,x[b>=0&&b<4?b:0],400,b<2?28:56,28);
 }
 PeTrainingUIRect pe_sandbox_ui_pause_button(const PeSandboxUI *u,int b) {
-    return pe_training_ui_map(&u->layout,(PeTrainingUIRect){485,280+48*(float)b,310,38},PE_UI_CENTER);
+    static const int rows[]={0,2,3,4,1};
+    if(!u||b<0||b>=5)return (PeTrainingUIRect){0};
+    return pe_training_ui_map(&u->layout,(PeTrainingUIRect){485,280+48*(float)rows[b],310,38},PE_UI_CENTER);
 }
 PeTrainingUIRect pe_sandbox_ui_revival_button(const PeSandboxUI *u,int b) {
     if(!u||b<0||b>1)return (PeTrainingUIRect){0};
@@ -822,11 +824,12 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     /* A closing/toggling frame is consumed as well: held clicks cannot leak. */
     r.consume_world=r.consume_world||before||panel(u)||i.escape||i.inventory||i.character||i.missions||i.replicator||i.tab;
     if(u->paused) {
-        if(i.left_pressed)for(int b=0;b<4;b++)if(hit(pe_sandbox_ui_pause_button(u,b),i)) {
+        if(i.left_pressed)for(int b=0;b<5;b++)if(hit(pe_sandbox_ui_pause_button(u,b),i)) {
             if(b==0)u->paused=false;
             if(b==1)r.save=true;
             if(b==2)r.load=true;
             if(b==3)r.return_main=true;
+            if(b==4)r.open_settings=true;
         }
         goto done;
     }

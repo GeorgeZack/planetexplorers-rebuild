@@ -4,6 +4,7 @@
 #include "pe_training_ui.h"
 #include "pe_sandbox_ui.h"
 #include "pe_ui_hud.h"
+#include "pe_ui_settings.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -26,17 +27,23 @@ static Image export_screen(const char *directory,const char *name,int width,int 
     Image image=LoadImageFromScreen();REQUIRE(image.data&&image.width==width&&image.height==height);
     REQUIRE(ExportImage(image,path));return image;
 }
+static const PeUiSettings settings_fixture={.open=true,.ready=true};
 static Image training_capture(PeTrainingUi *ui,const PeTraining *training,const char *directory,const char *name,int width,int height){
     for(int frame=0;frame<3;frame++){
         BeginDrawing();ClearBackground((Color){28,45,54,255});
-        pe_training_ui_draw(ui,training,(PeTrainingUiState){0});EndDrawing();
+        pe_training_ui_draw(ui,training,(PeTrainingUiState){.paused=strstr(name,"pause")||strstr(name,"settings")});
+        if(strstr(name,"settings"))pe_ui_settings_draw(&settings_fixture,ui->assets);
+        EndDrawing();
     }
     return export_screen(directory,name,width,height);
 }
 static Image sandbox_capture(PeSandboxUI *ui,const PeGame *game,const char *directory,const char *name,int width,int height){
     for(int frame=0;frame<3;frame++){
         Vector2 mouse=GetMousePosition();ui->mouse_x=mouse.x;ui->mouse_y=mouse.y;
-        BeginDrawing();ClearBackground((Color){28,45,54,255});pe_sandbox_ui_draw(ui,game,false);EndDrawing();
+        BeginDrawing();ClearBackground((Color){28,45,54,255});
+        ui->paused=strstr(name,"pause")||strstr(name,"settings");pe_sandbox_ui_draw(ui,game,false);ui->paused=false;
+        if(strstr(name,"settings"))pe_ui_settings_draw(&settings_fixture,ui->assets);
+        EndDrawing();
     }
     return export_screen(directory,name,width,height);
 }
@@ -137,6 +144,10 @@ int main(int argc,char **argv){
         REQUIRE(tutorial.history.scroll==0&&sandbox.history.scroll==0);
         compare_region(a,b,tutorial.layout.history,"HISTORY_TOP");UnloadImage(a);UnloadImage(b);
         tutorial.history.open=sandbox.history.open=false;
+        a=training_capture(&tutorial,training,argv[1],"tutorial-pause",w,h);
+        b=sandbox_capture(&sandbox,game,argv[1],"sandbox-pause",w,h);UnloadImage(a);UnloadImage(b);
+        a=training_capture(&tutorial,training,argv[1],"tutorial-settings",w,h);
+        b=sandbox_capture(&sandbox,game,argv[1],"sandbox-settings",w,h);UnloadImage(a);UnloadImage(b);
     }
     pe_training_ui_unload(&tutorial);pe_sandbox_ui_unload(&sandbox);
     pe_game_destroy(game);free(game);free(training);CloseWindow();

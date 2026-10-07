@@ -29,7 +29,7 @@ typedef struct {
     bool consume_actions; /* Nonmodal HUD/use owns action presses, not movement/camera/simulation. */
     bool npc_interaction; /* Hover/click allowed even with the free cursor. */
     bool camera_cycle_allowed; /* UI admission before the Tab-only world block; host still gates held buttons/focus. */
-    bool toggle_build, save, load, return_main, revive;
+    bool toggle_build, save, load, return_main, revive, open_settings;
     bool rotate_build;
     bool undo_build,redo_build;
     int build_shape,build_brush; /* Zero means no selection request. */
@@ -177,7 +177,7 @@ int pe_sandbox_ui_recipe_count(const PeSandboxUI *ui,const PeGame *game);
 /* Shared hit geometry for renderer and routed actions. */
 PeTrainingUIRect pe_sandbox_ui_recipe_row(const PeSandboxUI *ui,int row);
 PeTrainingUIRect pe_sandbox_ui_quantity(const PeSandboxUI *ui,int button); /* minus,plus,min,max */
-PeTrainingUIRect pe_sandbox_ui_pause_button(const PeSandboxUI *ui,int button); /* resume/save/load/main */
+PeTrainingUIRect pe_sandbox_ui_pause_button(const PeSandboxUI *ui,int button); /* resume/save/load/main/settings */
 PeTrainingUIRect pe_sandbox_ui_revival_button(const PeSandboxUI *ui,int button); /* revive/load */
 PeTrainingUIRect pe_sandbox_ui_cancel_button(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_search(const PeSandboxUI *ui);

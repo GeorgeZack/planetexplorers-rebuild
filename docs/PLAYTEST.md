@@ -1,5 +1,13 @@
 # Original-game playtest and C comparison
 
+## October7 in-game Settings access
+
+Both hosts now expose Esc → Settings through the same `pe_ui_settings` input/view used by main menu. A successful toggle updates the live host preference and the existing configuration file. Back/Esc returns to Pause; opening and closing frames retain modal/pointer ownership and cannot also resume, save/load or attack. No world save payload changed.
+
+Optimized production build, shared/menu settings tests (also ASan/UBSan with leak detection), sandbox UI routing, shared UI tests, three tutorial input checks (including extracted actual Escape dispatch under ASan/UBSan), and26 CLI checks pass. The tutorial harness needed its extraction boundary updated for the new Settings ownership guard; that fixture failure was corrected and the tests pass. Paired actual UI capture passes at1280×720,640×480 and320×240; Pause and Settings were inspected in both modes at normal/small sizes. The settings renderer remains shared and read-only. Captures/logs are under `rebuild/build/ui-shared-captures` and `rebuild/build/ingame-settings-*.log`.
+
+These are automated input/render checks, not a new ordinary gameplay or original-Steam acceptance session. No user desktop input or user configuration was changed by testing. The installed executable SHA256 is `93f487d21abe215b9ae332ea42245370eb56e276d1e18ee9852529e0436496b8`.
+
 ## October7 camera-facing attack preference
 
 Source-derived: the original default uses requested movement, falling back to body forward; `AttackWhithMouseDir=true` instead projects the cursor ray onto a player-height plane. No new Steam session or claim about the user's original saved setting is made. [Direction and preference contract](audit/MELEE_TARGET_FACING.md#optional-camera-facing-attacks).

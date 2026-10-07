@@ -1,5 +1,7 @@
 # Shared tutorial and sandbox UI
 
+`pe_ui_settings` is the single Settings input/view owner for the main menu and both gameplay Pause menus. Hosts open it as a child of Pause and suppress their underlying input through its closing frame. Back/Esc returns to Pause, successful edits update the current preference immediately, and rendering never saves or changes preferences. Keep the same panel geometry for drawing and input; do not add mode-specific copies.
+
 The tutorial and sandbox now use the same owners for normal HUD presentation, minimap chrome, mission tracking, conversation history, common inventory/dialogue frames, and pointer/chrome input. Host adapters supply the data. This implements the user's requested consistency between modes; it does not merge their gameplay progression or establish complete Unity UI parity.
 
 ## Durable ownership rules

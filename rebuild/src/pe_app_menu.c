@@ -1,6 +1,6 @@
 #include "pe_app_menu.h"
 #include "pe_ui_assets.h"
-#include "pe_preferences.h"
+#include "pe_ui_settings.h"
 #include <raylib.h>
 #include <rlgl.h>
 #include <math.h>
@@ -41,22 +41,19 @@ PeAppChoice pe_app_menu(const char *dir,bool can_continue,bool active,const char
     if(logo.id)SetTextureFilter(logo,TEXTURE_FILTER_BILINEAR);
     n=snprintf(path,sizeof path,"%s/room-collision.obj",dir);
     bool tutorial=n>0&&n<(int)sizeof path&&FileExists(path);
-    PePreferences preferences={0};char settings_path[4096]={0},settings_error[256]={0};
-    bool settings_ready=pe_preferences_default_path(settings_path,sizeof settings_path,settings_error,sizeof settings_error);
-    if(!settings_ready||!pe_preferences_load(&preferences,settings_path,settings_error,sizeof settings_error))
-        fprintf(stderr,"Settings: %s\n",settings_error);
+    PeUiSettings settings;pe_ui_settings_init(&settings);
     const char *names[]={"Continue Sandbox","New Sandbox","Tutorial","Settings","Quit"};
     const PeAppChoice choices[]={PE_APP_CONTINUE_SANDBOX,PE_APP_NEW_SANDBOX,PE_APP_TUTORIAL,PE_APP_QUIT,PE_APP_QUIT};
     bool enabled[]={can_continue,true,tutorial,true,true};
-    bool settings=false;int settings_selected=0;
     int selected=can_continue?0:1,frame=0;bool confirm=false,done=false;PeAppChoice result=PE_APP_QUIT;
     while(!WindowShouldClose()&&!done) {
         if(IsWindowFocused()&&ui)HideCursor();else ShowCursor();
         float scale=fminf(GetScreenWidth()/1280.f,GetScreenHeight()/720.f);
         float ox=(GetScreenWidth()-1280*scale)/2,oy=(GetScreenHeight()-720*scale)/2;
-        bool settings_was_open=settings;
-        if(!frames&&IsKeyPressed(KEY_ESCAPE)){if(settings)settings=false;else if(confirm)confirm=false;else done=true;}
-        if(!frames&&!confirm&&!settings_was_open&&(IsKeyPressed(KEY_DOWN)||IsKeyPressed(KEY_UP))) {
+        bool accept_input=!frames&&IsWindowFocused();
+        bool settings_was_open=pe_ui_settings_update(&settings,accept_input);
+        if(accept_input&&!settings_was_open&&IsKeyPressed(KEY_ESCAPE)){if(confirm)confirm=false;else done=true;}
+        if(accept_input&&!confirm&&!settings_was_open&&(IsKeyPressed(KEY_DOWN)||IsKeyPressed(KEY_UP))) {
             int step=IsKeyPressed(KEY_DOWN)?1:-1;
             do {selected=(selected+step+5)%5;}while(!enabled[selected]);
         }
@@ -80,38 +77,16 @@ PeAppChoice pe_app_menu(const char *dir,bool can_continue,bool active,const char
         for(int i=0;i<5;i++) {
             Rectangle r=scaled(1016,146+63*i,169,46,scale,ox,oy);
             bool hit=menu_button(ui,names[i],r,scale,enabled[i],selected==i);
-            if(!frames&&!confirm&&!settings_was_open&&(hit||(selected==i&&IsKeyPressed(KEY_ENTER)))) {
+            if(accept_input&&!confirm&&!settings_was_open&&(hit||(selected==i&&IsKeyPressed(KEY_ENTER)))) {
                 selected=i;
-                if(i==3){settings=true;settings_selected=0;}
+                if(i==3)pe_ui_settings_open(&settings);
                 else if(i==1&&active)confirm=true;
                 else {result=choices[i];done=true;}
             }
         }
         if(notice&&*notice)centered(pe_ui_font(ui,false),notice,scaled(130,510,1020,50,scale,ox,oy),18*scale,(Color){238,201,118,255});
         if(!tutorial)centered(pe_ui_font_small(ui,false),"Tutorial content is unavailable",scaled(940,475,320,30,scale,ox,oy),14*scale,(Color){165,184,198,255});
-        if(settings) {
-            /* Main menu owns this one settings view for both gameplay hosts.
-             * Opening/closing input cannot activate a background menu choice. */
-            bool accept_input=!frames&&settings_was_open;
-            if(accept_input&&(IsKeyPressed(KEY_DOWN)||IsKeyPressed(KEY_UP)))settings_selected=1-settings_selected;
-            DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(),Fade(BLACK,.8f));
-            Rectangle r=scaled(240,170,800,380,scale,ox,oy);
-            if(!pe_ui_sprite(ui,"midbg",r,WHITE,scale))DrawRectangleRec(r,(Color){24,45,79,255});
-            centered(pe_ui_font_heading(ui),"Settings",scaled(260,190,760,40,scale,ox,oy),26*scale,WHITE);
-            char label[128];snprintf(label,sizeof label,"Camera-facing attacks: %s",preferences.camera_facing_attacks?"ON":"OFF");
-            bool toggle=menu_button(ui,label,scaled(340,250,600,46,scale,ox,oy),scale,settings_ready,settings_selected==0);
-            centered(pe_ui_font(ui,false),"Free-mouse third person only. Applies to tutorial and sandbox.",scaled(260,310,760,28,scale,ox,oy),17*scale,(Color){190,215,235,255});
-            centered(pe_ui_font(ui,false),"ON: aim new attacks along the camera. OFF: movement / character facing.",scaled(260,341,760,28,scale,ox,oy),17*scale,(Color){190,215,235,255});
-            centered(pe_ui_font(ui,false),"Sandbox nearby-target assistance still applies. Changes save automatically.",scaled(260,372,760,28,scale,ox,oy),17*scale,(Color){190,215,235,255});
-            if(settings_error[0])centered(pe_ui_font_small(ui,false),"Settings could not be read or saved; see terminal for details.",scaled(260,410,760,28,scale,ox,oy),16*scale,(Color){238,201,118,255});
-            bool back=menu_button(ui,"Back",scaled(540,465,200,45,scale,ox,oy),scale,true,settings_selected==1);
-            if(accept_input&&settings_ready&&(toggle||(settings_selected==0&&(IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_SPACE))))) {
-                PePreferences next=preferences;next.camera_facing_attacks=!next.camera_facing_attacks;
-                if(pe_preferences_save(&next,settings_path,settings_error,sizeof settings_error)){preferences=next;settings_error[0]=0;}
-                else fprintf(stderr,"Settings: %s\n",settings_error);
-            }
-            if(accept_input&&(back||(settings_selected==1&&IsKeyPressed(KEY_ENTER))))settings=false;
-        }
+        pe_ui_settings_draw(&settings,ui);
         if(confirm) {
             DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(),Fade(BLACK,.6f));
             Rectangle r=scaled(350,255,580,210,scale,ox,oy);
@@ -120,10 +95,10 @@ PeAppChoice pe_app_menu(const char *dir,bool can_continue,bool active,const char
             centered(pe_ui_font(ui,false),"Unsaved progress in the current world will be lost.",scaled(370,318,540,40,scale,ox,oy),16*scale,(Color){190,215,235,255});
             bool yes=menu_button(ui,"New World",scaled(400,384,210,45,scale,ox,oy),scale,true,false);
             bool no=menu_button(ui,"Cancel",scaled(670,384,210,45,scale,ox,oy),scale,true,false);
-            if(!frames&&yes){result=PE_APP_NEW_SANDBOX;done=true;}
-            if(!frames&&no)confirm=false;
+            if(accept_input&&yes){result=PE_APP_NEW_SANDBOX;done=true;}
+            if(accept_input&&no)confirm=false;
         }
-        if(ui)pe_ui_sprite(ui,"mouse",(Rectangle){GetMouseX(),GetMouseY(),40*scale,40*scale},WHITE,scale);
+        if(ui&&!settings.open)pe_ui_sprite(ui,"mouse",(Rectangle){GetMouseX(),GetMouseY(),40*scale,40*scale},WHITE,scale);
         if(frames&&frame+1>=frames) {
             if(shot){rlDrawRenderBatchActive();Image capture=LoadImageFromScreen();bool ok=capture.data&&ExportImage(capture,shot);UnloadImage(capture);if(!ok)result=PE_APP_MENU_ERROR;}
             done=true;

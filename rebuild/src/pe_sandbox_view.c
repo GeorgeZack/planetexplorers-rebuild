@@ -4,7 +4,7 @@
 #include "pe_adventure_hunt.h"
 #include "../generated/pe_torch_source.h"
 #include "pe_sandbox_view.h"
-#include "pe_preferences.h"
+#include "pe_ui_settings.h"
 #include "pe_sandbox_ui.h"
 #include "pe_sandbox_actor.h"
 #include "pe_sandbox_actions.h"
@@ -613,10 +613,7 @@ static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *d
 }
 int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     int smoke_frames,const char *smoke_panel,const char *screenshot) {
-    PePreferences preferences={0};char settings_path[4096],settings_error[256];
-    if(!pe_preferences_default_path(settings_path,sizeof settings_path,settings_error,sizeof settings_error)||
-       !pe_preferences_load(&preferences,settings_path,settings_error,sizeof settings_error))
-        fprintf(stderr,"Settings: %s (using defaults)\n",settings_error);
+    PeUiSettings settings;pe_ui_settings_init(&settings);
     const char *profile_env=getenv("PE_SANDBOX_PROFILE");
     const char *combat_trace_env=getenv("PE_SANDBOX_COMBAT_TRACE");
     bool combat_trace=combat_trace_env&&!strcmp(combat_trace_env,"1");
@@ -826,7 +823,17 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         ui.camera_cursor=camera_controls.mode==PE_SANDBOX_CAMERA_FREE&&!captured;
         ui.discard_input=host_cancelled_modal;
         profile_stage(&profile,PROFILE_UI_ROUTE);
-        PeSandboxUIResult action=pe_sandbox_ui_update(&ui,game,dt);
+        /* Settings is a child of Pause. Its closing frame stays owned and
+         * cannot also resume, save/load, recapture the mouse or start actions. */
+        bool settings_consumed=pe_ui_settings_update(&settings,!smoke_frames&&IsWindowFocused());
+        PeSandboxUIResult action=settings_consumed?
+            (PeSandboxUIResult){.consume_world=true,.cursor_visible=true,.paused=true}:
+            pe_sandbox_ui_update(&ui,game,dt);
+        if(settings_consumed){
+            pe_sandbox_ui_resize(&ui,(float)GetScreenWidth(),(float)GetScreenHeight());
+            Vector2 pointer=GetMousePosition();ui.mouse_x=pointer.x;ui.mouse_y=pointer.y;
+        }
+        if(action.open_settings)pe_ui_settings_open(&settings);
         profile_stage(&profile,PROFILE_HOST);
         bool focused=smoke_frames||IsWindowFocused(),resized=IsWindowResized();
         if(profile.enabled){profile.focused_frames+=focused;profile.paused_frames+=action.paused;}
@@ -1146,7 +1153,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 float attack_yaw=pe_sandbox_actor_yaw(actor,game);
                 PeVec3 attack_request;
                 if(melee.ready&&(!pe_melee_facing_request((PeVec3){input.move_x,0,input.move_z},
-                    preferences.camera_facing_attacks,camera_controls.mode==PE_SANDBOX_CAMERA_FREE,game->yaw,&attack_request)||
+                    settings.preferences.camera_facing_attacks,camera_controls.mode==PE_SANDBOX_CAMERA_FREE,game->yaw,&attack_request)||
                     !sandbox_blade_tick(&melee,&blade_facing,&hunt.encounter,melee_gate,attack_pending,
                     attack_request,game->player,attack_yaw,&game->stamina,
                     &attack_interval,&attack_yaw,&began,&rejected)||
@@ -1376,6 +1383,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         pe_sandbox_ui_record_dialogue(&ui,game);
         pe_sandbox_ui_draw(&ui,game,build_mode);
+        pe_ui_settings_draw(&settings,ui.assets);
         if(smoke_frames&&frame+1>=smoke_frames&&screenshot) {
             rlDrawRenderBatchActive();
             Image capture=LoadImageFromScreen();bool saved=capture.data&&ExportImage(capture,screenshot);UnloadImage(capture);

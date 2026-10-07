@@ -40,7 +40,7 @@ static float GetMouseWheelMove(void){return 0;}
 static Vector2 pointer;
 static Vector2 GetMousePosition(void){return pointer;}
 static bool menu_open,paused,inventory,log,dragging,equipment_tab,dialogue_input_consumed;
-static bool focused=true,smoke_frames;
+static bool focused=true,smoke_frames,settings_consumed;
 static int inventory_tab,build_rotation;
 static float preview_yaw;
 static void frame(void){
@@ -58,7 +58,7 @@ static void reset(int mission,unsigned dialogue){
  training.tutorial=(PeTutorial){(unsigned)mission,3,15,0};training.dialogue_index=dialogue;
  if(mission==PE_TUTORIAL_CAMERA)pe_tutorial_init(&training.tutorial);
  training.equipped_shovel=-1;
- menu_open=paused=inventory=log=dragging=equipment_tab=false;
+ menu_open=paused=inventory=log=dragging=equipment_tab=settings_consumed=false;
  inventory_tab=build_rotation=0;preview_yaw=0;pointer=(Vector2){0};
  assert(pe_training_ui_layout(1280,720,&ui.layout));assert(pe_tutorial_valid(&training.tutorial));
 }
@@ -135,6 +135,9 @@ int main(void){
   reset(746,2);assert(pe_training_ui_layout(sizes[k][0],sizes[k][1],&ui.layout));
   menu_open=true;left=true;pointer=(Vector2){ui.layout.health.x+1,ui.layout.health.y+1};frame();assert(!menu_open&&!training.character_open);
  }
+ /* Settings closing Escape belongs to the child modal, not Resume. */
+ reset(746,2);paused=settings_consumed=true;keys[KEY_ESCAPE]=true;frame();assert(paused);
+ events();settings_consumed=false;keys[KEY_ESCAPE]=true;frame();assert(!paused);
  /* Actual history opening owns simultaneous digit use; Escape owns its
     closing frame as well. No synthetic copy of the host Escape dispatch. */
  reset(746,2);training.quickslot_item_id=916;training.juice_count=10;training.hp=100;
@@ -170,7 +173,7 @@ int main(void) {
     const float dimensions[][2]={{1280,720},{1920,1080},{1000,800}};
     for(unsigned d=0;d<3;d++) {
         assert(pe_training_ui_layout(dimensions[d][0],dimensions[d][1],&layout));
-        for(int index=0;index<3;index++) {
+        for(int index=0;index<4;index++) {
             PeTrainingUIRect r=pe_training_pause_button(&layout,index);
             assert(pe_training_pause_command(&layout,r.x+r.w/2,r.y+r.h/2,true,false,false)==index+1);
             assert(pe_training_pause_command(&layout,r.x+r.w/2,r.y+r.h/2,false,false,false)==0);
@@ -278,8 +281,8 @@ int main(void){
         with tempfile.TemporaryDirectory(prefix="ui-input-", dir=parent) as folder:
             temporary = Path(folder)
             harness, binary = temporary / "input.c", temporary / "input"
-            escape_first = source.index("        if(focused&&!smoke_frames&&IsKeyPressed(KEY_ESCAPE)) {")
-            escape_last = source.index("        if(focused&&paused&&!smoke_frames)", escape_first)
+            escape_first = source.index("        if(focused&&!smoke_frames&&!settings_consumed&&IsKeyPressed(KEY_ESCAPE)) {")
+            escape_last = source.index("        if(focused&&paused&&!smoke_frames&&!settings_consumed)", escape_first)
             harness.write_text(PREFIX + source[escape_first:escape_last] + source[window_first:window_last] + block + SUFFIX)
             environment = os.environ.copy()
             environment["TMPDIR"] = str(temporary)

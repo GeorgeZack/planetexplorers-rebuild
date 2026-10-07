@@ -30,6 +30,7 @@ static void scripted_end(void){
 #define InitWindow scripted_window
 #define SetWindowMinSize scripted_minimum
 #define EndDrawing scripted_end
+#include "../src/pe_ui_settings.c"
 #include "../src/pe_app_menu.c"
 #undef EndDrawing
 #undef SetWindowMinSize

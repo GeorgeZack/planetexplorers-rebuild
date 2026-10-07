@@ -217,9 +217,9 @@ void pe_training_ui_draw(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState s
     if(state.paused){
         DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(),Fade(BLACK,.48f));
         PeTrainingUIRect r=map(u,425,220,430,280,PE_UI_CENTER);panel(u,r,"PAUSED");
-        static const char *labels[]={"Resume  [Esc]","Main Menu  [M]","Quit  [Q]"};
+        static const char *labels[]={"Resume  [Esc]","Main Menu  [M]","Quit  [Q]","Settings"};
         Vector2 pointer=GetMousePosition();
-        for(int i=0;i<3;i++) {
+        for(int i=0;i<4;i++) {
             PeTrainingUIRect button=pe_training_pause_button(&u->layout,i);
             bool hover=pe_training_ui_contains(button,pointer.x,pointer.y);
             sprite(u,"menulist",button,hover?blue:WHITE);

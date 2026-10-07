@@ -433,6 +433,9 @@ int main(void) {
     assert(pe_sandbox_pointer_release_gate(&gate,r.consume_world,1)&&r.load);
     assert(pe_sandbox_pointer_release_gate(&gate,false,0));
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,3),false));assert(r.return_main&&r.consume_world);
+    r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,4),false));assert(r.open_settings&&r.paused&&r.consume_world&&!r.save&&!r.load&&!r.return_main);
+    assert(pe_sandbox_pointer_release_gate(&gate,r.consume_world,1));
+    assert(pe_sandbox_pointer_release_gate(&gate,false,0));
     r=pe_sandbox_ui_route(&u,g,click(pe_sandbox_ui_pause_button(&u,0),false));assert(!r.paused&&r.consume_world);
     /* Search only learned recipes; bounded quantity/craft routes real transactions. */
     i=input();i.replicator=true;r=pe_sandbox_ui_route(&u,g,i);assert(u.replicator_open&&r.consume_world);
