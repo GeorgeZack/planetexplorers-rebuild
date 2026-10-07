@@ -1,5 +1,7 @@
 # Source-first review at the pushed rebuild checkpoint
 
+Current follow-up: [audit after pushed3791d89e](SOURCE_FIRST_CHECKPOINT_REVIEW.md), including newly decoded vendor wallets, generic pounce extraction and inventory/construction gaps. The priorities below describe this earlier review and its subsequent implementation notes.
+
 October 6, 2026. Baseline: `5ec481e34060d78a461f3ea36d6a9689de18cdc9`, verified as both local `main` and private `rebuild/main` before this review. The working tree was clean. This is a fresh C#/database/tool/C comparison, with three parallel specialist reviews; neither game was launched. It updates the next-work decisions in [the earlier source-first audit](SOURCE_FIRST_REBUILD.md), whose baseline findings remain historical evidence.
 
 ## Decision

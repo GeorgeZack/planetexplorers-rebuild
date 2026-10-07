@@ -1,6 +1,6 @@
 # Source-first rebuild audit
 
-Current decision point: [the review at pushed checkpoint5ec481e3](SOURCE_FIRST_REVIEW.md) reassesses combat, progression and extraction after the recovery/contact/rotation work below. It prioritizes Revival Shot lifecycle and slow-movement attack admission, with quest planning and town transactions available in parallel. It also specifies what a prepared30-minute user recording can replace. Earlier baseline tables here remain historical findings, not a list of still-missing implementations.
+Current decision point: [the audit after pushed checkpoint3791d89e](SOURCE_FIRST_CHECKPOINT_REVIEW.md) reviews the next offline work after recovery, revival and walking attacks. It identifies vendor wallets, inventory operations, generic pounce extraction and construction history, with a separate user-recording plan. [The previous review](SOURCE_FIRST_REVIEW.md) and baseline tables below remain historical findings, not a list of still-missing implementations.
 
 October 6, 2026. Baseline: private rebuild commit `25877e7f759538b7cd6a0358a0c71d2debbe20d4`. This audit inspects original C# code, serialized data, existing captures and the C implementation. It launches neither game. It is a prioritized parity audit, not an exhaustive verification of every Unity subsystem.
 

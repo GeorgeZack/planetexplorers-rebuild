@@ -19,7 +19,7 @@ The latest running-knife increment adds grounded female third-person Knife33 sta
 | Overall scope and delivered systems | [Replication specification](docs/REPLICATION.md) |
 | Next sandbox milestone and live original fixtures | [Sandbox alignment](docs/audit/SANDBOX_ALIGNMENT.md) |
 | Source-first priorities and when a playtest is needed | [October6 source audit and work order](docs/audit/SOURCE_FIRST_REBUILD.md) |
-| Latest source-only reassessment and user recording plan | [Review at5ec481e3](docs/audit/SOURCE_FIRST_REVIEW.md): revival, walking attacks, progression/economy and existing-capture reuse |
+| Latest source-only reassessment and user recording plan | [Audit after3791d89e](docs/audit/SOURCE_FIRST_CHECKPOINT_REVIEW.md): wallets, inventory, pounce extraction, construction and a30-minute recording plan |
 | Revival Shot, death modal and contact grace | [Contract and limitations](docs/audit/SANDBOX_REVIVAL.md), [transient core](rebuild/src/pe_revival.h), [host regression](rebuild/tests/test_sandbox_revival_host.c); no ragdoll/physical acceptance claim |
 | Sword branch and movement policy | [Source/math evidence](docs/audit/SWORD_MOTION_POLICY.md), [selector](rebuild/src/pe_sword_variant.h), [shared request](rebuild/src/pe_sword_motion.h); ordinary roots now integrate through the qualified PESR1 group |
 | Offline ordinary attack root investigation | [Static native branches and existing-running comparison](docs/audit/PLAYER_ROOT_CHANNELS.md), [verifier](rebuild/tools/verify_player_root_channels.py); bounded extraction proof now complete |
