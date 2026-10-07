@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+The [sword policy increment](SWORD_MOTION_POLICY.md) centralizes source branch selection and horizontal movement requests, fixes a verified float-boundary classification and passes focused source/asset integration checks. Slow-walking attacks still await ordinary root-motion extraction; no game was launched.
+
 The subsequent [Revival Shot increment](SANDBOX_REVIVAL.md) implements item937's dedicated Adventure death flow, keeps the hunt cohort/progress and adds source recovery remount/contact grace. PECSv16 remains unchanged. Upright presentation is an explicit adapter; no new graphical/native hunt acceptance is claimed.
 
 Latest source-only planning update: [review at pushed checkpoint5ec481e3](SOURCE_FIRST_REVIEW.md). Recovery, stamina, capsule history and contact playback are implemented; the next proposed bounded gameplay work is revival and walking-attack admission, with quest/economy extraction in parallel. Shield presentation and ordinary native hunt/reload acceptance remain separate gates. This audit adds no gameplay or physical coverage.

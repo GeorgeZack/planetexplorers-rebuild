@@ -20,6 +20,8 @@ Subsequent implementation: [the bounded Revival Shot lifecycle](SANDBOX_REVIVAL.
 
 These are proposed increments, not features delivered by this documentation change. The order favors useful supported gameplay over expanding the list of visible but unusable content.
 
+Further implementation: [sword branch/movement policy](SWORD_MOTION_POLICY.md) now shares the source selector between display input and core admission and factors the horizontal request. The4,101-case offline magnitude oracle fixes one strict-boundary discrepancy. Ordinary moving admission remains gated on its own root-motion data.
+
 | Order | Deliverable | What can be done offline | Remaining acceptance or dependency |
 |---|---|---|---|
 | 1 | Dedicated Revival Shot937 transaction and death recovery state | Export the actual skill chain; implement inventory debit, vital changes, cancellation and repeat/reload guards with one owner | Source get-up readiness, ragdoll transition and death/revive action relations need a supported presentation contract. Town-return respawn is separate and requires a valid destination. |

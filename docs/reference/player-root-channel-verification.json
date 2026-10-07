@@ -1,0 +1,471 @@
+{
+  "schema": "pe-player-root-channel-verification-1",
+  "source_asset": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/sharedassets1.assets",
+  "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+  "capture": "/home/admin/.local/share/planet-explorers-strafe-reference/pose-captures/female-running-root-06.jsonl",
+  "capture_sha256": "b6ccd0199470a14b10182943d18db566409a03d27029a65bea657a06e63a43b4",
+  "verifier_sha256": "87aed14bf24c3fda2c8c9f661f1bd45e0fc66a34126c89aeebd1fc99e69aa841",
+  "dependency_sha256": {
+    "export_reference_player.py": "9c45c9b34067807b99a402d636ab0a9300d61deb09d16ea27e7c7563c6c0212b",
+    "analyze_reference_root_motion.py": "1892bedfe7d76c3031936fa70a6fa4813f6f5472072d79241ab076568defc80f"
+  },
+  "native": {
+    "elf_sha256": "1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6",
+    "ranges": [
+      {
+        "begin": "0xb99b53",
+        "end_exclusive": "0xb99be5",
+        "sha256": "130a6e5c494f0ae01c2d8304c2ba0caffc0eff5a095d221c014b185aa0e47fa0"
+      },
+      {
+        "begin": "0xc1ffd0",
+        "end_exclusive": "0xc200da",
+        "sha256": "b2988f0131ebc6c000b751773100c18e8d545ed12436c6e7ca98e30b42197c72"
+      },
+      {
+        "begin": "0xc251d3",
+        "end_exclusive": "0xc252cd",
+        "sha256": "914ec0663310ea7a8d397aaba18b1815009f98e983f919fb00c7f1955b2378f9"
+      },
+      {
+        "begin": "0xc54680",
+        "end_exclusive": "0xc546af",
+        "sha256": "64700f4cd696fa8a408a16c9c65e8209b9a1fe5e5b7871088ed20f3d0531764c"
+      },
+      {
+        "begin": "0xc51e60",
+        "end_exclusive": "0xc51e86",
+        "sha256": "c2fdc1051ab7b4dca079a8cac00cae4178429a0a7ea8b73cbf889decc9981944"
+      },
+      {
+        "begin": "0xbc96f0",
+        "end_exclusive": "0xbc9721",
+        "sha256": "a5e7aad8f9dc2babbd8e3bef9d2462d7439854b42a77f47afd4fc4b2a8bf58d1"
+      },
+      {
+        "begin": "0xbae650",
+        "end_exclusive": "0xbae68d",
+        "sha256": "780afeab829e620668be254082e630f418bf0f5cde5a4f66ea1d982f8cd7ec01"
+      },
+      {
+        "begin": "0xc04470",
+        "end_exclusive": "0xc044dd",
+        "sha256": "1fd94b3e687da1eafcb8871563bc91acdb5e9cb8145b488b7a2f51ef68125b40"
+      }
+    ],
+    "clip_flag_offsets": {
+      "m_LoopBlendOrientation": "0x77b",
+      "m_LoopBlendPositionY": "0x77c",
+      "m_LoopBlendPositionXZ": "0x77d",
+      "m_KeepOriginalOrientation": "0x77e",
+      "m_KeepOriginalPositionY": "0x77f",
+      "m_KeepOriginalPositionXZ": "0x780"
+    },
+    "y_selection_mask": [
+      4294967295,
+      0,
+      4294967295,
+      4294967295
+    ],
+    "root_translation_indices": [
+      {
+        "attribute": 7,
+        "index_offset": "0x514"
+      },
+      {
+        "attribute": 8,
+        "index_offset": "0x518"
+      },
+      {
+        "attribute": 9,
+        "index_offset": "0x51c"
+      }
+    ],
+    "evidence": "c1ffd0 samples RootT attributes7\u20139 through c2c470 and packs translation. Named serialized flags; humanoid branch copies baseline root quaternion and Y, preserves XZ. Animator humanScale resolves Human+0x1c0; c04492 loads this value and c044be multiplies a translation vector before c01b60 transform composition.",
+    "remaining_static_link": "Final root-delta composition call-chain and transform basis have not been independently replayed; numerical comparison below covers the actual408 identity-clone case."
+  },
+  "avatar_id": 777,
+  "human_scale": 0.9932681322097778,
+  "clips": [
+    {
+      "id": 231,
+      "name": "Attack6",
+      "duration": 1.0666667222976685,
+      "dense_frames": 34,
+      "rate": 30.0,
+      "begin": -1.4901161193847656e-08,
+      "flags": {
+        "m_LoopTime": false,
+        "m_LoopBlend": false,
+        "m_LoopBlendOrientation": true,
+        "m_LoopBlendPositionY": true,
+        "m_LoopBlendPositionXZ": false,
+        "m_KeepOriginalOrientation": true,
+        "m_KeepOriginalPositionY": true,
+        "m_KeepOriginalPositionXZ": false,
+        "m_HeightFromFeet": false,
+        "m_Mirror": false
+      },
+      "end_action": 0.7091259360313416,
+      "candidate_at_action_end": [
+        0.08295589042266092,
+        0,
+        1.375706511844644
+      ],
+      "candidate_at_clip_end": [
+        7.903030877938419e-06,
+        0,
+        1.2578971618609183
+      ],
+      "raw_root_ranges": {
+        "7": [
+          -0.0015276044141501188,
+          0.19336335361003876
+        ],
+        "8": [
+          0.5886315107345581,
+          1.1033005714416504
+        ],
+        "9": [
+          -0.002078332006931305,
+          1.3930577039718628
+        ],
+        "10": [
+          -0.05710073560476303,
+          0.39561814069747925
+        ],
+        "11": [
+          -0.7810348868370056,
+          0.3343982696533203
+        ],
+        "12": [
+          -0.12730956077575684,
+          0.12562330067157745
+        ],
+        "13": [
+          0.497990220785141,
+          0.9929801225662231
+        ]
+      }
+    },
+    {
+      "id": 240,
+      "name": "Attack7",
+      "duration": 1.100000262260437,
+      "dense_frames": 35,
+      "rate": 30.0,
+      "begin": 0.0,
+      "flags": {
+        "m_LoopTime": false,
+        "m_LoopBlend": false,
+        "m_LoopBlendOrientation": true,
+        "m_LoopBlendPositionY": true,
+        "m_LoopBlendPositionXZ": false,
+        "m_KeepOriginalOrientation": true,
+        "m_KeepOriginalPositionY": true,
+        "m_KeepOriginalPositionXZ": false,
+        "m_HeightFromFeet": false,
+        "m_Mirror": false
+      },
+      "end_action": 0.8369432091712952,
+      "candidate_at_action_end": [
+        0.3941421071266965,
+        0,
+        1.2099786107404273
+      ],
+      "candidate_at_clip_end": [
+        0.2775832726136509,
+        0,
+        1.1986588812323995
+      ],
+      "raw_root_ranges": {
+        "7": [
+          0.05242903158068657,
+          0.4836592674255371
+        ],
+        "8": [
+          0.5956944227218628,
+          1.0235730409622192
+        ],
+        "9": [
+          -0.005066315643489361,
+          1.2571525573730469
+        ],
+        "10": [
+          0.005554467439651489,
+          0.3664923906326294
+        ],
+        "11": [
+          -0.7737299203872681,
+          0.8451899290084839
+        ],
+        "12": [
+          -0.3439318537712097,
+          0.11864659190177917
+        ],
+        "13": [
+          0.3619053065776825,
+          0.9480401873588562
+        ]
+      }
+    },
+    {
+      "id": 247,
+      "name": "Attack8",
+      "duration": 1.2666668891906738,
+      "dense_frames": 40,
+      "rate": 30.0,
+      "begin": 0.0,
+      "flags": {
+        "m_LoopTime": false,
+        "m_LoopBlend": false,
+        "m_LoopBlendOrientation": true,
+        "m_LoopBlendPositionY": true,
+        "m_LoopBlendPositionXZ": false,
+        "m_KeepOriginalOrientation": true,
+        "m_KeepOriginalPositionY": true,
+        "m_KeepOriginalPositionXZ": false,
+        "m_HeightFromFeet": false,
+        "m_Mirror": false
+      },
+      "end_action": 0.8732097148895264,
+      "candidate_at_action_end": [
+        -0.32515847891865757,
+        0,
+        1.2438794944535394
+      ],
+      "candidate_at_clip_end": [
+        -0.45074951207779335,
+        0,
+        1.0957156540235617
+      ],
+      "raw_root_ranges": {
+        "7": [
+          -0.0015140247996896505,
+          0.4772816300392151
+        ],
+        "8": [
+          0.5408588647842407,
+          1.032671570777893
+        ],
+        "9": [
+          -0.11509373784065247,
+          1.1652990579605103
+        ],
+        "10": [
+          0.005521476734429598,
+          0.3089119493961334
+        ],
+        "11": [
+          -0.7781981229782104,
+          0.8271548748016357
+        ],
+        "12": [
+          -0.33237966895103455,
+          0.3225133419036865
+        ],
+        "13": [
+          0.37917307019233704,
+          0.9990226030349731
+        ]
+      }
+    },
+    {
+      "id": 254,
+      "name": "Attack9",
+      "duration": 0.9666671752929688,
+      "dense_frames": 31,
+      "rate": 30.0,
+      "begin": 0.0,
+      "flags": {
+        "m_LoopTime": false,
+        "m_LoopBlend": false,
+        "m_LoopBlendOrientation": true,
+        "m_LoopBlendPositionY": true,
+        "m_LoopBlendPositionXZ": false,
+        "m_KeepOriginalOrientation": true,
+        "m_KeepOriginalPositionY": true,
+        "m_KeepOriginalPositionXZ": false,
+        "m_HeightFromFeet": false,
+        "m_Mirror": false
+      },
+      "end_action": 0.5349509716033936,
+      "candidate_at_action_end": [
+        -0.21671629453103838,
+        0,
+        1.3994481749219516
+      ],
+      "candidate_at_clip_end": [
+        -0.30699381154528166,
+        0,
+        1.3879503199161976
+      ],
+      "raw_root_ranges": {
+        "7": [
+          -0.0015363255515694618,
+          0.30753815174102783
+        ],
+        "8": [
+          0.5279573202133179,
+          0.9889823198318481
+        ],
+        "9": [
+          -0.11949077993631363,
+          1.2899322509765625
+        ],
+        "10": [
+          -0.13361087441444397,
+          0.215203195810318
+        ],
+        "11": [
+          -0.7541073560714722,
+          0.33439815044403076
+        ],
+        "12": [
+          -0.05887703225016594,
+          0.3222188353538513
+        ],
+        "13": [
+          0.5717902779579163,
+          0.9975354671478271
+        ]
+      }
+    },
+    {
+      "id": 408,
+      "name": "RunSwordAttack",
+      "duration": 1.8333396911621094,
+      "dense_frames": 57,
+      "rate": 30.0,
+      "begin": 0.0,
+      "flags": {
+        "m_LoopTime": false,
+        "m_LoopBlend": false,
+        "m_LoopBlendOrientation": true,
+        "m_LoopBlendPositionY": true,
+        "m_LoopBlendPositionXZ": false,
+        "m_KeepOriginalOrientation": true,
+        "m_KeepOriginalPositionY": true,
+        "m_KeepOriginalPositionXZ": false,
+        "m_HeightFromFeet": false,
+        "m_Mirror": false
+      },
+      "end_action": 1.1680725812911987,
+      "candidate_at_action_end": [
+        -0.09822579702071275,
+        0,
+        3.9405233172139758
+      ],
+      "candidate_at_clip_end": [
+        -0.07608623930739142,
+        0,
+        3.9847792747076904
+      ],
+      "raw_root_ranges": {
+        "7": [
+          -0.18516018986701965,
+          0.10065457969903946
+        ],
+        "8": [
+          0.7739978432655334,
+          1.0303269624710083
+        ],
+        "9": [
+          0.12807120382785797,
+          4.155364036560059
+        ],
+        "10": [
+          -0.26995936036109924,
+          0.04915168136358261
+        ],
+        "11": [
+          -0.7056725025177002,
+          0.9107100367546082
+        ],
+        "12": [
+          -0.20551449060440063,
+          0.18915040791034698
+        ],
+        "13": [
+          -0.9988481402397156,
+          -0.35969826579093933
+        ]
+      }
+    }
+  ],
+  "running_comparisons": [
+    {
+      "trial": 0,
+      "compared_samples": 822,
+      "maximum_error_m": 3.5466859396002247e-06,
+      "at_authored_seconds": 1.809708595275879,
+      "candidate_xyz": [
+        -0.07368140491790343,
+        0,
+        3.986556026514048
+      ],
+      "observed_xyz": [
+        -0.07368137,
+        0,
+        3.98655248
+      ],
+      "endpoint_interpolation_error_m": 6.532017372351714e-05,
+      "candidate_endpoint_xyz": [
+        -0.07608623930739142,
+        0,
+        3.9847792747076904
+      ],
+      "interpolated_observed_endpoint_xyz": [
+        -0.07603214613973183,
+        0.0,
+        3.984815889654199
+      ],
+      "endpoint_bracket_seconds": [
+        1.8324191570281982,
+        1.8346151113510132
+      ]
+    },
+    {
+      "trial": 1,
+      "compared_samples": 1773,
+      "maximum_error_m": 1.0562889831089183e-05,
+      "at_authored_seconds": 1.5661708116531372,
+      "candidate_xyz": [
+        -0.05036811839964124,
+        0,
+        3.996389942867542
+      ],
+      "observed_xyz": [
+        -0.0503680967,
+        0,
+        3.99637938
+      ],
+      "endpoint_interpolation_error_m": 1.9499101903837193e-05,
+      "candidate_endpoint_xyz": [
+        -0.07608623930739142,
+        0,
+        3.9847792747076904
+      ],
+      "interpolated_observed_endpoint_xyz": [
+        -0.07606752164957371,
+        0.0,
+        3.984784739527987
+      ],
+      "endpoint_bracket_seconds": [
+        1.8326250314712524,
+        1.833589792251587
+      ]
+    }
+  ],
+  "running_oracle_qualified": true,
+  "ordinary_clips_observed_sequentially": false,
+  "ordinary_runtime_motion_qualified": false,
+  "formula": "(linearly_sampled_RootT.xz(t)-RootT.xz(0))*Avatar.Human.m_Scale; Y=0",
+  "scope": "All four ordinary clips pass the exact bounded source-data predicate. Transfer of408 numerical agreement to them remains explicitly inferred until the complete extraction path is proven; this report creates no runtime asset.",
+  "limitations": [
+    "No layer/state-transition/root blend or source motor/collision evaluation.",
+    "Double-precision dense interpolation is diagnostic, not bit-identical Unity arithmetic.",
+    "Raw RootQ is a humanoid body input. Same sampled root quaternion is selected by bake-orientation branch; do not apply body yaw a second time.",
+    "No motion is inferred from root-removed meshes or paused-seek deltaPosition."
+  ]
+}

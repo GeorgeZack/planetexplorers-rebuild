@@ -8,6 +8,7 @@
 #include "pe_sandbox_actor.h"
 #include "pe_sandbox_actions.h"
 #include "pe_sandbox_melee.h"
+#include "pe_sword_variant.h"
 #include "pe_running_attack_motion.h"
 #include "pe_hunt_combat.h"
 #include "pe_actor_view.h"
@@ -824,8 +825,10 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             /* Reject an unsupported press on this display frame, even if no
              * fixed tick runs. Otherwise a moving click could survive until
              * the next stationary tick and unexpectedly begin an attack. */
-            double attack_speed=sqrt((double)game->velocity.x*game->velocity.x+(double)game->velocity.y*game->velocity.y+(double)game->velocity.z*game->velocity.z);
-            bool running_press=!melee.action.active&&melee.setup.running_motion_ready&&attack_speed>4.5&&attack_speed<=7;
+            PeSwordVariant attack_branch=PE_SWORD_VARIANT_ORDINARY;
+            bool branch_valid=pe_sword_variant_select((PeSwordVariantInput){.velocity=game->velocity,
+                .movement_present=true,.in_air=!game->grounded,.motor_present=true},&attack_branch);
+            bool running_press=!melee.action.active&&melee.setup.running_motion_ready&&branch_valid&&attack_branch==PE_SWORD_VARIANT_RUNNING;
             bool running_active=melee.action.active&&melee.action.variant==PE_COMBAT_RUNNING;
             if((attack_pending||melee.action.active)&&(!game->grounded||jump_pending||
                (!running_active&&!running_press&&(fabsf(input.move_x)+fabsf(input.move_z)>.001f||hypotf(game->velocity.x,game->velocity.z)>.05f)))){

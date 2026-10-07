@@ -1,0 +1,68 @@
+{
+  "schema": 1,
+  "source_files": [
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Sword.cs",
+      "sha256": "dc4854aa4b5b45adb2b64597ec81c03b6b5591627b79b5c2f9c3961405cc38eb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs",
+      "sha256": "457e76b2e674a076705d784a0b25ae2a56d84434f1227dcee1822054a6acfc9c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Equip.cs.meta",
+      "sha256": "0d7f8c3ff2674f40ece69d8d02ee49df70dcaa0ef9d2c272b87eb2030000b224"
+    },
+    {
+      "path": "Assets/Scripts/Attack/PEAttackTrigger.cs",
+      "sha256": "238d3a50ab81caa3afc338234111670637556bbd4083ef3073774e0f25b8b4f8"
+    },
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    }
+  ],
+  "source_method_guards": {
+    "bool\\s+UpdateSkillState\\s*\\(": "97f3cd0ce820e913238f98a22fddff1adb11d042295c3132ab9c33d00a864c4b",
+    "void\\s+ApplySkill\\s*\\(": "f785245f446a7c134821c4f6a056eeedde9d1dcee87670b55e63ef1fbb15ea9f"
+  },
+  "binding": {
+    "component_path_id": 11400022,
+    "game_object_path_id": 100000,
+    "script_guid": "1b103bb6c9638b34b91defa0608b39e1",
+    "action_field": "m_SwordAttack"
+  },
+  "rule": {
+    "move_speed": 4.5,
+    "sprint_speed": 7.0,
+    "velocity_change_limit": 12.0
+  },
+  "semantics": {
+    "precedence": [
+      "air mask",
+      "motor present and spine in water",
+      "sprint",
+      "running",
+      "ordinary"
+    ],
+    "moving": "Movement component exists AND velocity.magnitude > move_speed",
+    "sprint": "Movement component exists AND velocity.magnitude > sprint_speed",
+    "magnitude": "Full XYZ vector, no projection onto ground/body plane; finite native input policy. Unity Mathf.Sqrt receives a single-precision squared magnitude and returns a float.",
+    "numeric_adapter": "C uses wider sum-of-products then rounds to float at Mathf.Sqrt argument; double sqrt then float result, matching the already-inspected installed Mono scalar expression behavior. Not every Unity runtime/compiler is qualified.",
+    "ordinary": "All remaining ground/nonwater velocities, including walking and exactly4.5; not a request-for-no-input condition.",
+    "absent_movement": "Ordinary ground branch; air and water still take precedence.",
+    "capability": "Branch identification alone does not enable air/water/sprint presentation or first-person; no action/stamina admission or motion integration.",
+    "motor": "Horizontal request minus current horizontal velocity: if magnitude >=12, normalized difference *12 + current. Cap per update, not acceleration*dt."
+  },
+  "numerical_evidence": {
+    "tool": "rebuild/tools/qualify_sword_variant.py",
+    "report": "docs/reference/sword-variant-numerics.json",
+    "compared_vectors": 4101,
+    "qualification": "Separate offline installed-Mono replay; exporter does not run arithmetic proof."
+  },
+  "installed": "Normal generation checks source prefab. Optional --game verifies the actual installed serialized Motion_Equip payload without running the game; report remains local."
+}

@@ -89,6 +89,12 @@ static void running_tests(const char *path){
     g.velocity.x=nextafterf(4.5f,0);CHECK(!pe_sandbox_melee_begin(&h,g,&stamina));
     g.velocity.x=nextafterf(7,INFINITY);CHECK(!pe_sandbox_melee_begin(&h,g,&stamina));
     CHECK(stamina==100&&!memcmp(&h,&before,sizeof h));
+    /* Actual installed Vector3.magnitude rounds this diagonal to4.5; the old
+     * double-only predicate called it running. Ordinary moving presentation
+     * is still unavailable, so this press must not debit or start408. */
+    g.velocity=(PeVec3){-2.2190206050872803f,-2.0396177768707275f,3.341542959213257f};
+    CHECK(!pe_sandbox_melee_begin(&h,g,&stamina)&&stamina==100&&!memcmp(&h,&before,sizeof h));
+    g.velocity=(PeVec3){0};
     const float speeds[]={nextafterf(4.5f,INFINITY),7};
     for(unsigned k=0;k<2;k++){
         g.velocity.x=speeds[k];CHECK(pe_sandbox_melee_begin(&h,g,&stamina));

@@ -1,0 +1,124 @@
+{
+  "schema": 1,
+  "cases": 4101,
+  "exact_matches": 4101,
+  "mismatch_count": 0,
+  "first_mismatches": [],
+  "golden": [
+    {
+      "input": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "speed_bits": "00000000",
+      "branch": 0
+    },
+    {
+      "input": [
+        2.700000047683716,
+        3.5999999046325684,
+        0.0
+      ],
+      "speed_bits": "40900000",
+      "branch": 0
+    },
+    {
+      "input": [
+        4.199999809265137,
+        5.599999904632568,
+        0.0
+      ],
+      "speed_bits": "40dfffff",
+      "branch": 1
+    },
+    {
+      "input": [
+        1.5,
+        3.0,
+        3.0
+      ],
+      "speed_bits": "40900000",
+      "branch": 0
+    },
+    {
+      "input": [
+        -2.2190206050872803,
+        -2.0396177768707275,
+        3.341542959213257
+      ],
+      "speed_bits": "40900000",
+      "branch": 0
+    }
+  ],
+  "runtime": "SHA-pinned installed libmono embedding, UnityEngine.Vector3.magnitude/Mathf.Sqrt only; no game or engine initialization",
+  "comparison": "Actual C pe_sword_variant_speed float bits AND pe_sword_variant_select enum; movement_present=true,motor_present=true,in_air=false,spine_in_water=false.",
+  "corpus": "Seed0x5147,2048 vectors within relative3e-7 of each threshold4.5/7 plus5 explicit cases; exact binary float input encoding",
+  "installed": [
+    {
+      "file": "Managed/UnityEngine.dll",
+      "sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b"
+    },
+    {
+      "file": "Mono/x86_64/libmono.so",
+      "sha256": "e11e7d56ffa83acdfdd2325743e29a08952308021b50a7deb05662c1c811a1b7"
+    },
+    {
+      "file": "Managed/mscorlib.dll",
+      "sha256": "cd25a2f5c5bda4baa40cf07e34856e1f022fdd22c9ce7829c351686ebe7d6df7"
+    },
+    {
+      "file": "Managed/Mono.CSharp.dll",
+      "sha256": "65168869b7f6ceec85ccf072257866fbd3f19de235ba036d0a5a73ffdb0fb46e"
+    }
+  ],
+  "sources": [
+    {
+      "file": "rebuild/tools/qualify_sword_variant.py",
+      "sha256": "b9562e796f9681d7f9e7577365814c1bcaa316127e8c564a5a53c33884d9d205"
+    },
+    {
+      "file": "rebuild/tools/reference_pose_compile.c",
+      "sha256": "4690d3b2eb762b18a9150106926422fab3c4510575555fe885db0e40ad6b8013"
+    },
+    {
+      "file": "rebuild/src/pe_sword_variant.c",
+      "sha256": "1f82276c4c1e921dcf003f7e47e115659a32993502a9c83f0ee6b29c43c86711"
+    },
+    {
+      "file": "rebuild/src/pe_sword_variant.h",
+      "sha256": "f26cf03ff22e59767b3d201eef1d9bf1a75dfa250a3340d26f9ac1a692fbbd60"
+    },
+    {
+      "file": "rebuild/generated/pe_sword_variant_source.h",
+      "sha256": "8f253e26df4e8982bd056fc529111196fc35c8bc9fc5a97273d2882ff5b442e7"
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "Oracle.cs",
+      "sha256": "87bdb8d5de6f5c9b948cc77840c97d19bcd8c977586d0f1157380b08258e4893"
+    },
+    {
+      "file": "run.c",
+      "sha256": "9ee2acb5cdb03c4d52f17a64433e162aac56d27129e861f258c2b5ad56236298"
+    },
+    {
+      "file": "cases.txt",
+      "sha256": "1174af87d5021ef49b274e5a0e2fef7986d43fd9b0c0faad545537ce6c16b183"
+    },
+    {
+      "file": "oracle.txt",
+      "sha256": "c8bff0f4b4528cbd7ed39d36844a50cdae6a254e173f8be81cb143a4168d9793"
+    },
+    {
+      "file": "libvariant.so",
+      "sha256": "8d48d783bed579a4bdf6a2edb5591e8717ede95a09cff9635113aff8236ec71d"
+    }
+  ],
+  "reproduction": {
+    "tool": "rebuild/tools/qualify_sword_variant.py",
+    "arguments": "--game STEAM_GAME_DIR --build rebuild/build/FRESH_NAME --report docs/reference/FRESH_NAME.json"
+  },
+  "limitations": "Bounded arithmetic/branch corpus, not universal bit-exactness, live Action_Sword execution, root motion or pose qualification."
+}

@@ -1,4 +1,5 @@
 #include "pe_sandbox_melee.h"
+#include "pe_sword_variant.h"
 #include <math.h>
 #include <string.h>
 static const char *attack_names[]={"Attack6","Attack7","Attack8","Attack9"};
@@ -18,9 +19,11 @@ static bool action_allowed(const PeSandboxMelee *h,PeSandboxMeleeGate g){
 }
 static bool begin_variant(const PeSandboxMelee *h,PeSandboxMeleeGate g,PeCombatVariant *variant){
     if(!gate_common(h,g))return false;
-    double speed=sqrt((double)g.velocity.x*g.velocity.x+(double)g.velocity.y*g.velocity.y+(double)g.velocity.z*g.velocity.z);
-    if(speed>7)return false;
-    if(speed>4.5){if(!h->setup.running_motion_ready)return false;*variant=PE_COMBAT_RUNNING;return true;}
+    PeSwordVariant selected;
+    if(!pe_sword_variant_select((PeSwordVariantInput){.velocity=g.velocity,.movement_present=true,
+        .in_air=!g.grounded,.motor_present=true,.spine_in_water=g.in_water},&selected))return false;
+    if(selected==PE_SWORD_VARIANT_RUNNING){if(!h->setup.running_motion_ready)return false;*variant=PE_COMBAT_RUNNING;return true;}
+    if(selected!=PE_SWORD_VARIANT_ORDINARY)return false;
     if(!stationary_allowed(g))return false;
     *variant=PE_COMBAT_STATIONARY;return true;
 }
