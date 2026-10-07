@@ -376,3 +376,8 @@ The next source-only target is sword/shield action integration and contact playb
 ## October6 — source-only selling and buyback
 
 The [trade increment](TOWN_SELL_BUYBACK.md) adds Buy/Sell/Buyback shop tabs, source condition prices, exact equipment transfer and vendor-funded sales. The per-vendor repurchase pool is transient; PECSv17 remains unchanged. Unsupported LifeLimit prices fail closed. No desktop input or new graphics session accompanies this work. Four ordinary kills and partial-hunt reload remain pending user testing; this independent economy work does not satisfy that gate.
+
+
+## October6 — source-only construction history
+
+[Construction undo/redo](CONSTRUCTION_HISTORY.md) now journals five supported cube/ramp batches. B mode exposes source Ctrl+Z/Ctrl+X plus labeled native toolbar buttons; replay applies source material rounding, atomic failure and immediate collision refresh before frame queries. History remains transient, with PECSv17 unchanged. Terrain, legacy full-sized objects, creations and tutorial construction are outside this journal. This independent implementation needs no new original run; graphical acceptance and ordinary hunt progress remain separate pending checks.

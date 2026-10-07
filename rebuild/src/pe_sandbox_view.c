@@ -18,6 +18,7 @@
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
 #include "pe_town_wallet.h"
+#include "pe_build_history.h"
 #include "../generated/pe_adventure_population.h"
 #include "pe_reference.h"
 #include "pe_terrain_material_view.h"
@@ -344,6 +345,18 @@ static bool sandbox_wallet_frame(PeGame *game,bool focused,bool paused){
     if(!game)return false;
     return !focused||paused||pe_town_wallet_step(game);
 }
+/* One admitted display-frame command, before any camera/pick queries. The
+ * renderer reads cells directly; collision needs an immediate refresh even
+ * when this display frame has no fixed simulation step. */
+static bool sandbox_build_history_apply(PeGame *game,const PeSandboxUI *ui,
+    PeSandboxUIResult action,bool enabled,PeSandboxCollision *collision,char *error,size_t capacity){
+    if(!game||!ui||!collision)return false;
+    if(!enabled||!ui->building||action.paused||ui->paused||ui->town_open||ui->revival_open||
+       ui->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||ui->inventory_open||ui->character_open||
+       ui->missions_open||ui->replicator_open||ui->menu_open||ui->dragging||game->hp<=0)return true;
+    bool changed=action.undo_build?pe_build_history_undo(game):action.redo_build?pe_build_history_redo(game):false;
+    return !changed||pe_game_collision_update(game,collision,error,capacity);
+}
 static bool sandbox_revive_request(PeGame *game,const PeAttributeClock *clock){
     if(!game||!clock)return false;
     /* The native actor currently has no ragdoll, ride or Fall action owner.
@@ -624,6 +637,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(profile.enabled){profile.focused_frames+=focused;profile.paused_frames+=action.paused;}
         unsigned pointer_buttons=0;for(int button=0;button<7;button++)if(IsMouseButtonDown(button))pointer_buttons|=1u<<button;
         if(action.paused||!focused||resized)action.consume_world=true;
+        bool pointer_was_owned=pointer_gate.waiting_for_release;
         bool pointer_blocked=pe_sandbox_pointer_route(&pointer_gate,&action,pointer_buttons);
         if(host_cancelled_modal){action.consume_world=true;action.npc_interaction=false;}
         if(action.return_main){result=2;break;}
@@ -651,6 +665,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 (game->mode==PE_GAME_ADVENTURE&&pe_sandbox_collision_overlap(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)))){result=1;break;}
         }
         if(loaded){mesh_revision=game->world.revision-1;load_town_name(&ui,game,assets);pe_sandbox_ui_set_resident_markers(&ui,NULL,0);PollInputEvents();continue;}
+        if(!sandbox_build_history_apply(game,&ui,action,focused&&!resized&&!host_cancelled_modal&&!pointer_was_owned,
+           collision,error,sizeof error)){result=1;break;}
         if(game->mode==PE_GAME_ADVENTURE&&!supplier_view.actor.loaded) {
             if(!pe_adventure_npc_view_load(&supplier_view,assets,error,sizeof error)){result=1;break;}
             ui.supplier_portrait=supplier_view.portrait.texture;

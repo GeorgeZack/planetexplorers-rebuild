@@ -3,6 +3,7 @@
 #include "../generated/pe_revival_source.h"
 #include "pe_shield.h"
 #include "pe_town_wallet.h"
+#include "pe_build_history.h"
 #include "pe_adventure_medicine.h"
 #include "pe_adventure_hunt.h"
 #include <math.h>
@@ -126,12 +127,16 @@ PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *u,PeGame *g,float dt) {
     while((code=GetCharPressed())!=0)if(code>=32&&code<127&&n+1<sizeof typed)typed[n++]=(char)code;
     typed[n]=0;
     bool keys=!u->search_focus;
+    bool control=IsKeyDown(KEY_LEFT_CONTROL)||IsKeyDown(KEY_RIGHT_CONTROL);
+    bool history_keys=IsKeyDown(KEY_Z)||IsKeyDown(KEY_X);
     PeSandboxUIInput i={.frame_dt=dt,.mouse_x=mouse.x,.mouse_y=mouse.y,.wheel=GetMouseWheelMove(),.focused=IsWindowFocused(),
         .left_pressed=IsMouseButtonPressed(MOUSE_BUTTON_LEFT),.left_released=IsMouseButtonReleased(MOUSE_BUTTON_LEFT),
         .right_pressed=IsMouseButtonPressed(MOUSE_BUTTON_RIGHT),.inventory=keys&&IsKeyPressed(KEY_I),
         .character=keys&&IsKeyPressed(KEY_C),.missions=keys&&IsKeyPressed(KEY_Q),.replicator=keys&&IsKeyPressed(KEY_Y),
         .escape=IsKeyPressed(KEY_ESCAPE),.tab=keys&&IsKeyPressed(KEY_TAB),.save=keys&&IsKeyPressed(KEY_F9),
         .load=keys&&IsKeyPressed(KEY_F10),.backspace=IsKeyPressed(KEY_BACKSPACE),
+        .undo_build=keys&&control&&IsKeyPressed(KEY_Z),.redo_build=keys&&control&&IsKeyPressed(KEY_X),
+        .build_history_chord=control&&history_keys,.build_history_keys_down=history_keys,
         .advance=IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_SPACE),.quickslot=-1,.typed=typed};
     if(keys)for(int k=0;k<9;k++)if(IsKeyPressed(KEY_ONE+k)||IsKeyPressed(KEY_KP_1+k)){i.quickslot=k;i.response=(unsigned)k+1;break;}
     return pe_sandbox_ui_route(u,g,i);
@@ -572,7 +577,7 @@ static void build_hud(const PeSandboxUI *u,const PeGame *g) {
     PeTrainingUIRect title=map(u,20,136,420,32,PE_UI_TOP_LEFT);
     text(u,"BUILD MODE",title.x,title.y,26,ink,false);
     PeTrainingUIRect help=map(u,25,174,320,240,PE_UI_TOP_LEFT);
-    wrapped(u,"B: Enter / Exit\nT: Rotate    V: Cube / Ramp\nG: One / Four cells\n\nLeft mouse: Place\nAlt + Left mouse: Remove\nRight mouse + move: Look\n\n1-7: Shapes / Materials\nSelect a tool on the toolbar",help,18,blue);
+    wrapped(u,"B: Enter / Exit\nT: Rotate    V: Cube / Ramp\nG: One / Four cells\nCtrl+Z: Undo   Ctrl+X: Redo\n\nLeft mouse: Place\nAlt + Left mouse: Remove\nRight mouse + move: Look\n\n1-7: Shapes / Materials\nSelect a tool on the toolbar",help,18,blue);
     static const int items[]={0,PE_ITEM_DIRT,PE_ITEM_STONE,PE_ITEM_WOOD,0,PE_ITEM_FENCE,PE_ITEM_LADDER,0,0};
     for(int k=0;k<9;k++) {
         PeTrainingUIRect r=pe_sandbox_ui_build_slot(u,k);
@@ -587,6 +592,7 @@ static void build_hud(const PeSandboxUI *u,const PeGame *g) {
         if(k==0)item(u,u->build_item,pe_inventory_count(&g->inventory,u->build_item),r,true,WHITE);
         else if(k==1){sprite(u,"itembox",r,WHITE);build_shape_icon(u,r,u->build_shape);}
         else if(k==7)center(u,"Exit [B]",r,16,ink,false);
+        else if(k==5||k==6)button(u,r,k==5?"Undo":"Redo",k==5?pe_build_history_can_undo(g):pe_build_history_can_redo(g));
         else {
             static const char *icons[]={"","","build_point","build_area","build_gjxie","build_save","build_delete"};
             sprite(u,icons[k],rel(u,r,11.5f,8.5f,25,29),k>=5?dim:WHITE);
@@ -595,10 +601,10 @@ static void build_hud(const PeSandboxUI *u,const PeGame *g) {
     }
     PeTrainingUIRect detail=map(u,333,567,614,27,PE_UI_BOTTOM_CENTER);
     const PeItemDef *material=pe_item_def(u->build_item);
-    center(u,TextFormat("%s   %s   %d cells   %d deg",material?material->name:"",u->build_shape==PE_B45_CUBE?"Cube":"Ramp",u->build_brush,u->build_rotation*90),detail,16,ink,false);
     if(pe_training_ui_contains(pe_sandbox_ui_build_tool(u,5),u->mouse_x,u->mouse_y)||
        pe_training_ui_contains(pe_sandbox_ui_build_tool(u,6),u->mouse_x,u->mouse_y))
-        center(u,"Creation saving / selection deletion unavailable",detail,14,dim,false);
+        center(u,"Undo Ctrl+Z / Redo Ctrl+X - last five cube/ramp edits",detail,14,dim,false);
+    else center(u,TextFormat("%s   %s   %d cells   %d deg",material?material->name:"",u->build_shape==PE_B45_CUBE?"Cube":"Ramp",u->build_brush,u->build_rotation*90),detail,16,ink,false);
     (void)z;
 }
 void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {

@@ -1,4 +1,5 @@
 #include "pe_game.h"
+#include "pe_build_history.h"
 #include "pe_town_wallet.h"
 #include "pe_shield.h"
 #include "pe_sword.h"
@@ -196,7 +197,7 @@ bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
     if(!g||!world||world->source>1||!pe_world_depth(world)||!finite3(preferred))return false;
     if(world->source==0)for(size_t i=0;i<pe_world_voxel_count(world);i++)if(pe_world_data_const(world)[i].material>PE_MAT_GRASS)return false;
     PeGame *next=calloc(1,sizeof *next);if(!next)return false;
-    *next=*g;memset(&next->world,0,sizeof next->world);
+    *next=*g;memset(&next->world,0,sizeof next->world);pe_build_history_clear(next);
     if(!pe_world_clone(&next->world,world)){free(next);return false;}next->block_count=0;next->tree_count=0;next->cell_count=0;
     next->deployed_count=0;memset(next->deployed,0,sizeof next->deployed);
     memset(next->blocks,0,sizeof next->blocks);memset(next->trees,0,sizeof next->trees);memset(next->cells,0,sizeof next->cells);
@@ -608,7 +609,8 @@ static bool cell_terrain_clear(const PeGame *g,const PeB45Cell *c){
 }
 static bool prepare_build_cells(const PeGame *g,const PeB45Cell *cells,int count,
                                 PeInventory *inventory,const char **message){
-    if(!g||!(g->hp>0)||!cells||count<1||count>PE_MAX_BUILD_BATCH||g->cell_count>PE_MAX_B45_CELLS-count)return false;
+    if(!g||!isfinite(g->hp)||!(g->hp>0)||!finite3(g->player)||!cells||count<1||count>PE_MAX_BUILD_BATCH||
+       g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS-count||g->block_count<0||g->block_count>PE_MAX_BLOCKS)return false;
     unsigned material_counts[16]={0};
     PeVec3 lo={g->player.x-PE_PLAYER_RADIUS,g->player.y,g->player.z-PE_PLAYER_RADIUS};
     PeVec3 hi={g->player.x+PE_PLAYER_RADIUS,g->player.y+PE_PLAYER_HEIGHT,g->player.z+PE_PLAYER_RADIUS};
@@ -640,7 +642,7 @@ bool pe_game_can_build_cells(const PeGame *g,const PeB45Cell *cells,int count){
     PeInventory inventory;const char *message=NULL;
     return prepare_build_cells(g,cells,count,&inventory,&message);
 }
-bool pe_game_build_cells(PeGame *g,const PeB45Cell *cells,int count){
+static bool build_cells(PeGame *g,const PeB45Cell *cells,int count,bool record){
     PeInventory next;const char *message=NULL;
     if(!prepare_build_cells(g,cells,count,&next,&message)){
         if(message)say(g,message);
@@ -648,16 +650,19 @@ bool pe_game_build_cells(PeGame *g,const PeB45Cell *cells,int count){
     }
     /* Copy input first to permit a caller-owned array that aliases game storage. */
     PeB45Cell copy[PE_MAX_BUILD_BATCH];memcpy(copy,cells,(size_t)count*sizeof *copy);
+    if(record&&!pe_build_history_record(g,copy,count,true)){say(g,"Construction history is invalid.");return false;}
     g->inventory=next;
     memcpy(&g->cells[g->cell_count],copy,(size_t)count*sizeof *copy);g->cell_count+=count;
-    bump(&g->built);say(g,"Construction placed (one resource per four cells, rounded up).");return true;
+    if(record)bump(&g->built);
+    say(g,"Construction placed (one resource per four cells, rounded up).");return true;
 }
-bool pe_game_remove_cells(PeGame *g,const int *indices,int count){
-    if(!g||!(g->hp>0))return false;
+bool pe_game_build_cells(PeGame *g,const PeB45Cell *cells,int count){return build_cells(g,cells,count,true);}
+static bool remove_cells(PeGame *g,const int *indices,int count,bool record){
+    if(!g||!isfinite(g->hp)||!(g->hp>0)||!finite3(g->player)||g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS)return false;
     if(!indices||count<1||count>PE_MAX_BUILD_BATCH)return false;
     bool remove[PE_MAX_B45_CELLS]={false};unsigned material_counts[16]={0};
     for(int i=0;i<count;i++){
-        int index=indices[i];if(index<0||index>=g->cell_count||remove[index]||!cell_reachable(g,&g->cells[index]))return false;
+        int index=indices[i];if(index<0||index>=g->cell_count||remove[index]||!cell_bounds(g,&g->cells[index])||!cell_reachable(g,&g->cells[index]))return false;
         remove[index]=true;++material_counts[g->cells[index].material];
     }
     PeInventory next=g->inventory;
@@ -665,10 +670,30 @@ bool pe_game_remove_cells(PeGame *g,const int *indices,int count){
         int refund=(int)pe_b45_remove_refund(material_counts[material]);
         if(refund&&!pe_inventory_add(&next,pe_b45_material_item(material),refund)){say(g,"Make room for construction refunds.");return false;}
     }
+    PeB45Cell removed[PE_MAX_BUILD_BATCH];
+    for(int i=0;i<count;i++)removed[i]=g->cells[indices[i]];
+    if(record&&!pe_build_history_record(g,removed,count,false)){say(g,"Construction history is invalid.");return false;}
     int written=0;
     for(int i=0;i<g->cell_count;i++)if(!remove[i])g->cells[written++]=g->cells[i];
     memset(&g->cells[written],0,(size_t)(g->cell_count-written)*sizeof g->cells[0]);
     g->cell_count=written;g->inventory=next;say(g,"Construction removed (refunds round down per material).");return true;
+}
+bool pe_game_remove_cells(PeGame *g,const int *indices,int count){return remove_cells(g,indices,count,true);}
+bool pe_game_replay_build_cells(PeGame *g,const PeB45Cell *cells,int count,bool addition){
+    if(!g||!cells||count<1||count>PE_MAX_BUILD_BATCH||g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS)return false;
+    if(addition)return build_cells(g,cells,count,false);
+    int indices[PE_MAX_BUILD_BATCH];
+    for(int i=0;i<count;i++){
+        indices[i]=-1;
+        for(int j=0;j<g->cell_count;j++)if(same_cell(&cells[i],&g->cells[j])){
+            if(indices[i]>=0||g->cells[j].type!=cells[i].type||g->cells[j].material!=cells[i].material){
+                say(g,"Construction changed since this action.");return false;
+            }
+            indices[i]=j;
+        }
+        if(indices[i]<0){say(g,"Construction changed since this action.");return false;}
+    }
+    return remove_cells(g,indices,count,false);
 }
 static int nearest_cell(const PeGame *g,PeVec3 o,PeVec3 d,PeB45Hit *hit){
     int found=-1;*hit=(PeB45Hit){.distance=3.001f};
@@ -687,8 +712,8 @@ static PeB45Cell brush_offset(PeB45Cell c,int axis,int index){
     if(axis==1){c.x+=a;c.z+=b;}else if(axis==0){c.y+=a;c.z+=b;}else{c.x+=a;c.y+=b;}
     return c;
 }
-bool pe_game_remove_shape(PeGame *g,PeVec3 o,PeVec3 d,int brush){
-    if(!g||!(g->hp>0))return false;
+static bool remove_shape(PeGame *g,PeVec3 o,PeVec3 d,int brush,bool record){
+    if(!g||!isfinite(g->hp)||!(g->hp>0)||g->cell_count<0||g->cell_count>PE_MAX_B45_CELLS||g->block_count<0||g->block_count>PE_MAX_BLOCKS)return false;
     if((brush!=1&&brush!=4)||!valid_ray(g,o,&d))return false;
     PeB45Hit hit;int index=nearest_cell(g,o,d,&hit);
     float old_distance;PeVec3 old_normal;int old=nearest_block(g,o,d,&old_distance,&old_normal);
@@ -702,8 +727,9 @@ bool pe_game_remove_shape(PeGame *g,PeVec3 o,PeVec3 d,int brush){
         PeB45Cell candidate=brush_offset(anchor,axis,i);
         for(int j=0;j<g->cell_count;j++)if(same_cell(&candidate,&g->cells[j])){indices[count++]=j;break;}
     }
-    return count>0&&pe_game_remove_cells(g,indices,count);
+    return count>0&&remove_cells(g,indices,count,record);
 }
+bool pe_game_remove_shape(PeGame *g,PeVec3 o,PeVec3 d,int brush){return remove_shape(g,o,d,brush,true);}
 bool pe_game_remove_block(PeGame *g,PeVec3 o,PeVec3 d){return pe_game_remove_shape(g,o,d,1);}
 static bool preview_shape(const PeGame *g,PeVec3 o,PeVec3 d,int item,int shape,int rotation,int brush,
                           PeB45Cell out[4],size_t *count,const char **message){
@@ -817,8 +843,8 @@ bool pe_game_mine(PeGame *g,PeVec3 o,PeVec3 d) {
     float dist; PeVec3 n;
     int block=nearest_block(g,o,d,&dist,&n);
     PeHit h=pe_world_raycast(&g->world,o,d,3);PeB45Hit cell_hit;int cell=nearest_cell(g,o,d,&cell_hit);
-    if(cell>=0&&(!h.hit||cell_hit.distance<=h.distance+0.01f)&&(block<0||cell_hit.distance<=dist))return pe_game_remove_shape(g,o,d,1);
-    if(block>=0 && (!h.hit || dist<=h.distance+0.05f)) return pe_game_remove_block(g,o,d);
+    if(cell>=0&&(!h.hit||cell_hit.distance<=h.distance+0.01f)&&(block<0||cell_hit.distance<=dist))return remove_shape(g,o,d,1,false);
+    if(block>=0 && (!h.hit || dist<=h.distance+0.05f)) return remove_shape(g,o,d,1,false);
     PeHit dig=pe_world_dig_target(&g->world,o,d,g->player,3.0f);
     if(!dig.hit) { say(g,"No supported terrain sample within 3 m of your body.");return false; }
     PeToolStats stats;const PeSlot *equipped=pe_game_equipped_tool(g);

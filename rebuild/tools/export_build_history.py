@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""Guard the original construction history, resource inversion and input contract."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import re
+import sys
+
+from export_content import ROOT, describe_source
+from export_starter_outfit import body, uncomment
+
+BASE='Assets/Scripts/WuYiqiu/Building System/Scripts/'
+HISTORY=BASE+'Action/BSHistory.cs'
+ACTION=BASE+'Action/BSAction.cs'
+MODIFY=BASE+'Action/BSVoxelModify.cs'
+BUILD=BASE+'PEBuildingMan.cs'
+HOST=BASE+'BuildingMan.cs'
+INPUT=BASE+'Tools/BSInput.cs'
+DATA=BASE+'BSDataSource.cs'
+CONSTANTS='Assets/Terrain/Voxelform2/Voxelform/Source/Scripts/Voxel/Block45/Block45Constants.cs'
+UI='Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/Widget/UIBuildBlock.cs'
+GUARDS=(
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/Action/BSHistory.cs', 'public\\s+static\\s+class\\s+BSHistory', '9f2512f67bb31613b592745b0b7518fa766f25199f441283e92f9b569f4d3b43'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/Action/BSAction.cs', 'public\\s+class\\s+BSAction', '32cd1150b1d6c798985af55ca94c253f99cd97cade7ed69ca266051a1903ee9c'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/Action/BSVoxelModify.cs', 'public\\s+class\\s+BSVoxelModify', 'b2056bdec92cc8c6c0c25fb775b01f9df8109ea0b043baf680cdd4d9b13372ff'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/PEBuildingMan.cs', 'bool\\s+OnCheckVoxelModify\\s*\\(', 'b0553f5d6fa3dcb3e6520009a9420fe8c8312772b53e9fa40fe53098408f6405'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/PEBuildingMan.cs', 'void\\s+Awake\\s*\\(', '3a19bd20c0e5a47c436f10ece57baab251b9538f06f1b75d44bd1f6625c33b7b'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/BuildingMan.cs', 'public\\s+static\\s+void\\s+Clear\\s*\\(', '18ffa221e15eba0d3433582b07a0aed91beab2ba66450d5f6325ec066d633bc1'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/BuildingMan.cs', 'void\\s+Update\\s*\\(', 'c24ec1802a1b0990987ff93900289b7225898bd8238830263d44df136e67bc17'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/Tools/BSInput.cs', 'void\\s+Update\\s*\\(', 'cc808256a037301240f012d37c43c71c35bc780e6a9a445ac3d3446bcfd1495f'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/BSDataSource.cs', 'public\\s+class\\s+BSBlock45Data', '5b070d2017ee7e0dd8c68d91bd58fdd0d05eb63432740479b2c6f669a64cb528'),
+    ('Assets/Terrain/Voxelform2/Voxelform/Source/Scripts/Voxel/Block45/Block45Constants.cs', 'public\\s+class\\s+Block45Constants', '128a2504095fccac1288aa6e3aff0aba9f4f8063148e25bc103ee514b1a626ef'),
+    ('Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/Widget/UIBuildBlock.cs', 'public\\s+void\\s+QuitBlock\\s*\\(', 'dfb9fd15904d137758beb753caa4510f88a5890758611e7a1824aab204ed4c5f'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/Brush/BSPointBrush.cs', 'public\\s+class\\s+BSPointBrush', 'a4a59732ec00b6d12f462db8507e94e80fe0c804e65a851cfb55f4ce924e2151'),
+    ('Assets/Scripts/WuYiqiu/Building System/Scripts/Brush/BSBoxBrush.cs', 'public\\s+class\\s+BSBoxBrush', 'ff3fc6ea49fdbc1a025ae0fc2b3540a05402718d8968dff7d322dd8ce2cebf67'),
+)
+
+
+def validate_sources(root=ROOT):
+    paths=list(dict.fromkeys(p for p,_,_ in GUARDS))
+    texts={p:uncomment((root/p).read_text(encoding='utf-8-sig',errors='replace')) for p in paths}
+    for path,pattern,expected in GUARDS:
+        if hashlib.sha256(body(texts[path],pattern).encode()).hexdigest()!=expected:
+            raise ValueError('Construction history source changed: '+path+' '+pattern)
+    defines=re.findall(r'^\s*#define\s+(\w+)\s*$',texts[CONSTANTS],re.M)
+    if defines!=['USE_HALF_METER_VOXEL']:
+        raise ValueError('Construction block scale compile selection changed')
+    hist=re.sub(r'\s+','',texts[HISTORY]); const=re.sub(r'\s+','',texts[CONSTANTS])
+    if 'constints_MaxCount=5;' not in hist or '#ifUSE_HALF_METER_VOXELpublicconstfloat_scale=0.5f;publicconstint_scaleInverted=2;' not in const:
+        raise ValueError('Construction history capacity/scale changed')
+    if 'publicboolIsGod=false;' not in re.sub(r'\s+','',texts[BUILD]):
+        raise ValueError('Construction god-mode default changed')
+    return [root/p for p in paths]
+
+
+def build_outputs(root=ROOT):
+    paths=validate_sources(root)
+    contract=dict(history_capacity=5,block_scale=0.5,block_scale_inverted=2,block_resource_divisor=4,
+                  standalone_modifier='Control',editor_modifier='Shift',undo_key='Z',redo_key='X',
+                  undo_before_redo=True,unit_debit='ceil(material_count/4)',unit_refund='floor(material_count/4)',
+                  undo_add='subtract current new voxels and refund floor',undo_subtract='restore old voxels and debit ceil',
+                  source_failed_action_moves_history=True,source_resources_before_voxel_write=True,
+                  source_on_after_do_uses_original_mode=True,source_quit_build_clears_history=False,
+                  source_building_clear_clears_both_lists=True,source_archive_owner_qualified=False)
+    header='''/* Generated by export_build_history.py; regenerate, do not edit. */
+#ifndef PE_BUILD_HISTORY_SOURCE_H
+#define PE_BUILD_HISTORY_SOURCE_H
+#define PE_BUILD_HISTORY_SOURCE_CAPACITY 5
+#define PE_BUILD_HISTORY_SOURCE_BLOCK_DIVISOR 4
+#define PE_BUILD_HISTORY_SOURCE_UNDO_KEY 'Z'
+#define PE_BUILD_HISTORY_SOURCE_REDO_KEY 'X'
+#endif
+'''
+    manifest=dict(format_version=1,sources=[describe_source(p) for p in paths],contract=contract,
+                  limitations=['Source-derived, with no new original/native physical observation.',
+                               'Atomic retry, safe geometry validation and native batch/cell limits are explicit adapters.',
+                               'No unrestricted Build/god-mode bypass, source terrain-voxel history or selected-box restoration is enabled.'])
+    return {'pe_build_history_source.h':header.encode(),
+            'pe_build_history_source.json':(json.dumps(manifest,indent=2)+'\n').encode()}
+
+
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--check',action='store_true')
+    parser.add_argument('--output',type=Path,default=ROOT/'rebuild/generated')
+    args=parser.parse_args(argv)
+    try:
+        for name,data in build_outputs().items():
+            path=args.output/name
+            if args.check:
+                if not path.is_file() or path.read_bytes()!=data:
+                    raise ValueError('Stale construction history output '+name)
+            else:
+                path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(data)
+    except (OSError,ValueError) as error:
+        print(error,file=sys.stderr);return 1
+    print('Construction history checked' if args.check else 'Construction history generated')
+    return 0
+
+
+if __name__=='__main__':raise SystemExit(main())

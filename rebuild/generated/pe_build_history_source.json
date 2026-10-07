@@ -1,0 +1,75 @@
+{
+  "format_version": 1,
+  "sources": [
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/Action/BSHistory.cs",
+      "sha256": "80e6bacb1df131365c0fb2678a82245b4b9d149ed73feed9f47af2d25d063a18"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/Action/BSAction.cs",
+      "sha256": "04fc5bc32c1790faefffb341dde7e1ed2ccdd4b90f87e9f295c41794172d6ed7"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/Action/BSVoxelModify.cs",
+      "sha256": "9f462dbf9bb73e8671e419975c26e0125b296e93a6909b9587bf9cdf099e47d9"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/PEBuildingMan.cs",
+      "sha256": "0fb723cb5849feb2eaf653431c3902566b93fab1769bae82aef815ea5a11aa26"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/BuildingMan.cs",
+      "sha256": "2ec3b322e4413d42fbd8f26c414fafeda1056dbe56ce642fe78b71895f7780b8"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/Tools/BSInput.cs",
+      "sha256": "c10789bcbfe599d56cf9942ce22f7e819754a345af24041246b7b170c58f9d5d"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/BSDataSource.cs",
+      "sha256": "5f7519e28c85ff652f72a6d19b0398b017d76e8dc3fa685ca4656bd7537a6bb0"
+    },
+    {
+      "path": "Assets/Terrain/Voxelform2/Voxelform/Source/Scripts/Voxel/Block45/Block45Constants.cs",
+      "sha256": "4f2b9722f3a00d504c8f6cd49dbc57b5123199d666dd01773bdddfe3a3dcd653"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/Widget/UIBuildBlock.cs",
+      "sha256": "e1d733bc155d5848ebbf763041b4d10fe245e0d68b20e2e91afb079e3bbd5ac4"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/Brush/BSPointBrush.cs",
+      "sha256": "8e9dcf784f101e9839007c6e8a3be08804b4aeed6cc04054cdd3b1f33abe6096"
+    },
+    {
+      "path": "Assets/Scripts/WuYiqiu/Building System/Scripts/Brush/BSBoxBrush.cs",
+      "sha256": "c3c15e9105a8b11d4ccdac3cfea48334e4fbb08bdc4f5a54094fc821e6a6d990"
+    }
+  ],
+  "contract": {
+    "history_capacity": 5,
+    "block_scale": 0.5,
+    "block_scale_inverted": 2,
+    "block_resource_divisor": 4,
+    "standalone_modifier": "Control",
+    "editor_modifier": "Shift",
+    "undo_key": "Z",
+    "redo_key": "X",
+    "undo_before_redo": true,
+    "unit_debit": "ceil(material_count/4)",
+    "unit_refund": "floor(material_count/4)",
+    "undo_add": "subtract current new voxels and refund floor",
+    "undo_subtract": "restore old voxels and debit ceil",
+    "source_failed_action_moves_history": true,
+    "source_resources_before_voxel_write": true,
+    "source_on_after_do_uses_original_mode": true,
+    "source_quit_build_clears_history": false,
+    "source_building_clear_clears_both_lists": true,
+    "source_archive_owner_qualified": false
+  },
+  "limitations": [
+    "Source-derived, with no new original/native physical observation.",
+    "Atomic retry, safe geometry validation and native batch/cell limits are explicit adapters.",
+    "No unrestricted Build/god-mode bypass, source terrain-voxel history or selected-box restoration is enabled."
+  ]
+}

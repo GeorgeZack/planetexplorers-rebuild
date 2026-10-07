@@ -15,6 +15,8 @@ typedef struct {
     bool focused, left_pressed, left_released, right_pressed;
     bool inventory, character, missions, replicator, escape, tab;
     bool save, load, backspace, advance;
+    bool undo_build,redo_build; /* Source standalone Ctrl+fresh Z / X. */
+    bool build_history_chord,build_history_keys_down; /* Retain chord ownership through release. */
     int quickslot; /* -1 means no key; otherwise 0..8. */
     unsigned response; /* Visible conversation response1..9; zero means no key. */
     const char *typed; /* Optional UTF-8 input; search currently accepts ASCII. */
@@ -26,6 +28,7 @@ typedef struct {
     bool camera_cycle_allowed; /* UI admission before the Tab-only world block; host still gates held buttons/focus. */
     bool toggle_build, save, load, return_main, revive;
     bool rotate_build;
+    bool undo_build,redo_build;
     int build_shape,build_brush; /* Zero means no selection request. */
     int selected_item; /* Explicit resource quickslot selection, otherwise0. */
 } PeSandboxUIResult;
@@ -73,6 +76,7 @@ typedef struct {
     bool starter_pair_available; /* Host-qualified body/weapon/block/contact group; never saved. */
     bool hunt_encounter_available; /* Transient host readiness, reset/recompute after load; no saved progression. */
     bool building;
+    bool build_history_keys_owned;
     int build_item,build_shape,build_rotation,build_brush;
     int inventory_tab, inventory_page, recipe_scroll, recipe_id, batches;
     int selected_slot, drag_item, drag_slot, drag_quickslot;

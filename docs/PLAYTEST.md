@@ -746,3 +746,22 @@ The tests cover worn/exhausted durable identity, source rounding and vendor-cred
 During development, the first build exposed an include preceding the existing POSIX feature macro; its order was corrected before final compilation. One UI test initially assumed a zero-money player could not buy back Juice916; the source price is zero, so the final test asserts success and uses a worn Knife for the insufficient-funds case. The completed optimized and focused sanitizer runs use that corrected test. Local logs are ignored under `rebuild/build/town-trade-check`.
 
 Graphical acceptance and ordinary four-hare completion/partial-progress reload remain pending. The trade audit contains a short disposable-checkpoint checklist for the user's next manual session. Buyback clears on load/new game, while money and the completed sale remain saved; the UI explicitly states this boundary.
+
+
+## October 6 — source-derived construction history (no graphics)
+
+The [construction history implementation](audit/CONSTRUCTION_HISTORY.md) adds a five-action transient journal for supported sandbox cube/ramp batches, source Ctrl+Z/Ctrl+X and labeled native toolbar buttons. [The source audit](audit/CONSTRUCTION_HISTORY_SOURCE.md) qualifies history capacity, material rounding, inverse modes, shortcut priority, mining exclusion and source failure/lifetime limitations. No original/native game window was launched, no desktop input was sent and no user save was changed.
+
+Executed from the root with `TMPDIR=$PWD/rebuild/build/compiler-tmp`:
+
+- Focused optimized build, history/lifecycle, actual-host/input, existing sandbox UI and content checks: exit0; construction C0 failures, source exporter14 tests with0 skips, headless host collision/input and existing UI pass.
+- Full optimized `make -s -C rebuild -j2 all test check-content cli-test`: exit0; complete core0 failures, source/generated checks and23 CLI checks pass. Broader Python tests retain51 optional skips, which are not passes.
+- After the renderer-only hover-summary correction, final `make -s -C rebuild all cli-test`: exit0, final executable rebuilt and23 CLI checks pass; no core/input code changed after their tests.
+- Full `make -s -C rebuild sanitize` with default `ASAN_OPTIONS=detect_leaks=1`: exit0, complete core0 failures including new history and lifecycle tests.
+- Focused actual-host ASan/UBSan with `ASAN_OPTIONS=detect_leaks=1` and isolated `BUILD=build/construction-history-check/sanitized`: exit0, no graphics or optional asset skips.
+
+The core tests cover mixed-material ceiling debit/floor refund, zero refund with a full bag, four-cell and64-cell batches, ramps, five-entry eviction, successful-new-edit redo invalidation, insufficient materials/refund capacity, changed/missing/occupied cells, player/terrain/legacy-block/reach constraints, malformed journals and unjournaled mining. The save suite checks independent clone/move, active undo and redo preserved by saving, failed-load retention, successful-load clearing, failed/successful world replacement and unchanged v17 wire bytes after round trip.
+
+The actual host/input test verifies immediate ray and movement-sweep refresh after undo/redo with no fixed simulation step, unchanged game/tool clocks and native `built` statistic, simultaneous-key priority, Ctrl-released-first chord ownership through release, modal/closing-frame and pause/focus/B-mode guards, and toolbar pointer ownership through held/release frames. The final renderer chooses either the hover hint or material summary so they cannot overprint; this static review does not establish graphical acceptance.
+
+Local logs are ignored under `rebuild/build/construction-history-check`. The construction audit provides a short later manual check. It remains pending alongside ordinary four-hare completion/partial-progress reload; these headless fixtures do not establish those physical outcomes.

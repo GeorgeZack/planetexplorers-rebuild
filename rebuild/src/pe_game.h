@@ -13,6 +13,10 @@
 #define PE_MAX_TREES 16
 #define PE_MAX_B45_CELLS 1024
 #define PE_MAX_BUILD_BATCH 64
+#define PE_BUILD_HISTORY_CAPACITY 5
+/* Bounded source construction undo journal; never part of the PECS payload. */
+typedef struct { bool addition; unsigned count; PeB45Cell cells[PE_MAX_BUILD_BATCH]; } PeBuildEdit;
+typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPACITY]; } PeBuildHistory;
 #define PE_PLAYER_RADIUS 0.30f
 #define PE_PLAYER_HEIGHT 1.75f
 #define PE_DAY_SECONDS (26.0 * 3600.0)
@@ -92,6 +96,7 @@ typedef struct PeGame {
     int block_count;
     PeB45Cell cells[PE_MAX_B45_CELLS];
     int cell_count;
+    PeBuildHistory build_history;
     PeTree trees[PE_MAX_TREES];
     int tree_count;
     uint32_t gathered, crafted, built;

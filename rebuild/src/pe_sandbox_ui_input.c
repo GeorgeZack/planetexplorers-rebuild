@@ -5,6 +5,7 @@
 #include "pe_shield.h"
 #include "pe_town_trade.h"
 #include "pe_town_wallet.h"
+#include "pe_build_history.h"
 #include "../generated/pe_revival_source.h"
 #include <ctype.h>
 #include <limits.h>
@@ -385,6 +386,9 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     if(u->discard_input){u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
     bool before=panel(u),cursor_before=pe_sandbox_ui_cursor(u);
     if(!i.focused){u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
+    bool history_owned=u->building&&(u->build_history_keys_owned||i.build_history_chord);
+    u->build_history_keys_owned=history_owned&&i.build_history_keys_down;
+    if(history_owned)r.consume_actions=true;
     if(u->revival_open&&!u->paused){
         r.consume_world=true;
         if(i.escape)u->paused=true;
@@ -463,6 +467,10 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     }
     if(u->menu_open)goto done;
     if(u->building&&!panel(u)&&!u->dragging) {
+        if(!r.consume_world&&(i.undo_build||i.redo_build)){
+            r.undo_build=i.undo_build;r.redo_build=!i.undo_build&&i.redo_build;
+            r.consume_actions=true;
+        }
         if(hit(pe_sandbox_ui_build_toolbar(u),i))r.consume_world=true;
         if(i.left_pressed&&!before&&!i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&!i.tab) {
             for(int k=0;k<9;k++)if(hit(pe_sandbox_ui_build_slot(u,k),i))build_select(u,&r,k);
@@ -472,6 +480,8 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
                 if(k==2)r.build_brush=1;
                 if(k==3)r.build_brush=4;
                 if(k==4)r.rotate_build=true;
+                if(k==5&&pe_build_history_can_undo(g))r.undo_build=true;
+                if(k==6&&pe_build_history_can_redo(g))r.redo_build=true;
                 if(k==7)r.toggle_build=true;
             }
         }

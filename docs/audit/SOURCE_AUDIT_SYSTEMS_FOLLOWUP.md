@@ -4,6 +4,8 @@ October 6, 2026, US/Central. Baseline: `3791d89e763586a5cd3bc7684c6462592288572a
 
 The strongest next work is inventory capacity/transactions, camera obstruction behavior, construction history, and species-aware tree resources. Their rules are available locally. A user-operated half-hour recording can consolidate visual and usability observations, but none of these rules requires another original-game session to discover its constants.
 
+Subsequent implementation: [bounded construction undo/redo](CONSTRUCTION_HISTORY.md) now supplies the five-action native journal and controls; its scope and pending visual acceptance supersede the absence described in this baseline audit.
+
 ## Confirmed differences and bounded implementation candidates
 
 ### 1. Inventory capacity is a gameplay difference, not merely missing pages
