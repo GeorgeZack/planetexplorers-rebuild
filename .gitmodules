@@ -1,0 +1,3 @@
+[submodule "reference/unity"]
+	path = reference/unity
+	url = https://github.com/pathea-games/planetexplorers.git

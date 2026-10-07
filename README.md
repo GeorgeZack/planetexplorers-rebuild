@@ -2,7 +2,7 @@
 
 A community C11 reconstruction of **Planet Explorers**, based on the publicly released [Pathea Games source project](https://github.com/pathea-games/planetexplorers). **Planet Explorers and its original game assets belong to Pathea Games LLC.** This rebuild is maintained by [GeorgeZack](https://github.com/GeorgeZack); it is not an official Pathea Games release or an endorsed project.
 
-The native implementation is in [`rebuild/`](rebuild/README.md). The original Unity source and Git history are retained as the replication reference. Start with the [project map](PROJECT_MAP.md), [build/run instructions](rebuild/README.md), and [credits and notices](NOTICE.md).
+The native implementation is in [`rebuild/`](rebuild/README.md). The original Unity source is not copied here: it is the pinned [`reference/unity`](https://github.com/pathea-games/planetexplorers) submodule, used read-only as the replication reference. Clone with `git clone --recurse-submodules`, or run `git submodule update --init` afterwards. Start with the [project map](PROJECT_MAP.md), [build/run instructions](rebuild/README.md), and [credits and notices](NOTICE.md).
 
 Recovered runtime asset exports, installed Steam game files, build outputs and local saves are excluded from this repository. Some tests and graphical modes require separately recovered local assets; see the build instructions. The documentation includes reference screenshots and asset provenance for this non-commercial reconstruction.
 

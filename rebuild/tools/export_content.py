@@ -10,6 +10,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import re
 import sqlite3
@@ -123,10 +124,14 @@ def c_string(value: str) -> str:
 
 
 def describe_source(path: Path) -> dict:
+    # Label by the logical repository path. The original sources are reached
+    # through root links into the reference/unity submodule; resolving them
+    # would record the submodule location instead of the stable source path.
+    logical = Path(os.path.abspath(path))
     try:
-        label = path.resolve().relative_to(ROOT).as_posix()
+        label = logical.relative_to(ROOT).as_posix()
     except ValueError:
-        label = str(path.resolve())
+        label = str(logical)
     return {'path': label, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
 
 

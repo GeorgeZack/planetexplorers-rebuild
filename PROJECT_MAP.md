@@ -4,7 +4,7 @@
 
 [Adventure debug tools](docs/audit/DEBUG_TOOLS.md): `pe_debug` owns atomic medicine/supply/hunt-skip commands; `pe_ui_settings` owns the session toggle and shared controls; `pe_sandbox_view` admits requests and resets transient owners after travel. These are explicit cheats, with no new save format or automatic save.
 
-The private rebuild uses `master` as its working/default branch on remote `rebuild`. Local `unity-reference-master` preserves the original source reference tracking `origin/master`.
+The private rebuild uses `master` as its working/default branch on remote `origin`. The original Unity source is the pinned, read-only `reference/unity` submodule; the root `Assets`, `ProjectSettings` and sibling links resolve into it.
 
 [Hunt loot](docs/audit/HUNT_LOOT.md): `pe_hunt_loot` owns source rolls, saved world-item identities, whole-stack pickup and expiry; `pe_hunt_loot_combat` commits actual contact deaths with their drops. PECSv22 appends this state without changing the v21 payload. `export_hunt_loot.py` guards the active source path, database and prefab; the sandbox host supplies readonly icon clusters through shared UI primitives.
 
