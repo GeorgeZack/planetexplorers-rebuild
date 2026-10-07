@@ -288,6 +288,7 @@ const PeItemDef pe_items[] = {
     {1172, "Fuel Cell Type 01", 20, 7, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 2, 0, "element_fuelcell_001", "", "", PE_LEARN_NONE, 0, {0}},
     {1180, "Side Seat", 20, 7, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 2, 0, "element_side_seat", "", "", PE_LEARN_NONE, 0, {0}},
     {1195, "Ship Control", 10, 7, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 2, 0, "element_cockpit_S002", "", "", PE_LEARN_NONE, 0, {0}},
+    {1228, "Soft Fur", 100, 0, 100, 0.0f, 0.0f, 0.0f, 0, 1.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 2, 0, "debris_024", "", "leftdown_debris", PE_LEARN_NONE, 0, {0}},
     {1362, "Steel Sword", 1, 9, 6071, 133.0f, 0.0f, 0.0f, 0, 5.0f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 528, "sword_steel_great", "", "", PE_LEARN_NONE, 0, {0}},
     {1365, "SC Helmet Type1\342\231\200", 1, 18, 6192, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 1, "equip_w_helmet_19", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},
     {1366, "SC Clothing Type1\342\231\200", 1, 19, 4166, 0.0f, 0.0f, 0.0f, 0, 0.1f, 0.0f, PE_TOOL_NONE, 0.0f, 0.0f, 1, 2, "equip_w_torso_25", "leftup_sex_f", "", PE_LEARN_NONE, 0, {0}},

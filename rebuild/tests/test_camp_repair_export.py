@@ -57,7 +57,7 @@ class CampRepairExport(unittest.TestCase):
 
     def test_catalog_closure_and_explicit_exclusions(self):
         c=self.manifest['catalog'];q={r['item_id']:r for r in c['qualified']};excluded={r['item_id']:r for r in c['excluded']}
-        self.assertEqual((c['catalog_item_count'],c['repair_component_count'],len(q)),(341,71,63))
+        self.assertEqual((c['catalog_item_count'],c['repair_component_count'],len(q)),(342,71,63))
         self.assertEqual(set(excluded),{33,67,365,370,1473,1474,1475,1527})
         for identity in (1,12,19,26,34):self.assertEqual(q[identity]['materials'],[dict(item_id=279,count=4)])
         for identity in (95,131):self.assertEqual(q[identity]['materials'],[dict(item_id=1006,count=2)])

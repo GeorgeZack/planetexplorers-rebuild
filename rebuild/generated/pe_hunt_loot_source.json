@@ -1,0 +1,191 @@
+{
+  "contracts": {
+    "components": "All seven _function0; class0 absent; ItemObject.Create returns with no components. Prototype _durability defaults do not establish Durability.",
+    "death": "PESkEntity.DispatchDeathEvent -> LootItemMgr.RequestCreateLootItem; old ItemDropPeEntity attachment is commented out.",
+    "lifetime": "CheckItemRemove: non-Quest Item category expires only when GameTime.Timer.Second-dropTime >93600.",
+    "native_stackables": "Existing C inventory requires instance_id=0 and durability=0 for stackables; separately owned world-drop identity must not be copied into bag cells.",
+    "persistence": "LootItemData archives item instance identity, position and double dropTime independently of the originating monster; ItemMgr owns prototype/count.",
+    "pickup": "LootItemMgr.Update strict squared root distance <16 and living player; AddItemToPlayer transfers a complete stack or retains it; successful stackable transfer destroys the world instance.",
+    "roll": "System.Random.Next(22,35); five trials; fresh float-cast NextDouble per ordered entry; strict less-than; first success ends trial; ID0 gives nothing; merge duplicate IDs.",
+    "special_items": "MonsterItemAdd consults active special-collection registrations. Supported quest targets are guarded; only medicine2531 is collect and its Type0/zero target/chance is not monster loot. Arbitrary side missions remain excluded."
+  },
+  "drop_id": 11,
+  "entries": [
+    {
+      "item_id": 1011,
+      "probability": 0.1
+    },
+    {
+      "item_id": 1008,
+      "probability": 0.2
+    },
+    {
+      "item_id": 236,
+      "probability": 0.4
+    },
+    {
+      "item_id": 1026,
+      "probability": 0.44
+    },
+    {
+      "item_id": 1228,
+      "probability": 0.45
+    },
+    {
+      "item_id": 1742,
+      "probability": 0.55
+    },
+    {
+      "item_id": 0,
+      "probability": 1.0
+    }
+  ],
+  "generate_distance": 48.0,
+  "icon_distance": 10.0,
+  "items": [
+    {
+      "category": "Synthetics",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "item_meat",
+      "inventory_tab": 2,
+      "item_id": 229,
+      "max_stack": 9999
+    },
+    {
+      "category": "Synthetics",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "item_animal_fat",
+      "inventory_tab": 2,
+      "item_id": 1011,
+      "max_stack": 9999
+    },
+    {
+      "category": "Synthetics",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "item_leather",
+      "inventory_tab": 2,
+      "item_id": 1008,
+      "max_stack": 9999
+    },
+    {
+      "category": "Herb",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "herb_peach_flower",
+      "inventory_tab": 2,
+      "item_id": 236,
+      "max_stack": 999
+    },
+    {
+      "category": "Synthetics",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "item_meat_51",
+      "inventory_tab": 2,
+      "item_id": 1026,
+      "max_stack": 100
+    },
+    {
+      "category": "Valuables",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "debris_024",
+      "inventory_tab": 2,
+      "item_id": 1228,
+      "max_stack": 100
+    },
+    {
+      "category": "Synthetics",
+      "component_class": 0,
+      "components": [],
+      "has_durability": false,
+      "icon": "task_blood",
+      "inventory_tab": 2,
+      "item_id": 1742,
+      "max_stack": 9999
+    }
+  ],
+  "lifetime_game_seconds": 93600.0,
+  "limitations": [
+    "No observed original random seed; native RNG is an explicit adapter preserving ordered decisions and saved outcomes.",
+    "No corpse window, corpse pose, mission-special drop activation or new enemy populations are authorized.",
+    "Prefab fields are source-derived; full glow, ballistic flight, particles and audio presentation are not established by this metadata.",
+    "Native pinned cohort/reload and bounded storage remain separate implementation policies; generate only from actual positive-to-zero deaths, never disappearance or saved quest credit."
+  ],
+  "meat": {
+    "item_id": 229,
+    "max_count_exclusive": 35,
+    "min_count": 22
+  },
+  "pickup_distance": 4.0,
+  "presentation": {
+    "effectID": 223,
+    "fadeSpeed": 1.0,
+    "getItemSoundID": 949,
+    "lootSoundID": 950,
+    "m_Acceleration": 5.0,
+    "m_MaxSpeed": 15.0,
+    "m_RotateSpeed": 10.0,
+    "selfRotateSpeed": 180.0,
+    "stayMinTime": 1.0
+  },
+  "prototype_id": 13,
+  "schema": "pe-hunt-loot-1",
+  "source_database_sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376",
+  "sources": [
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    },
+    {
+      "path": "Assets/Scripts/LootItem/LootItemMgr.cs",
+      "sha256": "c05a0cd6a6e170bb4d1d3effe220f9923e6d48cb76c6eebff34b6e0fe331521c"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemDrop/ItemDropData.cs",
+      "sha256": "d8dc2478e40781c6e360e571bfadc47540da0ffe0a3003a540624428aad4e19e"
+    },
+    {
+      "path": "Assets/Scripts/MousePicker/MousePickableLootItem.cs",
+      "sha256": "4e6cf758f339424b73f04592f483f5e6246ffe76915c9c7370e3d40c0eb599c9"
+    },
+    {
+      "path": "Assets/Scripts/ZhangShunBo/GetSpecialItem.cs",
+      "sha256": "cd224d5dd22a788d57cc325967e42f80e9abffc21677d31049387b76af288727"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "sha256": "11ba6d3f1e1c7627a0d114febd2256d4482dc498010157cfd40437d957397c35"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemObj.cs",
+      "sha256": "d7704733cafc8fdb2a8ae853e089459df6185fb1498e904f22ee3b3dbeb2e00a"
+    },
+    {
+      "path": "Assets/Scripts/Items/ItemData.cs",
+      "sha256": "66d6203e0c910c7dcd805318dbddfa4bdb205b6e1d189d28de865670a7a8b2ab"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PlayerPackageCmpt.cs",
+      "sha256": "c3668318f7d210ec0e3d7a435fa98a2f3382bffea3c4761883f115d49ed1a165"
+    },
+    {
+      "path": "Assets/Resources/Prefab/LootItem/LootItem.prefab",
+      "sha256": "eef0edbdbd82b7d2bc3cbcbaed645f3eef5b04dfc1d2b3cdb1b19962d7ec671b"
+    }
+  ],
+  "trials": 5
+}

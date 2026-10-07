@@ -37,9 +37,9 @@ int pe_test_v11_save(void){
     CHECK(!fseek(f,0,SEEK_END));long length=ftell(f);rewind(f);CHECK(length>1816);if(length<=1816){fclose(f);goto done;}
     size_t n=(size_t)length;bytes=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bytes&&snapshot);
     if(!bytes||!snapshot){fclose(f);goto done;}CHECK(fread(bytes,1,n,f)==n);fclose(f);
-    CHECK(bytes[4]==21);CHECK(pe_game_load(loaded,path,error,sizeof error));memcpy(snapshot,loaded,sizeof *loaded);
-    if(n<=((PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+2048){CHECK(false);goto done;}
-    n-=((PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND; /* Exercise literal v11 payload, excluding later append. */
+    CHECK(bytes[4]==PE_SAVE_VERSION);CHECK(pe_game_load(loaded,path,error,sizeof error));memcpy(snapshot,loaded,sizeof *loaded);
+    if(n<=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+2048){CHECK(false);goto done;}
+    n-=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND; /* Exercise literal v11 payload, excluding later append. */
     uint64_t hash=pe_world_hash(&loaded->world);
     put32(bytes+n-4,5);CHECK(write_bytes(path,bytes,n,11));CHECK(!pe_game_load(loaded,path,error,sizeof error));
     CHECK(!memcmp(snapshot,loaded,sizeof *loaded)&&pe_world_hash(&loaded->world)==hash);

@@ -82,7 +82,7 @@ static void save_load(void){
     CHECK(pe_game_init_mode(g,943,PE_GAME_ADVENTURE));g->hp=100;
     PeAttributeClock clock={.seconds=100};CHECK(sandbox_health_frame(&clock,g,0,true,false));
     sandbox_health_contacts(g,0,1);CHECK(g->passive_recovery.last_hurt==100);
-    CHECK(pe_game_save(g,path,error,sizeof error));first=read_file(path,&n);CHECK(first&&first[4]==21);
+    CHECK(pe_game_save(g,path,error,sizeof error));first=read_file(path,&n);CHECK(first&&first[4]==PE_SAVE_VERSION);
     /* Transient time/frame/phase is absent from the current V21 payload. */
     g->passive_recovery=(PePassiveRecovery){.loaded=true};
     CHECK(pe_game_save(g,path,error,sizeof error));second=read_file(path,&m);

@@ -2,6 +2,7 @@
  * Explicit isolated near-hare geometry and preexisting player wound; no desktop,
  * reduced hare HP, synthetic contact, earned-survival or full host rendering claim. */
 #include "pe_hunt_combat.h"
+#include "pe_hunt_loot_combat.h"
 #include "pe_sandbox_ui.h"
 #include "pe_sandbox_camera.h"
 #include "pe_settlement.h"
@@ -27,8 +28,8 @@ static PeSandboxMeleeFrame frame(const PeGame*g,bool drawn){return(PeSandboxMele
     .player_position=g->player,.player_scale=1,.attacker_eligible=true};}
 static bool contact(PeHuntCombat*h,PeGame*g,PeSandboxCollision*c,PeSandboxMelee*b,bool drawn){
     PeSandboxMeleeFrame f=frame(g,drawn);PeSandboxMeleeUpdate update;bool completed=false;
-    bool ok=pe_hunt_combat_step(h,&g->world,c,pose(g,h->player_actor),b,&f,&g->hp,&g->stamina,&g->hunt_kills,&update,&completed);
-    assert(!completed&&g->hunt_kills==0);return ok;
+    bool ok=pe_hunt_loot_combat_step(g,h,c,pose(g,h->player_actor),b,&f,&update,&completed);
+    assert(!completed&&g->hunt_kills==0&&g->hunt_loot.count==0);return ok;
 }
 static PeSandboxCameraControlResult controls(PeSandboxCameraControls*c,PeSandboxUIResult r){
     PeSandboxCameraControlResult out;

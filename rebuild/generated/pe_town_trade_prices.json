@@ -2954,6 +2954,13 @@
       ]
     },
     {
+      "item_id": 1228,
+      "base_currency": 280,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
       "item_id": 1362,
       "base_currency": 1118,
       "factor": "DURABILITY",

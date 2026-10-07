@@ -440,6 +440,15 @@
       "count": 1
     }
   ],
+  "hunt_loot_catalog_ids": [
+    229,
+    1011,
+    1008,
+    236,
+    1026,
+    1228,
+    1742
+  ],
   "followup_quest_items": {
     "9077": {
       "Get_MissionItem": [],
@@ -1143,6 +1152,7 @@
     1172,
     1180,
     1195,
+    1228,
     1362,
     1365,
     1366,
@@ -11269,6 +11279,33 @@
         "element_cockpit_S002",
         "",
         ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1228,
+      "name": "Soft Fur",
+      "stack_limit": 100,
+      "item_type": 0,
+      "component_class": 0,
+      "has_durability": false,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "debris_024",
+        "",
+        "leftdown_debris"
       ],
       "learn_kind": "PE_LEARN_NONE",
       "learn_ids": []

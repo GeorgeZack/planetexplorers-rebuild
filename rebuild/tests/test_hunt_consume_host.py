@@ -41,7 +41,13 @@ def extract():
     assert 'pe_hunt_combat_sense' in sensor
     fixed = block(text, 'if(hunt.encounter.active){\n                    pe_sandbox_actor_update')
     contact = block(fixed, 'if(sandbox_hunt_runs(&ui,action)){')
-    assert 'pe_hunt_combat_step' in contact
+    assert 'pe_hunt_loot_combat_step(game,&hunt,collision,player,&melee,&combat_frame,' in contact
+    assert 'pe_hunt_combat_step(' not in contact
+    # Loot joins the existing contact transaction; pickup remains a separate
+    # display update and may not replace the fourth-kill completion notice.
+    assert 'bool hunt_completed_this_frame=false;' in text
+    assert 'if(completed){hunt_completed_this_frame=true;' in contact
+    assert 'if(picked&&!hunt_completed_this_frame)' in text
     cancel = block(text, 'if(!world_input||build_mode||!third_person||game->hp<=0||!knife_ready){')
     facing = block(text, 'typedef struct {\n    uint32_t instance;\n    unsigned stage;') + ' SandboxBladeFacing;'
     return '''/* Generated from production pe_sandbox_view.c; do not edit. */

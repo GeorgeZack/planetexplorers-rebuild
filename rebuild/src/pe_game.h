@@ -3,6 +3,7 @@
 #include "pe_world.h"
 #include "pe_conversation_history.h"
 #include "pe_camp_repair_state.h"
+#include "pe_hunt_loot_state.h"
 #include "pe_content.h"
 #include "pe_block.h"
 #include "pe_outfit.h"
@@ -50,6 +51,8 @@ typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPAC
 #define PE_SAVE_V20_APPEND 32u
 /* V21 preserves v20, then stores count and20 canonical fixed UTF-8 pairs. */
 #define PE_SAVE_V21_APPEND (4u + PE_CONVERSATION_HISTORY_CAPACITY * (PE_CONVERSATION_SPEAKER_CAPACITY + PE_CONVERSATION_CONTENT_CAPACITY))
+#define PE_SAVE_V22_APPEND (4u + 32u * PE_HUNT_LOOT_CAPACITY)
+#define PE_SAVE_VERSION 22u
 #define PE_MAX_PLANTS 32
 typedef struct { uint32_t prototype_id; PeVec3 position; bool depleted; } PePlant;
 typedef struct { bool installed; unsigned count; PePlant plants[PE_MAX_PLANTS]; } PeVegetation;
@@ -104,6 +107,7 @@ typedef struct PeGame {
     double game_seconds;
     PeInventory inventory;
     PeConversationHistory conversation_history; /* Displayed/resolved dialogue; PECSv21. */
+    PeHuntLootState hunt_loot; /* Persistent bounded prototype13 world drops; PECSv22. */
     PeCampRepair repair; /* Archived camp machine20006 only; PECSv20. */
     PeOutfit outfit;
     PeCraftJob craft;
@@ -189,7 +193,8 @@ float pe_game_item_cooldown(const PeGame *game,int item_id);
 /* inventory_slot=-1 clears a shortcut. Assignment never consumes an item. */
 bool pe_game_quickslot_assign(PeGame *game, int quickslot, int inventory_slot);
 bool pe_game_quickslot_use(PeGame *game, int quickslot);
-/* Replace only world-bound state; preserve player possessions/progression. */
+/* Replace only world-bound state; preserve player possessions/progression.
+ * Reserved repair items or pending hunt drops reject replacement atomically. */
 bool pe_game_set_world(PeGame *game, const PeWorld *world, PeVec3 preferred);
 void pe_game_step(PeGame *game, PeInput input, float dt);
 /* Notify only an admitted stamina debit or active cost-owning action. */

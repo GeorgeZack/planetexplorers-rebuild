@@ -29,7 +29,9 @@ class TownTradeExportTests(unittest.TestCase):
     def test_catalog_coverage_and_order(self):
         catalog=json.loads((ex.ROOT/'rebuild/generated/content_manifest.json').read_text())
         self.assertEqual(list(self.prices),sorted(catalog['selected_item_ids']))
-        self.assertEqual(len(self.prices),341)
+        self.assertEqual(len(self.prices),342)
+        self.assertEqual(self.prices[1228]['base_currency'],280)
+        self.assertEqual(self.prices[1228]['factor'],'FULL')
 
     def test_known_digital_prices(self):
         self.assertEqual(self.prices[33]['base_currency'],14)

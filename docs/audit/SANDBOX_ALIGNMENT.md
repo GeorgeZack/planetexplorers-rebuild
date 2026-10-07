@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+Current gameplay increment: [hare loot](HUNT_LOOT.md) connects real hunt deaths to independent persistent drops, source-derived rolls and automatic whole-stack pickup. PECSv22 preserves prior save payloads. No new Steam session is needed for this contract; original drop visuals remain an explicit adapter. Next bounded combat parity work is source reaction lifecycle/motor qualification, followed by reaction poses; shield composition, pounce and9077 remain separate gates.
+
 Current QoL addition: [Camera-facing attacks](MELEE_TARGET_FACING.md#optional-camera-facing-attacks) is an optional, default-OFF setting in main menu and both in-game Pause menus for free third person in both hosts. It preserves sandbox nearby-target assistance and does not enable Sword/Shield. Settings persist independently of PECSv21.
 
 October7 current combat follow-through: [target acquisition and facing](MELEE_TARGET_FACING.md) now connect the source default movement/body direction and exact hare query/defence geometry to the Knife host. [Reaction decisions](HIT_REACTION.md) are extracted/tested but disconnected. Masked shield composition and reaction pose/motor qualification remain separate gates; no damage rebalance or new original session is implied.

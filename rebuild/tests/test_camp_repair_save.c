@@ -53,11 +53,11 @@ static int repair_save_cases(void){
     bool started=pe_settlement_start(g,error,sizeof error);CHECK(started);if(!started){fprintf(stderr,"repair fixture requires installed route: %s\n",error);goto done;}
     CHECK(g->world.extended&&pe_settlement_is_route(&g->world));CHECK(pe_game_quickslot_assign(g,8,index));
     /* Literal19 migration keeps authoritative high-index inventory and IDs. */
-    CHECK(pe_game_save(g,path,error,sizeof error));bytes=read_bytes(path,&n);CHECK(bytes&&n>(PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+16);if(!bytes||n<=(PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+16)goto done;
-    CHECK(u32(bytes+4)==21);for(size_t i=n-PE_SAVE_V21_APPEND-32;i<n;i++)CHECK(!bytes[i]);
-    CHECK(write_bytes(path,bytes,n-PE_SAVE_V21_APPEND-32,19)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!loaded->repair.item.count&&!loaded->repair.running&&!loaded->repair.remaining_ticks&&loaded->inventory.categorized);
+    CHECK(pe_game_save(g,path,error,sizeof error));bytes=read_bytes(path,&n);CHECK(bytes&&n>((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+16);if(!bytes||n<=((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+16)goto done;
+    CHECK(u32(bytes+4)==PE_SAVE_VERSION);for(size_t i=n-(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)-32;i<n;i++)CHECK(!bytes[i]);
+    CHECK(write_bytes(path,bytes,n-(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)-32,19)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!loaded->repair.item.count&&!loaded->repair.running&&!loaded->repair.remaining_ticks&&loaded->inventory.categorized);
     CHECK(!memcmp(&g->inventory,&loaded->inventory,sizeof g->inventory)&&loaded->quickslots[8].instance_id==sword.instance_id);
-    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&m);CHECK(after&&m==n);if(after&&m==n)CHECK(!memcmp(bytes+16,after+16,n-PE_SAVE_V21_APPEND-32-16));free(after);after=NULL;
+    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&m);CHECK(after&&m==n);if(after&&m==n)CHECK(!memcmp(bytes+16,after+16,n-(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)-32-16));free(after);after=NULL;
     /* Aliases and dead/revival transactions reject without side effects. */
     CHECK(pe_game_repair_candidate(g,index)&&pe_game_repair_can_insert(g,index));g->equipped_instance_id=sword.instance_id;CHECK(!pe_game_repair_candidate(g,index)&&!pe_game_repair_can_insert(g,index));g->equipped_instance_id=0;
     g->shield_instance_id=sword.instance_id;CHECK(!pe_game_repair_can_insert(g,index));g->shield_instance_id=0;
@@ -80,8 +80,8 @@ static int repair_save_cases(void){
     pe_world_init(world,3);memcpy(snapshot,g,sizeof *g);uint64_t hash=pe_world_hash(&g->world);
     CHECK(!pe_game_set_world(g,world,(PeVec3){32,20,32})&&!memcmp(snapshot,g,sizeof *g)&&pe_world_hash(&g->world)==hash);
     CHECK(pe_game_save(g,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));CHECK(same_repair(g->repair,loaded->repair)&&!memcmp(&g->inventory,&loaded->inventory,sizeof g->inventory));
-    free(bytes);bytes=read_bytes(path,&n);CHECK(bytes&&n>PE_SAVE_V21_APPEND+32);if(!bytes||n<=PE_SAVE_V21_APPEND+32)goto done;
-    size_t tail=n-PE_SAVE_V21_APPEND-32;CHECK(u32(bytes+tail)==20006&&u32(bytes+tail+4)==1&&u32(bytes+tail+8)==1&&u32(bytes+tail+12)==sword.instance_id&&u32(bytes+tail+20)==1&&u32(bytes+tail+24)==5275000&&!u32(bytes+tail+28));
+    free(bytes);bytes=read_bytes(path,&n);CHECK(bytes&&n>(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+32);if(!bytes||n<=(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+32)goto done;
+    size_t tail=n-(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)-32;CHECK(u32(bytes+tail)==20006&&u32(bytes+tail+4)==1&&u32(bytes+tail+8)==1&&u32(bytes+tail+12)==sword.instance_id&&u32(bytes+tail+20)==1&&u32(bytes+tail+24)==5275000&&!u32(bytes+tail+28));
     bad=malloc(n+1);CHECK(bad);if(!bad)goto done;memcpy(snapshot,loaded,sizeof *loaded);hash=pe_world_hash(&loaded->world);
     const struct{unsigned at;uint32_t value;} corruption[]={
         {0,0},{0,20007},{4,33},{4,0x80000000},{8,0},{8,2},{12,0},{12,UINT32_MAX},
@@ -89,14 +89,14 @@ static int repair_save_cases(void){
         {20,2},{20,0},{24,0},{24,6000001},{28,1},
     };
     for(unsigned i=0;i<sizeof corruption/sizeof *corruption;i++){
-        memcpy(bad,bytes,n);put(bad+tail+corruption[i].at,corruption[i].value);CHECK(write_bytes(path,bad,n,21)&&!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(snapshot,loaded,sizeof *loaded)&&pe_world_hash(&loaded->world)==hash);
+        memcpy(bad,bytes,n);put(bad+tail+corruption[i].at,corruption[i].value);CHECK(write_bytes(path,bad,n,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(snapshot,loaded,sizeof *loaded)&&pe_world_hash(&loaded->world)==hash);
     }
     /* Existing bag identity and outfit identity cannot be a detached owner. */
     int other=find(&g->inventory,1);CHECK(other>=0);if(other<0)goto done;
     const uint32_t aliases[]={g->inventory.slots[other].instance_id,g->outfit.items[0].instance_id,g->inventory.next_instance_id};
-    for(unsigned i=0;i<3;i++){memcpy(bad,bytes,n);put(bad+tail+12,aliases[i]);CHECK(write_bytes(path,bad,n,21)&&!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(snapshot,loaded,sizeof *loaded));}
-    memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-1,21)&&!pe_game_load(loaded,path,error,sizeof error));memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,21)&&!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(snapshot,loaded,sizeof *loaded));
-    CHECK(write_bytes(path,bytes,n,21));PeCampRepair saved=g->repair;g->repair.remaining_ticks=-1;
+    for(unsigned i=0;i<3;i++){memcpy(bad,bytes,n);put(bad+tail+12,aliases[i]);CHECK(write_bytes(path,bad,n,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(snapshot,loaded,sizeof *loaded));}
+    memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-1,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(snapshot,loaded,sizeof *loaded));
+    CHECK(write_bytes(path,bytes,n,PE_SAVE_VERSION));PeCampRepair saved=g->repair;g->repair.remaining_ticks=-1;
     CHECK(!pe_game_save(g,path,error,sizeof error));after=read_bytes(path,&m);CHECK(after&&m==n);if(after&&m==n)CHECK(!memcmp(bytes,after,n));free(after);after=NULL;g->repair=saved;
     g->quickslots[0]=(PeQuickslot){1,sword.instance_id};CHECK(!pe_game_repair_state_valid(g)&&!pe_game_save(g,path,error,sizeof error));g->quickslots[0]=(PeQuickslot){0};
     /* Source death doesn't stop the machine; transactions still require life. */

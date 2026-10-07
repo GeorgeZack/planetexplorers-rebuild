@@ -15,6 +15,10 @@
 #include "pe_running_attack_motion.h"
 #include "pe_sword_root_motion.h"
 #include "pe_hunt_combat.h"
+#include "pe_hunt_loot.h"
+#include "pe_hunt_loot_combat.h"
+#include "../generated/pe_hunt_loot_source.h"
+#include "pe_ui_draw.h"
 #include "pe_actor_view.h"
 #include "pe_sandbox_camera.h"
 #include "pe_camera_geometry.h"
@@ -113,6 +117,34 @@ static void source_begin_3d(Camera3D camera){
 static void source_end_3d(void){
     EndMode3D();rlSetCullFace(RL_CULL_FACE_BACK);
     rlSetClipPlanes(source_previous_near,source_previous_far);
+}
+
+/* Read-only icon clusters are a native presentation adapter. Pickup uses the
+ * saved death roots without visibility or pointer requirements. */
+static void sandbox_loot_markers(const PeGame *g,const PeSandboxCollision *collision,
+    Camera3D camera,const PeSandboxUI *ui){
+    PeUiCanvas canvas={.assets=ui->assets,.effects=ui->effects,.layout=&ui->layout};
+    float size=fmaxf(22,28*ui->layout.scale);
+    for(unsigned i=0;i<g->hunt_loot.count;i++){
+        const PeHuntLootDrop *d=&g->hunt_loot.drops[i];
+        Vector3 root=rv(d->position);
+        if(Vector3Distance(root,rv(g->player))>=PE_HUNT_LOOT_ICON_DISTANCE)continue;
+        Vector3 anchor=Vector3Add(root,(Vector3){0,.22f,0});
+        Vector3 direction=Vector3Subtract(anchor,camera.position);float range=Vector3Length(direction);
+        if(range<=PE_CAMERA_RENDER_NEAR)continue;
+        PeSceneHit obstruction=pe_sandbox_collision_ray_perception(collision,pv(camera.position),pv(direction),range);
+        if(obstruction.hit&&obstruction.distance<range-.04f)continue;
+        Vector2 screen=source_screen(anchor,camera);
+        unsigned group=0;
+        for(unsigned j=0;j<i;j++){
+            PeVec3 p=g->hunt_loot.drops[j].position;
+            if(p.x==d->position.x&&p.y==d->position.y&&p.z==d->position.z)group++;
+        }
+        PeTrainingUIRect rect={screen.x+((int)(group%3)-1)*(size+2)-size*.5f,
+            screen.y-(group/3+1)*(size+2),size,size};
+        if(rect.x+size<0||rect.x>GetScreenWidth()||rect.y+size<0||rect.y>GetScreenHeight())continue;
+        pe_ui_draw_item(&canvas,d->item_id,d->count,rect,true,WHITE);
+    }
 }
 
 typedef struct {PeAdventureNpc npc;PeAdventureNpcView view;bool visible;} Resident;
@@ -763,6 +795,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     printf("Sandbox ready: mode %d\n",game->mode);fflush(stdout);
     profile_stage(&profile,-1);
     while(!WindowShouldClose()) {
+        bool hunt_completed_this_frame=false;
         profile_stage(&profile,PROFILE_ENCOUNTERS);
         if(settlement.loaded&&settlement_route!=pe_settlement_is_route(&game->world))pe_reference_unload(&settlement);
         if(pe_settlement_matches(&game->world)&&!settlement.loaded){
@@ -1238,8 +1271,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                             .player_yaw=pe_sandbox_actor_yaw(actor,game),.player_scale=1,.attacker_eligible=game->hp>0};
                         PeSandboxMeleeUpdate combat_update;bool completed=false;unsigned before=game->hunt_kills;
                         uint64_t previous_hare_hits=hunt.hare_hits,previous_player_hits=hunt.player_hits;
-                        if(!pe_hunt_combat_step(&hunt,&game->world,collision,player,&melee,&combat_frame,
-                            &game->hp,&game->stamina,&game->hunt_kills,&combat_update,&completed)){
+                        if(!pe_hunt_loot_combat_step(game,&hunt,collision,player,&melee,&combat_frame,
+                            &combat_update,&completed)){
                             snprintf(error,sizeof error,"Hunt combat transaction failed");result=1;break;
                         }
                         sandbox_health_contacts(game,previous_player_hits,hunt.player_hits);
@@ -1261,7 +1294,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                             fputc('\n',stderr);fflush(stderr);combat_trace_lines++;
                         }
                         if(combat_update.advance==PE_COMBAT_NEXT_STAGE)melee_swings++;
-                        if(completed){game->hunt_state=PE_HUNT_RETURN_PENDING;snprintf(game->message,sizeof game->message,"Four hares defeated. Return to town and report in.");}
+                        if(completed){hunt_completed_this_frame=true;game->hunt_state=PE_HUNT_RETURN_PENDING;snprintf(game->message,sizeof game->message,"Four hares defeated. Return to town and report in.");}
                         else if(game->hunt_kills!=before)snprintf(game->message,sizeof game->message,"Lepus hares defeated: %u/4",game->hunt_kills);
                         if(game->hp<=0){attack_pending=false;tool_drawn=false;pe_sandbox_melee_cancel(&melee);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
                             snprintf(game->message,sizeof game->message,"You have died. Use a Revival Shot or load a saved game.");}
@@ -1273,6 +1306,16 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(steps>=6)accumulator=0;
             if(!hunt_fixed_pose&&!hunt.encounter.active)pe_sandbox_actor_update(actor,smoke_frames?PE_FIXED_DT:dt,game);
         } else {accumulator=0;jump_pending=false;}
+        /* Pickup owns no input. Ordinary menus and dead-player expiry continue;
+         * only focus loss/pause suspend this once-per-display transaction. */
+        if(focused&&!action.paused){
+            unsigned picked=0,expired=0;
+            if(!pe_hunt_loot_update(game,&picked,&expired)){
+                snprintf(error,sizeof error,"Hunt loot transaction failed");result=1;break;
+            }
+            if(picked&&!hunt_completed_this_frame)snprintf(game->message,sizeof game->message,"Collected loot: %u stack%s.",picked,picked==1?"":"s");
+            if(combat_trace&&(picked||expired))fprintf(stderr,"Hunt loot: picked=%u expired=%u remaining=%u\n",picked,expired,game->hunt_loot.count);
+        }
         profile_stage(&profile,PROFILE_REMESH);
         if(smoke_frames&&frame==30)pe_world_dig(&game->world,(PeVec3){27,pe_world_height(&game->world,27,27),27},1.7f);
         if(loaded||mesh_revision!=game->world.revision) {
@@ -1348,6 +1391,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible&&!pe_adventure_npc_view_draw(&residents[i].view,residents[i].npc.position,residents[i].npc.yaw,supplier_seconds)){snprintf(error,sizeof error,"Town NPC rendering failed");result=1;}
         if(!game->world.source)DrawCube((Vector3){31.5f,5.5f,31.5f},63,.06f,63,(Color){54,132,149,170});
         source_end_3d();
+        sandbox_loot_markers(game,collision,camera,&ui);
         profile_stage(&profile,PROFILE_UI_DRAW);
         if(picked_repair.hit&&repair_distance<fminf(plant_distance,fminf(nearest_npc,deploy_distance))&&
            action.npc_interaction&&!ui.history.open&&!ui.town_open&&!ui.repair_open)

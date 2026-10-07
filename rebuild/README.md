@@ -1,5 +1,7 @@
 # Planet Explorers C rebuild
 
+Hunt hares now drop source-derived loot. Walk within four metres while alive to collect it automatically; a full inventory leaves complete stacks on the ground. Uncollected drops survive saving/loading and hunt completion. Saves are now **PECSv22**; older saves load with no retroactive drops. Nearby ground icons are a bounded presentation adapter. [Loot rules and limits](../docs/audit/HUNT_LOOT.md).
+
 **Esc → Settings** in either game mode, or Main Menu → Settings, has **Camera-facing attacks**, OFF by default. Turn it ON to aim free-mouse third-person attacks along the camera in both sandbox and tutorial. Change it while paused, then use Back/Esc to return to Pause and Resume; it applies immediately to subsequent attacks without leaving the session. Settings save automatically outside world saves; restart any already-running older executable to use the update.
 
 With the setting OFF, Adventure blade attacks use movement direction (or current body facing while idle) and bounded source-based nearby-hare targeting. With it ON, the camera supplies the requested attack direction; nearby-target assistance still applies and freezes for each stage. Camera orientation itself stays independent. See [combat scope and adapters](../docs/audit/MELEE_TARGET_FACING.md). Wood Sword/Shield activation remains gated on qualified blocking presentation.

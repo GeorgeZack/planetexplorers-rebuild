@@ -23,6 +23,9 @@ RECIPE_IDS = (1, 7, 8, 19, 20, 58, 152, 13)
 ANNOT_VENDOR_PROTOTYPES = (153, 158, 163, 143, 148)
 RESOURCE_IDS = (268, 271, 273, 279, 280)
 HARVEST_RESOURCE_IDS = (1015, 1037, 1040, 1048, 1146)
+# Bounded hare13 -> loot11 dependencies. The separate hunt-loot exporter owns
+# roll/ownership qualification; these definitions must not depend on shop stock.
+HUNT_LOOT_CATALOG_IDS = (229, 1011, 1008, 236, 1026, 1228, 1742)
 FOLLOWUP_QUEST_IDS = tuple(range(9077, 9085))
 FOLLOWUP_ITEM_FIELDS = ('Get_MissionItem', 'RewardItem', 'CoRemoveItem')
 FOLLOWUP_GRANTS = {
@@ -239,6 +242,7 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         selected_ids |= vendor_items | {v['item_id'] for rows in medicine_grants.values() for v in rows}
         selected_ids |= {v['item_id'] for v in hunt_return_rewards}
         selected_ids.update(STARTER_OUTFIT_CATALOG_IDS)
+        selected_ids.update(HUNT_LOOT_CATALOG_IDS)
         wild_harvest_items = harvest_item_ids(db)
         selected_ids.update(wild_harvest_items)
         starter_outfit_catalog = []
@@ -407,6 +411,7 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         'adventure_starter': starter, 'adventure_supplies': supplies,
         'medicine_grants': medicine_grants, 'annot_vendor_item_ids': sorted(vendor_items),
         'hunt_return_rewards': hunt_return_rewards,
+        'hunt_loot_catalog_ids': list(HUNT_LOOT_CATALOG_IDS),
         'followup_quest_items': followup_quest_items,
         'followup_script_components': followup_script_components,
         'followup_catalog_scope': 'Definitions and ordinary learning/crafting only; no quest grant/acceptance, colony deployment, vehicle assembly or item-use activation.',

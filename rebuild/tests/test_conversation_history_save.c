@@ -32,8 +32,8 @@ int pe_test_conversation_history_save(void){
         assert(pe_conversation_history_add(&g->conversation_history,"名字","café 🌱",NULL));
         assert(pe_game_save(g,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));
         assert(!memcmp(&g->conversation_history,&loaded->conversation_history,sizeof g->conversation_history));
-        size_t n=0,m=0;unsigned char *bytes=read_file(path,&n);assert(bytes&&n>PE_SAVE_V21_APPEND+16);
-        size_t tail=n-PE_SAVE_V21_APPEND;assert(get(bytes+4)==21&&get(bytes+tail)==2);
+        size_t n=0,m=0;unsigned char *bytes=read_file(path,&n);assert(bytes&&n>(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+16);
+        size_t tail=n-(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND);assert(get(bytes+4)==PE_SAVE_VERSION&&get(bytes+tail)==2);
         assert(!strcmp((char *)bytes+tail+4,"Westina"));
         assert(!strcmp((char *)bytes+tail+4+PE_CONVERSATION_SPEAKER_CAPACITY,"Hello, explorer.\nWelcome!"));
         /* V20 is a literal prefix; old files acquire no invented past rows. */
@@ -45,7 +45,7 @@ int pe_test_conversation_history_save(void){
         for(size_t i=tail;i<m;i++)assert(!again[i]);
         free(again);
         assert(write_file(path,bytes,tail-PE_SAVE_V20_APPEND,19)&&pe_game_load(loaded,path,error,sizeof error)&&!loaded->conversation_history.count);
-        assert(write_file(path,bytes,n,21)&&pe_game_load(loaded,path,error,sizeof error));
+        assert(write_file(path,bytes,n,PE_SAVE_VERSION)&&pe_game_load(loaded,path,error,sizeof error));
         unsigned char *bad=malloc(n+1);assert(bad);memcpy(snapshot,loaded,sizeof *loaded);
         uint64_t hash=pe_world_hash(&loaded->world);
         for(unsigned fault=0;fault<8;fault++){
@@ -57,15 +57,15 @@ int pe_test_conversation_history_save(void){
             if(fault==3)bad[row+8]=1; /* nonzero after speaker NUL */
             if(fault==4)bad[row]=0xff; /* invalid UTF-8 */
             if(fault==5)memcpy(bad+second+PE_CONVERSATION_SPEAKER_CAPACITY,bad+row+PE_CONVERSATION_SPEAKER_CAPACITY,PE_CONVERSATION_CONTENT_CAPACITY);
-            if(fault==6)bad[n-1]=1; /* unused row must be all zero */
+            if(fault==6)bad[tail+PE_SAVE_V21_APPEND-1]=1; /* unused row must be all zero */
             if(fault==7)put(bad+tail,0); /* live strings in unused rows */
-            assert(write_file(path,bad,n,21)&&!pe_game_load(loaded,path,error,sizeof error));
+            assert(write_file(path,bad,n,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));
             assert(!memcmp(snapshot,loaded,sizeof *loaded)&&pe_world_hash(&loaded->world)==hash);
         }
-        memcpy(bad,bytes,n);assert(write_file(path,bad,n-1,21)&&!pe_game_load(loaded,path,error,sizeof error));
-        memcpy(bad,bytes,n);bad[n]=0;assert(write_file(path,bad,n+1,21)&&!pe_game_load(loaded,path,error,sizeof error));
+        memcpy(bad,bytes,n);assert(write_file(path,bad,n-1,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));
+        memcpy(bad,bytes,n);bad[n]=0;assert(write_file(path,bad,n+1,PE_SAVE_VERSION)&&!pe_game_load(loaded,path,error,sizeof error));
         assert(!memcmp(snapshot,loaded,sizeof *loaded));
-        assert(write_file(path,bytes,n,21));g->conversation_history.entries[19].content[1]='x';
+        assert(write_file(path,bytes,n,PE_SAVE_VERSION));g->conversation_history.entries[19].content[1]='x';
         assert(!pe_game_save(g,path,error,sizeof error));again=read_file(path,&m);assert(again&&m==n&&!memcmp(bytes,again,n));free(again);
         assert(!pe_game_clone(loaded,g)&&!memcmp(snapshot,loaded,sizeof *loaded));
         g->conversation_history.entries[19].content[1]=0;

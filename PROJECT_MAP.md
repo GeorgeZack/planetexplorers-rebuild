@@ -2,6 +2,8 @@
 
 The private rebuild uses `master` as its working/default branch on remote `rebuild`. Local `unity-reference-master` preserves the original source reference tracking `origin/master`.
 
+[Hunt loot](docs/audit/HUNT_LOOT.md): `pe_hunt_loot` owns source rolls, saved world-item identities, whole-stack pickup and expiry; `pe_hunt_loot_combat` commits actual contact deaths with their drops. PECSv22 appends this state without changing the v21 payload. `export_hunt_loot.py` guards the active source path, database and prefab; the sandbox host supplies readonly icon clusters through shared UI primitives.
+
 [Attack preference](docs/audit/MELEE_TARGET_FACING.md#optional-camera-facing-attacks): `pe_preferences` owns user configuration outside world saves, `pe_ui_settings` owns the shared Settings view/input in main menu and both Pause menus, and `pe_melee_facing_request` supplies the optional free-third-person camera direction to both hosts. Default OFF; Sword/Shield activation remains gated.
 
 October7 combat follow-through: [Adventure target/facing](docs/audit/MELEE_TARGET_FACING.md) connects `pe_hunt_targeting` and `pe_melee_facing` to the existing Knife host; camera orientation stays independent. [Hit-reaction decisions](docs/audit/HIT_REACTION.md) remain disconnected pending reaction pose/motor qualification.

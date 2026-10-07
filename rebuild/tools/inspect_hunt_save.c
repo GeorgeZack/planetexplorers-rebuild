@@ -43,5 +43,12 @@ int main(int argc,char **argv){
     printf("],\"quickslots\":[");
     for(int i=0;i<PE_QUICKSLOTS;i++)printf("%s{\"key\":%d,\"item_id\":%d,\"instance_id\":%u}",
         i?",":"",i+1,g->quickslots[i].item_id,g->quickslots[i].instance_id);
+    printf("],\"hunt_loot\":[");
+    for(unsigned i=0;i<g->hunt_loot.count;i++){
+        const PeHuntLootDrop *d=&g->hunt_loot.drops[i];
+        printf("%s{\"instance_id\":%u,\"item_id\":%d,\"count\":%d,\"source_position\":[%.9g,%.9g,%.9g],\"created_seconds\":%.17g}",
+            i?",":"",d->instance_id,d->item_id,d->count,(double)d->position.x+g->world.origin_x,
+            (double)d->position.y+g->world.origin_y,(double)d->position.z+g->world.origin_z,d->created_seconds);
+    }
     puts("]}");pe_game_destroy(g);free(g);return 0;
 }

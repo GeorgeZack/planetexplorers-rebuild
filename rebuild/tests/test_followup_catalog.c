@@ -1,5 +1,6 @@
 #include "pe_game.h"
 #include "pe_deployable.h"
+#include "../generated/pe_hunt_loot_source.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,7 +11,16 @@ static int slot(const PeGame*g,int id){for(int i=0;i<pe_inventory_capacity(&g->i
 static void clear_bag(PeGame*g){uint32_t next=g->inventory.next_instance_id;g->inventory=(PeInventory){.next_instance_id=next,.categorized=true};g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);}
 int pe_test_followup_catalog(void){
  failures=0;PeGame*g=calloc(1,sizeof *g);CHECK(g);if(!g)return failures;
- CHECK(pe_game_init_mode(g,415,PE_GAME_ADVENTURE));CHECK(pe_item_count==341&&pe_recipe_count==108&&pe_recipe_count<PE_KNOWN_RECIPES);
+ CHECK(pe_game_init_mode(g,415,PE_GAME_ADVENTURE));CHECK(pe_item_count==342&&pe_recipe_count==108&&pe_recipe_count<PE_KNOWN_RECIPES);
+ /* Loot dependencies are explicit catalog additions, not new recipe grants.
+  * Soft Fur1228 was absent from the prior shop/recipe dependency closure. */
+ bool soft_fur=false;
+ for(unsigned i=0;i<PE_HUNT_LOOT_ITEM_COUNT;i++){
+  const PeHuntLootItemDef*loot=&pe_hunt_loot_items[i];const PeItemDef*d=pe_item_def(loot->item_id);
+  CHECK(d&&d->stack_limit==(int)loot->max_stack&&d->tab==2&&d->learn_kind==PE_LEARN_NONE&&!pe_item_has_durability(loot->item_id));
+  if(loot->item_id==1228)soft_fur=true;
+ }
+ CHECK(soft_fur&&pe_inventory_count(&g->inventory,1228)==0);
  static const int scripts[]={465,473,478,481,490,657,660,662,696};
  static const int formulas[]={43,46,48,60,68,73,76,85,252,255,257,291,295};
  for(unsigned i=0;i<sizeof scripts/sizeof *scripts;i++)CHECK(pe_inventory_count(&g->inventory,scripts[i])==0);

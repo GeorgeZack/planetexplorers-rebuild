@@ -212,7 +212,7 @@
     },
     {
       "path": "rebuild/generated/content_manifest.json",
-      "sha256": "80aca0e69fc5bdde77e90103051b216b98d7a558d8ae1f37008ad507d342ced5"
+      "sha256": "c1458f0f0ee539b8c1db44036ff5a0d074d586e3944562e38ef00395a97370c5"
     },
     {
       "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/AssetBundles/Item/RepairMachine_Static.unity3d",
@@ -613,7 +613,7 @@
     }
   ],
   "catalog": {
-    "catalog_item_count": 341,
+    "catalog_item_count": 342,
     "repair_component_count": 71,
     "qualified": [
       {

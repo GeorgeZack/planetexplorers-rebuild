@@ -15,13 +15,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--shared',action='store_true',help='compare tutorial and sandbox shared UI')
     parser.add_argument('--settings',action='store_true',help='render and exercise shared main-menu settings')
+    parser.add_argument('--loot',action='store_true',help='render staged hunt loot icons')
     args = parser.parse_args()
-    if args.shared and args.settings: parser.error('select one capture type')
+    if sum((args.shared,args.settings,args.loot))>1: parser.error('select one capture type')
     out = root/('rebuild/build/ui-shared-captures' if args.shared else 'rebuild/build/ui-details-captures')
     binary = 'render_shared_ui' if args.shared else 'render_shop_details_ui'
     if args.settings:
         out=root/'rebuild/build/settings-captures'
         binary='render_app_settings'
+    if args.loot:
+        out=root/'rebuild/build/hunt-loot-captures'
+        binary='render_hunt_loot'
     out.mkdir(exist_ok=True)
     server = None
     try:

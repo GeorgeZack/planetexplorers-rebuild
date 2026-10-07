@@ -33,6 +33,22 @@ class ContentTests(unittest.TestCase):
         shutil.copyfile(export.DEFAULT_DATABASE, path)
         return path
 
+    def test_hunt_loot_catalog_closure(self):
+        # Every possible resource from the qualified roll must be constructible
+        # by native inventory, even when absent from shops and recipe closure.
+        loot = json.loads((export.ROOT/'rebuild/generated/pe_hunt_loot_source.json').read_text())
+        required = {loot['meat']['item_id']} | {v['item_id'] for v in loot['entries'] if v['item_id']}
+        self.assertEqual(set(self.manifest['hunt_loot_catalog_ids']), required)
+        items = {row['id']: row for row in self.manifest['items']}
+        for definition in loot['items']:
+            row = items[definition['item_id']]
+            self.assertEqual(row['stack_limit'], definition['max_stack'])
+            self.assertEqual(row['tab'], definition['inventory_tab'])
+            self.assertEqual(row['icons'][0], definition['icon'])
+            self.assertEqual(row['component_class'], 0)
+            self.assertFalse(row['has_durability'])
+            self.assertEqual(row['tool_kind'], 'PE_TOOL_NONE')
+
     def mutate(self, path, sql, arguments=()):
         with closing(sqlite3.connect(path)) as db:
             db.execute(sql, arguments)
@@ -45,7 +61,7 @@ class ContentTests(unittest.TestCase):
     def test_original_recipe_and_item_invariants(self):
         items = {row['id']: row for row in self.manifest['items']}
         recipes = {row['id']: row for row in self.manifest['recipes']}
-        self.assertEqual(len(items), 341)
+        self.assertEqual(len(items), 342)
         self.assertEqual(len(recipes), 108)
         self.assertEqual({k: items[279][k] for k in ('id', 'name', 'stack_limit')},
                          {'id': 279, 'name': 'Wood', 'stack_limit': 9999})
