@@ -20,6 +20,21 @@ static float oracle(float from,float to,float t){
 int pe_test_melee_facing(void){
     failures=0;
     PeVec3 out={0};
+    PeVec3 movement={3,17,-4};
+    for(unsigned enabled=0;enabled<2;enabled++)for(unsigned free_mode=0;free_mode<2;free_mode++){
+        if(enabled&&free_mode)continue;
+        CHECK(pe_melee_facing_request(movement,enabled,free_mode,NAN,&out));
+        CHECK(!memcmp(&out,&movement,sizeof out));
+    }
+    const PeVec3 camera_directions[]={{0,0,-1},{1,0,0},{0,0,1},{-1,0,0}};
+    for(unsigned i=0;i<4;i++){
+        CHECK(pe_melee_facing_request(movement,true,true,(float)(i*90*radians),&out));
+        CHECK(fabsf(out.x-camera_directions[i].x)<2e-7f&&out.y==0&&fabsf(out.z-camera_directions[i].z)<2e-7f);
+    }
+    CHECK(pe_melee_facing_request((PeVec3){0},false,true,0,&out));
+    CHECK(out.x==0&&out.y==0&&out.z==0); /* Retain body-forward fallback. */
+    CHECK(pe_melee_facing_request(movement,true,true,FLT_MAX,&out));
+    CHECK(isfinite(out.x)&&isfinite(out.z)&&fabs(hypot(out.x,out.z)-1)<1e-6);
     CHECK(pe_melee_facing_direction((PeVec3){3,17,4},-123,&out));
     CHECK(fabsf(out.x-.6f)<1e-7f&&out.y==0&&fabsf(out.z-.8f)<1e-7f);
     CHECK(pe_melee_facing_direction((PeVec3){0},90,&out));
@@ -63,6 +78,15 @@ int pe_test_melee_facing(void){
     CHECK(pe_melee_facing_yaw(0,direction(90),&target,.1f,&yaw)&&near(yaw,90));
 
     PeVec3 sentinel={7,8,9};out=sentinel;
+    CHECK(!pe_melee_facing_request(movement,true,true,NAN,&out));
+    CHECK(!memcmp(&out,&sentinel,sizeof out));
+    CHECK(!pe_melee_facing_request(movement,true,true,INFINITY,&out));
+    CHECK(!memcmp(&out,&sentinel,sizeof out));
+    CHECK(!pe_melee_facing_request((PeVec3){1,NAN,0},false,true,0,&out));
+    CHECK(!memcmp(&out,&sentinel,sizeof out));
+    CHECK(!pe_melee_facing_request((PeVec3){INFINITY,0,0},true,true,0,&out));
+    CHECK(!memcmp(&out,&sentinel,sizeof out));
+    CHECK(!pe_melee_facing_request(movement,true,true,0,NULL));
     CHECK(!pe_melee_facing_direction((PeVec3){NAN,0,1},0,&out));
     CHECK(!memcmp(&out,&sentinel,sizeof out));
     CHECK(!pe_melee_facing_direction((PeVec3){1,INFINITY,1},0,&out));

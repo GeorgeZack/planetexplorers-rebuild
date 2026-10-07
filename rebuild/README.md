@@ -1,6 +1,8 @@
 # Planet Explorers C rebuild
 
-Adventure blade attacks now use movement direction (or current body facing while idle) and bounded source-based nearby-hare targeting. The camera stays independent; target assistance freezes for each stage. See [combat scope and adapters](../docs/audit/MELEE_TARGET_FACING.md). Wood Sword/Shield activation remains gated on qualified blocking presentation.
+Main Menu → Settings now has **Camera-facing attacks**, OFF by default. Turn it ON to aim free-mouse third-person attacks along the camera in both sandbox and tutorial. Return through Esc → Main Menu to change it during play, then Continue Sandbox. Settings save automatically outside world saves; restart any already-running older executable to use the update.
+
+With the setting OFF, Adventure blade attacks use movement direction (or current body facing while idle) and bounded source-based nearby-hare targeting. With it ON, the camera supplies the requested attack direction; nearby-target assistance still applies and freezes for each stage. Camera orientation itself stays independent. See [combat scope and adapters](../docs/audit/MELEE_TARGET_FACING.md). Wood Sword/Shield activation remains gated on qualified blocking presentation.
 
 Conversation history is available from the speech-bubble icon on the minimap in both modes. It keeps the latest20 unique messages, supports scrolling/scrollbar dragging and Clear, and persists with sandbox saves (PECSv21). Older saves start with an empty log; tutorial history lasts for that session. [Contract and controls](../docs/audit/CONVERSATION_HISTORY.md). The [Adventure camera update](../docs/audit/CAMERA_ALIGNMENT.md) integrates camera-only wall queries and shares the rendered pose with cursor targeting; its close-rendering and timing adapters are documented.
 

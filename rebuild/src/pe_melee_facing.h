@@ -3,6 +3,15 @@
 
 #include "pe_sword_targeting.h"
 
+/* Optional native QoL request basis, before ordinary stage direction/targeting.
+ * Default/off and captured camera modes preserve the finite movement vector
+ * unchanged. Enabled free third person uses the camera's reflected horizontal
+ * forward (sin(yaw),0,-cos(yaw)); camera yaw is radians and is validated only
+ * when used. The caller captures requests on fresh attack/continuation presses;
+ * changing the camera does not steer a frozen stage. Failure preserves output. */
+bool pe_melee_facing_request(PeVec3 movement,bool camera_facing,
+    bool free_third_person,float camera_yaw_radians,PeVec3 *out_request);
+
 /* Grounded third-person Action_Sword direction policy. Angles are degrees:
  * yaw0 faces world+Z and yaw90 faces+X. The host captures accepted input at
  * stage admission/continuation, never actual attack-root velocity or cursor.

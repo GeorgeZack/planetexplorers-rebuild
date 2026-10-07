@@ -14,9 +14,14 @@ import native_private_input as private
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--shared',action='store_true',help='compare tutorial and sandbox shared UI')
+    parser.add_argument('--settings',action='store_true',help='render and exercise shared main-menu settings')
     args = parser.parse_args()
+    if args.shared and args.settings: parser.error('select one capture type')
     out = root/('rebuild/build/ui-shared-captures' if args.shared else 'rebuild/build/ui-details-captures')
     binary = 'render_shared_ui' if args.shared else 'render_shop_details_ui'
+    if args.settings:
+        out=root/'rebuild/build/settings-captures'
+        binary='render_app_settings'
     out.mkdir(exist_ok=True)
     server = None
     try:

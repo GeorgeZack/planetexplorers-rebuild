@@ -3,6 +3,8 @@
 #include "pe_training.h"
 #include "pe_player_locomotion.h"
 #include "pe_training_melee.h"
+#include "pe_melee_facing.h"
+#include "pe_preferences.h"
 #include "pe_training_tree_hit.h"
 #include "pe_training_terrain_view.h"
 #include "pe_training_build.h"
@@ -236,6 +238,10 @@ fail:
 }
 
 int pe_training_view(const char *asset_dir, int smoke_frames, const char *screenshot) {
+    PePreferences preferences={0};char settings_path[4096],settings_error[256];
+    if(!pe_preferences_default_path(settings_path,sizeof settings_path,settings_error,sizeof settings_error)||
+       !pe_preferences_load(&preferences,settings_path,settings_error,sizeof settings_error))
+        fprintf(stderr,"Settings: %s (using defaults)\n",settings_error);
     char model_path[4096], collision_path[4096], kit_path[4096], knife_path[4096], actor_path[4096], actor_texture[4096], player_path[4096], idle_path[4096], stowed_path[4096], error[256];
     if (!asset_dir || !*asset_dir || smoke_frames < 0 || (screenshot && !smoke_frames)) {
         fprintf(stderr, "Invalid training view arguments\n");
@@ -965,8 +971,19 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                     .velocity=measured_velocity};
                 if(attack_pending&&melee.ready) {
                     if(melee.action.active)pe_training_melee_queue(&melee);
-                    else if(pe_training_melee_begin(&melee,gate,&training.stamina)){
-                        player_yaw=atan2f(sinf(yaw),-cosf(yaw))*RAD2DEG;melee_swings++;
+                    else {
+                        PeVec3 request,direction;
+                        /* Stationary lesson attacks share the free-camera
+                         * preference; captured modes retain camera facing. */
+                        PeVec3 base=training.camera_mode==0?(PeVec3){input.move_x,0,input.move_z}:
+                            (PeVec3){sinf(yaw),0,-cosf(yaw)};
+                        if(!pe_melee_facing_request(base,preferences.camera_facing_attacks,training.camera_mode==0,yaw,&request)||
+                           !pe_melee_facing_direction(request,player_yaw,&direction)){
+                            failed=true;quit=true;break;
+                        }
+                        if(pe_training_melee_begin(&melee,gate,&training.stamina)){
+                            player_yaw=atan2f(direction.x,direction.z)*RAD2DEG;melee_swings++;
+                        }
                     }
                 }
                 attack_pending=false;

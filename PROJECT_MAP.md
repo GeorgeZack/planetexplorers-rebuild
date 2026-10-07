@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[Attack preference](docs/audit/MELEE_TARGET_FACING.md#optional-camera-facing-attacks): `pe_preferences` owns user configuration outside world saves, `pe_app_menu` owns the shared Settings entry, and `pe_melee_facing_request` supplies the optional free-third-person camera direction to both hosts. Default OFF; Sword/Shield activation remains gated.
+
 October7 combat follow-through: [Adventure target/facing](docs/audit/MELEE_TARGET_FACING.md) connects `pe_hunt_targeting` and `pe_melee_facing` to the existing Knife host; camera orientation stays independent. [Hit-reaction decisions](docs/audit/HIT_REACTION.md) remain disconnected pending reaction pose/motor qualification.
 
 The current increment adds [conversation history](docs/audit/CONVERSATION_HISTORY.md), owned by `pe_conversation_history` in PeGame (PECSv21) and the shared `pe_ui_history` renderer; tutorial has a transient owner. [Camera alignment](docs/audit/CAMERA_ALIGNMENT.md) integrates the recovered geometry evaluator with camera-only queries and one shared display pose for rendering/picking. See the linked contracts for native adapters and evidence limits.

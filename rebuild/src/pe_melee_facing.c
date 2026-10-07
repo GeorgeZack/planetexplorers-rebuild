@@ -6,6 +6,17 @@ static const double radians=3.14159265358979323846/180.;
 static bool finite_vector(PeVec3 p){return isfinite(p.x)&&isfinite(p.y)&&isfinite(p.z);}
 static double wrapped(double yaw){return remainder(yaw,360.);}
 
+bool pe_melee_facing_request(PeVec3 movement,bool camera_facing,
+    bool free_third_person,float camera_yaw,PeVec3 *out){
+    if(!out||!finite_vector(movement))return false;
+    PeVec3 request=movement;
+    if(camera_facing&&free_third_person){
+        if(!isfinite(camera_yaw))return false;
+        request=(PeVec3){sinf(camera_yaw),0,-cosf(camera_yaw)};
+    }
+    *out=request;return true;
+}
+
 bool pe_melee_facing_direction(PeVec3 movement,float yaw,PeVec3 *out){
     if(!out||!finite_vector(movement)||!isfinite(yaw))return false;
     double length=hypot((double)movement.x,(double)movement.z);

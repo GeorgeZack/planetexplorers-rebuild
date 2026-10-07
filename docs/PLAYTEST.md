@@ -1,5 +1,17 @@
 # Original-game playtest and C comparison
 
+## October7 camera-facing attack preference
+
+Source-derived: the original default uses requested movement, falling back to body forward; `AttackWhithMouseDir=true` instead projects the cursor ray onto a player-height plane. No new Steam session or claim about the user's original saved setting is made. [Direction and preference contract](audit/MELEE_TARGET_FACING.md#optional-camera-facing-attacks).
+
+Implemented in C: main-menu Settings exposes a persistent default-OFF camera-facing attack preference, scoped to free third person. Both hosts read the same preference/helper; Adventure retains target assistance and frozen stages, and tutorial retains its stationary combo adapter. No PECS payload or Sword/Shield activation changed.
+
+Automated checks pass: optimized build; preferences load/save/error rollback; actual-menu keyboard/mouse ownership, five-entry navigation and save failure/retry; pure direction/mode/invalid-input tests; real-asset sandbox host idle/moving/default/camera starts, frozen stages and latest pressed continuation; focused ASan/UBSan with leak detection for preferences, menu, direction and real-asset sandbox facing. Shared UI, sandbox UI, training asset clocks, consumable host regressions and26 CLI checks pass. This is focused verification, not a new complete runtime/asset suite.
+
+The actual menu renderer passes scripted OFF→ON persistence at1280×720 and800×450 on the qualified private display. [Normal OFF](reference/attack-settings/settings-off.png) and [small ON](reference/attack-settings/settings-on-small.png) were inspected; labels stay inside the panel. Paired tutorial/sandbox HUD/history pixel captures pass at1280×720,640×480 and320×240; normal/small HUDs were inspected. These are staged render checks, not physical attack acceptance. Settings tests write isolated files under build, never the user's preference or world save. Original Steam and user desktop input were not used.
+
+The actual tutorial host also passed isolated scripted runs with both values: OFF ran15,000 frames to mission756 with nine NPCs,19 construction additions/one removal/score50; ON ran3,600 frames through combat to mission719. Both exited0 and recorded eight melee starts,24 contacts and hareHP0. Logs are local under `rebuild/build/preferences-training`. This checks regression and preference loading in the lesson host, not an ordinary manually earned combat run or visual original parity. The final installed executable SHA256 is `0e2810885a3dcf4524e74f45f3103c285816e80db6e442df35745b6c8a34c1d0`.
+
 Session: 2026-10-03. Reference: installed Linux Planet Explorers V1.1.4, Unity 5.2.4f1, launched with `rebuild/tools/launch_reference.py` into the isolated reference profile. No Unity editor or plugins were needed. The original source/assets and normal saves remain separate from the rebuild.
 
 ## Evening sandbox reference pass

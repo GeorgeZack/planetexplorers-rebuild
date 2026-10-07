@@ -4,6 +4,7 @@
 #include "pe_adventure_hunt.h"
 #include "../generated/pe_torch_source.h"
 #include "pe_sandbox_view.h"
+#include "pe_preferences.h"
 #include "pe_sandbox_ui.h"
 #include "pe_sandbox_actor.h"
 #include "pe_sandbox_actions.h"
@@ -612,6 +613,10 @@ static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *d
 }
 int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     int smoke_frames,const char *smoke_panel,const char *screenshot) {
+    PePreferences preferences={0};char settings_path[4096],settings_error[256];
+    if(!pe_preferences_default_path(settings_path,sizeof settings_path,settings_error,sizeof settings_error)||
+       !pe_preferences_load(&preferences,settings_path,settings_error,sizeof settings_error))
+        fprintf(stderr,"Settings: %s (using defaults)\n",settings_error);
     const char *profile_env=getenv("PE_SANDBOX_PROFILE");
     const char *combat_trace_env=getenv("PE_SANDBOX_COMBAT_TRACE");
     bool combat_trace=combat_trace_env&&!strcmp(combat_trace_env,"1");
@@ -1139,8 +1144,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 bool melee_stamina_lock=melee.ready&&melee.action.active;
                 PeCombatInterval attack_interval={0};bool began=false,rejected=false;
                 float attack_yaw=pe_sandbox_actor_yaw(actor,game);
-                if(melee.ready&&(!sandbox_blade_tick(&melee,&blade_facing,&hunt.encounter,melee_gate,attack_pending,
-                    (PeVec3){input.move_x,0,input.move_z},game->player,attack_yaw,&game->stamina,
+                PeVec3 attack_request;
+                if(melee.ready&&(!pe_melee_facing_request((PeVec3){input.move_x,0,input.move_z},
+                    preferences.camera_facing_attacks,camera_controls.mode==PE_SANDBOX_CAMERA_FREE,game->yaw,&attack_request)||
+                    !sandbox_blade_tick(&melee,&blade_facing,&hunt.encounter,melee_gate,attack_pending,
+                    attack_request,game->player,attack_yaw,&game->stamina,
                     &attack_interval,&attack_yaw,&began,&rejected)||
                     !pe_sandbox_actor_face_yaw(actor,attack_yaw))){
                     snprintf(error,sizeof error,"Invalid sandbox blade facing/action clock");result=1;break;
