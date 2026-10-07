@@ -31,6 +31,12 @@ static void terrain_free(Terrain *t){pe_scene_free(t->scene);free(t->orientation
 PeSandboxCollision *pe_sandbox_collision_create(void){return calloc(1,sizeof(PeSandboxCollision));}
 void pe_sandbox_collision_free(PeSandboxCollision *c){if(c){for(int i=0;i<c->terrain_count;i++)terrain_free(&c->terrain[i]);pe_scene_free(c->construction);pe_world_destroy(&c->world);free(c);}}
 PeSandboxCollisionStats pe_sandbox_collision_stats(const PeSandboxCollision *c){return c?c->stats:(PeSandboxCollisionStats){0};}
+size_t pe_sandbox_collision_scene_count(const PeSandboxCollision *c){return c&&c->ready?(size_t)c->terrain_count+2:0;}
+bool pe_sandbox_collision_scene(const PeSandboxCollision *c,size_t i,const PeSceneCollision **scene,PeSandboxSceneKind *kind){
+    if(!scene||!kind||i>=pe_sandbox_collision_scene_count(c))return false;
+    *kind=i<(size_t)c->terrain_count?PE_SANDBOX_SCENE_TERRAIN:i==(size_t)c->terrain_count?PE_SANDBOX_SCENE_CONSTRUCTION:PE_SANDBOX_SCENE_STATIC;
+    *scene=*kind==PE_SANDBOX_SCENE_TERRAIN?c->terrain[i].scene:*kind==PE_SANDBOX_SCENE_CONSTRUCTION?c->construction:c->static_scene;return true;
+}
 PeSceneHit pe_sandbox_collision_ray_geometry(const PeSandboxCollision *c,PeVec3 p,PeVec3 d,float range){
     PeSceneHit best={0};
     if(!c||!c->ready||!finite3(p)||!finite3(d)||!isfinite(range)||range<=0)return best;
@@ -123,11 +129,19 @@ bool pe_sandbox_collision_update_with_static(PeSandboxCollision *c,const PeWorld
     }
     if(build_changed){
         PeMeshData mesh={0};size_t capacity=(nc+nb)*36;
+        uint32_t groups[(PE_SANDBOX_COLLISION_MAX_CELLS+PE_SANDBOX_COLLISION_MAX_BOXES)*12];
         mesh.vertices=capacity?calloc(capacity,sizeof *mesh.vertices):NULL;
         if(capacity&&!mesh.vertices){error_set(error,cap,"Sandbox construction allocation failed");goto fail;}
-        for(size_t i=0;i<nc;i++)mesh.count+=pe_b45_mesh(&cells[i],mesh.vertices+mesh.count,capacity-mesh.count);
-        for(size_t i=0;i<nb;i++){emit_box(boxes[i],mesh.vertices+mesh.count);mesh.count+=36;}
-        construction=pe_scene_from_mesh(&mesh,(PeVec3){0},error,cap);pe_mesh_free(&mesh);if(!construction)goto fail;
+        for(size_t i=0;i<nc;i++){
+            size_t before=mesh.count;mesh.count+=pe_b45_mesh(&cells[i],mesh.vertices+mesh.count,capacity-mesh.count);
+            for(size_t j=before/3;j<mesh.count/3;j++)groups[j]=(uint32_t)i;
+        }
+        for(size_t i=0;i<nb;i++){
+            emit_box(boxes[i],mesh.vertices+mesh.count);
+            for(size_t j=mesh.count/3;j<mesh.count/3+12;j++)groups[j]=(uint32_t)(nc+i);
+            mesh.count+=36;
+        }
+        construction=pe_scene_from_grouped_mesh(&mesh,(PeVec3){0},groups,nc+nb,error,cap);pe_mesh_free(&mesh);if(!construction)goto fail;
     }
     if(any||!same_key){snapshot=calloc(1,sizeof *snapshot);if(!snapshot||!pe_world_clone(snapshot,w)){error_set(error,cap,"Collision snapshot allocation failed");goto fail;}}
     for(int i=0;i<count;i++)if(changed[i]){terrain_free(&c->terrain[i]);c->terrain[i]=pending[i];c->stats.terrain_rebuilds++;}

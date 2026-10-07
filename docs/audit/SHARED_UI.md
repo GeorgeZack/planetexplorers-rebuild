@@ -1,6 +1,6 @@
 # Shared tutorial and sandbox UI
 
-The tutorial and sandbox now use the same owners for normal HUD presentation, minimap chrome, mission tracking, common inventory/dialogue frames, and pointer/chrome input. Host adapters supply the data. This implements the user's requested consistency between modes; it does not merge their gameplay progression or establish complete Unity UI parity.
+The tutorial and sandbox now use the same owners for normal HUD presentation, minimap chrome, mission tracking, conversation history, common inventory/dialogue frames, and pointer/chrome input. Host adapters supply the data. This implements the user's requested consistency between modes; it does not merge their gameplay progression or establish complete Unity UI parity.
 
 ## Durable ownership rules
 
@@ -21,6 +21,8 @@ Tracker titles wrap inside bounded shared geometry, followed by objectives after
 Input and simulation ownership are separate. A real modal consumes world input. A quickslot consumable or action-only HUD press suppresses new world actions without freezing movement, camera state or NPC simulation. Once a modal owns any mouse press, all held frames and the final release frame remain owned; capture and held-tool actions require a subsequent world press. A real modal may escalate an action-only press; it must never be downgraded while held. The sandbox's existing public pointer functions delegate to the shared gate. The tutorial uses that same gate before movement, digging and capture admission.
 
 Menu dismissal owns its click, including a click over another control. A newly opened panel cannot process its opening click as an inventory/equipment action. Preserve these rules for direct hotkeys, HUD shortcuts, overlapping panels, focus loss and window dragging.
+
+The subsequent [conversation-history increment](CONVERSATION_HISTORY.md) adds `pe_ui_history` and its pure shared scroll/drag state. Both hosts use the same window and named minimap history-button geometry. Text measurement and drawing use `pe_ui_draw_flow`, the same word walker as bounded wrapping. Extend these owners when changing history instead of introducing a host copy.
 
 ## Allowed differences
 

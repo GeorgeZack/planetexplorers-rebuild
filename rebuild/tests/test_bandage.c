@@ -58,7 +58,7 @@ int pe_test_bandage(void){
     for(unsigned i=0;i<sizeof malformed/sizeof *malformed;i++){g->inventory.slots[bandage]=malformed[i];memcpy(snapshot,g,sizeof *g);CHECK(!pe_game_use_slot(g,bandage)&&!memcmp(snapshot,g,sizeof *g));}g->inventory.slots[bandage]=original;
     CHECK(pe_game_use_slot(g,bandage)&&g->hp==300&&g->medpack_cooldown==10);
     memcpy(snapshot,g,sizeof *g);pe_game_step(g,(PeInput){0},NAN);pe_game_step(g,(PeInput){0},-.1f);pe_game_step(g,(PeInput){0},0);CHECK(!memcmp(snapshot,g,sizeof *g));
-    FILE *f=fopen(path,"rb");CHECK(f);if(f){unsigned char header[8];CHECK(fread(header,1,8,f)==8&&header[4]==20&&header[5]==0);fclose(f);} /* No save revision needed. */
+    FILE *f=fopen(path,"rb");CHECK(f);if(f){unsigned char header[8];CHECK(fread(header,1,8,f)==8&&header[4]==21&&header[5]==0);fclose(f);} /* Bandage reuses the saved group9 timer; verify the current envelope. */
  done:
     if(fd>=0)unlink(path);
     pe_game_destroy(g);pe_game_destroy(loaded);free(g);free(loaded);free(snapshot);return failures;

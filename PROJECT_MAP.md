@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+The current increment adds [conversation history](docs/audit/CONVERSATION_HISTORY.md), owned by `pe_conversation_history` in PeGame (PECSv21) and the shared `pe_ui_history` renderer; tutorial has a transient owner. [Camera alignment](docs/audit/CAMERA_ALIGNMENT.md) integrates the recovered geometry evaluator with camera-only queries and one shared display pose for rendering/picking. See the linked contracts for native adapters and evidence limits.
+
 The shared UI owners are [pe_ui_draw](rebuild/src/pe_ui_draw.h) (fonts/wrapping/frame primitives), [pe_ui_hud](rebuild/src/pe_ui_hud.h) (HUD, minimap chrome and bounded tracker), [pe_ui_input](rebuild/src/pe_ui_input.h) (shortcuts and pointer ownership), and [pe_training_ui_layout](rebuild/src/pe_training_ui_layout.h) (geometry/window movement). Both host renderers adapt their own state to these owners. [Shared UI rules and review](docs/audit/SHARED_UI.md) prevent separate tutorial/sandbox fixes.
 
 The October7 [ordinary hunt acceptance](docs/audit/HUNT_ORDINARY_ACCEPTANCE.md) now verifies earned kills, exact partial reload, return rewards and resumed ending dialogue. [Private native input](docs/audit/NATIVE_PRIVATE_INPUT.md) enables further isolated normal-game checks without the user desktop; [save inspection](rebuild/tools/inspect_hunt_save.c) covers the full categorized inventory. Earlier pending-hunt statements below describe their historical checkpoints.

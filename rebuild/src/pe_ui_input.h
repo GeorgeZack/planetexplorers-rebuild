@@ -10,7 +10,7 @@ bool pe_ui_pointer_route(PeUiPointerGate *gate,bool *consume_world,bool *consume
 
 typedef struct {
     bool menu_open,consume_press;
-    int action; /* -1, or shared menu order: inventory, character, craft, mission, pause. */
+    int action; /* -1, or shared menu order: inventory, character, craft, mission, pause (0..4), conversation history (5). */
 } PeUiChromeResult;
 /* Presentation actions only. Hosts retain inventory, quest and pause policy.
  * A popup owns outside dismissals; a newly opened panel cannot receive its

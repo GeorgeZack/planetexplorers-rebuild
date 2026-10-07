@@ -19,14 +19,14 @@ void pe_ui_draw_center(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,floa
     Vector2 m=MeasureTextEx(pe_ui_draw_font(c,size,bold),s,size*c->layout->scale,0);
     pe_ui_draw_text(c,s,r.x+(r.w-m.x)*.5f,r.y+(r.h-m.y)*.5f,size,tint,bold);
 }
-float pe_ui_draw_wrap(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,float size,Color tint,bool bold,float gap){
+static float text_flow(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,float size,Color tint,bool bold,float gap,bool draw){
     float px=size*c->layout->scale,step=(size+gap)*c->layout->scale,y=r.y;
     if(!s||r.w<=0||r.h<=0||px<=0||step<=0)return 0;
     Font font=pe_ui_draw_font(c,size,bold);char line[2048]={0};size_t used=0;
-    BeginScissorMode((int)floorf(r.x),(int)floorf(r.y),(int)ceilf(r.w),(int)ceilf(r.h));
     while(*s&&y+px<=r.y+r.h+.01f){
         if(*s=='\n'){
-            pe_ui_draw_text(c,line,r.x,y,size,tint,bold);y+=step;used=0;line[0]=0;s++;continue;
+            if(draw)pe_ui_draw_text(c,line,r.x,y,size,tint,bold);
+            y+=step;used=0;line[0]=0;s++;continue;
         }
         if(*s==' '||*s=='\t'){s++;continue;}
         size_t n=strcspn(s," \t\n");
@@ -36,14 +36,25 @@ float pe_ui_draw_wrap(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,float
         char next[2048];bool fits=used+(used?1:0)+take<sizeof(next);
         if(fits){memcpy(next,line,used);size_t at=used;if(used)next[at++]=' ';memcpy(next+at,s,take);next[at+take]=0;}
         if(used&&(!fits||MeasureTextEx(font,next,px,0).x>r.w)){
-            pe_ui_draw_text(c,line,r.x,y,size,tint,bold);y+=step;used=0;line[0]=0;continue;
+            if(draw)pe_ui_draw_text(c,line,r.x,y,size,tint,bold);
+            y+=step;used=0;line[0]=0;continue;
         }
         if(used)line[used++]=' ';
         memcpy(line+used,s,take);used+=take;line[used]=0;s+=n;
     }
-    if(used&&y+px<=r.y+r.h+.01f){pe_ui_draw_text(c,line,r.x,y,size,tint,bold);y+=step;}
-    EndScissorMode();return fminf(r.h,fmaxf(0,y-r.y));
+    if(used&&y+px<=r.y+r.h+.01f){if(draw)pe_ui_draw_text(c,line,r.x,y,size,tint,bold);y+=step;}
+    return fminf(r.h,fmaxf(0,y-r.y));
 }
+float pe_ui_draw_flow(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,float size,Color tint,bool bold,float gap,bool draw){
+    r.h=INFINITY;return text_flow(c,s,r,size,tint,bold,gap,draw);
+}
+float pe_ui_draw_wrap(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,float size,Color tint,bool bold,float gap){
+    if(!s||r.w<=0||r.h<=0)return 0;
+    BeginScissorMode((int)floorf(r.x),(int)floorf(r.y),(int)ceilf(r.w),(int)ceilf(r.h));
+    float used=text_flow(c,s,r,size,tint,bold,gap,true);
+    EndScissorMode();return used;
+}
+
 void pe_ui_draw_item(const PeUiCanvas *c,int id,int count,PeTrainingUIRect r,bool box,Color tint){
     if(box)pe_ui_draw_sprite(c,"itembox",r,WHITE);
     const PeItemDef *d=pe_item_def(id);if(!d)return;

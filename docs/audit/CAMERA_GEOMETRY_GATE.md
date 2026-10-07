@@ -1,5 +1,7 @@
 # Camera geometry: qualified math and query boundary
 
+Subsequent checkpoint: [Adventure host integration](CAMERA_ALIGNMENT.md) now connects this evaluator through dedicated camera queries and a documented native projection adapter. The disconnected status below describes the preceding checkpoint.
+
 This October7 audit qualifies the remaining `GeometryClamp` and `EvaluateNearclipPlaneRadius` source path. It follows the implemented [activity-space and recovery increment](CAMERA_ENVIRONMENT.md). No runtime camera, collision code, exporter or Makefile changed. The source algorithm is recoverable without manual play; its physics and projection prerequisites prevent a safe radius-only replacement of the current host approximation.
 
 ## Actual graph values and order

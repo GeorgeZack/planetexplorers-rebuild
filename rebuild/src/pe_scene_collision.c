@@ -12,9 +12,9 @@
 #define SCENE_MAX_BYTES (256u*1024u*1024u)
 #define SCENE_COORD_LIMIT 1000000.0f
 typedef struct { PeVec3 lo,hi; } Box;
-typedef struct { PeVec3 a,b,c; Box box; float key; uint32_t id; bool degenerate; } Triangle;
+typedef struct { PeVec3 a,b,c; Box box; float key; uint32_t id,group; bool degenerate; } Triangle;
 typedef struct { Box box; uint32_t start,count,left,right; } Node;
-struct PeSceneCollision { Triangle *triangles; Node *nodes; size_t count,node_count; PeSceneStats stats; };
+struct PeSceneCollision { Triangle *triangles; Node *nodes; size_t count,node_count; PeSceneStats stats; PeSceneGroup *groups; size_t group_count,group_capacity; };
 static PeVec3 plus(PeVec3 a,PeVec3 b){return(PeVec3){a.x+b.x,a.y+b.y,a.z+b.z};}
 static PeVec3 minus(PeVec3 a,PeVec3 b){return(PeVec3){a.x-b.x,a.y-b.y,a.z-b.z};}
 static PeVec3 times(PeVec3 a,double f){return(PeVec3){(float)(a.x*f),(float)(a.y*f),(float)(a.z*f)};}
@@ -33,6 +33,37 @@ static bool grow(void **buffer,size_t *capacity,size_t count,size_t item,size_t 
     size_t next=*capacity?*capacity*2:1024;if(next<count)next=count;if(next>limit)next=limit;
     if(next<count)return false;
     void *p=realloc(*buffer,next*item);if(!p)return false;*buffer=p;*capacity=next;return true;
+}
+static bool end_line(char *s);
+static bool source_group(const char *name,PeSceneGroup *group){
+    if(strncmp(name,"entity_",7))return false;
+    const char *p=name+7;char *end;errno=0;
+    unsigned long entity=strtoul(p,&end,10);
+    if(errno||p==end||!isdigit((unsigned char)*p)||!entity||entity>UINT32_MAX||strncmp(end,"_component_",11))return false;
+    p=end+11;errno=0;long long component=strtoll(p,&end,10);
+    if(errno||p==end||!component||strncmp(end,"_sub_",5))return false;
+    p=end+5;errno=0;unsigned long sub=strtoul(p,&end,10);
+    if(errno||p==end||!isdigit((unsigned char)*p)||sub>UINT32_MAX||!end_line(end))return false;
+    *group=(PeSceneGroup){.source_identity=true,.entity_id=(uint32_t)entity,.component_id=(int64_t)component};return true;
+}
+static bool new_group(PeSceneCollision *s,const char *name,uint32_t *index){
+    PeSceneGroup g={0};bool source=name&&source_group(name,&g);
+    if(source)for(size_t i=0;i<s->group_count;i++)if(s->groups[i].source_identity&&s->groups[i].entity_id==g.entity_id&&s->groups[i].component_id==g.component_id){*index=(uint32_t)i;return true;}
+    /* Most terrain scenes own exactly one group; the vertex allocator's
+     * initial1024 capacity would waste tens of MB across a route snapshot. */
+    if(s->group_count==s->group_capacity){
+        size_t capacity=s->group_capacity?s->group_capacity*2:4;
+        if(capacity>SCENE_MAX_TRIANGLES)capacity=SCENE_MAX_TRIANGLES;
+        if(capacity<=s->group_count)return false;
+        PeSceneGroup *groups=realloc(s->groups,capacity*sizeof *groups);
+        if(!groups)return false;
+        s->groups=groups;s->group_capacity=capacity;
+    }
+    g.minimum=(PeVec3){FLT_MAX,FLT_MAX,FLT_MAX};g.maximum=(PeVec3){-FLT_MAX,-FLT_MAX,-FLT_MAX};
+    *index=(uint32_t)s->group_count;s->groups[s->group_count++]=g;return true;
+}
+static void group_triangle(PeSceneCollision *s,const Triangle *t){
+    PeSceneGroup *g=&s->groups[t->group];Box b=include_box((Box){g->minimum,g->maximum},t->box);g->minimum=b.lo;g->maximum=b.hi;
 }
 static char *space(char *s){while(isspace((unsigned char)*s))s++;return s;}
 static bool end_line(char *s){s=space(s);return !*s||*s=='#';}
@@ -86,7 +117,7 @@ PeSceneCollision *pe_scene_load_obj(const char *path,char *error,size_t cap){
     if(!path){fail(error,cap,"Missing collision path",0);return NULL;}
     FILE *file=fopen(path,"rb");if(!file){fail(error,cap,"Cannot open collision OBJ",0);return NULL;}
     PeSceneCollision *scene=calloc(1,sizeof *scene);PeVec3 *vertices=NULL;size_t nv=0,nt=0,nn=0,vc=0,tc=0,line=0,bytes=0;
-    const char *problem=scene?NULL:"Out of memory";char text[4096];
+    const char *problem=scene?NULL:"Out of memory";char text[4096];uint32_t group=UINT32_MAX;
     while(!problem){
         int status=read_line(file,text,sizeof text,&bytes);if(!status)break;line++;
         if(status<0){problem="Collision OBJ byte/line limit or embedded NUL";break;}
@@ -107,12 +138,14 @@ PeSceneCollision *pe_scene_load_obj(const char *path,char *error,size_t cap){
             for(int i=0;i<3;i++)if(!face_index(&arguments,nv,nt,nn,&indices[i])){valid=false;break;}
             if(!valid||!end_line(arguments)){problem="Invalid triangle or index";break;}
             if(!grow((void **)&scene->triangles,&tc,scene->count+1,sizeof *scene->triangles,SCENE_MAX_TRIANGLES)){problem="Triangle limit or allocation failure";break;}
-            Triangle *t=&scene->triangles[scene->count];memset(t,0,sizeof *t);
+            if(group==UINT32_MAX&&!new_group(scene,NULL,&group)){problem="Collision group allocation failed";break;}
+            Triangle *t=&scene->triangles[scene->count];memset(t,0,sizeof *t);t->group=group;
             t->a=vertices[indices[0]];t->b=vertices[indices[1]];t->c=vertices[indices[2]];t->id=(uint32_t)scene->count++;
             t->box=include_point(include_point(include_point(empty_box(),t->a),t->b),t->c);
+            group_triangle(scene,t);
             PeVec3 face=cross(minus(t->b,t->a),minus(t->c,t->a));t->degenerate=dot(face,face)<1e-16;
             scene->stats.degenerate_triangles+=t->degenerate;
-        }else if(!strcmp(s,"o"))scene->stats.objects++;
+        }else if(!strcmp(s,"o")){scene->stats.objects++;if(!new_group(scene,arguments,&group)){problem="Collision group allocation failed";break;}}
         else if(strcmp(s,"g")&&strcmp(s,"s")&&strcmp(s,"usemtl")&&strcmp(s,"mtllib")){problem="Unsupported OBJ directive";break;}
     }
     if(ferror(file))problem="Error reading collision OBJ";
@@ -124,9 +157,10 @@ PeSceneCollision *pe_scene_load_obj(const char *path,char *error,size_t cap){
     scene->stats.vertices=nv;scene->stats.triangles=scene->count;scene->stats.nodes=scene->node_count;
     scene->stats.minimum=scene->nodes[0].box.lo;scene->stats.maximum=scene->nodes[0].box.hi;return scene;
 }
-PeSceneCollision *pe_scene_from_mesh(const PeMeshData *mesh,PeVec3 origin,char *error,size_t cap){
+PeSceneCollision *pe_scene_from_grouped_mesh(const PeMeshData *mesh,PeVec3 origin,const uint32_t *groups,size_t group_count,char *error,size_t cap){
     if(error&&cap)*error=0;
-    if(!mesh||mesh->count>SCENE_MAX_VERTICES||mesh->count%3||(mesh->count&&!mesh->vertices)||!finite_vec(origin)){
+    if(!mesh||mesh->count>SCENE_MAX_VERTICES||mesh->count%3||(mesh->count&&!mesh->vertices)||!finite_vec(origin)||
+       group_count>SCENE_MAX_TRIANGLES||(mesh->count&&(!group_count||(group_count>1&&!groups)))){
         fail(error,cap,"Invalid collision triangle mesh",0);return NULL;
     }
     for(int axis=0;axis<3;axis++)if(fabsf(component(origin,axis))>SCENE_COORD_LIMIT){fail(error,cap,"Invalid collision origin",0);return NULL;}
@@ -136,22 +170,28 @@ PeSceneCollision *pe_scene_from_mesh(const PeMeshData *mesh,PeVec3 origin,char *
         for(int axis=0;axis<3;axis++)if(fabsf(component(p,axis))>SCENE_COORD_LIMIT||
             fabs((double)component(p,axis)+component(origin,axis))>SCENE_COORD_LIMIT){fail(error,cap,"Collision position exceeds bounds",i+1);return NULL;}
     }
+    if(groups)for(size_t i=0;i<mesh->count/3;i++)if(groups[i]>=group_count){fail(error,cap,"Invalid collision group index",i);return NULL;}
     PeSceneCollision *scene=calloc(1,sizeof *scene);
     if(!scene){fail(error,cap,"Collision allocation failure",0);return NULL;}
     scene->count=mesh->count/3;scene->stats.vertices=mesh->count;scene->stats.triangles=scene->count;scene->stats.objects=scene->count?1:0;
     if(!scene->count)return scene;
+    for(size_t i=0;i<group_count;i++){uint32_t index;if(!new_group(scene,NULL,&index)){fail(error,cap,"Collision group allocation failed",0);pe_scene_free(scene);return NULL;}}
     scene->triangles=calloc(scene->count,sizeof *scene->triangles);scene->nodes=calloc(scene->count*2,sizeof *scene->nodes);
     if(!scene->triangles||!scene->nodes){fail(error,cap,"Collision allocation failure",0);pe_scene_free(scene);return NULL;}
     for(size_t i=0;i<scene->count;i++){
-        Triangle *t=&scene->triangles[i];t->a=plus(mesh->vertices[3*i].position,origin);t->b=plus(mesh->vertices[3*i+1].position,origin);t->c=plus(mesh->vertices[3*i+2].position,origin);t->id=(uint32_t)i;
+        Triangle *t=&scene->triangles[i];t->a=plus(mesh->vertices[3*i].position,origin);t->b=plus(mesh->vertices[3*i+1].position,origin);t->c=plus(mesh->vertices[3*i+2].position,origin);t->id=(uint32_t)i;t->group=groups?groups[i]:0;
         t->box=include_point(include_point(include_point(empty_box(),t->a),t->b),t->c);
+        group_triangle(scene,t);
         PeVec3 face=cross(minus(t->b,t->a),minus(t->c,t->a));t->degenerate=dot(face,face)<1e-16;scene->stats.degenerate_triangles+=t->degenerate;
     }
     if(scene->stats.degenerate_triangles==scene->count){fail(error,cap,"Collision mesh has no usable triangles",0);pe_scene_free(scene);return NULL;}
     build_node(scene,0,(uint32_t)scene->count);scene->stats.nodes=scene->node_count;
     scene->stats.minimum=scene->nodes[0].box.lo;scene->stats.maximum=scene->nodes[0].box.hi;return scene;
 }
-void pe_scene_free(PeSceneCollision *scene){if(scene){free(scene->triangles);free(scene->nodes);free(scene);}}
+PeSceneCollision *pe_scene_from_mesh(const PeMeshData *mesh,PeVec3 origin,char *error,size_t cap){return pe_scene_from_grouped_mesh(mesh,origin,NULL,1,error,cap);}
+void pe_scene_free(PeSceneCollision *scene){if(scene){free(scene->triangles);free(scene->nodes);free(scene->groups);free(scene);}}
+size_t pe_scene_group_count(const PeSceneCollision *s){return s?s->group_count:0;}
+bool pe_scene_group(const PeSceneCollision *s,size_t i,PeSceneGroup *out){if(!s||!out||i>=s->group_count)return false;*out=s->groups[i];return true;}
 PeSceneStats pe_scene_stats(const PeSceneCollision *scene){return scene?scene->stats:(PeSceneStats){0};}
 /* Separating-axis test: three box axes, triangle normal, and nine edge/box
  * cross products. Strict separation includes mere boundary contact. */
@@ -282,4 +322,95 @@ PeSceneHit pe_scene_capsule_sweep(const PeSceneCollision *scene,PeVec3 feet,floa
         }
     }
     return hit;
+}
+
+/* Dedicated camera query path. Do not use its touching/initial-contact rules
+ * for the player motor. Group convexity is asserted by the snapshot adapter. */
+static bool camera_inside_convex(const PeSceneCollision *s,uint32_t group,PeVec3 point){
+    bool negative=false,positive=false,found=false;
+    for(size_t i=0;i<s->count;i++){
+        const Triangle *t=&s->triangles[i];if(t->group!=group||t->degenerate)continue;
+        found=true;PeVec3 n=cross(minus(t->b,t->a),minus(t->c,t->a));
+        double d=dot(n,minus(point,t->a)),epsilon=1e-6*sqrt(dot(n,n));
+        positive|=d>epsilon;negative|=d< -epsilon;if(positive&&negative)return false;
+    }
+    return found;
+}
+static Box sphere_bounds(PeVec3 p,float r){return (Box){minus(p,(PeVec3){r,r,r}),plus(p,(PeVec3){r,r,r})};}
+static void camera_initial_contacts(const PeSceneCollision *s,PeVec3 center,float radius,unsigned char *flags){
+    Box bounds=sphere_bounds(center,radius);uint32_t stack[64];size_t count=0;stack[count++]=0;
+    while(count){const Node *n=&s->nodes[stack[--count]];if(!boxes_overlap(bounds,n->box))continue;
+        if(!n->count){stack[count++]=n->left;stack[count++]=n->right;continue;}
+        for(uint32_t i=n->start;i<n->start+n->count;i++){
+            const Triangle *t=&s->triangles[i];if(t->degenerate||!(flags[t->group]&PE_SCENE_CAMERA_ENABLED)||!boxes_overlap(bounds,t->box))continue;
+            PeVec3 delta=minus(center,point_triangle(center,t));
+            if(dot(delta,delta)<=(double)radius*radius+1e-10)flags[t->group]|=4;
+        }
+    }
+}
+bool pe_scene_camera_query(const PeSceneCollision *s,const PeCameraGeometryQuery *q,
+    const unsigned char *policy,size_t groups,PeCameraGeometryHit *out){
+    if(!s||!q||!out||groups!=s->group_count||(groups&&!policy)||
+       q->kind<PE_CAMERA_GEOMETRY_RAY||q->kind>PE_CAMERA_GEOMETRY_SPHERE_CAST||
+       !finite_vec(q->origin)||!finite_vec(q->direction)||!finite_vec(q->end)||
+       !isfinite(q->distance)||q->distance<0||q->distance>SCENE_COORD_LIMIT||!isfinite(q->radius)||q->radius<0||q->radius>SCENE_COORD_LIMIT||
+       ((q->kind==PE_CAMERA_GEOMETRY_OVERLAP||q->kind==PE_CAMERA_GEOMETRY_SPHERE_CAST)&&q->radius<=0))return false;
+    for(int a=0;a<3;a++)if(fabsf(component(q->origin,a))>SCENE_COORD_LIMIT||fabsf(component(q->end,a))>SCENE_COORD_LIMIT||fabsf(component(q->direction,a))>SCENE_COORD_LIMIT)return false;
+    for(size_t i=0;i<groups;i++)if(policy[i]&~3u)return false;
+    PeCameraGeometryHit result={0};
+    /* Most route regions miss a camera query entirely. Cull before allocating
+     * any per-group scratch; the existing immutable root bounds are exact. */
+    PeVec3 direction=q->kind==PE_CAMERA_GEOMETRY_LINE?minus(q->end,q->origin):q->direction;
+    double length=sqrt(dot(direction,direction));
+    double range=q->kind==PE_CAMERA_GEOMETRY_LINE?length:q->distance;
+    if(!isfinite(length)||!isfinite(range))return false;
+    if(q->kind==PE_CAMERA_GEOMETRY_LINE&&fabs(range-q->distance)>1e-5*fmax(1,range))return false;
+    if(!s->count){*out=result;return true;}
+    if(q->kind!=PE_CAMERA_GEOMETRY_OVERLAP&&(length<1e-14||range==0)){*out=result;return true;}
+    if(length>=1e-14)direction=times(direction,1/length);
+    bool sphere=q->kind==PE_CAMERA_GEOMETRY_SPHERE_CAST;
+    PeVec3 delta=times(direction,range);Box bounds=include_box(sphere_bounds(q->origin,q->radius),sphere_bounds(plus(q->origin,delta),q->radius));
+    if(!finite_vec(delta)||!finite_vec(bounds.lo)||!finite_vec(bounds.hi))return false;
+    bool candidate=q->kind==PE_CAMERA_GEOMETRY_OVERLAP?boxes_overlap(sphere_bounds(q->origin,q->radius),s->nodes[0].box):
+        sphere?boxes_overlap(bounds,s->nodes[0].box):box_ray(s->nodes[0].box,q->origin,direction,range);
+    if(!candidate){*out=result;return true;}
+    unsigned char local_flags[64],*heap=groups>sizeof local_flags?malloc(groups):NULL;
+    if(groups>sizeof local_flags&&!heap)return false;
+    unsigned char *flags=heap?heap:local_flags;memcpy(flags,policy,groups);
+    /* Box/ramp/qualified convex interiors are solids; merged concave buildings
+     * remain surface colliders, so an ordinary room is never one giant solid. */
+    for(size_t i=0;i<groups;i++)if((flags[i]&3)==3){
+        PeSceneGroup g=s->groups[i];Box b={g.minimum,g.maximum};
+        if(boxes_overlap(b,(Box){q->origin,q->origin})&&camera_inside_convex(s,(uint32_t)i,q->origin))flags[i]|=4;
+    }
+    if(q->kind==PE_CAMERA_GEOMETRY_OVERLAP||q->kind==PE_CAMERA_GEOMETRY_SPHERE_CAST)
+        camera_initial_contacts(s,q->origin,q->radius,flags);
+    if(q->kind==PE_CAMERA_GEOMETRY_OVERLAP){
+        for(size_t i=0;i<groups;i++)if((flags[i]&5)==5){result.hit=true;break;}
+        free(heap);*out=result;return true;
+    }
+    double nearest=range;
+    uint32_t stack[64];size_t count=0;stack[count++]=0;
+    while(count){const Node *n=&s->nodes[stack[--count]];
+        if(sphere?!boxes_overlap(bounds,n->box):!box_ray(n->box,q->origin,direction,nearest))continue;
+        if(!n->count){stack[count++]=n->left;stack[count++]=n->right;continue;}
+        for(uint32_t i=n->start;i<n->start+n->count;i++){
+            const Triangle *t=&s->triangles[i];if(t->degenerate||!(flags[t->group]&1)||(flags[t->group]&4))continue;
+            if(!sphere){double d;if(triangle_ray(t,q->origin,direction,nearest,&d)){result.hit=true;nearest=d;}continue;}
+            if(!boxes_overlap(bounds,t->box))continue;
+            double travel=0;
+            for(int iteration=0;iteration<64;iteration++){
+                PeVec3 point=plus(q->origin,times(direction,travel)),surface=point_triangle(point,t),offset=minus(point,surface);
+                double d=sqrt(dot(offset,offset));
+                if(d<=q->radius+1e-5){nearest=travel;result.hit=true;break;}
+                PeVec3 normal=times(offset,1/d);double closing=-dot(direction,normal);
+                if(closing<=1e-8)break;
+                double advance=(d-q->radius)/closing;if(advance<1e-9)advance=1e-9;
+                travel+=advance;if(travel>nearest+1e-8)break;travel=fmin(travel,nearest);
+            }
+        }
+    }
+    result.distance=result.hit?fminf((float)nearest,q->distance):0;free(heap);
+    if(!isfinite(result.distance)||result.distance<0||result.distance>q->distance)return false;
+    *out=result;return true;
 }

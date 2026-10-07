@@ -14,6 +14,10 @@
 #include "pe_hunt_combat.h"
 #include "pe_actor_view.h"
 #include "pe_sandbox_camera.h"
+#include "pe_camera_geometry.h"
+#include "pe_camera_projection.h"
+#include "pe_camera_query.h"
+#include "../generated/pe_camera_geometry_source.h"
 #include "pe_sandbox_world_view.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
@@ -82,19 +86,30 @@ static Vector3 rv(PeVec3 p) { return (Vector3){p.x,p.y,p.z}; }
 static PeVec3 pv(Vector3 p) { return (PeVec3){p.x,p.y,p.z}; }
 /* Unity source coordinates are left-handed. Reflect clip X for presentation;
  * retain source XYZ throughout simulation/collision and invert screen queries. */
+static PeCameraProjection source_projection(Camera3D camera){
+    return (PeCameraProjection){pv(camera.position),pv(Vector3Subtract(camera.target,camera.position)),pv(camera.up),
+        (float)GetScreenWidth(),(float)GetScreenHeight(),camera.fovy,PE_CAMERA_RENDER_NEAR};
+}
 static Ray source_ray(Vector2 point,Camera3D camera){
-    point.x=GetScreenWidth()-point.x;return GetScreenToWorldRay(point,camera);
+    PeCameraProjection p=source_projection(camera);PeCameraRay ray;
+    if(!pe_camera_projection_ray(&p,point.x,point.y,&ray))return (Ray){0};
+    return (Ray){rv(ray.origin),rv(ray.direction)};
 }
 static Vector2 source_screen(Vector3 point,Camera3D camera){
-    Vector2 p=GetWorldToScreen(point,camera);p.x=GetScreenWidth()-p.x;return p;
+    PeCameraProjection p=source_projection(camera);Vector2 screen={-100000,-100000};
+    pe_camera_projection_screen(&p,pv(point),&screen.x,&screen.y);return screen;
 }
+static double source_previous_near,source_previous_far;
 static void source_begin_3d(Camera3D camera){
+    source_previous_near=rlGetCullDistanceNear();source_previous_far=rlGetCullDistanceFar();
+    rlSetClipPlanes(PE_CAMERA_RENDER_NEAR,PE_CAMERA_RENDER_FAR);
     BeginMode3D(camera);Matrix projection=rlGetMatrixProjection();
     projection.m0=-projection.m0;rlSetMatrixProjection(projection);
     rlSetCullFace(RL_CULL_FACE_FRONT);
 }
 static void source_end_3d(void){
     EndMode3D();rlSetCullFace(RL_CULL_FACE_BACK);
+    rlSetClipPlanes(source_previous_near,source_previous_far);
 }
 
 typedef struct {PeAdventureNpc npc;PeAdventureNpcView view;bool visible;} Resident;
@@ -267,8 +282,8 @@ static void interact(PeGame *g) {
     else pe_game_gather(g);
 }
 
-/* Activity uses the same tree-excluding immutable snapshot as camera geometry.
- * The eye anchor and small capsule/rise remain native framing adapters. */
+/* Activity retains the tree-excluding immutable ray snapshot. Adventure
+ * geometry uses its dedicated collider-aware callback below. */
 static bool sandbox_camera_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,uint32_t mask,float *distance){
     const PeSandboxCollision *collision=context;
     if(!distance||mask!=PE_SANDBOX_CAMERA_OBSTACLE_MASK||!pe_sandbox_collision_stats(collision).generation)return false;
@@ -276,13 +291,15 @@ static bool sandbox_camera_ray(void *context,PeVec3 origin,PeVec3 direction,floa
     *distance=hit.hit?hit.distance:maximum;return true;
 }
 static bool sandbox_camera_frame(PeSandboxCamera *orbit,PeSandboxCameraRecovery *recovery,
-    const PeGame *game,const PeSandboxCollision *collision,PeSandboxCameraInput input){
-    if(game->mode!=PE_GAME_ADVENTURE)return pe_sandbox_camera_step(orbit,input);
+    const PeGame *game,const PeSandboxCollision *collision,PeSandboxCameraInput input,float *activity_out){
+    if(game->mode!=PE_GAME_ADVENTURE){if(activity_out)*activity_out=50;return pe_sandbox_camera_step(orbit,input);}
     float activity=50;
-    if(input.third_person&&!input.paused&&input.dt>0&&
+    if(input.third_person&&
        !pe_sandbox_camera_activity((PeVec3){game->player.x,game->player.y+1.58f,game->player.z},
            sandbox_camera_ray,(void *)collision,&activity))return false;
-    return pe_sandbox_camera_follow_step(orbit,recovery,input,activity);
+    if(!pe_sandbox_camera_follow_step(orbit,recovery,input,activity))return false;
+    if(activity_out)*activity_out=activity;
+    return true;
 }
 static bool sandbox_camera_feedback_frame(PeSandboxCamera *orbit,PeSandboxCameraRecovery *recovery,
     PeGameMode mode,PeSandboxCameraInput input,bool overview,float clamped_distance){
@@ -304,6 +321,41 @@ static Camera3D game_camera(const PeGame *g,const PeSandboxCollision *collision,
     }
     if(overview){camera.target=rv(g->player);camera.position=Vector3Add(camera.target,(Vector3){9,6,pe_settlement_matches(&g->world)?-11:11});camera.fovy=62;}
     return camera;
+}
+/* One immutable camera per display, shared by action queries and rendering.
+ * Anchor+1.58 remains the native player anchor, not recovered bone following.
+ * Geometry uses the source logical near; .03 is our visible/pick near adapter. */
+static bool sandbox_camera_pose_frame(const PeGame *g,const PeSandboxCollision *collision,
+    PeSandboxCameraInput input,bool overview,float width,float height,
+    PeSandboxCamera *orbit,PeSandboxCameraRecovery *recovery,PeCameraGeometryState *geometry,Camera3D *out){
+    if(!g||!orbit||!recovery||!geometry||!out||!isfinite(width)||!isfinite(height)||width<=0||height<=0)return false;
+    PeSandboxCamera next=*orbit;PeSandboxCameraRecovery next_recovery=*recovery;PeCameraGeometryState next_geometry=*geometry;
+    float activity=50;
+    if(!sandbox_camera_frame(&next,&next_recovery,g,collision,input,&activity))return false;
+    Camera3D camera;
+    if(g->mode!=PE_GAME_ADVENTURE||overview||!input.third_person){
+        camera=game_camera(g,collision,input.third_person,overview,next.distance,NULL);
+    }else{
+        PeVec3 forward={sinf(g->yaw)*cosf(g->pitch),sinf(g->pitch),-cosf(g->yaw)*cosf(g->pitch)};
+        PeVec3 anchor={g->player.x,g->player.y+1.58f,g->player.z},right,up;
+        if(!pe_camera_projection_basis(forward,(PeVec3){0,1,0},&right,&up))return false;
+        PeCameraGeometryInput in={.position={anchor.x-forward.x*next.distance,anchor.y-forward.y*next.distance,anchor.z-forward.z*next.distance},
+            .forward=forward,.right=right,.up=up,.distance=next.distance,.near_clip=PE_CAMERA_GEOMETRY_DEFAULT_NEAR,
+            .fov_degrees=PE_CAMERA_GEOMETRY_DEFAULT_FOV,.aspect=width/height,.activity=activity};
+        PeCameraGeometryResult result;PeCameraQueryContext query={collision};
+        bool active=!input.paused&&input.dt>0;
+        if(!pe_camera_geometry_evaluate(&next_geometry,&in,pe_camera_query,&query,&result))return false;
+        if(active)next_geometry.rise=result.rise;
+        else{
+            float correction=next_geometry.rise-result.rise;
+            result.position.x+=forward.x*.3f*correction;
+            result.position.y+=(1+forward.y*.3f)*correction;
+            result.position.z+=forward.z*.3f*correction;
+        }
+        camera=(Camera3D){rv(result.position),Vector3Add(rv(result.position),rv(forward)),rv(up),in.fov_degrees,CAMERA_PERSPECTIVE};
+        if(!sandbox_camera_feedback_frame(&next,&next_recovery,g->mode,input,false,result.clamped?result.distance:-1))return false;
+    }
+    *orbit=next;*recovery=next_recovery;*geometry=next_geometry;*out=camera;return true;
 }
 /* Construction transactions retain their player-origin reach validation. Aim
  * through the pointer at the closest visible terrain/cell, then trace from the
@@ -540,6 +592,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     double supplier_seconds=0;
     PeSandboxActions tool_action;pe_sandbox_actions_init(&tool_action,false);
     PeSandboxCamera orbit;pe_sandbox_camera_init(&orbit);
+    PeCameraGeometryState camera_geometry;pe_camera_geometry_init(&camera_geometry);
     PeSandboxCameraRecovery camera_recovery;pe_sandbox_camera_recovery_init(&camera_recovery);
     PeSandboxCameraControls camera_controls;pe_sandbox_camera_controls_init(&camera_controls);
     Vector2 right_press_pointer={0};
@@ -704,7 +757,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         /* Arrival queues source story replies independently of the NPC pick
          * distance. Other modal UI keeps ownership until it closes. Cancel may
          * be resumed by talking to Naoko; load restores pending presentation. */
-        if(!return_prompted&&pe_adventure_hunt_return_talk(game)&&!build_mode&&!ui.paused&&!ui.town_open&&!ui.repair_open&&
+        if(!return_prompted&&pe_adventure_hunt_return_talk(game)&&!build_mode&&!ui.paused&&!ui.history.open&&!ui.town_open&&!ui.repair_open&&
            !ui.inventory_open&&!ui.character_open&&!ui.missions_open&&!ui.replicator_open&&!ui.menu_open&&!ui.dragging&&
            ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&(smoke_frames||IsWindowFocused())){
             for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible&&pe_adventure_population_sources[i].adventure_role==3){
@@ -745,7 +798,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(action.load) {
             loaded=pe_game_load(game,save_path,error,sizeof error);
-            if(loaded){pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
+            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
@@ -850,11 +903,13 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         PeSandboxCameraInput camera_input={.dt=smoke_frames?PE_FIXED_DT:dt,
             .wheel_notches=GetMouseWheelMove(),.building=build_mode,.third_person=third_person,
             .input_allowed=world_input,.paused=action.paused||!focused};
-        if(!sandbox_camera_frame(&orbit,&camera_recovery,game,collision,camera_input)){
-            snprintf(error,sizeof error,"Invalid sandbox camera state");result=1;break;
+        Camera3D camera;
+        if(!sandbox_camera_pose_frame(game,collision,camera_input,smoke_frames>0,
+            (float)GetScreenWidth(),(float)GetScreenHeight(),&orbit,&camera_recovery,&camera_geometry,&camera)){
+            snprintf(error,sizeof error,"Invalid sandbox camera geometry or snapshot");result=1;break;
         }
         if(look_settle>0)look_settle--;
-        Camera3D aim_camera=game_camera(game,collision,third_person,false,orbit.distance,NULL);
+        Camera3D aim_camera=camera;
         Vector2 aim_point=captured?(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f}:pointer_position;
         Ray aim=source_ray(aim_point,aim_camera);
         Vector2 interaction_point=right_click&&camera_controls.mode==PE_SANDBOX_CAMERA_FREE?right_press_pointer:aim_point;
@@ -1159,13 +1214,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(!sandbox_action_pose(actor,game,&tool_action,&melee,tool_drawn)){
             snprintf(error,sizeof error,"Equipped action pose unavailable");result=1;break;
         }
-        float clamped_distance=-1;
-        Camera3D camera=game_camera(game,collision,third_person,smoke_frames>0,orbit.distance,&clamped_distance);
-        /* Feedback is once per final display pose; aim queries never mutate the
-         * clock. Freeze it under pause/focus loss and ignore synthetic overview. */
-        if(!sandbox_camera_feedback_frame(&orbit,&camera_recovery,game->mode,camera_input,smoke_frames>0,clamped_distance)){
-            snprintf(error,sizeof error,"Invalid sandbox camera clamp");result=1;break;
-        }
+        /* Camera pose/rays are immutable until next display. World edits and
+         * movement become camera-query inputs on that next snapshot. */
         ui.building=build_mode;ui.build_item=selected_item;ui.build_shape=build_shape;
         ui.build_rotation=build_rotation;ui.build_brush=build_brush;
         double cycle=game->game_seconds/PE_DAY_SECONDS;
@@ -1231,7 +1281,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         source_end_3d();
         profile_stage(&profile,PROFILE_UI_DRAW);
         if(picked_repair.hit&&repair_distance<fminf(plant_distance,fminf(nearest_npc,deploy_distance))&&
-           action.npc_interaction&&!ui.town_open&&!ui.repair_open)
+           action.npc_interaction&&!ui.history.open&&!ui.town_open&&!ui.repair_open)
             DrawTextEx(pe_ui_font(ui.assets,false),"Repair Machine  [RMB / E]",(Vector2){GetScreenWidth()*.5f-120,GetScreenHeight()*.5f+30},18,0,YELLOW);
         bool npc_nearest=nearest_npc<=fminf(repair_distance,fminf(deploy_distance,plant_distance));
         if(supplier_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
@@ -1246,7 +1296,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->welcome_page<PE_ADVENTURE_WELCOME_PAGES?YELLOW:LIGHTGRAY);
         }
-        if(ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!ui.town_open&&!ui.repair_open)for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible){
+        if(ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!ui.history.open&&!ui.town_open&&!ui.repair_open)for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible){
             PeVec3 p=residents[i].npc.position;
             if(Vector3Distance(rv(p),rv(game->player))>40||Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))<=0)continue;
             Vector2 screen=source_screen((Vector3){p.x,p.y+residents[i].view.label_height,p.z},camera);
@@ -1254,14 +1304,15 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             Font f=pe_ui_font(ui.assets,false);Vector2 size=MeasureTextEx(f,label,18,0);
             DrawTextEx(f,label,(Vector2){screen.x-size.x*.5f,screen.y},18,0,picked_resident==i?YELLOW:LIGHTGRAY);
         }
-        if(picked_deploy&&deploy_distance<=plant_distance&&deploy_distance<repair_distance&&deploy_distance<nearest_npc&&action.npc_interaction&&!ui.town_open&&!ui.repair_open)DrawTextEx(pe_ui_font(ui.assets,false),"Torch  [RMB / E]",(Vector2){GetScreenWidth()*.5f-70,GetScreenHeight()*.5f+30},18,0,YELLOW);
+        if(picked_deploy&&deploy_distance<=plant_distance&&deploy_distance<repair_distance&&deploy_distance<nearest_npc&&action.npc_interaction&&!ui.history.open&&!ui.town_open&&!ui.repair_open)DrawTextEx(pe_ui_font(ui.assets,false),"Torch  [RMB / E]",(Vector2){GetScreenWidth()*.5f-70,GetScreenHeight()*.5f+30},18,0,YELLOW);
         if(picked_plant<game->vegetation.count&&!game->vegetation.plants[picked_plant].depleted&&
-           plant_distance<fminf(repair_distance,fminf(nearest_npc,deploy_distance))&&action.npc_interaction&&!ui.town_open&&!ui.repair_open){
+           plant_distance<fminf(repair_distance,fminf(nearest_npc,deploy_distance))&&action.npc_interaction&&!ui.history.open&&!ui.town_open&&!ui.repair_open){
             const PePlantSource *source=pe_vegetation_source(game->vegetation.plants[picked_plant].prototype_id);
             const PeItemDef *item=source?pe_item_def(source->item_id):NULL;
             DrawTextEx(pe_ui_font(ui.assets,false),TextFormat("%s  [RMB / E]",item?item->name:"Herb"),
                 (Vector2){GetScreenWidth()*.5f-90,GetScreenHeight()*.5f+30},18,0,YELLOW);
         }
+        pe_sandbox_ui_record_dialogue(&ui,game);
         pe_sandbox_ui_draw(&ui,game,build_mode);
         if(smoke_frames&&frame+1>=smoke_frames&&screenshot) {
             rlDrawRenderBatchActive();

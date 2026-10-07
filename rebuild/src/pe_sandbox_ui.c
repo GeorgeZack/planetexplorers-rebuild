@@ -20,11 +20,6 @@
 #define gold PE_UI_GOLD
 #define dim PE_UI_DIM
 static PeUiCanvas canvas(const PeSandboxUI *u){return (PeUiCanvas){u->assets,u->effects,&u->layout,(float)u->seconds,u->mouse_x,u->mouse_y};}
-/* Resolved names from the preserved Adventure reference fixture. Generated
- * population/name selection is not yet ported; never relabel tutorial NPCs. */
-static const PeAdventureDialogueBindings supplier_names={.player_name="You",.welcome_name="Westina",
-    .supplier_name="Eitai",.town_name="Annot",.player_full_name="You",
-    .welcome_full_name="Westina Nangle",.supplier_full_name="Eitai Takayama",.annot_name="Naoko",.annot_full_name="Naoko Ueda"};
 static Rectangle rect(PeTrainingUIRect r) {return (Rectangle){r.x,r.y,r.w,r.h};}
 static PeTrainingUIRect map(const PeSandboxUI *u,float x,float y,float w,float h,PeTrainingUIAnchor a) {
     return pe_training_ui_map(&u->layout,(PeTrainingUIRect){x,y,w,h},a);
@@ -310,13 +305,14 @@ static void replicator(const PeSandboxUI *u,const PeGame *g) {
     } else sprite(u,"jindulan_1",l->replicator_progress,WHITE);
 }
 static const char *mission_goal(const PeSandboxUI *u,const PeGame *g) {
+    char seed[32];PeAdventureDialogueBindings names=pe_sandbox_ui_dialogue_bindings(u,g,seed);
     if(g->mode!=PE_GAME_ADVENTURE||g->welcome_page<PE_ADVENTURE_WELCOME_PAGES)return "";
     static char value[2048];
     if(g->hunt_state){
         return pe_sandbox_ui_hunt_goal(u,g,value,sizeof value)?value:"";
     }
     if(g->medicine_state==PE_MEDICINE_ACTIVE){
-        const PeItemDef *item=pe_item_def(917);PeAdventureDialogueBindings names=supplier_names;
+        const PeItemDef *item=pe_item_def(917);
         names.item_name=item?item->name:"Medicine";names.item_count="5";
         char objective[1024];int held=pe_inventory_count(&g->inventory,917);
         if(!pe_adventure_dialogue_format(pe_adventure_mission_objective(9072),&names,objective,sizeof objective))return "";
@@ -324,9 +320,10 @@ static const char *mission_goal(const PeSandboxUI *u,const PeGame *g) {
     }
     if(g->annot_complete)return "";
     const char *raw=pe_adventure_mission_objective(g->supplies_claimed?PE_ADVENTURE_SUPPLIES:PE_ADVENTURE_ARRIVAL);
-    return raw&&pe_adventure_dialogue_format(raw,&supplier_names,value,sizeof value)?value:"";
+    return raw&&pe_adventure_dialogue_format(raw,&names,value,sizeof value)?value:"";
 }
 static void missions(const PeSandboxUI *u,const PeGame *g) {
+    char seed[32];PeAdventureDialogueBindings names=pe_sandbox_ui_dialogue_bindings(u,g,seed);
     PeTrainingUIRect p=u->layout.mission;float z=u->layout.scale;
     panel(u,p,"MISSION",PE_UI_EFFECT_MISSION);sprite(u,"close1",u->layout.mission_close,WHITE);
     sprite(u,"insidebox2",rel(u,p,35,95,310,400),WHITE);sprite(u,"insidebox2",rel(u,p,365,75,640,390),WHITE);
@@ -338,11 +335,11 @@ static void missions(const PeSandboxUI *u,const PeGame *g) {
             if(g->hunt_state==PE_HUNT_ENCOUNTER_PENDING&&!u->hunt_encounter_available)wrapped(u,"The creature encounter is unavailable in this session.",rel(u,p,390,275,560,100),18,ink);
             else {
                 char description[2048];int mission=pe_sandbox_ui_hunt_mission_id(g);
-                if(pe_adventure_dialogue_format(pe_adventure_mission_description(mission),&supplier_names,description,sizeof description))wrapped(u,description,rel(u,p,390,275,560,100),18,ink);
+                if(pe_adventure_dialogue_format(pe_adventure_mission_description(mission),&names,description,sizeof description))wrapped(u,description,rel(u,p,390,275,560,100),18,ink);
             }
         }else if(g->medicine_state==PE_MEDICINE_ACTIVE){
             char description[2048];
-            if(pe_adventure_dialogue_format(pe_adventure_mission_description(9072),&supplier_names,description,sizeof description))wrapped(u,description,rel(u,p,390,275,560,60),18,ink);
+            if(pe_adventure_dialogue_format(pe_adventure_mission_description(9072),&names,description,sizeof description))wrapped(u,description,rel(u,p,390,275,560,60),18,ink);
             wrapped(u,"Learn the Herbal Drink script from your inventory, then use the Replicator to create five units. Return to Naoko in Annot to deliver them.",rel(u,p,390,345,560,100),17,ink);
         }else if(g->supplies_claimed){
             double x=pe_adventure_settlement_town4_destination[0]-g->world.origin_x;
@@ -359,12 +356,12 @@ static void supplier_portrait(const PeSandboxUI *u,PeTrainingUIRect r) {
 static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
     if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE)return;
     const PeAdventureDialogueLine *line=pe_adventure_dialogue_current(&u->dialogue,g);
-    char value[2048]={0},seed[32];snprintf(seed,sizeof seed,"%u",g->world.seed);
-    PeAdventureDialogueBindings names=supplier_names;names.seed_name=seed;names.start_town_name=u->start_town_name[0]?u->start_town_name:NULL;
+    char value[2048]={0},seed[32];
+    PeAdventureDialogueBindings names=pe_sandbox_ui_dialogue_bindings(u,g,seed);
     if(line&&!pe_adventure_dialogue_format(line->text,&names,value,sizeof value))return;
     if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_CHOICE){
         const PeTrainingUILayout *l=&u->layout;
-        PeUiCanvas c=canvas(u);pe_ui_draw_dialogue_frame(&c,supplier_names.annot_full_name);
+        PeUiCanvas c=canvas(u);pe_ui_draw_dialogue_frame(&c,names.annot_full_name);
         supplier_portrait(u,l->dialogue_portrait);
         for(int row=0;row<9;row++){
             int index=pe_sandbox_ui_dialogue_choice_index(u,g,row);if(index<0)break;
@@ -397,7 +394,7 @@ static void supplier_dialogue(const PeSandboxUI *u,const PeGame *g) {
             text(u,line?"2.  That's all.":"1.  That's all.",close.x,close.y,18,pe_training_ui_contains(close,u->mouse_x,u->mouse_y)?blue:ink,false);
     } else if(line) {
         const PeTrainingUILayout *l=&u->layout;
-        PeUiCanvas c=canvas(u);const char *speaker=pe_adventure_dialogue_speaker(line,&supplier_names);
+        PeUiCanvas c=canvas(u);const char *speaker=pe_adventure_dialogue_speaker(line,&names);
         pe_ui_draw_dialogue_frame(&c,speaker?speaker:"");
         if(line->speaker!=PE_ADVENTURE_SPEAKER_PLAYER)supplier_portrait(u,l->dialogue_portrait);
         pe_ui_draw_wrap(&c,value,l->dialogue_text,18,ink,true,2);
@@ -606,6 +603,7 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(u->replicator_open)replicator(u,g);
     if(u->missions_open)missions(u,g);
     supplier_dialogue(u,g);town_dialogue(u,g);repair_window(u,g);
+    if(u->history.open){PeUiCanvas c=canvas(u);pe_ui_history_draw(&c,&g->conversation_history,&u->history);}
     sprite(u,"menu1",u->layout.menu_button,WHITE);
     if(u->menu_open) {
         static const char *labels[]={"Inventory [I]","Character [C]","Replicator [Y]","Mission [Q]","Pause"};

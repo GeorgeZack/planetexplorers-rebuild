@@ -40,10 +40,8 @@ static Image sandbox_capture(PeSandboxUI *ui,const PeGame *game,const char *dire
     }
     return export_screen(directory,name,width,height);
 }
-static void compare_hud(Image a,Image b,const PeTrainingUILayout *layout){
+static void compare_region(Image a,Image b,PeTrainingUIRect r,const char *label){
     REQUIRE(a.width==b.width&&a.height==b.height);
-    /* Include the entire authored frame, beyond the smaller input hit area. */
-    PeTrainingUIRect r=pe_training_ui_map(layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER);
     int x0=(int)fmaxf(0,floorf(r.x)),y0=(int)fmaxf(0,floorf(r.y));
     int x1=(int)fminf(a.width,ceilf(r.x+r.w)),y1=(int)fminf(a.height,ceilf(r.y+r.h));
     REQUIRE(x1>x0&&y1>y0);
@@ -52,12 +50,12 @@ static void compare_hud(Image a,Image b,const PeTrainingUILayout *layout){
     for(int y=y0;y<y1;y++)for(int x=x0;x<x1;x++){
         size_t k=(size_t)y*(size_t)a.width+(size_t)x;checked++;
         if(memcmp(&left[k],&right[k],sizeof(Color))){
-            if(!different)fprintf(stderr,"first HUD mismatch (%d,%d): tutorial=%u,%u,%u,%u sandbox=%u,%u,%u,%u\n",x,y,left[k].r,left[k].g,left[k].b,left[k].a,right[k].r,right[k].g,right[k].b,right[k].a);
+            if(!different)fprintf(stderr,"first %s mismatch (%d,%d): tutorial=%u,%u,%u,%u sandbox=%u,%u,%u,%u\n",label,x,y,left[k].r,left[k].g,left[k].b,left[k].a,right[k].r,right[k].g,right[k].b,right[k].a);
             different++;
         }
     }
     UnloadImageColors(left);UnloadImageColors(right);
-    printf("HUD_PIXELS size=%dx%d checked=%zu different=%zu\n",a.width,a.height,checked,different);fflush(stdout);
+    printf("%s_PIXELS size=%dx%d checked=%zu different=%zu\n",label,a.width,a.height,checked,different);fflush(stdout);
     REQUIRE(different==0);
 }
 static int bag(const PeGame *g,int item){
@@ -103,6 +101,16 @@ int main(int argc,char **argv){
     REQUIRE(pe_training_ui_load(&tutorial,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
     REQUIRE(pe_sandbox_ui_load(&sandbox,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
     REQUIRE(tutorial.assets&&sandbox.assets);tutorial.seconds=sandbox.seconds=0;
+    /* Twenty retained, resolved draw-fixture records, independently owned by
+       the tutorial UI and sandbox game; no active dialogue/capture hook. */
+    for(unsigned i=0;i<PE_CONVERSATION_HISTORY_CAPACITY;i++){
+        char speaker[64],content[1024];
+        snprintf(speaker,sizeof speaker,"Staged speaker %u",i+1);
+        snprintf(content,sizeof content,"Record %u: This long conversation demonstrates the original cyan speaker and white body with wrapped lines. \nScrolling keeps earlier remarks available and reopening returns to the newest retained entry. These are staged presentation records, not observed gameplay.",i+1);
+        REQUIRE(pe_conversation_history_add(&tutorial.conversation_history,speaker,content,NULL));
+        REQUIRE(pe_conversation_history_add(&game->conversation_history,speaker,content,NULL));
+    }
+    REQUIRE(tutorial.conversation_history.count==20&&game->conversation_history.count==20);
     const int sizes[][2]={{1280,720},{640,480},{320,240}};
     for(size_t k=0;k<sizeof sizes/sizeof *sizes;k++){
         int w=sizes[k][0],h=sizes[k][1];SetWindowSize(w,h);SetMousePosition(-100,-100);
@@ -110,14 +118,27 @@ int main(int argc,char **argv){
         pe_sandbox_ui_prepare(&sandbox,game);
         Image a=training_capture(&tutorial,training,argv[1],"tutorial-hud",w,h);
         Image b=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud",w,h);
-        compare_hud(a,b,&tutorial.layout);UnloadImage(a);UnloadImage(b);
+        compare_region(a,b,pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER),"HUD");UnloadImage(a);UnloadImage(b);
         training->inventory_open=sandbox.inventory_open=true;
         a=training_capture(&tutorial,training,argv[1],"tutorial-inventory",w,h);
         b=sandbox_capture(&sandbox,game,argv[1],"sandbox-inventory",w,h);
         UnloadImage(a);UnloadImage(b);training->inventory_open=sandbox.inventory_open=false;
         tracker_capture(&tutorial,argv[1],w,h);
+        tutorial.history.open=sandbox.history.open=true;
+        tutorial.history.scroll=sandbox.history.scroll=-1;
+        a=training_capture(&tutorial,training,argv[1],"tutorial-history-bottom",w,h);
+        b=sandbox_capture(&sandbox,game,argv[1],"sandbox-history-bottom",w,h);
+        REQUIRE(tutorial.history.content_height>tutorial.history.height&&tutorial.history.scroll>0);
+        REQUIRE(fabsf(tutorial.history.scroll-sandbox.history.scroll)<.01f);
+        compare_region(a,b,tutorial.layout.history,"HISTORY_BOTTOM");UnloadImage(a);UnloadImage(b);
+        tutorial.history.scroll=sandbox.history.scroll=0;
+        a=training_capture(&tutorial,training,argv[1],"tutorial-history-top",w,h);
+        b=sandbox_capture(&sandbox,game,argv[1],"sandbox-history-top",w,h);
+        REQUIRE(tutorial.history.scroll==0&&sandbox.history.scroll==0);
+        compare_region(a,b,tutorial.layout.history,"HISTORY_TOP");UnloadImage(a);UnloadImage(b);
+        tutorial.history.open=sandbox.history.open=false;
     }
     pe_training_ui_unload(&tutorial);pe_sandbox_ui_unload(&sandbox);
     pe_game_destroy(game);free(game);free(training);CloseWindow();
-    puts("paired staged shared UI captures complete; actual-host HUD pixels match");return 0;
+    puts("paired staged shared UI captures complete; actual-host HUD and history pixels match");return 0;
 }

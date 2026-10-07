@@ -38,8 +38,8 @@ int pe_test_shield_save(void){
     CHECK(loaded->world.extended&&loaded->world.extended!=g->world.extended&&loaded->shield_instance_id==id);
     CHECK(!memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)&&!memcmp(&loaded->outfit,&g->outfit,sizeof g->outfit));
     CHECK(loaded->equipped_instance_id==g->equipped_instance_id&&pe_shield_equipped(loaded)&&pe_shield_equipped(loaded)->durability==321.25f);
-    bytes=read_bytes(path,&n);bad=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bytes&&bad&&snapshot&&n>20);if(!bytes||!bad||!snapshot||n<=PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+64){CHECK(false);goto done;}
-    CHECK(get32(bytes+4)==20);n-=(PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
+    bytes=read_bytes(path,&n);bad=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bytes&&bad&&snapshot&&n>20);if(!bytes||!bad||!snapshot||n<=(PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+64){CHECK(false);goto done;}
+    CHECK(get32(bytes+4)==21);n-=((PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
     CHECK(get32(bytes+n-PE_SAVE_V16_APPEND-4)==id);
     memcpy(snapshot,loaded,sizeof *loaded);uint64_t hash=pe_world_hash(&loaded->world);
     uint32_t invalid[]={g->inventory.next_instance_id,UINT32_MAX,g->equipped_instance_id,g->outfit.items[0].instance_id,g->inventory.slots[pick].instance_id};
@@ -54,8 +54,8 @@ int pe_test_shield_save(void){
     memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-PE_SAVE_V16_APPEND-4,14)&&pe_game_load(loaded,path,error,sizeof error));
     CHECK(!loaded->shield_instance_id&&loaded->inventory.next_instance_id==g->inventory.next_instance_id);
     CHECK(!memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)&&!memcmp(&loaded->outfit,&g->outfit,sizeof g->outfit));
-    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+(PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
-    if(after)CHECK(get32(after+4)==20&&get32(after+n-PE_SAVE_V16_APPEND-4)==0&&!memcmp(after+16,bytes+16,n-PE_SAVE_V16_APPEND-4-16));
+    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+((PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
+    if(after)CHECK(get32(after+4)==21&&get32(after+n-PE_SAVE_V16_APPEND-4)==0&&!memcmp(after+16,bytes+16,n-PE_SAVE_V16_APPEND-4-16));
     /* V13 outfit migration remains intact; shield still defaults absent. */
     memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-PE_SAVE_V16_APPEND-4-PE_SAVE_V14_APPEND,13)&&pe_game_load(loaded,path,error,sizeof error));
     CHECK(!loaded->shield_instance_id&&loaded->inventory.next_instance_id==g->inventory.next_instance_id+3&&pe_outfit_defense(&loaded->outfit)==12);
@@ -68,7 +68,7 @@ int pe_test_shield_save(void){
     CHECK(current&&after&&current_n==after_n&&!memcmp(current,after,after_n));free(current);
     /* Legacy stores zero and old Legacy loads cannot gain a shield. */
     pe_game_destroy(g);pe_game_init(g,106);CHECK(pe_game_save(g,path,error,sizeof error));free(after);after=read_bytes(path,&after_n);CHECK(after);
-    if(after){after_n-=(PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(get32(after+after_n-PE_SAVE_V16_APPEND-4)==0&&write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-4,14)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!loaded->shield_instance_id&&loaded->mode==PE_GAME_LEGACY);}
+    if(after){after_n-=((PE_SAVE_V21_APPEND+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(get32(after+after_n-PE_SAVE_V16_APPEND-4)==0&&write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-4,14)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!loaded->shield_instance_id&&loaded->mode==PE_GAME_LEGACY);}
  done:
     if(fd>=0)unlink(path);
     free(bytes);free(bad);free(snapshot);free(after);pe_world_destroy(w);free(w);

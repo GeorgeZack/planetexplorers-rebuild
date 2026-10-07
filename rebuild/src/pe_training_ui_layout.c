@@ -73,6 +73,7 @@ bool pe_training_ui_layout(float width,float height,PeTrainingUILayout *out) {
         l.quickslots[i]=rect(&l,bottom,i<4?329+51*i:748+51*(i-4),647,48,48);
     R(health,bottom,558,648,164,30); R(stamina,bottom,571,678.5f,138,9);
     R(mission_button,right,1254,173,20,26);
+    R(history_button,right,1253,148,22,22);
     R(minimap,right,1069,0,210,208); R(mission_tracker,right,994,224,282,309);
     R(notification,left,42,0,520,64);
     /* UIMinMapCtrl.UpdateMapPos runtime 190x200, centered at(-96,-101)
@@ -85,6 +86,12 @@ bool pe_training_ui_layout(float width,float height,PeTrainingUILayout *out) {
     R(dialogue_next,bottom,1034,573,24,24);
     /* MissionWnd authoredrootx=-100 is reset to0 by GameUI.AddUIPrefab. */
     R(mission,center,120,90,1040,540); R(mission_close,center,1117,107,25,25);
+    /* NpcTalkHistoryWnd.prefab: GameUI resets authored root y36 to0.
+       Root660x492; Records y12.3, clip630x393; Clear80x37. */
+    R(history,center,310,114,660,492); R(history_close,center,939.2f,119.5f,25,25);
+    R(history_content,center,325,151.2f,630,393);
+    R(history_clear,center,884,550.5f,80,37);
+    R(history_scrollbar,center,951,149.7f,8,396);
     R(menu_button,PE_UI_BOTTOM_RIGHT,1191,659.5f,48,49);
     /* Compact supported menu subset; original full menu contents are not
        reproduced. Keep 15px interior margins and five distinct hit rows. */
@@ -129,6 +136,7 @@ PeTrainingUIRect pe_training_ui_window_rect(const PeTrainingUILayout *l,int w) {
     case PE_UI_WINDOW_INVENTORY:return l->inventory;
     case PE_UI_WINDOW_REPLICATOR:return l->replicator;
     case PE_UI_WINDOW_MISSION:return l->mission;
+    case PE_UI_WINDOW_HISTORY:return l->history;
     default:return (PeTrainingUIRect){0};
     }
 }
@@ -141,6 +149,7 @@ static void move_window(PeTrainingUILayout *l,int w,float x,float y) {
     case PE_UI_WINDOW_INVENTORY:M(inventory);M(inventory_close);M(inventory_title);M(inventory_page);A(inventory_tabs);A(inventory_slots);break;
     case PE_UI_WINDOW_CHARACTER:M(equipment);M(equipment_close);M(equipment_preview);M(equipment_weapon);A(equipment_slots);break;
     case PE_UI_WINDOW_MISSION:M(mission);M(mission_close);break;
+    case PE_UI_WINDOW_HISTORY:M(history);M(history_close);M(history_content);M(history_clear);M(history_scrollbar);break;
     case PE_UI_WINDOW_REPLICATOR:M(replicator);M(replicator_close);M(replicator_recipes);M(replicator_recipe);M(replicator_material);M(replicator_craft);M(replicator_output);M(replicator_progress);M(replicator_craft_icon);break;
     }
 #undef A
@@ -174,8 +183,8 @@ bool pe_training_ui_window_drag(PeUIWindows *s,PeTrainingUILayout *l,int w,float
     if(!active&&pressed&&w>=0&&w<PE_UI_WINDOW_COUNT){
         PeTrainingUIRect r=pe_training_ui_window_rect(l,w),close={0};
         switch(w){case PE_UI_WINDOW_STORAGE:close=l->storage_close;break;case PE_UI_WINDOW_CHARACTER:close=l->equipment_close;break;
-        case PE_UI_WINDOW_INVENTORY:close=l->inventory_close;break;case PE_UI_WINDOW_REPLICATOR:close=l->replicator_close;break;case PE_UI_WINDOW_MISSION:close=l->mission_close;break;}
-        r.h=50*l->scale;
+        case PE_UI_WINDOW_INVENTORY:close=l->inventory_close;break;case PE_UI_WINDOW_REPLICATOR:close=l->replicator_close;break;case PE_UI_WINDOW_MISSION:close=l->mission_close;break;case PE_UI_WINDOW_HISTORY:close=l->history_close;break;}
+        r.h=(w==PE_UI_WINDOW_HISTORY?32:50)*l->scale;
         if(pe_training_ui_contains(r,x,y)&&!pe_training_ui_contains(close,x,y)){
             s->dragging=w+1;s->grab_x=(x-r.x)/l->scale;s->grab_y=(y-r.y)/l->scale;active=true;
         }

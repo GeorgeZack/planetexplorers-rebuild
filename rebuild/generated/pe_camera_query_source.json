@@ -1,0 +1,200 @@
+{
+  "groups": [
+    {
+      "component_id": 1573717156708898775,
+      "convex_solid": false,
+      "entity_id": 20001,
+      "game_object_id": -8883039017249619003,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -942343772604221371,
+      "convex_solid": true,
+      "entity_id": 20003,
+      "game_object_id": -1895850040575962530,
+      "kind": "MeshCollider",
+      "layer": 16
+    },
+    {
+      "component_id": 7538488328409834502,
+      "convex_solid": false,
+      "entity_id": 20004,
+      "game_object_id": -1418134163132625678,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -4607474722917053766,
+      "convex_solid": false,
+      "entity_id": 20005,
+      "game_object_id": 7706649112089671858,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": 1988853168752268321,
+      "convex_solid": true,
+      "entity_id": 20006,
+      "game_object_id": 5272855295632875899,
+      "kind": "BoxCollider",
+      "layer": 13
+    },
+    {
+      "component_id": 8768003564898406011,
+      "convex_solid": true,
+      "entity_id": 20007,
+      "game_object_id": -7499573919649011711,
+      "kind": "BoxCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -8895255374565302428,
+      "convex_solid": false,
+      "entity_id": 20021,
+      "game_object_id": 7706853532831121393,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -8895255374565302428,
+      "convex_solid": false,
+      "entity_id": 20022,
+      "game_object_id": 7706853532831121393,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": 3059961376977143772,
+      "convex_solid": false,
+      "entity_id": 20023,
+      "game_object_id": -2353338161993336508,
+      "kind": "MeshCollider",
+      "layer": 16
+    },
+    {
+      "component_id": -9171895249221837838,
+      "convex_solid": true,
+      "entity_id": 20024,
+      "game_object_id": -870604345349956025,
+      "kind": "BoxCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -2562793505867123570,
+      "convex_solid": false,
+      "entity_id": 20024,
+      "game_object_id": 8328472084908679902,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": 8749249857071063818,
+      "convex_solid": true,
+      "entity_id": 20024,
+      "game_object_id": 1312757054068675863,
+      "kind": "BoxCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -8895255374565302428,
+      "convex_solid": false,
+      "entity_id": 20025,
+      "game_object_id": 7706853532831121393,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -9171895249221837838,
+      "convex_solid": true,
+      "entity_id": 20026,
+      "game_object_id": -870604345349956025,
+      "kind": "BoxCollider",
+      "layer": 13
+    },
+    {
+      "component_id": -2562793505867123570,
+      "convex_solid": false,
+      "entity_id": 20026,
+      "game_object_id": 8328472084908679902,
+      "kind": "MeshCollider",
+      "layer": 13
+    },
+    {
+      "component_id": 8749249857071063818,
+      "convex_solid": true,
+      "entity_id": 20026,
+      "game_object_id": 1312757054068675863,
+      "kind": "BoxCollider",
+      "layer": 13
+    }
+  ],
+  "layer_source": {
+    "path": "Assets/Scripts/ZhouXun/Voxel Creation/Scripts/WhiteCat/PE-VC/Layer.cs",
+    "sha256": "65e25f06ce43e223d50527f2e652ce0eca96b4b6e06077a52ac50548535648aa"
+  },
+  "policy": "Source identities/layers; native inclusive triangle overlap, convex containment and group initial-contact exclusion. No PhysX cooking parity claim.",
+  "schema": 1,
+  "sources": [
+    {
+      "bundle": "town_store01.unity3d",
+      "entity_id": 20001,
+      "sha256": "6b8bb29e1bf070bbb4d0959cd7ac9dfcd2ee58850fd657690bf1d84330dc4f64"
+    },
+    {
+      "bundle": "town_board01.unity3d",
+      "entity_id": 20003,
+      "sha256": "77d24c78845156cb6643fffeb42b4224356cb6913c81d2553108f1dfa07a4cb6"
+    },
+    {
+      "bundle": "town_hotel01.unity3d",
+      "entity_id": 20004,
+      "sha256": "1b08ea7bd1b57c108e52587e944cfcf145201c8f658008b36b043d36022eef97"
+    },
+    {
+      "bundle": "town_dwelling01.unity3d",
+      "entity_id": 20005,
+      "sha256": "4c6e86b2d81cbe2b4bcd0b1b9d4a6dd97cf93dd2650941a1c016b6abcf94b691"
+    },
+    {
+      "bundle": "RepairMachine_Static.unity3d",
+      "entity_id": 20006,
+      "sha256": "e267a1b55e0e174da80af090dbefc8a39c6451a8e705a5637e182085acc570ee"
+    },
+    {
+      "bundle": "PowerPlanetSolar.unity3d",
+      "entity_id": 20007,
+      "sha256": "3c457201093269d3899f54d3a434b3c7471505f2a844486e38de4c6e4d7c42c7"
+    },
+    {
+      "bundle": "scene_HumanBuilding04.unity3d",
+      "entity_id": 20021,
+      "sha256": "53c46a7c456270a87d4e727bb9b09f3735e8f61f2a97251e6c82473ee07d757a"
+    },
+    {
+      "bundle": "scene_HumanBuilding04.unity3d",
+      "entity_id": 20022,
+      "sha256": "53c46a7c456270a87d4e727bb9b09f3735e8f61f2a97251e6c82473ee07d757a"
+    },
+    {
+      "bundle": "scene_HumanBuilding03.unity3d",
+      "entity_id": 20023,
+      "sha256": "aec228f884723b025440bc6924babdff02eb92bcbeeea87cc923830a80f2d50b"
+    },
+    {
+      "bundle": "scene_HumanBuilding05.unity3d",
+      "entity_id": 20024,
+      "sha256": "bd0d90e7fa616ebe7122ea9c846357e57aec837b316b5e2ccb1a16972a6310aa"
+    },
+    {
+      "bundle": "scene_HumanBuilding04.unity3d",
+      "entity_id": 20025,
+      "sha256": "53c46a7c456270a87d4e727bb9b09f3735e8f61f2a97251e6c82473ee07d757a"
+    },
+    {
+      "bundle": "scene_HumanBuilding05.unity3d",
+      "entity_id": 20026,
+      "sha256": "bd0d90e7fa616ebe7122ea9c846357e57aec837b316b5e2ccb1a16972a6310aa"
+    }
+  ]
+}

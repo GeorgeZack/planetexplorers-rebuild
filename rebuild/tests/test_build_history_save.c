@@ -40,7 +40,7 @@ int pe_test_build_history_save(void){
     CHECK(!pe_build_history_can_undo(copy)&&!pe_build_history_can_redo(copy));
     CHECK(pe_game_save(g,path,error,sizeof error));before=read_bytes(path,&n);CHECK(before&&n>16);
     if(!before||n<=16)goto done;
-    CHECK(before[4]==20&&before[5]==0&&before[6]==0&&before[7]==0);
+    CHECK(before[4]==21&&before[5]==0&&before[6]==0&&before[7]==0);
     CHECK(!memcmp(&g->build_history,&history,sizeof history)); /* Saving keeps the session. */
     char missing[1100];snprintf(missing,sizeof missing,"%s.missing",path);
     CHECK(!pe_game_load(g,missing,error,sizeof error));

@@ -14,10 +14,11 @@ enum { PE_UI_INVENTORY_SLOTS=42, PE_UI_STORAGE_SLOTS=30,
 typedef struct {
     float width, height, scale;
     PeTrainingUIRect hud, hand_slot, build_button, quickslots[PE_UI_QUICKSLOTS];
-    PeTrainingUIRect health, stamina, minimap, mission_tracker, notification, mission_button;
+    PeTrainingUIRect health, stamina, minimap, mission_tracker, notification, mission_button, history_button;
     PeTrainingUIRect minimap_texture, minimap_clip, minimap_player;
     PeTrainingUIRect dialogue, dialogue_portrait, dialogue_name, dialogue_text, dialogue_next;
     PeTrainingUIRect mission, mission_close;
+    PeTrainingUIRect history,history_close,history_content,history_clear,history_scrollbar;
     PeTrainingUIRect menu_button, menu_panel, menu_items[PE_UI_MENU_ITEMS];
     PeTrainingUIRect inventory, inventory_close, inventory_title;
     PeTrainingUIRect inventory_tabs[PE_UI_INVENTORY_TABS];
@@ -39,7 +40,7 @@ typedef struct {
 
 /* Ordered back-to-front; HUD/dialogue stay anchored. Zero-init session state. */
 typedef enum { PE_UI_WINDOW_STORAGE, PE_UI_WINDOW_CHARACTER, PE_UI_WINDOW_INVENTORY,
-    PE_UI_WINDOW_REPLICATOR, PE_UI_WINDOW_MISSION, PE_UI_WINDOW_COUNT } PeUIWindow;
+    PE_UI_WINDOW_REPLICATOR, PE_UI_WINDOW_MISSION, PE_UI_WINDOW_HISTORY, PE_UI_WINDOW_COUNT } PeUIWindow;
 typedef struct {
     float x[PE_UI_WINDOW_COUNT],y[PE_UI_WINDOW_COUNT]; /* Reference-pixel offsets. */
     int dragging; /* Window+1, or zero. */

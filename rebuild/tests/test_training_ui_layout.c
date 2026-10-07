@@ -14,6 +14,13 @@ int pe_test_training_ui_layout(void) {
     CHECK(base.scale==1 && base.inventory.x==752 && base.inventory.y==110);
     CHECK(base.mission.x==120 && base.mission.w==1040 && base.mission_close.x==1117);
     CHECK(base.health.w==164 && base.stamina.y==678.5f);
+    CHECK(base.history.x==310&&base.history.y==114&&base.history.w==660&&base.history.h==492);
+    CHECK(near(base.history_content.x,325)&&near(base.history_content.y,151.2f)&&base.history_content.w==630&&base.history_content.h==393);
+    CHECK(inside(base.history_content,base.history)&&inside(base.history_clear,base.history)&&inside(base.history_close,base.history)&&inside(base.history_scrollbar,base.history));
+    CHECK(inside(base.history_button,base.minimap));
+    CHECK(pe_training_ui_contains(base.history_button,1254,149));
+    CHECK(!pe_training_ui_contains(base.history_button,1254,175));
+
     for(int i=0;i<PE_UI_MENU_ITEMS;i++){CHECK(inside(base.menu_items[i],base.menu_panel));CHECK(pe_training_ui_hit(base.menu_items,PE_UI_MENU_ITEMS,base.menu_items[i].x+1,base.menu_items[i].y+1)==i);}
     CHECK(base.replicator.x==200 && base.replicator.w==880 && base.replicator.h==480);
     CHECK(base.equipment.x==-20 && base.equipment.w==620 && base.equipment.h==602);
@@ -115,5 +122,28 @@ int pe_test_training_ui_layout(void) {
     CHECK(pe_training_ui_window_drag(&windows,&moved,-1,400,300,false,false,true)&&!windows.dragging);
     PeTrainingUILayout kept=moved;windows.x[0]=NAN;
     CHECK(!pe_training_ui_windows_layout(1000,700,&windows,&moved)&&!memcmp(&kept,&moved,sizeof kept));
+    /* History is the highest ordinary window and all dependent hit/draw
+       rectangles move together. Source content starts37px below the top,
+       so the native32px header must not steal the first history row. */
+    for(size_t i=0;i<sizeof sizes/sizeof sizes[0];i++){
+        PeUIWindows windows={0};PeTrainingUILayout l;
+        CHECK(pe_training_ui_windows_layout(sizes[i][0],sizes[i][1],&windows,&l));
+        PeTrainingUIRect original=l.history_content,button=l.history_button;
+        unsigned visible=(1u<<PE_UI_WINDOW_HISTORY)|(1u<<PE_UI_WINDOW_MISSION);
+        CHECK(pe_training_ui_window_at(&l,visible,l.history.x+25*l.scale,l.history.y+20*l.scale)==PE_UI_WINDOW_HISTORY);
+        CHECK(!pe_training_ui_window_drag(&windows,&l,PE_UI_WINDOW_HISTORY,l.history_close.x+l.scale,l.history_close.y+l.scale,true,false,false));
+        CHECK(!pe_training_ui_window_drag(&windows,&l,PE_UI_WINDOW_HISTORY,l.history_content.x+l.scale,l.history_content.y+l.scale,true,false,false));
+        float old_x=l.history.x,old_y=l.history.y;
+        CHECK(pe_training_ui_window_drag(&windows,&l,PE_UI_WINDOW_HISTORY,old_x+20*l.scale,old_y+15*l.scale,true,false,false));
+        CHECK(pe_training_ui_window_drag(&windows,&l,-1,l.width+100,l.height+100,false,true,false));
+        CHECK(!windows.dragging);
+        CHECK(near(l.history_content.x-original.x,l.history.x-old_x));
+        CHECK(near(l.history_content.y-original.y,l.history.y-old_y));
+        CHECK(inside(l.history,(PeTrainingUIRect){0,0,l.width,l.height}));
+        CHECK(inside(l.history_content,l.history)&&inside(l.history_close,l.history)&&inside(l.history_clear,l.history)&&inside(l.history_scrollbar,l.history));
+        CHECK(!memcmp(&button,&l.history_button,sizeof button));
+        CHECK(pe_training_ui_window_drag(&windows,&l,PE_UI_WINDOW_HISTORY,l.history.x+20*l.scale,l.history.y+15*l.scale,true,false,false));
+        CHECK(pe_training_ui_window_drag(&windows,&l,-1,0,0,false,false,true)&&!windows.dragging);
+    }
     return failures;
 }

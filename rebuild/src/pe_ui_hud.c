@@ -75,7 +75,7 @@ void pe_ui_minimap_chrome_draw(const PeUiCanvas *c,const PeUiMinimapView *v){
     pe_ui_draw_effect(c,PE_UI_EFFECT_MAP_SCAN,pe_ui_draw_map(c,1094,0,148,208,PE_UI_TOP_RIGHT));
     pe_ui_draw_sprite(c,"mapeye",pe_ui_draw_map(c,1253,4,22,22,PE_UI_TOP_RIGHT),WHITE);
     pe_ui_draw_sprite(c,"maplight1",pe_ui_draw_map(c,1253,29,22,22,PE_UI_TOP_RIGHT),WHITE);
-    pe_ui_draw_sprite(c,"NpcTalkHistoryBtn",pe_ui_draw_map(c,1253,148,22,22,PE_UI_TOP_RIGHT),WHITE);
+    pe_ui_draw_sprite(c,"NpcTalkHistoryBtn",c->layout->history_button,WHITE);
     pe_ui_draw_sprite(c,"Icon_mission",c->layout->mission_button,WHITE);
     char text[128];
     if(v->clock_available&&v->hour>=0&&v->hour<=99&&v->minute>=0&&v->minute<60){

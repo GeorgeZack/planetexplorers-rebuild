@@ -16,11 +16,18 @@ PREFIX = r"""
 #include "pe_training.h"
 #include "pe_training_ui_layout.h"
 #include "pe_ui_input.h"
+#include "pe_conversation_history.h"
+#include "pe_ui_history_state.h"
+#define log mission_log
 #include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+#undef assert
+#define assert(x) do{if(!(x)){fprintf(stderr,"UI input:%d: %s\n",__LINE__,#x);exit(1);}}while(0)
 #include <string.h>
 #include <stdio.h>
 typedef struct {float x,y;} Vector2;
-enum {MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT,KEY_C,KEY_Y,KEY_I,KEY_Q,KEY_B,KEY_T,KEY_ONE=40,KEY_KP_1=80,KEY_ENTER=100,KEY_SPACE};
+enum {MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT,KEY_C,KEY_Y,KEY_I,KEY_Q,KEY_B,KEY_T,KEY_ONE=40,KEY_KP_1=80,KEY_ENTER=100,KEY_SPACE,KEY_ESCAPE};
 static bool keys[128],left,right,down,released;
 static bool IsKeyPressed(int k){return keys[k];}
 static bool IsMouseButtonPressed(int k){return k==MOUSE_BUTTON_LEFT?left:right;}
@@ -28,22 +35,25 @@ static bool IsMouseButtonDown(int k){(void)k;return down;}
 static bool IsMouseButtonReleased(int k){(void)k;return released;}
 static Vector2 GetMouseDelta(void){return(Vector2){5,0};}
 static PeTraining training;
-static struct{PeTrainingUILayout layout;}ui;
+static struct{PeTrainingUILayout layout;PeUiHistoryState history;PeConversationHistory conversation_history;}ui;
+static float GetMouseWheelMove(void){return 0;}
 static Vector2 pointer;
 static Vector2 GetMousePosition(void){return pointer;}
 static bool menu_open,paused,inventory,log,dragging,equipment_tab,dialogue_input_consumed;
+static bool focused=true,smoke_frames;
 static int inventory_tab,build_rotation;
 static float preview_yaw;
 static void frame(void){
  int talk=pe_training_dialogue(&training);dialogue_input_consumed=false;
  bool pointer_release_pending=false;
- bool ui_was_modal=training.character_open||training.replicator_open||training.kit_open||inventory||log||menu_open;
+ bool history_was_open=ui.history.open;
+ bool ui_was_modal=ui.history.open||training.character_open||training.replicator_open||training.kit_open||inventory||log||menu_open;
 """
 SUFFIX = r"""}
 
 static void events(void){memset(keys,0,sizeof keys);left=right=down=released=false;}
 static void reset(int mission,unsigned dialogue){
- memset(&training,0,sizeof training);events();
+ memset(&training,0,sizeof training);memset(&ui,0,sizeof ui);events();
  training.ready=true;training.hp=training.max_hp=500;training.stamina=100;
  training.tutorial=(PeTutorial){(unsigned)mission,3,15,0};training.dialogue_index=dialogue;
  if(mission==PE_TUTORIAL_CAMERA)pe_tutorial_init(&training.tutorial);
@@ -125,6 +135,19 @@ int main(void){
   reset(746,2);assert(pe_training_ui_layout(sizes[k][0],sizes[k][1],&ui.layout));
   menu_open=true;left=true;pointer=(Vector2){ui.layout.health.x+1,ui.layout.health.y+1};frame();assert(!menu_open&&!training.character_open);
  }
+ /* Actual history opening owns simultaneous digit use; Escape owns its
+    closing frame as well. No synthetic copy of the host Escape dispatch. */
+ reset(746,2);training.quickslot_item_id=916;training.juice_count=10;training.hp=100;
+ left=true;keys[KEY_ONE]=true;pointer=(Vector2){ui.layout.history_button.x+1,ui.layout.history_button.y+1};frame();
+ assert(ui.history.open&&dialogue_input_consumed&&training.juice_count==10&&training.hp==100);
+ ui.history.content_height=1600;ui.history.scroll=700;
+ events();PeTrainingUIRect thumb=pe_ui_history_thumb(&ui.history,&ui.layout);
+ left=true;pointer=(Vector2){thumb.x+thumb.w*.5f,thumb.y+thumb.h*.25f};frame();
+ assert(ui.history.scroll_dragging&&dialogue_input_consumed&&fabsf(ui.history.scroll-700)<.01f);
+ events();pointer.x=0;pointer.y-=80;frame();assert(ui.history.scroll_dragging&&ui.history.scroll<700&&dialogue_input_consumed);
+ events();released=true;pointer.y=-100;frame();assert(!ui.history.scroll_dragging&&ui.history.scroll==0&&dialogue_input_consumed);
+ events();keys[KEY_ESCAPE]=keys[KEY_ONE]=keys[KEY_C]=true;frame();
+ assert(!ui.history.open&&dialogue_input_consumed&&training.juice_count==10&&training.hp==100&&!training.character_open);
  puts("Actual core transactions through extracted UI routing: storage, tabs, drag/use, equip/unequip, craft conservation passed");return 0;
 }
 """
@@ -137,6 +160,10 @@ class TrainingUIInput(unittest.TestCase):
         harness = r"""
 #include "pe_training_view.h"
 #include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+#undef assert
+#define assert(x) do{if(!(x)){fprintf(stderr,"UI input:%d: %s\n",__LINE__,#x);exit(1);}}while(0)
 #include <math.h>
 int main(void) {
     PeTrainingUILayout layout;
@@ -185,6 +212,10 @@ int main(void) {
         harness = r"""
 #include "pe_ui_input.h"
 #include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+#undef assert
+#define assert(x) do{if(!(x)){fprintf(stderr,"UI input:%d: %s\n",__LINE__,#x);exit(1);}}while(0)
 #include <stdio.h>
 typedef struct {float x,y;} Vector2;
 enum {MOUSE_BUTTON_LEFT,MOUSE_BUTTON_RIGHT};
@@ -247,7 +278,9 @@ int main(void){
         with tempfile.TemporaryDirectory(prefix="ui-input-", dir=parent) as folder:
             temporary = Path(folder)
             harness, binary = temporary / "input.c", temporary / "input"
-            harness.write_text(PREFIX + source[window_first:window_last] + block + SUFFIX)
+            escape_first = source.index("        if(focused&&!smoke_frames&&IsKeyPressed(KEY_ESCAPE)) {")
+            escape_last = source.index("        if(focused&&paused&&!smoke_frames)", escape_first)
+            harness.write_text(PREFIX + source[escape_first:escape_last] + source[window_first:window_last] + block + SUFFIX)
             environment = os.environ.copy()
             environment["TMPDIR"] = str(temporary)
             command = [compiler, "-std=c11", "-Wall", "-Wextra", "-Wpedantic", "-Werror",

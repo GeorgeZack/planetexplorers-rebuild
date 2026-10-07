@@ -234,7 +234,7 @@ bool pe_game_repair_frame(PeGame *g,float dt,bool enabled,bool *completed){
 }
 bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
     if(!g||!world||world->source>1||!pe_world_depth(world)||!finite3(preferred)||
-       !pe_game_repair_state_valid(g)||g->repair.item.count)return false;
+       !pe_game_repair_state_valid(g)||g->repair.item.count||!pe_conversation_history_valid(&g->conversation_history))return false;
     if(world->source==0)for(size_t i=0;i<pe_world_voxel_count(world);i++)if(pe_world_data_const(world)[i].material>PE_MAT_GRASS)return false;
     PeGame *next=calloc(1,sizeof *next);if(!next)return false;
     *next=*g;memset(&next->world,0,sizeof next->world);pe_build_history_clear(next);pe_vegetation_clear(next);
@@ -261,7 +261,7 @@ bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
 }
 void pe_game_destroy(PeGame *g){if(g){pe_world_destroy(&g->world);memset(g,0,sizeof *g);}}
 bool pe_game_clone(PeGame *out,const PeGame *g){
-    if(!out||!g)return false;
+    if(!out||!g||!pe_conversation_history_valid(&g->conversation_history))return false;
     if(out==g)return true;
     PeWorld *w=calloc(1,sizeof *w);if(!w)return false;
     if(!pe_world_clone(w,&g->world)){free(w);return false;}

@@ -38,7 +38,8 @@ static inline bool pe_test_save_pre_welcome(const char *path,unsigned version){
     long size=ftell(file);if(size<20||size>800000){fclose(file);return false;}
     rewind(file);unsigned char *data=malloc((size_t)size);if(!data){fclose(file);return false;}
     bool ok=fread(data,1,(size_t)size,file)==(size_t)size;fclose(file);
-    if(ok&&data[4]>=6&&data[4]<=20&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+    if(ok&&data[4]>=6&&data[4]<=21&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+        if(data[4]>=21){if(size<=PE_SAVE_V21_APPEND+20){free(data);return false;}size-=PE_SAVE_V21_APPEND;}
         if(data[4]>=20){if(size<=PE_SAVE_V20_APPEND+20){free(data);return false;}size-=PE_SAVE_V20_APPEND;}
         if(data[4]>=19)size-=PE_SAVE_V19_APPEND;
         if(data[4]>=18)size-=PE_SAVE_V18_APPEND;

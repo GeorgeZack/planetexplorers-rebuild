@@ -19,8 +19,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+65536u)
-#define SAVE_VERSION 20u
+#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+65536u+PE_SAVE_V21_APPEND)
+#define SAVE_VERSION 21u
+_Static_assert(PE_SAVE_V21_APPEND==84484u,"V21 appends bounded conversation history");
 _Static_assert(PE_SAVE_V20_APPEND==32,"V20 appends fixed camp repair ownership");
 _Static_assert(PE_INVENTORY_SLOTS==32&&PE_INVENTORY_MAX_SLOTS==1680,"Preserve old inventory wire prefix");
 _Static_assert(PE_MAX_PLANTS==32&&PE_SAVE_V18_APPEND==648,"V18 appends bounded vegetation records");
@@ -43,7 +44,7 @@ static void err(char *out,size_t cap,const char *msg) {if(out&&cap)snprintf(out,
 static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
 static bool valid(const PeGame *g,bool trees,bool outfit) {
     if(!pe_inventory_state_valid(&g->inventory)||!pe_game_repair_state_valid(g))return false;
-    if(!pe_vegetation_state_valid(g))return false;
+    if(!pe_vegetation_state_valid(g)||!pe_conversation_history_valid(&g->conversation_history))return false;
     if(!pe_town_wallet_state_valid(g))return false;
     if(outfit&&!pe_outfit_state_valid(g))return false;
     if(!pe_shield_state_valid(g))return false;
@@ -273,6 +274,13 @@ static void encode(Stream *s,const PeGame *g) {
     put32(s,g->repair.item.instance_id);putf(s,g->repair.item.durability);
     put32(s,g->repair.running?1u:0u);
     put32(s,(uint32_t)g->repair.remaining_ticks);put32(s,(uint32_t)((uint64_t)g->repair.remaining_ticks>>32));
+    put32(s,g->conversation_history.count);
+    if(s->pos>s->size||PE_SAVE_V21_APPEND-4u>s->size-s->pos){s->ok=false;return;}
+    for(unsigned i=0;i<PE_CONVERSATION_HISTORY_CAPACITY;i++){
+        const PeConversationEntry *entry=&g->conversation_history.entries[i];
+        memcpy(s->p+s->pos,entry->speaker,PE_CONVERSATION_SPEAKER_CAPACITY);s->pos+=PE_CONVERSATION_SPEAKER_CAPACITY;
+        memcpy(s->p+s->pos,entry->content,PE_CONVERSATION_CONTENT_CAPACITY);s->pos+=PE_CONVERSATION_CONTENT_CAPACITY;
+    }
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -424,12 +432,21 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
         if(running>1||high||machine!=(g->repair.item.count?PE_CAMP_REPAIR_ENTITY_ID:0u)){s->ok=false;return;}
         g->repair.running=running!=0;g->repair.remaining_ticks=low;
     }
+    if(version>=21){
+        g->conversation_history.count=get32(s);
+        if(g->conversation_history.count>PE_CONVERSATION_HISTORY_CAPACITY||s->pos>s->size||PE_SAVE_V21_APPEND-4u>s->size-s->pos){s->ok=false;return;}
+        for(unsigned i=0;i<PE_CONVERSATION_HISTORY_CAPACITY;i++){
+            PeConversationEntry *entry=&g->conversation_history.entries[i];
+            memcpy(entry->speaker,s->p+s->pos,PE_CONVERSATION_SPEAKER_CAPACITY);s->pos+=PE_CONVERSATION_SPEAKER_CAPACITY;
+            memcpy(entry->content,s->p+s->pos,PE_CONVERSATION_CONTENT_CAPACITY);s->pos+=PE_CONVERSATION_CONTENT_CAPACITY;
+        }
+    }
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");
     if(g&&g->inventory.categorized!=(g->mode==PE_GAME_ADVENTURE)){err(error,capacity,"Inventory layout does not match game mode.");return false;}
     if(!g||!path||!path[0]||!valid(g,true,true)){err(error,capacity,"Invalid save path or game state.");return false;}
-    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+65536u;
+    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+65536u+PE_SAVE_V21_APPEND;
     unsigned char *data=malloc(buffer_size);
     if(!data){err(error,capacity,"Out of memory.");return false;}
     Stream s={data,16,buffer_size,true};encode(&s,g);

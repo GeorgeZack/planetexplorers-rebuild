@@ -1,6 +1,7 @@
 #ifndef PE_GAME_H
 #define PE_GAME_H
 #include "pe_world.h"
+#include "pe_conversation_history.h"
 #include "pe_camp_repair_state.h"
 #include "pe_content.h"
 #include "pe_block.h"
@@ -47,6 +48,8 @@ typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPAC
 #define PE_SAVE_V19_APPEND (8u + 16u * PE_INVENTORY_MAX_SLOTS)
 /* V20 retains v19 and appends machine identity, exact item and tick clock. */
 #define PE_SAVE_V20_APPEND 32u
+/* V21 preserves v20, then stores count and20 canonical fixed UTF-8 pairs. */
+#define PE_SAVE_V21_APPEND (4u + PE_CONVERSATION_HISTORY_CAPACITY * (PE_CONVERSATION_SPEAKER_CAPACITY + PE_CONVERSATION_CONTENT_CAPACITY))
 #define PE_MAX_PLANTS 32
 typedef struct { uint32_t prototype_id; PeVec3 position; bool depleted; } PePlant;
 typedef struct { bool installed; unsigned count; PePlant plants[PE_MAX_PLANTS]; } PeVegetation;
@@ -100,6 +103,7 @@ typedef struct PeGame {
     float yaw, pitch;
     double game_seconds;
     PeInventory inventory;
+    PeConversationHistory conversation_history; /* Displayed/resolved dialogue; PECSv21. */
     PeCampRepair repair; /* Archived camp machine20006 only; PECSv20. */
     PeOutfit outfit;
     PeCraftJob craft;

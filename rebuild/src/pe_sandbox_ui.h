@@ -6,6 +6,7 @@
 #include "pe_ui_assets.h"
 #include "pe_training_ui_layout.h"
 #include "pe_ui_input.h"
+#include "pe_ui_history.h"
 #include "pe_training_ui_shader.h"
 
 /* Presentation only. All possessions, equipment, recipes and quickslots live
@@ -52,6 +53,8 @@ typedef struct {
     PeTrainingUiShader *effects;
     PeTrainingUILayout layout;
     PeUIWindows windows;
+    PeUiHistoryState history;
+    int recorded_talk; /* Presentation transition latch; Clear never rewinds it. */
     RenderTexture2D preview;
     Texture2D minimap;
     Texture2D welcome_portrait;
@@ -155,6 +158,9 @@ PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *ui,PeGame *game,float dt);
 void pe_sandbox_ui_prepare(PeSandboxUI *ui,const PeGame *game);
 /* Call inside BeginDrawing after 3D mode. Does not advance simulation. */
 void pe_sandbox_ui_draw(PeSandboxUI *ui,const PeGame *game,bool build_mode);
+/* Capture presented TALK pages; rendering itself stays read-only. */
+void pe_sandbox_ui_record_dialogue(PeSandboxUI *ui,PeGame *game);
+PeAdventureDialogueBindings pe_sandbox_ui_dialogue_bindings(const PeSandboxUI *ui,const PeGame *game,char seed[32]);
 bool pe_sandbox_ui_cursor(const PeSandboxUI *ui);
 int pe_sandbox_ui_inventory_slot(const PeSandboxUI *ui,const PeGame *game,int visible);
 int pe_sandbox_ui_inventory_count(const PeSandboxUI *ui,const PeGame *game);

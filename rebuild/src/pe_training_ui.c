@@ -100,6 +100,16 @@ static void tracker(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState state)
     if(count>mission->objective_count){snprintf(labels[count-1],sizeof labels[0],"%u / 50",state.receivers_blocked);goals[count-1]=(PeUiTrackerObjective){labels[count-1],false};}
     PeUiCanvas c=canvas(u);PeUiTrackerView v={mission->title,mission->mission_type==1,goals,count};pe_ui_tracker_draw(&c,&v);
 }
+void pe_training_ui_record_dialogue(PeTrainingUi *u,const PeTraining *t){
+    if(!u||!t)return;
+    int id=pe_training_dialogue(t);const PeTrainingDialogue *entry=pe_training_dialogue_entry(id);
+    if(!entry){u->recorded_talk=0;return;}
+    if(id==u->recorded_talk)return;
+    u->recorded_talk=id;
+    const char *speaker=entry->speaker_npc_id==-9995?"Tips":entry->speaker_npc_id==-9999?"You":"Andy";
+    bool added=false;
+    if(pe_conversation_history_add(&u->conversation_history,speaker,pe_training_dialogue_text(id),&added)&&added)u->history.scroll=-1;
+}
 static void dialogue(PeTrainingUi *u,const PeTraining *t){
     int id=pe_training_dialogue(t);if(!id)return;
     PeTrainingUILayout *l=&u->layout;const PeTrainingDialogue *entry=pe_training_dialogue_entry(id);
@@ -165,7 +175,7 @@ static void character(PeTrainingUi *u,const PeTraining *t){
     }
 }
 static void tooltip(PeTrainingUi *u,const PeTraining *t,int tab){
-    if(pe_training_dialogue(t)||u->windows.dragging||t->replicator_open)return;
+    if(pe_training_dialogue(t)||u->history.open||u->windows.dragging||t->replicator_open)return;
     Vector2 m=GetMousePosition();
     unsigned visible=(t->kit_open?(1u<<PE_UI_WINDOW_STORAGE)|(1u<<PE_UI_WINDOW_INVENTORY):0)|
         (t->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(t->character_open?1u<<PE_UI_WINDOW_CHARACTER:0);
@@ -202,6 +212,7 @@ void pe_training_ui_draw(PeTrainingUi *u,const PeTraining *t,PeTrainingUiState s
         if(*title(t)){text(u,"New Mission:",42*z,31*z,18,blue,false);float x=42*z+MeasureTextEx(pe_ui_font(u->assets,false),"New Mission: ",18*z,0).x;text(u,title(t),x,31*z,18,gold,false);}
     }
     dialogue(u,t);tooltip(u,t,state.inventory_tab);
+    if(u->history.open){PeUiCanvas c=canvas(u);pe_ui_history_draw(&c,&u->conversation_history,&u->history);}
     if(state.dragging){Vector2 m=GetMousePosition();sprite(u,"drug_hot01",(PeTrainingUIRect){m.x-24*u->layout.scale,m.y-24*u->layout.scale,48*u->layout.scale,48*u->layout.scale},WHITE);}
     if(state.paused){
         DrawRectangle(0,0,GetScreenWidth(),GetScreenHeight(),Fade(BLACK,.48f));

@@ -24,6 +24,7 @@ PeUiChromeResult pe_ui_chrome_click(const PeTrainingUILayout *l,float x,float y,
     }else if(hud_shortcuts){
         if(pe_training_ui_contains(l->health,x,y))r.action=1;
         else if(pe_training_ui_contains(l->mission_button,x,y))r.action=3;
+        else if(pe_training_ui_contains(l->history_button,x,y))r.action=5;
         r.consume_press=r.action>=0;
     }
     return r;

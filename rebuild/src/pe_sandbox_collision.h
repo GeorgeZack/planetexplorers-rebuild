@@ -34,6 +34,13 @@ bool pe_sandbox_collision_update_with_static(PeSandboxCollision *collision,const
     const PeTreeCapsule *trees,size_t tree_count,const PeSceneCollision *static_scene,
     char *error,size_t error_capacity);
 PeSandboxCollisionStats pe_sandbox_collision_stats(const PeSandboxCollision *collision);
+typedef enum { PE_SANDBOX_SCENE_TERRAIN,PE_SANDBOX_SCENE_CONSTRUCTION,PE_SANDBOX_SCENE_STATIC } PeSandboxSceneKind;
+/* Read-only camera snapshot traversal. No trees or synthetic crop planes.
+ * Borrowed scenes remain valid only until the next successful snapshot update;
+ * a NULL static entry represents an intentionally absent settlement. */
+size_t pe_sandbox_collision_scene_count(const PeSandboxCollision *collision);
+bool pe_sandbox_collision_scene(const PeSandboxCollision *collision,size_t index,
+    const PeSceneCollision **scene,PeSandboxSceneKind *kind);
 /* All queries use the last successful snapshot. Unready/invalid overlap is
  * conservatively true; invalid sweep/support is no hit. Bounds are solid at
  * x/z=0..WORLD-1, feet>=0, head<=WORLD_Y-1. Exact touching is not penetration.

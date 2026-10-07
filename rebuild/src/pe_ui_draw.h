@@ -18,6 +18,9 @@ void pe_ui_draw_sprite(const PeUiCanvas *c,const char *name,PeTrainingUIRect r,C
 void pe_ui_draw_effect(const PeUiCanvas *c,PeUiEffect effect,PeTrainingUIRect r);
 void pe_ui_draw_text(const PeUiCanvas *c,const char *text,float x,float y,float size,Color tint,bool bold);
 void pe_ui_draw_center(const PeUiCanvas *c,const char *text,PeTrainingUIRect r,float size,Color tint,bool bold);
+/* Shared word walker, unbounded height and no scissor. draw=false measures
+ * with the same font/line rules; area.h is ignored. Caller owns clipping. */
+float pe_ui_draw_flow(const PeUiCanvas *c,const char *text,PeTrainingUIRect area,float size,Color tint,bool bold,float gap,bool draw);
 /* Word wrapping with pixel clipping and explicit row gap; returns used pixels. */
 float pe_ui_draw_wrap(const PeUiCanvas *c,const char *text,PeTrainingUIRect r,float size,Color tint,bool bold,float gap);
 void pe_ui_draw_item(const PeUiCanvas *c,int id,int count,PeTrainingUIRect r,bool box,Color tint);

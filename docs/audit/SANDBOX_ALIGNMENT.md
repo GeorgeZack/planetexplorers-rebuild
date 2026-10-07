@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+New implementation checkpoint: [conversation history](CONVERSATION_HISTORY.md) brings source retention/capture/clear behavior to both modes and PECSv21 sandbox persistence. [Camera collision and cursor alignment](CAMERA_ALIGNMENT.md) now integrate the qualified geometry evaluator with a dedicated query backend and a coherent display/picking pose. The preceding disconnected-evaluator status below is historical. Native manual camera quality and original compositor/anchor parity remain separate gates.
+
 Current UI checkpoint: [shared tutorial/sandbox presentation](SHARED_UI.md) centralizes HUD, minimap chrome, bounded quest tracking and common drawing/input primitives. Review both modes at equal normal/small sizes before expanding the UI. The next gameplay implementation target remains camera-only geometry query qualification and coherent projection/near-camera integration; the disconnected evaluator alone is insufficient to enable it. User-assisted UI review is available now, followed by camera acceptance when that integration is ready.
 
 October7: [ordinary native hunt acceptance](HUNT_ORDINARY_ACCEPTANCE.md) now passes earned kills, partial reload, cleanup, return rewards and resumed dialogue. Native difficulty/animation quality and9077 remain unqualified; earlier pending statements below retain their historical scope. The next source-first implementation target remains the camera-only query/projection qualification described below.

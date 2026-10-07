@@ -47,10 +47,10 @@ bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *u,const PeSandboxMapNpc *ma
     u->resident_markers=markers;u->resident_marker_count=count;return true;
 }
 bool pe_sandbox_ui_cursor(const PeSandboxUI *u) {
-    return u&&(u->revival_open||u->repair_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->camera_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
+    return u&&(u->history.open||u->revival_open||u->repair_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->camera_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
 }
 static bool panel(const PeSandboxUI *u) {
-    return u->revival_open||u->repair_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
+    return u->history.open||u->revival_open||u->repair_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
 }
 PeTrainingUIRect pe_sandbox_ui_supplier_menu(const PeSandboxUI *u) {
     return pe_training_ui_map(&u->layout,(PeTrainingUIRect){107,140,426,486},PE_UI_CENTER);
@@ -162,7 +162,7 @@ bool pe_sandbox_ui_item_details(const PeGame *g,const PeSlot *value,bool repair_
 bool pe_sandbox_ui_item_tooltip(const PeSandboxUI *u,const PeGame *g,char *out,size_t capacity,PeTrainingUIRect *box){
     if(!u||!g||!out||!capacity||!box)return false;
     out[0]=0;
-    if(!isfinite(u->mouse_x)||!isfinite(u->mouse_y)||u->layout.scale<=0||u->paused||u->revival_open||u->repair_confirm||u->repair_dragging||u->repair_window_dragging||u->shop_edit||u->shop_dragging||u->dragging||u->delete_open||u->split_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return false;
+    if(!isfinite(u->mouse_x)||!isfinite(u->mouse_y)||u->layout.scale<=0||u->paused||u->revival_open||u->repair_confirm||u->repair_dragging||u->repair_window_dragging||u->shop_edit||u->shop_dragging||u->dragging||u->delete_open||u->split_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->history.open||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return false;
     PeSlot value={0};bool worn=false,shop=false;PeSandboxShopRow entry={0};
     if(u->repair_open){
         if(pe_training_ui_contains(pe_sandbox_ui_repair_reserved(u),u->mouse_x,u->mouse_y))value=g->repair.item;
@@ -418,6 +418,7 @@ static void quick_use(const PeSandboxUI *u,PeSandboxUIResult *r,PeGame *g,int i)
 }
 static void close_panels(PeSandboxUI *u) {
     u->inventory_open=u->character_open=u->missions_open=u->replicator_open=false;
+    u->history.open=false;u->history.scroll_dragging=false;
     u->menu_open=u->search_focus=false;u->dragging=false;u->windows.dragging=0;u->split_open=u->split_armed=false;u->delete_open=u->delete_armed=false;
 }
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
@@ -708,6 +709,29 @@ static void repair_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i){
     }
 }
 
+PeAdventureDialogueBindings pe_sandbox_ui_dialogue_bindings(const PeSandboxUI *u,const PeGame *g,char seed[32]){
+    snprintf(seed,32,"%u",g->world.seed);
+    return (PeAdventureDialogueBindings){.player_name="You",.welcome_name="Westina",
+        .supplier_name="Eitai",.town_name="Annot",.player_full_name="You",
+        .welcome_full_name="Westina Nangle",.supplier_full_name="Eitai Takayama",
+        .annot_name="Naoko",.annot_full_name="Naoko Ueda",.seed_name=seed,
+        .start_town_name=u->start_town_name[0]?u->start_town_name:NULL};
+}
+static void record_line(PeSandboxUI *u,PeGame *g,const PeAdventureDialogueLine *line){
+    if(!line)return;
+    char seed[32],text[4096];PeAdventureDialogueBindings names=pe_sandbox_ui_dialogue_bindings(u,g,seed);
+    const char *speaker=pe_adventure_dialogue_speaker(line,&names);bool added=false;
+    if(speaker&&pe_adventure_dialogue_format(line->text,&names,text,sizeof text)&&
+       pe_conversation_history_add(&g->conversation_history,speaker,text,&added)&&added)u->history.scroll=-1;
+}
+void pe_sandbox_ui_record_dialogue(PeSandboxUI *u,PeGame *g){
+    if(!u||!g)return;
+    const PeAdventureDialogueLine *line=u->dialogue.stage==PE_ADVENTURE_DIALOGUE_TALK?pe_adventure_dialogue_current(&u->dialogue,g):NULL;
+    int id=line?line->talk_id:0;
+    if(id&&id!=u->recorded_talk)record_line(u,g,line);
+    u->recorded_talk=id;
+}
+
 PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
     PeSandboxUIResult r={0};
     if(!u||!g||!isfinite(i.mouse_x)||!isfinite(i.mouse_y)||!isfinite(i.wheel)||u->layout.scale<=0){r.consume_world=true;return r;}
@@ -717,9 +741,11 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         u->windows.dragging=0;u->building=false;
     }
     u->mouse_x=i.mouse_x;u->mouse_y=i.mouse_y;
-    if(u->discard_input){u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=u->repair_dragging=u->repair_window_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
+    if(u->discard_input){u->history.scroll_dragging=false;u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=u->repair_dragging=u->repair_window_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
+    pe_sandbox_ui_record_dialogue(u,g);
     bool before=panel(u),cursor_before=pe_sandbox_ui_cursor(u);
-    if(!i.focused){if(u->shop_edit){u->shop_quantity=u->shop_edit_before;u->shop_edit=false;}u->repair_dragging=u->repair_window_dragging=false;u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
+    bool chrome_press=i.left_pressed&&cursor_before&&pe_ui_chrome_click(&u->layout,i.mouse_x,i.mouse_y,true,u->menu_open,!u->building).consume_press;
+    if(!i.focused){u->history.scroll_dragging=false;if(u->shop_edit){u->shop_quantity=u->shop_edit_before;u->shop_edit=false;}u->repair_dragging=u->repair_window_dragging=false;u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
     bool history_owned=u->building&&(u->build_history_keys_owned||i.build_history_chord);
     u->build_history_keys_owned=history_owned&&i.build_history_keys_down;
     if(history_owned)r.consume_actions=true;
@@ -740,12 +766,22 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     if(u->split_open){r.consume_world=true;split_route(u,g,i);goto done;}
     if(u->delete_armed&&i.right_pressed){u->delete_armed=false;r.consume_world=true;goto done;}
     unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0)|
-        (u->missions_open?1u<<PE_UI_WINDOW_MISSION:0)|(u->replicator_open?1u<<PE_UI_WINDOW_REPLICATOR:0);
+        (u->missions_open?1u<<PE_UI_WINDOW_MISSION:0)|(u->replicator_open?1u<<PE_UI_WINDOW_REPLICATOR:0)|
+        (u->history.open?1u<<PE_UI_WINDOW_HISTORY:0);
     int pointer_window=pe_training_ui_window_at(&u->layout,visible,i.mouse_x,i.mouse_y);
     bool drag_cancel=!i.focused||i.escape||u->paused||u->menu_open||u->dragging||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||
         (u->windows.dragging&&!(visible&(1u<<(u->windows.dragging-1))));
     if(pe_training_ui_window_drag(&u->windows,&u->layout,pointer_window,i.mouse_x,i.mouse_y,
        i.left_pressed,i.left_released,drag_cancel)){r.consume_world=true;goto done;}
+    if(u->history.open){
+        r.consume_world=true;
+        if(i.escape||(i.left_pressed&&(hit(u->layout.history_close,i)||hit(u->layout.history_button,i)))){u->history.open=false;u->history.scroll_dragging=false;}
+        else if(i.left_pressed&&hit(u->layout.history_clear,i)){
+            pe_conversation_history_clear(&g->conversation_history);u->history.scroll=-1;u->history.scroll_dragging=false;
+        }else pe_ui_history_pointer(&u->history,&u->layout,i.mouse_x,i.mouse_y,i.wheel,
+            i.left_pressed,i.left_released,false);
+        goto done;
+    }
     if(u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE) {
         r.consume_world=true;
         bool offer=pe_adventure_dialogue_current(&u->dialogue,g)!=NULL;
@@ -757,10 +793,13 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
             if(i.left_pressed)for(int row=0;row<9;row++)
                 if(pe_sandbox_ui_dialogue_choice_index(u,g,row)>=0&&hit(pe_sandbox_ui_supplier_choice(u,row),i)){selected=row;break;}
             int source=pe_sandbox_ui_dialogue_choice_index(u,g,selected);
-            if(source>=0)u->dialogue_result=pe_adventure_dialogue_choose_medicine(&u->dialogue,g,source==0);
+            if(source>=0){record_line(u,g,pe_adventure_dialogue_choice(&u->dialogue,g,(unsigned)source));u->dialogue_result=pe_adventure_dialogue_choose_medicine(&u->dialogue,g,source==0);}
         } else if(u->dialogue.stage==PE_ADVENTURE_DIALOGUE_MENU) {
             if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i))pe_adventure_dialogue_cancel(&u->dialogue);
-            else if(offer&&(i.advance||i.response==1||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i))))pe_adventure_dialogue_choose_supply(&u->dialogue,g);
+            else if(offer&&(i.advance||i.response==1||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,0),i)))){
+                const PeAdventureDialogueLine *selected=pe_adventure_dialogue_current(&u->dialogue,g);
+                if(pe_adventure_dialogue_choose_supply(&u->dialogue,g))record_line(u,g,selected);
+            }
             else if((!offer&&i.advance)||i.response==(unsigned)(offer?2:1)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,offer?1:0),i)))pe_adventure_dialogue_cancel(&u->dialogue);
         } else if(i.advance||i.response==1||(i.left_pressed&&(hit(u->layout.dialogue_next,i)||hit(u->layout.dialogue,i))))u->dialogue_result=pe_adventure_dialogue_advance(&u->dialogue,g);
         goto done;
@@ -777,7 +816,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(i.replicator){bool open=!u->replicator_open;close_panels(u);u->replicator_open=open;}
         if(i.tab)u->free_cursor=!u->free_cursor;
         if(!u->search_focus){r.save=i.save;r.load=i.load;}
-        if(!before&&!panel(u)&&!i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&i.quickslot>=0){if(u->building){build_select(u,&r,i.quickslot);r.consume_world=true;}else quick_use(u,&r,g,i.quickslot);}
+        if(!chrome_press&&!before&&!panel(u)&&!i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&i.quickslot>=0){if(u->building){build_select(u,&r,i.quickslot);r.consume_world=true;}else quick_use(u,&r,g,i.quickslot);}
     }
     bool cursor=pe_sandbox_ui_cursor(u);
     /* A closing/toggling frame is consumed as well: held clicks cannot leak. */
@@ -803,6 +842,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(chrome.action==2)u->replicator_open=true;
         if(chrome.action==3)u->missions_open=true;
         if(chrome.action==4)u->paused=true;
+        if(chrome.action==5){u->history.open=true;u->history.scroll=-1;u->history.scroll_dragging=false;}
     }
     if(chrome.consume_press){r.consume_world=true;goto done;}
     if(u->menu_open)goto done;
@@ -957,6 +997,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(i.left_pressed&&hit(u->layout.build_button,i)){r.toggle_build=true;close_panels(u);}
     }
  done:
+    pe_sandbox_ui_record_dialogue(u,g);
     r.npc_interaction=!before&&!panel(u)&&!u->building&&!u->dragging&&
         !i.escape&&!i.inventory&&!i.character&&!i.missions&&!i.replicator&&!i.tab&&
         !i.save&&!i.load&&i.quickslot<0&&!r.toggle_build&&
