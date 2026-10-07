@@ -29,7 +29,7 @@ static void rejected(PeGame*g,const char*path,const PeGame*before,uint64_t hash)
     char error[256];CHECK(!pe_game_load(g,path,error,sizeof error));
     CHECK(!memcmp(g,before,sizeof *g)&&pe_world_hash(&g->world)==hash);
 }
-static int slot(const PeGame*g,int id){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;return -1;}
+static int slot(const PeGame*g,int id){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;return -1;}
 int pe_test_stamina_save(void){
     failures=0;char path[]="/tmp/pe-stamina-save-XXXXXX",error[256];int fd=mkstemp(path);
     if(fd>=0)close(fd);
@@ -57,7 +57,7 @@ int pe_test_stamina_save(void){
     }
     g->comfort=275.125f;CHECK(pe_game_save(g,path,error,sizeof error));bytes=read_bytes(path,&n);bad=malloc(n+1);
     CHECK(bytes&&bad&&n>20);if(!bytes||!bad||n<=20)goto done;
-    CHECK(get32(bytes+4)==18);n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
+    CHECK(get32(bytes+4)==19);n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
     CHECK(get32(bytes+n-4)==bits(275.125f));
     /* Exact V15 prefix retains its shield, clothes, existing raw stamina fields
      * and dynamic world. No old-world-time inference invents historical comfort. */
@@ -66,8 +66,8 @@ int pe_test_stamina_save(void){
     CHECK(!memcmp(&loaded->stamina_recovery,&(PeStaminaRecovery){0},sizeof loaded->stamina_recovery));
     CHECK(loaded->shield_instance_id==g->shield_instance_id&&!memcmp(&loaded->outfit,&g->outfit,sizeof g->outfit));
     CHECK(pe_world_hash(&loaded->world)==pe_world_hash(&g->world));
-    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND);
-    if(after)CHECK(get32(after+4)==18&&!memcmp(after+16,bytes+16,n-PE_SAVE_V16_APPEND-16)&&get32(after+n-4)==bits(500));
+    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
+    if(after)CHECK(get32(after+4)==19&&!memcmp(after+16,bytes+16,n-PE_SAVE_V16_APPEND-16)&&get32(after+n-4)==bits(500));
     /* Invalid serialized comfort cannot mutate either the owned world or the
      * existing gameplay/transient state, even with a valid envelope checksum. */
     memcpy(snapshot,loaded,sizeof *loaded);uint64_t hash=pe_world_hash(&loaded->world);
@@ -91,7 +91,7 @@ int pe_test_stamina_save(void){
     pe_game_destroy(g);pe_game_init(g,953);CHECK(g->comfort==500);g->comfort=123.25f;
     CHECK(pe_game_save(g,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));CHECK(loaded->comfort==123.25f&&loaded->mode==PE_GAME_LEGACY);
     free(after);after=read_bytes(path,&after_n);CHECK(after);
-    if(after){after_n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND;CHECK(write_bytes(path,after,after_n-PE_SAVE_V16_APPEND,15)&&pe_game_load(loaded,path,error,sizeof error));CHECK(loaded->comfort==500&&loaded->mode==PE_GAME_LEGACY);}
+    if(after){after_n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(write_bytes(path,after,after_n-PE_SAVE_V16_APPEND,15)&&pe_game_load(loaded,path,error,sizeof error));CHECK(loaded->comfort==500&&loaded->mode==PE_GAME_LEGACY);}
 done:
     if(fd>=0)unlink(path);
     free(bytes);free(bad);free(after);free(snapshot);pe_world_destroy(w);free(w);pe_game_destroy(g);pe_game_destroy(loaded);free(g);free(loaded);

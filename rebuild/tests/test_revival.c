@@ -11,7 +11,7 @@
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"revival:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static int slot(const PeGame *g,int id){
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;
     return -1;
 }
 static PeRevivalGate admitted(void){
@@ -180,7 +180,7 @@ static void save_progress(void){
     if(!g||!loaded||fd<0)goto done;
     g->hp=g->max_hp;
     CHECK(pe_test_ack_welcome(g)&&pe_game_arrival_complete(g)&&pe_game_accept_supplies(g));g->annot_complete=true;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};
     g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     CHECK(pe_adventure_medicine_accept(g)&&pe_inventory_add(&g->inventory,917,5)&&pe_adventure_medicine_complete(g));
     CHECK(pe_inventory_add(&g->inventory,937,3)&&pe_adventure_hunt_reference(&g->hunt_destination));
@@ -203,7 +203,7 @@ static void save_progress(void){
     CHECK(pe_inventory_count(&loaded->inventory,937)==2);
     CHECK(pe_game_save(loaded,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));
     CHECK(pe_inventory_count(&loaded->inventory,937)==2&&loaded->hunt_kills==2);
-    FILE *file=fopen(path,"rb");CHECK(file);if(file){unsigned char h[8];CHECK(fread(h,1,8,file)==8&&h[4]==18&&h[5]==0);fclose(file);}
+    FILE *file=fopen(path,"rb");CHECK(file);if(file){unsigned char h[8];CHECK(fread(h,1,8,file)==8&&h[4]==19&&h[5]==0);fclose(file);}
     /* Invalid loads leave current recovery/game/world state untouched. */
     unsigned char *snapshot=malloc(sizeof *loaded);CHECK(snapshot);
     if(snapshot){

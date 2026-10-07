@@ -24,7 +24,7 @@ int main(int argc,char **argv) {
     if(!pe_game_start_craft(g,7,1)){free(g);return 1;}
     for(int i=0;i<190;i++)pe_game_step(g,(PeInput){0},PE_FIXED_DT);
     bool equipped=false;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==19)equipped=pe_game_equip_slot(g,i);
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==19)equipped=pe_game_equip_slot(g,i);
     PeVec3 eye={g->player.x,g->player.y+1.58f,g->player.z};
     uint32_t before=g->world.revision;
     if(!equipped||!pe_game_mine(g,eye,(PeVec3){1,-1,0})||g->world.revision==before){fprintf(stderr,"Tool action failed: %s\n",g->message);free(g);return 1;}

@@ -9,7 +9,7 @@ static void at(PeGame*g,PeVec3 source){g->player=(PeVec3){source.x-g->world.orig
 int pe_test_hunt_return(void){
     failures=0;PeGame*g=calloc(1,sizeof *g);if(!g)return 1;
     CHECK(pe_game_init_mode(g,54,PE_GAME_ADVENTURE));CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
     /* Explicit state/empty-world fixture isolates the return transaction. It
      * supplies no runtime kill shortcut and establishes no route playability. */
     g->hunt_state=PE_HUNT_RETURN_PENDING;g->hunt_kills=4;CHECK(pe_adventure_hunt_reference(&g->hunt_destination));
@@ -27,10 +27,10 @@ int pe_test_hunt_return(void){
     g->player.y=0;g->hp=0;CHECK(!pe_adventure_hunt_return_step(g));g->hp=g->max_hp;
     g->player.z=NAN;CHECK(!pe_adventure_hunt_return_step(g));at(g,destination);
     g->hunt_kills=3;CHECK(!pe_adventure_hunt_return_step(g)&&!pe_adventure_hunt_state_valid(g));g->hunt_kills=4;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};
     /* Four source nonstackable scripts need four slots. Three spare slots must
      * roll back even though three earlier rewards could fit. */
-    for(unsigned i=0;i<PE_INVENTORY_SLOTS-3;i++)CHECK(pe_inventory_add(&g->inventory,593,1));
+    for(unsigned i=0;i<PE_INVENTORY_CATEGORY_SLOTS-3;i++)CHECK(pe_inventory_add(&g->inventory,593,1));
     PeInventory before=g->inventory;uint32_t money=g->money,rng=g->rng_state;
     CHECK(!pe_adventure_hunt_return_step(g)&&g->hunt_state==PE_HUNT_RETURN_PENDING&&!memcmp(&g->inventory,&before,sizeof before));
     CHECK(g->money==money&&g->rng_state==rng&&!pe_adventure_hunt_return_talk(g));

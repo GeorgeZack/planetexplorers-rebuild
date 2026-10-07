@@ -26,7 +26,7 @@ static bool write_save(const char *path,unsigned char *p,size_t size,unsigned ve
 }
 static uint32_t add_torch(PeGame *g){
     if(!pe_inventory_add(&g->inventory,10,1))return 0;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==10&&g->inventory.slots[i].count){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==10&&g->inventory.slots[i].count){
         g->inventory.slots[i].durability=1234.5f;return g->inventory.slots[i].instance_id;
     }
     return 0;
@@ -42,7 +42,7 @@ int pe_test_v10_save(void){
     CHECK(pe_world_resize(w,80,32,80));
     for(int z=0;z<80;z++)for(int y=0;y<=8;y++)for(int x=0;x<80;x++)CHECK(pe_world_set(w,x,y,z,(PeVoxel){255,PE_MAT_DIRT}));
     CHECK(pe_game_set_world(g,w,(PeVec3){30,10,30}));CHECK(g->world.extended);
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};CHECK(pe_adventure_medicine_accept(g));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};CHECK(pe_adventure_medicine_accept(g));
     CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
     CHECK(pe_game_collision_update(g,collision,error,sizeof error));
     uint32_t first=add_torch(g);CHECK(first);
@@ -65,7 +65,7 @@ int pe_test_v10_save(void){
     CHECK(loaded->medicine_state==PE_MEDICINE_COMPLETE&&loaded->inventory.next_instance_id==g->inventory.next_instance_id);
     CHECK(!pe_inventory_count(&loaded->inventory,10));
     size_t size=0;original=read_save(path,&size);CHECK(original&&size>PE_SAVE_V10_APPEND);if(!original||size<=PE_SAVE_V10_APPEND)goto done;
-    CHECK(get32(original+4)==18);size-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND;CHECK(write_save(path,original,size,10));size_t footer=size-PE_SAVE_V10_APPEND;CHECK(get32(original+footer+16)==2);
+    CHECK(get32(original+4)==19);size-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND;CHECK(write_save(path,original,size,10));size_t footer=size-PE_SAVE_V10_APPEND;CHECK(get32(original+footer+16)==2);
     /* A literal v9 prefix has no phantom deployed instances or quest progress.
      * Existing inventory, medicine, stocks and owned world remain intact. */
     CHECK(write_save(path,original,footer,9));CHECK(pe_game_load(loaded,path,error,sizeof error));

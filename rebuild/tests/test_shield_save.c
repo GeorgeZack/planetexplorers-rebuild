@@ -20,7 +20,7 @@ static bool write_bytes(const char*path,unsigned char*p,size_t n,unsigned versio
     for(size_t i=16;i<n;i++){sum^=p[i];sum*=16777619u;}put32(p+12,sum);
     FILE*f=fopen(path,"wb");if(!f)return false;bool ok=fwrite(p,1,n,f)==n;return fclose(f)==0&&ok;
 }
-static int slot(const PeGame*g,int item){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==item)return i;return -1;}
+static int slot(const PeGame*g,int item){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==item)return i;return -1;}
 static void rejected(PeGame*g,const char*path,const void*snapshot,uint64_t hash){char error[256];CHECK(!pe_game_load(g,path,error,sizeof error));CHECK(!memcmp(g,snapshot,sizeof *g)&&pe_world_hash(&g->world)==hash);}
 int pe_test_shield_save(void){
     failures=0;char path[]="/tmp/pe-shield-save-XXXXXX",error[256];int fd=mkstemp(path);
@@ -39,14 +39,14 @@ int pe_test_shield_save(void){
     CHECK(!memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)&&!memcmp(&loaded->outfit,&g->outfit,sizeof g->outfit));
     CHECK(loaded->equipped_instance_id==g->equipped_instance_id&&pe_shield_equipped(loaded)->durability==321.25f);
     bytes=read_bytes(path,&n);bad=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bytes&&bad&&snapshot&&n>20);if(!bytes||!bad||!snapshot||n<=20)goto done;
-    CHECK(get32(bytes+4)==18);n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
+    CHECK(get32(bytes+4)==19);n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
     CHECK(get32(bytes+n-PE_SAVE_V16_APPEND-4)==id);
     memcpy(snapshot,loaded,sizeof *loaded);uint64_t hash=pe_world_hash(&loaded->world);
     uint32_t invalid[]={g->inventory.next_instance_id,UINT32_MAX,g->equipped_instance_id,g->outfit.items[0].instance_id,g->inventory.slots[pick].instance_id};
     for(unsigned i=0;i<sizeof invalid/sizeof invalid[0];i++){memcpy(bad,bytes,n);put32(bad+n-PE_SAVE_V16_APPEND-4,invalid[i]);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);}
     size_t counter=pe_test_save_counter_offset(g);
-    memcpy(bad,bytes,n);put32(bad+counter+4+8*(size_t)shield+4,0x7fc00000u);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);
-    memcpy(bad,bytes,n);put32(bad+counter+4+8*(size_t)pick,id);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);
+    memcpy(bad,bytes,n);put32(bad+counter+4+8*(size_t)pe_test_save_prefix_index(g,shield)+4,0x7fc00000u);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);
+    memcpy(bad,bytes,n);put32(bad+counter+4+8*(size_t)pe_test_save_prefix_index(g,pick),id);CHECK(write_bytes(path,bad,n,16));rejected(loaded,path,snapshot,hash);
     for(unsigned missing=1;missing<=PE_SAVE_V16_APPEND+4;missing++){memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-missing,16));rejected(loaded,path,snapshot,hash);}
     memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,16));rejected(loaded,path,snapshot,hash);
     /* Literal V14 keeps every field, including worn clothes, but never infers
@@ -54,8 +54,8 @@ int pe_test_shield_save(void){
     memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-PE_SAVE_V16_APPEND-4,14)&&pe_game_load(loaded,path,error,sizeof error));
     CHECK(!loaded->shield_instance_id&&loaded->inventory.next_instance_id==g->inventory.next_instance_id);
     CHECK(!memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)&&!memcmp(&loaded->outfit,&g->outfit,sizeof g->outfit));
-    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND);
-    if(after)CHECK(get32(after+4)==18&&get32(after+n-PE_SAVE_V16_APPEND-4)==0&&!memcmp(after+16,bytes+16,n-PE_SAVE_V16_APPEND-4-16));
+    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
+    if(after)CHECK(get32(after+4)==19&&get32(after+n-PE_SAVE_V16_APPEND-4)==0&&!memcmp(after+16,bytes+16,n-PE_SAVE_V16_APPEND-4-16));
     /* V13 outfit migration remains intact; shield still defaults absent. */
     memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-PE_SAVE_V16_APPEND-4-PE_SAVE_V14_APPEND,13)&&pe_game_load(loaded,path,error,sizeof error));
     CHECK(!loaded->shield_instance_id&&loaded->inventory.next_instance_id==g->inventory.next_instance_id+3&&pe_outfit_defense(&loaded->outfit)==12);
@@ -68,7 +68,7 @@ int pe_test_shield_save(void){
     CHECK(current&&after&&current_n==after_n&&!memcmp(current,after,after_n));free(current);
     /* Legacy stores zero and old Legacy loads cannot gain a shield. */
     pe_game_destroy(g);pe_game_init(g,106);CHECK(pe_game_save(g,path,error,sizeof error));free(after);after=read_bytes(path,&after_n);CHECK(after);
-    if(after){after_n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND;CHECK(get32(after+after_n-PE_SAVE_V16_APPEND-4)==0&&write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-4,14)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!loaded->shield_instance_id&&loaded->mode==PE_GAME_LEGACY);}
+    if(after){after_n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(get32(after+after_n-PE_SAVE_V16_APPEND-4)==0&&write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-4,14)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!loaded->shield_instance_id&&loaded->mode==PE_GAME_LEGACY);}
  done:
     if(fd>=0)unlink(path);
     free(bytes);free(bad);free(snapshot);free(after);pe_world_destroy(w);free(w);

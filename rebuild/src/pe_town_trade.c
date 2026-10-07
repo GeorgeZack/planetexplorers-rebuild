@@ -58,7 +58,7 @@ bool pe_town_trade_state_valid(const PeGame *g){
             if(id>=g->inventory.next_instance_id||id==g->equipped_instance_id||id==g->shield_instance_id)return false;
             for(size_t j=0;j<owners;j++)if(owned[j]==id)return false;
             owned[owners++]=id;
-            for(unsigned j=0;j<PE_INVENTORY_SLOTS;j++)if(g->inventory.slots[j].instance_id==id)return false;
+            for(int j=0;j<pe_inventory_capacity(&g->inventory);j++)if(g->inventory.slots[j].instance_id==id)return false;
             for(unsigned j=0;j<PE_QUICKSLOTS;j++)if(g->quickslots[j].instance_id==id)return false;
             for(unsigned j=0;j<PE_OUTFIT_SLOTS;j++)if(g->outfit.items[j].instance_id==id)return false;
             for(unsigned j=0;j<PE_MAX_DEPLOYABLES;j++)if(g->deployed[j].instance_id==id)return false;
@@ -77,13 +77,13 @@ const PeSlot *pe_town_trade_at(const PeGame *g,uint32_t entity,size_t row){
 }
 static bool inventory_valid(const PeGame *g){
     if(!g->inventory.next_instance_id)return false;
-    for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++){
         const PeSlot *s=&g->inventory.slots[i];
         if(!s->count){if(!empty_slot(s))return false;continue;}
         if(!slot_valid(s))return false;
         if(s->instance_id){
             if(s->instance_id>=g->inventory.next_instance_id)return false;
-            for(unsigned j=0;j<i;j++)if(g->inventory.slots[j].instance_id==s->instance_id)return false;
+            for(int j=0;j<i;j++)if(g->inventory.slots[j].instance_id==s->instance_id)return false;
         }
     }
     for(unsigned i=0;i<PE_QUICKSLOTS;i++){
@@ -92,7 +92,7 @@ static bool inventory_valid(const PeGame *g){
         const PeItemDef *d=pe_item_def(q.item_id);if(!d)return false;
         if(d->stack_limit>1){if(q.instance_id)return false;continue;}
         bool found=false;
-        for(unsigned j=0;j<PE_INVENTORY_SLOTS;j++){
+        for(int j=0;j<pe_inventory_capacity(&g->inventory);j++){
             const PeSlot *s=&g->inventory.slots[j];
             if(s->item_id==q.item_id&&s->count==1&&s->instance_id==q.instance_id)found=true;
         }
@@ -116,7 +116,7 @@ static const char *admit(const PeGame *g,uint32_t entity,int *vendor){
 typedef struct {int vendor;uint32_t cost,credit;PeInventory inventory;} TradePlan;
 static const char *sale_plan(const PeGame *g,uint32_t entity,int slot,unsigned count,TradePlan *p){
     const char *error=admit(g,entity,&p->vendor);if(error)return error;
-    if(slot<0||slot>=PE_INVENTORY_SLOTS||!count)return "Select an item and quantity.";
+    if(slot<0||slot>=pe_inventory_capacity(&g->inventory)||!count)return "Select an item and quantity.";
     const PeSlot *s=&g->inventory.slots[slot];
     if(s->count<=0||count>(unsigned)s->count)return "Not enough items in this stack.";
     if(s->instance_id&&(s->instance_id==g->equipped_instance_id||s->instance_id==g->shield_instance_id))
@@ -140,10 +140,7 @@ static const char *repurchase_plan(const PeGame *g,uint32_t entity,size_t row,un
     if(credit>(uint32_t)INT32_MAX-g->town_wallet[p->vendor].balance)return "Vendor currency limit reached.";
     p->inventory=g->inventory;
     if(s->instance_id){
-        int free_slot=-1;
-        for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(!p->inventory.slots[i].count){free_slot=i;break;}
-        if(free_slot<0)return "Inventory full.";
-        p->inventory.slots[free_slot]=*s;
+        if(!pe_inventory_insert(&p->inventory,*s,NULL))return "Inventory full.";
     }else if(!pe_inventory_add(&p->inventory,s->item_id,(int)count))return "Inventory full.";
     p->cost=(uint32_t)total;p->credit=(uint32_t)credit;return NULL;
 }

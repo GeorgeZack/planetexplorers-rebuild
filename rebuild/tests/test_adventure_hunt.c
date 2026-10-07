@@ -19,7 +19,7 @@ static int hunt_tests(void){
     CHECK(!pe_adventure_hunt_state_valid(NULL));CHECK(!pe_adventure_hunt_available(NULL));CHECK(!pe_adventure_hunt_accept(NULL));CHECK(!pe_adventure_hunt_step(NULL));
     CHECK(pe_game_init_mode(g,7,PE_GAME_ADVENTURE));CHECK(pe_adventure_hunt_state_valid(g));CHECK(!pe_adventure_hunt_available(g));
     CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
     CHECK(!pe_adventure_hunt_available(g));g->hunt_destination.x=1;CHECK(!pe_adventure_hunt_state_valid(g));g->hunt_destination.x=0;
     g->hunt_state=7;CHECK(!pe_adventure_hunt_state_valid(g));g->hunt_state=PE_HUNT_NONE;
     g->hunt_destination.y=NAN;CHECK(!pe_adventure_hunt_state_valid(g));g->hunt_destination.y=0;

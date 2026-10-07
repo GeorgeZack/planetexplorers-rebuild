@@ -18,7 +18,7 @@ static bool key_pressed(int key){(void)key;return false;}
 #include "hunt_consume_host.inc"
 #undef IsKeyDown
 #undef IsKeyPressed
-static int slot(PeGame*g,int id){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;return -1;}
+static int slot(PeGame*g,int id){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;return -1;}
 static PeHuntCombatPlayer pose(const PeGame*g,const PeActor*a){return(PeHuntCombatPlayer){.position=g->player,.velocity=g->velocity,
     .radius=.5f,.height=1.8f,.max_hp=g->max_hp,.alive=g->hp>0,.grounded=g->grounded,.clip=pe_actor_find_clip(a,"NormalIdle")};}
 static PeSandboxMeleeFrame frame(const PeGame*g,bool drawn){return(PeSandboxMeleeFrame){.gate={.alive=g->hp>0,

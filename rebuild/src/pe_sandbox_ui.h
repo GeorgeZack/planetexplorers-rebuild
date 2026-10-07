@@ -15,6 +15,7 @@ typedef struct {
     bool focused, left_pressed, left_released, right_pressed;
     bool inventory, character, missions, replicator, escape, tab;
     bool save, load, backspace, advance;
+    bool page_up,page_down,merge_stacks;
     bool undo_build,redo_build; /* Source standalone Ctrl+fresh Z / X. */
     bool build_history_chord,build_history_keys_down; /* Retain chord ownership through release. */
     int quickslot; /* -1 means no key; otherwise 0..8. */
@@ -81,6 +82,9 @@ typedef struct {
     int inventory_tab, inventory_page, recipe_scroll, recipe_id, batches;
     int selected_slot, drag_item, drag_slot, drag_quickslot;
     uint32_t drag_instance;
+    PeSlot drag_source,split_source;
+    bool split_open,split_armed,split_edit_started;
+    int split_slot,split_count;
     float drag_x, drag_y, mouse_x, mouse_y;
     bool dragging;
     char search[64];
@@ -135,6 +139,12 @@ void pe_sandbox_ui_draw(PeSandboxUI *ui,const PeGame *game,bool build_mode);
 bool pe_sandbox_ui_cursor(const PeSandboxUI *ui);
 int pe_sandbox_ui_inventory_slot(const PeSandboxUI *ui,const PeGame *game,int visible);
 int pe_sandbox_ui_inventory_count(const PeSandboxUI *ui,const PeGame *game);
+int pe_sandbox_ui_inventory_pages(const PeSandboxUI *ui,const PeGame *game);
+/* Fixed bag cell, including empty cells; equipped ownership is not a drop target. */
+int pe_sandbox_ui_inventory_cell(const PeSandboxUI *ui,const PeGame *game,int visible);
+PeTrainingUIRect pe_sandbox_ui_inventory_action(const PeSandboxUI *ui,int action); /* split,sort */
+PeTrainingUIRect pe_sandbox_ui_split_panel(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_split_button(const PeSandboxUI *ui,int button); /* minus,plus,confirm,cancel */
 int pe_sandbox_ui_recipe_at(const PeSandboxUI *ui,const PeGame *game,int row);
 int pe_sandbox_ui_recipe_count(const PeSandboxUI *ui,const PeGame *game);
 /* Shared hit geometry for renderer and routed actions. */

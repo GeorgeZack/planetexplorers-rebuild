@@ -98,7 +98,7 @@ static void purchases(PeGame *g){
     g->town_wallet[0].balance=INT32_MAX-158;
     CHECK(pe_town_shop_buy(g,20002,1184,1)&&g->town_wallet[0].balance==INT32_MAX);
     /* Full bag rejects before wallet/stock/player debit; preserve instance IDs. */
-    memset(g->inventory.slots,0,sizeof g->inventory.slots);CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_SLOTS));
+    memset(g->inventory.slots,0,sizeof g->inventory.slots);CHECK(pe_inventory_add(&g->inventory,877,PE_INVENTORY_CATEGORY_SLOTS));
     CHECK(pe_town_shop_open(g,20011));inv=g->inventory;memcpy(stocks,g->town_stock,sizeof stocks);memcpy(all,g->town_wallet,sizeof all);money=g->money;
     CHECK(!pe_town_shop_buy(g,20011,338,1));
     CHECK(!memcmp(&inv,&g->inventory,sizeof inv)&&!memcmp(stocks,g->town_stock,sizeof stocks)&&!memcmp(all,g->town_wallet,sizeof all)&&g->money==money);

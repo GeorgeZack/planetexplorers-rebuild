@@ -25,14 +25,14 @@ bool pe_revival_frame(PeRevival *state,PeAttributeFrame frame,bool alive){
 }
 static bool inventory_valid(const PeInventory *p){
     if(!p->next_instance_id)return false;
-    for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++){
+    for(int i=0;i<pe_inventory_capacity(p);i++){
         PeSlot s=p->slots[i];
         if(!s.count){if(s.item_id||s.instance_id||s.durability!=0)return false;continue;}
         const PeItemDef *d=pe_item_def(s.item_id);
         if(!d||s.count<1||s.count>d->stack_limit||!isfinite(s.durability))return false;
         if(d->stack_limit==1){
             if(!s.instance_id||s.instance_id>=p->next_instance_id||s.durability<0||s.durability>d->durability_max)return false;
-            for(unsigned j=0;j<i;j++)if(p->slots[j].instance_id==s.instance_id)return false;
+            for(int j=0;j<i;j++)if(p->slots[j].instance_id==s.instance_id)return false;
         }else if(s.instance_id||s.durability!=0)return false;
     }
     return true;

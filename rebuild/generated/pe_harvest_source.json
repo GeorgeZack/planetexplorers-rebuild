@@ -1,0 +1,288 @@
+{
+  "format_version": 1,
+  "sources": [
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    },
+    {
+      "path": "Assets/PeLauncher/Resources/VETreeProtos.prefab",
+      "sha256": "0ba32b30fe8fc0807979125fdb34263aefaef43d3cac9f2d64c3fd5f7d9f585b"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree15_grasslandC.prefab",
+      "sha256": "bf47779449ef367ca79deb0ace4be11b0e634b241c5ce1460899048c9a143d0f"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree08_grassland.prefab",
+      "sha256": "e2a99107b676bf6aec1952cf5cd86e487067cc717118532280a4e4bfd5ed7f19"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree09_grassland.prefab",
+      "sha256": "8a4b5fbf6c9e9c095cd7bcb4773d8ef66919b25df8ea4f0f4fdfdf7b6fa0ddc2"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree16_grassland.prefab",
+      "sha256": "2a637cfdee93ad4c50557fe487ce255505c5b625190ad6cd3f1b90b861a2b6a4"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Gather.cs",
+      "sha256": "a6a4b7b4ac0df03497db6064262609bb46ecb674f3002c24241164838cd2ffb3"
+    },
+    {
+      "path": "Assets/Scripts/ZhouXun/Random SubTerrain/RSubTerrainMgr.cs",
+      "sha256": "fa4904fa3272ed848b4c8031241a111b28d7fc4e8d99d3864fcaa2c7f39b2e51"
+    },
+    {
+      "path": "Assets/Scripts/NaturalRes/NaturalRes.cs",
+      "sha256": "35c272c17d30fa2f349e8779f09c55d6ab370616635b6b9f5a765282d92d1b93"
+    },
+    {
+      "path": "Assets/Scripts/BuildNDig/DigTerrainManager.cs",
+      "sha256": "66ad667305b4ed154b86d7e424134e556baed97efd75b8754f1580d6ae14c900"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntitySubTerrain.cs",
+      "sha256": "0e4031aace9c6b576ae98da3f229db38165cb1a0d060acf2022f059c9f2117cb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "sha256": "f6f52e21dda703433c4add331bb1d8779c989f4b6ecaf093b0373d565b975da7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "sha256": "84a63a50d399e76077a4bb11aef7c1821334a9a2e3e9b4141fa507d6d539ea6b"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree11_grassland.prefab",
+      "sha256": "a94f5931d8fa6cab466004968f0dc73f1eec41fd6c8919874f2f4ae9fc0f442b"
+    },
+    {
+      "path": "Assets/Prefabs/tree-Ambient-Occlusion/tree11_grassland.prefab.meta",
+      "sha256": "4d9caa67c2597ef3b293891e303a91f7aad686fff689150aaab1ac24dee1988b"
+    }
+  ],
+  "tree_identity": {
+    "prototype_id": 48,
+    "prefab": "Assets/Prefabs/tree-Ambient-Occlusion/tree11_grassland.prefab",
+    "guid": "2055b9405382acf4793ddceef4234dda",
+    "mesh": "tree11_grassland",
+    "unit_instances": true
+  },
+  "resources": [
+    {
+      "prototype_id": 15,
+      "row": {
+        "ID": "1015",
+        "name": "\u8349\u836f(\u8349\u539f\u690d\u72696)",
+        "level": "0",
+        "illustration": "11200007",
+        "type": "10",
+        "durability": "255",
+        "production": "238,100;0.03,943,100;",
+        "fixed_num": "2",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      },
+      "primary": [
+        {
+          "item_id": 238,
+          "threshold": 100.0
+        }
+      ],
+      "optional": {
+        "chance": 0.03,
+        "drops": [
+          {
+            "item_id": 943,
+            "threshold": 100.0
+          }
+        ]
+      },
+      "rare": {
+        "chance": 0.0,
+        "drops": []
+      }
+    },
+    {
+      "prototype_id": 37,
+      "row": {
+        "ID": "1037",
+        "name": "\u8349\u836f(\u90c1\u91d1\u9999)",
+        "level": "0",
+        "illustration": "0",
+        "type": "10",
+        "durability": "255",
+        "production": "235,70,1583,100;0.1,388,50,940,75,1583,100;",
+        "fixed_num": "3",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      },
+      "primary": [
+        {
+          "item_id": 235,
+          "threshold": 70.0
+        },
+        {
+          "item_id": 1583,
+          "threshold": 100.0
+        }
+      ],
+      "optional": {
+        "chance": 0.1,
+        "drops": [
+          {
+            "item_id": 388,
+            "threshold": 50.0
+          },
+          {
+            "item_id": 940,
+            "threshold": 75.0
+          },
+          {
+            "item_id": 1583,
+            "threshold": 100.0
+          }
+        ]
+      },
+      "rare": {
+        "chance": 0.0,
+        "drops": []
+      }
+    },
+    {
+      "prototype_id": 40,
+      "row": {
+        "ID": "1040",
+        "name": "\u8349\u836f(\u5411\u65e5\u8475)",
+        "level": "0",
+        "illustration": "0",
+        "type": "10",
+        "durability": "255",
+        "production": "239,70,1583,100;0.1,388,50,944,75,1583,100;",
+        "fixed_num": "4",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      },
+      "primary": [
+        {
+          "item_id": 239,
+          "threshold": 70.0
+        },
+        {
+          "item_id": 1583,
+          "threshold": 100.0
+        }
+      ],
+      "optional": {
+        "chance": 0.1,
+        "drops": [
+          {
+            "item_id": 388,
+            "threshold": 50.0
+          },
+          {
+            "item_id": 944,
+            "threshold": 75.0
+          },
+          {
+            "item_id": 1583,
+            "threshold": 100.0
+          }
+        ]
+      },
+      "rare": {
+        "chance": 0.0,
+        "drops": []
+      }
+    },
+    {
+      "prototype_id": 48,
+      "row": {
+        "ID": "1048",
+        "name": "\u6811",
+        "level": "0",
+        "illustration": "0",
+        "type": "9",
+        "durability": ".48571",
+        "production": "279,100;1.2,979,67,1017,100;",
+        "fixed_num": "0",
+        "self_num": "16",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10006"
+      },
+      "primary": [
+        {
+          "item_id": 279,
+          "threshold": 100.0
+        }
+      ],
+      "optional": {
+        "chance": 1.2,
+        "drops": [
+          {
+            "item_id": 979,
+            "threshold": 67.0
+          },
+          {
+            "item_id": 1017,
+            "threshold": 100.0
+          }
+        ]
+      },
+      "rare": {
+        "chance": 0.0,
+        "drops": []
+      }
+    },
+    {
+      "prototype_id": 146,
+      "row": {
+        "ID": "1146",
+        "name": "\u666e\u901a\u690d\u7269",
+        "level": "0",
+        "illustration": "0",
+        "type": "10",
+        "durability": "255",
+        "production": "1006,50,1583,100;;",
+        "fixed_num": "3",
+        "self_num": "0",
+        "ground_effect": "0",
+        "walk_sound": "0",
+        "gather_skill": "10007"
+      },
+      "primary": [
+        {
+          "item_id": 1006,
+          "threshold": 50.0
+        },
+        {
+          "item_id": 1583,
+          "threshold": 100.0
+        }
+      ],
+      "optional": {
+        "chance": 0.0,
+        "drops": []
+      },
+      "rare": {
+        "chance": 0.0,
+        "drops": []
+      }
+    }
+  ],
+  "adapters": [
+    "Existing saved xorshift32 stream replaces UnityEngine.Random; distribution and draw order reproduced, not Unity seed sequence.",
+    "Runtime instances have unit width/height; fixed placement remains unchanged.",
+    "No skill-tree rare enablement or quest-specific PlantItemAdd; unsupported source quest hooks remain disabled.",
+    "Herb input still commits immediately; source Gather animation and event timing are not ported.",
+    "Inventory/RNG/depletion commit atomically; full bag preserves harvest instead of original removal-before-pack behavior."
+  ]
+}

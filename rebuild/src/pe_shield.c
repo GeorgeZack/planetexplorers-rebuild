@@ -10,7 +10,7 @@ static const PeSlot *owned(const PeGame *g,uint32_t id){
     if(!g||g->mode!=PE_GAME_ADVENTURE||!id||!g->inventory.next_instance_id||id>=g->inventory.next_instance_id||
        id==g->equipped_instance_id||g->deployed_count>PE_MAX_DEPLOYABLES)return NULL;
     const PeSlot *found=NULL;
-    for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==id){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id==id){
         if(found||!pe_shield_slot_valid(&g->inventory.slots[i]))return NULL;
         found=&g->inventory.slots[i];
     }
@@ -26,7 +26,7 @@ bool pe_shield_state_valid(const PeGame *g){
 }
 const PeSlot *pe_shield_equipped(const PeGame *g){return g?owned(g,g->shield_instance_id):NULL;}
 bool pe_shield_equip(PeGame *g,int index){
-    if(!g||index<0||index>=PE_INVENTORY_SLOTS||!isfinite(g->hp)||g->hp<=0||!pe_shield_state_valid(g))return false;
+    if(!g||index<0||index>=pe_inventory_capacity(&g->inventory)||!isfinite(g->hp)||g->hp<=0||!pe_shield_state_valid(g))return false;
     const PeSlot *s=&g->inventory.slots[index];
     if(owned(g,s->instance_id)!=s)return false;
     g->shield_instance_id=s->instance_id;return true;
@@ -53,7 +53,7 @@ bool pe_shield_wear(PeSlot *s,float damage){
 }
 void pe_shield_clear_missing(PeGame *g){
     if(!g||!g->shield_instance_id)return;
-    for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)
         if(g->inventory.slots[i].count&&g->inventory.slots[i].instance_id==g->shield_instance_id)return;
     g->shield_instance_id=0;
 }

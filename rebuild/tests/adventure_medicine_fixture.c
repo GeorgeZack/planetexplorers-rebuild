@@ -23,7 +23,7 @@ static void inspect(const PeGame *g){
         (double)g->player.x+g->world.origin_x,(double)g->player.y+g->world.origin_y,(double)g->player.z+g->world.origin_z,
         (double)g->velocity.x,(double)g->velocity.y,(double)g->velocity.z,(double)g->yaw,(double)g->pitch);
     bool comma=false;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count){
         const PeSlot *s=&g->inventory.slots[i];printf("%s{\"id\":%d,\"count\":%d,\"instance\":%u}",comma?",":"",s->item_id,s->count,s->instance_id);comma=true;
     }
     printf("],\"knownRecipes\":[");for(int i=0;i<g->known_recipe_count;i++)printf("%s%d",i?",":"",g->known_recipes[i]);printf("]}");
@@ -47,7 +47,7 @@ int main(int argc,char **argv){
     bool comma=false;
     /* Learn existing scripts through the same inventory action as the UI.
      * Each consumed source book releases capacity; no inventory is cleared. */
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++){
         const PeSlot *slot=&g->inventory.slots[i];const PeItemDef *def=pe_item_def(slot->item_id);
         if(slot->count&&def&&def->learn_kind==PE_LEARN_RECIPE){
             int id=slot->item_id;if(!pe_game_use_slot(g,i)){snprintf(error,sizeof error,"Cannot learn source script%d: %s",id,g->message);goto report;}
@@ -55,7 +55,7 @@ int main(int argc,char **argv){
         }
     }
     if(!pe_adventure_medicine_accept(g)){snprintf(error,sizeof error,"Acceptance failed: %s",g->message);goto report;}
-    int script=-1;for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==877&&g->inventory.slots[i].count){script=i;break;}
+    int script=-1;for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==877&&g->inventory.slots[i].count){script=i;break;}
     if(script<0||!pe_game_use_slot(g,script)||!pe_game_recipe_known(g,337)){snprintf(error,sizeof error,"Cannot learn accepted Herbal Drink script");goto report;}
     printf("%s877],\"purchases\":[",comma?",":"");comma=false;
     const PeRecipeDef *recipe=pe_recipe_def(337);

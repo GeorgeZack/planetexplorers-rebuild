@@ -21,7 +21,7 @@ static bool write_bytes(const char*path,unsigned char*p,size_t n,unsigned versio
     for(size_t i=16;i<n;i++){sum^=p[i];sum*=16777619u;}put32(p+12,sum);
     FILE*f=fopen(path,"wb");if(!f)return false;bool ok=fwrite(p,1,n,f)==n;return fclose(f)==0&&ok;
 }
-static int slot(const PeGame*g,int id){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;return -1;}
+static int slot(const PeGame*g,int id){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;return -1;}
 static void rejected(PeGame*loaded,const char*path,const void*snapshot,uint64_t hash){
     char error[256];CHECK(!pe_game_load(loaded,path,error,sizeof error));
     CHECK(!memcmp(loaded,snapshot,sizeof *loaded)&&pe_world_hash(&loaded->world)==hash);
@@ -41,7 +41,7 @@ int pe_test_outfit_save(void){
     for(int z=0;z<80;z++)for(int y=0;y<=8;y++)for(int x=0;x<80;x++)CHECK(pe_world_set(w,x,y,z,(PeVoxel){255,PE_MAT_DIRT}));
     CHECK(pe_game_set_world(g,w,(PeVec3){30,10,30})&&g->world.extended);
     /* Keep the allocator that already owns the clothes when emptying the bag. */
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     CHECK(pe_inventory_add(&g->inventory,33,1)&&pe_inventory_add(&g->inventory,19,1)&&pe_inventory_add(&g->inventory,10,1));
     int knife=slot(g,33),pickaxe=slot(g,19),torch=slot(g,10);CHECK(knife>=0&&pickaxe>=0&&torch>=0);if(knife<0||pickaxe<0||torch<0)goto done;
     CHECK(pe_game_equip_slot(g,knife)&&pe_game_quickslot_assign(g,0,knife));
@@ -57,7 +57,7 @@ int pe_test_outfit_save(void){
     CHECK(loaded->deployed_count==1&&loaded->deployed[0].instance_id==deployed&&loaded->equipped_instance_id==g->equipped_instance_id);
     CHECK(pe_outfit_defense(&loaded->outfit)==11&&loaded->medpack_cooldown==3.5f&&loaded->juice_cooldown==1.25);
     bytes=read_bytes(path,&n);CHECK(bytes&&n>PE_SAVE_V14_APPEND+16);if(!bytes||n<=PE_SAVE_V14_APPEND+16)goto done;
-    CHECK(get32(bytes+4)==18);n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
+    CHECK(get32(bytes+4)==19);n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
     size_t footer=n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND,counter=pe_test_save_counter_offset(g);
     CHECK(get32(bytes+counter)==g->inventory.next_instance_id);
     for(unsigned i=0;i<3;i++){
@@ -102,7 +102,7 @@ int pe_test_outfit_save(void){
     for(unsigned i=0;i<sizeof bad_counters/sizeof bad_counters[0];i++){
         memcpy(bad,bytes,n);put32(bad+counter,bad_counters[i]);CHECK(write_bytes(path,bad,footer,13));rejected(loaded,path,snapshot,hash);
     }
-    memcpy(bad,bytes,n);put32(bad+counter+4+8*(size_t)pickaxe,g->inventory.slots[knife].instance_id);
+    memcpy(bad,bytes,n);put32(bad+counter+4+8*(size_t)pe_test_save_prefix_index(g,pickaxe),g->inventory.slots[knife].instance_id);
     CHECK(write_bytes(path,bad,footer,13));rejected(loaded,path,snapshot,hash);
     memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,footer,13));CHECK(pe_game_load(loaded,path,error,sizeof error));
     CHECK(loaded->inventory.next_instance_id==next+3&&pe_outfit_defense(&loaded->outfit)==12);
@@ -113,13 +113,13 @@ int pe_test_outfit_save(void){
     /* Migrating the same checkpoint is deterministic, not repeated in-memory
      * allocation. Subsequent v14 saves preserve wear, including exhausted shoes. */
     PeOutfit migrated=loaded->outfit;CHECK(pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(&migrated,&loaded->outfit,sizeof migrated)&&loaded->inventory.next_instance_id==next+3);
-    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND);
+    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
     if(after){put32(bad+counter,next+3);CHECK(!memcmp(after+16,bad+16,footer-16));} /* Only required allocator field changed in retained prefix. */
     CHECK(pe_outfit_wear(&loaded->outfit,50));loaded->outfit.items[2].durability=0;migrated=loaded->outfit;
     CHECK(pe_game_save(loaded,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(&migrated,&loaded->outfit,sizeof migrated));
     /* Legacy retains zero outfit and allocates nothing on old load. */
     pe_game_init(legacy,97);CHECK(pe_game_save(legacy,path,error,sizeof error));free(after);after=read_bytes(path,&after_n);CHECK(after);
-    if(after){after_n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND;CHECK(!memcmp(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,(unsigned char[36]){0},36));
+    if(after){after_n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(!memcmp(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,(unsigned char[36]){0},36));
         CHECK(write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,13)&&pe_game_load(loaded,path,error,sizeof error));
         CHECK(loaded->mode==PE_GAME_LEGACY&&pe_outfit_defense(&loaded->outfit)==0&&loaded->inventory.next_instance_id==legacy->inventory.next_instance_id);
         put32(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,95);CHECK(write_bytes(path,after,after_n,16));

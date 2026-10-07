@@ -53,7 +53,7 @@ bool pe_actor_scene_view_draw_blend(PeActorSceneView*v,const PeActorBlendSample*
 (void)p;(void)yaw;(void)scale;(void)color;assert(n==expected.blend_count);
 for(size_t i=0;i<n;i++){const PeActorClip*c=pe_actor_scene_view_clip_at(v,s[i].clip);assert(c&&!strcmp(c->name,expected.blend[i].clip)&&s[i].seconds==expected.blend[i].seconds&&s[i].weight==expected.blend[i].weight);}
 for(size_t part=0;part<v->count;part++){PeActorVertex vertex;assert(pe_actor_pose_vertex_blend(v->parts[part].actor,s,n,0,&vertex));}draws++;return true;}
-const PeSlot*pe_game_equipped_tool(const PeGame*g){for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)if(g->equipped_instance_id&&g->inventory.slots[i].instance_id==g->equipped_instance_id&&g->inventory.slots[i].count==1)return &g->inventory.slots[i];return NULL;}
+const PeSlot*pe_game_equipped_tool(const PeGame*g){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->equipped_instance_id&&g->inventory.slots[i].instance_id==g->equipped_instance_id&&g->inventory.slots[i].count==1)return &g->inventory.slots[i];return NULL;}
 static void check_draw(PeSandboxActor*a,PeGame*g){assert(pe_sandbox_actor_body_pose(a,g,&expected));draws=0;pe_sandbox_actor_draw(a,g);assert(pe_sandbox_actor_ok(a)&&draws==3);}
 int main(int argc,char **argv){assert(argc==3);base=argv[1];stage=argv[2];char error[256];
 PeSandboxActor*a=pe_sandbox_actor_load("original",error,sizeof error);if(!a){puts(error);return 2;}assert(pe_sandbox_actor_hold_ready(a,33)&&!pe_sandbox_actor_hold_ready(a,1));pe_sandbox_actor_unload(a);
@@ -61,9 +61,9 @@ for(int mode=0;mode<2;mode++){
 a=pe_sandbox_actor_load(mode?"overlay":"stage",error,sizeof error);if(!a){puts(error);return 3;}
 assert(pe_sandbox_actor_hold_ready(a,1)&&pe_sandbox_actor_running_ready_for_item(a,1)&&pe_sandbox_actor_shield_ready(a));
 assert(pe_sandbox_actor_hold_ready(a,33)==(mode!=0));assert(pe_sandbox_actor_action_ready(a,19)==(mode!=0));
-PeGame*g=calloc(1,sizeof *g);assert(g);g->mode=PE_GAME_ADVENTURE;g->hp=500;g->grounded=true;g->yaw=PI;g->inventory.next_instance_id=3;
-g->inventory.slots[0]=(PeSlot){.item_id=1,.count=1,.instance_id=1,.durability=2369};g->equipped_instance_id=1;
-g->inventory.slots[1]=(PeSlot){.item_id=34,.count=1,.instance_id=2,.durability=4312};g->shield_instance_id=2;
+PeGame*g=calloc(1,sizeof *g);assert(g);g->mode=PE_GAME_ADVENTURE;g->hp=500;g->grounded=true;g->yaw=PI;g->inventory.next_instance_id=3;g->inventory.categorized=true;
+g->inventory.slots[420]=(PeSlot){.item_id=1,.count=1,.instance_id=1,.durability=2369};g->equipped_instance_id=1;
+g->inventory.slots[421]=(PeSlot){.item_id=34,.count=1,.instance_id=2,.durability=4312};g->shield_instance_id=2;assert(pe_inventory_state_valid(&g->inventory));
 pe_sandbox_actor_reset_motion(a,g);assert(pe_sandbox_actor_set_melee_item(a,1,1,true,NULL));assert(pe_sandbox_actor_set_shield(a,2));
 check_draw(a,g);assert(!strcmp(expected.clip,"AttackIdle"));
 g->player.z-=.2;pe_sandbox_actor_update(a,.1,g);check_draw(a,g);assert(!strcmp(expected.clip,"SwordWB"));
@@ -76,7 +76,7 @@ c.variant=PE_COMBAT_RUNNING;c.stage=0;assert(pe_sandbox_actor_set_melee_item(a,1
 pe_sandbox_actor_unload(a);free(g);}
 return 0;}
 ''')
-            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_hitbox.c','pe_shield.c')],'-lm','-o',str(binary)]
+            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_hitbox.c','pe_shield.c','pe_inventory.c')],str(ROOT/'rebuild/generated/pe_content.c'),'-lm','-o',str(binary)]
             if os.environ.get('PE_TEST_SANITIZE'):command[1:1]=['-g','-fsanitize=address,undefined','-fno-omit-frame-pointer']
             subprocess.run(command,check=True)
             subprocess.run([str(binary),str(assets),str(stage)],check=True)

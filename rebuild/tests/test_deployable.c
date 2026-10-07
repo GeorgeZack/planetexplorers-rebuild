@@ -6,7 +6,7 @@
 #include <string.h>
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"deployable:%d: %s\n",__LINE__,#c);failures++;}}while(0)
-static int torch_slot(const PeGame *g){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==10&&g->inventory.slots[i].count)return i;return -1;}
+static int torch_slot(const PeGame *g){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==10&&g->inventory.slots[i].count)return i;return -1;}
 static void floor_world(PeGame *g){
     memset(pe_world_data(&g->world),0,pe_world_voxel_count(&g->world)*sizeof(PeVoxel));
     for(int z=0;z<pe_world_depth(&g->world);z++)for(int y=0;y<8;y++)for(int x=0;x<pe_world_width(&g->world);x++)pe_world_set(&g->world,x,y,z,(PeVoxel){255,PE_MAT_DIRT});
@@ -54,13 +54,13 @@ int pe_test_deployable(void){
     g->deployed[0].instance_id=next;CHECK(!pe_deployable_state_valid(g));g->deployed[0]=saved;
     g->deployed[1]=saved;g->deployed_count=2;CHECK(!pe_deployable_state_valid(g));g->deployed_count=1;CHECK(!pe_deployable_state_valid(g));g->deployed[1]=(PeDeployable){0};
     PeSlot prior=g->inventory.slots[slot];g->inventory.slots[slot]=(PeSlot){10,1,id,1200.25f};CHECK(!pe_deployable_state_valid(g));g->inventory.slots[slot]=prior;
-    while(pe_inventory_add(&g->inventory,1,1)){}before=g->inventory;
+    while(pe_inventory_add(&g->inventory,PE_ITEM_STONE,pe_item_def(PE_ITEM_STONE)->stack_limit)){}before=g->inventory;
     CHECK(!pe_deployable_get(g,id)&&g->deployed_count==1&&!memcmp(&before,&g->inventory,sizeof before));
-    CHECK(pe_inventory_remove(&g->inventory,1,1));int charcoal=pe_inventory_count(&g->inventory,1001);
+    CHECK(pe_inventory_remove(&g->inventory,PE_ITEM_STONE,pe_item_def(PE_ITEM_STONE)->stack_limit));int charcoal=pe_inventory_count(&g->inventory,1001);
     CHECK(pe_deployable_get(g,id)&&g->deployed_count==0&&pe_inventory_count(&g->inventory,1001)==charcoal+1&&!pe_inventory_count(&g->inventory,10));
     CHECK(pe_deployable_state_valid(g)&&!pe_deployable_get(g,id)&&!pe_deployable_turn(g,id));
     /* A surface disappearing after preview must not commit the old position. */
-    CHECK(pe_inventory_remove(&g->inventory,1,1));CHECK(pe_town_shop_buy(g,offer->entity_id,offer->store_id,1));slot=torch_slot(g);CHECK(slot>=0);
+    CHECK(pe_inventory_remove(&g->inventory,PE_ITEM_STONE,pe_item_def(PE_ITEM_STONE)->stack_limit));CHECK(pe_town_shop_buy(g,offer->entity_id,offer->store_id,1));slot=torch_slot(g);CHECK(slot>=0);
     if(slot>=0){
         id=g->inventory.slots[slot].instance_id;CHECK(pe_deployable_preview(g,collision,id,origin,direction,&out));before=g->inventory;
         memset(pe_world_data(&g->world),0,pe_world_voxel_count(&g->world)*sizeof(PeVoxel));g->world.revision++;

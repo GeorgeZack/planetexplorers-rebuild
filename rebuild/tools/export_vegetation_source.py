@@ -277,7 +277,7 @@ def build_outputs(root=ROOT,database=DEFAULT_DATABASE):
     manifest=dict(format_version=1,sources=[describe_source(database)]+[describe_source(p) for p in sources],plants=records,action_relation=relation,
                   source_gather=dict(requested_range=3,effective_horizontal_range=2,range_inclusive=True,scan_floor_cell_radius=2,source_skill=20110003,type=10),
                   adapters=['Fixed manually selected fixtures, no random world generation.',
-                            'Primary-only deterministic fixture harvest:15 gives238x2,37 gives235x3,40 gives239x4. Source70% alternatives and optional seed drops are omitted.',
+                            'Source production probabilities and optional seed/fallback drops are owned by pe_harvest; fixture_item_id/count describe primary metadata only.',
                             '146 is decorative only although original resource1146 is gatherable.',
                             'Unit native instance transform, immediate native gathering; no full source animation/skill/timing claim.'])
     return {'pe_vegetation_source.h':'\n'.join(gameplay).encode(),

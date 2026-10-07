@@ -98,12 +98,12 @@ bool pe_actor_scene_view_draw_blend(PeActorSceneView *v,const PeActorBlendSample
     draw_count++;return !draw_failure;
 }
 const PeSlot *pe_game_equipped_tool(const PeGame *g) {
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->equipped_instance_id&&g->inventory.slots[i].instance_id==g->equipped_instance_id)return &g->inventory.slots[i];
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->equipped_instance_id&&g->inventory.slots[i].instance_id==g->equipped_instance_id)return &g->inventory.slots[i];
     return NULL;
 }
 const PeSlot *pe_shield_equipped(const PeGame *g){
     const PeSlot *found=NULL;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->shield_instance_id&&g->inventory.slots[i].instance_id==g->shield_instance_id){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->shield_instance_id&&g->inventory.slots[i].instance_id==g->shield_instance_id){
         if(found||g->inventory.slots[i].item_id!=34||g->inventory.slots[i].count!=1)return NULL;
         found=&g->inventory.slots[i];
     }

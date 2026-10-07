@@ -68,7 +68,7 @@ static void report(const char *path,const PeGame *g){
         pe_inventory_count(&g->inventory,279),pe_inventory_count(&g->inventory,229),pe_inventory_count(&g->inventory,916),
         pe_inventory_count(&g->inventory,12),pe_inventory_count(&g->inventory,19),pe_inventory_count(&g->inventory,26),
         pe_inventory_count(&g->inventory,406),g->player.x,g->player.y,g->player.z,g->yaw,g->pitch,g->grounded);
-    printf("  inventory:");for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count)
+    printf("  inventory:");for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count)
         printf(" %dx%d",g->inventory.slots[i].item_id,g->inventory.slots[i].count);
     putchar('\n');
 }

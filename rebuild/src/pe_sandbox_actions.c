@@ -196,7 +196,7 @@ bool pe_sandbox_actions_step(PeSandboxActions *a,PeGame *g,PeSandboxActionInput 
         }
     }
     /* Resource helpers may replace the inventory value; reacquire its instance. */
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==next_tool.instance_id)
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id==next_tool.instance_id)
         g->inventory.slots[i].durability=next_tool.durability;
     g->stamina=stamina;if(next.stamina_lock){g->stamina_idle=0;pe_game_stamina_activity(g);}
     *a=next;*out=result;return true;

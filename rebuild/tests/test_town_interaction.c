@@ -25,7 +25,7 @@ int pe_test_town_interaction(void){
     /* Nonempty rows reset timestamps on opening even before refresh interval. */
     CHECK(g->town_stock[4].create_time==g->game_seconds);
     g->money=100000;memset(g->inventory.slots,0,sizeof g->inventory.slots);
-    CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_SLOTS));inv=g->inventory;money=g->money;
+    CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_CATEGORY_SLOTS));inv=g->inventory;money=g->money;
     CHECK(!pe_town_shop_buy(g,20002,1184,1));CHECK(g->money==money&&pe_town_shop_stock(g,20002,1184)==3&&!memcmp(&inv,&g->inventory,sizeof inv));
     g->town_stock[0].remaining=4;CHECK(!pe_town_state_valid(g));g->town_stock[0].remaining=3;
     g->town_stock[0].create_time=NAN;CHECK(!pe_town_state_valid(g));g->town_stock[0].create_time=g->game_seconds;
@@ -49,7 +49,7 @@ int pe_test_town_interaction(void){
     }
     CHECK(g->money==895);
     CHECK(pe_inventory_add(&g->inventory,877,1));
-    int script=-1;for(int j=0;j<PE_INVENTORY_SLOTS;j++)if(g->inventory.slots[j].item_id==877)script=j;
+    int script=-1;for(int j=0;j<pe_inventory_capacity(&g->inventory);j++)if(g->inventory.slots[j].item_id==877)script=j;
     CHECK(script>=0&&pe_game_use_slot(g,script));CHECK(!pe_inventory_count(&g->inventory,877));
     CHECK(pe_game_recipe_known(g,337)&&pe_game_recipe_known(g,388)&&pe_game_recipe_known(g,390));
     CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));

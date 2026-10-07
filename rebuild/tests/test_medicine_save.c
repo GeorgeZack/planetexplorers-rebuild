@@ -41,7 +41,7 @@ int pe_test_medicine_save(void){
     CHECK(pe_world_resize(w,80,32,80));
     for(int z=0;z<80;z++)for(int y=0;y<=8;y++)for(int x=0;x<80;x++)CHECK(pe_world_set(w,x,y,z,(PeVoxel){255,PE_MAT_DIRT}));
     CHECK(pe_game_set_world(g,w,(PeVec3){30,10,30}));CHECK(g->world.extended);
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};CHECK(pe_adventure_medicine_accept(g));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};CHECK(pe_adventure_medicine_accept(g));
     g->game_seconds=100;CHECK(pe_town_shop_open(g,20011));CHECK(pe_town_shop_open(g,20028));
     CHECK(pe_town_shop_buy(g,20011,338,1));CHECK(pe_town_shop_buy(g,20028,212,2));
     bool saved=pe_game_save(g,path,error,sizeof error);if(!saved)fprintf(stderr,"medicine-save: %s\n",error);CHECK(saved);if(!saved)goto done;
@@ -52,7 +52,7 @@ int pe_test_medicine_save(void){
     CHECK(pe_world_hash(&loaded->world)==pe_world_hash(&g->world));same_stocks(g,loaded,0,PE_TOWN_STOCK_CAPACITY);
     size_t size=0;unsigned char *original=read_save(path,&size);CHECK(original&&size>V9_APPEND+PE_SAVE_V10_APPEND);
     if(original&&size>V9_APPEND+PE_SAVE_V10_APPEND){
-        CHECK(get32(original+4)==18);size-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND; /* Keep malformed fixtures in their literal V16 envelope. */
+        CHECK(get32(original+4)==19);size-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Keep malformed fixtures in their literal V16 envelope. */
         size_t footer=size-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-V9_APPEND;CHECK(get32(original+footer)==PE_MEDICINE_ACTIVE);
         CHECK(get32(original+footer+4)==PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY);
         /* A literal v8 prefix retains first seventeen offer clocks and Annot;

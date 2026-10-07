@@ -2278,6 +2278,36 @@
       ]
     },
     {
+      "item_id": 940,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 73,
+      "components": [
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 943,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 73,
+      "components": [
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 944,
+      "base_currency": 8,
+      "factor": "FULL",
+      "component_class": 73,
+      "components": [
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
       "item_id": 973,
       "base_currency": 320,
       "factor": "FULL",

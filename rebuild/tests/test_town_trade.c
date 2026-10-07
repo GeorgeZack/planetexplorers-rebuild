@@ -20,7 +20,7 @@ static PeSlot item(int id,uint32_t instance){
 }
 static int add(PeGame *g,int id,int count){
     CHECK(pe_inventory_add(&g->inventory,id,count));
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==id)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==id)return i;
     CHECK(false);return 0;
 }
 static bool same_except_message(const PeGame *g,const PeGame *before){
@@ -123,8 +123,8 @@ static void admission(PeGame *g,PeGame *before){
 static void capacity(PeGame *g,PeGame *before){
     fresh(g);int slot=add(g,12,1);g->inventory.slots[slot].durability*=.5f;
     CHECK(pe_town_trade_sell(g,20002,slot,1));uint32_t id=g->town_buyback[0].slots[0].instance_id;
-    CHECK(pe_inventory_add(&g->inventory,12,32));reject_back(g,before,20002,0,1);
-    g->inventory.slots[31]=(PeSlot){0};CHECK(pe_town_trade_buyback(g,20002,0,1)&&g->inventory.slots[31].instance_id==id);
+    CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_CATEGORY_SLOTS));reject_back(g,before,20002,0,1);
+    g->inventory.slots[839]=(PeSlot){0};CHECK(pe_town_trade_buyback(g,20002,0,1)&&g->inventory.slots[839].instance_id==id);
     fresh(g);slot=add(g,279,40);
     for(unsigned i=0;i<PE_TOWN_BUYBACK_CAPACITY;i++)CHECK(pe_town_trade_sell(g,20002,slot,1));
     CHECK(g->town_buyback[0].count==32&&g->inventory.slots[slot].count==8);
@@ -135,8 +135,8 @@ static void capacity(PeGame *g,PeGame *before){
     /* Stack buyback must preflight a partial merge plus a missing free slot. */
     fresh(g);slot=add(g,279,5);CHECK(pe_town_trade_sell(g,20002,slot,5));
     int max=pe_item_def(279)->stack_limit;CHECK(pe_inventory_add(&g->inventory,279,max-1));
-    CHECK(pe_inventory_add(&g->inventory,12,31));reject_back(g,before,20002,0,2);
-    CHECK(pe_town_trade_buyback(g,20002,0,1)&&g->inventory.slots[0].count==max);
+    CHECK(pe_inventory_add(&g->inventory,280,pe_item_def(280)->stack_limit*(PE_INVENTORY_CATEGORY_SLOTS-1)));reject_back(g,before,20002,0,2);
+    CHECK(pe_town_trade_buyback(g,20002,0,1)&&g->inventory.slots[840].count==max);
 }
 static void malformed(PeGame *g,PeGame *before){
     fresh(g);int slot=add(g,12,1);CHECK(pe_town_trade_sell(g,20002,slot,1));

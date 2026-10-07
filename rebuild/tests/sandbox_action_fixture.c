@@ -10,7 +10,7 @@
 #include <string.h>
 #include <unistd.h>
 
-static int item_slot(const PeGame *g,int item){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==item)return i;return -1;}
+static int item_slot(const PeGame *g,int item){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==item)return i;return -1;}
 static PeVec3 add(PeVec3 a,PeVec3 b){return(PeVec3){a.x+b.x,a.y+b.y,a.z+b.z};}
 static PeVec3 scale(PeVec3 v,float s){return(PeVec3){v.x*s,v.y*s,v.z*s};}
 static PeVec3 normalize(PeVec3 v){return scale(v,1/sqrtf(v.x*v.x+v.y*v.y+v.z*v.z));}

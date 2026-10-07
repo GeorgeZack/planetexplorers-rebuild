@@ -1,6 +1,7 @@
 #include "pe_game.h"
 #include "pe_build_history.h"
 #include "pe_vegetation.h"
+#include "pe_harvest.h"
 #include "pe_town_wallet.h"
 #include "pe_shield.h"
 #include "pe_sword.h"
@@ -38,57 +39,13 @@ static bool static_box_clear(const PeGame *g,PeVec3 lo,PeVec3 hi){
     const PeSceneCollision *scene=pe_settlement_collision_for_world(&g->world,NULL,0);
     return scene&&!pe_scene_overlaps_aabb(scene,lo,hi);
 }
-int pe_inventory_count(const PeInventory *p, int id) {
-    int n = 0;
-    for (int i=0;i<PE_INVENTORY_SLOTS;i++) if (p->slots[i].item_id == id) {
-        if (p->slots[i].count < 0 || n > INT_MAX-p->slots[i].count) return INT_MAX;
-        n += p->slots[i].count;
-    }
-    return n;
-}
-bool pe_inventory_add(PeInventory *p, int id, int count) {
-    const PeItemDef *def=pe_item_def(id);
-    if (!def || def->stack_limit < 1 || count <= 0) return false;
-    PeInventory copy=*p;
-    if(!copy.next_instance_id)copy.next_instance_id=1;
-    int left=count;
-    if(def->stack_limit==1){
-        for(int i=0;i<PE_INVENTORY_SLOTS&&left;i++)if(copy.slots[i].count==0){
-            if(copy.next_instance_id==UINT32_MAX)return false;
-            copy.slots[i]=(PeSlot){id,1,copy.next_instance_id++,(float)def->durability_max};--left;
-        }
-    }else{
-        for (int pass=0;pass<2;pass++) for (int i=0;i<PE_INVENTORY_SLOTS && left;i++) {
-            PeSlot *slot=&copy.slots[i];
-            if ((pass==0 && slot->item_id!=id) || (pass==1 && slot->count!=0)) continue;
-            if (slot->count < 0 || slot->count > def->stack_limit) return false;
-            int take=def->stack_limit-slot->count;
-            if (take>left) take=left;
-            slot->item_id=id; slot->count+=take; left-=take;
-        }
-    }
-    if (left) return false;
-    *p=copy; return true;
-}
-bool pe_inventory_remove(PeInventory *p, int id, int count) {
-    if (count <= 0 || !pe_item_def(id) || pe_inventory_count(p,id)<count) return false;
-    PeInventory copy=*p;
-    for (int i=0;i<PE_INVENTORY_SLOTS && count;i++) {
-        PeSlot *slot=&copy.slots[i];
-        if (slot->item_id!=id) continue;
-        int take=slot->count<count?slot->count:count;
-        slot->count-=take; count-=take;
-        if (!slot->count) memset(slot,0,sizeof *slot);
-    }
-    *p=copy; return true;
-}
 const PeSlot *pe_game_equipped_tool(const PeGame *g){
     if(!g->equipped_instance_id)return NULL;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id&&g->inventory.slots[i].count==1)return &g->inventory.slots[i];
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id&&g->inventory.slots[i].count==1)return &g->inventory.slots[i];
     return NULL;
 }
 bool pe_game_equip_slot(PeGame *g,int index){
-    if(!g||index<0||index>=PE_INVENTORY_SLOTS||!(g->hp>0))return false;
+    if(!g||index<0||index>=pe_inventory_capacity(&g->inventory)||!(g->hp>0))return false;
     PeSlot *slot=&g->inventory.slots[index];const PeItemDef *def=pe_item_def(slot->item_id);
     bool supported=def&&(def->id==10||def->tool_kind!=PE_TOOL_NONE||
         (g->mode==PE_GAME_ADVENTURE&&(def->equip_position&16)&&(def->item_type==9||def->item_type==10||def->item_type==14)));
@@ -257,7 +214,7 @@ static bool grant_items(PeInventory *inventory,const PeIngredient *grants,size_t
 }
 bool pe_game_init_mode(PeGame *g,uint32_t seed,PeGameMode mode){
     if(!g||(mode!=PE_GAME_LEGACY&&mode!=PE_GAME_ADVENTURE))return false;
-    PeInventory starter={0};
+    PeInventory starter={.categorized=mode==PE_GAME_ADVENTURE};
     if(mode==PE_GAME_ADVENTURE&&!grant_items(&starter,pe_adventure_starter,pe_adventure_starter_count))return false;
     PeGame *staged=malloc(sizeof *staged);if(!staged)return false;
     pe_game_init(staged,seed);staged->mode=mode;
@@ -312,7 +269,7 @@ static void clear_spent_references(PeGame *g){
     for(int i=0;i<PE_QUICKSLOTS;i++){
         PeQuickslot *q=&g->quickslots[i];bool exists=false;
         if(q->item_id&&!q->instance_id)continue; /* Stack shortcuts survive exhaustion. */
-        for(int j=0;j<PE_INVENTORY_SLOTS;j++){
+        for(int j=0;j<pe_inventory_capacity(&g->inventory);j++){
             PeSlot *s=&g->inventory.slots[j];
             if(s->count&&s->item_id==q->item_id&&s->instance_id==q->instance_id){exists=true;break;}
         }
@@ -329,7 +286,7 @@ float pe_game_item_cooldown(const PeGame *g,int item_id){
     return isfinite(cooldown)&&cooldown>0?(float)cooldown:0;
 }
 bool pe_game_use_slot(PeGame *g,int index){
-    if(!g||index<0||index>=PE_INVENTORY_SLOTS||!isfinite(g->hp)||!(g->hp>0)||
+    if(!g||index<0||index>=pe_inventory_capacity(&g->inventory)||!isfinite(g->hp)||!(g->hp>0)||
        g->known_recipe_count<0||g->known_recipe_count>PE_KNOWN_RECIPES)return false;
     PeSlot *s=&g->inventory.slots[index];const PeItemDef *d=s->count?pe_item_def(s->item_id):NULL;
     if(!d)return false;
@@ -364,7 +321,7 @@ bool pe_game_use_slot(PeGame *g,int index){
     return pe_game_equip_slot(g,index);
 }
 bool pe_game_quickslot_assign(PeGame *g,int quick,int index){
-    if(!g||quick<0||quick>=PE_QUICKSLOTS||index< -1||index>=PE_INVENTORY_SLOTS)return false;
+    if(!g||quick<0||quick>=PE_QUICKSLOTS||index< -1||index>=pe_inventory_capacity(&g->inventory))return false;
     if(index== -1){memset(&g->quickslots[quick],0,sizeof g->quickslots[quick]);return true;}
     PeSlot s=g->inventory.slots[index];if(s.count<1||!pe_item_def(s.item_id))return false;
     g->quickslots[quick]=(PeQuickslot){s.item_id,s.instance_id};return true;
@@ -372,7 +329,7 @@ bool pe_game_quickslot_assign(PeGame *g,int quick,int index){
 bool pe_game_quickslot_use(PeGame *g,int quick){
     if(!g||quick<0||quick>=PE_QUICKSLOTS)return false;
     PeQuickslot q=g->quickslots[quick];if(!q.item_id)return false;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++){
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++){
         PeSlot *s=&g->inventory.slots[i];
         if(s->count&&s->item_id==q.item_id&&s->instance_id==q.instance_id)return pe_game_use_slot(g,i);
     }
@@ -862,7 +819,7 @@ bool pe_game_mine(PeGame *g,PeVec3 o,PeVec3 d) {
     PeResourceEdit edit;
     if(!pe_game_dig_sample(g,sx,sy,sz,&edit))return false;
     if(edit.capacity_blocked){say(g,"Inventory full; terrain and tool preserved.");return false;}
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id)
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id)
         g->inventory.slots[i].durability=fmaxf(0,g->inventory.slots[i].durability-stats.durability_cost);
     g->stamina=fmaxf(0,g->stamina-stats.stamina_cost);g->stamina_idle=0;pe_game_stamina_activity(g);
     float speed=1;if(g->stamina<=40)speed*=0.9f;if(g->stamina<=20)speed*=0.9f;
@@ -881,13 +838,18 @@ bool pe_game_cut_tree(PeGame *g,int index,PeResourceEdit *out){
         (PeVec3){tree->position.x,tree->position.y+1,tree->position.z}))return false;
     if(!isfinite(tree->health)||tree->health<0||tree->health>255||tree->remaining<0)return false;
     if(!tree->remaining||tree->health==0){*out=(PeResourceEdit){0};return true;}
-    /* Source HP255 and CutDamage, but procedural trees retain provisional unit
-     * height/width/resource duration and stored wood yield, not a recovered
-     * Adventure species table. The event clock does not establish data parity. */
-    float health=fmaxf(0,tree->health-(pe_player_defaults.cut_damage+def->cut_damage));
-    PeInventory next=g->inventory;
-    if(!health&&!pe_inventory_add(&next,PE_ITEM_WOOD,tree->remaining)){*out=(PeResourceEdit){.capacity_blocked=true};return true;}
-    tree->health=health;g->inventory=next;
+    /* The displayed tree is qualified source prototype48 at unit scale.
+     * Legacy test worlds retain their earlier bootstrap/stored-Wood policy. */
+    float damage=pe_player_defaults.cut_damage+def->cut_damage;
+    float health=fmaxf(0,tree->health-damage);PeInventory next=g->inventory;uint32_t rng=g->rng_state;
+    if(g->mode==PE_GAME_ADVENTURE&&!pe_harvest_damage(PE_HARVEST_TREE_PROTOTYPE_ID,1,1,tree->health,damage,&health))return false;
+    if(!health){
+        bool granted=g->mode==PE_GAME_ADVENTURE?
+            pe_harvest_grant(&next,&rng,PE_HARVEST_TREE_PROTOTYPE_ID,1,1,pe_player_defaults.cut_bonus+def->cut_bonus,false):
+            pe_inventory_add(&next,PE_ITEM_WOOD,tree->remaining);
+        if(!granted){*out=(PeResourceEdit){.capacity_blocked=true};return true;}
+    }
+    tree->health=health;g->inventory=next;g->rng_state=rng;
     if(!health){tree->remaining=0;bump(&g->gathered);}
     *out=(PeResourceEdit){.changed=true,.removed=!health};return true;
 }
@@ -907,6 +869,7 @@ bool pe_game_gather(PeGame *g) {
     if(!pe_game_static_segment_clear(g,(PeVec3){g->player.x,g->player.y+1,g->player.z},
         (PeVec3){tree->position.x,tree->position.y+1,tree->position.z}))return false;
     if(!axe){
+        if(g->mode==PE_GAME_ADVENTURE){say(g,"Equip an axe to fell this tree.");return false;}
         if(!pe_inventory_add(&g->inventory,PE_ITEM_WOOD,1)){say(g,"Inventory full.");return false;}
         --tree->remaining;if(!tree->remaining)tree->health=0;
         g->tool_cooldown=0.35f;bump(&g->gathered);say(g,"Gathered loose wood (bootstrap gathering).");return true;
@@ -915,11 +878,11 @@ bool pe_game_gather(PeGame *g) {
     PeResourceEdit edit;
     if(!pe_game_cut_tree(g,best,&edit))return false;
     if(edit.capacity_blocked){say(g,"Inventory full; tree and axe preserved.");return false;}
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id)
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id==g->equipped_instance_id)
         g->inventory.slots[i].durability=fmaxf(0,g->inventory.slots[i].durability-stats.durability_cost);
     g->stamina=fmaxf(0,g->stamina-stats.stamina_cost);g->stamina_idle=0;pe_game_stamina_activity(g);
     float speed=1;if(g->stamina<=40)speed*=0.9f;if(g->stamina<=20)speed*=0.9f;g->tool_cooldown=0.5f/speed;
-    if(edit.removed)say(g,"Tree felled; remaining wood recovered.");
+    if(edit.removed)say(g,"Tree felled; resources gathered.");
     else say(g,"Axe cut the tree.");
     return true;
 }

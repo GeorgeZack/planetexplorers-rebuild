@@ -5,7 +5,7 @@
 #include <string.h>
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"shield:%d %s\n",__LINE__,#c);failures++;}}while(0)
-static int slot(const PeGame*g,int item){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==item)return i;return -1;}
+static int slot(const PeGame*g,int item){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==item)return i;return -1;}
 int pe_test_shield(void){
     failures=0;PeGame*g=calloc(1,sizeof *g);unsigned char*snapshot=malloc(sizeof *g);CHECK(g&&snapshot);if(!g||!snapshot)goto done;
     CHECK(pe_game_init_mode(g,104,PE_GAME_ADVENTURE));CHECK(!g->shield_instance_id&&pe_shield_state_valid(g));
@@ -21,7 +21,7 @@ int pe_test_shield(void){
     while(pe_inventory_add(&g->inventory,19,1)){}before=g->inventory;
     CHECK(pe_shield_unequip(g)&&!g->shield_instance_id&&pe_shield_equip(g,shield));
     CHECK(!memcmp(&before,&g->inventory,sizeof before)&&g->equipped_instance_id==primary); /* Full bag never needs a transfer. */
-    int second=-1;for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(i!=shield&&g->inventory.slots[i].item_id==34){second=i;break;}
+    int second=-1;for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(i!=shield&&g->inventory.slots[i].item_id==34){second=i;break;}
     CHECK(second>=0);if(second<0)goto done;
     g->inventory.slots[second].durability=1234.5f;before=g->inventory;
     CHECK(pe_shield_equip(g,second)&&pe_shield_equipped(g)->durability==1234.5f&&!memcmp(&before,&g->inventory,sizeof before));
@@ -49,7 +49,7 @@ int pe_test_shield(void){
         CHECK(!pe_shield_wear(&malformed,100)&&!memcmp(&malformed,&old,sizeof old));
     }
     /* Invalid selection never partially clears/replaces the valid reference. */
-    const int invalid[]={-1,PE_INVENTORY_SLOTS,sword};
+    const int invalid[]={-1,pe_inventory_capacity(&g->inventory),sword};
     for(unsigned i=0;i<3;i++){memcpy(snapshot,g,sizeof *g);CHECK(!pe_shield_equip(g,invalid[i])&&!memcmp(snapshot,g,sizeof *g));}
     g->hp=0;memcpy(snapshot,g,sizeof *g);CHECK(!pe_shield_equip(g,second)&&!memcmp(snapshot,g,sizeof *g));g->hp=500;
     uint32_t old=g->inventory.next_instance_id;g->inventory.next_instance_id=identity;CHECK(!pe_shield_state_valid(g));g->inventory.next_instance_id=old;

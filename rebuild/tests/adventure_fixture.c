@@ -11,7 +11,7 @@
 
 static int slot(const PeGame *game,int item,bool last){
     int found=-1;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(game->inventory.slots[i].item_id==item&&game->inventory.slots[i].count){
+    for(int i=0;i<pe_inventory_capacity(&game->inventory);i++)if(game->inventory.slots[i].item_id==item&&game->inventory.slots[i].count){
         found=i;if(!last)break;
     }
     return found;

@@ -24,7 +24,7 @@ int main(void){
     for(int z=0;z<PE_WORLD_Z;z++)for(int y=0;y<PE_WORLD_Y;y++)for(int x=0;x<PE_WORLD_X;x++)
         pe_world_set(&g->world,x,y,z,(PeVoxel){y<10?255:0,y<10?PE_MAT_DIRT:PE_MAT_AIR});
     g->player=(PeVec3){32,10.05f,32};g->velocity=(PeVec3){0};g->tree_count=g->block_count=g->cell_count=0;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};
     g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     assert(pe_inventory_add(&g->inventory,PE_ITEM_WOOD,5));
     PeB45Cell cells[4]={{68,20,64,4,11},{69,20,64,4,11},{68,20,65,4,11},{69,20,65,4,11}};

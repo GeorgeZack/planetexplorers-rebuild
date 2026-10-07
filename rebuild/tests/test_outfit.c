@@ -8,7 +8,7 @@
 #include <string.h>
 
 static int slot(const PeGame *g,int id){
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;
     return -1;
 }
 static void reject_init(PeGame *g){
@@ -92,7 +92,7 @@ static void initialization_and_healing(void){
     assert(pe_game_init_mode(g,87,PE_GAME_LEGACY)&&pe_outfit_state_valid(g)&&pe_outfit_defense(&g->outfit)==0);
     pe_game_destroy(g);assert(pe_game_init_mode(g,87,PE_GAME_ADVENTURE)&&pe_outfit_state_valid(g));
     int knife=slot(g,33);assert(knife>=0&&g->inventory.slots[knife].instance_id==1);
-    uint32_t maximum=0;for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id>maximum)maximum=g->inventory.slots[i].instance_id;
+    uint32_t maximum=0;for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id>maximum)maximum=g->inventory.slots[i].instance_id;
     assert(g->outfit.items[0].instance_id==maximum+1&&g->inventory.next_instance_id==maximum+4);
     assert(pe_outfit_wear(&g->outfit,130));PeOutfit worn=g->outfit;
     assert(pe_inventory_add(&g->inventory,925,1));g->hp=10;

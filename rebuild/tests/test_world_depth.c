@@ -90,8 +90,8 @@ static int static_game_child(void){
     CHECK(pe_game_collision_update(g,cache,error,sizeof error));
     CHECK(!pe_game_static_segment_clear(g,(PeVec3){9,10,95},(PeVec3){11,10,95}));
     CHECK(pe_game_static_segment_clear(g,(PeVec3){9,10,95},(PeVec3){10,10,95}));
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
-    CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,0));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};
+    CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,pe_inventory_category_start(&g->inventory,1)));
     CHECK(pe_inventory_add(&g->inventory,PE_ITEM_WOOD,10));
     PeB45Cell cell={20,20,190,(PE_B45_CUBE<<2),0};
     CHECK(!pe_game_can_build_cells(g,&cell,1));*before=*g;
@@ -231,7 +231,7 @@ int pe_test_world_depth(void){
     pe_game_init_mode(g,666,PE_GAME_ADVENTURE);
     CHECK(pe_game_set_world(g,w,(PeVec3){25,9,95}));CHECK(g->player.z==95);
     memset(g->inventory.slots,0,sizeof g->inventory.slots);
-    CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,0));
+    CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,pe_inventory_category_start(&g->inventory,1)));
     PeResourceEdit edit={0};CHECK(pe_game_dig_sample(g,22,8,95,&edit)&&edit.changed);
     /* A stored extended-Z action must survive both pose and subsequent-clock
      * validation, not merely select a target on its initial frame. */

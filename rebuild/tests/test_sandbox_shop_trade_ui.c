@@ -14,7 +14,7 @@ static PeSandboxUIInput click(PeTrainingUIRect r){
 static PeSandboxUIResult route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i){
     PeSandboxUIResult r=pe_sandbox_ui_route(u,g,i);assert(r.consume_world&&!r.npc_interaction&&!r.toggle_build);return r;
 }
-static int slot(const PeGame *g,int id){for(int k=0;k<PE_INVENTORY_SLOTS;k++)if(g->inventory.slots[k].item_id==id&&g->inventory.slots[k].count)return k;return -1;}
+static int slot(const PeGame *g,int id){for(int k=0;k<pe_inventory_capacity(&g->inventory);k++)if(g->inventory.slots[k].item_id==id&&g->inventory.slots[k].count)return k;return -1;}
 static void open(PeSandboxUI *u,PeGame *g,uint32_t entity){
     assert(pe_sandbox_ui_open_town(u,g,entity,"Vendor",(Texture2D){0},true));
     PeSandboxUIInput i=input();i.response=1;i.quickslot=0;route(u,g,i);
@@ -40,12 +40,12 @@ static PeSandboxShopRow select_item(PeSandboxUI *u,PeGame *g,int item,uint32_t i
 static void commit(PeSandboxUI *u,PeGame *g){route(u,g,click(pe_sandbox_ui_shop_button(u,2)));}
 int main(void){
     PeGame *g=calloc(1,sizeof *g);assert(g&&pe_game_init_mode(g,811,PE_GAME_ADVENTURE));
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};
     g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     assert(pe_inventory_add(&g->inventory,33,1)&&pe_inventory_add(&g->inventory,34,1)&&
         pe_inventory_add(&g->inventory,916,10)&&pe_inventory_add(&g->inventory,308,9)&&pe_inventory_add(&g->inventory,12,10));
     int knife=slot(g,33),shield=slot(g,34),juice=slot(g,916);
-    assert(knife>=0&&shield>=0&&juice>=0);g->inventory.slots[knife].durability=pe_item_def(33)->durability_max*.5f;
+    assert(knife>=420&&shield>=420&&juice>=0);g->inventory.slots[knife].durability=pe_item_def(33)->durability_max*.5f;
     uint32_t knife_id=g->inventory.slots[knife].instance_id;float wear=g->inventory.slots[knife].durability;
     assert(pe_game_equip_slot(g,knife)&&pe_shield_equip(g,shield)&&pe_game_quickslot_assign(g,0,juice));
     PeSandboxUI ui;pe_sandbox_ui_init(&ui,1280,720);open(&ui,g,20002);tab(&ui,g,PE_SANDBOX_SHOP_SELL);
@@ -108,6 +108,14 @@ int main(void){
     assert(!memcmp(&bag,&g->inventory,sizeof bag)&&g->money==money&&strstr(g->message,"afford"));
     assert(pe_inventory_add(&g->inventory,365,1));row=select_item(&ui,g,365,0);
     assert(!row.eligible&&strstr(row.reason,"not supported"));bag=g->inventory;commit(&ui,g);assert(!memcmp(&bag,&g->inventory,sizeof bag));
+    /* Resource rows are beyond both the old32 cells and the Equipment range;
+     * source Sell must enumerate them after a move to the final category cell. */
+    assert(pe_inventory_add(&g->inventory,PE_ITEM_WOOD,7));
+    int wood=slot(g,PE_ITEM_WOOD),last=pe_inventory_category_start(&g->inventory,2)+419;
+    assert(wood>=840&&pe_inventory_move(&g->inventory,wood,last));
+    row=select_item(&ui,g,PE_ITEM_WOOD,0);
+    assert(row.bag_slot==last&&row.item.count==7&&row.eligible);
+    bag=g->inventory;
     /* Dragging and resize retain the same modal geometry, never trading from
      * a title press or from an advance key while the panel is dragged. */
     PeTrainingUIRect panel=pe_sandbox_ui_shop_panel(&ui);i=input();i.left_pressed=true;i.mouse_x=panel.x+100;i.mouse_y=panel.y+25;

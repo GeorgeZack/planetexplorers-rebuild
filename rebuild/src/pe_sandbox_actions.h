@@ -46,7 +46,8 @@ bool pe_sandbox_actions_pose(const PeSandboxActions *action,const PeGame *game,P
  * A normal release retains authored exit timing; re-press does not undo it.
  * State is external/transient: initialize/cancel after load/import/new game.
  * Source clip events are exact; discrete state transitions approximate Unity
- * blends/IK. Procedural tree prototype/size/yield remain explicit substitutes.
+ * blends/IK. Adventure source48 resource rules use the rendered unit instance;
+ * procedural species placement/scales remain outside the current fixtures.
  * Invalid input returns false without changing action, gameplay, or output. */
 bool pe_sandbox_actions_step(PeSandboxActions *action,PeGame *game,
     PeSandboxActionInput input,PeSandboxActionUpdate *update);

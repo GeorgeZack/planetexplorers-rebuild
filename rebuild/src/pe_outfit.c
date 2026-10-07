@@ -27,7 +27,7 @@ static bool allocator_valid(const PeGame *g){
     uint32_t next=g->inventory.next_instance_id;
     if(!next||g->deployed_count>PE_MAX_DEPLOYABLES)return false;
     if(g->equipped_instance_id>=next)return false;
-    for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)
         if(g->inventory.slots[i].instance_id>=next)return false;
     for(unsigned i=0;i<PE_QUICKSLOTS;i++)
         if(g->quickslots[i].instance_id>=next)return false;
@@ -42,7 +42,7 @@ bool pe_outfit_state_valid(const PeGame *g){
     for(unsigned i=0;i<PE_OUTFIT_SLOTS;i++){
         uint32_t id=g->outfit.items[i].instance_id;
         if(id>=g->inventory.next_instance_id||id==g->equipped_instance_id)return false;
-        for(unsigned j=0;j<PE_INVENTORY_SLOTS;j++)if(id==g->inventory.slots[j].instance_id)return false;
+        for(int j=0;j<pe_inventory_capacity(&g->inventory);j++)if(id==g->inventory.slots[j].instance_id)return false;
         for(unsigned j=0;j<PE_QUICKSLOTS;j++)if(id==g->quickslots[j].instance_id)return false;
         for(unsigned j=0;j<PE_MAX_DEPLOYABLES;j++)if(id==g->deployed[j].instance_id)return false;
     }

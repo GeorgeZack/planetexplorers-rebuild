@@ -45,7 +45,7 @@ class ContentTests(unittest.TestCase):
     def test_original_recipe_and_item_invariants(self):
         items = {row['id']: row for row in self.manifest['items']}
         recipes = {row['id']: row for row in self.manifest['recipes']}
-        self.assertEqual(len(items), 320)
+        self.assertEqual(len(items), 323)
         self.assertEqual(len(recipes), 95)
         self.assertEqual({k: items[279][k] for k in ('id', 'name', 'stack_limit')},
                          {'id': 279, 'name': 'Wood', 'stack_limit': 9999})

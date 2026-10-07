@@ -35,8 +35,8 @@ int pe_test_v13_save(void){
     }
     bytes=read_bytes(path,&n);snapshot=malloc(sizeof *loaded);CHECK(bytes&&snapshot);
     if(!bytes||!snapshot)goto done;
-    CHECK(bytes[4]==18&&PE_SAVE_V13_APPEND==4);
-    n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND; /* Test the literal V16 payload below, not a mislabeled V18 file. */
+    CHECK(bytes[4]==19&&PE_SAVE_V13_APPEND==4);
+    n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Test the literal V16 payload below, not a mislabeled V18 file. */
     CHECK(n>PE_SAVE_V13_APPEND+16);
     /* The independent clock precedes the fixed V14 outfit extension. */
     size_t clock_at=n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND;
@@ -58,7 +58,7 @@ int pe_test_v13_save(void){
     CHECK(loaded->juice_cooldown==7.25&&loaded->juice_buff_active&&loaded->juice_buff_elapsed==1.25&&loaded->juice_buff_tick==3);
     CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after);
     put32(bytes+pe_test_save_counter_offset(loaded),loaded->inventory.next_instance_id);
-    if(after){CHECK(after_n==n+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND&&after[4]==18&&!memcmp(after+16,bytes+16,old_n-16));CHECK(!memcmp(after+old_n,"\0\0\0\0",4));}
+    if(after){CHECK(after_n==n+(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND&&after[4]==19&&!memcmp(after+16,bytes+16,old_n-16));CHECK(!memcmp(after+old_n,"\0\0\0\0",4));}
     /* Invalid in-memory clocks cannot replace the last valid checkpoint. */
     const float invalid[]={-.01f,10.01f,NAN,INFINITY,-INFINITY};
     for(size_t i=0;i<sizeof invalid/sizeof invalid[0];i++){

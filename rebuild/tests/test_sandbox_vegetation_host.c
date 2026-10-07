@@ -1,6 +1,7 @@
 /* CPU-only actual sandbox gathering dispatch and input ownership. */
 #include "../src/pe_sandbox_view.c"
 #include <assert.h>
+#include "pe_harvest.h"
 static PeSandboxUIResult plant_route(PeSandboxUI *ui,PeGame *g){
     return pe_sandbox_ui_route(ui,g,(PeSandboxUIInput){.focused=true,.quickslot=-1,.mouse_x=100,.mouse_y=300});
 }
@@ -37,7 +38,10 @@ int main(void){
         assert(action.consume_actions&&!action.consume_world&&sandbox_hunt_runs(&ui,action)&&strstr(g->message,"Finish"));
     }
     melee=(PeSandboxMelee){0};tool=(PeSandboxActions){0};action=plant_route(&ui,g);
+    PeInventory expected=g->inventory;uint32_t expected_rng=g->rng_state;
+    assert(pe_harvest_grant(&expected,&expected_rng,15,1,1,0,false));
     assert(sandbox_vegetation_interact(g,collision,input,&action,&gate,2));
+    assert(!memcmp(&expected,&g->inventory,sizeof expected)&&expected_rng==g->rng_state);
     assert(g->vegetation.plants[0].depleted&&pe_inventory_count(&g->inventory,source->item_id)==count+(int)source->drop_count&&g->gathered==gathered+1);
     assert(action.consume_actions&&!action.consume_world&&!action.npc_interaction&&gate.actions_only&&gate.waiting_for_release);
     assert(sandbox_hunt_runs(&ui,action)); /* same production AI admission */
@@ -57,11 +61,11 @@ int main(void){
     assert(before.triangles==after.triangles&&before.construction_rebuilds==after.construction_rebuilds);
     /* A full bag rejects atomically but still consumes its action. */
     g->vegetation.plants[0].depleted=false;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
-    const PeItemDef *wood=pe_item_def(PE_ITEM_WOOD);assert(wood&&pe_inventory_add(&g->inventory,PE_ITEM_WOOD,wood->stack_limit*PE_INVENTORY_SLOTS));
-    PeInventory bag=g->inventory;action=plant_route(&ui,g);
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=true};g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
+    const PeItemDef *wood=pe_item_def(PE_ITEM_WOOD);assert(wood&&pe_inventory_add(&g->inventory,PE_ITEM_WOOD,wood->stack_limit*PE_INVENTORY_CATEGORY_SLOTS));
+    PeInventory bag=g->inventory;uint32_t failed_rng=g->rng_state;action=plant_route(&ui,g);
     assert(sandbox_vegetation_interact(g,collision,input,&action,&gate,0));
-    assert(!g->vegetation.plants[0].depleted&&!memcmp(&bag,&g->inventory,sizeof bag)&&g->gathered==gathered+1);
+    assert(!g->vegetation.plants[0].depleted&&!memcmp(&bag,&g->inventory,sizeof bag)&&g->gathered==gathered+1&&g->rng_state==failed_rng);
     assert(strstr(g->message,"room")&&action.consume_actions&&!action.consume_world&&sandbox_hunt_runs(&ui,action));
     pe_sandbox_collision_free(collision);pe_game_destroy(g);free(g);
     puts("Sandbox vegetation host: PASS (no graphics or asset skips)");return 0;

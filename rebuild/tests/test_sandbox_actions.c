@@ -24,9 +24,9 @@ static void setup(PeGame *g,PeSandboxActions *a,int item,bool male){
     for(int z=0;z<PE_WORLD_Z;z++)for(int x=0;x<PE_WORLD_X;x++)for(int y=0;y<10;y++)
         pe_world_set(&g->world,x,y,z,(PeVoxel){255,1});
     g->player=(PeVec3){32.1f,10,32.1f};g->velocity=(PeVec3){0};g->grounded=true;
-    g->inventory=(PeInventory){.next_instance_id=1};g->tree_count=2;
+    g->inventory=(PeInventory){.next_instance_id=1,.categorized=true};g->tree_count=2;
     g->trees[0]=(PeTree){{33,10,32},8,255};g->trees[1]=(PeTree){{32,10,33},8,255};
-    CHECK(pe_inventory_add(&g->inventory,item,1));CHECK(pe_game_equip_slot(g,0));
+    CHECK(pe_inventory_add(&g->inventory,item,1));CHECK(pe_game_equip_slot(g,PE_INVENTORY_CATEGORY_SLOTS));
     pe_sandbox_actions_init(a,male);
 }
 static PeSandboxActionUpdate tick(PeSandboxActions *a,PeGame *g,PeSandboxActionInput in){
@@ -78,7 +78,7 @@ static void shovel_targets(PeGame *g,PeSandboxActions *a){
 }
 static void conservation(PeGame *g,PeSandboxActions *a){
     setup(g,a,12,false);PeSandboxActionInput in=input();
-    CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*(PE_INVENTORY_SLOTS-1)));
+    CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*PE_INVENTORY_CATEGORY_SLOTS));
     pe_world_set(&g->world,32,9,32,(PeVoxel){130,1});PeSandboxActionUpdate u={0};
     for(int i=0;i<48;i++)u=tick(a,g,in);
     PeInventory inventory=g->inventory;uint32_t rng=g->rng_state;uint64_t hash=pe_world_hash(&g->world);float stamina=g->stamina;
@@ -87,11 +87,11 @@ static void conservation(PeGame *g,PeSandboxActions *a){
     in.held=false;bool ended=false;for(int i=0;i<200&&!ended;i++)ended=tick(a,g,in).finished;
     CHECK(ended&&a->stage==PE_SANDBOX_ACTION_IDLE);
     setup(g,a,1527,false);in=input();in.camera_tree=in.forward_tree=0;
-    g->trees[0].health=28;CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*(PE_INVENTORY_SLOTS-1)));
+    g->trees[0].health=10;CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*PE_INVENTORY_CATEGORY_SLOTS));
     for(int i=0;i<56;i++)u=tick(a,g,in);
-    inventory=g->inventory;stamina=g->stamina;
-    u=tick(a,g,in);CHECK(u.capacity_blocked&&!u.swung&&g->trees[0].health==28&&g->trees[0].remaining==8);
-    CHECK(memcmp(&inventory,&g->inventory,sizeof inventory)==0&&g->stamina==stamina);
+    inventory=g->inventory;stamina=g->stamina;rng=g->rng_state;
+    u=tick(a,g,in);CHECK(u.capacity_blocked&&!u.swung&&g->trees[0].health==10&&g->trees[0].remaining==8);
+    CHECK(memcmp(&inventory,&g->inventory,sizeof inventory)==0&&g->stamina==stamina&&g->rng_state==rng);
 }
 static void felling(PeGame *g,PeSandboxActions *a){
     setup(g,a,1527,false);PeSandboxActionInput in=input();in.camera_tree=0;in.forward_tree=1;
@@ -102,24 +102,24 @@ static void felling(PeGame *g,PeSandboxActions *a){
      * silently change it or suppress its already-running authored events. */
     in.camera_tree=in.forward_tree=1;
     for(int i=1;i<56;i++){u=tick(a,g,in);CHECK(!u.swung);}
-    u=tick(a,g,in);CHECK(u.swung&&u.tree_index==0&&g->trees[0].health==227&&g->trees[1].health==255);
+    u=tick(a,g,in);CHECK(u.swung&&u.tree_index==0&&fabsf(g->trees[0].health-(255-28*.48571f))<.001f&&g->trees[1].health==255);
     unsigned hits=1;bool removed=false;
-    for(int i=0;i<900&&!removed;i++){u=tick(a,g,in);hits+=u.swung;removed=u.removed;}
-    CHECK(removed&&hits==10&&g->trees[0].remaining==0&&g->trees[0].health==0&&g->trees[1].remaining==8);
-    CHECK(pe_inventory_count(&g->inventory,279)==8&&g->gathered==1&&g->stamina==60);
+    for(int i=0;i<2000&&!removed;i++){u=tick(a,g,in);hits+=u.swung;removed=u.removed;}
+    CHECK(removed&&hits==19&&g->trees[0].remaining==0&&g->trees[0].health==0&&g->trees[1].remaining==8);
+    CHECK(pe_inventory_count(&g->inventory,279)==16&&g->gathered==1&&g->stamina==24);
     CHECK(pe_game_equipped_tool(g)->durability==100); /* Safety axe's source wear is0. */
     bool ended=false;for(int i=0;i<150&&!ended;i++)ended=tick(a,g,in).finished;
-    CHECK(ended&&pe_inventory_count(&g->inventory,279)==8);
+    CHECK(ended&&pe_inventory_count(&g->inventory,279)==16);
     setup(g,a,1527,true);in=input();in.camera_tree=in.forward_tree=0;
     for(int i=0;i<42;i++)CHECK(!tick(a,g,in).swung);
     CHECK(tick(a,g,in).swung); /* Male override first event frame43. */
     setup(g,a,26,false);in=input();in.camera_tree=in.forward_tree=0;
     for(int i=0;i<69;i++)CHECK(!tick(a,g,in).swung);
-    u=tick(a,g,in);CHECK(u.swung&&a->speed==1&&g->trees[0].health==209&&g->stamina==92);
+    u=tick(a,g,in);CHECK(u.swung&&a->speed==1&&fabsf(g->trees[0].health-(255-46*.48571f))<.001f&&g->stamina==92);
     hits=1;removed=false;
-    for(int i=0;i<500&&!removed;i++){u=tick(a,g,in);hits+=u.swung;removed=u.removed;}
-    CHECK(removed&&hits==6&&pe_inventory_count(&g->inventory,279)==8&&g->stamina==76);
-    CHECK(pe_game_equipped_tool(g)->durability==3523); /* Six source5-wear attacks. */
+    for(int i=0;i<1200&&!removed;i++){u=tick(a,g,in);hits+=u.swung;removed=u.removed;}
+    CHECK(removed&&hits==12&&pe_inventory_count(&g->inventory,279)==16&&g->stamina==52);
+    CHECK(pe_game_equipped_tool(g)->durability==3493); /* Twelve source5-wear attacks. */
 }
 static void pickaxe(PeGame *g,PeSandboxActions *a){
     PeSandboxActionInput in=input();PeSandboxActionPose pose;PeSandboxActionUpdate u;
@@ -174,7 +174,7 @@ static void pickaxe(PeGame *g,PeSandboxActions *a){
     }
     CHECK(ended&&saw_exit&&hits==1&&a->swings==1&&a->stamina_lock&&g->stamina==96);
     /* Capacity rejection preserves terrain, inventory, RNG, wear and followup cost. */
-    setup(g,a,19,false);in=input();CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*(PE_INVENTORY_SLOTS-1)));
+    setup(g,a,19,false);in=input();CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*PE_INVENTORY_CATEGORY_SLOTS));
     pe_world_set(&g->world,32,9,32,(PeVoxel){130,1});
     for(int i=0;i<67;i++)tick(a,g,in);
     PeInventory inventory=g->inventory;uint64_t hash=pe_world_hash(&g->world);uint32_t rng=g->rng_state;
@@ -188,7 +188,7 @@ static void pickaxe(PeGame *g,PeSandboxActions *a){
     setup(g,a,19,false);in=input();tick(a,g,in);hash=pe_world_hash(&g->world);in.enabled=false;
     CHECK(tick(a,g,in).finished&&a->stage==PE_SANDBOX_ACTION_IDLE&&a->swings==0&&g->stamina==96);
     CHECK(pe_world_hash(&g->world)==hash&&pe_game_equipped_tool(g)->durability==3553);
-    setup(g,a,19,false);in=input();tick(a,g,in);CHECK(pe_inventory_add(&g->inventory,19,1));CHECK(pe_game_equip_slot(g,1));
+    setup(g,a,19,false);in=input();tick(a,g,in);CHECK(pe_inventory_add(&g->inventory,19,1));CHECK(pe_game_equip_slot(g,PE_INVENTORY_CATEGORY_SLOTS+1));
     CHECK(tick(a,g,in).finished&&a->stage==PE_SANDBOX_ACTION_IDLE&&g->stamina==96&&pe_game_equipped_tool(g)->durability==3553);
 }
 static void guards(PeGame *g,PeSandboxActions *a){
@@ -209,12 +209,12 @@ static void guards(PeGame *g,PeSandboxActions *a){
      * scheduler admits a full40 pulse only at its next eight-frame pass. */
     for(int i=0;i<6;i++){recovery_frame(g,&attributes,1.0/60);CHECK(g->stamina==0);}
     recovery_frame(g,&attributes,1.0/60);CHECK(g->stamina==40);
-    setup(g,a,12,false);in=input();tick(a,g,in);CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,1));
+    setup(g,a,12,false);in=input();tick(a,g,in);CHECK(pe_inventory_add(&g->inventory,12,1));CHECK(pe_game_equip_slot(g,PE_INVENTORY_CATEGORY_SLOTS+1));
     CHECK(tick(a,g,in).finished&&a->stage==PE_SANDBOX_ACTION_IDLE&&pe_game_equipped_tool(g)->durability==3553);
     setup(g,a,20,false);in=input();CHECK(tick(a,g,in).unsupported&&a->stage==PE_SANDBOX_ACTION_IDLE&&g->stamina==100);
-    setup(g,a,12,false);in=input();g->inventory.slots[0].durability=5;
+    setup(g,a,12,false);in=input();g->inventory.slots[PE_INVENTORY_CATEGORY_SLOTS].durability=5;
     for(int i=0;i<49;i++)tick(a,g,in);
-    CHECK(a->ending&&a->stage==PE_SANDBOX_ACTION_LOOP&&g->inventory.slots[0].durability==0&&g->stamina==96);
+    CHECK(a->ending&&a->stage==PE_SANDBOX_ACTION_LOOP&&g->inventory.slots[PE_INVENTORY_CATEGORY_SLOTS].durability==0&&g->stamina==96);
     bool ended=false;for(int i=0;i<200&&!ended;i++)ended=tick(a,g,in).finished;
     CHECK(ended&&a->swings==1);
     setup(g,a,12,false);in=input();tick(a,g,in);

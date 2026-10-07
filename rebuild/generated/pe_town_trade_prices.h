@@ -4,7 +4,7 @@
 typedef enum { PE_TOWN_PRICE_FULL=0, PE_TOWN_PRICE_DURABILITY=1,
                PE_TOWN_PRICE_LIFE_LIMIT=2 } PeTownPriceFactor;
 typedef struct { int item_id; unsigned base_currency; PeTownPriceFactor factor; } PeTownTradePrice;
-#define PE_TOWN_TRADE_PRICE_COUNT 320u
+#define PE_TOWN_TRADE_PRICE_COUNT 323u
 static const PeTownTradePrice pe_town_trade_prices[PE_TOWN_TRADE_PRICE_COUNT] = {
     {1u,42u,PE_TOWN_PRICE_DURABILITY},
     {2u,100u,PE_TOWN_PRICE_DURABILITY},
@@ -209,6 +209,9 @@ static const PeTownTradePrice pe_town_trade_prices[PE_TOWN_TRADE_PRICE_COUNT] = 
     {924u,0u,PE_TOWN_PRICE_FULL},
     {925u,0u,PE_TOWN_PRICE_FULL},
     {937u,34u,PE_TOWN_PRICE_FULL},
+    {940u,8u,PE_TOWN_PRICE_FULL},
+    {943u,8u,PE_TOWN_PRICE_FULL},
+    {944u,8u,PE_TOWN_PRICE_FULL},
     {973u,320u,PE_TOWN_PRICE_FULL},
     {974u,800u,PE_TOWN_PRICE_FULL},
     {975u,2000u,PE_TOWN_PRICE_FULL},

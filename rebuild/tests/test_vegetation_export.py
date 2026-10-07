@@ -44,7 +44,7 @@ class VegetationExportTests(unittest.TestCase):
         p=self.report['plants']
         self.assertEqual([r['resource']['production'].split(';')[0] for r in p],
                          ['238,100','235,70,1583,100','239,70,1583,100','1006,50,1583,100'])
-        self.assertIn('Primary-only',self.report['adapters'][1])
+        self.assertIn('pe_harvest',self.report['adapters'][1])
 
     def test_effective_range_and_action_masks(self):
         self.assertEqual(self.report['source_gather']['effective_horizontal_range'],2)

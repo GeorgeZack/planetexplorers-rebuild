@@ -9,6 +9,13 @@ static inline bool pe_test_ack_welcome(PeGame *game){
         if(!pe_game_welcome_advance(game,game->welcome_page))return false;
     return game->welcome_page==PE_ADVENTURE_WELCOME_PAGES;
 }
+/* Current category storage projects occupied records into the literal32 prefix. */
+static inline int pe_test_save_prefix_index(const PeGame *game,int index){
+    if(!game->inventory.categorized)return index;
+    int result=0;
+    for(int i=0;i<index;i++)if(game->inventory.slots[i].count)result++;
+    return result<PE_INVENTORY_SLOTS?result:-1;
+}
 /* Offset of the retained v2 counter, after variable blocks/trees and v1 voxels.
  * Old-save outfit migration advances only this existing field in the prefix. */
 static inline size_t pe_test_save_counter_offset(const PeGame *game){
@@ -31,7 +38,8 @@ static inline bool pe_test_save_pre_welcome(const char *path,unsigned version){
     long size=ftell(file);if(size<20||size>800000){fclose(file);return false;}
     rewind(file);unsigned char *data=malloc((size_t)size);if(!data){fclose(file);return false;}
     bool ok=fread(data,1,(size_t)size,file)==(size_t)size;fclose(file);
-    if(ok&&data[4]>=6&&data[4]<=18&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+    if(ok&&data[4]>=6&&data[4]<=19&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+        if(data[4]>=19)size-=PE_SAVE_V19_APPEND;
         if(data[4]>=18)size-=PE_SAVE_V18_APPEND;
         if(data[4]>=17)size-=PE_SAVE_V17_APPEND;
         if(data[4]>=16)size-=PE_SAVE_V16_APPEND;

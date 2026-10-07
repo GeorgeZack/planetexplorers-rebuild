@@ -9,7 +9,7 @@ static bool finite3(PeVec3 p){return isfinite(p.x)&&isfinite(p.y)&&isfinite(p.z)
 static bool alive(const PeGame *g){return g&&g->mode==PE_GAME_ADVENTURE&&isfinite(g->hp)&&g->hp>0;}
 static int inventory_slot(const PeGame *g,uint32_t id){
     if(!g||!id)return -1;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].instance_id==id&&g->inventory.slots[i].count)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].instance_id==id&&g->inventory.slots[i].count)return i;
     return -1;
 }
 static int deployed_slot(const PeGame *g,uint32_t id){

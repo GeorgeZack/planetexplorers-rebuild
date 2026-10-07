@@ -22,6 +22,7 @@ DEFAULT_OUTPUT = ROOT / 'rebuild/generated'
 RECIPE_IDS = (1, 7, 8, 19, 20, 58, 152, 13)
 ANNOT_VENDOR_PROTOTYPES = (153, 158, 163, 143, 148)
 RESOURCE_IDS = (268, 271, 273, 279, 280)
+HARVEST_RESOURCE_IDS = (1015, 1037, 1040, 1048, 1146)
 # Catalog presentation only. Equipment identity/defense/wear are owned by the
 # separate guarded export_starter_outfit contract, not generic bag equip logic.
 STARTER_OUTFIT_CATALOG_IDS = (95, 131, 192)
@@ -112,6 +113,25 @@ def describe_source(path: Path) -> dict:
     return {'path': label, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
+def harvest_item_ids(db):
+    """Catalog dependencies of the bounded wild resource production groups."""
+    rows, _ = numeric_rows(db, 'resource', 'ID')
+    result = set()
+    for identity in HARVEST_RESOURCE_IDS:
+        parts = str(rows[identity]['production']).split(';')
+        groups = [parts[0].split(',')]
+        if len(parts) == 3:
+            for part in parts[1:]:
+                tokens = part.split(',')
+                if len(tokens) >= 3 and len(tokens) % 2:
+                    groups.append(tokens[1:])
+        for tokens in groups:
+            if len(tokens) % 2:
+                raise ValueError('Malformed wild harvest production')
+            result.update(integer(value, 'wild resource item', 1) for value in tokens[::2])
+    return result
+
+
 def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]:
     stamina_costs = []
     for path in TOOL_SOURCES:
@@ -194,6 +214,8 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         selected_ids |= vendor_items | {v['item_id'] for rows in medicine_grants.values() for v in rows}
         selected_ids |= {v['item_id'] for v in hunt_return_rewards}
         selected_ids.update(STARTER_OUTFIT_CATALOG_IDS)
+        wild_harvest_items = harvest_item_ids(db)
+        selected_ids.update(wild_harvest_items)
         starter_outfit_catalog = []
         for identity in STARTER_OUTFIT_CATALOG_IDS:
             row = item_rows[identity]
@@ -334,6 +356,7 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
                           'valid_recipes': len(recipe_rows), 'skipped_recipe_metadata': skipped_recipes,
                           'embedded_unique_translations': len(embedded_rows), 'external_unique_translations': len(external_rows),
                           'construction_materials': len(material_rows), 'terrain_resources': len(terrain_resources)},
+        'wild_harvest_item_ids': sorted(wild_harvest_items),
         'selected_item_ids': sorted(selected_ids),
         'selected_recipe_ids': recipe_ids,
         'player_defaults': player_defaults,

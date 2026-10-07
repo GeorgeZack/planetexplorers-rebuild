@@ -98,10 +98,10 @@ static void actual_lifecycle(void){
     CHECK(pe_test_ack_welcome(g)&&pe_game_arrival_complete(g)&&pe_game_accept_supplies(g));g->annot_complete=true;
     /* Bounded prerequisite fixture; inventory contents come through public
      * supply/medicine/item APIs, never fabricated kill or reduced-HP state. */
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     CHECK(pe_adventure_medicine_accept(g)&&pe_inventory_add(&g->inventory,917,5)&&pe_adventure_medicine_complete(g));
     CHECK(pe_inventory_count(&g->inventory,925)==10&&pe_inventory_add(&g->inventory,33,1));
-    int knife_slot=-1;for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==33)knife_slot=i;
+    int knife_slot=-1;for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==33)knife_slot=i;
     CHECK(knife_slot>=0&&pe_game_equip_slot(g,knife_slot));
     CHECK(pe_adventure_hunt_accept(g));
     /* Supported explicit fixture relocation, not proof of walking the route. */

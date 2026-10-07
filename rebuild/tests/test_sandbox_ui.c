@@ -20,7 +20,7 @@ static PeSandboxUIInput click(PeTrainingUIRect r,bool right) {
     i.left_pressed=!right;i.right_pressed=right;return i;
 }
 static int find(const PeGame *g,int id) {
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==id)return i;
     return -1;
 }
 static int visible(PeSandboxUI *u,const PeGame *g,int id) {
@@ -49,7 +49,9 @@ static void deployed_menu(void){
     PeSandboxUIResult r=pe_sandbox_ui_route(&u,g,i);
     assert(r.consume_world&&!r.save&&!r.load&&!r.npc_interaction&&!u.inventory_open&&u.town_open);
     assert(g->deployed[0].quarter_turn==1&&!memcmp(&before,&g->inventory,sizeof before)&&g->money==money);
-    while(pe_inventory_add(&g->inventory,308,1)){}before=g->inventory;
+    /* Charcoal is a Resource: saturate its category, not Equipment. */
+    const int resource_limit=pe_item_def(PE_ITEM_WOOD)->stack_limit;
+    while(pe_inventory_add(&g->inventory,PE_ITEM_WOOD,resource_limit)){}before=g->inventory;
     PeDeployable torch=g->deployed[0];
     i=click(pe_sandbox_ui_supplier_choice(&u,0),false);i.save=i.load=true;i.frame_dt=10;
     r=pe_sandbox_ui_route(&u,g,i);
@@ -101,7 +103,7 @@ static void deployed_menu(void){
     /* Reopening a normal resident must clear any stale deployed selection. */
     u.deploy_entity=id;assert(pe_sandbox_ui_open_town(&u,g,20002,"Cherish Mercer",(Texture2D){0},true));
     assert(!u.deploy_entity&&u.town_entity==20002);pe_sandbox_ui_cancel_town(&u);
-    assert(pe_inventory_remove(&g->inventory,308,1));
+    assert(pe_inventory_remove(&g->inventory,PE_ITEM_WOOD,resource_limit));
     int charcoal=pe_inventory_count(&g->inventory,1001);
     assert(pe_sandbox_ui_open_deployable(&u,g,id));
     i=click(pe_sandbox_ui_supplier_choice(&u,0),false);i.save=i.load=i.inventory=true;i.quickslot=0;
@@ -350,7 +352,7 @@ int main(void) {
     assert(r.consume_world&&r.cursor_visible&&u.inventory_open&&!r.paused);
     /* Source starter scanner updates are not recipes. Use through UI only. */
     int scanner=-1;
-    for(int k=0;k<PE_INVENTORY_SLOTS;k++) {
+    for(int k=0;k<pe_inventory_capacity(&g->inventory);k++) {
         const PeItemDef *d=pe_item_def(g->inventory.slots[k].item_id);
         if(d&&d->learn_kind==PE_LEARN_SCAN&&g->inventory.slots[k].count){scanner=k;break;}
     }
@@ -379,7 +381,7 @@ int main(void) {
     /* Stable drag survives an inventory slot move before release. */
     v=visible(&u,g,12);assert(v>=0);
     pe_sandbox_ui_route(&u,g,click(u.layout.inventory_slots[v],false));assert(u.dragging);
-    int other=(shovel+1)%PE_INVENTORY_SLOTS;
+    int other=pe_inventory_category_start(&g->inventory,pe_item_def(12)->tab)+(shovel+1)%PE_INVENTORY_CATEGORY_SLOTS;
     PeSlot swap=g->inventory.slots[shovel];g->inventory.slots[shovel]=g->inventory.slots[other];g->inventory.slots[other]=swap;
     i=click(u.layout.quickslots[0],false);i.left_pressed=false;i.left_released=true;
     r=pe_sandbox_ui_route(&u,g,i);

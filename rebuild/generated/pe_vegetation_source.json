@@ -345,7 +345,7 @@
   },
   "adapters": [
     "Fixed manually selected fixtures, no random world generation.",
-    "Primary-only deterministic fixture harvest:15 gives238x2,37 gives235x3,40 gives239x4. Source70% alternatives and optional seed drops are omitted.",
+    "Source production probabilities and optional seed/fallback drops are owned by pe_harvest; fixture_item_id/count describe primary metadata only.",
     "146 is decorative only although original resource1146 is gatherable.",
     "Unit native instance transform, immediate native gathering; no full source animation/skill/timing claim."
   ]

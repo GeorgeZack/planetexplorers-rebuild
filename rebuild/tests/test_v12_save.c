@@ -30,7 +30,7 @@ static int awarded_reload(void){
     if(!g||!loaded||fd<0){failures++;goto done;}close(fd);
     CHECK(pe_game_init_mode(g,89,PE_GAME_ADVENTURE));CHECK(pe_test_ack_welcome(g));
     CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};CHECK(pe_adventure_medicine_accept(g));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};CHECK(pe_adventure_medicine_accept(g));
     CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
     CHECK(pe_adventure_hunt_reference(&g->hunt_destination));g->hunt_state=PE_HUNT_RETURN_PENDING;g->hunt_kills=4;
     if(!pe_settlement_configure(assets,error,sizeof error)){CHECK(false);goto done;}
@@ -75,7 +75,7 @@ int pe_test_v12_save(void){
     failures=awarded_reload_isolated();char path[]="/tmp/pe-v12-XXXXXX",error[256];int fd=mkstemp(path);PeGame*g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded);
     unsigned char*bytes=NULL,*after=NULL,*snapshot=NULL;if(fd<0||!g||!loaded){failures++;goto done;}close(fd);
     CHECK(pe_game_init_mode(g,88,PE_GAME_ADVENTURE));CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
     CHECK(pe_adventure_hunt_reference(&g->hunt_destination));g->hunt_kills=4;
     for(unsigned state=PE_HUNT_RETURN_TALK1;state<=PE_HUNT_COMPLETE;state++){
         g->hunt_state=state;CHECK(pe_game_save(g,path,error,sizeof error));CHECK(pe_game_load(loaded,path,error,sizeof error));
@@ -85,7 +85,7 @@ int pe_test_v12_save(void){
     }
     FILE*f=fopen(path,"rb");CHECK(f);if(!f)goto done;CHECK(!fseek(f,0,SEEK_END));long length=ftell(f);rewind(f);CHECK(length>1816);if(length<=1816){fclose(f);goto done;}
     size_t n=(size_t)length;bytes=malloc(n);after=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bytes&&after&&snapshot);if(!bytes||!after||!snapshot){fclose(f);goto done;}
-    CHECK(fread(bytes,1,n,f)==n);fclose(f);CHECK(bytes[4]==18);n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND;size_t state_at=n-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND;
+    CHECK(fread(bytes,1,n,f)==n);fclose(f);CHECK(bytes[4]==19);n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND;size_t state_at=n-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND;
     memcpy(snapshot,loaded,sizeof *loaded);uint64_t hash=pe_world_hash(&loaded->world);
     /* New semantic states are impossible in every older payload version. */
     for(unsigned state=4;state<=6;state++){
@@ -101,7 +101,7 @@ int pe_test_v12_save(void){
     CHECK(pe_game_save(loaded,path,error,sizeof error));
     put32(bytes+pe_test_save_counter_offset(loaded),loaded->inventory.next_instance_id);
     f=fopen(path,"rb");CHECK(f);
-    if(f){size_t got=fread(after,1,n+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+1,f);fclose(f);CHECK(got==n+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND&&after[4]==18&&!memcmp(bytes+16,after+16,n-16));}
+    if(f){size_t got=fread(after,1,n+(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+1,f);fclose(f);CHECK(got==n+(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND&&after[4]==19&&!memcmp(bytes+16,after+16,n-16));}
  done:
     if(fd>=0)unlink(path);
     pe_game_destroy(g);pe_game_destroy(loaded);free(g);free(loaded);free(bytes);free(after);free(snapshot);return failures;

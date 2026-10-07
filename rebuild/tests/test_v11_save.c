@@ -19,7 +19,7 @@ int pe_test_v11_save(void){
     CHECK(pe_game_init_mode(g,74,PE_GAME_ADVENTURE));CHECK(pe_test_ack_welcome(g));
     CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;
     /* Isolate save progression from the starter inventory capacity limit. */
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};
     CHECK(pe_adventure_medicine_accept(g));CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_adventure_medicine_complete(g));
     CHECK(pe_adventure_hunt_reference(&g->hunt_destination));
     for(unsigned kills=0;kills<=4;kills++){
@@ -37,8 +37,8 @@ int pe_test_v11_save(void){
     CHECK(!fseek(f,0,SEEK_END));long length=ftell(f);rewind(f);CHECK(length>1816);if(length<=1816){fclose(f);goto done;}
     size_t n=(size_t)length;bytes=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bytes&&snapshot);
     if(!bytes||!snapshot){fclose(f);goto done;}CHECK(fread(bytes,1,n,f)==n);fclose(f);
-    CHECK(bytes[4]==18);CHECK(pe_game_load(loaded,path,error,sizeof error));memcpy(snapshot,loaded,sizeof *loaded);
-    n-=PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND; /* Exercise literal v11 payload, excluding later append. */
+    CHECK(bytes[4]==19);CHECK(pe_game_load(loaded,path,error,sizeof error));memcpy(snapshot,loaded,sizeof *loaded);
+    n-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND; /* Exercise literal v11 payload, excluding later append. */
     uint64_t hash=pe_world_hash(&loaded->world);
     put32(bytes+n-4,5);CHECK(write_bytes(path,bytes,n,11));CHECK(!pe_game_load(loaded,path,error,sizeof error));
     CHECK(!memcmp(snapshot,loaded,sizeof *loaded)&&pe_world_hash(&loaded->world)==hash);

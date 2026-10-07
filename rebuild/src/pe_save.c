@@ -18,8 +18,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+32768u)
-#define SAVE_VERSION 18u
+#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+65536u)
+#define SAVE_VERSION 19u
+_Static_assert(PE_INVENTORY_SLOTS==32&&PE_INVENTORY_MAX_SLOTS==1680,"Preserve old inventory wire prefix");
 _Static_assert(PE_MAX_PLANTS==32&&PE_SAVE_V18_APPEND==648,"V18 appends bounded vegetation records");
 _Static_assert(PE_TOWN_WALLET_CAPACITY==8&&PE_SAVE_V17_APPEND==100,"V17 appends eight identified wallet records");
 _Static_assert(PE_SAVE_V16_APPEND==4,"V16 appends only raw comfort");
@@ -39,6 +40,7 @@ static uint32_t checksum(const unsigned char *p,size_t n) {uint32_t h=2166136261
 static void err(char *out,size_t cap,const char *msg) {if(out&&cap)snprintf(out,cap,"%s",msg);}
 static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
 static bool valid(const PeGame *g,bool trees,bool outfit) {
+    if(!pe_inventory_state_valid(&g->inventory))return false;
     if(!pe_vegetation_state_valid(g))return false;
     if(!pe_town_wallet_state_valid(g))return false;
     if(outfit&&!pe_outfit_state_valid(g))return false;
@@ -68,7 +70,7 @@ static bool valid(const PeGame *g,bool trees,bool outfit) {
         const PeItemDef *qd=pe_item_def(q.item_id);if(!qd)return false;
         if(qd->stack_limit>1){if(q.instance_id)return false;continue;}
         bool found=false;
-        for(int j=0;j<PE_INVENTORY_SLOTS;j++){
+        for(int j=0;j<pe_inventory_capacity(&g->inventory);j++){
             PeSlot s=g->inventory.slots[j];if(s.count>0&&s.item_id==q.item_id&&s.instance_id==q.instance_id){found=true;break;}
         }
         if(!found)return false;
@@ -95,7 +97,7 @@ static bool valid(const PeGame *g,bool trees,bool outfit) {
            !(g->mode==PE_GAME_ADVENTURE&&(def->equip_position&16)&&(def->item_type==9||def->item_type==10||def->item_type==14))))return false;
     }
     if(g->mode==PE_GAME_LEGACY&&pe_world_collides(&g->world,g->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT))return false;
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++) {
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++) {
         PeSlot s=g->inventory.slots[i];
         if(s.count==0) {if(s.item_id!=0||s.instance_id||s.durability!=0)return false;continue;}
         const PeItemDef *d=pe_item_def(s.item_id);
@@ -152,10 +154,23 @@ static bool valid(const PeGame *g,bool trees,bool outfit) {
     }
     return true;
 }
+/* Keep the old32-slot wire layout. Categorized storage uses a bounded compact
+ * projection here; v19's full suffix owns actual category cell positions.
+ * This is not a promise that truncating a >32-item save makes an old save. */
+static void inventory_prefix(const PeInventory *inventory,PeSlot slots[PE_INVENTORY_SLOTS]){
+    memset(slots,0,sizeof(PeSlot)*PE_INVENTORY_SLOTS);
+    if(!inventory->categorized){memcpy(slots,inventory->slots,sizeof(PeSlot)*PE_INVENTORY_SLOTS);return;}
+    int count=0;
+    for(int i=0;i<PE_INVENTORY_MAX_SLOTS&&count<PE_INVENTORY_SLOTS;i++)
+        if(inventory->slots[i].count)slots[count++]=inventory->slots[i];
+}
+static bool same_slot(PeSlot a,PeSlot b){return a.item_id==b.item_id&&a.count==b.count&&a.instance_id==b.instance_id&&
+    memcmp(&a.durability,&b.durability,sizeof a.durability)==0;}
 static void encode(Stream *s,const PeGame *g) {
+    PeSlot prefix[PE_INVENTORY_SLOTS];inventory_prefix(&g->inventory,prefix);
     put32(s,g->world.seed);put32(s,g->world.revision);
     putvec(s,g->player);putvec(s,g->velocity);put32(s,g->grounded?1u:0u);putf(s,g->yaw);putf(s,g->pitch);putd(s,g->game_seconds);
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++){put32(s,(uint32_t)g->inventory.slots[i].item_id);put32(s,(uint32_t)g->inventory.slots[i].count);}
+    for(int i=0;i<PE_INVENTORY_SLOTS;i++){put32(s,(uint32_t)prefix[i].item_id);put32(s,(uint32_t)prefix[i].count);}
     put32(s,(uint32_t)g->craft.recipe_id);put32(s,(uint32_t)g->craft.batches_left);putf(s,g->craft.elapsed);
     put32(s,(uint32_t)g->block_count);
     for(int i=0;i<g->block_count;i++){put32(s,(uint32_t)g->blocks[i].x);put32(s,(uint32_t)g->blocks[i].y);put32(s,(uint32_t)g->blocks[i].z);put32(s,(uint32_t)g->blocks[i].item_id);}
@@ -167,7 +182,7 @@ static void encode(Stream *s,const PeGame *g) {
     /* Version 2 extends the v1 payload without reinterpreting its prefix. */
     put32(s,g->world.source);put32(s,(uint32_t)g->world.origin_x);put32(s,(uint32_t)g->world.origin_y);put32(s,(uint32_t)g->world.origin_z);
     put32(s,g->inventory.next_instance_id);
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++){put32(s,g->inventory.slots[i].instance_id);putf(s,g->inventory.slots[i].durability);}
+    for(int i=0;i<PE_INVENTORY_SLOTS;i++){put32(s,prefix[i].instance_id);putf(s,prefix[i].durability);}
     put32(s,g->equipped_instance_id);put32(s,g->rng_state);
     putf(s,g->stamina);putf(s,g->stamina_max);putf(s,g->stamina_regen);putf(s,g->stamina_recover_delay);putf(s,g->stamina_idle);putf(s,g->tool_cooldown);
     put32(s,(uint32_t)g->craft.batches_pending);putf(s,g->craft.delivery_elapsed);
@@ -244,6 +259,11 @@ static void encode(Stream *s,const PeGame *g) {
     for(unsigned i=0;i<PE_MAX_PLANTS;i++){
         const PePlant *p=&g->vegetation.plants[i];
         put32(s,p->prototype_id);putvec(s,p->position);put32(s,p->depleted?1u:0u);
+    }
+    put32(s,g->inventory.categorized?1u:0u);put32(s,PE_INVENTORY_MAX_SLOTS);
+    for(unsigned i=0;i<PE_INVENTORY_MAX_SLOTS;i++){
+        PeSlot slot=g->inventory.slots[i];put32(s,(uint32_t)slot.item_id);put32(s,(uint32_t)slot.count);
+        put32(s,slot.instance_id);putf(s,slot.durability);
     }
 }
 /* Decode signed-domain values by range check before C conversion. */
@@ -376,11 +396,24 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
             uint32_t depleted=get32(s);if(depleted>1){s->ok=false;return;}p->depleted=depleted!=0;
         }
     }
+    if(version>=19){
+        PeSlot before[PE_INVENTORY_SLOTS],expected[PE_INVENTORY_SLOTS];memcpy(before,g->inventory.slots,sizeof before);
+        uint32_t categorized=get32(s),count=get32(s);
+        if(categorized>1||count!=PE_INVENTORY_MAX_SLOTS||((categorized!=0)!=(g->mode==PE_GAME_ADVENTURE))){s->ok=false;return;}
+        g->inventory.categorized=categorized!=0;
+        for(unsigned i=0;i<PE_INVENTORY_MAX_SLOTS;i++){
+            PeSlot *slot=&g->inventory.slots[i];slot->item_id=getint(s);slot->count=getint(s);
+            slot->instance_id=get32(s);slot->durability=getf(s);
+        }
+        inventory_prefix(&g->inventory,expected);
+        for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)if(!same_slot(before[i],expected[i]))s->ok=false;
+    }
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");
+    if(g&&g->inventory.categorized!=(g->mode==PE_GAME_ADVENTURE)){err(error,capacity,"Inventory layout does not match game mode.");return false;}
     if(!g||!path||!path[0]||!valid(g,true,true)){err(error,capacity,"Invalid save path or game state.");return false;}
-    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+32768u;
+    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+65536u;
     unsigned char *data=malloc(buffer_size);
     if(!data){err(error,capacity,"Out of memory.");return false;}
     Stream s={data,16,buffer_size,true};encode(&s,g);
@@ -417,6 +450,9 @@ bool pe_game_load(PeGame *g,const char *path,char *error,size_t capacity) {
         /* Older native saves never recorded vendor money. Archived profile
          * defaults are the bounded migration, not reconstructed transactions. */
         if(ok&&version<17)ok=pe_town_wallet_init(next)&&pe_town_wallet_state_valid(next);}
+    /* Validate old flat storage before category migration. Preserve every
+     * exact instance, stack quantity and ordering within its source tab. */
+    if(ok&&version<19&&next->mode==PE_GAME_ADVENTURE)ok=pe_inventory_enable_categories(&next->inventory);
     if(ok&&version==4&&next->mode==PE_GAME_ADVENTURE){
         PeVec3 previous=next->player;
         PeSandboxCollision *collision=pe_sandbox_collision_create();

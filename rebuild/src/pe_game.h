@@ -8,7 +8,10 @@
 #include "pe_stamina_recovery.h"
 #include "pe_revival.h"
 #include "pe_sandbox_collision.h"
-#define PE_INVENTORY_SLOTS 32
+#define PE_INVENTORY_SLOTS 32 /* Literal v1-v18 wire prefix and Legacy capacity. */
+#define PE_INVENTORY_CATEGORIES 4
+#define PE_INVENTORY_CATEGORY_SLOTS 420
+#define PE_INVENTORY_MAX_SLOTS (PE_INVENTORY_CATEGORIES*PE_INVENTORY_CATEGORY_SLOTS)
 #define PE_MAX_BLOCKS 256
 #define PE_MAX_TREES 16
 #define PE_MAX_B45_CELLS 1024
@@ -39,6 +42,8 @@ typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPAC
 #define PE_SAVE_V17_APPEND 100u
 /* V18 retains v17, then fixture flag/count and32 prototype/XYZ/depletion records. */
 #define PE_SAVE_V18_APPEND 648u
+/* V19 appends inventory layout/count and1680 full16-byte slot records. */
+#define PE_SAVE_V19_APPEND (8u + 16u * PE_INVENTORY_MAX_SLOTS)
 #define PE_MAX_PLANTS 32
 typedef struct { uint32_t prototype_id; PeVec3 position; bool depleted; } PePlant;
 typedef struct { bool installed; unsigned count; PePlant plants[PE_MAX_PLANTS]; } PeVegetation;
@@ -60,7 +65,11 @@ typedef struct { int item_id; uint32_t instance_id; } PeQuickslot;
 #define PE_JUMP_STAMINA 10.0f
 /* Non-stack items have stable IDs; durable equipment preserves wear per instance. */
 typedef struct { int item_id, count; uint32_t instance_id; float durability; } PeSlot;
-typedef struct { PeSlot slots[PE_INVENTORY_SLOTS]; uint32_t next_instance_id; } PeInventory;
+typedef struct {
+    PeSlot slots[PE_INVENTORY_MAX_SLOTS];
+    uint32_t next_instance_id;
+    bool categorized; /* Adventure: four independent source category lists. */
+} PeInventory;
 /* Source repurchase lists are session-only. Never serialize these records;
  * each unstackable remains the sole owner of its original instance/wear. */
 #define PE_TOWN_BUYBACK_CAPACITY 32
@@ -172,6 +181,23 @@ bool pe_game_step_collision(PeGame *game, PeInput input, float dt, const PeSandb
  * Requires finite XZ speed<=100, Y=0; invalid input leaves game unchanged. */
 bool pe_game_step_collision_motion(PeGame *game, PeInput input, float dt,
                                   const PeSandboxCollision *collision, PeVec3 motion);
+bool pe_inventory_state_valid(const PeInventory *inventory);
+int pe_inventory_first_empty(const PeInventory *inventory, int item_id);
+bool pe_inventory_insert(PeInventory *inventory, PeSlot slot, int *destination);
+int pe_inventory_capacity(const PeInventory *inventory);
+int pe_inventory_category_start(const PeInventory *inventory, int category);
+int pe_inventory_category_capacity(const PeInventory *inventory, int category);
+bool pe_inventory_slot_valid(const PeInventory *inventory, int index);
+/* Stable migration: category-local ordering, exact identities and wear survive. */
+bool pe_inventory_enable_categories(PeInventory *inventory);
+/* Split to the first empty same-category cell; failure leaves both outputs intact. */
+bool pe_inventory_split(PeInventory *inventory, int from, int count, int *destination);
+/* Source bag drag: move or exchange within one category, including equal items. */
+bool pe_inventory_move(PeInventory *inventory, int from, int to);
+/* Explicit convenience merge, also performed by source Sort/Reduce. */
+bool pe_inventory_merge(PeInventory *inventory, int from, int to);
+/* Source Reduce then ascending sortLabel/prototype/count, stable equal ties. */
+bool pe_inventory_sort(PeInventory *inventory, int category);
 int pe_inventory_count(const PeInventory *inventory, int item_id);
 bool pe_inventory_add(PeInventory *inventory, int item_id, int count);
 bool pe_inventory_remove(PeInventory *inventory, int item_id, int count);

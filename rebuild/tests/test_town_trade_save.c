@@ -8,7 +8,7 @@
 static int failures;
 #define CHECK(c) do { if(!(c)){fprintf(stderr,"town trade lifecycle:%d %s\n",__LINE__,#c);failures++;} } while(0)
 static int slot_for(const PeGame *g,int item){
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==item)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count&&g->inventory.slots[i].item_id==item)return i;
     return -1;
 }
 int pe_test_town_trade_save(void){

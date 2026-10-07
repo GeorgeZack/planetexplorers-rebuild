@@ -1,4 +1,5 @@
 #include "pe_vegetation.h"
+#include "pe_harvest.h"
 #include "pe_settlement.h"
 #include "../generated/pe_vegetation_source.h"
 #include "../generated/pe_adventure_population.h"
@@ -62,7 +63,7 @@ bool pe_vegetation_pick(const PeGame *g,PeVec3 origin,PeVec3 direction,float obs
     if(found==PE_MAX_PLANTS)return false;
     *index=found;*distance=best;return true;
 }
-static const char *harvest_plan(const PeGame *g,unsigned index,const PeSandboxCollision *collision,PeInventory *inventory){
+static const char *harvest_plan(const PeGame *g,unsigned index,const PeSandboxCollision *collision,PeInventory *inventory,uint32_t *rng){
     if(!alive(g)||!pe_vegetation_state_valid(g)||index>=g->vegetation.count||!collision||!pe_sandbox_collision_stats(collision).generation)return "Gathering is unavailable.";
     const PePlant *p=&g->vegetation.plants[index];const PePlantSource *s=pe_vegetation_source(p->prototype_id);
     if(!s->harvestable)return "This foliage is decorative.";
@@ -73,19 +74,18 @@ static const char *harvest_plan(const PeGame *g,unsigned index,const PeSandboxCo
     PeVec3 delta={target.x-eye.x,target.y-eye.y,target.z-eye.z};
     double length=hypot(hypot((double)delta.x,delta.y),delta.z);
     if(length>0.01&&pe_sandbox_collision_ray_perception(collision,eye,delta,(float)length-.01f).hit)return "A surface blocks this plant.";
-    *inventory=g->inventory;
-    if(!s->drop_count||s->drop_count>INT_MAX||!pe_inventory_add(inventory,s->item_id,(int)s->drop_count))return "Make room for gathered plants.";
+    *inventory=g->inventory;*rng=g->rng_state;
+    if(!pe_harvest_grant(inventory,rng,p->prototype_id,1,1,0,false))return "Make room for gathered plants.";
     return NULL;
 }
 bool pe_vegetation_can_harvest(const PeGame *g,unsigned index,const PeSandboxCollision *collision){
-    PeInventory inventory;return !harvest_plan(g,index,collision,&inventory);
+    PeInventory inventory;uint32_t rng;return !harvest_plan(g,index,collision,&inventory,&rng);
 }
 bool pe_vegetation_harvest(PeGame *g,unsigned index,const PeSandboxCollision *collision){
-    PeInventory inventory;const char *error=harvest_plan(g,index,collision,&inventory);
+    PeInventory inventory;uint32_t rng;const char *error=harvest_plan(g,index,collision,&inventory,&rng);
     if(error){if(g)snprintf(g->message,sizeof g->message,"%s",error);return false;}
-    const PePlantSource *s=pe_vegetation_source(g->vegetation.plants[index].prototype_id);
-    g->inventory=inventory;g->vegetation.plants[index].depleted=true;if(g->gathered<UINT32_MAX)g->gathered++;
-    snprintf(g->message,sizeof g->message,"Gathered %u %s.",s->drop_count,pe_item_def(s->item_id)->name);return true;
+    g->inventory=inventory;g->rng_state=rng;g->vegetation.plants[index].depleted=true;if(g->gathered<UINT32_MAX)g->gathered++;
+    snprintf(g->message,sizeof g->message,"Gathered wild plant resources.");return true;
 }
 static bool resident_clear(const PeGame *g,PeVec3 p){
     if(pe_settlement_matches(&g->world)){

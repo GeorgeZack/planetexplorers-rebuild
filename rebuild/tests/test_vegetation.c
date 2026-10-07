@@ -1,4 +1,5 @@
 #include "pe_vegetation.h"
+#include "pe_harvest.h"
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
@@ -12,7 +13,7 @@ static void fresh(PeGame *g){
         pe_world_set(&g->world,x,y,z,(PeVoxel){y<10?255:0,y<10?PE_MAT_DIRT:PE_MAT_AIR});
     g->player=(PeVec3){32,9.6f,32};g->velocity=(PeVec3){0};g->block_count=0;g->cell_count=0;g->tree_count=0;
     memset(g->blocks,0,sizeof g->blocks);memset(g->cells,0,sizeof g->cells);memset(g->trees,0,sizeof g->trees);
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=0;g->shield_instance_id=0;
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=true};g->equipped_instance_id=0;g->shield_instance_id=0;
     memset(g->quickslots,0,sizeof g->quickslots);memset(&g->craft,0,sizeof g->craft);
 }
 static bool unchanged(const PeGame *g,const PeGame *before){
@@ -62,12 +63,16 @@ static void planting(PeGame *g,PeGame *before,PeGame *copy){
     memcpy(before,g,sizeof *g);CHECK(!pe_vegetation_install_fixture(g,g->player)&&unchanged(g,before));
 }
 static void harvest(PeGame *g,PeGame *before,PeSandboxCollision *c){
-    const uint32_t prototypes[]={15,37,40};const int ids[]={238,235,239};const unsigned counts[]={2,3,4};
+    const uint32_t prototypes[]={15,37,40};const unsigned counts[]={2,3,4};
     for(unsigned i=0;i<3;i++){
         fresh(g);one(g,prototypes[i]);update(g,c);uint32_t rng=g->rng_state,gathered=g->gathered;
         memcpy(before,g,sizeof *g);CHECK(pe_vegetation_can_harvest(g,0,c)&&!memcmp(before,g,sizeof *g));
+        PeInventory expected=g->inventory;uint32_t expected_rng=rng;
+        CHECK(pe_harvest_grant(&expected,&expected_rng,prototypes[i],1,1,0,false));
         CHECK(pe_vegetation_harvest(g,0,c)&&g->vegetation.plants[0].depleted);
-        CHECK(pe_inventory_count(&g->inventory,ids[i])==(int)counts[i]&&g->rng_state==rng&&g->gathered==gathered+1);
+        CHECK(!memcmp(&expected,&g->inventory,sizeof expected)&&g->rng_state==expected_rng&&g->gathered==gathered+1);
+        int total=0;for(int slot=0;slot<pe_inventory_capacity(&g->inventory);slot++)total+=g->inventory.slots[slot].count;
+        CHECK(total>=(int)counts[i]&&total<=(int)counts[i]+1);
         CHECK(pe_inventory_count(&g->inventory,917)==0); /* No tutorial/quest grants. */
         reject_harvest(g,before,c,0);
     }
@@ -88,8 +93,8 @@ static void harvest(PeGame *g,PeGame *before,PeSandboxCollision *c){
     g->trees[0]=(PeTree){{33.1f,9.5f,31.6f},8,255};g->tree_count=1;update(g,c);reject_harvest(g,before,c,0);
     g->tree_count=0;memset(g->trees,0,sizeof g->trees);update(g,c);
     /* Capacity failure does not deplete, count an acquisition, or consume RNG. */
-    CHECK(pe_inventory_add(&g->inventory,12,32));reject_harvest(g,before,c,0);
-    g->inventory.slots[31]=(PeSlot){0};CHECK(pe_vegetation_harvest(g,0,c));
+    CHECK(pe_inventory_add(&g->inventory,279,pe_item_def(279)->stack_limit*PE_INVENTORY_CATEGORY_SLOTS));reject_harvest(g,before,c,0);
+    g->inventory.slots[pe_inventory_category_start(&g->inventory,2)+PE_INVENTORY_CATEGORY_SLOTS-1]=(PeSlot){0};CHECK(pe_vegetation_harvest(g,0,c));
     CHECK(pe_inventory_count(&g->inventory,238)==2);
 }
 static void picking(PeGame *g,PeSandboxCollision *c){

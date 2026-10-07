@@ -4,7 +4,7 @@
 #include <string.h>
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"medicine:%d %s\n",__LINE__,#c);failures++;}}while(0)
-static int slot(const PeGame *g,int id){for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;return -1;}
+static int slot(const PeGame *g,int id){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==id&&g->inventory.slots[i].count)return i;return -1;}
 static void empty(PeGame *g){memset(g->inventory.slots,0,sizeof g->inventory.slots);}
 int pe_test_adventure_medicine(void){
     PeGame *g=calloc(1,sizeof *g);if(!g)return 1;
@@ -15,7 +15,7 @@ int pe_test_adventure_medicine(void){
     CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));
     CHECK(!pe_adventure_medicine_accept(g));g->annot_complete=true;
     g->hp=0;CHECK(!pe_adventure_medicine_accept(g));g->hp=NAN;CHECK(!pe_adventure_medicine_accept(g));g->hp=g->max_hp;
-    empty(g);CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_SLOTS));initial=g->inventory;
+    empty(g);CHECK(pe_inventory_add(&g->inventory,877,PE_INVENTORY_CATEGORY_SLOTS));initial=g->inventory;
     CHECK(!pe_adventure_medicine_accept(g));CHECK(g->medicine_state==PE_MEDICINE_NONE&&!memcmp(&initial,&g->inventory,sizeof initial));
     empty(g);CHECK(pe_adventure_medicine_accept(g));CHECK(g->medicine_state==PE_MEDICINE_ACTIVE);
     CHECK(pe_inventory_count(&g->inventory,877)==1);CHECK(!pe_game_recipe_known(g,337));
@@ -33,12 +33,12 @@ int pe_test_adventure_medicine(void){
     CHECK(pe_adventure_medicine_ready(g));CHECK(pe_inventory_remove(&g->inventory,917,1));
     CHECK(!pe_adventure_medicine_ready(g));initial=g->inventory;CHECK(!pe_adventure_medicine_complete(g));CHECK(!memcmp(&initial,&g->inventory,sizeof initial));
     CHECK(pe_inventory_add(&g->inventory,917,1));
-    empty(g);CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_inventory_add(&g->inventory,12,PE_INVENTORY_SLOTS-1));
+    empty(g);CHECK(pe_inventory_add(&g->inventory,917,5));CHECK(pe_inventory_add(&g->inventory,877,PE_INVENTORY_CATEGORY_SLOTS-1));
     initial=g->inventory;CHECK(pe_adventure_medicine_ready(g));CHECK(!pe_adventure_medicine_complete(g));
     CHECK(g->medicine_state==PE_MEDICINE_ACTIVE&&!memcmp(&initial,&g->inventory,sizeof initial));
     /* Removing five drinks creates one slot. The first reward fits; failure of
      * the second must roll back the removal, first reward and instance IDs. */
-    CHECK(pe_inventory_remove(&g->inventory,12,1));uint32_t money=g->money;uint32_t crafted=g->crafted;
+    CHECK(pe_inventory_remove(&g->inventory,877,1));uint32_t money=g->money;uint32_t crafted=g->crafted;
     CHECK(pe_adventure_medicine_complete(g));CHECK(g->medicine_state==PE_MEDICINE_COMPLETE);
     CHECK(pe_inventory_count(&g->inventory,917)==0&&pe_inventory_count(&g->inventory,925)==10&&pe_inventory_count(&g->inventory,554)==1);
     CHECK(g->money==money&&g->crafted==crafted&&g->adventure_mission==PE_ADVENTURE_SUPPLIES);

@@ -83,7 +83,7 @@ static void report(const char *path,const PeGame *g){
         path,g->mode,pe_world_width(&g->world),pe_world_size_y(&g->world),pe_world_depth(&g->world),g->world.origin_x,g->world.origin_y,g->world.origin_z,
         g->welcome_page,g->arrival_complete,g->supplies_claimed,g->annot_complete,g->adventure_mission,g->money,g->player.x,g->player.y,g->player.z,
         g->player.x+g->world.origin_x,g->player.y+g->world.origin_y,g->player.z+g->world.origin_z,g->yaw,g->pitch);
-    printf("  inventory:");for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count)printf(" %dx%d",g->inventory.slots[i].item_id,g->inventory.slots[i].count);
+    printf("  inventory:");for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].count)printf(" %dx%d",g->inventory.slots[i].item_id,g->inventory.slots[i].count);
     printf("\n  changed stock:");for(int i=0;i<PE_TOWN_STOCK_CAPACITY;i++)if(g->town_stock[i].initialized)printf(" %d:%u",i,g->town_stock[i].remaining);putchar('\n');
 }
 int main(int argc,char **argv){

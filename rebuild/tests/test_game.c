@@ -27,7 +27,7 @@ static void advance(PeGame *g,float seconds){
 }
 static int add_tool(PeGame *g,int item){
     CHECK(pe_inventory_add(&g->inventory,item,1));
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==item){CHECK(pe_game_equip_slot(g,i));return i;}
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==item){CHECK(pe_game_equip_slot(g,i));return i;}
     CHECK(false);return -1;
 }
 static bool mine_until_drop(PeGame *g,PeVec3 direction,int item){
@@ -206,7 +206,7 @@ static void craft_tests(PeGame *g){
     for(int i=0;i<r->ingredient_count;i++)CHECK(pe_inventory_add(&g->inventory,r->ingredients[i].item_id,r->ingredients[i].count));
     CHECK(pe_game_start_craft(g,r->id,1));
     const PeItemDef *wood=pe_item_def(PE_ITEM_WOOD);
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)g->inventory.slots[i]=(PeSlot){.item_id=PE_ITEM_WOOD,.count=wood->stack_limit};
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)g->inventory.slots[i]=(PeSlot){.item_id=PE_ITEM_WOOD,.count=wood->stack_limit};
     before=g->inventory;
     for(int i=0;i<frames;i++)pe_game_step(g,(PeInput){0},PE_FIXED_DT);
     CHECK(g->craft.batches_left==1);CHECK(memcmp(&before,&g->inventory,sizeof before)==0);
@@ -287,7 +287,7 @@ static void instance_tool_tests(PeGame *g){
     CHECK(pe_game_equip_slot(g,0));CHECK(pe_game_equipped_tool(g)->durability==3553);
     pe_game_unequip(g);CHECK(!pe_game_equipped_tool(g));
     CHECK(pe_inventory_add(&g->inventory,308,1));CHECK(pe_inventory_add(&g->inventory,1,1));
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==308||g->inventory.slots[i].item_id==1)CHECK(!pe_game_equip_slot(g,i));
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==308||g->inventory.slots[i].item_id==1)CHECK(!pe_game_equip_slot(g,i));
     flat(g);settle(g);add_tool(g,26);g->tree_count=1;g->trees[0]=(PeTree){{33,g->player.y,32},8,255};
     for(int i=0;i<6;i++){g->tool_cooldown=0;CHECK(pe_game_gather(g));}
     CHECK(g->trees[0].remaining==0&&g->trees[0].health==0);CHECK(pe_inventory_count(&g->inventory,PE_ITEM_WOOD)==8);
@@ -303,7 +303,7 @@ static void pending_craft_tests(PeGame *g){
     CHECK(pe_game_cancel_craft(g));CHECK(g->craft.recipe_id==0);CHECK(pe_inventory_count(&g->inventory,PE_ITEM_WOOD)==30);
     CHECK(pe_game_start_craft(g,1,3));advance(g,3.25f);CHECK(g->craft.batches_pending==1);before=g->inventory;
     const PeItemDef *wood=pe_item_def(PE_ITEM_WOOD);
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)g->inventory.slots[i]=(PeSlot){.item_id=PE_ITEM_WOOD,.count=wood->stack_limit};
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)g->inventory.slots[i]=(PeSlot){.item_id=PE_ITEM_WOOD,.count=wood->stack_limit};
     PeInventory full=g->inventory;PeCraftJob job=g->craft;
     CHECK(!pe_game_cancel_craft(g));CHECK(memcmp(&full,&g->inventory,sizeof full)==0&&memcmp(&job,&g->craft,sizeof job)==0);
     g->inventory=before;CHECK(pe_game_cancel_craft(g));CHECK(pe_inventory_count(&g->inventory,12)==3);CHECK(pe_inventory_count(&g->inventory,PE_ITEM_WOOD)==20);
@@ -324,7 +324,7 @@ static void imported_world_tests(PeGame *g){
     CHECK(pe_game_set_world(g,world,(PeVec3){32,10,32}));
     g->tool_cooldown=0;PeInventory empty_before=g->inventory;uint32_t rng_before=g->rng_state;uint64_t hash_before=pe_world_hash(&g->world);
     CHECK(pe_game_mine(g,eye(g),(PeVec3){1,-1,0}));CHECK(pe_world_hash(&g->world)!=hash_before&&g->rng_state==rng_before);
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)CHECK(g->inventory.slots[i].count==empty_before.slots[i].count);
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)CHECK(g->inventory.slots[i].count==empty_before.slots[i].count);
     for(int i=0;i<PE_VOXEL_COUNT;i++)if(g->world.voxels[i].volume)g->world.voxels[i].material=255;
     g->tool_cooldown=0;*before=*g;CHECK(!pe_game_mine(g,eye(g),(PeVec3){1,-1,0}));
     CHECK(pe_world_hash(&g->world)==pe_world_hash(&before->world)&&memcmp(&g->inventory,&before->inventory,sizeof g->inventory)==0);
@@ -361,7 +361,7 @@ static void block_game_tests(PeGame *g){
     CHECK(g->player.x<=32.701f);
     /* Refund overflow leaves every cell untouched. */
     const PeItemDef *wood=pe_item_def(PE_ITEM_WOOD);
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)g->inventory.slots[i]=(PeSlot){.item_id=PE_ITEM_WOOD,.count=wood->stack_limit};
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)g->inventory.slots[i]=(PeSlot){.item_id=PE_ITEM_WOOD,.count=wood->stack_limit};
     before=g->inventory;CHECK(!pe_game_remove_cells(g,all,4));CHECK(g->cell_count==4&&memcmp(&before,&g->inventory,sizeof before)==0);
 }
 static void placement_surface_tests(PeGame *g){
@@ -607,7 +607,7 @@ static void save_tests(PeGame *g){
     free(copy);unlink(path);
 }
 static int find_slot(const PeGame *g,int item){
-    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].item_id==item&&g->inventory.slots[i].count>0)return i;
+    for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==item&&g->inventory.slots[i].count>0)return i;
     return -1;
 }
 static void adventure_tests(PeGame *g){
@@ -622,10 +622,10 @@ static void adventure_tests(PeGame *g){
     CHECK(pe_inventory_add(&g->inventory,973,1));scan=find_slot(g,973);
     CHECK(!pe_game_use_slot(g,scan)&&pe_inventory_count(&g->inventory,973)==1);
     CHECK(pe_test_ack_welcome(g));CHECK(pe_game_arrival_complete(g));CHECK(!pe_game_arrival_complete(g));
-    CHECK(pe_inventory_add(&g->inventory,308,2)); /* 33 total entries cannot fit32. */
+    int added=0;while(pe_inventory_first_empty(&g->inventory,308)>=0){CHECK(pe_inventory_add(&g->inventory,308,1));added++;} /* Fill Item category before atomic supplies. */
     PeInventory before=g->inventory;CHECK(!pe_game_accept_supplies(g));
     CHECK(!g->supplies_claimed&&memcmp(&before,&g->inventory,sizeof before)==0);
-    CHECK(pe_inventory_remove(&g->inventory,308,2));CHECK(pe_game_accept_supplies(g));
+    CHECK(pe_inventory_remove(&g->inventory,308,added));CHECK(pe_game_accept_supplies(g));
     before=g->inventory;CHECK(!pe_game_accept_supplies(g));CHECK(memcmp(&before,&g->inventory,sizeof before)==0);
     CHECK(g->known_recipe_count==0&&pe_inventory_count(&g->inventory,12)==1);
     int book=find_slot(g,406);CHECK(book>=0);CHECK(pe_game_quickslot_assign(g,2,book));
@@ -650,7 +650,7 @@ static void furniture_shortcut_tests(PeGame *g){
     char path[]="/tmp/pe-furniture-shortcut-XXXXXX",error[200];int fd=mkstemp(path);
     CHECK(fd>=0);if(fd<0)return;close(fd);
     PeGame *loaded=calloc(1,sizeof *loaded);CHECK(loaded!=NULL);if(!loaded){unlink(path);return;}
-    flat(g);settle(g);g->mode=PE_GAME_ADVENTURE;CHECK(pe_outfit_init(g));CHECK(pe_test_ack_welcome(g));
+    flat(g);settle(g);g->mode=PE_GAME_ADVENTURE;CHECK(pe_inventory_enable_categories(&g->inventory));CHECK(pe_outfit_init(g));CHECK(pe_test_ack_welcome(g));
     CHECK(pe_inventory_add(&g->inventory,PE_ITEM_FENCE,2));CHECK(pe_inventory_add(&g->inventory,PE_ITEM_LADDER,1));
     CHECK(pe_game_quickslot_assign(g,0,0));CHECK(pe_game_quickslot_assign(g,1,1));CHECK(pe_game_quickslot_assign(g,2,2));
     uint32_t other_fence=g->quickslots[1].instance_id;
@@ -724,7 +724,7 @@ static void tree_save_migration_tests(PeGame *g){
     CHECK(fd>=0);if(fd<0)return;close(fd);
     PeGame *before=malloc(sizeof *before),*loaded=calloc(1,sizeof *loaded);
     CHECK(before&&loaded);if(!before||!loaded){free(before);free(loaded);unlink(path);return;}
-    flat(g);g->world.depth=PE_WORLD_Z;g->mode=PE_GAME_ADVENTURE;CHECK(pe_outfit_init(g));CHECK(pe_test_ack_welcome(g));
+    flat(g);g->world.depth=PE_WORLD_Z;g->mode=PE_GAME_ADVENTURE;CHECK(pe_inventory_enable_categories(&g->inventory));CHECK(pe_outfit_init(g));CHECK(pe_test_ack_welcome(g));
     g->tree_count=1;g->trees[0]=(PeTree){{40.6f,9.5f,40.7f},8,255};
     g->player=(PeVec3){44,10.05f,40.5f};g->velocity=(PeVec3){0,-1,0};g->grounded=false;
     *before=*g;
@@ -776,7 +776,7 @@ static void tree_save_migration_tests(PeGame *g){
 }
 static void medpack_tests(PeGame *g){
     CHECK(pe_game_init_mode(g,81,PE_GAME_ADVENTURE));
-    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
+    g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=g->mode==PE_GAME_ADVENTURE};g->equipped_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     g->hp=100;CHECK(pe_inventory_add(&g->inventory,925,3)&&pe_inventory_add(&g->inventory,916,2));
     CHECK(pe_game_quickslot_assign(g,0,find_slot(g,925))&&pe_game_quickslot_assign(g,1,find_slot(g,925)));
     CHECK(pe_game_quickslot_assign(g,2,find_slot(g,916)));

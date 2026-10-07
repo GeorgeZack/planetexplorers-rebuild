@@ -134,7 +134,8 @@ PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *u,PeGame *g,float dt) {
         .right_pressed=IsMouseButtonPressed(MOUSE_BUTTON_RIGHT),.inventory=keys&&IsKeyPressed(KEY_I),
         .character=keys&&IsKeyPressed(KEY_C),.missions=keys&&IsKeyPressed(KEY_Q),.replicator=keys&&IsKeyPressed(KEY_Y),
         .escape=IsKeyPressed(KEY_ESCAPE),.tab=keys&&IsKeyPressed(KEY_TAB),.save=keys&&IsKeyPressed(KEY_F9),
-        .load=keys&&IsKeyPressed(KEY_F10),.backspace=IsKeyPressed(KEY_BACKSPACE),
+        .load=keys&&IsKeyPressed(KEY_F10),.page_up=IsKeyPressed(KEY_PAGE_UP),.page_down=IsKeyPressed(KEY_PAGE_DOWN),
+        .merge_stacks=IsKeyDown(KEY_LEFT_SHIFT)||IsKeyDown(KEY_RIGHT_SHIFT),.backspace=IsKeyPressed(KEY_BACKSPACE),
         .undo_build=keys&&control&&IsKeyPressed(KEY_Z),.redo_build=keys&&control&&IsKeyPressed(KEY_X),
         .build_history_chord=control&&history_keys,.build_history_keys_down=history_keys,
         .advance=IsKeyPressed(KEY_ENTER)||IsKeyPressed(KEY_SPACE),.quickslot=-1,.typed=typed};
@@ -185,7 +186,7 @@ static void hud(const PeSandboxUI *u,const PeGame *g,bool building) {
     for(int k=0;k<9;k++) {
         PeTrainingUIRect r=l->quickslots[k];
         const int id=g->quickslots[k].item_id;int count=0;
-        for(int slot=0;slot<PE_INVENTORY_SLOTS;slot++) {
+        for(int slot=0;slot<pe_inventory_capacity(&g->inventory);slot++) {
             const PeSlot *owned=&g->inventory.slots[slot];
             if(owned->count>0&&owned->item_id==id&&owned->instance_id==g->quickslots[k].instance_id)count+=owned->count;
         }
@@ -267,14 +268,30 @@ static void inventory(const PeSandboxUI *u,const PeGame *g) {
         const PeSlot *s=index>=0?&g->inventory.slots[index]:NULL;item(u,s?s->item_id:0,s?s->count:0,r,true,WHITE);
         if(index>=0&&index==u->selected_slot)DrawRectangleLinesEx(rect(r),z,blue);
     }
-    int n=pe_sandbox_ui_inventory_count(u,g),pages=(n+41)/42;if(pages<1)pages=1;
+    int n=pe_sandbox_ui_inventory_count(u,g),pages=pe_sandbox_ui_inventory_pages(u,g);
     PeTrainingUIRect page=l->inventory_page;
     static const char *arrows[]={"leftendbutton","leftbutton","rightbutton","rightendbutton"};
     const float offset[]={0,25,105,130};
     for(int i=0;i<4;i++)sprite(u,arrows[i],rel(u,page,offset[i],3,16,16),WHITE);
     center(u,TextFormat("%d/%d",u->inventory_page+1,pages),rel(u,page,48,0,50,23),18,ink,true);
     text(u,TextFormat("Money: %u",g->money),p.x+24*z,p.y+531*z,14,gold,false);
-    text(u,"Right-click: use / equip   Drag: quickbar",p.x+17*z,p.y+507*z,14,dim,false);
+    text(u,u->split_armed?"Select a stack to split":"Drag: move / swap    Shift+drop: merge",p.x+17*z,p.y+507*z,13,dim,false);
+    text(u,TextFormat("%d / %d",n,pe_inventory_category_capacity(&g->inventory,u->inventory_tab)),p.x+18*z,p.y+491*z,12,dim,false);
+    button(u,pe_sandbox_ui_inventory_action(u,0),"Split",u->inventory_tab<4);
+    button(u,pe_sandbox_ui_inventory_action(u,1),"Sort",u->inventory_tab<4);
+    text(u,"Right-click: use / equip    PageUp / PageDown",p.x+17*z,p.y+557*z,12,dim,false);
+}
+static void inventory_split(const PeSandboxUI *u){
+    PeTrainingUIRect p=pe_sandbox_ui_split_panel(u);float z=u->layout.scale;
+    DrawRectangleRec(rect(u->layout.inventory),(Color){0,0,0,125});
+    DrawRectangleRec(rect(p),(Color){14,29,51,250});DrawRectangleLinesEx(rect(p),z,blue);
+    center(u,"Split stack",rel(u,p,10,10,308,25),18,ink,true);
+    center(u,TextFormat("Choose 1 - %d (type or use +/-)",u->split_source.count-1),rel(u,p,10,38,308,20),13,dim,false);
+    center(u,TextFormat("%d",u->split_count),rel(u,p,94,65,140,30),20,ink,true);
+    button(u,pe_sandbox_ui_split_button(u,0),"-",u->split_count>1);
+    button(u,pe_sandbox_ui_split_button(u,1),"+",u->split_count<u->split_source.count-1);
+    button(u,pe_sandbox_ui_split_button(u,2),"Split [Enter]",u->split_count>0);
+    button(u,pe_sandbox_ui_split_button(u,3),"Cancel [Esc]",true);
 }
 static const int outfit_ui_slots[PE_OUTFIT_SLOTS]={1,6,7}; /* coat, pants, shoes */
 static void character(const PeSandboxUI *u,const PeGame *g) {
@@ -521,12 +538,12 @@ static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
     text(u,TextFormat("%d-%d of %d - Scroll to browse",count?u->shop_scroll+1:0,(int)fminf(u->shop_scroll+8,(float)count),count),p.x+24*z,p.y+496*z,15,ink,false);
 }
 static void tooltip(const PeSandboxUI *u,const PeGame *g) {
-    if(u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
+    if(u->split_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
     unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0);
     int top=pe_training_ui_window_at(&u->layout,visible,u->mouse_x,u->mouse_y),index=-1;
     if(top==PE_UI_WINDOW_INVENTORY)index=pe_sandbox_ui_inventory_slot(u,g,pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,u->mouse_x,u->mouse_y));
     if(top==PE_UI_WINDOW_CHARACTER&&pe_training_ui_contains(u->layout.equipment_weapon,u->mouse_x,u->mouse_y)) {
-        for(int k=0;k<PE_INVENTORY_SLOTS;k++)if(g->equipped_instance_id&&g->inventory.slots[k].instance_id==g->equipped_instance_id)index=k;
+        for(int k=0;k<pe_inventory_capacity(&g->inventory);k++)if(g->equipped_instance_id&&g->inventory.slots[k].instance_id==g->equipped_instance_id)index=k;
     }
     if(top==PE_UI_WINDOW_CHARACTER&&pe_training_ui_contains(u->layout.equipment_slots[9],u->mouse_x,u->mouse_y)){
         const PeSlot *shield=pe_shield_equipped(g);
@@ -618,6 +635,7 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     }
     if(u->character_open)character(u,g);
     if(u->inventory_open)inventory(u,g);
+    if(u->split_open)inventory_split(u);
     if(u->replicator_open)replicator(u,g);
     if(u->missions_open)missions(u,g);
     supplier_dialogue(u,g);town_dialogue(u,g);
