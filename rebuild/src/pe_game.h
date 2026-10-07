@@ -1,6 +1,7 @@
 #ifndef PE_GAME_H
 #define PE_GAME_H
 #include "pe_world.h"
+#include "pe_camp_repair_state.h"
 #include "pe_content.h"
 #include "pe_block.h"
 #include "pe_outfit.h"
@@ -44,6 +45,8 @@ typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPAC
 #define PE_SAVE_V18_APPEND 648u
 /* V19 appends inventory layout/count and1680 full16-byte slot records. */
 #define PE_SAVE_V19_APPEND (8u + 16u * PE_INVENTORY_MAX_SLOTS)
+/* V20 retains v19 and appends machine identity, exact item and tick clock. */
+#define PE_SAVE_V20_APPEND 32u
 #define PE_MAX_PLANTS 32
 typedef struct { uint32_t prototype_id; PeVec3 position; bool depleted; } PePlant;
 typedef struct { bool installed; unsigned count; PePlant plants[PE_MAX_PLANTS]; } PeVegetation;
@@ -64,7 +67,6 @@ typedef struct { int item_id; uint32_t instance_id; } PeQuickslot;
 #define PE_SPRINT_STAMINA_PER_SECOND 5.0f
 #define PE_JUMP_STAMINA 10.0f
 /* Non-stack items have stable IDs; durable equipment preserves wear per instance. */
-typedef struct { int item_id, count; uint32_t instance_id; float durability; } PeSlot;
 typedef struct {
     PeSlot slots[PE_INVENTORY_MAX_SLOTS];
     uint32_t next_instance_id;
@@ -98,6 +100,7 @@ typedef struct PeGame {
     float yaw, pitch;
     double game_seconds;
     PeInventory inventory;
+    PeCampRepair repair; /* Archived camp machine20006 only; PECSv20. */
     PeOutfit outfit;
     PeCraftJob craft;
     uint32_t equipped_instance_id, rng_state;
@@ -154,6 +157,20 @@ bool pe_game_arrival_complete(PeGame *game);
 bool pe_game_accept_supplies(PeGame *game);
 bool pe_game_recipe_known(const PeGame *game, int recipe_id);
 bool pe_game_use_slot(PeGame *game, int inventory_slot);
+/* Repair transaction adapters require a living Adventure player and the
+ * qualified settlement world. Host additionally owns machine model/reach.
+ * Reserved items survive clone/move/menu/save; occupied machines block world
+ * replacement. No fixed tick advances this independent display-frame clock. */
+bool pe_game_repair_state_valid(const PeGame *game);
+/* Advisory row filter only: no full bag validation or capacity reservation. */
+bool pe_game_repair_candidate(const PeGame *game,int slot);
+bool pe_game_repair_can_insert(const PeGame *game,int slot);
+bool pe_game_repair_can_start(const PeGame *game);
+bool pe_game_repair_insert(PeGame *game,int slot,const PeSlot *expected);
+bool pe_game_repair_start(PeGame *game);
+bool pe_game_repair_cancel(PeGame *game);
+bool pe_game_repair_take(PeGame *game,int *destination);
+bool pe_game_repair_frame(PeGame *game,float dt,bool enabled,bool *completed);
 /* Confirmed bag deletion destroys the complete exact slot. Split first for a
  * partial stack. Protected source prototypes and worn/equipped owners fail.
  * expected is the confirmation snapshot; any intervening change rejects

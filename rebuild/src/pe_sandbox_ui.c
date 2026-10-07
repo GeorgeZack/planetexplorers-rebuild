@@ -4,6 +4,7 @@
 #include "pe_shield.h"
 #include "pe_town_wallet.h"
 #include "pe_build_history.h"
+#include "pe_camp_repair.h"
 #include "pe_adventure_medicine.h"
 #include "pe_adventure_hunt.h"
 #include <math.h>
@@ -550,7 +551,7 @@ static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
     text(u,TextFormat("%d-%d of %d - Scroll to browse",count?u->shop_scroll+1:0,(int)fminf(u->shop_scroll+8,(float)count),count),p.x+24*z,p.y+496*z,15,ink,false);
 }
 static void tooltip(const PeSandboxUI *u,const PeGame *g) {
-    if(u->delete_open||u->split_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
+    if(u->repair_open||u->delete_open||u->split_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
     unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0);
     int top=pe_training_ui_window_at(&u->layout,visible,u->mouse_x,u->mouse_y),index=-1;
     if(top==PE_UI_WINDOW_INVENTORY)index=pe_sandbox_ui_inventory_slot(u,g,pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,u->mouse_x,u->mouse_y));
@@ -636,6 +637,62 @@ static void build_hud(const PeSandboxUI *u,const PeGame *g) {
     else center(u,TextFormat("%s   %s   %d cells   %d deg",material?material->name:"",u->build_shape==PE_B45_CUBE?"Cube":"Ramp",u->build_brush,u->build_rotation*90),detail,16,ink,false);
     (void)z;
 }
+
+static void repair_window(const PeSandboxUI *u,const PeGame *g){
+    if(!u->repair_open)return;
+    PeTrainingUIRect p=pe_sandbox_ui_repair_panel(u);
+    panel(u,p,"REPAIR MACHINE",PE_UI_EFFECT_INVENTORY);
+    sprite(u,"close1",pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_CLOSE),WHITE);
+    text(u,"Bag equipment",p.x+22*u->layout.scale,p.y+65*u->layout.scale,18,blue,true);
+    text(u,"Machine slot",p.x+320*u->layout.scale,p.y+65*u->layout.scale,18,blue,true);
+    int count=pe_sandbox_ui_repair_count(g),pages=count?(count+PE_REPAIR_UI_ROWS-1)/PE_REPAIR_UI_ROWS:1;
+    for(int row=0;row<PE_REPAIR_UI_ROWS;row++){
+        int slot=pe_sandbox_ui_repair_slot(u,g,row);if(slot<0)break;
+        const PeSlot *value=&g->inventory.slots[slot];const PeItemDef *d=pe_item_def(value->item_id);
+        PeTrainingUIRect r=pe_sandbox_ui_repair_row(u,row);
+        sprite(u,"menulist",r,slot==u->repair_slot?blue:WHITE);
+        item(u,value->item_id,1,rel(u,r,2,2,38,38),true,WHITE);
+        clipped(u,d?d->name:"Item",rel(u,r,46,3,228,20),16,ink,false);
+        text(u,TextFormat("Durability %.0f / %.0f",value->durability,d?(float)d->durability_max:0),r.x+46*u->layout.scale,r.y+23*u->layout.scale,13,dim,false);
+    }
+    if(!count)wrapped(u,g->repair.running?"Repair in progress. The machine slot is locked.":"No available repairable equipment. Unequip an item first.",rel(u,p,28,98,264,108),18,dim);
+    button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_PREVIOUS),"<",u->repair_page>0);
+    button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_NEXT),">",u->repair_page+1<pages);
+    center(u,TextFormat("%d / %d",u->repair_page+1,pages),rel(u,p,94,376,136,32),16,ink,false);
+    bool selected=u->repair_slot>=0&&pe_inventory_slot_valid(&g->inventory,u->repair_slot)&&
+        g->inventory.slots[u->repair_slot].instance_id==u->repair_selected.instance_id&&pe_game_repair_can_insert(g,u->repair_slot);
+    button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_INSERT),g->repair.item.count?"Replace selected [Enter]":"Insert selected [Enter]",selected);
+    PeTrainingUIRect reserved=pe_sandbox_ui_repair_reserved(u);
+    item(u,g->repair.item.item_id,1,reserved,true,WHITE);
+    const PeItemDef *d=pe_item_def(g->repair.item.item_id);
+    if(d){
+        wrapped(u,d->name,rel(u,p,320,164,284,42),20,ink);
+        text(u,TextFormat("Durability %.0f / %.0f",g->repair.item.durability,(float)d->durability_max),p.x+320*u->layout.scale,p.y+211*u->layout.scale,16,ink,false);
+        bar(u,"jindulan_1","jindulan_2",rel(u,p,320,237,284,10),fraction(g->repair.item.durability,(float)d->durability_max),blue);
+        text(u,g->repair.running?TextFormat("Repairing: %.1f seconds",pe_camp_repair_seconds(&g->repair)):"Repair time: 60 seconds",p.x+320*u->layout.scale,p.y+258*u->layout.scale,16,g->repair.running?gold:ink,false);
+        PeCampRepairCost cost;
+        if(pe_camp_repair_quote(&g->repair.item,&cost)){
+            text(u,g->repair.running?"Materials paid":"Required materials",p.x+320*u->layout.scale,p.y+285*u->layout.scale,16,blue,true);
+            for(unsigned k=0;k<cost.count&&k<3;k++){
+                const PeItemDef *material=pe_item_def(cost.materials[k].item_id);int available=pe_inventory_count(&g->inventory,cost.materials[k].item_id);
+                clipped(u,TextFormat("%s: %d (bag %d)",material?material->name:"Item",cost.materials[k].count,available),rel(u,p,320,309+19*(float)k,284,19),15,available>=cost.materials[k].count?ink:gold,false);
+            }
+        }
+    }else wrapped(u,"Select equipment from your bag, then insert it or drag it into this slot.",rel(u,p,326,184,274,134),18,dim);
+    button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_START),"Repair",pe_game_repair_can_start(g));
+    button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_CANCEL),"Cancel repair",g->repair.running);
+    button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_TAKE),"Take item",g->repair.item.count&&!g->repair.running);
+    wrapped(u,*u->repair_notice?u->repair_notice:"Close [Esc] keeps the item here. Running repairs continue.",rel(u,p,22,470,582,40),16,ink);
+    if(u->repair_dragging&&u->repair_selected.item_id)item(u,u->repair_selected.item_id,1,(PeTrainingUIRect){u->mouse_x-20*u->layout.scale,u->mouse_y-20*u->layout.scale,40*u->layout.scale,40*u->layout.scale},true,WHITE);
+    if(u->repair_confirm){
+        DrawRectangleRec(rect(p),(Color){0,0,0,145});PeTrainingUIRect q=pe_sandbox_ui_repair_confirm_panel(u);
+        panel(u,q,u->repair_confirm==1?"START REPAIR?":"CANCEL REPAIR?",PE_UI_EFFECT_INVENTORY);
+        wrapped(u,u->repair_confirm==1?"Spend the listed materials and repair this item for 60 seconds? Cancelling will not refund materials.":"Stop repairing this item? Materials already spent will not be refunded.",rel(u,q,24,66,372,68),18,ink);
+        button(u,pe_sandbox_ui_repair_confirm_button(u,0),u->repair_confirm==1?"Repair [Enter]":"Stop [Enter]",true);
+        button(u,pe_sandbox_ui_repair_confirm_button(u,1),"Back [Esc]",true);
+    }
+}
+
 void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(!u||!u->loaded||!g)return;
     if(building)build_hud(u,g);else hud(u,g,false);
@@ -651,7 +708,7 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(u->delete_open)inventory_delete(u);
     if(u->replicator_open)replicator(u,g);
     if(u->missions_open)missions(u,g);
-    supplier_dialogue(u,g);town_dialogue(u,g);
+    supplier_dialogue(u,g);town_dialogue(u,g);repair_window(u,g);
     sprite(u,"menu1",u->layout.menu_button,WHITE);
     if(u->menu_open) {
         static const char *labels[]={"Inventory [I]","Character [C]","Replicator [Y]","Mission [Q]","Pause"};

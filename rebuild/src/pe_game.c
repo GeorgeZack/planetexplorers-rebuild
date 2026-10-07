@@ -1,4 +1,5 @@
 #include "pe_game.h"
+#include "pe_camp_repair.h"
 #include "pe_build_history.h"
 #include "pe_vegetation.h"
 #include "pe_harvest.h"
@@ -8,6 +9,7 @@
 #include "pe_tree_collision.h"
 #include "pe_settlement.h"
 #include "../generated/pe_stamina_recovery_source.h"
+#include "../generated/pe_camp_repair_source.h"
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
@@ -151,8 +153,88 @@ static bool collides(const PeGame *g, PeVec3 p) {
     for(int i=0;i<g->cell_count;i++)if(pe_b45_overlaps_aabb(&g->cells[i],lo,hi))return true;
     return false;
 }
+/* Host-independent repair owner: spatial/model admission is the host's job. */
+static bool repair_unbound(const void *context,uint32_t id){
+    const PeGame *g=context;
+    if(!g||!id||g->deployed_count>PE_MAX_DEPLOYABLES||id==g->equipped_instance_id||id==g->shield_instance_id)return false;
+    for(unsigned i=0;i<PE_OUTFIT_SLOTS;i++)if(g->outfit.items[i].instance_id==id)return false;
+    for(unsigned i=0;i<PE_MAX_DEPLOYABLES;i++)if(g->deployed[i].instance_id==id)return false;
+    for(unsigned i=0;i<PE_TOWN_WALLET_CAPACITY;i++){
+        if(g->town_buyback[i].count>PE_TOWN_BUYBACK_CAPACITY)return false;
+        for(unsigned j=0;j<PE_TOWN_BUYBACK_CAPACITY;j++)if(g->town_buyback[i].slots[j].instance_id==id)return false;
+    }
+    return true;
+}
+static PeCampRepairAccess repair_access(PeGame *g){return(PeCampRepairAccess){&g->inventory,repair_unbound,g};}
+bool pe_game_repair_state_valid(const PeGame *g){
+    if(!g||(g->mode!=PE_GAME_LEGACY&&g->mode!=PE_GAME_ADVENTURE))return false;
+    PeCampRepairAccess access={(PeInventory *)&g->inventory,repair_unbound,g};
+    if(!pe_camp_repair_valid(&g->repair,&access))return false;
+    if(!g->repair.item.count)return true;
+    if(g->mode!=PE_GAME_ADVENTURE||!g->inventory.categorized||!pe_settlement_matches(&g->world))return false;
+    for(unsigned i=0;i<PE_QUICKSLOTS;i++)if(g->quickslots[i].instance_id==g->repair.item.instance_id)return false;
+    return true;
+}
+static bool repair_transaction(const PeGame *g){
+    return g&&g->mode==PE_GAME_ADVENTURE&&g->inventory.categorized&&pe_settlement_matches(&g->world)&&
+        isfinite(g->hp)&&g->hp>0&&g->revival.phase!=PE_REVIVAL_GETTING_UP&&pe_game_repair_state_valid(g);
+}
+bool pe_game_repair_candidate(const PeGame *g,int index){
+    if(!g||g->mode!=PE_GAME_ADVENTURE||!g->inventory.categorized||!pe_settlement_matches(&g->world)||
+       !isfinite(g->hp)||g->hp<=0||g->revival.phase==PE_REVIVAL_GETTING_UP||g->repair.running||
+       !pe_inventory_slot_valid(&g->inventory,index))return false;
+    const PeSlot *item=&g->inventory.slots[index];
+    return pe_camp_repair_item_supported(item)&&repair_unbound(g,item->instance_id);
+}
+bool pe_game_repair_can_insert(const PeGame *g,int index){
+    if(!repair_transaction(g)||!pe_inventory_slot_valid(&g->inventory,index))return false;
+    PeInventory bag=g->inventory;PeCampRepair repair=g->repair;
+    PeCampRepairAccess access={&bag,repair_unbound,g};PeSlot expected=bag.slots[index];
+    return pe_camp_repair_insert(&repair,&access,index,&expected);
+}
+bool pe_game_repair_can_start(const PeGame *g){
+    if(!repair_transaction(g))return false;
+    PeInventory bag=g->inventory;PeCampRepair repair=g->repair;PeCampRepairAccess access={&bag,repair_unbound,g};
+    return pe_camp_repair_start(&repair,&access);
+}
+bool pe_game_repair_insert(PeGame *g,int index,const PeSlot *expected){
+    if(!repair_transaction(g))return false;
+    PeCampRepairAccess access=repair_access(g);
+    if(!pe_camp_repair_insert(&g->repair,&access,index,expected))return false;
+    for(unsigned i=0;i<PE_QUICKSLOTS;i++)if(g->quickslots[i].instance_id==g->repair.item.instance_id)g->quickslots[i]=(PeQuickslot){0};
+    return true;
+}
+bool pe_game_repair_start(PeGame *g){
+    if(!repair_transaction(g))return false;
+    PeCampRepairAccess access=repair_access(g);return pe_camp_repair_start(&g->repair,&access);
+}
+bool pe_game_repair_cancel(PeGame *g){
+    if(!repair_transaction(g))return false;
+    PeCampRepairAccess access=repair_access(g);return pe_camp_repair_cancel(&g->repair,&access);
+}
+bool pe_game_repair_take(PeGame *g,int *destination){
+    if(!repair_transaction(g))return false;
+    PeCampRepairAccess access=repair_access(g);return pe_camp_repair_take(&g->repair,&access,destination);
+}
+bool pe_game_repair_frame(PeGame *g,float dt,bool enabled,bool *completed){
+    if(!g||(g->mode!=PE_GAME_LEGACY&&g->mode!=PE_GAME_ADVENTURE)||!isfinite(dt)||dt<0)return false;
+    float ticks=dt*(float)PE_CAMP_REPAIR_TICKS_PER_SECOND;
+    if(!isfinite(ticks)||(double)ticks>=0x1p63)return false;
+    /* Most frames have no reserved item. Validate the canonical empty value
+     * without rescanning unrelated inventory slots on every display frame. */
+    if(!g->repair.item.count){
+        PeSlot item=g->repair.item;
+        if(item.item_id||item.instance_id||item.durability!=0||signbit(item.durability)||g->repair.running||g->repair.remaining_ticks)return false;
+        if(completed)*completed=false;
+        return true;
+    }
+    if(!pe_game_repair_state_valid(g))return false;
+    PeCampRepairAccess access=repair_access(g);
+    return pe_camp_repair_update(&g->repair,&access,dt,enabled,completed);
+}
 bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
-    if(!g||!world||world->source>1||!pe_world_depth(world)||!finite3(preferred))return false;
+    if(!g||!world||world->source>1||!pe_world_depth(world)||!finite3(preferred)||
+       !pe_game_repair_state_valid(g)||g->repair.item.count)return false;
     if(world->source==0)for(size_t i=0;i<pe_world_voxel_count(world);i++)if(pe_world_data_const(world)[i].material>PE_MAT_GRASS)return false;
     PeGame *next=calloc(1,sizeof *next);if(!next)return false;
     *next=*g;memset(&next->world,0,sizeof next->world);pe_build_history_clear(next);pe_vegetation_clear(next);

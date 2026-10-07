@@ -42,6 +42,9 @@ typedef struct {
     bool eligible;
     const char *reason;
 } PeSandboxShopRow;
+#define PE_REPAIR_UI_ROWS 6
+typedef enum {PE_REPAIR_UI_INSERT,PE_REPAIR_UI_START,PE_REPAIR_UI_CANCEL,PE_REPAIR_UI_TAKE,
+    PE_REPAIR_UI_PREVIOUS,PE_REPAIR_UI_NEXT,PE_REPAIR_UI_CLOSE} PeSandboxRepairButton;
 typedef void (*PeSandboxUIPreview)(void *context,const PeGame *game);
 typedef struct {
     PeUiAssets *assets;
@@ -57,6 +60,11 @@ typedef struct {
     Texture2D town_portrait,annot_portrait;
     uint32_t town_entity,deploy_entity;
     bool town_open,shop_open,shop_dragging;
+    bool repair_open,repair_dragging,repair_window_dragging;
+    int repair_page,repair_slot,repair_confirm; /* 0 none,1 start,2 cancel job. */
+    PeSlot repair_selected,repair_expected;
+    float repair_offset_x,repair_offset_y,repair_grab_x,repair_grab_y;
+    char repair_notice[160];
     bool deploy_get_pending;
     uint32_t deploy_get_ticks; /* UTimer: 100,000 ticks/s, commit strictly >200,000. */
     char town_name[129],start_town_name[129];
@@ -178,6 +186,17 @@ bool pe_sandbox_ui_shop_item(const PeSandboxUI *ui,const PeGame *game,int index,
 bool pe_sandbox_ui_shop_can_trade(const PeSandboxUI *ui,const PeGame *game);
 PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *ui,int button); /* minus,plus,buy,back,close */
 void pe_sandbox_ui_cancel_town(PeSandboxUI *ui);
+/* Host qualifies the actual machine/model/range. Close never changes its job. */
+bool pe_sandbox_ui_open_repair(PeSandboxUI *ui,const PeGame *game,bool eligible);
+void pe_sandbox_ui_cancel_repair(PeSandboxUI *ui);
+int pe_sandbox_ui_repair_count(const PeGame *game);
+int pe_sandbox_ui_repair_slot(const PeSandboxUI *ui,const PeGame *game,int visible_row);
+PeTrainingUIRect pe_sandbox_ui_repair_panel(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_repair_row(const PeSandboxUI *ui,int row);
+PeTrainingUIRect pe_sandbox_ui_repair_reserved(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_repair_button(const PeSandboxUI *ui,int button);
+PeTrainingUIRect pe_sandbox_ui_repair_confirm_panel(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_repair_confirm_button(const PeSandboxUI *ui,int button); /* confirm,cancel */
 bool pe_sandbox_ui_open_deployable(PeSandboxUI *ui,const PeGame *game,uint32_t instance_id);
 bool pe_sandbox_ui_open_town(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,const char *name,Texture2D portrait,bool eligible);
 bool pe_sandbox_ui_open_annot(PeSandboxUI *ui,const PeGame *game,uint32_t entity_id,Texture2D portrait,bool eligible);

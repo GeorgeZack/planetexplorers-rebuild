@@ -135,6 +135,22 @@
       "sha256": "0b7da4e19cc61cad16b88c1498af8fe664f8a64547dd9da95bf9383ddd912093"
     },
     {
+      "path": "Assets/Scripts/Input/PeInputExt.cs",
+      "sha256": "9cf4c5c41798ab4b5c753273ad014d50fd9508cc8fee180a6ecb7296edd8725d"
+    },
+    {
+      "path": "Assets/Scripts/MousePicker/MousePicker.cs",
+      "sha256": "ebefb48cb9a28eacef2488757c85cdf9d7a844f73187de3cc89b673ed6c0a1e8"
+    },
+    {
+      "path": "Assets/Scripts/Input/PeInput.cs",
+      "sha256": "d335ae3e7f469a3cda7bc489c580fc526c8dfb4a1cf3ed9ed80d3aacc137261c"
+    },
+    {
+      "path": "Assets/Scripts/Input/PeInputSettings.cs",
+      "sha256": "3f3036fd68b4c6af2e96124d52f64eabfec6283c3414c18f40efb0b68fa34064"
+    },
+    {
       "path": "/home/admin/.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0/index.arc",
       "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
     },
@@ -236,7 +252,11 @@
     "Assets/Scripts/PETools/PEMath.cs": "3f1aad65bb9928affcc3ad60c3ad7f4518abe3cf7f56f41aab9d4119433cbf3a",
     "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSElectric.cs": "7d927252bce2b6a8933ab08e0abed20af7839268a2d939a30a3228c31f3774db",
     "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSWorkerMachine.cs": "229644918554519e3f7cb767d2d0fda4720a47901031c05ff8049197c8c7261d",
-    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSEntity.cs": "0b7da4e19cc61cad16b88c1498af8fe664f8a64547dd9da95bf9383ddd912093"
+    "Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSEntity.cs": "0b7da4e19cc61cad16b88c1498af8fe664f8a64547dd9da95bf9383ddd912093",
+    "Assets/Scripts/Input/PeInputExt.cs": "9cf4c5c41798ab4b5c753273ad014d50fd9508cc8fee180a6ecb7296edd8725d",
+    "Assets/Scripts/MousePicker/MousePicker.cs": "ebefb48cb9a28eacef2488757c85cdf9d7a844f73187de3cc89b673ed6c0a1e8",
+    "Assets/Scripts/Input/PeInput.cs": "d335ae3e7f469a3cda7bc489c580fc526c8dfb4a1cf3ed9ed80d3aacc137261c",
+    "Assets/Scripts/Input/PeInputSettings.cs": "3f3036fd68b4c6af2e96124d52f64eabfec6283c3414c18f40efb0b68fa34064"
   },
   "source_prefab": {
     "game_object_path_id": 100048,
@@ -252,6 +272,24 @@
     "work_transforms": 0,
     "power_field": 0,
     "layer": 13,
+    "root_transform": {
+      "position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "rotation": [
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "scale": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
     "collider": {
       "path_id": 6500000,
       "kind": "BoxCollider",
@@ -269,6 +307,18 @@
     }
   },
   "installed_prefab": {
+    "collider": {
+      "center": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "size": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
     "game_object_path_id": 5272855295632875899,
     "repair_component_path_id": 7000867702593108574,
     "operate_component_path_id": 6424481666651604853,
@@ -2490,6 +2540,22 @@
       "item_editor_type": "32",
       "is_formula": "0"
     }
+  },
+  "interaction": {
+    "operate_distance": 19,
+    "rough_axis_factor": 1.25,
+    "ray_distance": 100,
+    "window_close_distance": 8,
+    "source_obstacle_allowance": 10,
+    "source_obstacle_layers": [
+      "VFVoxelTerrain",
+      "SceneStatic"
+    ],
+    "range": "Root has no PeTrans; CollectColliders finds the one enabled nontrigger root box; inclusive Bounds.SqrDistance <= 19 squared after root-axis rough filter.",
+    "transform": "Prefab root identity; archived yaw180 quaternion retained, root localScale reset to one by OperatableItemRepairMachine.Init/PostInit.",
+    "source_pointer": "MousePicker enabled and not gamePause; UICamera.hoveredObject blocks; delayTime0 requires positive hover elapsed; nearest Level0 pick in source obstacle distance+10.",
+    "source_operation": "InteractWithItem Click or OpenItemMenu ClickNoMove calls Operate; the latter also dispatches RMouseClickEvent.",
+    "native_adapter": "Supported crop, loaded model/current collision, living player within inclusive8m root range; strict tree-free geometry occlusion with .0001m equality tolerance. No source +10m through-wall allowance."
   },
   "semantics": {
     "creator_id": 10000,

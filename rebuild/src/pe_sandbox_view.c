@@ -18,6 +18,8 @@
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
 #include "pe_town_wallet.h"
+#include "pe_camp_repair.h"
+#include "pe_camp_repair_interaction.h"
 #include "pe_build_history.h"
 #include "pe_vegetation.h"
 #include "pe_vegetation_view.h"
@@ -371,13 +373,42 @@ static bool sandbox_wallet_frame(PeGame *game,bool focused,bool paused){
     if(!game)return false;
     return !focused||paused||pe_town_wallet_step(game);
 }
+/* One source UTimer step per display, never per movement catch-up tick.
+ * Native pause/focus/menu/load policy suspends it; closing the UI or death
+ * does not. Successful-load frames continue before reaching this adapter. */
+static bool sandbox_repair_frame(PeGame *game,float dt,bool focused,bool paused){
+    bool completed=false;
+    if(!pe_game_repair_frame(game,dt,focused&&!paused,&completed))return false;
+    if(completed)snprintf(game->message,sizeof game->message,"Repair complete. Collect your item at the Repair Machine.");
+    return true;
+}
+/* Closing the panel never releases the machine's item/job ownership. The
+ * caller retains modal input ownership for this entire cancellation frame. */
+static bool sandbox_repair_close_invalid(PeSandboxUI *ui,const PeGame *game,
+    const PeSandboxCollision *collision,bool model_ready){
+    if(!ui||!ui->repair_open||pe_camp_repair_in_range(game,collision,model_ready))return false;
+    pe_sandbox_ui_cancel_repair(ui);return true;
+}
+/* The selected machine competes with the same NPC/Torch/herb ray distances.
+ * Opening owns the original press until release, just like other town modals. */
+static bool sandbox_repair_interact(PeSandboxUI *ui,PeGame *game,
+    const PeSandboxCollision *collision,bool model_ready,bool enabled,bool requested,
+    bool modal_priority,PeSceneHit picked,float other_distance,PeSandboxUIResult *action,
+    PeSandboxPointerGate *pointer,unsigned buttons){
+    if(!ui||!game||!action||!pointer||!enabled||!requested||modal_priority||!picked.hit||
+       !isfinite(picked.distance)||picked.distance<=0||isnan(other_distance)||picked.distance>=other_distance||
+       action->consume_world||action->consume_actions||action->paused||!action->npc_interaction||
+       !pe_camp_repair_in_range(game,collision,model_ready)||!pe_sandbox_ui_open_repair(ui,game,true))return false;
+    action->consume_world=true;action->cursor_visible=true;action->npc_interaction=false;action->camera_cycle_allowed=false;
+    pe_sandbox_pointer_release_gate(pointer,true,buttons);return true;
+}
 /* One admitted display-frame command, before any camera/pick queries. The
  * renderer reads cells directly; collision needs an immediate refresh even
  * when this display frame has no fixed simulation step. */
 static bool sandbox_build_history_apply(PeGame *game,const PeSandboxUI *ui,
     PeSandboxUIResult action,bool enabled,PeSandboxCollision *collision,char *error,size_t capacity){
     if(!game||!ui||!collision)return false;
-    if(!enabled||!ui->building||action.paused||ui->paused||ui->town_open||ui->revival_open||
+    if(!enabled||!ui->building||action.paused||ui->paused||ui->town_open||ui->repair_open||ui->revival_open||
        ui->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||ui->inventory_open||ui->character_open||
        ui->missions_open||ui->replicator_open||ui->menu_open||ui->dragging||game->hp<=0)return true;
     bool changed=action.undo_build?pe_build_history_undo(game):action.redo_build?pe_build_history_redo(game):false;
@@ -648,7 +679,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         ui.welcome_present=welcome_visible;ui.welcome_position=welcome.position;
         ui.supplier_present=supplier_visible;ui.supplier_position=supplier.position;
         if(!residents_refresh(residents,game,collision,assets,error,sizeof error)){result=1;break;}
-        bool host_cancelled_modal=false;
+        bool repair_model_ready=settlement.loaded&&settlement_route==pe_settlement_is_route(&game->world);
+        bool host_cancelled_modal=sandbox_repair_close_invalid(&ui,game,collision,repair_model_ready);
         size_t marker_count=0;
         for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible)resident_markers[marker_count++]=(PeSandboxMapNpc){(uint32_t)pe_adventure_population_sources[i].entity_id,residents[i].npc.position};
         pe_sandbox_ui_set_resident_markers(&ui,resident_markers,marker_count);
@@ -672,7 +704,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         /* Arrival queues source story replies independently of the NPC pick
          * distance. Other modal UI keeps ownership until it closes. Cancel may
          * be resumed by talking to Naoko; load restores pending presentation. */
-        if(!return_prompted&&pe_adventure_hunt_return_talk(game)&&!build_mode&&!ui.paused&&!ui.town_open&&
+        if(!return_prompted&&pe_adventure_hunt_return_talk(game)&&!build_mode&&!ui.paused&&!ui.town_open&&!ui.repair_open&&
            !ui.inventory_open&&!ui.character_open&&!ui.missions_open&&!ui.replicator_open&&!ui.menu_open&&!ui.dragging&&
            ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&(smoke_frames||IsWindowFocused())){
             for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible&&pe_adventure_population_sources[i].adventure_role==3){
@@ -716,7 +748,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(loaded){pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
-                pe_sandbox_ui_cancel_town(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
+                pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
             if(!loaded)snprintf(game->message,sizeof game->message,"%.159s",error);
             if(loaded&&(!pe_game_collision_update(game,collision,error,sizeof error)||
                 (game->mode==PE_GAME_ADVENTURE&&pe_sandbox_collision_overlap(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT)))){result=1;break;}
@@ -847,6 +879,12 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             PeSceneHit obstruction=pe_sandbox_collision_ray_geometry(collision,pv(pick.position),pv(pick.direction),100);
             pe_deployable_pick(game,pv(pick.position),pv(pick.direction),obstruction.hit?obstruction.distance:INFINITY,&picked_deploy,&deploy_distance);
         }
+        PeSceneHit picked_repair={0};float repair_distance=INFINITY;
+        if(!build_mode&&!placing_torch){
+            Ray pick=source_ray(interaction_point,aim_camera);
+            picked_repair=pe_camp_repair_pick(game,collision,repair_model_ready,pv(pick.position),pv(pick.direction));
+            if(picked_repair.hit)repair_distance=picked_repair.distance;
+        }
         unsigned picked_plant=PE_MAX_PLANTS;float plant_distance=INFINITY;
         if(!build_mode&&!placing_torch&&pe_vegetation_view_available(vegetation_view)){
             Ray pick=source_ray(interaction_point,aim_camera);
@@ -856,14 +894,17 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         bool auto_welcome=!welcome_prompted&&welcome_visible&&game->welcome_page<PE_ADVENTURE_WELCOME_PAGES&&
             Vector3Distance(rv(game->player),rv(welcome.position))<=9;
         bool npc_right=right_click||(ui.free_cursor&&IsMouseButtonPressed(MOUSE_BUTTON_RIGHT));
-        SandboxVegetationInput plant_input={.index=picked_plant,.distance=plant_distance,.other_distance=fminf(nearest_npc,deploy_distance),
+        SandboxVegetationInput plant_input={.index=picked_plant,.distance=plant_distance,.other_distance=fminf(repair_distance,fminf(nearest_npc,deploy_distance)),
             .enabled=focused&&!loaded&&!build_mode&&!placing_torch,.available=pe_vegetation_view_available(vegetation_view),
             .requested=IsKeyPressed(KEY_E)||npc_right,.modal_priority=auto_welcome,.melee=&melee,.tool=&tool_action};
         if(sandbox_vegetation_interact(game,collision,plant_input,&action,&pointer_gate,pointer_buttons)){
             action_input=false;right_click=false;attack_pending=false;
         }
         int open_role=auto_welcome?1:((IsKeyPressed(KEY_E)||npc_right)?picked_role:0);
-        bool opened=false;PeAdventureNpc *selected=NULL;
+        bool opened=sandbox_repair_interact(&ui,game,collision,repair_model_ready,
+            focused&&!loaded&&!build_mode&&!placing_torch,IsKeyPressed(KEY_E)||npc_right,auto_welcome,
+            picked_repair,fminf(plant_distance,fminf(nearest_npc,deploy_distance)),&action,&pointer_gate,pointer_buttons);
+        PeAdventureNpc *selected=NULL;
         if(focused&&!loaded&&!build_mode&&!placing_torch&&action.npc_interaction){
             if(!auto_welcome&&picked_deploy&&deploy_distance<nearest_npc&&(IsKeyPressed(KEY_E)||npc_right))
                 opened=pe_sandbox_ui_open_deployable(&ui,game,picked_deploy);
@@ -895,6 +936,9 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(!sandbox_wallet_frame(game,focused,action.paused)){
             snprintf(error,sizeof error,"Invalid or overflowing town wallet update");result=1;break;
+        }
+        if(!sandbox_repair_frame(game,smoke_frames?PE_FIXED_DT:dt,focused,action.paused)){
+            snprintf(error,sizeof error,"Invalid camp repair state or clock");result=1;break;
         }
         if(action.revive&&focused&&!action.paused&&sandbox_revive_request(game,&sandbox_attribute_clock)){
             attack_pending=tool_drawn=placing_torch=autorun=jump_pending=false;
@@ -1186,7 +1230,10 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(!game->world.source)DrawCube((Vector3){31.5f,5.5f,31.5f},63,.06f,63,(Color){54,132,149,170});
         source_end_3d();
         profile_stage(&profile,PROFILE_UI_DRAW);
-        bool npc_nearest=nearest_npc<=fminf(deploy_distance,plant_distance);
+        if(picked_repair.hit&&repair_distance<fminf(plant_distance,fminf(nearest_npc,deploy_distance))&&
+           action.npc_interaction&&!ui.town_open&&!ui.repair_open)
+            DrawTextEx(pe_ui_font(ui.assets,false),"Repair Machine  [RMB / E]",(Vector2){GetScreenWidth()*.5f-120,GetScreenHeight()*.5f+30},18,0,YELLOW);
+        bool npc_nearest=nearest_npc<=fminf(repair_distance,fminf(deploy_distance,plant_distance));
         if(supplier_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
             PeVec3 p=supplier.position;Vector2 pos=source_screen((Vector3){p.x,p.y+supplier_view.label_height,p.z},camera);
             const char *prompt=picked_role==2&&npc_nearest&&action.npc_interaction?"Eitai  [RMB / E]":"Eitai";
@@ -1199,7 +1246,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->welcome_page<PE_ADVENTURE_WELCOME_PAGES?YELLOW:LIGHTGRAY);
         }
-        if(ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!ui.town_open)for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible){
+        if(ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!ui.town_open&&!ui.repair_open)for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible){
             PeVec3 p=residents[i].npc.position;
             if(Vector3Distance(rv(p),rv(game->player))>40||Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))<=0)continue;
             Vector2 screen=source_screen((Vector3){p.x,p.y+residents[i].view.label_height,p.z},camera);
@@ -1207,9 +1254,9 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             Font f=pe_ui_font(ui.assets,false);Vector2 size=MeasureTextEx(f,label,18,0);
             DrawTextEx(f,label,(Vector2){screen.x-size.x*.5f,screen.y},18,0,picked_resident==i?YELLOW:LIGHTGRAY);
         }
-        if(picked_deploy&&deploy_distance<=plant_distance&&deploy_distance<nearest_npc&&action.npc_interaction&&!ui.town_open)DrawTextEx(pe_ui_font(ui.assets,false),"Torch  [RMB / E]",(Vector2){GetScreenWidth()*.5f-70,GetScreenHeight()*.5f+30},18,0,YELLOW);
+        if(picked_deploy&&deploy_distance<=plant_distance&&deploy_distance<repair_distance&&deploy_distance<nearest_npc&&action.npc_interaction&&!ui.town_open&&!ui.repair_open)DrawTextEx(pe_ui_font(ui.assets,false),"Torch  [RMB / E]",(Vector2){GetScreenWidth()*.5f-70,GetScreenHeight()*.5f+30},18,0,YELLOW);
         if(picked_plant<game->vegetation.count&&!game->vegetation.plants[picked_plant].depleted&&
-           plant_distance<fminf(nearest_npc,deploy_distance)&&action.npc_interaction&&!ui.town_open){
+           plant_distance<fminf(repair_distance,fminf(nearest_npc,deploy_distance))&&action.npc_interaction&&!ui.town_open&&!ui.repair_open){
             const PePlantSource *source=pe_vegetation_source(game->vegetation.plants[picked_plant].prototype_id);
             const PeItemDef *item=source?pe_item_def(source->item_id):NULL;
             DrawTextEx(pe_ui_font(ui.assets,false),TextFormat("%s  [RMB / E]",item?item->name:"Herb"),

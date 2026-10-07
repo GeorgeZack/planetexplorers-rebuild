@@ -50,9 +50,9 @@ int pe_test_medicine_save(void){
     CHECK(loaded->money==g->money&&pe_inventory_count(&loaded->inventory,877)==1);
     CHECK(pe_world_width(&loaded->world)==80&&loaded->world.extended!=g->world.extended);
     CHECK(pe_world_hash(&loaded->world)==pe_world_hash(&g->world));same_stocks(g,loaded,0,PE_TOWN_STOCK_CAPACITY);
-    size_t size=0;unsigned char *original=read_save(path,&size);CHECK(original&&size>V9_APPEND+PE_SAVE_V10_APPEND);
-    if(original&&size>V9_APPEND+PE_SAVE_V10_APPEND){
-        CHECK(get32(original+4)==19);size-=(PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Keep malformed fixtures in their literal V16 envelope. */
+    size_t size=0;unsigned char *original=read_save(path,&size);CHECK(original&&size>PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND+V9_APPEND+PE_SAVE_V10_APPEND+16);
+    if(original&&size>PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND+V9_APPEND+PE_SAVE_V10_APPEND+16){
+        CHECK(get32(original+4)==20);size-=(PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Keep malformed fixtures in their literal V16 envelope. */
         size_t footer=size-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-V9_APPEND;CHECK(get32(original+footer)==PE_MEDICINE_ACTIVE);
         CHECK(get32(original+footer+4)==PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY);
         /* A literal v8 prefix retains first seventeen offer clocks and Annot;

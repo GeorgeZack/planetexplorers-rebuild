@@ -11,6 +11,7 @@
 #include "pe_deployable.h"
 #include "pe_shield.h"
 #include "../generated/pe_stamina_recovery_source.h"
+#include "../generated/pe_camp_repair_source.h"
 #include <errno.h>
 #include <math.h>
 #include <stdio.h>
@@ -19,7 +20,8 @@
 #include <unistd.h>
 
 #define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+65536u)
-#define SAVE_VERSION 19u
+#define SAVE_VERSION 20u
+_Static_assert(PE_SAVE_V20_APPEND==32,"V20 appends fixed camp repair ownership");
 _Static_assert(PE_INVENTORY_SLOTS==32&&PE_INVENTORY_MAX_SLOTS==1680,"Preserve old inventory wire prefix");
 _Static_assert(PE_MAX_PLANTS==32&&PE_SAVE_V18_APPEND==648,"V18 appends bounded vegetation records");
 _Static_assert(PE_TOWN_WALLET_CAPACITY==8&&PE_SAVE_V17_APPEND==100,"V17 appends eight identified wallet records");
@@ -40,7 +42,7 @@ static uint32_t checksum(const unsigned char *p,size_t n) {uint32_t h=2166136261
 static void err(char *out,size_t cap,const char *msg) {if(out&&cap)snprintf(out,cap,"%s",msg);}
 static bool vecfinite(PeVec3 v) {return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
 static bool valid(const PeGame *g,bool trees,bool outfit) {
-    if(!pe_inventory_state_valid(&g->inventory))return false;
+    if(!pe_inventory_state_valid(&g->inventory)||!pe_game_repair_state_valid(g))return false;
     if(!pe_vegetation_state_valid(g))return false;
     if(!pe_town_wallet_state_valid(g))return false;
     if(outfit&&!pe_outfit_state_valid(g))return false;
@@ -265,6 +267,12 @@ static void encode(Stream *s,const PeGame *g) {
         PeSlot slot=g->inventory.slots[i];put32(s,(uint32_t)slot.item_id);put32(s,(uint32_t)slot.count);
         put32(s,slot.instance_id);putf(s,slot.durability);
     }
+    /* Literal v19 prefix followed by one archived machine's fixed value. */
+    put32(s,g->repair.item.count?PE_CAMP_REPAIR_ENTITY_ID:0u);
+    put32(s,(uint32_t)g->repair.item.item_id);put32(s,(uint32_t)g->repair.item.count);
+    put32(s,g->repair.item.instance_id);putf(s,g->repair.item.durability);
+    put32(s,g->repair.running?1u:0u);
+    put32(s,(uint32_t)g->repair.remaining_ticks);put32(s,(uint32_t)((uint64_t)g->repair.remaining_ticks>>32));
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -407,6 +415,14 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
         }
         inventory_prefix(&g->inventory,expected);
         for(unsigned i=0;i<PE_INVENTORY_SLOTS;i++)if(!same_slot(before[i],expected[i]))s->ok=false;
+    }
+    if(version>=20){
+        uint32_t machine=get32(s);
+        g->repair.item.item_id=getint(s);g->repair.item.count=getint(s);
+        g->repair.item.instance_id=get32(s);g->repair.item.durability=getf(s);
+        uint32_t running=get32(s),low=get32(s),high=get32(s);
+        if(running>1||high||machine!=(g->repair.item.count?PE_CAMP_REPAIR_ENTITY_ID:0u)){s->ok=false;return;}
+        g->repair.running=running!=0;g->repair.remaining_ticks=low;
     }
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {

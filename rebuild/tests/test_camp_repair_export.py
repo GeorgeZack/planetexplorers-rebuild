@@ -43,6 +43,18 @@ class CampRepairExport(unittest.TestCase):
         self.assertFalse(m['archives'][0]['repair']['alive'])
         self.assertTrue(m['archives'][1]['repair']['alive'])
 
+    def test_source_interaction_box_and_real_range(self):
+        m=self.manifest
+        self.assertEqual(m['source_prefab']['collider']['center'],[0,.5,0])
+        self.assertEqual(m['source_prefab']['collider']['size'],[1,1,1])
+        self.assertEqual(m['installed_prefab']['collider'],dict(center=[0,.5,0],size=[1,1,1]))
+        self.assertEqual(m['source_prefab']['root_transform'],dict(position=[0,0,0],rotation=[0,0,0,1],scale=[1,1,1]))
+        self.assertEqual(m['interaction']['operate_distance'],19)
+        self.assertEqual(m['interaction']['window_close_distance'],8)
+        self.assertEqual(m['interaction']['ray_distance'],100)
+        self.assertEqual(m['interaction']['source_obstacle_allowance'],10)
+        for a in m['archives']:self.assertEqual(a['pose']['rotation'],[0,1,0,-4.371138828673793e-08])
+
     def test_catalog_closure_and_explicit_exclusions(self):
         c=self.manifest['catalog'];q={r['item_id']:r for r in c['qualified']};excluded={r['item_id']:r for r in c['excluded']}
         self.assertEqual((c['catalog_item_count'],c['repair_component_count'],len(q)),(341,71,63))
@@ -94,14 +106,18 @@ class CampRepairExport(unittest.TestCase):
 
     def test_source_prefab_requires_real_components_and_material_binding(self):
         static=ex.read_prefab(ex.ROOT/ex.STATIC_PREFAB);furniture=ex.read_prefab(ex.ROOT/ex.FURNITURE_PREFAB)
-        for what in ('disabled','type','workers','ordinary_id'):
+        for what in ('disabled','type','workers','ordinary_id','box_size','root_offset','extra_collider','range_override'):
             a,b=copy.deepcopy(static),copy.deepcopy(furniture)
             repair=next(v['data'] for v in a.values() if v.get('script_guid')==ex.REPAIR_GUID)
             ordinary=next(v['data'] for v in b.values() if v.get('script_guid')==ex.REPAIR_GUID)
             if what=='disabled':repair['m_Enabled']=0
             elif what=='type':repair['m_Type']=6
             elif what=='workers':repair['m_WorkTrans']=[{'m_FileID':0,'m_PathID':400000}]
-            else:ordinary['m_ItemID']=1132
+            elif what=='ordinary_id':ordinary['m_ItemID']=1132
+            elif what=='box_size':next(v['data'] for v in a.values() if v['kind']=='BoxCollider')['m_Size']['x']=2
+            elif what=='root_offset':next(v['data'] for v in a.values() if v['kind']=='Transform' and v['data']['m_GameObject']['m_PathID']==100048)['m_LocalPosition']['x']=1
+            elif what=='extra_collider':a[-999]=copy.deepcopy(next(v for v in a.values() if v['kind']=='BoxCollider'))
+            else:next(v['data'] for v in a.values() if v.get('script_guid')==ex.OPERATE_GUID)['operateDistance']=6
             with self.subTest(what=what),patch.object(ex,'read_prefab',side_effect=[a,b]),self.assertRaises(ValueError):ex.source_prefabs()
 
     def test_missing_catalog_material_fails_profile_closure(self):

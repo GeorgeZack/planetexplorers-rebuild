@@ -6,6 +6,7 @@
 #include "pe_town_trade.h"
 #include "pe_town_wallet.h"
 #include "pe_build_history.h"
+#include "pe_camp_repair.h"
 #include "../generated/pe_revival_source.h"
 #include <ctype.h>
 #include <limits.h>
@@ -45,7 +46,7 @@ bool pe_sandbox_pointer_route(PeSandboxPointerGate *gate,PeSandboxUIResult *r,un
 }
 void pe_sandbox_ui_init(PeSandboxUI *u,float w,float h) {
     if(!u)return;
-    memset(u,0,sizeof *u);u->batches=1;u->selected_slot=-1;u->drag_slot=-1;u->drag_quickslot=-1;
+    memset(u,0,sizeof *u);u->batches=1;u->selected_slot=-1;u->drag_slot=-1;u->drag_quickslot=-1;u->repair_slot=-1;
     u->build_item=PE_ITEM_WOOD;u->build_shape=PE_B45_CUBE;u->build_brush=4;
     pe_training_ui_windows_layout(w,h,&u->windows,&u->layout);
 }
@@ -58,10 +59,10 @@ bool pe_sandbox_ui_set_resident_markers(PeSandboxUI *u,const PeSandboxMapNpc *ma
     u->resident_markers=markers;u->resident_marker_count=count;return true;
 }
 bool pe_sandbox_ui_cursor(const PeSandboxUI *u) {
-    return u&&(u->revival_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->camera_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
+    return u&&(u->revival_open||u->repair_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->building||u->free_cursor||u->camera_cursor||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open||u->dragging);
 }
 static bool panel(const PeSandboxUI *u) {
-    return u->revival_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
+    return u->revival_open||u->repair_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->inventory_open||u->character_open||u->missions_open||u->replicator_open||u->paused||u->menu_open;
 }
 PeTrainingUIRect pe_sandbox_ui_supplier_menu(const PeSandboxUI *u) {
     return pe_training_ui_map(&u->layout,(PeTrainingUIRect){107,140,426,486},PE_UI_CENTER);
@@ -343,27 +344,27 @@ static void quick_use(const PeSandboxUI *u,PeSandboxUIResult *r,PeGame *g,int i)
 }
 static void close_panels(PeSandboxUI *u) {
     u->inventory_open=u->character_open=u->missions_open=u->replicator_open=false;
-    u->menu_open=u->search_focus=false;u->dragging=false;u->split_open=u->split_armed=false;u->delete_open=u->delete_armed=false;
+    u->menu_open=u->search_focus=false;u->dragging=false;u->windows.dragging=0;u->split_open=u->split_armed=false;u->delete_open=u->delete_armed=false;
 }
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
-    if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,1,entity,eligible))return false;
+    if(!u||!g||u->town_open||u->repair_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,1,entity,eligible))return false;
     u->dialogue_result=PE_ADVENTURE_DIALOGUE_REJECTED;close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_supplier(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
-    if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,2,entity,eligible))return false;
+    if(!u||!g||u->town_open||u->repair_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,2,entity,eligible))return false;
     u->dialogue_result=PE_ADVENTURE_DIALOGUE_REJECTED;close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_annot(PeSandboxUI *u,const PeGame *g,uint32_t entity,Texture2D portrait,bool eligible) {
-    if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,3,entity,eligible))return false;
+    if(!u||!g||u->town_open||u->repair_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,3,entity,eligible))return false;
     u->dialogue_result=PE_ADVENTURE_DIALOGUE_REJECTED;u->annot_portrait=portrait;close_panels(u);return true;
 }
 bool pe_sandbox_ui_open_town(PeSandboxUI *u,const PeGame *g,uint32_t entity,const char *name,Texture2D portrait,bool eligible) {
-    if(!u||!g||!entity||!name||strlen(name)>128||!eligible||u->town_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0)return false;
+    if(!u||!g||!entity||!name||strlen(name)>128||!eligible||u->town_open||u->repair_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0)return false;
     close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_portrait=portrait;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;
     snprintf(u->town_name,sizeof u->town_name,"%s",name);return true;
 }
 bool pe_sandbox_ui_open_deployable(PeSandboxUI *u,const PeGame *g,uint32_t instance){
-    if(!u||!g||u->town_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||
+    if(!u||!g||u->town_open||u->repair_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||
        g->mode!=PE_GAME_ADVENTURE||g->hp<=0||!pe_deployable_in_range(g,instance))return false;
     close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=0;u->deploy_entity=instance;u->deploy_get_pending=false;u->deploy_get_ticks=0;
     u->town_portrait=(Texture2D){0};snprintf(u->town_name,sizeof u->town_name,"Torch");return true;
@@ -458,18 +459,146 @@ static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
         }
     }
 }
+
+PeTrainingUIRect pe_sandbox_ui_repair_panel(const PeSandboxUI *u){
+    PeTrainingUIRect p=pe_training_ui_map(&u->layout,(PeTrainingUIRect){325,100,630,520},PE_UI_CENTER);
+    p.x+=u->repair_offset_x*u->layout.scale;p.y+=u->repair_offset_y*u->layout.scale;
+    p.x=fmaxf(0,fminf(p.x,u->layout.width-p.w));p.y=fmaxf(0,fminf(p.y,u->layout.height-p.h));return p;
+}
+PeTrainingUIRect pe_sandbox_ui_repair_row(const PeSandboxUI *u,int row){return relative(u,pe_sandbox_ui_repair_panel(u),22,90+46*(float)row,280,42);}
+PeTrainingUIRect pe_sandbox_ui_repair_reserved(const PeSandboxUI *u){return relative(u,pe_sandbox_ui_repair_panel(u),430,90,64,64);}
+PeTrainingUIRect pe_sandbox_ui_repair_button(const PeSandboxUI *u,int button){
+    PeTrainingUIRect p=pe_sandbox_ui_repair_panel(u);
+    switch(button){
+    case PE_REPAIR_UI_INSERT:return relative(u,p,22,422,280,32);
+    case PE_REPAIR_UI_START:return relative(u,p,320,376,136,32);
+    case PE_REPAIR_UI_CANCEL:return relative(u,p,468,376,136,32);
+    case PE_REPAIR_UI_TAKE:return relative(u,p,320,422,284,32);
+    case PE_REPAIR_UI_PREVIOUS:return relative(u,p,22,376,70,32);
+    case PE_REPAIR_UI_NEXT:return relative(u,p,232,376,70,32);
+    default:return relative(u,p,591,19,25,25);
+    }
+}
+PeTrainingUIRect pe_sandbox_ui_repair_confirm_panel(const PeSandboxUI *u){return relative(u,pe_sandbox_ui_repair_panel(u),105,158,420,190);}
+PeTrainingUIRect pe_sandbox_ui_repair_confirm_button(const PeSandboxUI *u,int button){return relative(u,pe_sandbox_ui_repair_confirm_panel(u),24+190*(float)button,138,180,32);}
+static bool repair_candidate(const PeGame *g,int slot){
+    return pe_game_repair_candidate(g,slot);
+}
+int pe_sandbox_ui_repair_count(const PeGame *g){
+    if(!g||g->repair.running)return 0;
+    int count=0;for(int k=0;k<pe_inventory_capacity(&g->inventory);k++)if(repair_candidate(g,k))count++;
+    return count;
+}
+int pe_sandbox_ui_repair_slot(const PeSandboxUI *u,const PeGame *g,int row){
+    if(!u||!g||row<0||row>=PE_REPAIR_UI_ROWS||u->repair_page<0||u->repair_page>PE_INVENTORY_MAX_SLOTS/PE_REPAIR_UI_ROWS)return -1;
+    int skip=u->repair_page*PE_REPAIR_UI_ROWS+row;
+    for(int k=0;k<pe_inventory_capacity(&g->inventory);k++)if(repair_candidate(g,k)&&skip--==0)return k;
+    return -1;
+}
+void pe_sandbox_ui_cancel_repair(PeSandboxUI *u){
+    if(!u)return;
+    u->repair_open=u->repair_dragging=u->repair_window_dragging=false;u->repair_confirm=0;u->repair_slot=-1;
+    u->repair_selected=u->repair_expected=(PeSlot){0};u->repair_notice[0]=0;
+}
+bool pe_sandbox_ui_open_repair(PeSandboxUI *u,const PeGame *g,bool eligible){
+    if(!u||!g||!eligible||panel(u)||u->building||!isfinite(g->hp)||g->hp<=0||g->mode!=PE_GAME_ADVENTURE||
+       pe_revival_frozen(&g->revival)||!pe_game_repair_state_valid(g))return false;
+    close_panels(u);pe_sandbox_ui_cancel_repair(u);u->repair_open=true;return true;
+}
+static void repair_notice(PeSandboxUI *u,const char *message){snprintf(u->repair_notice,sizeof u->repair_notice,"%s",message);}
+static bool repair_selection(const PeSandboxUI *u,const PeGame *g){
+    return pe_inventory_slot_valid(&g->inventory,u->repair_slot)&&same_slot(u->repair_selected,g->inventory.slots[u->repair_slot])&&repair_candidate(g,u->repair_slot);
+}
+static void repair_insert(PeSandboxUI *u,PeGame *g){
+    if(repair_selection(u,g)&&pe_game_repair_insert(g,u->repair_slot,&u->repair_selected)){
+        u->repair_slot=-1;u->repair_selected=(PeSlot){0};repair_notice(u,"Item placed in the machine.");
+    }else repair_notice(u,"Cannot insert: the item changed or is still equipped.");
+    u->repair_dragging=false;
+}
+static void repair_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i){
+    if(!isfinite(g->hp)||g->hp<=0||g->mode!=PE_GAME_ADVENTURE||!pe_game_repair_state_valid(g)){
+        pe_sandbox_ui_cancel_repair(u);return;
+    }
+    if(u->repair_confirm){
+        if(!same_slot(g->repair.item,u->repair_expected)||(u->repair_confirm==1&&g->repair.running)||(u->repair_confirm==2&&!g->repair.running)){
+            u->repair_confirm=0;repair_notice(u,"The repair state changed. Review it before continuing.");return;
+        }
+        if(i.escape||(i.left_pressed&&hit(pe_sandbox_ui_repair_confirm_button(u,1),i))){u->repair_confirm=0;return;}
+        if(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_repair_confirm_button(u,0),i))){
+            bool start=u->repair_confirm==1;
+            bool ok=start?pe_game_repair_start(g):pe_game_repair_cancel(g);
+            u->repair_confirm=0;
+            if(ok)repair_notice(u,start?"Repair started. You can close this window.":"Repair cancelled. Materials were not refunded.");
+            else repair_notice(u,start?"Cannot start: check the required materials and item.":"The repair could not be cancelled.");
+        }
+        return;
+    }
+    if(i.escape||(i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_CLOSE),i))){pe_sandbox_ui_cancel_repair(u);return;}
+    PeTrainingUIRect p=pe_sandbox_ui_repair_panel(u);
+    if(u->repair_window_dragging){
+        PeTrainingUIRect base=pe_training_ui_map(&u->layout,(PeTrainingUIRect){325,100,630,520},PE_UI_CENTER);
+        float x=fmaxf(0,fminf(i.mouse_x-u->repair_grab_x,u->layout.width-p.w));
+        float y=fmaxf(0,fminf(i.mouse_y-u->repair_grab_y,u->layout.height-p.h));
+        u->repair_offset_x=(x-base.x)/u->layout.scale;u->repair_offset_y=(y-base.y)/u->layout.scale;
+        if(i.left_released)u->repair_window_dragging=false;
+        return;
+    }
+    if(i.left_pressed&&hit(relative(u,p,10,10,570,46),i)){
+        u->repair_window_dragging=true;u->repair_dragging=false;u->repair_grab_x=i.mouse_x-p.x;u->repair_grab_y=i.mouse_y-p.y;return;
+    }
+    if(u->repair_slot>=0&&!repair_selection(u,g)){
+        u->repair_slot=-1;u->repair_selected=(PeSlot){0};u->repair_dragging=false;
+        repair_notice(u,"The selected item changed. Select it again.");
+        /* Never reinterpret this same Enter/drop as another transaction. */
+        return;
+    }
+    if(u->repair_dragging&&i.left_released){
+        if(hit(pe_sandbox_ui_repair_reserved(u),i))repair_insert(u,g);
+        else u->repair_dragging=false;
+        return;
+    }
+    int count=pe_sandbox_ui_repair_count(g),pages=count?(count+PE_REPAIR_UI_ROWS-1)/PE_REPAIR_UI_ROWS:1;
+    int page=u->repair_page;
+    if(i.page_up||(i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_PREVIOUS),i)))page--;
+    if(i.page_down||(i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_NEXT),i)))page++;
+    if(i.wheel&&hit(relative(u,p,22,90,280,276),i))page+=i.wheel>0?-1:1;
+    if(page<0)page=0;
+    if(page>=pages)page=pages-1;
+    if(page!=u->repair_page){u->repair_page=page;u->repair_slot=-1;u->repair_selected=(PeSlot){0};u->repair_dragging=false;return;}
+    if(i.left_pressed)for(int row=0;row<PE_REPAIR_UI_ROWS;row++)if(hit(pe_sandbox_ui_repair_row(u,row),i)){
+        int slot=pe_sandbox_ui_repair_slot(u,g,row);
+        if(slot>=0){u->repair_slot=slot;u->repair_selected=g->inventory.slots[slot];u->repair_dragging=true;u->repair_notice[0]=0;}
+        return;
+    }
+    bool insert=(i.advance&&u->repair_slot>=0)||(i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_INSERT),i));
+    if(insert){repair_insert(u,g);return;}
+    bool start=(i.advance&&u->repair_slot<0)||(i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_START),i));
+    bool cancel=i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_CANCEL),i);
+    if(start||cancel){
+        u->repair_dragging=false;
+        if((start&&pe_game_repair_can_start(g))||(cancel&&g->repair.running)){
+            u->repair_confirm=start?1:2;u->repair_expected=g->repair.item;
+        }else if(start)repair_notice(u,"Place a damaged item in the machine and bring the required materials.");
+        return;
+    }
+    if(i.left_pressed&&hit(pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_TAKE),i)){
+        if(pe_game_repair_take(g,NULL)){u->repair_slot=-1;u->repair_selected=(PeSlot){0};u->repair_dragging=false;repair_notice(u,"Item returned to your bag.");}
+        else repair_notice(u,g->repair.running?"Cancel the running repair before taking the item.":"Cannot take the item. Make room in its bag category.");
+    }
+}
+
 PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
     PeSandboxUIResult r={0};
     if(!u||!g||!isfinite(i.mouse_x)||!isfinite(i.mouse_y)||!isfinite(i.wheel)||u->layout.scale<=0){r.consume_world=true;return r;}
     u->revival_open=g->mode==PE_GAME_ADVENTURE&&(g->hp<=0||pe_revival_frozen(&g->revival));
     if(u->revival_open){
-        close_panels(u);pe_sandbox_ui_cancel_town(u);pe_adventure_dialogue_cancel(&u->dialogue);
+        close_panels(u);pe_sandbox_ui_cancel_town(u);pe_sandbox_ui_cancel_repair(u);pe_adventure_dialogue_cancel(&u->dialogue);
         u->windows.dragging=0;u->building=false;
     }
     u->mouse_x=i.mouse_x;u->mouse_y=i.mouse_y;
-    if(u->discard_input){u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
+    if(u->discard_input){u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=u->repair_dragging=u->repair_window_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
     bool before=panel(u),cursor_before=pe_sandbox_ui_cursor(u);
-    if(!i.focused){u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
+    if(!i.focused){u->repair_dragging=u->repair_window_dragging=false;u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
     bool history_owned=u->building&&(u->build_history_keys_owned||i.build_history_chord);
     u->build_history_keys_owned=history_owned&&i.build_history_keys_down;
     if(history_owned)r.consume_actions=true;
@@ -484,6 +613,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         }
         goto done;
     }
+    if(u->repair_open){r.consume_world=true;repair_route(u,g,i);goto done;}
     if(u->town_open){r.consume_world=true;town_route(u,g,i);goto done;}
     if(u->delete_open){r.consume_world=true;delete_route(u,g,i);goto done;}
     if(u->split_open){r.consume_world=true;split_route(u,g,i);goto done;}

@@ -45,9 +45,9 @@ int pe_test_vegetation_save(void){
     CHECK(loaded->world.extended&&loaded->world.extended!=g->world.extended);
     CHECK(pe_vegetation_install_fixture(loaded,(PeVec3){40,10,40}));
     CHECK(!memcmp(&g->vegetation,&loaded->vegetation,sizeof g->vegetation)&&loaded->tree_count==2);
-    bytes=read_bytes(path,&n);CHECK(bytes&&n>PE_SAVE_V18_APPEND+16);if(!bytes||n<=PE_SAVE_V18_APPEND+16)goto done;
-    size_t tail=n-PE_SAVE_V19_APPEND-PE_SAVE_V18_APPEND;
-    CHECK(get32(bytes+4)==19&&get32(bytes+tail)==1&&get32(bytes+tail+4)==8);
+    bytes=read_bytes(path,&n);CHECK(bytes&&n>PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+16);if(!bytes||n<=PE_SAVE_V20_APPEND+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+16)goto done;
+    size_t tail=n-PE_SAVE_V20_APPEND-PE_SAVE_V19_APPEND-PE_SAVE_V18_APPEND;
+    CHECK(get32(bytes+4)==20&&get32(bytes+tail)==1&&get32(bytes+tail+4)==8);
     CHECK(get32(bytes+tail+8)==g->vegetation.plants[0].prototype_id&&get32(bytes+tail+24)==1);
     for(size_t i=tail+8+8*20;i<tail+PE_SAVE_V18_APPEND;i++)CHECK(bytes[i]==0);
     bad=malloc(n+1);snapshot=malloc(sizeof *loaded);CHECK(bad&&snapshot);if(!bad||!snapshot)goto done;
@@ -60,15 +60,15 @@ int pe_test_vegetation_save(void){
     };
     for(unsigned i=0;i<sizeof corruptions/sizeof corruptions[0];i++){
         memcpy(bad,bytes,n);put32(bad+tail+corruptions[i].offset,corruptions[i].value);
-        CHECK(write_bytes(path,bad,n,19));CHECK(!pe_game_load(loaded,path,error,sizeof error));
+        CHECK(write_bytes(path,bad,n,20));CHECK(!pe_game_load(loaded,path,error,sizeof error));
         CHECK(!memcmp(snapshot,loaded,sizeof *loaded)&&pe_world_hash(&loaded->world)==world_hash);
     }
     memcpy(bad,bytes,n);memcpy(bad+tail+8+20+4,bad+tail+8+4,12); /* duplicate position */
-    CHECK(write_bytes(path,bad,n,19)&&!pe_game_load(loaded,path,error,sizeof error));
+    CHECK(write_bytes(path,bad,n,20)&&!pe_game_load(loaded,path,error,sizeof error));
     CHECK(!memcmp(snapshot,loaded,sizeof *loaded));
-    memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-1,19)&&!pe_game_load(loaded,path,error,sizeof error));
+    memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,n-1,20)&&!pe_game_load(loaded,path,error,sizeof error));
     CHECK(!memcmp(snapshot,loaded,sizeof *loaded));
-    memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,19)&&!pe_game_load(loaded,path,error,sizeof error));
+    memcpy(bad,bytes,n);bad[n]=0;CHECK(write_bytes(path,bad,n+1,20)&&!pe_game_load(loaded,path,error,sizeof error));
     CHECK(!memcmp(snapshot,loaded,sizeof *loaded));
     /* Literal v17 retains the exact tree owner, but cannot infer plants. */
     memcpy(bad,bytes,n);CHECK(write_bytes(path,bad,tail,17)&&pe_game_load(loaded,path,error,sizeof error));
@@ -77,7 +77,7 @@ int pe_test_vegetation_save(void){
     CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n);
     if(after&&after_n==n){CHECK(!memcmp(bytes+16,after+16,tail-16));for(size_t i=tail;i<tail+PE_SAVE_V18_APPEND;i++)CHECK(after[i]==0);CHECK(!memcmp(bytes+tail+PE_SAVE_V18_APPEND,after+tail+PE_SAVE_V18_APPEND,PE_SAVE_V19_APPEND));}
     free(after);after=NULL;
-    CHECK(write_bytes(path,bytes,n,19));g->vegetation.count=PE_MAX_PLANTS+1;
+    CHECK(write_bytes(path,bytes,n,20));g->vegetation.count=PE_MAX_PLANTS+1;
     CHECK(!pe_game_save(g,path,error,sizeof error));after=read_bytes(path,&after_n);
     CHECK(after&&after_n==n);if(after&&after_n==n)CHECK(!memcmp(bytes,after,n));
 done:

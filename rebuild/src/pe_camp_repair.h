@@ -1,14 +1,9 @@
 #ifndef PE_CAMP_REPAIR_H
 #define PE_CAMP_REPAIR_H
 #include "pe_game.h"
-/* Disconnected ordinary camp repair. This owns a removed bag instance, never a
- * copy still owned by inventory. Not part of PeGame or PECS. Zero initializes.
- * Source equipment-origin drops are intentionally unsupported in this adapter. */
-typedef struct {
-    PeSlot item;
-    int64_t remaining_ticks;
-    bool running;
-} PeCampRepair;
+/* Ordinary camp repair owns a removed bag instance. PeGame embeds the value
+ * state; no item is simultaneously owned by the bag. Source equipment-origin
+ * drops remain unsupported: callers must unequip before bag transfer. */
 /* Mandatory host guard: true only if this instance has no equipment, outfit,
  * deployment, buyback or other external owner/reference preventing transfer.
  * Bag membership is checked here separately. Guard must be read-only. */
@@ -38,6 +33,7 @@ bool pe_camp_repair_update(PeCampRepair *repair,const PeCampRepairAccess *access
 float pe_camp_repair_seconds(const PeCampRepair *repair);
 /* Value snapshot only: caller must restore the corresponding inventory and
  * other owners first. Destination must be empty; rejected snapshots leave it
- * unchanged. No on-disk parser, host load hook or original mid-job oracle. */
+ * unchanged. The PECS adapter separately validates its fixed record; there is
+ * no original mid-job oracle. */
 bool pe_camp_repair_restore(PeCampRepair *repair,const PeCampRepair *snapshot,const PeCampRepairAccess *access);
 #endif

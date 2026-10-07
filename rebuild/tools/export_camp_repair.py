@@ -56,6 +56,12 @@ SOURCE_PINS = {'Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UIRep
  'Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSElectric.cs': '7d927252bce2b6a8933ab08e0abed20af7839268a2d939a30a3228c31f3774db',
  'Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSWorkerMachine.cs': '229644918554519e3f7cb767d2d0fda4720a47901031c05ff8049197c8c7261d',
  'Assets/Scripts/WuYiqiu/Colony System/Scripts/Entities/CSEntity.cs': '0b7da4e19cc61cad16b88c1498af8fe664f8a64547dd9da95bf9383ddd912093'}
+SOURCE_PINS.update({
+    'Assets/Scripts/Input/PeInputExt.cs': '9cf4c5c41798ab4b5c753273ad014d50fd9508cc8fee180a6ecb7296edd8725d',
+    'Assets/Scripts/MousePicker/MousePicker.cs': 'ebefb48cb9a28eacef2488757c85cdf9d7a844f73187de3cc89b673ed6c0a1e8',
+    'Assets/Scripts/Input/PeInput.cs': 'd335ae3e7f469a3cda7bc489c580fc526c8dfb4a1cf3ed9ed80d3aacc137261c',
+    'Assets/Scripts/Input/PeInputSettings.cs': '3f3036fd68b4c6af2e96124d52f64eabfec6283c3414c18f40efb0b68fa34064',
+})
 SUB_PINS = {
     'starting': ('149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae',
                  'dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6',
@@ -107,19 +113,26 @@ def source_prefabs(source_root=ROOT):
     if len(colliders)!=1 or not colliders[0][1]['m_Enabled'] or colliders[0][1]['m_IsTrigger']:
         raise ValueError('Expected source static repair box collider')
     collider_id, collider = colliders[0]
+    roots=[o['data'] for o in static.values() if o['kind']=='Transform' and pointer(o['data']['m_GameObject'])==game_id]
+    if len(roots)!=1 or pointer(roots[0]['m_Father'])!=0 or vector(roots[0]['m_LocalPosition'])!=[0.,0.,0.] or vector(roots[0]['m_LocalScale'])!=[1.,1.,1.] or roots[0]['m_LocalRotation']!=dict(x=0.,y=0.,z=0.,w=1.):
+        raise ValueError('Repair root transform changed')
+    if len([o for o in static.values() if o['kind'].endswith('Collider')])!=1 or vector(collider['m_Center'])!=[0.,.5,0.] or vector(collider['m_Size'])!=[1.,1.,1.]:
+        raise ValueError('Repair pick collider set changed')
+    if 'operateDistance' in operate or operate.get('mCollider',operate.get('mColldier'))!=[]:
+        raise ValueError('Repair source requires default range and collected colliders')
     _, ordinary = component(furniture, REPAIR_GUID)
     if ordinary['m_ItemID']!=1130 or ordinary['m_Type']!=repair['m_Type']:
         raise ValueError('Ordinary repair prototype/type binding changed')
     return dict(game_object_path_id=game_id,repair_component_path_id=repair_id,operate_component_path_id=operate_id,
         scripts=dict(repair=REPAIR_GUID,operate=OPERATE_GUID),object_type=5,item_id_field=0,
-        ordinary_repair_prototype=1130,work_transforms=0,power_field=0,layer=13,
+        ordinary_repair_prototype=1130,work_transforms=0,power_field=0,layer=13,root_transform=dict(position=[0.,0.,0.],rotation=[0.,0.,0.,1.],scale=[1.,1.,1.]),
         collider=dict(path_id=collider_id,kind='BoxCollider',center=vector(collider['m_Center']),size=vector(collider['m_Size']),trigger=False))
 
 
 def installed_prefab(bundle=BUNDLE):
     import UnityPy
     checked_file(bundle,BUNDLE_SHA)
-    env=UnityPy.load(str(bundle)); objects={o.path_id:(o.type.name,o.read_typetree()) for o in env.objects if o.type.name in ('MonoBehaviour','MonoScript','GameObject')}
+    env=UnityPy.load(str(bundle)); objects={o.path_id:(o.type.name,o.read_typetree()) for o in env.objects if o.type.name in ('MonoBehaviour','MonoScript','GameObject','BoxCollider','Transform')}
     found={}
     for identity,(kind,data) in objects.items():
         if kind!='MonoBehaviour':continue
@@ -132,7 +145,15 @@ def installed_prefab(bundle=BUNDLE):
     root=pointer(repair['m_GameObject'])
     if root!=pointer(operate['m_GameObject']) or objects[root][1]['m_Name']!='RepairMachine_Static' or repair['m_Type']!=5 or repair['m_ItemID']!=0 or repair['m_WorkTrans'] or repair['m_Power']!=0:
         raise ValueError('Installed repair machine differs from qualified source')
-    return dict(game_object_path_id=root,repair_component_path_id=repair_id,operate_component_path_id=operate_id,object_type=5,item_id_field=0,work_transforms=0)
+    boxes=[d for kind,d in objects.values() if kind=='BoxCollider']
+    roots=[d for kind,d in objects.values() if kind=='Transform' and pointer(d['m_GameObject'])==root]
+    if len(boxes)!=1 or pointer(boxes[0]['m_GameObject'])!=root or not boxes[0]['m_Enabled'] or boxes[0]['m_IsTrigger'] or vector(boxes[0]['m_Center'])!=[0.,.5,0.] or vector(boxes[0]['m_Size'])!=[1.,1.,1.]:
+        raise ValueError('Installed repair pick box changed')
+    if len(roots)!=1 or pointer(roots[0]['m_Father'])!=0 or vector(roots[0]['m_LocalPosition'])!=[0.,0.,0.] or vector(roots[0]['m_LocalScale'])!=[1.,1.,1.] or roots[0]['m_LocalRotation']!=dict(x=0.,y=0.,z=0.,w=1.):
+        raise ValueError('Installed repair root transform changed')
+    if 'operateDistance' in operate or operate['mCollider']!=[]:
+        raise ValueError('Installed repair requires default range and collected colliders')
+    return dict(collider=dict(center=vector(boxes[0]['m_Center']),size=vector(boxes[0]['m_Size'])),game_object_path_id=root,repair_component_path_id=repair_id,operate_component_path_id=operate_id,object_type=5,item_id_field=0,work_transforms=0)
 
 
 def read_colony(data):
@@ -191,6 +212,7 @@ def archive(directory,profile):
     decoded=read_colony(colony);entities,_=decode_entities(root);entity=entities[20006]
     if (entity['prefab'],entity['prototype_type'],entity['prototype_id'])!=('EntityDoodad',5,145):raise ValueError('Repair doodad binding changed')
     pose=transform(entity)
+    if pose['rotation']!=[0.,1.,0.,-4.371138828673793e-08]:raise ValueError('Repair archived heading changed')
     if pose['position']!=decoded['repair']['position']:raise ValueError('Doodad and repair job anchors differ')
     resource=Reader(entity['components']['BiologyViewCmpt']);path=resource.string();resource.end()
     if path!='Item/RepairMachine_Static.unity3d':raise ValueError('Archived repair model changed')
@@ -245,7 +267,13 @@ def build_outputs(source_root=ROOT,database=DEFAULT_DATABASE,catalog_path=ROOT/'
     qualified=profiles['qualified']
     header=['/* Generated by export_camp_repair.py; do not edit. */','#ifndef PE_CAMP_REPAIR_SOURCE_H','#define PE_CAMP_REPAIR_SOURCE_H',
         '#define PE_CAMP_REPAIR_ENTITY_ID 20006','#define PE_CAMP_REPAIR_CREATOR_ID 10000','#define PE_CAMP_REPAIR_DATA_TYPE 5',
-        '#define PE_CAMP_REPAIR_BASE_SECONDS 60.0f','#define PE_CAMP_REPAIR_TICKS_PER_SECOND 100000',
+        '#define PE_CAMP_REPAIR_SOURCE_X -613.5f','#define PE_CAMP_REPAIR_SOURCE_Y 29.5f','#define PE_CAMP_REPAIR_SOURCE_Z 404.0f',
+        '#define PE_CAMP_REPAIR_BOX_CENTER_Y 0.5f','#define PE_CAMP_REPAIR_BOX_HALF 0.5f',
+        '#define PE_CAMP_REPAIR_ROTATION_Y 1.0f','#define PE_CAMP_REPAIR_ROTATION_W -4.371138828673793e-08f',
+        '#define PE_CAMP_REPAIR_PICK_METERS 19.0f','#define PE_CAMP_REPAIR_PICK_ROUGH_FACTOR 1.25f',
+        '#define PE_CAMP_REPAIR_RAY_METERS 100.0f','#define PE_CAMP_REPAIR_CLOSE_METERS 8.0f',
+        '#define PE_CAMP_REPAIR_SOURCE_OBSTACLE_ALLOWANCE 10.0f',
+        '#define PE_CAMP_REPAIR_BASE_SECONDS 60.0f' ,'#define PE_CAMP_REPAIR_TICKS_PER_SECOND 100000',
         '#define PE_CAMP_REPAIR_MATERIAL_CAPACITY 8',f'#define PE_CAMP_REPAIR_SOURCE_ITEM_COUNT {len(qualified)}',
         'typedef struct { int item_id,count; } PeCampRepairMaterial;',
         'typedef struct { int item_id; float durability_max; unsigned material_count; PeCampRepairMaterial materials[PE_CAMP_REPAIR_MATERIAL_CAPACITY]; } PeCampRepairItemSource;',
@@ -258,6 +286,13 @@ def build_outputs(source_root=ROOT,database=DEFAULT_DATABASE,catalog_path=ROOT/'
     manifest=dict(schema=1,scope='One archived camp repair machine; source-qualified metadata, no gameplay service or PECS format change.',
         sources=[describe_source(p) for p in all_sources],source_file_guards=SOURCE_PINS,
         source_prefab=prefab,installed_prefab=installed,archives=[starting,route],catalog=profiles,
+        interaction=dict(operate_distance=19,rough_axis_factor=1.25,ray_distance=100,window_close_distance=8,
+            source_obstacle_allowance=10,source_obstacle_layers=['VFVoxelTerrain','SceneStatic'],
+            range='Root has no PeTrans; CollectColliders finds the one enabled nontrigger root box; inclusive Bounds.SqrDistance <= 19 squared after root-axis rough filter.',
+            transform='Prefab root identity; archived yaw180 quaternion retained, root localScale reset to one by OperatableItemRepairMachine.Init/PostInit.',
+            source_pointer='MousePicker enabled and not gamePause; UICamera.hoveredObject blocks; delayTime0 requires positive hover elapsed; nearest Level0 pick in source obstacle distance+10.',
+            source_operation='InteractWithItem Click or OpenItemMenu ClickNoMove calls Operate; the latter also dispatches RMouseClickEvent.',
+            native_adapter='Supported crop, loaded model/current collision, living player within inclusive8m root range; strict tree-free geometry occlusion with .0001m equality tolerance. No source +10m through-wall allowance.'),
         semantics=dict(creator_id=10000,data_type=5,ordinary_repair_prototype=1130,base_seconds=60,qualified_workers=0,
             cost='ceil(base material count * 1 * (1 - durability/max)); active UI has no epsilon early return',
             start_gate='Repair exists and !PeFloatRangeNum.IsCurrentMax(); absolute deficit < PEMath.Epsilon counts as full',
