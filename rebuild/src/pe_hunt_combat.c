@@ -160,7 +160,7 @@ bool pe_hunt_combat_step(PeHuntCombat*h,const PeWorld*w,const PeSandboxCollision
     }
     for(unsigned i=0;i<PE_HUNT_ENCOUNTER_COUNT&&life>0;i++){
         PeHuntEncounterActor *a=&next.encounter.actors[i];PeHareAttack *attack=&next.attacks[i];PeHareSkill *skill=&next.skills[i];
-        if(!a->present||a->hp<=0||!attack->active||!skill->contact_enabled||!permissions.can_damage)continue;
+        if(!a->present||a->hp<=0||!attack->active||!skill->contact_enabled||!permissions.can_damage||p.defence_disabled)continue;
         const PeHareAttackDef *def=pe_hare_attack_def(attack->attack);
         for(unsigned window=0;window<def->window_count;window++)if(attack->open_windows&(1u<<window))
             for(unsigned bone=1;bone<=2;bone*=2)if(def->windows[window].bones&bone){

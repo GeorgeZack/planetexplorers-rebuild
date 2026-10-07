@@ -214,7 +214,7 @@ bool pe_game_set_world(PeGame *g,const PeWorld *world,PeVec3 preferred){
         if(collision){next->player=p;found=pe_game_collision_settle(next,collision);}
         else for(int lift=0;lift<15;lift++,p.y+=0.05f)if(!collides(next,p)){next->player=p;found=true;break;}
     }
-    if(found){next->velocity=(PeVec3){0};next->grounded=false;next->sprinting=false;next->jumping=false;next->jump_action_elapsed=0;pe_game_move(g,next);say(g,"World imported; inventory retained.");}
+    if(found){next->velocity=(PeVec3){0};next->grounded=false;next->sprinting=false;next->jumping=false;next->jump_action_elapsed=0;next->revival=(PeRevival){0};pe_game_move(g,next);say(g,"World imported; inventory retained.");}
     pe_sandbox_collision_free(collision);pe_game_destroy(next);free(next);return found;
 }
 void pe_game_destroy(PeGame *g){if(g){pe_world_destroy(&g->world);memset(g,0,sizeof *g);}}
@@ -395,7 +395,8 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
         if(g->juice_buff_elapsed>10+1e-9)g->juice_buff_active=false;
     }
     clear_spent_references(g);
-    if(!(g->hp>0)){input=(PeInput){0};g->sprinting=false;motion=NULL;}
+    bool frozen=!(g->hp>0)||pe_revival_frozen(&g->revival);
+    if(frozen){input=(PeInput){0};g->sprinting=false;g->jumping=false;motion=NULL;}
     if(motion){input.move_x=input.move_z=0;input.jump=input.sprint=false;input.stamina_action=true;}
     if(g->equipped_instance_id&&!pe_game_equipped_tool(g))g->equipped_instance_id=0;
     if (!isfinite(input.move_x)) input.move_x=0;
@@ -423,8 +424,10 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
         g->stamina-=jump_cost;g->jumping=true;g->sprinting=false;stamina_active=true;
         g->velocity.y=7;g->grounded=false;g->jump_action_elapsed=0;
     }
-    g->velocity.y-=20*dt;
-    if(collision){
+    if(frozen)g->velocity=(PeVec3){0};
+    else g->velocity.y-=20*dt;
+    if(frozen){ /* Death/get-up freezes player physics, not clocks or NPCs. */ }
+    else if(collision){
         PeSandboxMotion motion;
         if(pe_sandbox_collision_move(collision,g->player,g->velocity,dt,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT,
                                     g->grounded,g->grounded&&g->velocity.y<=0,&motion)){

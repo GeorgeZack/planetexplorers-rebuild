@@ -324,12 +324,28 @@ static bool sandbox_health_frame(PeAttributeClock *clock,PeGame *game,double dt,
     if(!pe_attribute_clock_step(&next,active?dt:0,&frame))return false;
     PePassiveRecovery recovery=game->passive_recovery;float hp=game->hp;
     PeStaminaRecovery stamina=game->stamina_recovery;
+    PeRevival revival=game->revival;
     PeStaminaVitals vitals={game->stamina,game->stamina_max,game->stamina_regen,game->stamina_recover_delay,game->comfort};
     if(active&&game->mode==PE_GAME_ADVENTURE&&
-       (!pe_passive_recovery_frame(&recovery,frame,&hp,game->max_hp)||
+       (!pe_revival_frame(&revival,frame,hp>0)||
+        !pe_passive_recovery_frame(&recovery,frame,&hp,game->max_hp)||
         !pe_stamina_recovery_frame(&stamina,&game->passive_recovery,&recovery,frame,&vitals)))return false;
     *clock=next;game->passive_recovery=recovery;game->hp=hp;
+    game->revival=revival;
     game->stamina_recovery=stamina;game->stamina=vitals.stamina;game->comfort=vitals.comfort;return true;
+}
+static bool sandbox_revive_request(PeGame *game,const PeAttributeClock *clock){
+    if(!game||!clock)return false;
+    /* The native actor currently has no ragdoll, ride or Fall action owner.
+     * This follows source model-present/no-ragdoll readiness; it does not
+     * pretend to play the original death/get-up animation. */
+    PeRevivalGate gate={.death_mask=game->hp==0,.getup_ready=true,.item_skill_ready=true};
+    PeAttributeFrame frame={(float)clock->seconds,clock->frame,clock->frame==clock->attribute_frame};
+    return pe_game_revive(game,frame,gate);
+}
+static bool sandbox_hunt_runs(const PeSandboxUI *ui,PeSandboxUIResult action){
+    /* The get-up modal owns player input, not the other actors' clocks. */
+    return !action.consume_world||ui->revival_open;
 }
 static void sandbox_health_contacts(PeGame *game,uint64_t previous_hits,uint64_t committed_hits){
     if(game&&committed_hits!=previous_hits&&game->mode==PE_GAME_ADVENTURE)
@@ -364,7 +380,8 @@ static bool hunt_player_pose(PeSandboxActor *actor,PeGame *game,const PeActor *d
     if(!definition||fabs(definition->duration-pose.duration)>1e-6||definition->loop!=pose.loop)return false;
     PeHuntCombatPlayer next=(PeHuntCombatPlayer){.position=game->player,.velocity=game->velocity,.yaw=pose.yaw,
         .radius=PE_PLAYER_RADIUS,.height=PE_PLAYER_HEIGHT,.defense=pe_player_defaults.defense,.outfit=&game->outfit,
-        .max_hp=game->max_hp,.alive=game->hp>0,.grounded=game->grounded,.clip=clip,.seconds=pose.seconds};
+        .max_hp=game->max_hp,.alive=game->hp>0,.grounded=game->grounded,.clip=clip,.seconds=pose.seconds,
+        .defence_disabled=pe_revival_damage_disabled(&game->revival)};
     const PeSlot *weapon=pe_game_equipped_tool(game);
     if(weapon&&weapon->item_id==1&&melee&&melee->ready&&melee->setup.weapon_item_id==1){
         next.weapon=&game->inventory.slots[weapon-game->inventory.slots];
@@ -739,9 +756,20 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(!sandbox_health_frame(&sandbox_attribute_clock,game,smoke_frames?PE_FIXED_DT:dt,focused,action.paused)){
             snprintf(error,sizeof error,"Invalid player recovery clock");result=1;break;
         }
-        if(focused&&!action.paused&&game->hp>0) {
+        if(action.revive&&focused&&!action.paused&&sandbox_revive_request(game,&sandbox_attribute_clock)){
+            attack_pending=tool_drawn=placing_torch=autorun=jump_pending=false;
+            build_mode=ui.building=false;accumulator=0;
+            pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);
+            pe_sandbox_actor_reset_motion(actor,game);
+            /* Preserve the actual cohort, injuries, kill count and encounter
+             * clock. Revival must not reload or replace surviving creatures. */
+            world_input=action_input=false;
+            fprintf(stderr,"Player revived: hp=%.6f stamina=%.6f comfort=%.6f kills=%u\n",
+                game->hp,game->stamina,game->comfort,game->hunt_kills);
+        }
+        if(focused&&!action.paused) {
             supplier_seconds+=smoke_frames?PE_FIXED_DT:dt;
-            if(hunt.encounter.active&&!action.consume_world){
+            if(hunt.encounter.active&&sandbox_hunt_runs(&ui,action)){
                 PeHuntCombatPlayer player;
                 if(!sandbox_action_pose(actor,game,&tool_action,&melee,tool_drawn)||!hunt_player_pose(actor,game,player_defence,&melee,&player)||
                    !pe_hunt_combat_sense(&hunt,collision,player)){snprintf(error,sizeof error,"Hunt sensor pose unavailable");result=1;break;}
@@ -872,7 +900,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     snprintf(error,sizeof error,"Player capsule intersects world geometry");result=1;break;
                 }
                 melee_gate.alive=game->hp>0;melee_gate.grounded=game->grounded;melee_gate.velocity=game->velocity;
-                if(melee.ready&&(!hunt.encounter.active||action.consume_world)){
+                if(melee.ready&&(!hunt.encounter.active||!sandbox_hunt_runs(&ui,action))){
                     PeSandboxMeleeFrame frame_pose={.gate=melee_gate,.player_position=game->player,
                         .player_yaw=pe_sandbox_actor_yaw(actor,game),.player_scale=1};
                     PeSandboxMeleeUpdate update;
@@ -884,7 +912,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 pe_sandbox_actor_facing_lock(actor,melee.action.active||tool_action.stage!=PE_SANDBOX_ACTION_IDLE);
                 if(hunt.encounter.active){
                     pe_sandbox_actor_update(actor,PE_FIXED_DT,game);hunt_fixed_pose=true;
-                    if(!action.consume_world){
+                    if(sandbox_hunt_runs(&ui,action)){
                         PeHuntCombatPlayer player;
                         if(!sandbox_action_pose(actor,game,&tool_action,&melee,tool_drawn)||!hunt_player_pose(actor,game,player_defence,&melee,&player)){
                             snprintf(error,sizeof error,"Hunt player defence pose unavailable");result=1;break;
@@ -920,11 +948,10 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                         if(completed){game->hunt_state=PE_HUNT_RETURN_PENDING;snprintf(game->message,sizeof game->message,"Four hares defeated. Return to town and report in.");}
                         else if(game->hunt_kills!=before)snprintf(game->message,sizeof game->message,"Lepus hares defeated: %u/4",game->hunt_kills);
                         if(game->hp<=0){attack_pending=false;tool_drawn=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actions_cancel(&tool_action);
-                            snprintf(game->message,sizeof game->message,"You have died. Load a saved game from the pause menu.");}
+                            snprintf(game->message,sizeof game->message,"You have died. Use a Revival Shot or load a saved game.");}
                     }
                 }
                 jump_pending=false;accumulator-=PE_FIXED_DT;
-                if(game->hp<=0){accumulator=0;break;}
             }
             if(result==1)break;
             if(steps>=6)accumulator=0;

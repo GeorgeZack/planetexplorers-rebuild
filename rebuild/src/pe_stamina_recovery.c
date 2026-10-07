@@ -4,8 +4,10 @@
 
 static bool valid(const PeStaminaRecovery *s){
     return isfinite(s->last_consumption)&&s->last_consumption>=0&&isfinite(s->summed_delay)&&s->summed_delay>=0&&
+        isfinite(s->pending_raw_comfort)&&
+        (s->comfort_pending?s->pending_raw_comfort<=pe_stamina_recovery_source.comfort_max:s->pending_raw_comfort==0)&&
         s->stamina_ticks<UINT64_MAX-1&&s->comfort_ticks<UINT64_MAX-1&&s->delay_ticks<UINT64_MAX-1&&
-        (s->initialized||(!s->last_consumption&&!s->summed_delay&&!s->stamina_ticks&&!s->comfort_ticks&&!s->delay_ticks&&!s->frame));
+        (s->initialized||(!s->last_consumption&&!s->summed_delay&&!s->stamina_ticks&&!s->comfort_ticks&&!s->delay_ticks&&!s->frame&&!s->comfort_pending));
 }
 static unsigned pulses(uint64_t *index,float elapsed,double interval){
     unsigned count=0;
@@ -25,6 +27,7 @@ bool pe_stamina_recovery_frame(PeStaminaRecovery *state,const PePassiveRecovery 
     PeStaminaRecovery next=*state;PeStaminaVitals value=*vitals;
     if(!next.initialized){next.initialized=true;next.summed_delay=value.base_delay;}
     next.frame=frame.frame;
+    if(frame.attributes_due&&next.comfort_pending)value.comfort=next.pending_raw_comfort;
     bool remount=after->mounted&&(!before->mounted||!before->initialized||
         before->mounted_at!=after->mounted_at||before->initialization_checked!=after->initialization_checked);
     if(remount||!after->mounted)next.stamina_ticks=next.comfort_ticks=next.delay_ticks=0;
@@ -50,9 +53,23 @@ bool pe_stamina_recovery_frame(PeStaminaRecovery *state,const PePassiveRecovery 
         value.stamina=fminf(value.maximum,value.stamina);
         value.comfort=fminf(pe_stamina_recovery_source.comfort_max,fmaxf(0,value.comfort));
     }
-    if(!valid(&next)||!isfinite(value.stamina))return false;
+    if(frame.attributes_due&&next.comfort_pending){
+        value.comfort=fminf(pe_stamina_recovery_source.comfort_max,fmaxf(0,value.comfort));
+        next.comfort_pending=false;next.pending_raw_comfort=0;
+    }
+    if(!valid(&next)||!isfinite(value.stamina)||!isfinite(value.comfort))return false;
     *state=next;*vitals=value;return true;
 }
 void pe_stamina_recovery_consume(PeStaminaRecovery *state,float now){
     if(state&&state->initialized)state->last_consumption=now;
+}
+
+bool pe_stamina_recovery_revive(PeStaminaRecovery *state,PeAttributeFrame frame,float raw_comfort){
+    if(!state||!valid(state)||!state->initialized||!isfinite(frame.now)||frame.now<0||!frame.frame||
+       state->frame!=frame.frame||state->last_consumption>frame.now||
+       !isfinite(raw_comfort)||raw_comfort>pe_stamina_recovery_source.comfort_max)return false;
+    PeStaminaRecovery next=*state;
+    next.stamina_ticks=next.comfort_ticks=next.delay_ticks=0;
+    next.pending_raw_comfort=raw_comfort;next.comfort_pending=true;
+    *state=next;return true;
 }

@@ -20,6 +20,7 @@ The latest running-knife increment adds grounded female third-person Knife33 sta
 | Next sandbox milestone and live original fixtures | [Sandbox alignment](docs/audit/SANDBOX_ALIGNMENT.md) |
 | Source-first priorities and when a playtest is needed | [October6 source audit and work order](docs/audit/SOURCE_FIRST_REBUILD.md) |
 | Latest source-only reassessment and user recording plan | [Review at5ec481e3](docs/audit/SOURCE_FIRST_REVIEW.md): revival, walking attacks, progression/economy and existing-capture reuse |
+| Revival Shot, death modal and contact grace | [Contract and limitations](docs/audit/SANDBOX_REVIVAL.md), [transient core](rebuild/src/pe_revival.h), [host regression](rebuild/tests/test_sandbox_revival_host.c); no ragdoll/physical acceptance claim |
 | Low-health recovery clocks, damage notification and load lifecycle | [Passive recovery](docs/audit/PASSIVE_RECOVERY.md), [core owner](rebuild/src/pe_passive_recovery.h) |
 | Melee endpoint history, source entity centers and collision sampling | [Capsule history audit](docs/audit/MELEE_CAPSULE_HISTORY.md), [numerical owner](rebuild/src/pe_capsule_history.h) |
 | Offline humanoid evaluation and remaining limb gap | [697-pose proof](docs/audit/HUMANOID_ROTATION_PROOF.md), [channel mapping](docs/audit/HUMANOID_CHANNEL_MAPPING.md), [experimental C arithmetic](rebuild/tools/human_rotation_math.h); outside runtime CORE |

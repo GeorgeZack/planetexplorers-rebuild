@@ -30,11 +30,17 @@ def extract():
     assert '.input_allowed=(!action.consume_world||cycle_from_tab)&&!action.paused&&!loaded&&!resized&&game->hp>0' in text
     assert 'bool world_input=camera_control.world_input;' in text
     assert 'bool action_input=world_input&&!action.consume_actions;' in text
-    assert 'hunt.encounter.active&&!action.consume_world' in text
-    sensor = block(text, 'if(hunt.encounter.active&&!action.consume_world){')
+    hunt_policy = block(text, 'static bool sandbox_hunt_runs(')
+    # The no-target and live-hunt branches must be complementary even during
+    # revival, or a prepared interval is consumed twice. Death only freezes
+    # player physics; the outer host must keep advancing actor clocks.
+    assert 'if(melee.ready&&(!hunt.encounter.active||!sandbox_hunt_runs(&ui,action))){' in text
+    assert 'if(focused&&!action.paused&&game->hp>0)' not in text
+    assert 'if(game->hp<=0){accumulator=0;break;}' not in text
+    sensor = block(text, 'if(hunt.encounter.active&&sandbox_hunt_runs(&ui,action)){')
     assert 'pe_hunt_combat_sense' in sensor
     fixed = block(text, 'if(hunt.encounter.active){\n                    pe_sandbox_actor_update')
-    contact = block(fixed, 'if(!action.consume_world){')
+    contact = block(fixed, 'if(sandbox_hunt_runs(&ui,action)){')
     assert 'pe_hunt_combat_step' in contact
     cancel = block(text, 'if(!world_input||build_mode||!third_person||game->hp<=0||!knife_ready){')
     return '''/* Generated from production pe_sandbox_view.c; do not edit. */
@@ -52,8 +58,10 @@ static PeInput host_motion(PeGame *game, PeSandboxUIResult action,
     *blade=melee;*drawn=tool_drawn;*new_action=action_input;*pending=attack_pending;
     return input;
 }
+''' + hunt_policy + '''
 static bool host_hunt_enabled(PeHuntCombat hunt,PeSandboxUIResult action){
-    return hunt.encounter.active&&!action.consume_world;
+    PeSandboxUI ui={0}; /* This regression exercises living consumable use. */
+    return hunt.encounter.active&&sandbox_hunt_runs(&ui,action);
 }
 '''
 

@@ -41,6 +41,7 @@ typedef struct {
     float base_attack;
     bool shield_block;
     bool alive,grounded;
+    bool defence_disabled; /* Actual collider grace; actor/AI clocks continue. */
     size_t clip; /* Exact visible NON-MELEE pose; active blade overrides below. */
     double seconds;
     /* Zero uses legacy clip/seconds; otherwise exact visible normalized blend. */

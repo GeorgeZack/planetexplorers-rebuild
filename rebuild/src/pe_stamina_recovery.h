@@ -7,6 +7,10 @@ typedef struct {
     float last_consumption, summed_delay;
     uint64_t stamina_ticks, comfort_ticks, delay_ticks, frame;
     bool initialized;
+    /* Revival writes raw comfort before the next sum/clamp pass. PeGame keeps
+     * a bounded saved value; loading drops this transient pre-clamp remainder. */
+    float pending_raw_comfort;
+    bool comfort_pending;
 } PeStaminaRecovery;
 typedef struct {
     float stamina, maximum, recovery_speed, base_delay, comfort;
@@ -18,5 +22,7 @@ bool pe_stamina_recovery_frame(PeStaminaRecovery *state,
     PeAttributeFrame frame,PeStaminaVitals *vitals);
 /* Only successful consumption or an active cost-owning action calls this.
  * now is the validated shared display timestamp, never a fixed-tick clock. */
+/* Same-frame remount; preserves prior consumption/summed-delay/frame state. */
+bool pe_stamina_recovery_revive(PeStaminaRecovery *state,PeAttributeFrame frame,float raw_comfort);
 void pe_stamina_recovery_consume(PeStaminaRecovery *state,float now);
 #endif

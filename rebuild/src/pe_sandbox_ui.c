@@ -1,5 +1,6 @@
 #include "../generated/pe_stamina_recovery_source.h"
 #include "pe_sandbox_ui.h"
+#include "../generated/pe_revival_source.h"
 #include "pe_shield.h"
 #include "pe_adventure_medicine.h"
 #include "pe_adventure_hunt.h"
@@ -610,6 +611,16 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(u->seconds<u->message_until&&*u->last_message)wrapped(u,u->last_message,map(u,36,22,600,70,PE_UI_TOP_LEFT),18,ink);
     if(u->dragging)item(u,u->drag_item,0,(PeTrainingUIRect){u->mouse_x-24*u->layout.scale,u->mouse_y-24*u->layout.scale,48*u->layout.scale,48*u->layout.scale},false,WHITE);
     else if(!u->paused)tooltip(u,g);
+    if(u->revival_open&&!u->paused) {
+        DrawRectangle(0,0,(int)u->layout.width,(int)u->layout.height,(Color){0,0,0,110});
+        panel(u,map(u,395,220,490,300,PE_UI_CENTER),g->hp>0?"REVIVING":"REVIVE",PE_UI_EFFECT_INVENTORY);
+        int shots=pe_inventory_count(&g->inventory,pe_revival_source.item_id);
+        item(u,pe_revival_source.item_id,shots,map(u,455,285,64,64,PE_UI_CENTER),true,WHITE);
+        wrapped(u,g->hp>0?"Getting up...":TextFormat("Revival Shot x%d\nRevive here with 33.3%% HP.",shots),
+            map(u,535,285,290,85,PE_UI_CENTER),18,ink);
+        button(u,pe_sandbox_ui_revival_button(u,0),"1. Revive (1 shot)",g->hp<=0&&shots>0);
+        button(u,pe_sandbox_ui_revival_button(u,1),"2. Load saved game",true);
+    }
     if(u->paused) {
         DrawRectangle(0,0,(int)u->layout.width,(int)u->layout.height,(Color){0,0,0,145});
         panel(u,map(u,425,200,430,320,PE_UI_CENTER),"PAUSED",PE_UI_EFFECT_INVENTORY);

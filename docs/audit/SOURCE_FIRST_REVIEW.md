@@ -16,6 +16,8 @@ Detailed current reviews:
 
 ## Next implementation order
 
+Subsequent implementation: [the bounded Revival Shot lifecycle](SANDBOX_REVIVAL.md) now connects the dedicated transaction, death modal, recovery remount and transient contact grace. Ragdoll/get-up presentation and physical acceptance remain open. The table below retains the audit's proposed order; walking-attack admission is the next source implementation target.
+
 These are proposed increments, not features delivered by this documentation change. The order favors useful supported gameplay over expanding the list of visible but unusable content.
 
 | Order | Deliverable | What can be done offline | Remaining acceptance or dependency |

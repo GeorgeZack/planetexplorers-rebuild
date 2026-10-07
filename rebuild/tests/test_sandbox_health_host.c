@@ -9,7 +9,7 @@ static unsigned failures;
 
 static void fresh_health(PeGame *g){
     g->mode=PE_GAME_ADVENTURE;g->hp=100;g->max_hp=500;
-    g->passive_recovery=(PePassiveRecovery){0};g->stamina_recovery=(PeStaminaRecovery){0};
+    g->passive_recovery=(PePassiveRecovery){0};g->stamina_recovery=(PeStaminaRecovery){0};g->revival=(PeRevival){0};
 }
 static void frame_gate(PeGame *g){
     fresh_health(g);PeAttributeClock clock={.seconds=10};

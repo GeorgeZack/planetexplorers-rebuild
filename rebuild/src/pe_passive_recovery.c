@@ -55,3 +55,12 @@ void pe_passive_recovery_hurt(PePassiveRecovery *state,float hp){
     state->last_hurt=state->last_time;
     if(hp<=0){state->mounted=false;state->evaluations=0;}
 }
+
+bool pe_passive_recovery_revive(PePassiveRecovery *state,PeAttributeFrame frame){
+    if(!state||!valid(state)||!state->initialized||state->mounted||
+       !isfinite(frame.now)||frame.now<0||!frame.frame||
+       state->last_time!=frame.now||state->frame!=frame.frame)return false;
+    PePassiveRecovery next=*state;
+    next.mounted=true;next.mounted_at=frame.now;next.evaluations=0;
+    *state=next;return true;
+}

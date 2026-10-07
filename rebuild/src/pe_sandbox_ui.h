@@ -24,7 +24,7 @@ typedef struct {
     bool consume_actions; /* Nonmodal HUD/use owns action presses, not movement/camera/simulation. */
     bool npc_interaction; /* Hover/click allowed even with the free cursor. */
     bool camera_cycle_allowed; /* UI admission before the Tab-only world block; host still gates held buttons/focus. */
-    bool toggle_build, save, load, return_main;
+    bool toggle_build, save, load, return_main, revive;
     bool rotate_build;
     int build_shape,build_brush; /* Zero means no selection request. */
     int selected_item; /* Explicit resource quickslot selection, otherwise0. */
@@ -58,6 +58,7 @@ typedef struct {
     bool supplier_present;
     bool loaded, inventory_open, character_open, missions_open, replicator_open;
     bool paused, menu_open, free_cursor, search_focus;
+    bool revival_open; /* Host/game-derived death/get-up modal, never saved. */
     bool camera_cursor; /* Free-mouse camera pointer; not a modal or Tab override. */
     bool discard_input; /* Host-cancelled modal: consume next route frame completely. */
     bool starter_pair_available; /* Host-qualified body/weapon/block/contact group; never saved. */
@@ -127,6 +128,7 @@ int pe_sandbox_ui_recipe_count(const PeSandboxUI *ui,const PeGame *game);
 PeTrainingUIRect pe_sandbox_ui_recipe_row(const PeSandboxUI *ui,int row);
 PeTrainingUIRect pe_sandbox_ui_quantity(const PeSandboxUI *ui,int button); /* minus,plus,min,max */
 PeTrainingUIRect pe_sandbox_ui_pause_button(const PeSandboxUI *ui,int button); /* resume/save/load/main */
+PeTrainingUIRect pe_sandbox_ui_revival_button(const PeSandboxUI *ui,int button); /* revive/load */
 PeTrainingUIRect pe_sandbox_ui_cancel_button(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_search(const PeSandboxUI *ui);
 /* Host mirrors building/selection fields before routing. Build canvas retains

@@ -29,5 +29,8 @@ typedef struct {
 bool pe_passive_recovery_frame(PePassiveRecovery *state,PeAttributeFrame frame,float *hp,float max_hp);
 /* A committed damage notification, including an admitted zero-damage hit.
  * The caller has already validated/frame-updated the owner. No second clock. */
+/* State_Revive remounts immediately without resetting entity timestamps or
+ * its pending initial CheckInitAttr timer. Same-frame operation, no buff tick. */
+bool pe_passive_recovery_revive(PePassiveRecovery *state,PeAttributeFrame frame);
 void pe_passive_recovery_hurt(PePassiveRecovery *state,float hp);
 #endif

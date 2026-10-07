@@ -114,6 +114,46 @@ static void outfit_contact_tests(const PeHuntCombat *initial,PeWorld *w,PeSandbo
     fprintf(stderr,"hunt outfit: source protection, per-hit breakage, overkill wear and rollback passed\n");
 }
 
+/* Injury grace disables the defence query, not actor/skill/history clocks.
+ * This is deliberately arranged overlap and cannot establish survival parity. */
+static void revival_contact_gate_tests(const PeHuntCombat *initial,PeWorld *w,PeSandboxCollision *c,PeHuntCombatPlayer p,PeSandboxMelee blade){
+    PeHuntCombat h=*initial;for(unsigned i=1;i<6;i++)h.encounter.actors[i].present=false;
+    h.encounter.actors[0].motion.yaw_degrees=0;p.position=h.encounter.actors[0].motion.position;p.position.z+=.6f;
+    for(unsigned i=0;i<30;i++)CHECK(pe_hunt_combat_sense(&h,c,p));
+    PeHuntCombat before=h;PeSandboxMelee before_blade=blade;
+    float hp=p.max_hp,energy=100;unsigned kills=0;bool complete=false,found=false;
+    PeSandboxMeleeFrame f=frame(p);PeSandboxMeleeUpdate update={0};
+    for(unsigned tick=0;tick<360&&!found;tick++){
+        before=h;before_blade=blade;float old=hp;
+        CHECK(pe_hunt_combat_step(&h,w,c,p,&blade,&f,&hp,&energy,&kills,&update,&complete));found=hp<old;
+    }
+    CHECK(found);if(!found)return;
+    PeOutfit outfit={0};for(unsigned i=0;i<PE_OUTFIT_SLOTS;i++)outfit.items[i]=(PeWornItem){pe_starter_outfit_sources[i].item_id,101+i,pe_starter_outfit_sources[i].durability};
+    PeOutfit saved_outfit=outfit;PeSlot shield={.item_id=34,.count=1,.instance_id=201,.durability=4312},saved_shield=shield;
+    PeHuntCombat protected=before;PeSandboxMelee pb=before_blade;float life=p.max_hp,stamina=100;unsigned credit=0;
+    p.defence_disabled=true;p.outfit=&outfit;p.shield=&shield;p.shield_block=true;
+    CHECK(pe_hunt_combat_step(&protected,w,c,p,&pb,&f,&life,&stamina,&credit,&update,&complete));
+    CHECK(life==p.max_hp&&protected.player_hits==before.player_hits&&!complete&&credit==0);
+    CHECK(!memcmp(&outfit,&saved_outfit,sizeof outfit)&&!memcmp(&shield,&saved_shield,sizeof shield));
+    CHECK(protected.clock>before.clock&&protected.attack_seconds[0]>before.attack_seconds[0]);
+    CHECK(!memcmp(&protected.skills[0],&h.skills[0],sizeof protected.skills[0]));
+    CHECK(!memcmp(&protected.histories[0],&h.histories[0],sizeof protected.histories[0]));
+    CHECK(memcmp(&protected.histories[0],&before.histories[0],sizeof protected.histories[0])!=0);
+    for(unsigned guide=0;guide<2;guide++)CHECK(protected.attacks[0].target_count[guide]==before.attacks[0].target_count[guide]);
+    /* The disabled contact must not reserve the player in this guide's dedupe.
+     * Re-enable while its unchanged guide remains open; the same actor can hit. */
+    unsigned guide=protected.skills[0].guide;bool hit=false;p.defence_disabled=false;
+    for(unsigned n=0;n<12&&!hit;n++){
+        CHECK(protected.skills[0].guide==guide);if(protected.skills[0].guide!=guide)break;
+        CHECK(pe_hunt_combat_step(&protected,w,c,p,&pb,&f,&life,&stamina,&credit,&update,&complete));
+        hit=protected.player_hits>before.player_hits;
+        if(hit)CHECK(protected.skills[0].guide==guide);
+    }
+    CHECK(hit&&life<p.max_hp&&protected.player_hits==before.player_hits+1);
+    CHECK(shield.durability<saved_shield.durability&&outfit.items[0].durability<saved_outfit.items[0].durability);
+    fprintf(stderr,"hunt revival: actual incoming gate preserves clocks/history, blocks HP/wear/hit/dedupe, same-guide reenable hits\n");
+}
+
 /* Replays a real sensor/clock-derived forearm contact with arranged geometry.
  * Shield pose qualification is a host responsibility; these tests supply its
  * transient block request and retain the real recovered player defence pose. */
@@ -548,7 +588,7 @@ static void actual_assets(void){
     }
     PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.history_enabled=true,.history_local_center={pe_player_collider_center_source[0].local_center[0],pe_player_collider_center_source[0].local_center[1],pe_player_collider_center_source[0].local_center[2]},.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,.gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};CHECK(pe_sandbox_melee_init(&blade,&setup));
     PeHuntCombatPlayer p={.position=h.encounter.actors[0].motion.position,.radius=.5f,.height=1.8f,.max_hp=5000,.alive=true,.grounded=true,.clip=pe_actor_find_clip(player,"NormalIdle")};
-    history_tick_tests(h,w,c,p,blade);sword_wear_tests(&h,w,c,p);shield_contact_tests(&h,w,c,p,blade);outfit_contact_tests(&h,w,c,p,blade);sense_tests(&h,w,c,buildings,p);retaliation_tests(&h,w,c,p,blade);outgoing_tests(&h,w,c,p,blade);running_pending_tests(&h,w,c,p);
+    revival_contact_gate_tests(&h,w,c,p,blade);history_tick_tests(h,w,c,p,blade);sword_wear_tests(&h,w,c,p);shield_contact_tests(&h,w,c,p,blade);outfit_contact_tests(&h,w,c,p,blade);sense_tests(&h,w,c,buildings,p);retaliation_tests(&h,w,c,p,blade);outgoing_tests(&h,w,c,p,blade);running_pending_tests(&h,w,c,p);
  done:pe_hitboxes_free(hb);pe_hitboxes_free(pb);pe_hitboxes_free(kb);pe_actor_free(hare);pe_actor_free(player);pe_actor_free(body);pe_actor_free(knife);pe_sandbox_collision_free(c);pe_world_destroy(w);free(w);
 }
 int pe_test_hunt_combat(void){

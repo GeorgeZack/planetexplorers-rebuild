@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+The subsequent [Revival Shot increment](SANDBOX_REVIVAL.md) implements item937's dedicated Adventure death flow, keeps the hunt cohort/progress and adds source recovery remount/contact grace. PECSv16 remains unchanged. Upright presentation is an explicit adapter; no new graphical/native hunt acceptance is claimed.
+
 Latest source-only planning update: [review at pushed checkpoint5ec481e3](SOURCE_FIRST_REVIEW.md). Recovery, stamina, capsule history and contact playback are implemented; the next proposed bounded gameplay work is revival and walking-attack admission, with quest/economy extraction in parallel. Shield presentation and ordinary native hunt/reload acceptance remain separate gates. This audit adds no gameplay or physical coverage.
 
 Original audit and reference playtest: 2026-10-03, US/Central. That session changed no C gameplay; its 23:59 stopping deadline was session-specific. Implementation checkpoints dated 2026-10-05 and2026-10-06 are appended below. The original observations and work-order table remain historical evidence, with the checkpoint identifying which parts are now implemented.
