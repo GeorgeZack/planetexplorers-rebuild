@@ -169,7 +169,11 @@ int pe_sandbox_ui_inventory_slot(const PeSandboxUI *u,const PeGame *g,int visibl
     return index>=0&&g->inventory.slots[index].count>0?index:-1;
 }
 PeTrainingUIRect pe_sandbox_ui_inventory_action(const PeSandboxUI *u,int action){
-    return relative(u,u->layout.inventory,202+80*(float)action,529,73,25);
+    return relative(u,u->layout.inventory,153+70*(float)action,529,64,25);
+}
+PeTrainingUIRect pe_sandbox_ui_delete_panel(const PeSandboxUI *u){return relative(u,u->layout.inventory,24,185,328,166);}
+PeTrainingUIRect pe_sandbox_ui_delete_button(const PeSandboxUI *u,int button){
+    return relative(u,pe_sandbox_ui_delete_panel(u),30+140*(float)button,119,128,30);
 }
 PeTrainingUIRect pe_sandbox_ui_split_panel(const PeSandboxUI *u){
     return relative(u,u->layout.inventory,24,185,328,166);
@@ -181,6 +185,26 @@ PeTrainingUIRect pe_sandbox_ui_split_button(const PeSandboxUI *u,int button){
 }
 static bool same_slot(PeSlot a,PeSlot b){
     return a.item_id==b.item_id&&a.count==b.count&&a.instance_id==b.instance_id&&a.durability==b.durability;
+}
+static void delete_begin(PeSandboxUI *u,PeGame *g,int index){
+    u->dragging=false;
+    if(!pe_game_can_discard_slot(g,index)){
+        snprintf(g->message,sizeof g->message,"This item cannot be discarded. Unequip equipment first.");return;
+    }
+    u->delete_slot=index;u->delete_source=g->inventory.slots[index];u->delete_open=true;
+}
+static void delete_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i){
+    if(!u->inventory_open||!pe_inventory_slot_valid(&g->inventory,u->delete_slot)||
+       !same_slot(u->delete_source,g->inventory.slots[u->delete_slot])||!pe_game_can_discard_slot(g,u->delete_slot)){
+        u->delete_open=false;snprintf(g->message,sizeof g->message,"Discard cancelled: the selected item changed.");return;
+    }
+    if(i.escape||(i.left_pressed&&hit(pe_sandbox_ui_delete_button(u,1),i))){u->delete_open=false;return;}
+    if(i.advance||(i.left_pressed&&hit(pe_sandbox_ui_delete_button(u,0),i))){
+        if(pe_game_discard_slot(g,u->delete_slot,&u->delete_source)){
+            u->delete_open=false;u->selected_slot=-1;
+            snprintf(g->message,sizeof g->message,"Item discarded.");
+        }else snprintf(g->message,sizeof g->message,"Cannot discard the selected item.");
+    }
 }
 static void split_begin(PeSandboxUI *u,const PeGame *g,int index){
     if(!pe_inventory_slot_valid(&g->inventory,index))return;
@@ -319,7 +343,7 @@ static void quick_use(const PeSandboxUI *u,PeSandboxUIResult *r,PeGame *g,int i)
 }
 static void close_panels(PeSandboxUI *u) {
     u->inventory_open=u->character_open=u->missions_open=u->replicator_open=false;
-    u->menu_open=u->search_focus=false;u->dragging=false;u->split_open=u->split_armed=false;
+    u->menu_open=u->search_focus=false;u->dragging=false;u->split_open=u->split_armed=false;u->delete_open=u->delete_armed=false;
 }
 bool pe_sandbox_ui_open_welcome(PeSandboxUI *u,const PeGame *g,uint32_t entity,bool eligible) {
     if(!u||!g||u->town_open||u->paused||u->building||!pe_adventure_dialogue_open(&u->dialogue,g,1,entity,eligible))return false;
@@ -461,7 +485,9 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         goto done;
     }
     if(u->town_open){r.consume_world=true;town_route(u,g,i);goto done;}
+    if(u->delete_open){r.consume_world=true;delete_route(u,g,i);goto done;}
     if(u->split_open){r.consume_world=true;split_route(u,g,i);goto done;}
+    if(u->delete_armed&&i.right_pressed){u->delete_armed=false;r.consume_world=true;goto done;}
     unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0)|
         (u->missions_open?1u<<PE_UI_WINDOW_MISSION:0)|(u->replicator_open?1u<<PE_UI_WINDOW_REPLICATOR:0);
     int pointer_window=pe_training_ui_window_at(&u->layout,visible,i.mouse_x,i.mouse_y);
@@ -494,7 +520,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         else if(before)close_panels(u);
         else u->paused=true;
     } else if(!u->paused) {
-        if(i.inventory){u->inventory_open=!u->inventory_open;u->missions_open=u->replicator_open=false;u->dragging=false;u->split_armed=false;}
+        if(i.inventory){u->inventory_open=!u->inventory_open;u->missions_open=u->replicator_open=false;u->dragging=false;u->split_armed=u->delete_armed=false;}
         if(i.character){u->character_open=!u->character_open;u->missions_open=u->replicator_open=false;}
         if(i.missions){bool open=!u->missions_open;close_panels(u);u->missions_open=open;}
         if(i.replicator){bool open=!u->replicator_open;close_panels(u);u->replicator_open=open;}
@@ -595,20 +621,23 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(u->inventory_page>=pages)u->inventory_page=pages-1;
     }
     if(u->inventory_open&&pointer_window==PE_UI_WINDOW_INVENTORY) {
-        if(i.left_pressed&&hit(u->layout.inventory_close,i)){u->inventory_open=false;u->dragging=u->split_armed=false;goto done;}
+        if(i.left_pressed&&hit(u->layout.inventory_close,i)){u->inventory_open=false;u->dragging=u->split_armed=u->delete_armed=false;goto done;}
         if(i.left_pressed)for(int b=0;b<PE_UI_INVENTORY_TABS;b++)if(hit(u->layout.inventory_tabs[b],i)) {
-            u->inventory_tab=b;u->inventory_page=0;u->dragging=u->split_armed=false;
+            u->inventory_tab=b;u->inventory_page=0;u->dragging=u->split_armed=u->delete_armed=false;
         }
         int pages=pe_sandbox_ui_inventory_pages(u,g);
         if(u->inventory_tab>=0&&u->inventory_tab<4&&i.left_pressed&&hit(pe_sandbox_ui_inventory_action(u,0),i)){
-            u->dragging=false;u->split_armed=!u->split_armed;
+            u->dragging=u->delete_armed=false;u->split_armed=!u->split_armed;
             if(u->split_armed&&pe_inventory_slot_valid(&g->inventory,u->selected_slot)&&item_visible(u,g,u->selected_slot))split_begin(u,g,u->selected_slot);
             goto done;
         }
         if(u->inventory_tab>=0&&u->inventory_tab<4&&i.left_pressed&&hit(pe_sandbox_ui_inventory_action(u,1),i)){
-            u->dragging=u->split_armed=false;
+            u->dragging=u->split_armed=u->delete_armed=false;
             if(pe_inventory_sort(&g->inventory,u->inventory_tab)){u->selected_slot=-1;snprintf(g->message,sizeof g->message,"Inventory category sorted.");}
             goto done;
+        }
+        if(u->inventory_tab>=0&&u->inventory_tab<4&&i.left_pressed&&hit(pe_sandbox_ui_inventory_action(u,2),i)){
+            u->dragging=u->split_armed=false;u->delete_armed=!u->delete_armed;r.save=r.load=false;goto done;
         }
         if(i.wheel&&hit(u->layout.inventory,i))u->inventory_page+=i.wheel>0?-1:1;
         if(i.left_pressed&&hit(u->layout.inventory_page,i)) {
@@ -619,6 +648,11 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
         if(u->inventory_page>=pages)u->inventory_page=pages-1;
         int visible=pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,i.mouse_x,i.mouse_y);
         int index=pe_sandbox_ui_inventory_slot(u,g,visible);
+        if(index>=0&&u->delete_armed&&(i.left_pressed||i.right_pressed)){
+            if(i.left_pressed)delete_begin(u,g,index);
+            r.save=r.load=false;
+            goto done;
+        }
         if(index>=0&&u->split_armed&&(i.left_pressed||i.right_pressed)){split_begin(u,g,index);goto done;}
         if(index>=0&&i.right_pressed){use_inventory_slot(u,g,index);u->dragging=false;}
         if(index>=0&&i.left_pressed) {

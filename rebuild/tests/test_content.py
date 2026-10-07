@@ -45,8 +45,8 @@ class ContentTests(unittest.TestCase):
     def test_original_recipe_and_item_invariants(self):
         items = {row['id']: row for row in self.manifest['items']}
         recipes = {row['id']: row for row in self.manifest['recipes']}
-        self.assertEqual(len(items), 323)
-        self.assertEqual(len(recipes), 95)
+        self.assertEqual(len(items), 341)
+        self.assertEqual(len(recipes), 108)
         self.assertEqual({k: items[279][k] for k in ('id', 'name', 'stack_limit')},
                          {'id': 279, 'name': 'Wood', 'stack_limit': 9999})
         self.assertEqual(items[20]['stack_limit'], 1)
@@ -133,6 +133,46 @@ class ContentTests(unittest.TestCase):
                 self.assertIn(recipes[formula]['output_id'], items)
                 for ingredient in recipes[formula]['ingredients']:
                     self.assertIn(ingredient['item_id'], items)
+
+    def test_followup_quest_catalog_closure_without_live_grants(self):
+        items = {row['id']: row for row in self.manifest['items']}
+        recipes = {row['id']: row for row in self.manifest['recipes']}
+        quests = self.manifest['followup_quest_items']
+        self.assertEqual(set(quests), {str(q) for q in range(9077, 9085)})
+        self.assertEqual(quests['9080']['Get_MissionItem'], [{'item_id': id, 'count': 1} for id in (657,662,660)])
+        self.assertEqual(quests['9082']['Get_MissionItem'], [{'item_id':597,'count':1}])
+        self.assertEqual(quests['9082']['RewardItem'], [{'item_id': id, 'count': 1} for id in (478,490,696,465,474,473,481)])
+        self.assertEqual(quests['9082']['CoRemoveItem'], [{'item_id':1038,'count':50}])
+        for quest in ('9077','9078','9079','9081','9083','9084'):
+            self.assertTrue(all(not values for values in quests[quest].values()))
+        for script, learns in export.FOLLOWUP_SCRIPT_LEARNS.items():
+            self.assertEqual(items[script]['learn_kind'], 'PE_LEARN_RECIPE')
+            self.assertEqual(items[script]['learn_ids'], list(map(int, learns.split(','))))
+            for formula in items[script]['learn_ids']:
+                recipe = recipes[formula]
+                self.assertEqual(recipe['workspace'], 0)
+                self.assertIn(recipe['output_id'], items)
+                self.assertTrue(all(row['item_id'] in items for row in recipe['ingredients']))
+        self.assertEqual(self.manifest['selected_recipe_ids'][-13:], [60,68,73,76,85,252,295,43,46,48,255,257,291])
+        starter = {g['item_id'] for g in self.manifest['adventure_starter']}
+        supplies = {g['item_id'] for g in self.manifest['adventure_supplies']}
+        self.assertTrue(set(export.FOLLOWUP_SCRIPT_LEARNS).isdisjoint(starter | supplies))
+        self.assertIn('no quest grant', self.manifest['followup_catalog_scope'])
+
+    def test_changed_followup_contracts_rejected(self):
+        mutations = [
+            ("UPDATE AdRandomQuest_List SET Get_MissionItem='657_2,662_1,660_1' WHERE ID='9080'", 'item contract'),
+            ("UPDATE AdRandomQuest_List SET RewardItem='478_1' WHERE ID='9082'", 'item contract'),
+            ("UPDATE AdRandomQuest_List SET Get_DeleteItem='279_1' WHERE ID='9078'", 'unsupported item hook'),
+            ("UPDATE PrototypeItem SET _function='0' WHERE id='657'", 'component/learning contract'),
+            ("UPDATE PrototypeItem SET learn='252' WHERE id='657'", 'component/learning contract'),
+            ("UPDATE synthesis_skill SET workspace='1' WHERE ID='252'", 'unsupported workspace'),
+        ]
+        for sql, expected in mutations:
+            database = self.clone_database()
+            self.mutate(database, sql)
+            with self.assertRaisesRegex(ValueError, expected):
+                export.build_outputs(database, None)
 
     def test_changed_hunt_rewards_rejected(self):
         database = self.clone_database()

@@ -85,6 +85,9 @@ typedef struct {
     PeSlot drag_source,split_source;
     bool split_open,split_armed,split_edit_started;
     int split_slot,split_count;
+    bool delete_armed,delete_open;
+    int delete_slot;
+    PeSlot delete_source; /* Exact confirmation snapshot; transient, never saved. */
     float drag_x, drag_y, mouse_x, mouse_y;
     bool dragging;
     char search[64];
@@ -142,7 +145,9 @@ int pe_sandbox_ui_inventory_count(const PeSandboxUI *ui,const PeGame *game);
 int pe_sandbox_ui_inventory_pages(const PeSandboxUI *ui,const PeGame *game);
 /* Fixed bag cell, including empty cells; equipped ownership is not a drop target. */
 int pe_sandbox_ui_inventory_cell(const PeSandboxUI *ui,const PeGame *game,int visible);
-PeTrainingUIRect pe_sandbox_ui_inventory_action(const PeSandboxUI *ui,int action); /* split,sort */
+PeTrainingUIRect pe_sandbox_ui_inventory_action(const PeSandboxUI *ui,int action); /* split,sort,delete */
+PeTrainingUIRect pe_sandbox_ui_delete_panel(const PeSandboxUI *ui);
+PeTrainingUIRect pe_sandbox_ui_delete_button(const PeSandboxUI *ui,int button); /* confirm,cancel */
 PeTrainingUIRect pe_sandbox_ui_split_panel(const PeSandboxUI *ui);
 PeTrainingUIRect pe_sandbox_ui_split_button(const PeSandboxUI *ui,int button); /* minus,plus,confirm,cancel */
 int pe_sandbox_ui_recipe_at(const PeSandboxUI *ui,const PeGame *game,int row);

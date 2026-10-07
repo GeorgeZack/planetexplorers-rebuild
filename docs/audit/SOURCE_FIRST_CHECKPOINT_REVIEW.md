@@ -14,6 +14,12 @@ This is a targeted parity review by three parallel agents and a coordinating rev
 - [Mission progression, wallets and services](SOURCE_AUDIT_PROGRESSION_FOLLOWUP.md).
 - [Inventory, construction, camera, gathering and recording](SOURCE_AUDIT_SYSTEMS_FOLLOWUP.md).
 
+## October7 follow-through
+
+The audit recommendations below are historical. Wallets and selling/buyback, category inventory operations and confirmed discard, construction history, source harvesting transactions, camera activity/recovery, isolated pounce, defense wave/member planning, typed9077–9084 events and follow-up recipe definitions are now implemented at their documented boundaries. [Sandbox alignment](SANDBOX_ALIGNMENT.md) and [PLAYTEST](../PLAYTEST.md) track the individual evidence.
+
+The next source-only qualification is the existing starting-town repair machine: source entity20006/prototype145 is already present in the recovered settlement and route. Its camp owner, inserted-item transfer, material costs, counter and saved job must be qualified before adding a live service. Remaining camera near-plane geometry likewise needs projection/near-clip and overlap semantics; activity/recovery alone is not the full clamp. Neither investigation needs a new broad original playthrough. Gather humanoid poses, masked shield composition and live pounce/defense integration retain their separate gates.
+
 ## What to extract next
 
 | Workstream | Offline result available | Boundary before calling it playable parity |

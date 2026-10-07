@@ -14,6 +14,12 @@ int pe_inventory_category_capacity(const PeInventory *p,int category){
     return pe_inventory_category_start(p,category)<0?0:(p->categorized?PE_INVENTORY_CATEGORY_SLOTS:PE_INVENTORY_SLOTS);
 }
 bool pe_inventory_slot_valid(const PeInventory *p,int index){return index>=0&&index<pe_inventory_capacity(p);}
+bool pe_inventory_item_discardable(int id){
+    if(id<=0||id/10000000==9)return false;
+    size_t count=sizeof pe_inventory_source_items/sizeof *pe_inventory_source_items;
+    for(size_t i=0;i<count;i++)if(pe_inventory_source_items[i].id==id)return !pe_inventory_source_items[i].quest_item;
+    return false;
+}
 static bool valid_slot(PeSlot s){
     if(!s.count)return s.item_id==0&&s.instance_id==0&&s.durability==0&&!signbit(s.durability);
     const PeItemDef *d=pe_item_def(s.item_id);

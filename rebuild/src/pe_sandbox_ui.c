@@ -275,10 +275,11 @@ static void inventory(const PeSandboxUI *u,const PeGame *g) {
     for(int i=0;i<4;i++)sprite(u,arrows[i],rel(u,page,offset[i],3,16,16),WHITE);
     center(u,TextFormat("%d/%d",u->inventory_page+1,pages),rel(u,page,48,0,50,23),18,ink,true);
     text(u,TextFormat("Money: %u",g->money),p.x+24*z,p.y+531*z,14,gold,false);
-    text(u,u->split_armed?"Select a stack to split":"Drag: move / swap    Shift+drop: merge",p.x+17*z,p.y+507*z,13,dim,false);
+    text(u,u->delete_armed?"Select an item to discard":u->split_armed?"Select a stack to split":"Drag: move / swap    Shift+drop: merge",p.x+17*z,p.y+507*z,13,dim,false);
     text(u,TextFormat("%d / %d",n,pe_inventory_category_capacity(&g->inventory,u->inventory_tab)),p.x+18*z,p.y+491*z,12,dim,false);
     button(u,pe_sandbox_ui_inventory_action(u,0),"Split",u->inventory_tab<4);
     button(u,pe_sandbox_ui_inventory_action(u,1),"Sort",u->inventory_tab<4);
+    button(u,pe_sandbox_ui_inventory_action(u,2),u->delete_armed?"Cancel":"Delete",u->inventory_tab<4);
     text(u,"Right-click: use / equip    PageUp / PageDown",p.x+17*z,p.y+557*z,12,dim,false);
 }
 static void inventory_split(const PeSandboxUI *u){
@@ -292,6 +293,17 @@ static void inventory_split(const PeSandboxUI *u){
     button(u,pe_sandbox_ui_split_button(u,1),"+",u->split_count<u->split_source.count-1);
     button(u,pe_sandbox_ui_split_button(u,2),"Split [Enter]",u->split_count>0);
     button(u,pe_sandbox_ui_split_button(u,3),"Cancel [Esc]",true);
+}
+static void inventory_delete(const PeSandboxUI *u){
+    PeTrainingUIRect p=pe_sandbox_ui_delete_panel(u);float z=u->layout.scale;
+    const PeItemDef *item=pe_item_def(u->delete_source.item_id);
+    DrawRectangleRec(rect(u->layout.inventory),(Color){0,0,0,125});
+    DrawRectangleRec(rect(p),(Color){14,29,51,250});DrawRectangleLinesEx(rect(p),z,blue);
+    center(u,"Discard this item?",rel(u,p,10,10,308,25),18,ink,true);
+    wrapped_spaced(u,TextFormat("%s x%d",item?item->name:"Item",u->delete_source.count),rel(u,p,18,43,292,34),14,ink,2);
+    center(u,"Destroys the whole stack. Split first to keep some.",rel(u,p,10,77,308,20),12,dim,false);
+    button(u,pe_sandbox_ui_delete_button(u,0),"Discard [Enter]",true);
+    button(u,pe_sandbox_ui_delete_button(u,1),"Cancel [Esc]",true);
 }
 static const int outfit_ui_slots[PE_OUTFIT_SLOTS]={1,6,7}; /* coat, pants, shoes */
 static void character(const PeSandboxUI *u,const PeGame *g) {
@@ -538,7 +550,7 @@ static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
     text(u,TextFormat("%d-%d of %d - Scroll to browse",count?u->shop_scroll+1:0,(int)fminf(u->shop_scroll+8,(float)count),count),p.x+24*z,p.y+496*z,15,ink,false);
 }
 static void tooltip(const PeSandboxUI *u,const PeGame *g) {
-    if(u->split_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
+    if(u->delete_open||u->split_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
     unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0);
     int top=pe_training_ui_window_at(&u->layout,visible,u->mouse_x,u->mouse_y),index=-1;
     if(top==PE_UI_WINDOW_INVENTORY)index=pe_sandbox_ui_inventory_slot(u,g,pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,u->mouse_x,u->mouse_y));
@@ -636,6 +648,7 @@ void pe_sandbox_ui_draw(PeSandboxUI *u,const PeGame *g,bool building) {
     if(u->character_open)character(u,g);
     if(u->inventory_open)inventory(u,g);
     if(u->split_open)inventory_split(u);
+    if(u->delete_open)inventory_delete(u);
     if(u->replicator_open)replicator(u,g);
     if(u->missions_open)missions(u,g);
     supplier_dialogue(u,g);town_dialogue(u,g);

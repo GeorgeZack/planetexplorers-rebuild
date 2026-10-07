@@ -23,6 +23,20 @@ RECIPE_IDS = (1, 7, 8, 19, 20, 58, 152, 13)
 ANNOT_VENDOR_PROTOTYPES = (153, 158, 163, 143, 148)
 RESOURCE_IDS = (268, 271, 273, 279, 280)
 HARVEST_RESOURCE_IDS = (1015, 1037, 1040, 1048, 1146)
+FOLLOWUP_QUEST_IDS = tuple(range(9077, 9085))
+FOLLOWUP_ITEM_FIELDS = ('Get_MissionItem', 'RewardItem', 'CoRemoveItem')
+FOLLOWUP_GRANTS = {
+    (9080, 'Get_MissionItem'): '657_1,662_1,660_1',
+    (9082, 'Get_MissionItem'): '597_1',
+    (9082, 'RewardItem'): '478_1,490_1,696_1,465_1,474_1,473_1,481_1',
+    (9082, 'CoRemoveItem'): '1038_50',
+}
+FOLLOWUP_SCRIPT_LEARNS = {
+    657: '252,89,123,56,42,295,43,46,48,51', 662: '257,41,42,51', 660: '255,328',
+    597: '192', 478: '73,41,42,51', 490: '85,89,41,42,51,123,56,328',
+    696: '291,42', 465: '60', 474: '69', 473: '68,56,42', 481: '76,123,56',
+}
+
 # Catalog presentation only. Equipment identity/defense/wear are owned by the
 # separate guarded export_starter_outfit contract, not generic bag equip logic.
 STARTER_OUTFIT_CATALOG_IDS = (95, 131, 192)
@@ -230,6 +244,36 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
                     formula = integer(value, f'book {identity} formula', 1)
                     if formula not in recipe_ids:
                         recipe_ids.append(formula)
+        # Disconnected9077-9084 event preparation: catalog definitions only.
+        # Append after existing book closure to preserve the prior recipe order.
+        followup_quest_items = {}
+        for quest in FOLLOWUP_QUEST_IDS:
+            row = quests[quest]
+            if any(str(row[field]) != '0' for field in ('Get_DemandItem', 'Get_DeleteItem', 'CoSelRewardItem', 'KeepItem')):
+                raise ValueError(f'Follow-up{quest}: unsupported item hook changed')
+            entry = {}
+            for field in FOLLOWUP_ITEM_FIELDS:
+                literal = str(row[field])
+                if literal != FOLLOWUP_GRANTS.get((quest, field), '0'):
+                    raise ValueError(f'Follow-up{quest} {field} item contract changed')
+                entry[field] = [] if literal == '0' else [pairs(token, ';', f'Follow-up{quest} {field}')[0] for token in literal.split(',')]
+                selected_ids.update(grant['item_id'] for grant in entry[field])
+            followup_quest_items[str(quest)] = entry
+        followup_script_components = []
+        for identity, learns in sorted(FOLLOWUP_SCRIPT_LEARNS.items()):
+            row = item_rows[identity]
+            component = integer(row['_function'], f'follow-up script{identity} class')
+            if component != 28 or str(item_classes[component]['classname']) != 'ReplicatorFormula,RecycleReplicate' or str(row['learn']) != learns:
+                raise ValueError(f'Follow-up script{identity} component/learning contract changed')
+            followup_script_components.append({'item_id': identity, 'component_class': component,
+                'components': str(item_classes[component]['classname']).split(','),
+                'learn_ids': [integer(value, 'follow-up formula', 1) for value in learns.split(',')]})
+            for value in learns.split(','):
+                formula = integer(value, 'follow-up formula', 1)
+                if formula not in recipe_rows or str(recipe_rows[formula]['workspace']) != '0':
+                    raise ValueError(f'Follow-up formula{formula} requires unsupported workspace')
+                if formula not in recipe_ids:
+                    recipe_ids.append(formula)
         material_items = [-1] * 256
         material_rows, _ = numeric_rows(db, 'buildblock', 'matID')
         for material, row in material_rows.items():
@@ -338,11 +382,14 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
 
     source = describe_source(database)
     manifest = {
-        'format_version': 4,
-        'scope': 'Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine,9127 hunt rewards, fixed female starter clothing presentation and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.',
+        'format_version': 5,
+        'scope': 'Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine,9127 hunt rewards, disconnected9077-9084 item/script definitions, fixed female starter clothing presentation and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.',
         'adventure_starter': starter, 'adventure_supplies': supplies,
         'medicine_grants': medicine_grants, 'annot_vendor_item_ids': sorted(vendor_items),
         'hunt_return_rewards': hunt_return_rewards,
+        'followup_quest_items': followup_quest_items,
+        'followup_script_components': followup_script_components,
+        'followup_catalog_scope': 'Definitions and ordinary learning/crafting only; no quest grant/acceptance, colony deployment, vehicle assembly or item-use activation.',
         'starter_outfit_catalog': starter_outfit_catalog,
         'portable_medpack': medpack,
         'formula_component_classes': sorted(formula_classes),

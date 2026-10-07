@@ -1727,6 +1727,16 @@
       ]
     },
     {
+      "item_id": 465,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
       "item_id": 471,
       "base_currency": 15,
       "factor": "FULL",
@@ -1737,7 +1747,47 @@
       ]
     },
     {
+      "item_id": 473,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
       "item_id": 474,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 478,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 481,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 490,
       "base_currency": 15,
       "factor": "FULL",
       "component_class": 28,
@@ -2087,7 +2137,47 @@
       ]
     },
     {
+      "item_id": 657,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 660,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 662,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
       "item_id": 665,
+      "base_currency": 15,
+      "factor": "FULL",
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 696,
       "base_currency": 15,
       "factor": "FULL",
       "component_class": 28,
@@ -2380,6 +2470,13 @@
       "components": []
     },
     {
+      "item_id": 985,
+      "base_currency": 866,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
       "item_id": 986,
       "base_currency": 33,
       "factor": "FULL",
@@ -2527,6 +2624,20 @@
       "components": []
     },
     {
+      "item_id": 1013,
+      "base_currency": 63,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1014,
+      "base_currency": 85,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
       "item_id": 1015,
       "base_currency": 9,
       "factor": "FULL",
@@ -2536,6 +2647,13 @@
     {
       "item_id": 1017,
       "base_currency": 16,
+      "factor": "FULL",
+      "component_class": 0,
+      "components": []
+    },
+    {
+      "item_id": 1018,
+      "base_currency": 143,
       "factor": "FULL",
       "component_class": 0,
       "components": []
@@ -2621,6 +2739,39 @@
       "factor": "FULL",
       "component_class": 0,
       "components": []
+    },
+    {
+      "item_id": 1127,
+      "base_currency": 3283,
+      "factor": "FULL",
+      "component_class": 52,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1128,
+      "base_currency": 1831,
+      "factor": "FULL",
+      "component_class": 52,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
+    },
+    {
+      "item_id": 1131,
+      "base_currency": 1234,
+      "factor": "FULL",
+      "component_class": 52,
+      "components": [
+        "RecycleReplicate",
+        "Drag",
+        "Instantiate"
+      ]
     },
     {
       "item_id": 1145,
@@ -2758,6 +2909,15 @@
       ]
     },
     {
+      "item_id": 1165,
+      "base_currency": 173,
+      "factor": "FULL",
+      "component_class": 41,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
       "item_id": 1167,
       "base_currency": 58,
       "factor": "FULL",
@@ -2771,6 +2931,15 @@
       "base_currency": 693,
       "factor": "FULL",
       "component_class": 42,
+      "components": [
+        "RecycleReplicate"
+      ]
+    },
+    {
+      "item_id": 1180,
+      "base_currency": 172,
+      "factor": "FULL",
+      "component_class": 46,
       "components": [
         "RecycleReplicate"
       ]

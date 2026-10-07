@@ -280,6 +280,29 @@ static void consume_slot(PeGame *g,int index){
     PeSlot *s=&g->inventory.slots[index];if(--s->count==0)memset(s,0,sizeof *s);
     clear_spent_references(g);
 }
+bool pe_game_can_discard_slot(const PeGame *g,int index){
+    if(!g||(g->mode!=PE_GAME_LEGACY&&g->mode!=PE_GAME_ADVENTURE)||!isfinite(g->hp)||g->hp<=0||
+       pe_revival_frozen(&g->revival)||!pe_inventory_slot_valid(&g->inventory,index)||
+       !pe_inventory_state_valid(&g->inventory)||g->deployed_count>PE_MAX_DEPLOYABLES)return false;
+    const PeSlot *s=&g->inventory.slots[index];
+    if(!s->count||!pe_inventory_item_discardable(s->item_id))return false;
+    if(s->instance_id){
+        if(s->instance_id==g->equipped_instance_id||s->instance_id==g->shield_instance_id)return false;
+        for(int k=0;k<PE_OUTFIT_SLOTS;k++)if(s->instance_id==g->outfit.items[k].instance_id)return false;
+        for(unsigned k=0;k<g->deployed_count;k++)if(s->instance_id==g->deployed[k].instance_id)return false;
+    }
+    return true;
+}
+bool pe_game_discard_slot(PeGame *g,int index,const PeSlot *expected){
+    if(!expected||!pe_game_can_discard_slot(g,index))return false;
+    PeSlot s=g->inventory.slots[index];
+    if(s.item_id!=expected->item_id||s.count!=expected->count||s.instance_id!=expected->instance_id||
+       s.durability!=expected->durability)return false;
+    memset(&g->inventory.slots[index],0,sizeof g->inventory.slots[index]);
+    if(s.instance_id)for(int k=0;k<PE_QUICKSLOTS;k++)if(g->quickslots[k].instance_id==s.instance_id)
+        memset(&g->quickslots[k],0,sizeof g->quickslots[k]);
+    return true;
+}
 float pe_game_item_cooldown(const PeGame *g,int item_id){
     if(!g)return 0;
     double cooldown=item_id==916?g->juice_cooldown:item_id==PE_ITEM_MEDPACK?g->medpack_cooldown:0;

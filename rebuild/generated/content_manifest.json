@@ -1,6 +1,6 @@
 {
-  "format_version": 4,
-  "scope": "Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine,9127 hunt rewards, fixed female starter clothing presentation and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.",
+  "format_version": 5,
+  "scope": "Legacy subset plus Adventure1289 starter,9032 supplies,9072 medicine,9127 hunt rewards, disconnected9077-9084 item/script definitions, fixed female starter clothing presentation and all five archived Annot purchase catalogs with formula ingredient/output closure; equipment/deployable/consumable behavior remains bounded.",
   "adventure_starter": [
     {
       "item_id": 33,
@@ -440,6 +440,252 @@
       "count": 1
     }
   ],
+  "followup_quest_items": {
+    "9077": {
+      "Get_MissionItem": [],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    },
+    "9078": {
+      "Get_MissionItem": [],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    },
+    "9079": {
+      "Get_MissionItem": [],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    },
+    "9080": {
+      "Get_MissionItem": [
+        {
+          "item_id": 657,
+          "count": 1
+        },
+        {
+          "item_id": 662,
+          "count": 1
+        },
+        {
+          "item_id": 660,
+          "count": 1
+        }
+      ],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    },
+    "9081": {
+      "Get_MissionItem": [],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    },
+    "9082": {
+      "Get_MissionItem": [
+        {
+          "item_id": 597,
+          "count": 1
+        }
+      ],
+      "RewardItem": [
+        {
+          "item_id": 478,
+          "count": 1
+        },
+        {
+          "item_id": 490,
+          "count": 1
+        },
+        {
+          "item_id": 696,
+          "count": 1
+        },
+        {
+          "item_id": 465,
+          "count": 1
+        },
+        {
+          "item_id": 474,
+          "count": 1
+        },
+        {
+          "item_id": 473,
+          "count": 1
+        },
+        {
+          "item_id": 481,
+          "count": 1
+        }
+      ],
+      "CoRemoveItem": [
+        {
+          "item_id": 1038,
+          "count": 50
+        }
+      ]
+    },
+    "9083": {
+      "Get_MissionItem": [],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    },
+    "9084": {
+      "Get_MissionItem": [],
+      "RewardItem": [],
+      "CoRemoveItem": []
+    }
+  },
+  "followup_script_components": [
+    {
+      "item_id": 465,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        60
+      ]
+    },
+    {
+      "item_id": 473,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        68,
+        56,
+        42
+      ]
+    },
+    {
+      "item_id": 474,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        69
+      ]
+    },
+    {
+      "item_id": 478,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        73,
+        41,
+        42,
+        51
+      ]
+    },
+    {
+      "item_id": 481,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        76,
+        123,
+        56
+      ]
+    },
+    {
+      "item_id": 490,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        85,
+        89,
+        41,
+        42,
+        51,
+        123,
+        56,
+        328
+      ]
+    },
+    {
+      "item_id": 597,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        192
+      ]
+    },
+    {
+      "item_id": 657,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        252,
+        89,
+        123,
+        56,
+        42,
+        295,
+        43,
+        46,
+        48,
+        51
+      ]
+    },
+    {
+      "item_id": 660,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        255,
+        328
+      ]
+    },
+    {
+      "item_id": 662,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        257,
+        41,
+        42,
+        51
+      ]
+    },
+    {
+      "item_id": 696,
+      "component_class": 28,
+      "components": [
+        "ReplicatorFormula",
+        "RecycleReplicate"
+      ],
+      "learn_ids": [
+        291,
+        42
+      ]
+    }
+  ],
+  "followup_catalog_scope": "Definitions and ordinary learning/crafting only; no quest grant/acceptance, colony deployment, vehicle assembly or item-use activation.",
   "starter_outfit_catalog": [
     {
       "item_id": 95,
@@ -727,8 +973,13 @@
     462,
     463,
     464,
+    465,
     471,
+    473,
     474,
+    478,
+    481,
+    490,
     504,
     510,
     511,
@@ -763,7 +1014,11 @@
     612,
     613,
     618,
+    657,
+    660,
+    662,
     665,
+    696,
     701,
     732,
     747,
@@ -794,6 +1049,7 @@
     982,
     983,
     984,
+    985,
     986,
     987,
     988,
@@ -815,8 +1071,11 @@
     1010,
     1011,
     1012,
+    1013,
+    1014,
     1015,
     1017,
+    1018,
     1024,
     1025,
     1026,
@@ -827,6 +1086,9 @@
     1036,
     1037,
     1038,
+    1127,
+    1128,
+    1131,
     1145,
     1146,
     1147,
@@ -842,8 +1104,10 @@
     1160,
     1161,
     1162,
+    1165,
     1167,
     1172,
+    1180,
     1195,
     1362,
     1365,
@@ -998,7 +1262,20 @@
     519,
     522,
     537,
-    589
+    589,
+    60,
+    68,
+    73,
+    76,
+    85,
+    252,
+    295,
+    43,
+    46,
+    48,
+    255,
+    257,
+    291
   ],
   "player_defaults": {
     "stamina_max": 100.0,
@@ -6466,6 +6743,33 @@
       ]
     },
     {
+      "id": 465,
+      "name": "Rubber Tire Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_tire_001",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        60
+      ]
+    },
+    {
       "id": 471,
       "name": "Iron Stairs Script",
       "stack_limit": 1,
@@ -6493,6 +6797,35 @@
       ]
     },
     {
+      "id": 473,
+      "name": "Fuel Cell Type 01 Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_fuelcell_001",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        68,
+        56,
+        42
+      ]
+    },
+    {
       "id": 474,
       "name": "Wood Wheel Script",
       "stack_limit": 1,
@@ -6517,6 +6850,99 @@
       "learn_kind": "PE_LEARN_RECIPE",
       "learn_ids": [
         69
+      ]
+    },
+    {
+      "id": 478,
+      "name": "Vehicle Engine Type 01 Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_engine_001",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        73,
+        41,
+        42,
+        51
+      ]
+    },
+    {
+      "id": 481,
+      "name": "Vehicle Headlight Type 01 Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_headlight_001",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        76,
+        123,
+        56
+      ]
+    },
+    {
+      "id": 490,
+      "name": "Vehicle Cockpit Type 01 Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_cockpit_V001",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        85,
+        89,
+        41,
+        42,
+        51,
+        123,
+        56,
+        328
       ]
     },
     {
@@ -7463,6 +7889,100 @@
       ]
     },
     {
+      "id": 657,
+      "name": "Assembly Core Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_building_010101",
+        "leftup_putdown",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        252,
+        89,
+        123,
+        56,
+        42,
+        295,
+        43,
+        46,
+        48,
+        51
+      ]
+    },
+    {
+      "id": 660,
+      "name": "Dwelling Bed Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_building_040201",
+        "leftup_putdown",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        255,
+        328
+      ]
+    },
+    {
+      "id": 662,
+      "name": "Power Plant Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "building_powerplant_coal",
+        "leftup_putdown",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        257,
+        41,
+        42,
+        51
+      ]
+    },
+    {
       "id": 665,
       "name": "Insecticide Script",
       "stack_limit": 1,
@@ -7487,6 +8007,34 @@
       "learn_kind": "PE_LEARN_RECIPE",
       "learn_ids": [
         260
+      ]
+    },
+    {
+      "id": 696,
+      "name": "Side Seat Script",
+      "stack_limit": 1,
+      "item_type": 38,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_side_seat",
+        "",
+        "leftdown_script"
+      ],
+      "learn_kind": "PE_LEARN_RECIPE",
+      "learn_ids": [
+        291,
+        42
       ]
     },
     {
@@ -8299,6 +8847,31 @@
       "learn_ids": []
     },
     {
+      "id": 985,
+      "name": "Chipset (1 GHz)",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_chipset_1G",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
       "id": 986,
       "name": "Fuel",
       "stack_limit": 9999,
@@ -8824,6 +9397,56 @@
       "learn_ids": []
     },
     {
+      "id": 1013,
+      "name": "Resistors",
+      "stack_limit": 100,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_resistors",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1014,
+      "name": "Capacitors",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_capacitors",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
       "id": 1015,
       "name": "Copper Wire",
       "stack_limit": 9999,
@@ -8867,6 +9490,31 @@
       "equip_position": 0,
       "icons": [
         "item_resin",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1018,
+      "name": "Multilayer PCB",
+      "stack_limit": 9999,
+      "item_type": 40,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "item_mutilayer_PCB",
         "",
         ""
       ],
@@ -9118,6 +9766,81 @@
       "icons": [
         "item_pigment",
         "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1127,
+      "name": "Assembly Core",
+      "stack_limit": 1,
+      "item_type": 28,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_building_010101",
+        "leftup_putdown",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1128,
+      "name": "Power Plant",
+      "stack_limit": 1,
+      "item_type": 28,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "building_powerplant_coal",
+        "leftup_putdown",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1131,
+      "name": "Dwelling Bed",
+      "stack_limit": 1,
+      "item_type": 28,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 0,
+      "equip_position": 0,
+      "icons": [
+        "element_building_040201",
+        "leftup_putdown",
         ""
       ],
       "learn_kind": "PE_LEARN_NONE",
@@ -9499,6 +10222,31 @@
       "learn_ids": []
     },
     {
+      "id": 1165,
+      "name": "Vehicle Headlight Type 01",
+      "stack_limit": 10,
+      "item_type": 7,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "element_headlight_001",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
       "id": 1167,
       "name": "Motorbike Headlight 01",
       "stack_limit": 10,
@@ -9542,6 +10290,31 @@
       "equip_position": 0,
       "icons": [
         "element_fuelcell_001",
+        "",
+        ""
+      ],
+      "learn_kind": "PE_LEARN_NONE",
+      "learn_ids": []
+    },
+    {
+      "id": 1180,
+      "name": "Side Seat",
+      "stack_limit": 20,
+      "item_type": 7,
+      "durability_max": 100,
+      "attack": 0.0,
+      "resource_damage": 0.0,
+      "resource_range": 0.0,
+      "skill_id": 0,
+      "durability_cost": 1.0,
+      "stamina_cost": 0.0,
+      "tool_kind": "PE_TOOL_NONE",
+      "cut_damage": 0.0,
+      "cut_bonus": 0.0,
+      "tab": 2,
+      "equip_position": 0,
+      "icons": [
+        "element_side_seat",
         "",
         ""
       ],
@@ -12728,6 +13501,267 @@
         {
           "item_id": 1742,
           "count": 2
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "output_id": 1159,
+      "output_count": 1,
+      "seconds": 4.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 271,
+          "count": 4
+        },
+        {
+          "item_id": 979,
+          "count": 4
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "output_id": 1172,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 986,
+          "count": 10
+        },
+        {
+          "item_id": 980,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "output_id": 1162,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 273,
+          "count": 20
+        },
+        {
+          "item_id": 976,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "output_id": 1165,
+      "output_count": 1,
+      "seconds": 5.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 271,
+          "count": 5
+        },
+        {
+          "item_id": 282,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "output_id": 1157,
+      "output_count": 1,
+      "seconds": 10.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 272,
+          "count": 30
+        },
+        {
+          "item_id": 976,
+          "count": 4
+        },
+        {
+          "item_id": 282,
+          "count": 5
+        },
+        {
+          "item_id": 1009,
+          "count": 5
+        },
+        {
+          "item_id": 1008,
+          "count": 5
+        }
+      ]
+    },
+    {
+      "id": 252,
+      "output_id": 1127,
+      "output_count": 1,
+      "seconds": 10.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 272,
+          "count": 30
+        },
+        {
+          "item_id": 282,
+          "count": 25
+        },
+        {
+          "item_id": 980,
+          "count": 5
+        },
+        {
+          "item_id": 985,
+          "count": 2
+        }
+      ]
+    },
+    {
+      "id": 295,
+      "output_id": 985,
+      "output_count": 1,
+      "seconds": 1.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 1018,
+          "count": 1
+        },
+        {
+          "item_id": 1013,
+          "count": 4
+        },
+        {
+          "item_id": 1014,
+          "count": 4
+        },
+        {
+          "item_id": 1015,
+          "count": 10
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "output_id": 1018,
+      "output_count": 1,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 273,
+          "count": 2
+        },
+        {
+          "item_id": 980,
+          "count": 3
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "output_id": 1013,
+      "output_count": 1,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 271,
+          "count": 1
+        },
+        {
+          "item_id": 980,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "output_id": 1014,
+      "output_count": 1,
+      "seconds": 0.5,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 276,
+          "count": 1
+        },
+        {
+          "item_id": 980,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": 255,
+      "output_id": 1131,
+      "output_count": 1,
+      "seconds": 10.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 271,
+          "count": 24
+        },
+        {
+          "item_id": 1009,
+          "count": 16
+        },
+        {
+          "item_id": 1008,
+          "count": 12
+        }
+      ]
+    },
+    {
+      "id": 257,
+      "output_id": 1128,
+      "output_count": 1,
+      "seconds": 10.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 269,
+          "count": 40
+        },
+        {
+          "item_id": 271,
+          "count": 20
+        },
+        {
+          "item_id": 976,
+          "count": 4
+        },
+        {
+          "item_id": 1015,
+          "count": 40
+        }
+      ]
+    },
+    {
+      "id": 291,
+      "output_id": 1180,
+      "output_count": 1,
+      "seconds": 2.0,
+      "workspace": 0,
+      "ingredients": [
+        {
+          "item_id": 269,
+          "count": 8
+        },
+        {
+          "item_id": 980,
+          "count": 4
         }
       ]
     }

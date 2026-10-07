@@ -832,3 +832,14 @@ The actual-route camera CPU benchmark evaluated99,000 rays against387,048 collis
 Two initial isolated assertion failures were incorrect test expectations: activity2 produces a slightly-above1.8 floating target, and a50m southward defense sample was not outside the crop. Fixtures were corrected against source arithmetic; final runs above supersede those failures. Subsequent development tests disable only their own core dumps while retaining failures/exit codes, avoiding extra crash-notification windows. No original game, graphical rebuild, recording or desktop input was used.
 
 The [Gather audit](audit/GATHER_ACTION_GATE.md) also checked335 recovered actor files and the installed controller. No player Gather poses are recovered: the action depends on exits from three overlapping humanoid states, not the tutorial's fixed timer. No guessed delay or replacement pose was added; immediate transactional harvesting remains its declared adapter.
+
+
+## October 7 — inventory discard and follow-up mission contracts
+
+[Inventory discard](audit/INVENTORY_DISCARD.md) now follows Delete → select → confirm, destroying a whole cell with protected-item and exact-owner checks. Split first for partial disposal. The modal revalidates item/count/identity/wear, consumes save/load even on its opening frames, and retains pointer ownership through close/release. No new save fields were introduced.
+
+[Typed mission events](audit/ADVENTURE_MISSION_EVENTS.md) are a disconnected source-derived9077–9084 reducer with ordered dialogue acceptance, plot queues, separate grant latches and injected atomic effects. Synthetic callbacks verify rollback and one-time transactions; no additional playable quest, actual NPC chain or save integration is implied. [Catalog closure](audit/ADVENTURE_FOLLOWUP_CATALOG.md) adds nine books and thirteen recipes, for341 items/108 formulas. Tests use actual book-learning and timed-crafting APIs; colony and vehicle outputs remain unsupported for use/deployment.
+
+The final aggregate in `rebuild/build/offline-next-final.log` exited0: optimized frontend, full optimized core (0 failures), inventory UI, general sandbox UI, shop trade UI, discard and mission-event tests, all content regeneration checks and26 CLI tests. This is a full core run plus selected relevant suites, not a new complete `make test` run. The general inventory/save/harvest cases are included in that core run.
+
+Focused discard, mission-event and actual follow-up learning/crafting tests also pass ASan/UBSan with leak detection enabled. Source tests pass with zero skips: four inventory, seven mission-event, nineteen content and eleven trade exporter tests. New item icons and overlays already exist in the recovered atlas. Rendered confirmation layout and visual camera feel remain untested; no original game, graphical rebuild or desktop input was used.

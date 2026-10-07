@@ -1,0 +1,1133 @@
+{
+  "schema": 1,
+  "evidence": "Source-derived disconnected event contracts; no host or save integration.",
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "sha256": "11ba6d3f1e1c7627a0d114febd2256d4482dc498010157cfd40437d957397c35"
+    },
+    {
+      "path": "Assets/Scripts/Mission/StroyManager.cs",
+      "sha256": "152a755f05ef4ee7ae7206128e5f93db24f6d1a6f86d13926abbf16b2346ddeb"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UINPCTalk.cs",
+      "sha256": "bd5dcfab7969e8e27e41c23c37f861fc0ebfe3b70d82906a30eae56d6968e607"
+    },
+    {
+      "path": "Assets/Scripts/Mission/Mission.cs",
+      "sha256": "523cf63d00fe1bf9c14889c56e87db22a08bbb4a0c3532d9c8da9b49ef3da548"
+    },
+    {
+      "path": "Assets/Scripts/Mission/MissionScript/MissionManager.cs",
+      "sha256": "0fc59f0512c89e8018ad691759072704505973a216f33fad91a5a8045bf6aa0c"
+    }
+  ],
+  "guarded_methods": [
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public int SetQuestVariable1(",
+      "normalized_sha256": "97d00512f0dd4e4c6005d24180162ba3b07aac9f63072984cfed20aec215fb7e"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public void CompleteMission(",
+      "normalized_sha256": "28cbbeef654c138ec58da1e4c587310e90fa9e62ebade72a96fd1d81b8e34cca"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public void CompleteTarget(",
+      "normalized_sha256": "94fd790792951d6f0a3b9558f3721ea7c53ac0afea0a4c37e2546c8d93542016"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "bool ForceCompleteMission(",
+      "normalized_sha256": "1771330b511baf22e7cfbf12f58345ee70f79b858eb604a46694da84128b37f0"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public bool IsGetTakeMission(",
+      "normalized_sha256": "89aedcc3df7149e3dfab8e8ba05846cf7f327f107b1f23d0d7ad3d4c1f6a7b8d"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public void Export(BinaryWriter bw)",
+      "normalized_sha256": "2ee536383ec334d8ef9e7ef0c565092a93fbfe78b010d73222e8afa362d52e94"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public void Import(byte[] buffer)",
+      "normalized_sha256": "21f02107198062015bf4638c249883316000200c850cec2ef4432ada21cfbd3e"
+    },
+    {
+      "path": "Assets/Scripts/Mission/StroyManager.cs",
+      "method": "void UpdateAdvPlot(",
+      "normalized_sha256": "6f32cc0d69175d7b885a10c1e3d724efef58048caa5215a8f356504e35afd38d"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UINPCTalk.cs",
+      "method": "public void MatchTalkInfo(",
+      "normalized_sha256": "d8ea5753f1926be8f0ae32cc60eca46232c39ed0eb55795eb5421290a88c91a4"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UINPCTalk.cs",
+      "method": "protected override void OnClose()",
+      "normalized_sha256": "64d9a52fc45ace32ed3ebb05c7b56bd830e1983f35374aca45176365832b0fe6"
+    },
+    {
+      "path": "Assets/Scripts/Mission/Mission.cs",
+      "method": "public enum Story_Info",
+      "normalized_sha256": "b0625ebf709412d328c3b610bc3603eaa675307da20f397d4b7a5b2499cd500e"
+    },
+    {
+      "path": "Assets/Scripts/Mission/MissionScript/MissionManager.cs",
+      "method": "public void SetGetTakeMission(",
+      "normalized_sha256": "f6b3dac11dbd780412dbd2b1f1b1d78383bf0f1dbcbd66749b60173e61e186ce"
+    },
+    {
+      "path": "Assets/Scripts/Mission/MissionScript/MissionManager.cs",
+      "method": "public void ProcessSingleMode(",
+      "normalized_sha256": "e13fb7d8cfdcaba351a3345dd74c7ce22db2d1534eeea17bb7d6fe7678f79724"
+    },
+    {
+      "path": "Assets/Scripts/Mission/MissionScript/MissionManager.cs",
+      "method": "public enum TakeMissionType",
+      "normalized_sha256": "7a10a7053f52a7eb978af8cb86fed71380993aef3459c3490cfac146caf82c59"
+    },
+    {
+      "path": "Assets/Scripts/Mission/PlayerMission.cs",
+      "method": "public int SetQuestVariable(",
+      "normalized_sha256": "f91db14b1d8800f5b9e187f6e51b433aa03718721784fccdffbb73d4757df247"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/NGUIScripts/UINPCTalk.cs",
+      "method": "public void UpdateNpcTalkInfo(int MissionID,",
+      "normalized_sha256": "25f3963e7230fca8dd65f3e6dde174c7f755f1e6e4ab32d80f65651e9ec56d1c"
+    }
+  ],
+  "missions": [
+    {
+      "mission": 9077,
+      "prerequisite": 9127,
+      "mutex": [],
+      "choices": [],
+      "player_talk": [
+        3164,
+        0
+      ],
+      "opening": [
+        4107,
+        4108,
+        4109,
+        4110
+      ],
+      "ending": 0,
+      "targets": [
+        7507
+      ],
+      "any_target": false,
+      "auto_reply": true,
+      "repeatable": false,
+      "increase_chain": false,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 0,
+      "accept_items": [],
+      "complete_remove": [],
+      "complete_items": []
+    },
+    {
+      "mission": 9078,
+      "prerequisite": 9077,
+      "mutex": [],
+      "choices": [],
+      "player_talk": [
+        4111,
+        0
+      ],
+      "opening": [
+        4112
+      ],
+      "ending": 0,
+      "targets": [
+        4504
+      ],
+      "any_target": false,
+      "auto_reply": true,
+      "repeatable": false,
+      "increase_chain": false,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 0,
+      "accept_items": [],
+      "complete_remove": [],
+      "complete_items": []
+    },
+    {
+      "mission": 9079,
+      "prerequisite": 9078,
+      "mutex": [],
+      "choices": [],
+      "player_talk": [
+        4113,
+        0
+      ],
+      "opening": [
+        4114,
+        4115
+      ],
+      "ending": 0,
+      "targets": [
+        4505
+      ],
+      "any_target": false,
+      "auto_reply": true,
+      "repeatable": false,
+      "increase_chain": false,
+      "accept_plot": 5,
+      "complete_plot": 0,
+      "next": 0,
+      "accept_items": [],
+      "complete_remove": [],
+      "complete_items": []
+    },
+    {
+      "mission": 9080,
+      "prerequisite": 0,
+      "mutex": [],
+      "choices": [],
+      "player_talk": [
+        0,
+        0
+      ],
+      "opening": [],
+      "ending": 0,
+      "targets": [
+        5509,
+        5510,
+        5511
+      ],
+      "any_target": true,
+      "auto_reply": true,
+      "repeatable": false,
+      "increase_chain": false,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 9084,
+      "accept_items": [
+        {
+          "item_id": 657,
+          "count": 1
+        },
+        {
+          "item_id": 662,
+          "count": 1
+        },
+        {
+          "item_id": 660,
+          "count": 1
+        }
+      ],
+      "complete_remove": [],
+      "complete_items": []
+    },
+    {
+      "mission": 9081,
+      "prerequisite": 9079,
+      "mutex": [
+        9082,
+        9083
+      ],
+      "choices": [
+        9082,
+        9083
+      ],
+      "player_talk": [
+        4116,
+        0
+      ],
+      "opening": [
+        4117
+      ],
+      "ending": 0,
+      "targets": [],
+      "any_target": false,
+      "auto_reply": true,
+      "repeatable": true,
+      "increase_chain": false,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 0,
+      "accept_items": [],
+      "complete_remove": [],
+      "complete_items": []
+    },
+    {
+      "mission": 9082,
+      "prerequisite": 0,
+      "mutex": [],
+      "choices": [],
+      "player_talk": [
+        4118,
+        4120
+      ],
+      "opening": [],
+      "ending": 4121,
+      "targets": [
+        2534
+      ],
+      "any_target": false,
+      "auto_reply": false,
+      "repeatable": false,
+      "increase_chain": true,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 0,
+      "accept_items": [
+        {
+          "item_id": 597,
+          "count": 1
+        }
+      ],
+      "complete_remove": [
+        {
+          "item_id": 1038,
+          "count": 50
+        }
+      ],
+      "complete_items": [
+        {
+          "item_id": 478,
+          "count": 1
+        },
+        {
+          "item_id": 490,
+          "count": 1
+        },
+        {
+          "item_id": 696,
+          "count": 1
+        },
+        {
+          "item_id": 465,
+          "count": 1
+        },
+        {
+          "item_id": 474,
+          "count": 1
+        },
+        {
+          "item_id": 473,
+          "count": 1
+        },
+        {
+          "item_id": 481,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "mission": 9083,
+      "prerequisite": 0,
+      "mutex": [
+        9082
+      ],
+      "choices": [],
+      "player_talk": [
+        4119,
+        0
+      ],
+      "opening": [],
+      "ending": 0,
+      "targets": [],
+      "any_target": false,
+      "auto_reply": true,
+      "repeatable": true,
+      "increase_chain": false,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 0,
+      "accept_items": [],
+      "complete_remove": [],
+      "complete_items": []
+    },
+    {
+      "mission": 9084,
+      "prerequisite": 0,
+      "mutex": [],
+      "choices": [],
+      "player_talk": [
+        0,
+        0
+      ],
+      "opening": [
+        4122,
+        4123,
+        4124
+      ],
+      "ending": 0,
+      "targets": [
+        4506
+      ],
+      "any_target": false,
+      "auto_reply": true,
+      "repeatable": false,
+      "increase_chain": false,
+      "accept_plot": 0,
+      "complete_plot": 0,
+      "next": 9114,
+      "accept_items": [],
+      "complete_remove": [],
+      "complete_items": []
+    }
+  ],
+  "raw_missions": {
+    "9077": {
+      "ID": "9077",
+      "MissionName": "3102572",
+      "MaxNum": "1",
+      "Type": "1",
+      "TargetIDList": "7507",
+      "PreLimit": "1:9127",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "0",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "3102574",
+      "player_talk": "3164,0",
+      "TalkOP": "4107,4108,4109,4110",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "0",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "2",
+      "MutexLimit": "0",
+      "GuanLianList": "0",
+      "AdvPlot": "0",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "9006,9010,9013,9015,9025,9050,9052,9053,9054,9061,9074,9075,9077,9085,9086,9093,9094,9106,9109,9110,9112,9113,9117,9119,9126,9127,9128,9129,9131,9146,9147,9148,9161,9162,9164,9165,9166,9167,9168,9173",
+      "Dungeon": "0"
+    },
+    "9078": {
+      "ID": "9078",
+      "MissionName": "3102575",
+      "MaxNum": "1",
+      "Type": "1",
+      "TargetIDList": "4504",
+      "PreLimit": "1:9077",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "0",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "3102577",
+      "player_talk": "4111,0",
+      "TalkOP": "4112",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "0",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "2",
+      "MutexLimit": "0",
+      "GuanLianList": "0",
+      "AdvPlot": "0",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    },
+    "9079": {
+      "ID": "9079",
+      "MissionName": "3102578",
+      "MaxNum": "1",
+      "Type": "1",
+      "TargetIDList": "4505",
+      "PreLimit": "1:9078",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "0",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "3102580",
+      "player_talk": "4113,0",
+      "TalkOP": "4114,4115",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "0",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "2",
+      "MutexLimit": "0",
+      "GuanLianList": "0",
+      "AdvPlot": "1_5",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    },
+    "9080": {
+      "ID": "9080",
+      "MissionName": "3102581",
+      "MaxNum": "1",
+      "Type": "1",
+      "TargetIDList": "5509,5510,5511",
+      "PreLimit": "0",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "657_1,662_1,660_1",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "3102585",
+      "player_talk": "0,0",
+      "TalkOP": "0",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "9084",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "2",
+      "MutexLimit": "0",
+      "GuanLianList": "0",
+      "AdvPlot": "0",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    },
+    "9081": {
+      "ID": "9081",
+      "MissionName": "0",
+      "MaxNum": "-1",
+      "Type": "1",
+      "TargetIDList": "0",
+      "PreLimit": "1:9079",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "0",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "0",
+      "player_talk": "4116,0",
+      "TalkOP": "4117",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "0",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "0",
+      "MutexLimit": "1:9082,9083",
+      "GuanLianList": "9082,9083",
+      "AdvPlot": "0",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    },
+    "9082": {
+      "ID": "9082",
+      "MissionName": "3102586",
+      "MaxNum": "1",
+      "Type": "1",
+      "TargetIDList": "2534",
+      "PreLimit": "0",
+      "Reputation": "0",
+      "AutoReply": "0",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "597_1",
+      "CoSelRewardItem": "0",
+      "RewardItem": "478_1,490_1,696_1,465_1,474_1,473_1,481_1",
+      "CoRemoveItem": "1038_50",
+      "Description": "3102587",
+      "player_talk": "4118,4120",
+      "TalkOP": "0",
+      "TalkIN": "0",
+      "TalkED": "4121",
+      "NextQuest": "0",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "2",
+      "MutexLimit": "0",
+      "GuanLianList": "0",
+      "AdvPlot": "0",
+      "IncreaseChain": "1",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    },
+    "9083": {
+      "ID": "9083",
+      "MissionName": "0",
+      "MaxNum": "-1",
+      "Type": "1",
+      "TargetIDList": "0",
+      "PreLimit": "0",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "0",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "0",
+      "player_talk": "4119,0",
+      "TalkOP": "0",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "0",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "0",
+      "MutexLimit": "1:9082",
+      "GuanLianList": "0",
+      "AdvPlot": "0",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    },
+    "9084": {
+      "ID": "9084",
+      "MissionName": "3102588",
+      "MaxNum": "1",
+      "Type": "1",
+      "TargetIDList": "4506",
+      "PreLimit": "0",
+      "Reputation": "0",
+      "AutoReply": "1",
+      "Get_DemandItem": "0",
+      "Get_DeleteItem": "0",
+      "Get_MissionItem": "0",
+      "CoSelRewardItem": "0",
+      "RewardItem": "0",
+      "CoRemoveItem": "0",
+      "Description": "3102590",
+      "player_talk": "0,0",
+      "TalkOP": "4122,4123,4124",
+      "TalkIN": "0",
+      "TalkED": "0",
+      "NextQuest": "9114",
+      "bGiveUp": "0",
+      "TalkOP_SP": "0",
+      "TalkIN_SP": "0",
+      "TalkED_SP": "0",
+      "RewardSP": "2",
+      "MutexLimit": "0",
+      "GuanLianList": "0",
+      "AdvPlot": "0",
+      "IncreaseChain": "0",
+      "ChangeReputation": "0",
+      "KeepItem": "0",
+      "TempLimit": "0",
+      "Dungeon": "0"
+    }
+  },
+  "targets": {
+    "7507": {
+      "table": "AdQuest_TowerDefence",
+      "row": {
+        "TargetID": "7507",
+        "ScriptID": "0",
+        "Desc": "3102573",
+        "Time": "30",
+        "Pos": "5_4",
+        "NpcList": "0",
+        "ObjectList": "0",
+        "Count": "15",
+        "td_id": "520",
+        "ReceiveQuest": "0"
+      }
+    },
+    "4504": {
+      "table": "AdQuest_EnterArea",
+      "row": {
+        "TargetID": "4504",
+        "ScriptID": "0",
+        "Desc": "3102576",
+        "DistPos": "3_2_0_5",
+        "TrackRadius": "60",
+        "NotForDungeon": "1",
+        "NpcRadius": "0",
+        "Prompt": "0",
+        "TalkID": "0",
+        "ReceiveQuest": "0",
+        "NpcNum": "0"
+      }
+    },
+    "4505": {
+      "table": "AdQuest_EnterArea",
+      "row": {
+        "TargetID": "4505",
+        "ScriptID": "0",
+        "Desc": "3102579",
+        "DistPos": "3_5_0_5",
+        "TrackRadius": "60",
+        "NotForDungeon": "1",
+        "NpcRadius": "0",
+        "Prompt": "0",
+        "TalkID": "0",
+        "ReceiveQuest": "0",
+        "NpcNum": "0"
+      }
+    },
+    "5509": {
+      "table": "AdQuest_UseItem",
+      "row": {
+        "TargetID": "5509",
+        "ScriptID": "0",
+        "Desc": "3102582",
+        "ItemID": "1127",
+        "Pos": "2_1_0_100",
+        "UseNum": "1",
+        "AllowOld": "1",
+        "UsedPrompt": "0",
+        "TalkID": "0",
+        "FailPrompt": "0",
+        "ReceiveQuest": "0",
+        "ComMission": "1"
+      }
+    },
+    "5510": {
+      "table": "AdQuest_UseItem",
+      "row": {
+        "TargetID": "5510",
+        "ScriptID": "0",
+        "Desc": "3102583",
+        "ItemID": "1127",
+        "Pos": "2_2_0_100",
+        "UseNum": "1",
+        "AllowOld": "1",
+        "UsedPrompt": "0",
+        "TalkID": "0",
+        "FailPrompt": "0",
+        "ReceiveQuest": "0",
+        "ComMission": "1"
+      }
+    },
+    "5511": {
+      "table": "AdQuest_UseItem",
+      "row": {
+        "TargetID": "5511",
+        "ScriptID": "0",
+        "Desc": "3102584",
+        "ItemID": "1127",
+        "Pos": "2_3_0_100",
+        "UseNum": "1",
+        "AllowOld": "1",
+        "UsedPrompt": "0",
+        "TalkID": "0",
+        "FailPrompt": "0",
+        "ReceiveQuest": "0",
+        "ComMission": "1"
+      }
+    },
+    "2534": {
+      "table": "AdQuest_LootItem",
+      "row": {
+        "TargetID": "2534",
+        "ScriptID": "0",
+        "Desc": "3102224",
+        "Type": "0",
+        "ItemID": "1038",
+        "ItemNum": "50",
+        "TargetItemID": "0",
+        "MaxNum": "0",
+        "Chance": "0",
+        "TargetPos": "0",
+        "ReceiveQuest": "0",
+        "RandNum": "0",
+        "RandID": "0"
+      }
+    },
+    "4506": {
+      "table": "AdQuest_EnterArea",
+      "row": {
+        "TargetID": "4506",
+        "ScriptID": "0",
+        "Desc": "3102589",
+        "DistPos": "3_2_0_5",
+        "TrackRadius": "60",
+        "NotForDungeon": "1",
+        "NpcRadius": "0",
+        "Prompt": "0",
+        "TalkID": "0",
+        "ReceiveQuest": "0",
+        "NpcNum": "0"
+      }
+    }
+  },
+  "plots": {
+    "5": {
+      "ID": "5",
+      "CreNPC": "0",
+      "NearPos": "0",
+      "NPCMove": "0",
+      "GetMission": "9080",
+      "ComMission": "0",
+      "ShowTip": "0"
+    }
+  },
+  "dialogue_roles": [
+    {
+      "id": 3164,
+      "role": 0,
+      "row": {
+        "talk_id": "3164",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3003164:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4107,
+      "role": 4,
+      "row": {
+        "talk_id": "4107",
+        "npc_id": "-9897",
+        "OtherNPC": "0",
+        "talk_content": "3004107:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4108,
+      "role": 3,
+      "row": {
+        "talk_id": "4108",
+        "npc_id": "-9898",
+        "OtherNPC": "0",
+        "talk_content": "3004108:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4109,
+      "role": 4,
+      "row": {
+        "talk_id": "4109",
+        "npc_id": "-9897",
+        "OtherNPC": "0",
+        "talk_content": "3004109:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4110,
+      "role": 3,
+      "row": {
+        "talk_id": "4110",
+        "npc_id": "-9898",
+        "OtherNPC": "0",
+        "talk_content": "3004110:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4111,
+      "role": 0,
+      "row": {
+        "talk_id": "4111",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004111:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4112,
+      "role": 3,
+      "row": {
+        "talk_id": "4112",
+        "npc_id": "-9898",
+        "OtherNPC": "0",
+        "talk_content": "3004112:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4113,
+      "role": 0,
+      "row": {
+        "talk_id": "4113",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004113:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4114,
+      "role": 2,
+      "row": {
+        "talk_id": "4114",
+        "npc_id": "-9899",
+        "OtherNPC": "0",
+        "talk_content": "3004114:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4115,
+      "role": 2,
+      "row": {
+        "talk_id": "4115",
+        "npc_id": "-9899",
+        "OtherNPC": "0",
+        "talk_content": "3004115:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4116,
+      "role": 0,
+      "row": {
+        "talk_id": "4116",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004116:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4117,
+      "role": 5,
+      "row": {
+        "talk_id": "4117",
+        "npc_id": "-9896",
+        "OtherNPC": "0",
+        "talk_content": "3004117:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4118,
+      "role": 0,
+      "row": {
+        "talk_id": "4118",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004118:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4119,
+      "role": 0,
+      "row": {
+        "talk_id": "4119",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004119:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4120,
+      "role": 0,
+      "row": {
+        "talk_id": "4120",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004120:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4121,
+      "role": 5,
+      "row": {
+        "talk_id": "4121",
+        "npc_id": "-9896",
+        "OtherNPC": "0",
+        "talk_content": "3004121:0 :0",
+        "isRadio": "0",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "0",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4122,
+      "role": 1,
+      "row": {
+        "talk_id": "4122",
+        "npc_id": "-9900",
+        "OtherNPC": "0",
+        "talk_content": "3004122:0 :0",
+        "isRadio": "1",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4123,
+      "role": 0,
+      "row": {
+        "talk_id": "4123",
+        "npc_id": "-9999",
+        "OtherNPC": "0",
+        "talk_content": "3004123:0 :0",
+        "isRadio": "1",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    },
+    {
+      "id": 4124,
+      "role": 1,
+      "row": {
+        "talk_id": "4124",
+        "npc_id": "-9900",
+        "OtherNPC": "0",
+        "talk_content": "3004124:0 :0",
+        "isRadio": "1",
+        "LanguageSkill": "0",
+        "TalkTo": "0",
+        "MoveTo": "-1",
+        "MoveSpeed": "0",
+        "EndNPCTalk": "0"
+      }
+    }
+  ],
+  "lifecycle": {
+    "acceptance": "active flag then Get plot enqueue then guarded acceptance items",
+    "completion": "chain advance then mission state then removal/rewards then Complete plot then ending/NextQuest",
+    "grant_latch": "PlayerMission.m_GetRewards separately exported/imported; loads never imply fresh grants"
+  },
+  "limitations": [
+    "Repeatable choice shells9081/9083 are metadata only; concrete NPC/choice/geometry readiness remains external.",
+    "Atomic effect batches are a native retry policy, not source partial transaction ordering.",
+    "9080 target ComMission=1 permits any qualified assembly target, never arbitrary B-key geometry.",
+    "9082 item effects require a caller with complete item catalog and transaction support; no catalog is extended here.",
+    "Skill-tree rewards, broader quest chains and NextQuest9114 remain outside this bounded reducer."
+  ]
+}

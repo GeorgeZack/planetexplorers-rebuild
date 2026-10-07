@@ -23,6 +23,10 @@ class InventorySourceTests(unittest.TestCase):
         self.assertEqual(rows[279]['category'],2)
         self.assertLess(rows[33]['sort_label'],rows[12]['sort_label'])
         self.assertLess(rows[279]['sort_label'],rows[280]['sort_label'])
+        self.assertTrue(rows[1332]['quest_item'])
+        self.assertFalse(rows[916]['quest_item'])
+        self.assertEqual(manifest['contract']['discard']['confirmation'],8000055)
+        self.assertTrue(manifest['contract']['discard']['whole_selected_stack'])
     def test_catalog_coverage(self):
         rows={r['id']:r for r in json.loads(exporter.build_outputs()['pe_inventory_source.json'])['items']}
         content=json.loads((exporter.ROOT/'rebuild/generated/content_manifest.json').read_text())

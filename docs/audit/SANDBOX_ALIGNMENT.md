@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October7 continuation also adds [confirmed inventory discard](INVENTORY_DISCARD.md), disconnected [typed9077–9084 mission events](ADVENTURE_MISSION_EVENTS.md), and the associated [recipe closure](ADVENTURE_FOLLOWUP_CATALOG.md) (341 items/108 formulas). Ordinary learning/crafting supports the new definitions; future quests and colony deployment remain unavailable.
+
 October7 source-only continuation adds [Adventure camera activity/recovery](CAMERA_ENVIRONMENT.md), [isolated hare-pounce preparation](HARE_POUNCE_PREPARATION.md) and [defense wave planning/member credit](TOWN_DEFENSE_SPAWN.md). Camera math is integrated with the real snapshot; pounce and9077 remain disconnected until their host prerequisites are qualified. No new desktop/physical acceptance is claimed.
 
 The latest [inventory increment](SANDBOX_INVENTORY.md) adds four source420-cell Adventure categories, paged split/swap/merge/sort controls and PECSv19 identity-preserving migration. [Harvesting fidelity](SANDBOX_HARVESTING.md) replaces provisional loot with qualified tree48 hardness and source primary/fallback/optional herb and tree production, preserving inventory/RNG on failure. These are source-derived and headlessly tested; Gather animation and final visual acceptance remain separate.

@@ -154,6 +154,12 @@ bool pe_game_arrival_complete(PeGame *game);
 bool pe_game_accept_supplies(PeGame *game);
 bool pe_game_recipe_known(const PeGame *game, int recipe_id);
 bool pe_game_use_slot(PeGame *game, int inventory_slot);
+/* Confirmed bag deletion destroys the complete exact slot. Split first for a
+ * partial stack. Protected source prototypes and worn/equipped owners fail.
+ * expected is the confirmation snapshot; any intervening change rejects
+ * without mutation. Prototype quickslots retain the existing exhaustion policy. */
+bool pe_game_can_discard_slot(const PeGame *game,int inventory_slot);
+bool pe_game_discard_slot(PeGame *game,int inventory_slot,const PeSlot *expected);
 /* Remaining supported source item cooldown; unknown items return0. */
 float pe_game_item_cooldown(const PeGame *game,int item_id);
 /* inventory_slot=-1 clears a shortcut. Assignment never consumes an item. */
@@ -188,6 +194,9 @@ int pe_inventory_capacity(const PeInventory *inventory);
 int pe_inventory_category_start(const PeInventory *inventory, int category);
 int pe_inventory_category_capacity(const PeInventory *inventory, int category);
 bool pe_inventory_slot_valid(const PeInventory *inventory, int index);
+/* Source Quest Item category and creation-ID quotient9 cannot be discarded.
+ * Unknown source prototypes fail closed, independently of catalog coverage. */
+bool pe_inventory_item_discardable(int item_id);
 /* Stable migration: category-local ordering, exact identities and wear survive. */
 bool pe_inventory_enable_categories(PeInventory *inventory);
 /* Split to the first empty same-category cell; failure leaves both outputs intact. */
