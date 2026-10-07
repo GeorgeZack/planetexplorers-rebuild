@@ -1,5 +1,18 @@
 # Planet Explorers C rebuild
 
+The latest review batch adds Restoration Bandage924 use, typed shop quantities and item-detail tooltips. The existing camp repair service and these changes can be reviewed together using the checklist below. Saves remain PECSv20. A source-derived camera geometry evaluator is also tested offline; the live camera still uses its existing geometry adapter.
+
+## Review batch: shop details, bandages and repair
+
+Run `make -C rebuild`, then launch `rebuild/build/planet_explorers` from the repository root. To use an existing native save without overwriting it, copy it to a review path and launch with `--load PATH_TO_REVIEW_COPY`; F9 saves back to that copy. These are C rebuild saves, not original Steam saves.
+
+1. **Shop quantities:** select goods in Buy, Sell or Buyback, click the quantity field, and type an amount. Enter or clicking outside accepts the edit; a separate Enter/Buy/Sell action trades. Escape cancels the edit. Try a stock-limited amount and resize the window. The field clamps to available quantity; affordability and capacity are checked at trade time.
+2. **Item details:** hover bag cells, equipped items, shop rows and repair items. Check condition, learned-script labels and relevant prices/material quotes. Newly purchased tools show full condition; owned worn tools retain their actual condition. Displayed durability now uses source units; this does not repair or alter items.
+3. **Bandages:** Xing Zhang in Annot already sells Restoration Bandages and their script. A bandage restores200 HP. It shares a ten-second cooldown with Portable Medpacks; Herbal Juice remains separate. Try a shortcut while walking, then a blocked retry or the other medicine. Movement and NPC simulation should continue. Bandages may be consumed at full health, matching the source.
+4. **Camp repair:** with an eligible worn tool in the bag, approach the starting camp's repair machine and use E/short RMB. Insert the item, review materials, confirm Start, then close the window. The60-second job continues during ordinary play; pause/focus loss suspends it. Save outside the modal, reload, and check retained progress and exact returned item. Wear on currently equipped starter clothing, Knife33 and Safety Axe1527 is outside this service's supported scope.
+
+No fresh original-game session is needed for this checklist. Automated checks cover the transactions and saved ownership; final native layout and ordinary gameplay acceptance remain separate. Detailed boundaries: [shop/details](../docs/audit/SHOP_QUANTITY_AND_ITEM_DETAILS.md), [bandages](../docs/audit/SANDBOX_BANDAGE.md), [repair](../docs/audit/CAMP_REPAIR.md), and [disconnected camera geometry](../docs/audit/CAMERA_GEOMETRY.md).
+
 Adventure camera now uses source-derived activity-space zoom targets and obstruction recovery, keeping the existing native framing/collision adapter. [Camera contract](../docs/audit/CAMERA_ENVIRONMENT.md) records automated host checks and remaining visual limits. [Hare pounce](../docs/audit/HARE_POUNCE_PREPARATION.md) and [defense-wave planning](../docs/audit/TOWN_DEFENSE_SPAWN.md) are isolated foundations; they do not enable new combat or9077.
 
 Adventure inventory now has four independent420-cell categories, with42 visible cells per page and ten pages per category. Split stacks, move or exchange cells, merge with Shift+drop, and consolidate/order a category with Sort. Delete arms item selection and opens whole-stack confirmation; use Split first for partial disposal. Legacy and tutorial inventories retain32 cells. [Inventory ownership, controls and migration](../docs/audit/SANDBOX_INVENTORY.md) describes the source rules and native conveniences.

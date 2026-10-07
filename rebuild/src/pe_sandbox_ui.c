@@ -337,7 +337,10 @@ static void character(const PeSandboxUI *u,const PeGame *g) {
         Vector2 extent=MeasureTextEx(font(u,18,true),number,18*z,0);
         text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||(k==3&&g->mode==PE_GAME_ADVENTURE)||k==7||k==8?gold:dim,true);
     }
-    if(tool)wrapped(u,TextFormat("%s\nDurability %.0f / %d\nRight-click hand to unequip",tool->name,equipped->durability,tool->durability_max),rel(u,p,25,446,250,110),14,ink);
+    if(tool){
+        const char *detail=pe_item_has_durability(tool->id)?TextFormat("%s\nDurability %d / %d\nRight-click hand to unequip",tool->name,pe_sandbox_ui_durability(equipped->durability,false),pe_sandbox_ui_durability((float)tool->durability_max,false)):TextFormat("%s\nRight-click hand to unequip",tool->name);
+        wrapped(u,detail,rel(u,p,25,446,250,110),14,ink);
+    }
 }
 static void replicator(const PeSandboxUI *u,const PeGame *g) {
     const PeTrainingUILayout *l=&u->layout;PeTrainingUIRect p=l->replicator;float z=l->scale;
@@ -542,43 +545,23 @@ static void town_dialogue(const PeSandboxUI *u,const PeGame *g) {
     bool can=pe_sandbox_ui_shop_can_trade(u,g);
     const char *action=u->shop_mode==PE_SANDBOX_SHOP_SELL?"Sell":u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buy back":"Buy";
     button(u,pe_sandbox_ui_shop_button(u,0),"-",u->shop_quantity>1);
-    center(u,TextFormat("%u",u->shop_quantity),rel(u,p,60,408,58,30),18,ink,true);
+    PeTrainingUIRect quantity=pe_sandbox_ui_shop_quantity_rect(u);
+    sprite(u,"insidebox2",quantity,WHITE);
+    if(u->shop_edit)DrawRectangleLinesEx(rect(quantity),z,blue);
+    if(u->shop_edit)clipped(u,u->shop_edit_text,rel(u,quantity,3,3,82,24),14,ink,false);
+    else center(u,TextFormat("%u",u->shop_quantity),quantity,16,ink,true);
     button(u,pe_sandbox_ui_shop_button(u,1),"+",u->shop_quantity<stock);
-    button(u,pe_sandbox_ui_shop_button(u,2),have&&selected.eligible?TextFormat("%s - %llu",action,(unsigned long long)selected.unit_price*u->shop_quantity):action,can);
+    button(u,pe_sandbox_ui_shop_button(u,2),u->shop_edit?"Accept quantity":have&&selected.eligible?TextFormat("%s - %llu",action,(unsigned long long)selected.unit_price*u->shop_quantity):action,u->shop_edit||can);
     button(u,pe_sandbox_ui_shop_button(u,3),"Back",true);
-    text(u,u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buyback clears when you load or start a new game.":"Unit price shown beside each item.",p.x+24*z,p.y+391*z,14,dim,false);
-    wrapped(u,have&&!selected.eligible?selected.reason:g->message,rel(u,p,24,450,580,45),16,ink);
+    text(u,u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buyback clears when you load or start a new game.":u->shop_edit?"Enter accepts quantity; Esc restores it.":"Click quantity to type; Enter confirms the trade.",p.x+24*z,p.y+391*z,14,ink,false);
+    wrapped(u,u->shop_edit&&have?TextFormat("Quantity %u - Total %llu. Accept, then confirm the trade.",u->shop_quantity,(unsigned long long)selected.unit_price*u->shop_quantity):have&&!selected.eligible?selected.reason:g->message,rel(u,p,24,450,580,45),16,ink);
     text(u,TextFormat("%d-%d of %d - Scroll to browse",count?u->shop_scroll+1:0,(int)fminf(u->shop_scroll+8,(float)count),count),p.x+24*z,p.y+496*z,15,ink,false);
 }
 static void tooltip(const PeSandboxUI *u,const PeGame *g) {
-    if(u->repair_open||u->delete_open||u->split_open||u->town_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return;
-    unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0);
-    int top=pe_training_ui_window_at(&u->layout,visible,u->mouse_x,u->mouse_y),index=-1;
-    if(top==PE_UI_WINDOW_INVENTORY)index=pe_sandbox_ui_inventory_slot(u,g,pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,u->mouse_x,u->mouse_y));
-    if(top==PE_UI_WINDOW_CHARACTER&&pe_training_ui_contains(u->layout.equipment_weapon,u->mouse_x,u->mouse_y)) {
-        for(int k=0;k<pe_inventory_capacity(&g->inventory);k++)if(g->equipped_instance_id&&g->inventory.slots[k].instance_id==g->equipped_instance_id)index=k;
-    }
-    if(top==PE_UI_WINDOW_CHARACTER&&pe_training_ui_contains(u->layout.equipment_slots[9],u->mouse_x,u->mouse_y)){
-        const PeSlot *shield=pe_shield_equipped(g);
-        if(shield)index=(int)(shield-g->inventory.slots);
-    }
-    PeSlot worn={0};
-    if(top==PE_UI_WINDOW_CHARACTER)for(unsigned k=0;k<PE_OUTFIT_SLOTS;k++)
-        if(pe_training_ui_contains(u->layout.equipment_slots[outfit_ui_slots[k]],u->mouse_x,u->mouse_y)){
-            const PeWornItem *w=&g->outfit.items[k];
-            if(w->item_id)worn=(PeSlot){w->item_id,1,w->instance_id,w->durability};
-        }
-    if(index<0&&!worn.item_id)return;
-    const PeSlot *s=worn.item_id?&worn:&g->inventory.slots[index];const PeItemDef *d=pe_item_def(s->item_id);if(!d)return;
-    float z=u->layout.scale;PeTrainingUIRect box={fminf(u->mouse_x+18*z,u->layout.width-312*z),fminf(u->mouse_y+20*z,u->layout.height-134*z),300*z,122*z};
-    DrawRectangleRec(rect(box),(Color){14,29,51,245});DrawRectangleLinesEx(rect(box),z,blue);
-    char value[512];
-    const char *action=d->learn_count?"Right-click to learn":(d->equip_position&(16|512))?"Right-click to equip":d->id==916?"Right-click to use":"Drag to quickbar";
-    if(s->instance_id&&s->instance_id==g->shield_instance_id)action=u->starter_pair_available?"Right-click shield slot to unequip":"Unavailable; right-click slot to unequip";
-    if(worn.item_id)action=worn.durability>0?"Equipped clothing":"Broken clothing";
-    if(s->instance_id&&d->durability_max>0)snprintf(value,sizeof value,"%s\nDurability %.0f / %d\n%s",d->name,s->durability,d->durability_max,action);
-    else snprintf(value,sizeof value,"%s\n%d owned\n%s",d->name,pe_inventory_count(&g->inventory,s->item_id),action);
-    wrapped(u,value,rel(u,box,10,8,280,108),14,ink);
+    char value[1024];PeTrainingUIRect box;
+    if(!pe_sandbox_ui_item_tooltip(u,g,value,sizeof value,&box))return;
+    DrawRectangleRec(rect(box),(Color){14,29,51,245});DrawRectangleLinesEx(rect(box),u->layout.scale,blue);
+    wrapped(u,value,rel(u,box,10,8,box.w/u->layout.scale-20,box.h/u->layout.scale-16),14,ink);
 }
 static void build_shape_icon(const PeSandboxUI *u,PeTrainingUIRect r,int shape) {
     PeB45Cell cell={0,0,0,(uint8_t)(shape<<2),0};
@@ -653,7 +636,7 @@ static void repair_window(const PeSandboxUI *u,const PeGame *g){
         sprite(u,"menulist",r,slot==u->repair_slot?blue:WHITE);
         item(u,value->item_id,1,rel(u,r,2,2,38,38),true,WHITE);
         clipped(u,d?d->name:"Item",rel(u,r,46,3,228,20),16,ink,false);
-        text(u,TextFormat("Durability %.0f / %.0f",value->durability,d?(float)d->durability_max:0),r.x+46*u->layout.scale,r.y+23*u->layout.scale,13,dim,false);
+        text(u,TextFormat("Durability %d / %d",pe_sandbox_ui_durability(value->durability,true),d?pe_sandbox_ui_durability((float)d->durability_max,true):0),r.x+46*u->layout.scale,r.y+23*u->layout.scale,13,dim,false);
     }
     if(!count)wrapped(u,g->repair.running?"Repair in progress. The machine slot is locked.":"No available repairable equipment. Unequip an item first.",rel(u,p,28,98,264,108),18,dim);
     button(u,pe_sandbox_ui_repair_button(u,PE_REPAIR_UI_PREVIOUS),"<",u->repair_page>0);
@@ -667,7 +650,7 @@ static void repair_window(const PeSandboxUI *u,const PeGame *g){
     const PeItemDef *d=pe_item_def(g->repair.item.item_id);
     if(d){
         wrapped(u,d->name,rel(u,p,320,164,284,42),20,ink);
-        text(u,TextFormat("Durability %.0f / %.0f",g->repair.item.durability,(float)d->durability_max),p.x+320*u->layout.scale,p.y+211*u->layout.scale,16,ink,false);
+        text(u,TextFormat("Durability %d / %d",pe_sandbox_ui_durability(g->repair.item.durability,true),pe_sandbox_ui_durability((float)d->durability_max,true)),p.x+320*u->layout.scale,p.y+211*u->layout.scale,16,ink,false);
         bar(u,"jindulan_1","jindulan_2",rel(u,p,320,237,284,10),fraction(g->repair.item.durability,(float)d->durability_max),blue);
         text(u,g->repair.running?TextFormat("Repairing: %.1f seconds",pe_camp_repair_seconds(&g->repair)):"Repair time: 60 seconds",p.x+320*u->layout.scale,p.y+258*u->layout.scale,16,g->repair.running?gold:ink,false);
         PeCampRepairCost cost;

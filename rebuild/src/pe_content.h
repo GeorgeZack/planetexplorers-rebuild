@@ -1,6 +1,7 @@
 #ifndef PE_CONTENT_H
 #define PE_CONTENT_H
 #include <stddef.h>
+#include <stdbool.h>
 #define PE_RECIPE_INPUTS 6
 #define PE_ITEM_LEARNS 16
 typedef enum { PE_LEARN_NONE, PE_LEARN_RECIPE, PE_LEARN_SCAN } PeLearnKind;
@@ -10,6 +11,12 @@ typedef enum { PE_LEARN_NONE, PE_LEARN_RECIPE, PE_LEARN_SCAN } PeLearnKind;
 #define PE_ITEM_FENCE 308
 #define PE_ITEM_LADDER 310
 #define PE_ITEM_MEDPACK 925
+#define PE_ITEM_BANDAGE 924
+/* Qualified instant HP healing only, sharing source cooldown group9. */
+typedef struct { int item_id; float heal,cooldown_seconds; } PeInstantHealDef;
+extern const PeInstantHealDef pe_instant_heals[];
+extern const size_t pe_instant_heal_count;
+const PeInstantHealDef *pe_instant_heal_def(int item_id);
 extern const float pe_medpack_heal,pe_medpack_cooldown_seconds;
 typedef enum { PE_TOOL_NONE, PE_TOOL_PICKAXE, PE_TOOL_SHOVEL, PE_TOOL_AXE } PeToolKind;
 typedef struct {
@@ -61,6 +68,9 @@ extern const PeItemDef pe_items[];
 extern const size_t pe_item_count;
 extern const PeRecipeDef pe_recipes[];
 extern const size_t pe_recipe_count;
+/* Actual source component membership; positive prototype default alone is
+ * not evidence of durability. Unknown/out-of-catalog IDs return false. */
+bool pe_item_has_durability(int id);
 const PeItemDef *pe_item_def(int id);
 const PeRecipeDef *pe_recipe_def(int id);
 #endif

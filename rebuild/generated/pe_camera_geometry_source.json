@@ -1,0 +1,409 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "path": "Assets/PeCamera/Resources/Controllers/PECamera_Update.asset",
+      "sha256": "253ba07513eae22cf3f4e404d63a9942ddea7c13bfb12215bd476000f3760938"
+    },
+    {
+      "path": "Assets/PeCamera/Resources/Controllers/PECamera_Start.asset",
+      "sha256": "e1956bec6ee32bc4c9e304f05211b9114adc2f4d7f44c784fa6fddc206650694"
+    },
+    {
+      "path": "Assets/PeCamera/Scripts/PeCamera.cs",
+      "sha256": "8c3436eec6f52e7a88ee95711f517f9fe80fb25552fa51496ecd90ccdf0eb63f"
+    },
+    {
+      "path": "Assets/PeCamera/Scripts/ScriptModifier/ThirdPersonFollow.cs",
+      "sha256": "8ebbdcca0e791b6d374da00c958738ce401bea34e73ca773f1c9d3c8323dd0a1"
+    },
+    {
+      "path": "Assets/PeCamera/Scripts/ScriptModifier/GeometryClamp.cs",
+      "sha256": "e207bc211d09be330261845669e3b6f097674fc2a6dd904c03b14a7ba009670a"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Utilities/Utils.cs",
+      "sha256": "59e8f0b2b6be7c18290df7b782cace3ce459e93049bc14d8961119bf3e23e526"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Assets/ControllerAsset.cs",
+      "sha256": "2e69314593b98958148274e8eb445ba89c65572df4dd9755bde930d919d0206b"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Core/Controller/PoseNode.cs",
+      "sha256": "815a41e9d966f7483b61ca0381a4c4a17586abc704ff44fc3b8767f0410a5730"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Core/Modifier/Node.cs",
+      "sha256": "7c986e1cdd5ba83041bd49e1043a91fc9fda2829b987724827642ed1818622df"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Core/Modifier/Var.cs",
+      "sha256": "623cfa397b9eab6d4673739a1546531fe7eb3bbad08a5f871b2d0396a83a1ca9"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Assets/ModifierAsset.cs",
+      "sha256": "b9fda7b03a6f2142c5093b6b7e1a0ea47981cc658bc01456a3b443237fe8fcae"
+    },
+    {
+      "path": "Assets/Scripts/Lilj/SystemSettingData.cs",
+      "sha256": "bbaf09f6410f42a00583469b13ab02f4e4bdcb26fc69750a39992df26a190159"
+    }
+  ],
+  "graph": {
+    "normal_path": [
+      0,
+      25,
+      2,
+      1,
+      24,
+      3,
+      4,
+      5,
+      23,
+      27,
+      9,
+      17,
+      18,
+      13,
+      26,
+      29
+    ],
+    "geometry_node": 3,
+    "incoming_near": 0.800000011920929,
+    "fov_input": "Original Fov",
+    "fov_default": 60,
+    "system_settings": {
+      "kind": "CameraForge.Modifier",
+      "slots": {
+        "Name": {
+          "input": -1,
+          "value": {
+            "kind": 7,
+            "boolean": 1,
+            "integer": 0,
+            "number": 0.0,
+            "vector": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "text": "System Settings"
+          }
+        },
+        "Life": {
+          "input": -1,
+          "value": {
+            "kind": 3,
+            "boolean": 1,
+            "integer": 0,
+            "number": 1.0000000200408773e+20,
+            "vector": [
+              1.0000000200408773e+20,
+              1.0000000200408773e+20,
+              1.0000000200408773e+20,
+              1.0000000200408773e+20
+            ],
+            "text": ""
+          }
+        },
+        "Color": {
+          "input": -1,
+          "value": {
+            "kind": 4,
+            "boolean": 1,
+            "integer": 0,
+            "number": 0.20000000298023224,
+            "vector": [
+              0.20000000298023224,
+              1.0,
+              0.0,
+              1.0
+            ],
+            "text": ""
+          }
+        }
+      },
+      "poses": {
+        "Prev": 25
+      },
+      "modifier": {
+        "nodes": [
+          {
+            "kind": "CameraForge.GetUserVar",
+            "slots": {
+              "Var": {
+                "input": -1,
+                "value": {
+                  "kind": 7,
+                  "boolean": 1,
+                  "integer": 0,
+                  "number": 0.0,
+                  "vector": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "text": "Original Fov"
+                }
+              }
+            }
+          }
+        ],
+        "output": {
+          "kind": "CameraForge.ConeOutput",
+          "slots": {
+            "Fov": {
+              "input": 0,
+              "value": null
+            },
+            "Nearclip": {
+              "input": -1,
+              "value": {
+                "kind": 3,
+                "boolean": 1,
+                "integer": 0,
+                "number": 0.800000011920929,
+                "vector": [
+                  0.800000011920929,
+                  0.800000011920929,
+                  0.800000011920929,
+                  0.800000011920929
+                ],
+                "text": ""
+              }
+            }
+          }
+        }
+      }
+    },
+    "geometry": {
+      "kind": "CameraForge.GeometryClamp",
+      "slots": {
+        "Name": {
+          "input": -1,
+          "value": {
+            "kind": 7,
+            "boolean": 1,
+            "integer": 0,
+            "number": 0.0,
+            "vector": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "text": ""
+          }
+        },
+        "Color": {
+          "input": -1,
+          "value": {
+            "kind": 4,
+            "boolean": 1,
+            "integer": 1,
+            "number": 1.0,
+            "vector": [
+              1.0,
+              0.699999988079071,
+              0.5,
+              1.0
+            ],
+            "text": ""
+          }
+        }
+      },
+      "poses": {
+        "Prev": 24
+      }
+    },
+    "later_near_modifier": {
+      "kind": "CameraForge.Modifier",
+      "slots": {
+        "Name": {
+          "input": -1,
+          "value": {
+            "kind": 7,
+            "boolean": 1,
+            "integer": 0,
+            "number": 0.0,
+            "vector": [
+              0.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            "text": "ChangeNearclip"
+          }
+        },
+        "Life": {
+          "input": -1,
+          "value": {
+            "kind": 3,
+            "boolean": 1,
+            "integer": -2147483648,
+            "number": 1.0000000200408773e+20,
+            "vector": [
+              1.0000000200408773e+20,
+              1.0000000200408773e+20,
+              1.0000000200408773e+20,
+              1.0000000200408773e+20
+            ],
+            "text": ""
+          }
+        },
+        "Color": {
+          "input": -1,
+          "value": {
+            "kind": 4,
+            "boolean": 1,
+            "integer": 1,
+            "number": 1.0,
+            "vector": [
+              1.0,
+              0.0,
+              0.0,
+              1.0
+            ],
+            "text": ""
+          }
+        }
+      },
+      "poses": {
+        "Prev": 13
+      },
+      "modifier": {
+        "nodes": [
+          {
+            "kind": "CameraForge.InputFOV",
+            "slots": {}
+          },
+          {
+            "kind": "CameraForge.InputNearclip",
+            "slots": {}
+          },
+          {
+            "kind": "CameraForge.GetUserVar",
+            "slots": {
+              "Var": {
+                "input": -1,
+                "value": {
+                  "kind": 7,
+                  "boolean": 1,
+                  "integer": 0,
+                  "number": 0.0,
+                  "vector": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "text": "OnMonorail"
+                }
+              }
+            }
+          },
+          {
+            "kind": "CameraForge.Default",
+            "slots": {
+              "Var": {
+                "input": 2,
+                "value": null
+              },
+              "Default": {
+                "input": -1,
+                "value": {
+                  "kind": 1,
+                  "boolean": 0,
+                  "integer": 0,
+                  "number": 0.0,
+                  "vector": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                  ],
+                  "text": ""
+                }
+              }
+            }
+          },
+          {
+            "kind": "CameraForge.Lerp",
+            "slots": {
+              "A": {
+                "input": 1,
+                "value": null
+              },
+              "B": {
+                "input": -1,
+                "value": {
+                  "kind": 3,
+                  "boolean": 1,
+                  "integer": 0,
+                  "number": 0.6000000238418579,
+                  "vector": [
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579,
+                    0.6000000238418579
+                  ],
+                  "text": ""
+                }
+              },
+              "T": {
+                "input": 3,
+                "value": null
+              }
+            }
+          }
+        ],
+        "output": {
+          "kind": "CameraForge.ConeOutput",
+          "slots": {
+            "Fov": {
+              "input": 0,
+              "value": null
+            },
+            "Nearclip": {
+              "input": 4,
+              "value": null
+            }
+          }
+        }
+      }
+    }
+  },
+  "contract": {
+    "mask": 8468481,
+    "ignore_triggers": true,
+    "rings": [
+      {
+        "radius": 0,
+        "iterations": 4
+      },
+      {
+        "radius": 1.5,
+        "iterations": 4
+      },
+      {
+        "radius": 3,
+        "iterations": 8
+      }
+    ],
+    "near_search": "overlap(min=.05) then overlap(max=near*activity_scale*ur); last clear lower bound while max-min>.005",
+    "radial_angles": "integer360/n in degrees; ray target to ring point before line point to eye; r0 repeats4 times if blocked",
+    "clamp": "If every line blocked OR eye overlap: at most one sphere cast, radius=NCR-.01; hit zeros DistVelocity and sets Geometry Clampd",
+    "rise": "Always sphere cast along normalized worldUp+forward*.3 with radius NCR-.02,range NCR*10; cap hit.distance*.95 or NCR; lerp.1 per evaluation; displace along unnormalized direction",
+    "distance": "Distance from target to corrected position BEFORE rise; DistWanted untouched",
+    "preview": "Read-only evaluator returns proposal; step commits rise only after complete valid success; latch/velocity feedback stays caller-owned"
+  },
+  "boundaries": [
+    "Disconnected mathematical evaluator; no native host or physics backend changed.",
+    "Callback provider must explicitly qualify original collider granularity, initial-overlap and crop-boundary semantics.",
+    "Primary/auxiliary near-camera projection, reflected picking and pointer origin remain unresolved host work.",
+    "Source float math, not bit-identical Unity physics or rendered parity; no desktop/gameplay observation."
+  ]
+}

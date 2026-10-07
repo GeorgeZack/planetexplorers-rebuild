@@ -191,6 +191,82 @@ class ContentTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'Portable Medpack925'):
                 export.build_outputs(database,None)
 
+    def test_bandage_shared_healing_and_existing_acquisition_closure(self):
+        heals = self.manifest['instant_healing']
+        self.assertEqual([(h['item_id'],h['skill_id'],h['trigger_id'],h['heal']) for h in heals],
+                         [(924,20150027,1,200),(925,20150028,2,350)])
+        for row in heals:
+            self.assertEqual((row['cooldown_seconds'],row['cooldown_group'],row['target_effect_id']), (10,9,420))
+        self.assertEqual(self.manifest['instant_healing_effect']['_anms'], '0')
+        self.assertEqual(self.manifest['instant_healing_effect']['_effId'], '139')
+        items = {r['id']:r for r in self.manifest['items']}
+        recipes = {r['id']:r for r in self.manifest['recipes']}
+        self.assertEqual(items[878]['learn_ids'], [146,391,394])
+        self.assertEqual((items[924]['stack_limit'],items[924]['tab']), (100,0))
+        for recipe in (146,391,394):
+            self.assertEqual((recipes[recipe]['output_id'],recipes[recipe]['output_count'],recipes[recipe]['seconds'],recipes[recipe]['workspace']), (924,1,1,0))
+            self.assertTrue(all(i['item_id'] in items for i in recipes[recipe]['ingredients']))
+        self.assertNotIn(924, {g['item_id'] for g in self.manifest['adventure_starter']})
+        self.assertIn(924, self.manifest['annot_vendor_item_ids'])
+        self.assertIn(878, self.manifest['annot_vendor_item_ids'])
+        self.assertNotIn(926, items)  # No extra medicine/catalog activation.
+
+    def test_changed_bandage_healing_cooldown_or_presentation_rejected(self):
+        mutations = [
+            "UPDATE PrototypeItem SET _function='0' WHERE id='924'",
+            "UPDATE PrototypeItem SET skillId='20150028' WHERE id='924'",
+            "UPDATE skMain SET _coolingTimeType='11' WHERE _id='20150027'",
+            "UPDATE skMain SET _coolingTimeShared='5' WHERE _id='20150027'",
+            "UPDATE skMain SET _timeOfMain='.1' WHERE _id='20150027'",
+            "UPDATE skMain SET _effPrepare='1' WHERE _id='20150027'",
+            "UPDATE skMain SET _triggerEvents='1,2' WHERE _id='20150027'",
+            "UPDATE skTriggerEvent SET _modsTarget='mad,1,1,201' WHERE _id='1'",
+            "UPDATE skTriggerEvent SET _modsCaster='mad,1,1,1' WHERE _id='1'",
+            "UPDATE skTriggerEvent SET _force='1' WHERE _id='1'",
+            "UPDATE skTriggerEvent SET _effOnHitTarget='419' WHERE _id='1'",
+        ]
+        for sql in mutations:
+            database=self.clone_database();self.mutate(database,sql)
+            with self.assertRaisesRegex(ValueError,'Restoration Bandage924'):
+                export.build_outputs(database,None)
+        database=self.clone_database();self.mutate(database,"UPDATE skEffect SET _anms='Eat' WHERE _id='420'")
+        with self.assertRaisesRegex(ValueError,'effect420 presentation'):
+            export.build_outputs(database,None)
+
+    def test_durability_component_membership_not_positive_default(self):
+        items = {row['id']:row for row in self.manifest['items']}
+        classes = self.manifest['item_component_classes']
+        for item in items.values():
+            self.assertEqual(item['has_durability'], 'Durability' in classes[str(item['component_class'])])
+        for identity in (1,12,19,26,33,34,95,131,192,10,1527):
+            self.assertTrue(items[identity]['has_durability'], identity)
+        for identity in (877,924,925,937,228,365,370,279):
+            self.assertFalse(items[identity]['has_durability'], identity)
+            self.assertGreater(items[identity]['durability_max'], 0)
+        self.assertEqual(items[877]['component_class'], 28)
+        self.assertEqual(classes['28'], ['ReplicatorFormula','RecycleReplicate'])
+        self.assertEqual(classes['27'], ['Property','Consume'])
+        self.assertIn('unknown classes have no components', self.manifest['durability_component_source']['rule'])
+        self.assertEqual(len(self.manifest['durability_component_source']['sources']), 2)
+
+    def test_durability_component_literal_factory_semantics(self):
+        database=self.clone_database()
+        self.mutate(database,"UPDATE PrototypeItem SET _durability='0' WHERE id='33'")
+        output=export.build_outputs(database,None)
+        item=next(r for r in json.loads(output['content_manifest.json'])['items'] if r['id']==33)
+        self.assertTrue(item['has_durability'])
+        self.assertEqual(item['durability_max'], 0)
+        self.mutate(database,"UPDATE PrototypeItem SET _function='0' WHERE id='33'")
+        output=export.build_outputs(database,None)
+        item=next(r for r in json.loads(output['content_manifest.json'])['items'] if r['id']==33)
+        self.assertFalse(item['has_durability'])
+        self.mutate(database,"UPDATE PrototypeItem SET _function='5' WHERE id='33'")
+        self.mutate(database,"UPDATE item_class SET classname='Property,NotDurability, Durability' WHERE id='5'")
+        output=export.build_outputs(database,None)
+        item=next(r for r in json.loads(output['content_manifest.json'])['items'] if r['id']==33)
+        self.assertFalse(item['has_durability'])
+        self.assertNotIn(b'    case 33:', output['pe_content.c'])
+
     def test_invalid_adventure_grants_rejected(self):
         database = self.clone_database()
         self.mutate(database, "UPDATE PrototypeItem SET bundle='1;33,1' WHERE id='1289'")

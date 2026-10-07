@@ -76,7 +76,9 @@ rebuild/build/camera-geometry-audit/probe
 
 The strict optimized probe and ASan/UBSan probe with leak detection both pass. Local documentation links and whitespace checks pass. These checks establish current native query/math behavior; they do not execute original Unity physics or validate a new rendered camera.
 
-## Smallest safe next increment
+## Pure increment completed; host gate remains
+
+The subsequent [disconnected C evaluator](CAMERA_GEOMETRY.md) now implements the bounded mathematical step below, with guarded graph/source metadata, transactional query callbacks and analytical optimized/sanitizer tests. No live camera, movement backend or projection was changed. The remaining prerequisite is a qualified camera-query/rendering integration, not further recovery of these formulas.
 
 First add a disconnected pure geometry evaluator and guarded graph metadata, with explicit callbacks for ray/line, sphere overlap and sphere cast. Port the source endpoint/binary search, ring order, one-cast correction and frame-based rise; return corrected pose, NCR/near clip, pre-rise distance and clamp flag transactionally. Use deterministic analytical callback fixtures for open space, narrow walls, initial overlap, alternate visible rings, aspect changes and failed queries. Keep desired distance untouched. Preview/aim evaluation must not commit rise or a clamp latch; only the final display evaluation may commit them.
 

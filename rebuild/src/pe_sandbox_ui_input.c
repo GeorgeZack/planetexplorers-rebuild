@@ -12,6 +12,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <string.h>
 
 static bool hit(PeTrainingUIRect r,PeSandboxUIInput i) {
@@ -131,12 +132,98 @@ bool pe_sandbox_ui_shop_can_trade(const PeSandboxUI *u,const PeGame *g){
 PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *u,int b) {
     PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);
     if(b==0)return relative(u,p,24,408,32,30);
-    if(b==1)return relative(u,p,122,408,32,30);
+    if(b==1)return relative(u,p,154,408,32,30);
     if(b==2)return relative(u,p,190,408,190,30);
     if(b==3)return relative(u,p,445,408,160,30);
     return relative(u,p,591,19,25,25);
 }
-void pe_sandbox_ui_cancel_town(PeSandboxUI *u){if(u){u->town_open=u->shop_open=u->shop_dragging=false;u->town_entity=u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_name[0]=0;u->town_portrait=(Texture2D){0};}}
+void pe_sandbox_ui_cancel_town(PeSandboxUI *u){if(u){u->shop_edit=u->shop_bound=false;u->town_open=u->shop_open=u->shop_dragging=false;u->town_entity=u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_name[0]=0;u->town_portrait=(Texture2D){0};}}
+int pe_sandbox_ui_durability(float raw,bool repair_units){
+    if(!isfinite(raw)||raw<0)return -1;
+    float value=ceilf(repair_units?raw*.01f:raw/100.f);
+    return (double)value>INT_MAX?-1:(int)value;
+}
+bool pe_sandbox_ui_script_known(const PeGame *g,int id){
+    const PeItemDef *d=pe_item_def(id);
+    /* Source ReplicatorFormula checks its first formula, not all outputs. */
+    return g&&d&&d->learn_kind==PE_LEARN_RECIPE&&d->learn_count>0&&pe_game_recipe_known(g,d->learn_ids[0]);
+}
+static bool details_append(char *out,size_t capacity,const char *format,...){
+    size_t n=strlen(out);if(n>=capacity)return false;
+    va_list args;va_start(args,format);int written=vsnprintf(out+n,capacity-n,format,args);va_end(args);
+    return written>=0&&(size_t)written<capacity-n;
+}
+bool pe_sandbox_ui_item_details(const PeGame *g,const PeSlot *value,bool repair_units,char *out,size_t capacity){
+    if(!out||!capacity)return false;
+    out[0]=0;if(!g||!value||value->count<=0)return false;
+    const PeItemDef *d=pe_item_def(value->item_id);if(!d)return false;
+    if(!details_append(out,capacity,"%s",d->name))return false;
+    if(pe_item_has_durability(d->id)&&d->durability_max>0){
+        int current=pe_sandbox_ui_durability(value->durability,repair_units),maximum=pe_sandbox_ui_durability((float)d->durability_max,repair_units);
+        if(current<0||maximum<0||value->durability>d->durability_max)return false;
+        if(!details_append(out,capacity,"\nDurability %d / %d",current,maximum))return false;
+    }else if(!details_append(out,capacity,"\nQuantity: %d",value->count))return false;
+    if(d->learn_kind==PE_LEARN_RECIPE&&d->learn_count>0&&
+       !details_append(out,capacity,"\nFormula: %s",pe_sandbox_ui_script_known(g,d->id)?"already learned":"not learned"))return false;
+    PeCampRepairCost quote;
+    if(pe_camp_repair_quote(value,&quote))for(unsigned i=0;i<quote.count;i++){
+        const PeItemDef *material=pe_item_def(quote.materials[i].item_id);
+        if(!material||!details_append(out,capacity,"\nRepair: %s x%d",material->name,quote.materials[i].count))return false;
+    }
+    return true;
+}
+bool pe_sandbox_ui_item_tooltip(const PeSandboxUI *u,const PeGame *g,char *out,size_t capacity,PeTrainingUIRect *box){
+    if(!u||!g||!out||!capacity||!box)return false;
+    out[0]=0;
+    if(!isfinite(u->mouse_x)||!isfinite(u->mouse_y)||u->layout.scale<=0||u->paused||u->revival_open||u->repair_confirm||u->repair_dragging||u->repair_window_dragging||u->shop_edit||u->shop_dragging||u->dragging||u->delete_open||u->split_open||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||u->replicator_open||u->missions_open||u->menu_open||u->windows.dragging)return false;
+    PeSlot value={0};bool worn=false,shop=false;PeSandboxShopRow entry={0};
+    if(u->repair_open){
+        if(pe_training_ui_contains(pe_sandbox_ui_repair_reserved(u),u->mouse_x,u->mouse_y))value=g->repair.item;
+        for(int row=0;row<PE_REPAIR_UI_ROWS&&!value.count;row++)if(pe_training_ui_contains(pe_sandbox_ui_repair_row(u,row),u->mouse_x,u->mouse_y)){
+            int index=pe_sandbox_ui_repair_slot(u,g,row);if(index>=0)value=g->inventory.slots[index];
+        }
+    }else if(u->town_open){
+        if(!u->shop_open)return false;
+        for(int row=0;row<8;row++)if(pe_training_ui_contains(pe_sandbox_ui_shop_row(u,row),u->mouse_x,u->mouse_y)&&pe_sandbox_ui_shop_item(u,g,u->shop_scroll+row,&entry)){value=entry.item;shop=true;break;}
+    }else{
+        unsigned visible=(u->inventory_open?1u<<PE_UI_WINDOW_INVENTORY:0)|(u->character_open?1u<<PE_UI_WINDOW_CHARACTER:0);
+        int top=pe_training_ui_window_at(&u->layout,visible,u->mouse_x,u->mouse_y),index=-1;
+        if(top==PE_UI_WINDOW_INVENTORY)index=pe_sandbox_ui_inventory_slot(u,g,pe_training_ui_hit(u->layout.inventory_slots,PE_UI_INVENTORY_SLOTS,u->mouse_x,u->mouse_y));
+        if(top==PE_UI_WINDOW_CHARACTER){
+            uint32_t id=0;
+            if(pe_training_ui_contains(u->layout.equipment_weapon,u->mouse_x,u->mouse_y))id=g->equipped_instance_id;
+            if(pe_training_ui_contains(u->layout.equipment_slots[9],u->mouse_x,u->mouse_y))id=g->shield_instance_id;
+            if(id)for(int k=0;k<pe_inventory_capacity(&g->inventory);k++)if(g->inventory.slots[k].instance_id==id)index=k;
+            const int slots[PE_OUTFIT_SLOTS]={1,6,7};
+            for(unsigned k=0;k<PE_OUTFIT_SLOTS;k++)if(pe_training_ui_contains(u->layout.equipment_slots[slots[k]],u->mouse_x,u->mouse_y)){
+                const PeWornItem *w=&g->outfit.items[k];value=(PeSlot){w->item_id,1,w->instance_id,w->durability};worn=value.item_id!=0;
+            }
+        }
+        if(index>=0)value=g->inventory.slots[index];
+    }
+    /* Purchases instantiate full-condition items. The stock row remains unchanged;
+       this non-owning presentation copy never fabricates an instance ID. */
+    if(shop&&u->shop_mode==PE_SANDBOX_SHOP_BUY){
+        const PeItemDef *fresh=pe_item_def(value.item_id);
+        if(fresh&&fresh->stack_limit==1&&pe_item_has_durability(fresh->id)){value.count=1;value.durability=(float)fresh->durability_max;}
+    }
+    if(!pe_sandbox_ui_item_details(g,&value,u->repair_open,out,capacity))return false;
+    const PeItemDef *d=pe_item_def(value.item_id);
+    if(shop){
+        if(entry.eligible){if(!details_append(out,capacity,"\n%s unit price: %u",u->shop_mode==PE_SANDBOX_SHOP_SELL?"Sell":u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buyback":"Buy",entry.unit_price))return false;}
+        else if(!details_append(out,capacity,"\n%s",entry.reason))return false;
+    }else if(!u->repair_open){
+        const char *action=d->learn_kind==PE_LEARN_SCAN?"Right-click to scan":d->learn_count?"Right-click to learn":(d->equip_position&(16|512))?"Right-click to equip":pe_game_item_is_healing_consumable(d->id)?"Right-click to use":"Drag to quickbar";
+        if(value.instance_id&&value.instance_id==g->shield_instance_id)action=u->starter_pair_available?"Right-click shield slot to unequip":"Unavailable; right-click slot to unequip";
+        if(worn)action=value.durability>0?"Equipped clothing":"Broken clothing";
+        if(!details_append(out,capacity,"\n%s",action))return false;
+    }
+    /* Include wrapped-line allowance; clamp hover geometry independently of its owner window. */
+    unsigned lines=0,characters=0;
+    for(const char *p=out;;p++){if(!*p||*p=='\n'){lines+=characters?(characters+41)/42:1;characters=0;if(!*p)break;}else characters++;}
+    float z=u->layout.scale,w=fminf(340*z,u->layout.width),h=fminf((20+19*(float)lines)*z,u->layout.height);
+    *box=(PeTrainingUIRect){fmaxf(0,fminf(u->mouse_x+18*z,u->layout.width-w)),fmaxf(0,fminf(u->mouse_y+20*z,u->layout.height-h)),w,h};return true;
+}
 static bool item_visible(const PeSandboxUI *u,const PeGame *g,int i) {
     const PeSlot *s=&g->inventory.slots[i];const PeItemDef *d=pe_item_def(s->item_id);
     return s->count>0&&d&&d->tab==u->inventory_tab&&
@@ -339,7 +426,7 @@ static void quick_use(const PeSandboxUI *u,PeSandboxUIResult *r,PeGame *g,int i)
     }else pe_game_quickslot_use(g,i);
     /* A cooldown/empty-stack retry owns the key too, but must not interrupt
        locomotion, camera capture, drawn equipment or enemy clocks. */
-    if(d&&(d->id==916||d->id==925))r->consume_actions=true;
+    if(d&&pe_game_item_is_healing_consumable(d->id))r->consume_actions=true;
     else r->consume_world=true;
 }
 static void close_panels(PeSandboxUI *u) {
@@ -360,13 +447,13 @@ bool pe_sandbox_ui_open_annot(PeSandboxUI *u,const PeGame *g,uint32_t entity,Tex
 }
 bool pe_sandbox_ui_open_town(PeSandboxUI *u,const PeGame *g,uint32_t entity,const char *name,Texture2D portrait,bool eligible) {
     if(!u||!g||!entity||!name||strlen(name)>128||!eligible||u->town_open||u->repair_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0)return false;
-    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=entity;u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_portrait=portrait;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;
+    close_panels(u);u->town_open=true;u->shop_open=false;u->shop_edit=u->shop_bound=false;u->town_entity=entity;u->deploy_entity=0;u->deploy_get_pending=false;u->deploy_get_ticks=0;u->town_portrait=portrait;u->shop_selection=u->shop_scroll=0;u->shop_quantity=1;
     snprintf(u->town_name,sizeof u->town_name,"%s",name);return true;
 }
 bool pe_sandbox_ui_open_deployable(PeSandboxUI *u,const PeGame *g,uint32_t instance){
     if(!u||!g||u->town_open||u->repair_open||u->paused||u->building||u->dialogue.stage!=PE_ADVENTURE_DIALOGUE_IDLE||
        g->mode!=PE_GAME_ADVENTURE||g->hp<=0||!pe_deployable_in_range(g,instance))return false;
-    close_panels(u);u->town_open=true;u->shop_open=false;u->town_entity=0;u->deploy_entity=instance;u->deploy_get_pending=false;u->deploy_get_ticks=0;
+    close_panels(u);u->town_open=true;u->shop_open=false;u->shop_edit=u->shop_bound=false;u->town_entity=0;u->deploy_entity=instance;u->deploy_get_pending=false;u->deploy_get_ticks=0;
     u->town_portrait=(Texture2D){0};snprintf(u->town_name,sizeof u->town_name,"Torch");return true;
 }
 int pe_sandbox_ui_dialogue_choice_index(const PeSandboxUI *u,const PeGame *g,int row) {
@@ -375,8 +462,23 @@ int pe_sandbox_ui_dialogue_choice_index(const PeSandboxUI *u,const PeGame *g,int
         if(pe_adventure_dialogue_choice(&u->dialogue,g,source)&&row--==0)return (int)source;
     return -1;
 }
+PeTrainingUIRect pe_sandbox_ui_shop_quantity_rect(const PeSandboxUI *u){return relative(u,pe_sandbox_ui_shop_panel(u),60,408,88,30);}
+static bool shop_same_row(const PeSandboxUI *u,const PeSandboxShopRow *row){
+    const PeSandboxShopRow *a=&u->shop_expected;
+    return u->shop_bound&&u->shop_expected_index==u->shop_selection&&u->shop_expected_mode==u->shop_mode&&u->shop_expected_vendor==u->town_entity&&
+        same_slot(a->item,row->item)&&a->bag_slot==row->bag_slot&&a->store_id==row->store_id&&a->unit_price==row->unit_price&&a->eligible==row->eligible;
+}
+static unsigned shop_parse_quantity(const char *text,unsigned maximum){
+    unsigned n=0;if(!maximum)return 1;
+    for(const char *p=text;*p;p++){
+        unsigned digit=(unsigned)(*p-'0');
+        if(n>maximum/10||(n==maximum/10&&digit>maximum%10))return maximum;
+        n=n*10+digit;
+    }
+    return n?n:1;
+}
 static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
-    if(i.escape||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0){pe_sandbox_ui_cancel_town(u);return;}
+    if((i.escape&&!u->shop_edit)||g->mode!=PE_GAME_ADVENTURE||!isfinite(g->hp)||g->hp<=0){pe_sandbox_ui_cancel_town(u);return;}
     if(u->deploy_entity){
         if(!pe_deployable_in_range(g,u->deploy_entity)){pe_sandbox_ui_cancel_town(u);return;}
         if(i.left_pressed&&hit(pe_sandbox_ui_supplier_close(u),i)){pe_sandbox_ui_cancel_town(u);return;}
@@ -413,6 +515,23 @@ static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
         }else if((!vendor&&i.advance)||i.response==(unsigned)(vendor?2:1)||(i.left_pressed&&hit(pe_sandbox_ui_supplier_choice(u,vendor?1:0),i)))pe_sandbox_ui_cancel_town(u);
         return;
     }
+    if(u->shop_edit){
+        PeSandboxShopRow row;
+        bool current=pe_sandbox_ui_shop_item(u,g,u->shop_selection,&row);
+        if(!current||!shop_same_row(u,&row)){
+            u->shop_edit=u->shop_bound=false;u->shop_quantity=1;
+            snprintf(g->message,sizeof g->message,"Quantity reset: the selected item changed.");return;
+        }
+        if(i.escape){u->shop_edit=false;u->shop_quantity=u->shop_edit_before;return;}
+        if(i.backspace){size_t n=strlen(u->shop_edit_text);if(n)u->shop_edit_text[n-1]=0;u->shop_edit_started=true;}
+        if(i.typed)for(const unsigned char *p=(const unsigned char *)i.typed;*p;p++)if(*p>='0'&&*p<='9'){
+            if(!u->shop_edit_started){u->shop_edit_text[0]=0;u->shop_edit_started=true;}
+            size_t n=strlen(u->shop_edit_text);if(n+1<sizeof u->shop_edit_text){u->shop_edit_text[n]=(char)*p;u->shop_edit_text[n+1]=0;}
+        }
+        u->shop_quantity=shop_parse_quantity(u->shop_edit_text,(unsigned)row.item.count);
+        if(i.advance||(i.left_pressed&&!hit(pe_sandbox_ui_shop_quantity_rect(u),i)))u->shop_edit=false;
+        return;
+    }
     PeTrainingUIRect p=pe_sandbox_ui_shop_panel(u);
     if(u->shop_dragging){
         PeTrainingUIRect base=pe_training_ui_map(&u->layout,(PeTrainingUIRect){325,100,630,520},PE_UI_CENTER);
@@ -436,10 +555,24 @@ static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
     if(selected<u->shop_scroll)selected=u->shop_scroll;
     if(selected>=u->shop_scroll+8)selected=u->shop_scroll+7;
     if(selected>=count)selected=count-1;
-    if(selected!=u->shop_selection){u->shop_selection=selected;u->shop_quantity=1;}
+    if(selected!=u->shop_selection){
+        bool rebound=u->shop_bound;u->shop_selection=selected;u->shop_quantity=1;u->shop_bound=false;
+        /* Automatic range/visibility clamping is not an explicit fresh choice.
+           Never let this same Enter trade the row replacing a removed last row. */
+        if(rebound){snprintf(g->message,sizeof g->message,"Quantity reset: review the selected item.");return;}
+    }
     if(i.left_pressed)for(int row=0;row<8&&row+u->shop_scroll<count;row++)if(hit(pe_sandbox_ui_shop_row(u,row),i)){u->shop_selection=row+u->shop_scroll;u->shop_quantity=1;}
     PeSandboxShopRow selected_row;
     if(!pe_sandbox_ui_shop_item(u,g,u->shop_selection,&selected_row))return;
+    if(u->shop_bound&&u->shop_expected_index==u->shop_selection&&u->shop_expected_mode==u->shop_mode&&u->shop_expected_vendor==u->town_entity&&!shop_same_row(u,&selected_row)){
+        u->shop_bound=false;u->shop_quantity=1;snprintf(g->message,sizeof g->message,"Quantity reset: the selected item changed.");return;
+    }
+    u->shop_bound=true;u->shop_expected=selected_row;u->shop_expected_index=u->shop_selection;
+    u->shop_expected_mode=u->shop_mode;u->shop_expected_vendor=u->town_entity;
+    if(i.left_pressed&&hit(pe_sandbox_ui_shop_quantity_rect(u),i)){
+        u->shop_edit=true;u->shop_edit_started=false;u->shop_edit_before=u->shop_quantity;
+        snprintf(u->shop_edit_text,sizeof u->shop_edit_text,"%u",u->shop_quantity);return;
+    }
     unsigned stock=(unsigned)selected_row.item.count;
     if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,0),i)&&u->shop_quantity>1)u->shop_quantity--;
     if(i.left_pressed&&hit(pe_sandbox_ui_shop_button(u,1),i)&&u->shop_quantity<stock)u->shop_quantity++;
@@ -452,6 +585,7 @@ static void town_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput i) {
         else if(u->shop_mode==PE_SANDBOX_SHOP_BUYBACK)committed=pe_town_trade_buyback(g,u->town_entity,(size_t)u->shop_selection,u->shop_quantity);
         else committed=pe_town_shop_buy(g,u->town_entity,selected_row.store_id,u->shop_quantity);
         if(committed){
+            u->shop_bound=false;
             count=pe_sandbox_ui_shop_count(u,g);maxscroll=count>8?count-8:0;
             if(u->shop_scroll>maxscroll)u->shop_scroll=maxscroll;
             if(u->shop_selection>=count)u->shop_selection=count-1;
@@ -598,7 +732,7 @@ PeSandboxUIResult pe_sandbox_ui_route(PeSandboxUI *u,PeGame *g,PeSandboxUIInput 
     u->mouse_x=i.mouse_x;u->mouse_y=i.mouse_y;
     if(u->discard_input){u->discard_input=false;u->windows.dragging=0;u->dragging=u->shop_dragging=u->repair_dragging=u->repair_window_dragging=false;return (PeSandboxUIResult){.consume_world=true,.cursor_visible=pe_sandbox_ui_cursor(u),.paused=u->paused};}
     bool before=panel(u),cursor_before=pe_sandbox_ui_cursor(u);
-    if(!i.focused){u->repair_dragging=u->repair_window_dragging=false;u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
+    if(!i.focused){if(u->shop_edit){u->shop_quantity=u->shop_edit_before;u->shop_edit=false;}u->repair_dragging=u->repair_window_dragging=false;u->shop_dragging=false;u->windows.dragging=0;u->dragging=false;r.consume_world=true;r.cursor_visible=cursor_before;r.paused=u->paused;return r;}
     bool history_owned=u->building&&(u->build_history_keys_owned||i.build_history_chord);
     u->build_history_keys_owned=history_owned&&i.build_history_keys_down;
     if(history_owned)r.consume_actions=true;

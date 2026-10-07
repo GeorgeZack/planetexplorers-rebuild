@@ -205,23 +205,34 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         item_classes, _ = numeric_rows(db, 'item_class', 'id', allow_duplicates=True)
         skills, _ = numeric_rows(db, 'skMain', '_id')
         triggers, _ = numeric_rows(db, 'skTriggerEvent', '_id')
-        medpack_skill = skills[20150028]
-        medpack_trigger = triggers[2]
-        if (item_rows[925]['_function'] != '27' or item_rows[925]['skillId'] != '20150028'
-                or item_classes[27]['classname'] != 'Property,Consume'
-                or medpack_skill['_triggerEvents'] != '2' or medpack_skill['_cond'] != 'False'
-                or any(medpack_skill[key] != '0' for key in ('_pretimeOfPrepare','_postimeOfPrepare',
-                    '_pretimeOfMain','_timeOfMain','_postimeOfMain','_pretimeOfEnding','_postimeOfEnding'))
-                or medpack_trigger['_cond'] != 'True' or medpack_trigger['_modsCaster'] != '0'
-                or medpack_trigger['_modsTarget'] != 'mad,1,1,350'
-                or medpack_skill['_coolingTime'] != '10' or medpack_skill['_coolingTimeShared'] != '10'
-                or medpack_skill['_coolingTimeType'] != '9' or skills[20150023]['_coolingTimeType'] != '11'):
-            raise ValueError('Portable Medpack925 healing/cooldown source contract changed')
-        medpack = {'item_id':925,'skill_id':20150028,'component_class':27,'trigger_id':2,
-                   'heal':real(medpack_trigger['_modsTarget'].split(',')[3],'medpack heal'),
-                   'cooldown_seconds':real(medpack_skill['_coolingTime'],'medpack cooldown'),
-                   'cooldown_group':9,'juice_cooldown_group':11,
-                   'target_effect_id':integer(medpack_trigger['_effOnHitTarget'],'medpack effect')}
+        effects, _ = numeric_rows(db, 'skEffect', '_id')
+        instant_healing = []
+        for item_id, skill_id, trigger_id, healing, label in (
+                (924, 20150027, 1, 200, 'Restoration Bandage924'),
+                (925, 20150028, 2, 350, 'Portable Medpack925')):
+            skill, trigger = skills[skill_id], triggers[trigger_id]
+            if (item_rows[item_id]['_function'] != '27' or item_rows[item_id]['skillId'] != str(skill_id)
+                    or item_classes[27]['classname'] != 'Property,Consume'
+                    or skill['_triggerEvents'] != str(trigger_id) or skill['_cond'] != 'False'
+                    or any(skill[key] != '0' for key in ('_pretimeOfPrepare','_postimeOfPrepare',
+                        '_pretimeOfMain','_timeOfMain','_postimeOfMain','_pretimeOfEnding','_postimeOfEnding',
+                        '_effPrepare','_effMainOneTime','_effMainEachTime','_effEnding','_interruptable'))
+                    or trigger['_cond'] != 'True' or trigger['_modsCaster'] != '0'
+                    or trigger['_modsTarget'] != f'mad,1,1,{healing}' or trigger['_force'] != '0'
+                    or trigger['_effOnHitCaster'] != '0' or trigger['_effOnHitTarget'] != '420'
+                    or skill['_coolingTime'] != '10' or skill['_coolingTimeShared'] != '10'
+                    or skill['_coolingTimeType'] != '9' or skills[20150023]['_coolingTimeType'] != '11'):
+                raise ValueError(label + ' healing/cooldown source contract changed')
+            instant_healing.append({'item_id':item_id,'skill_id':skill_id,'component_class':27,
+                'trigger_id':trigger_id,'heal':real(trigger['_modsTarget'].split(',')[3],label+' heal'),
+                'cooldown_seconds':real(skill['_coolingTime'],label+' cooldown'),'cooldown_group':9,
+                'juice_cooldown_group':11,'target_effect_id':420})
+        healing_effect = dict(effects[420])
+        if any(healing_effect[key] != value for key, value in {
+                '_seId':'0','_effId':'139','_camEffId':'0','_anms':'0','_spEff':'False',
+                '_emitId':'0','_procEff':'0'}.items()):
+            raise ValueError('Instant healing effect420 presentation contract changed')
+        medpack = instant_healing[1]  # Retain the existing manifest/constants API.
         formula_classes = {identity for identity, row in item_classes.items()
                            if 'ReplicatorFormula' in str(row['classname']).split(',')}
         selected_ids = set(RESOURCE_IDS) | {v['item_id'] for v in starter + supplies}
@@ -343,10 +354,17 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
                             'ingredients': ingredients})
 
         items = []
+        selected_component_classes = {}
         for identity in sorted(selected_ids):
             if identity not in item_rows:
                 raise ValueError(f'PrototypeItem: missing required item {identity}')
             row = item_rows[identity]
+            component_class = integer(row['_function'], f'item {identity} component class')
+            # ItemObject.Create returns an object with no components for an
+            # absent class. LoadItemType uses literal comma splitting; never
+            # infer Durability from _durability or substring matches.
+            components = str(item_classes[component_class]['classname']).split(',') if component_class in item_classes else []
+            selected_component_classes[str(component_class)] = components
             name_id = integer(row['_nameID'], f'item {identity} name ID')
             name = names.get(name_id) or row['_engName']
             if not isinstance(name, str) or not name or '\0' in name:
@@ -363,6 +381,8 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
             items.append({'id': identity, 'name': name,
                           'stack_limit': integer(row['stacking_num'], f'item {identity} stack', 1),
                           'item_type': item_type,
+                          'component_class': component_class,
+                          'has_durability': 'Durability' in components,
                           'durability_max': integer(row['_durability'], f'item {identity} durability'),
                           'attack': real(row['Atk'], f'item {identity} Atk'),
                           'resource_damage': real(row['ResDamage'], f'item {identity} ResDamage'),
@@ -392,6 +412,8 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
         'followup_catalog_scope': 'Definitions and ordinary learning/crafting only; no quest grant/acceptance, colony deployment, vehicle assembly or item-use activation.',
         'starter_outfit_catalog': starter_outfit_catalog,
         'portable_medpack': medpack,
+        'instant_healing': instant_healing,
+        'instant_healing_effect': healing_effect,
         'formula_component_classes': sorted(formula_classes),
         'source_tool_overrides': {str(k): {'stamina_cost': v[0], 'source': describe_source(ROOT/v[1]), 'evidence': 'Serialized wood_hoe PEDigTool11466528; see SANDBOX_PICKAXE audit.' if k == 19 else 'Serialized wood_ax PEAxe11484812; see SANDBOX_ACTIONS audit.' if k == 26 else 'Serialized source/installed fields verified in TRAINING_MINING/TRAINING_GATHERING audits.'} for k,v in TOOL_OVERRIDES.items()},
         'source_database': source,
@@ -419,6 +441,11 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
             'terrain_material_durability': 'resource.ID -> durability; NaturalRes.GetTerrainResData matches ID directly.',
             'terrain_resources': 'resource first production segment cumulative primary thresholds plus fixed_num/self_num. Extra and special drops remain in manifest original_production and are not implemented by this catalog.',
             'cut_damage': 'PrototypeItem.CutDamage and CutBouns; original tree resource duration/scale is applied separately.',
+        },
+        'item_component_classes': selected_component_classes,
+        'durability_component_source': {
+            'rule': 'PrototypeItem._function -> item_class.classname literal comma token Durability; unknown classes have no components.',
+            'sources': [describe_source(ROOT/'Assets/Scripts/Items/ItemData.cs'), describe_source(ROOT/'Assets/Scripts/Items/ItemObj.cs')],
         },
         'items': items,
         'recipes': recipes,
@@ -481,6 +508,19 @@ def build_outputs(database: Path, localization: Path | None) -> dict[str, bytes]
               '}', '']
     lines += [f'const float pe_medpack_heal = {c_float(medpack["heal"])};',
               f'const float pe_medpack_cooldown_seconds = {c_float(medpack["cooldown_seconds"])};', '']
+    lines += ['bool pe_item_has_durability(int item_id)', '{', '    switch (item_id) {']
+    for item in items:
+        if item['has_durability']:
+            lines.append(f'    case {item["id"]}:')
+    lines += ['        return true;', '    default: return false;', '    }', '}', '']
+    lines += ['const PeInstantHealDef pe_instant_heals[] = {']
+    for healing in instant_healing:
+        lines.append(f'    {{{healing["item_id"]}, {c_float(healing["heal"])}, {c_float(healing["cooldown_seconds"])}}},')
+    lines += ['};', 'const size_t pe_instant_heal_count = sizeof pe_instant_heals / sizeof pe_instant_heals[0];',
+              'const PeInstantHealDef *pe_instant_heal_def(int item_id)', '{',
+              '    for (size_t i=0;i<pe_instant_heal_count;i++)',
+              '        if (pe_instant_heals[i].item_id==item_id) return &pe_instant_heals[i];',
+              '    return NULL;', '}', '']
     return {'pe_content.c': '\n'.join(lines).encode('utf-8'),
             'content_manifest.json': (json.dumps(manifest, indent=2, ensure_ascii=False) + '\n').encode('utf-8')}
 

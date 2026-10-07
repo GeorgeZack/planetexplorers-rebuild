@@ -385,9 +385,10 @@ bool pe_game_discard_slot(PeGame *g,int index,const PeSlot *expected){
         memset(&g->quickslots[k],0,sizeof g->quickslots[k]);
     return true;
 }
+bool pe_game_item_is_healing_consumable(int item_id){return item_id==916||pe_instant_heal_def(item_id)!=NULL;}
 float pe_game_item_cooldown(const PeGame *g,int item_id){
     if(!g)return 0;
-    double cooldown=item_id==916?g->juice_cooldown:item_id==PE_ITEM_MEDPACK?g->medpack_cooldown:0;
+    double cooldown=item_id==916?g->juice_cooldown:pe_instant_heal_def(item_id)?g->medpack_cooldown:0;
     return isfinite(cooldown)&&cooldown>0?(float)cooldown:0;
 }
 bool pe_game_use_slot(PeGame *g,int index){
@@ -413,15 +414,20 @@ bool pe_game_use_slot(PeGame *g,int index){
         if(mask==g->scanner_mask){say(g,"This scanner update is already installed.");return false;}
         g->scanner_mask=mask;consume_slot(g,index);say(g,"Scanner update installed; terrain scanner presentation is not implemented.");return true;
     }
+    if(pe_game_item_is_healing_consumable(d->id)&&
+       (s->count<=0||s->count>d->stack_limit||s->instance_id||s->durability!=0||
+        !isfinite(g->max_hp)||g->max_hp<=0||g->hp>g->max_hp))return false;
     if(d->id==916){
         if(g->juice_cooldown>0||!isfinite(g->max_hp)||g->max_hp<=0)return false;
         consume_slot(g,index);g->juice_cooldown=10;g->juice_buff_elapsed=0;g->juice_buff_tick=1;g->juice_buff_active=true;
         g->hp=fminf(g->max_hp,g->hp+30);say(g,"Herbal Juice used.");return true;
     }
-    if(d->id==PE_ITEM_MEDPACK){
+    const PeInstantHealDef *healing=pe_instant_heal_def(d->id);
+    if(healing){
         if(!isfinite(g->medpack_cooldown)||g->medpack_cooldown!=0||!isfinite(g->max_hp)||g->max_hp<=0)return false;
-        consume_slot(g,index);g->medpack_cooldown=pe_medpack_cooldown_seconds;
-        g->hp=fminf(g->max_hp,g->hp+pe_medpack_heal);say(g,"Portable Medpack used.");return true;
+        consume_slot(g,index);g->medpack_cooldown=healing->cooldown_seconds;
+        g->hp=fminf(g->max_hp,g->hp+healing->heal);
+        say(g,d->id==PE_ITEM_BANDAGE?"Restoration Bandage used.":"Portable Medpack used.");return true;
     }
     return pe_game_equip_slot(g,index);
 }

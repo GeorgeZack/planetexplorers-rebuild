@@ -177,6 +177,9 @@ bool pe_game_repair_frame(PeGame *game,float dt,bool enabled,bool *completed);
  * without mutation. Prototype quickslots retain the existing exhaustion policy. */
 bool pe_game_can_discard_slot(const PeGame *game,int inventory_slot);
 bool pe_game_discard_slot(PeGame *game,int inventory_slot,const PeSlot *expected);
+/* Supported live-player healing916/924/925, including empty/cooldown retry
+ * input ownership. Revival937 and unsupported medicine are deliberately false. */
+bool pe_game_item_is_healing_consumable(int item_id);
 /* Remaining supported source item cooldown; unknown items return0. */
 float pe_game_item_cooldown(const PeGame *game,int item_id);
 /* inventory_slot=-1 clears a shortcut. Assignment never consumes an item. */

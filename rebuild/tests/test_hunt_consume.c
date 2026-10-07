@@ -36,7 +36,7 @@ static PeSandboxCameraControlResult controls(PeSandboxCameraControls*c,PeSandbox
         .input_allowed=!r.consume_world&&!r.paused,.pointer_over_ui=r.consume_world},&out));return out;
 }
 static PeSandboxUIInput ui_input(void){return(PeSandboxUIInput){.focused=true,.mouse_x=640,.mouse_y=350,.frame_dt=PE_FIXED_DT,.quickslot=-1};}
-int main(void){
+static int scenario(int medicine,float healing){
     const char *root=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
     const char *names[]={"adventure-route/terrain.pevx","hare.peac","hare.pehb","player-defence/player-defence.peac",
         "player-defence/player-defence.pehb","player/player-part-0-material-0.peac",
@@ -59,8 +59,10 @@ int main(void){
     g->player=hunt.encounter.actors[0].motion.position;g->player.z+=.6f;g->velocity=(PeVec3){0};g->grounded=true;g->yaw=0;
     assert(pe_game_collision_settle(g,c));
     g->hp=120; /* Preexisting wound, not an enemy damage alteration. */
-    assert(pe_inventory_add(&g->inventory,33,1)&&pe_inventory_add(&g->inventory,925,2));
-    assert(pe_game_equip_slot(g,slot(g,33))&&pe_game_quickslot_assign(g,0,slot(g,925)));
+    assert(pe_inventory_add(&g->inventory,33,1)&&pe_inventory_add(&g->inventory,medicine,2));
+    assert(pe_game_equip_slot(g,slot(g,33))&&pe_game_quickslot_assign(g,0,slot(g,medicine)));
+    int other=medicine==924?925:924;
+    assert(pe_inventory_add(&g->inventory,other,2)&&pe_game_quickslot_assign(g,2,slot(g,other)));
     uint32_t instance=g->equipped_instance_id;PeSlot original_knife=*pe_game_equipped_tool(g);
     PeSandboxMelee blade={0};PeSandboxMeleeSetup setup={.weapon_item_id=33,.body=body,.drawn_weapon=knife,.drawn_capsule=kb,
         .gender=PE_COMBAT_FEMALE,.player_id=1,.attack=19,.stamina_reduce_percent=1};assert(pe_sandbox_melee_init(&blade,&setup));
@@ -82,7 +84,7 @@ int main(void){
     assert(found&&g->hp==120);
     PeSandboxUIInput in=ui_input();in.quickslot=0;in.left_pressed=true;
     PeSandboxUIResult action=pe_sandbox_ui_route(&ui,g,in);assert(action.consume_actions&&!action.consume_world);
-    assert(g->hp==470&&g->medpack_cooldown==10&&pe_inventory_count(&g->inventory,925)==1);
+    assert(g->hp==120+healing&&g->medpack_cooldown==10&&pe_inventory_count(&g->inventory,medicine)==1);
     pe_sandbox_pointer_route(&pointer,&action,1);held_w=true;pending=true;
     PeInput move=host_motion(g,action,controls(&camera,action),&blade,&drawn,&new_action,&pending);
     assert(move.move_z==-1&&move.move_x==0&&!new_action&&!pending&&drawn&&host_hunt_enabled(hunt,action));
@@ -91,16 +93,16 @@ int main(void){
     assert(pe_game_step_collision(g,move,PE_FIXED_DT,c));
     assert(g->player.z<before.z&&g->medpack_cooldown<10);
     assert(contact(&hunt,g,c,&blade,drawn));
-    assert(hunt.clock>clock&&hunt.player_hits>hits&&g->hp<470&&g->hp>120);
+    assert(hunt.clock>clock&&hunt.player_hits>hits&&g->hp<120+healing&&g->hp>120);
     assert(g->equipped_instance_id==instance&&!memcmp(pe_game_equipped_tool(g),&original_knife,sizeof original_knife));
-    fprintf(stderr,"hunt consume: heal frame moved %.6fm; real incoming contacts %llu; HP %.6f; clock %.6f\n",
-        before.z-g->player.z,(unsigned long long)(hunt.player_hits-hits),g->hp,hunt.clock);
+    fprintf(stderr,"hunt consume item%d: heal frame moved %.6fm; real incoming contacts %llu; HP %.6f; clock %.6f\n",
+        medicine,before.z-g->player.z,(unsigned long long)(hunt.player_hits-hits),g->hp,hunt.clock);
     /* Held use-click, failed cooldown key, and release retain only action
      * ownership: movement, AI clock and equipment survive each frame. */
     for(unsigned i=0;i<3;i++){
-        in=ui_input();if(i==1)in.quickslot=0;action=pe_sandbox_ui_route(&ui,g,in);
+        in=ui_input();if(i==1)in.quickslot=2;action=pe_sandbox_ui_route(&ui,g,in);
         pe_sandbox_pointer_route(&pointer,&action,i<2?1:0);
-        float hp=g->hp;assert(action.consume_actions&&!action.consume_world&&pe_inventory_count(&g->inventory,925)==1);
+        float hp=g->hp;assert(action.consume_actions&&!action.consume_world&&pe_inventory_count(&g->inventory,medicine)==1&&pe_inventory_count(&g->inventory,other)==2);
         move=host_motion(g,action,controls(&camera,action),&blade,&drawn,&new_action,&pending);
         assert(move.move_z==-1&&!new_action&&drawn&&g->hp==hp&&host_hunt_enabled(hunt,action));
         clock=hunt.clock;assert(pe_hunt_combat_sense(&hunt,c,pose(g,player)));
@@ -130,4 +132,9 @@ int main(void){
     assert(!memcmp(&hunt,&untouched,sizeof hunt));
     pe_hitboxes_free(hb);pe_hitboxes_free(pb);pe_hitboxes_free(kb);pe_actor_free(hare);pe_actor_free(player);pe_actor_free(body);pe_actor_free(knife);
     pe_sandbox_collision_free(c);pe_game_destroy(g);free(g);puts("hunt consume: real UI, extracted host movement, recovered incoming contact and modal control passed");return 0;
+}
+
+int main(void){
+    int result=scenario(925,350);if(result)return result;
+    return scenario(924,200);
 }

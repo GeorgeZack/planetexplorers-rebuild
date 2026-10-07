@@ -684,3 +684,99 @@ const PeTerrainResourceDef *pe_terrain_resource(int material)
 
 const float pe_medpack_heal = 350.0f;
 const float pe_medpack_cooldown_seconds = 10.0f;
+
+bool pe_item_has_durability(int item_id)
+{
+    switch (item_id) {
+    case 1:
+    case 2:
+    case 4:
+    case 6:
+    case 10:
+    case 12:
+    case 14:
+    case 19:
+    case 20:
+    case 21:
+    case 26:
+    case 28:
+    case 33:
+    case 34:
+    case 37:
+    case 39:
+    case 43:
+    case 44:
+    case 45:
+    case 54:
+    case 58:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+    case 70:
+    case 71:
+    case 73:
+    case 74:
+    case 76:
+    case 79:
+    case 84:
+    case 87:
+    case 90:
+    case 95:
+    case 99:
+    case 102:
+    case 106:
+    case 117:
+    case 120:
+    case 124:
+    case 131:
+    case 135:
+    case 138:
+    case 142:
+    case 153:
+    case 156:
+    case 160:
+    case 167:
+    case 169:
+    case 175:
+    case 186:
+    case 192:
+    case 196:
+    case 199:
+    case 203:
+    case 214:
+    case 217:
+    case 221:
+    case 1362:
+    case 1365:
+    case 1366:
+    case 1367:
+    case 1368:
+    case 1369:
+    case 1370:
+    case 1371:
+    case 1372:
+    case 1373:
+    case 1374:
+    case 1473:
+    case 1474:
+    case 1475:
+    case 1527:
+    case 1563:
+    case 1565:
+        return true;
+    default: return false;
+    }
+}
+
+const PeInstantHealDef pe_instant_heals[] = {
+    {924, 200.0f, 10.0f},
+    {925, 350.0f, 10.0f},
+};
+const size_t pe_instant_heal_count = sizeof pe_instant_heals / sizeof pe_instant_heals[0];
+const PeInstantHealDef *pe_instant_heal_def(int item_id)
+{
+    for (size_t i=0;i<pe_instant_heal_count;i++)
+        if (pe_instant_heals[i].item_id==item_id) return &pe_instant_heals[i];
+    return NULL;
+}

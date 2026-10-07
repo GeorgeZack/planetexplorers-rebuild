@@ -71,6 +71,13 @@ typedef struct {
     int shop_selection,shop_scroll;
     PeSandboxShopMode shop_mode;
     unsigned shop_quantity;
+    bool shop_edit,shop_edit_started,shop_bound;
+    char shop_edit_text[16];
+    unsigned shop_edit_before;
+    PeSandboxShopRow shop_expected;
+    int shop_expected_index;
+    PeSandboxShopMode shop_expected_mode;
+    uint32_t shop_expected_vendor;
     float shop_offset_x,shop_offset_y,shop_grab_x,shop_grab_y;
     PeAdventureDialogue dialogue;
     PeAdventureDialogueResult dialogue_result; /* Last modal action, for explicit failure feedback. */
@@ -183,6 +190,12 @@ PeTrainingUIRect pe_sandbox_ui_shop_row(const PeSandboxUI *ui,int row);
 PeTrainingUIRect pe_sandbox_ui_shop_tab(const PeSandboxUI *ui,PeSandboxShopMode mode);
 int pe_sandbox_ui_shop_count(const PeSandboxUI *ui,const PeGame *game);
 bool pe_sandbox_ui_shop_item(const PeSandboxUI *ui,const PeGame *game,int index,PeSandboxShopRow *out);
+/* Source display units; raw durability remains unchanged. */
+int pe_sandbox_ui_durability(float raw,bool repair_units);
+bool pe_sandbox_ui_script_known(const PeGame *game,int item_id);
+bool pe_sandbox_ui_item_details(const PeGame *game,const PeSlot *item,bool repair_units,char *out,size_t capacity);
+bool pe_sandbox_ui_item_tooltip(const PeSandboxUI *ui,const PeGame *game,char *out,size_t capacity,PeTrainingUIRect *box);
+PeTrainingUIRect pe_sandbox_ui_shop_quantity_rect(const PeSandboxUI *ui);
 bool pe_sandbox_ui_shop_can_trade(const PeSandboxUI *ui,const PeGame *game);
 PeTrainingUIRect pe_sandbox_ui_shop_button(const PeSandboxUI *ui,int button); /* minus,plus,buy,back,close */
 void pe_sandbox_ui_cancel_town(PeSandboxUI *ui);
