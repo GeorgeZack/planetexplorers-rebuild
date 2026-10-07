@@ -393,3 +393,8 @@ $(BUILD)/test_sandbox_wallet_host: tests/test_sandbox_wallet_host.c src/pe_sandb
 	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_wallet_host.c $(CORE) -Wl,--gc-sections -o $@ $(LZ4_LIBS) -lm
 sandbox-wallet-host-test: $(BUILD)/test_sandbox_wallet_host
 	./$(BUILD)/test_sandbox_wallet_host
+
+.PHONY: hunt-save-inspector
+$(BUILD)/inspect_hunt_save: tools/inspect_hunt_save.c $(CORE) $(HEADERS) | $(BUILD)
+	$(CC) $(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tools/inspect_hunt_save.c $(CORE) -o $@ $(LZ4_LIBS) -lm
+hunt-save-inspector: $(BUILD)/inspect_hunt_save

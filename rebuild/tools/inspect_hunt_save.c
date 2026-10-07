@@ -1,0 +1,43 @@
+/* Read-only current-loader interpretation of one native hunt checkpoint.
+ * Does not advance simulation, save, create a fixture or initialize graphics.
+ * Older-save migrations happen in memory only, exactly as in the game loader. */
+#include "pe_game.h"
+#include "pe_settlement.h"
+#include "pe_adventure_hunt.h"
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc,char **argv){
+    if(argc<2||argc>3){fprintf(stderr,"Usage: %s SAVE [ASSETS]\n",argv[0]);return 2;}
+    const char *assets=argc==3?argv[2]:PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    char error[256];PeGame *g=calloc(1,sizeof *g);if(!g)return 1;
+    if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
+        fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;
+    }
+    printf("{\"schema\":1,\"interpretation\":\"current-loader\",\"mode\":%u,"
+        "\"hunt_state\":%u,\"hunt_kills\":%u,\"pending_return_talk\":%d,"
+        "\"source_position\":[%.17g,%.17g,%.17g],\"hunt_destination\":[%.9g,%.9g,%.9g],"
+        "\"hp\":%.9g,\"max_hp\":%.9g,\"stamina\":%.9g,\"comfort\":%.9g,"
+        "\"game_seconds\":%.17g,\"money\":%u,\"equipped_instance\":%u,\"outfit_defense\":%.9g,"
+        "\"medpacks\":%d,\"juice\":%d,\"revival_shots\":%d,"
+        "\"medpack_cooldown\":%.9g,\"juice_cooldown\":%.17g,\"reward_scripts\":[%d,%d,%d,%d],\"outfit\":[",
+        (unsigned)g->mode,g->hunt_state,g->hunt_kills,pe_adventure_hunt_return_talk(g),
+        (double)g->player.x+g->world.origin_x,(double)g->player.y+g->world.origin_y,(double)g->player.z+g->world.origin_z,
+        (double)g->hunt_destination.x,(double)g->hunt_destination.y,(double)g->hunt_destination.z,
+        (double)g->hp,(double)g->max_hp,(double)g->stamina,(double)g->comfort,g->game_seconds,g->money,
+        g->equipped_instance_id,(double)pe_outfit_defense(&g->outfit),
+        pe_inventory_count(&g->inventory,925),pe_inventory_count(&g->inventory,916),pe_inventory_count(&g->inventory,937),
+        (double)g->medpack_cooldown,g->juice_cooldown,pe_inventory_count(&g->inventory,592),
+        pe_inventory_count(&g->inventory,593),pe_inventory_count(&g->inventory,594),pe_inventory_count(&g->inventory,595));
+    for(unsigned i=0;i<PE_OUTFIT_SLOTS;i++)printf("%s{\"item_id\":%d,\"instance_id\":%u,\"durability\":%.9g}",
+        i?",":"",g->outfit.items[i].item_id,g->outfit.items[i].instance_id,(double)g->outfit.items[i].durability);
+    printf("],\"inventory\":[");bool comma=false;
+    for(int i=0;i<PE_INVENTORY_SLOTS;i++)if(g->inventory.slots[i].count){
+        const PeSlot *s=&g->inventory.slots[i];
+        printf("%s{\"slot\":%d,\"item_id\":%d,\"count\":%d,\"instance_id\":%u,\"durability\":%.9g}",
+            comma?",":"",i,s->item_id,s->count,s->instance_id,(double)s->durability);comma=true;
+    }
+    printf("],\"quickslots\":[");
+    for(int i=0;i<PE_QUICKSLOTS;i++)printf("%s{\"key\":%d,\"item_id\":%d,\"instance_id\":%u}",
+        i?",":"",i+1,g->quickslots[i].item_id,g->quickslots[i].instance_id);
+    puts("]}");pe_game_destroy(g);free(g);return 0;
+}
