@@ -265,7 +265,30 @@ static void interact(PeGame *g) {
     else pe_game_gather(g);
 }
 
-static Camera3D game_camera(const PeGame *g,const PeSandboxCollision *collision,bool third,bool overview,float distance) {
+/* Activity uses the same tree-excluding immutable snapshot as camera geometry.
+ * The eye anchor and small capsule/rise remain native framing adapters. */
+static bool sandbox_camera_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,uint32_t mask,float *distance){
+    const PeSandboxCollision *collision=context;
+    if(!distance||mask!=PE_SANDBOX_CAMERA_OBSTACLE_MASK||!pe_sandbox_collision_stats(collision).generation)return false;
+    PeSceneHit hit=pe_sandbox_collision_ray_geometry(collision,origin,direction,maximum);
+    *distance=hit.hit?hit.distance:maximum;return true;
+}
+static bool sandbox_camera_frame(PeSandboxCamera *orbit,PeSandboxCameraRecovery *recovery,
+    const PeGame *game,const PeSandboxCollision *collision,PeSandboxCameraInput input){
+    if(game->mode!=PE_GAME_ADVENTURE)return pe_sandbox_camera_step(orbit,input);
+    float activity=50;
+    if(input.third_person&&!input.paused&&input.dt>0&&
+       !pe_sandbox_camera_activity((PeVec3){game->player.x,game->player.y+1.58f,game->player.z},
+           sandbox_camera_ray,(void *)collision,&activity))return false;
+    return pe_sandbox_camera_follow_step(orbit,recovery,input,activity);
+}
+static bool sandbox_camera_feedback_frame(PeSandboxCamera *orbit,PeSandboxCameraRecovery *recovery,
+    PeGameMode mode,PeSandboxCameraInput input,bool overview,float clamped_distance){
+    if(mode!=PE_GAME_ADVENTURE||!input.third_person||overview||input.paused||input.dt<=0||clamped_distance<0)return true;
+    return pe_sandbox_camera_feedback(orbit,recovery,clamped_distance,true);
+}
+static Camera3D game_camera(const PeGame *g,const PeSandboxCollision *collision,bool third,bool overview,float distance,float *clamped_distance) {
+    if(clamped_distance)*clamped_distance=-1;
     Vector3 direction={sinf(g->yaw)*cosf(g->pitch),sinf(g->pitch),-cosf(g->yaw)*cosf(g->pitch)};
     Vector3 eye={g->player.x,g->player.y+1.58f,g->player.z};
     Camera3D camera={eye,Vector3Add(eye,direction),{0,1,0},60,CAMERA_PERSPECTIVE};
@@ -275,6 +298,7 @@ static Camera3D game_camera(const PeGame *g,const PeSandboxCollision *collision,
         PeSceneHit hit=pe_sandbox_collision_sweep_geometry(collision,pv((Vector3){eye.x,eye.y-.1f,eye.z}),.1f,.2f,pv(delta));
         float f=hit.hit?fmaxf(.05f,hit.fraction-.02f):1;
         camera.position=Vector3Add(eye,Vector3Scale(delta,f));
+        if(hit.hit&&clamped_distance)*clamped_distance=distance*f;
     }
     if(overview){camera.target=rv(g->player);camera.position=Vector3Add(camera.target,(Vector3){9,6,pe_settlement_matches(&g->world)?-11:11});camera.fovy=62;}
     return camera;
@@ -485,6 +509,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     double supplier_seconds=0;
     PeSandboxActions tool_action;pe_sandbox_actions_init(&tool_action,false);
     PeSandboxCamera orbit;pe_sandbox_camera_init(&orbit);
+    PeSandboxCameraRecovery camera_recovery;pe_sandbox_camera_recovery_init(&camera_recovery);
     PeSandboxCameraControls camera_controls;pe_sandbox_camera_controls_init(&camera_controls);
     Vector2 right_press_pointer={0};
     bool tool_drawn=false;uint32_t tool_instance=0;uint64_t tool_edits=0;
@@ -688,7 +713,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(action.load) {
             loaded=pe_game_load(game,save_path,error,sizeof error);
-            if(loaded){melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
+            if(loaded){pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
@@ -793,11 +818,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         PeSandboxCameraInput camera_input={.dt=smoke_frames?PE_FIXED_DT:dt,
             .wheel_notches=GetMouseWheelMove(),.building=build_mode,.third_person=third_person,
             .input_allowed=world_input,.paused=action.paused||!focused};
-        if(!pe_sandbox_camera_step(&orbit,camera_input)){
+        if(!sandbox_camera_frame(&orbit,&camera_recovery,game,collision,camera_input)){
             snprintf(error,sizeof error,"Invalid sandbox camera state");result=1;break;
         }
         if(look_settle>0)look_settle--;
-        Camera3D aim_camera=game_camera(game,collision,third_person,false,orbit.distance);
+        Camera3D aim_camera=game_camera(game,collision,third_person,false,orbit.distance,NULL);
         Vector2 aim_point=captured?(Vector2){GetScreenWidth()*.5f,GetScreenHeight()*.5f}:pointer_position;
         Ray aim=source_ray(aim_point,aim_camera);
         Vector2 interaction_point=right_click&&camera_controls.mode==PE_SANDBOX_CAMERA_FREE?right_press_pointer:aim_point;
@@ -1090,7 +1115,13 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(!sandbox_action_pose(actor,game,&tool_action,&melee,tool_drawn)){
             snprintf(error,sizeof error,"Equipped action pose unavailable");result=1;break;
         }
-        Camera3D camera=game_camera(game,collision,third_person,smoke_frames>0,orbit.distance);
+        float clamped_distance=-1;
+        Camera3D camera=game_camera(game,collision,third_person,smoke_frames>0,orbit.distance,&clamped_distance);
+        /* Feedback is once per final display pose; aim queries never mutate the
+         * clock. Freeze it under pause/focus loss and ignore synthetic overview. */
+        if(!sandbox_camera_feedback_frame(&orbit,&camera_recovery,game->mode,camera_input,smoke_frames>0,clamped_distance)){
+            snprintf(error,sizeof error,"Invalid sandbox camera clamp");result=1;break;
+        }
         ui.building=build_mode;ui.build_item=selected_item;ui.build_shape=build_shape;
         ui.build_rotation=build_rotation;ui.build_brush=build_brush;
         double cycle=game->game_seconds/PE_DAY_SECONDS;

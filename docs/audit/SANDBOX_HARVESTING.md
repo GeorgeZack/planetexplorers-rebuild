@@ -22,6 +22,8 @@ Source prototype48 has multiplier`.48571`. Native damage is player base plus the
 
 `Action_Gather` picks type10 collider-free objects; its original animation event starts skill20110003. Native herbs still collect immediately with action-only input ownership. This increment ports their production distribution, not the Gather animation/event lifecycle. Decorative prototype146 remains deliberately nongatherable despite its source resource row.
 
+The subsequent [offline Gather qualification audit](GATHER_ACTION_GATE.md) found no reusable tutorial/player Gather poses in335 recovered PEAC files. The installed general action uses overlapping HerbDown/Herb/HerbUp humanoid states and state-exit notifications, so the tutorial's1.1s timer cannot qualify it. Visible Gather behavior remains gated on that specific composed pose/event group; no additional game session was needed to establish the gap.
+
 ## Production rules
 
 `NaturalRes` reads the first production segment as ordered **cumulative cutoffs**; do not sum them a second time. `GetTreeResouce` computes:

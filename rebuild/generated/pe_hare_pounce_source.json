@@ -1,0 +1,98 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "path": "Assets/Scripts/Behave/Action/BTAttack.cs",
+      "sha256": "47c826146d1913f0e05b07eb663b46a5cb320b2f569bc995f0ce75f872424f33"
+    },
+    {
+      "path": "Assets/Resources/AiPrefab/EntityData/Monster/M_lepus_hare.xml",
+      "sha256": "587284178f07dcf9ee14ecbba53f11441524f6366aa7d5e4d20500fdb7747118"
+    },
+    {
+      "path": "Assets/Scripts/PETools/PEMath.cs",
+      "sha256": "3f1aad65bb9928affcc3ad60c3ad7f4518abe3cf7f56f41aab9d4119433cbf3a"
+    },
+    {
+      "path": "Assets/Scripts/Assist/AnimationStateInfo/PEAnimatorAttackTrigger.cs",
+      "sha256": "3a4440daceaad6e444990bd355fa52ca12a89c6a1d30ddbefab38ea0e8ba85b5"
+    },
+    {
+      "path": "Assets/Resources/AiPrefab/EntityControllers/Monster/Land/lepus_hare.controller",
+      "sha256": "a0e8eda8989a5447a27d019b6949354c12536a6d76be21cc7790b283869ed024"
+    },
+    {
+      "path": "Assets/Prefabs/AiPrefab/AiPrefabEntity/AiPrefabMonster/Monster/M_lepus_hare.prefab",
+      "sha256": "bfebf9c0d9c846ec1fc9a0764910fa14bb652fdbbcedcae204d1075b2973b1e5"
+    },
+    {
+      "path": "Assets/Resources/DataBase/localData.bytes",
+      "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+    }
+  ],
+  "contract": {
+    "xml": {
+      "Name": "Pounce",
+      "pounce": "attack5",
+      "prob": "0.5",
+      "cdTime": "5",
+      "minRange": "2.0",
+      "maxRange": "5.0",
+      "minAngle": "-15",
+      "maxAngle": "15",
+      "startTime": "0.267",
+      "endTime": "0.6",
+      "stopTime": "0.967",
+      "skillID": "30100053"
+    },
+    "skill": {
+      "_id": "30100053",
+      "_name": "\u5154\u5b50-\u51b2\u649e",
+      "_icon": "0",
+      "_desc": "2200000",
+      "_interruptable": "1",
+      "_coolingTime": ".967",
+      "_coolingTimeType": "1",
+      "_coolingTimeShared": "0",
+      "_pretimeOfPrepare": "0",
+      "_postimeOfPrepare": "0",
+      "_effPrepare": "0",
+      "_cond": "False",
+      "_effMainOneTime": "0",
+      "_pretimeOfMain": "0",
+      "_timeOfMain": ".967",
+      "_postimeOfMain": "0",
+      "_effMainEachTime": "0",
+      "_triggerEvents": "10250",
+      "_pretimeOfEnding": "0",
+      "_postimeOfEnding": "0",
+      "_effEnding": "0"
+    },
+    "trigger": {
+      "_id": "10250",
+      "_cond": "colinfo",
+      "_modsCaster": "0",
+      "_modsTarget": "exp,29,target.raws[29]=-1;#exp,1,target.expFunc.TryGetHurt(caster.sums[25]*caster.sums[25]/(target.sums[27]+caster.sums[25])*(target.sums[35]==1?(1-target.sums[33]):1)*(target.expFunc.RandIn(caster.sums[26])?2:1));caster.raws[74]+=0.1f",
+      "_force": "250",
+      "_effOnHitCaster": "0",
+      "_effOnHitTarget": "57"
+    }
+  },
+  "installed": {
+    "bundle_sha256": "94409ad1bf9570048a52c42671986907e2a5ca131f55f73737e5b7d7cff76c35",
+    "controller_id": 4131577587453613724,
+    "state_id": 336979320,
+    "clip_id": 1506232535475238862,
+    "clip_name": "attack5_pouncefront",
+    "duration": 0.9666671752929688,
+    "frames": 31,
+    "fps": 30,
+    "dense_channels": 302
+  },
+  "scope": [
+    "Disconnected lifecycle and staged animation; no production pounce admission, aggression or collision activation.",
+    "Absolute scaled float timestamps preserve source strict comparisons; host must supply actual ReadyAttack scope and bounds-gap geometry.",
+    "First aligned tick starts the independently owned skill; movement success and Reset never stop that skill.",
+    "Reset retains the original Linux epsilon guard; initialization at exactly time0 has its original no-restore edge."
+  ]
+}

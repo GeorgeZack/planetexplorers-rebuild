@@ -18,6 +18,10 @@
       "sha256": "fa852a0d8069b957f8c18d05e30d1ae6423b8bd5f7d2d7401fb71ab4664263ab"
     },
     {
+      "path": "Assets/Scripts/Scene/SceneEntityPosAgent.cs",
+      "sha256": "14b83de45503a6358eba3bbea5f73d76462bcee14ed2f74da882a01e6017b1db"
+    },
+    {
       "path": "Assets/Scripts/Scene/MonsterEntityCreator.cs",
       "sha256": "f7773406c9a521abe6a42e99fe12d415e0b8699a8735877349df47e7d97eb73e"
     },
@@ -50,7 +54,57 @@
       "sha256": "d5a3c820d0ca811b3418aeeaa777aa274376e9711ec7933e61a97260097911ec"
     }
   ],
-  "evidence": "Source-derived metadata; no live beacon/cohort or runtime implementation.",
+  "guarded_spawn_methods": [
+    {
+      "path": "Assets/Scripts/Scene/EntityMonsterBeacon.cs",
+      "method": "public static EntityMonsterBeacon CreateMonsterBeaconByTDID(",
+      "normalized_sha256": "1c8cada20bb1f2ca53a0714873e67efadec26a6cb058d79abc50a8b0ced49029"
+    },
+    {
+      "path": "Assets/Scripts/Scene/EntityMonsterBeacon.cs",
+      "method": "IEnumerator RefreshTowerMission()",
+      "normalized_sha256": "53e291f5913d7a1d30918c59b7dd17438b72203e2eae82790200b0a8871ea259"
+    },
+    {
+      "path": "Assets/Scripts/Scene/EntityMonsterBeacon.cs",
+      "method": "public virtual void OnMonsterCreated(PeEntity e)",
+      "normalized_sha256": "f019d61a9250cd729b63df9c8f1b7a850b6bc1e55a02f5331e9872a4be256cb6"
+    },
+    {
+      "path": "Assets/Scripts/AiScripts/AiHelper/AiUtil.cs",
+      "method": "public static Vector3 GetRandomPosition(Vector3 center, float minRadius, float maxRadius, Vector3 direction, float minAngle, float maxAngle)",
+      "normalized_sha256": "eeab7dc61ad6e4efae7d3bdbccfb2b4b2f253c934164699754b9e30035a9c162"
+    },
+    {
+      "path": "Assets/Scripts/Scene/SceneEntityMissionPointTowerDefense.cs",
+      "method": "void OnOneDeath()",
+      "normalized_sha256": "207eda8c028b17b4cbf22ff35558e614651461ccbc385799dd484e33768ae6ba"
+    },
+    {
+      "path": "Assets/Scripts/Scene/SceneEntityPosAgent.cs",
+      "method": "IEnumerator TryCreateEntityUnstatic()",
+      "normalized_sha256": "1d63249b872e96aee0b84311a8462bc2ae9ab419b5ac11fcb00c657c4234bb46"
+    }
+  ],
+  "evidence": "Source-derived metadata; no live beacon/cohort capture.",
+  "planner_rule": {
+    "draw_order": "group count then each angle then uniform radius",
+    "integer_maximum": "exclusive",
+    "real_endpoints": "inclusive",
+    "positive_y_rotation": "forward +Z rotates toward +X",
+    "deferred_y_value": 0,
+    "can_ride": false,
+    "created_permissions": {
+      "default_player_id": 8,
+      "camp_id": 26
+    },
+    "credit": "actual beacon-owned member deaths regardless of killer",
+    "native_adapters": [
+      "Atomic whole-wave admission, stable per-beacon agent IDs and death deduplication.",
+      "Pending anchors retained on failed support; no source retry clock is ported.",
+      "Completion latches at15; survivor cleanup and mission completion remain host responsibilities."
+    ]
+  },
   "contract": {
     "missions": {
       "9077": {

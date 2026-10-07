@@ -3,6 +3,7 @@ from contextlib import closing
 import json
 from pathlib import Path
 import sqlite3
+import shutil
 import sys
 import tempfile
 import unittest
@@ -57,6 +58,40 @@ class TownDefenseExportTests(unittest.TestCase):
                     changed.commit()
                     with self.assertRaises(ValueError):self.manifest(p)
                     source.backup(changed)
+
+    def test_planner_source_contract(self):
+        m=self.manifest()
+        self.assertEqual(len(m['guarded_spawn_methods']),6)
+        self.assertEqual(m['planner_rule']['created_permissions'],dict(default_player_id=8,camp_id=26))
+        self.assertEqual(m['planner_rule']['integer_maximum'],'exclusive')
+        self.assertEqual(m['planner_rule']['real_endpoints'],'inclusive')
+        self.assertEqual(m['planner_rule']['deferred_y_value'],0)
+        self.assertFalse(m['planner_rule']['can_ride'])
+
+    def test_changed_source_algorithm_rejected(self):
+        changes=(
+            ('Assets/Scripts/Scene/EntityMonsterBeacon.cs','go.transform.rotation = Quaternion.identity;','go.transform.rotation = targetTrans.rotation;'),
+            ('Assets/Scripts/Scene/EntityMonsterBeacon.cs','AiUtil.GetRandomPosition(center, 20, 80, dir, minAngle, maxAngle)','AiUtil.GetRandomPosition(center, 10, 80, dir, minAngle, maxAngle)'),
+            ('Assets/Scripts/Scene/EntityMonsterBeacon.cs','const int MonsterBeaconCampID = 26;','const int MonsterBeaconCampID = 27;'),
+            ('Assets/Scripts/Scene/EntityMonsterBeacon.cs','sae.deathEvent += (t, c) => OnMonsterDeath(e);','sae.deathEvent += (t, c) => OnMonsterDeath(null);'),
+            ('Assets/Scripts/AiScripts/AiHelper/AiUtil.cs','direction.y = 0.0f;','direction.y = 1.0f;'),
+            ('Assets/Scripts/Scene/SceneEntityMissionPointTowerDefense.cs','num++;','num += 2;'),
+            ('Assets/Scripts/Scene/SceneEntityPosAgent.cs','public const float PosYTBD = 0.0f;','public const float PosYTBD = 1.0f;'),
+            ('Assets/Scripts/Scene/SceneEntityPosAgent.cs','if(CheckSetAvailablePos())','if(true)'),
+        )
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            for path,_,_ in exporter.SPAWN_METHODS:
+                target=root/path;target.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copyfile(exporter.ROOT/path,target)
+            self.assertEqual(len(exporter.validate_spawn_sources(root)),6)
+            for path,old,new in changes:
+                with self.subTest(change=old):
+                    target=root/path;original=target.read_text(encoding='utf-8-sig')
+                    self.assertIn(old,original)
+                    target.write_text(original.replace(old,new),encoding='utf-8')
+                    with self.assertRaises(ValueError):exporter.validate_spawn_sources(root)
+                    target.write_text(original,encoding='utf-8')
 
     def test_parser_rejects_malformed_or_invalid_ranges(self):
         for bad in ('0_501_8_10_0','0_501_8_8_0_360','-1_501_8_10_0_360','0_501_8_10_360_0'):

@@ -1,5 +1,7 @@
 # Planet Explorers C rebuild
 
+Adventure camera now uses source-derived activity-space zoom targets and obstruction recovery, keeping the existing native framing/collision adapter. [Camera contract](../docs/audit/CAMERA_ENVIRONMENT.md) records automated host checks and remaining visual limits. [Hare pounce](../docs/audit/HARE_POUNCE_PREPARATION.md) and [defense-wave planning](../docs/audit/TOWN_DEFENSE_SPAWN.md) are isolated foundations; they do not enable new combat or9077.
+
 Adventure inventory now has four independent420-cell categories, with42 visible cells per page and ten pages per category. Split stacks, move or exchange cells, merge with Shift+drop, and consolidate/order a category with Sort. Legacy and tutorial inventories retain32 cells. [Inventory ownership, controls and migration](../docs/audit/SANDBOX_INVENTORY.md) describes the source rules and native conveniences.
 
 The fixed vegetation patch now uses recovered tree hardness and resource production, including herb fallback items and optional seeds. Unit-scale Tree48 yields16 Wood and20 combined Resin/Rubber at the supported axe bonuses. Placement remains fixed; gathering is still immediate without the original Gather animation. [Harvesting contract](../docs/audit/SANDBOX_HARVESTING.md) distinguishes source calculations from the saved native RNG and presentation adapters. These changes require no new original-game capture; consolidated visual acceptance remains pending.

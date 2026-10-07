@@ -8,6 +8,11 @@
 #define PE_TOWN_DEFENSE_INITIAL_SECONDS 30
 #define PE_TOWN_DEFENSE_COOLDOWN_SECONDS 10
 #define PE_TOWN_DEFENSE_COHORT_AVAILABLE 0
+#define PE_TOWN_DEFENSE_RADIUS_MIN 20.0f
+#define PE_TOWN_DEFENSE_RADIUS_MAX 80.0f
+#define PE_TOWN_DEFENSE_DEFERRED_Y 0.0f
+#define PE_TOWN_DEFENSE_PLAYER_ID 8
+#define PE_TOWN_DEFENSE_CAMP_ID 26
 typedef struct {int wave,delay_seconds,spawn_type,prototype,count_min,count_max_exclusive,angle_min,angle_max;} PeTownDefenseSourceGroup;
 static const PeTownDefenseSourceGroup pe_town_defense_source_groups[]={
     {0,0,501,13,8,10,0,360},

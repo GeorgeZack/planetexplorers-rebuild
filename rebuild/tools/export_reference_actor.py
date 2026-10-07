@@ -201,7 +201,7 @@ def melee_provenance(objects):
                      'controller_state_names': sorted(states)}
 
 
-def recover(bundle, output):
+def recover(bundle, output, include_pounce=False):
     import UnityPy
     from UnityPy.helpers.MeshHelper import MeshHandler
     if not bundle.is_file() or bundle.stat().st_size > 64*1024*1024:
@@ -301,9 +301,16 @@ def recover(bundle, output):
     authored_bounds = bounds(skin_position(v[0], v[3], v[4], authored_palette) for v in vertices)
     clip_objects = {obj.read_typetree()['m_Name']: obj for obj in objects.values() if obj.type.name == 'AnimationClip'}
     combat, combat_evidence = melee_provenance(objects)
+    selected_clips = list(CLIPS)
+    if include_pounce:
+        from export_hare_pounce import installed_provenance, BUNDLE_SHA
+        if hashlib.sha256(bundle.read_bytes()).hexdigest() != BUNDLE_SHA:
+            raise ValueError("Unqualified pounce bundle")
+        combat["attack5"] = installed_provenance(objects)
+        selected_clips.append(("attack5", "attack5_pouncefront"))
     exported = []
     reports = []
-    for name, source_name in CLIPS:
+    for name, source_name in selected_clips:
         obj = clip_objects[source_name]
         clip = obj.read_typetree(); muscle = clip['m_MuscleClip']; data = muscle['m_Clip']['data']
         dense = data['m_DenseClip']; constant = data['m_ConstantClip']['data']
@@ -389,6 +396,9 @@ def recover(bundle, output):
                                 'Root motion extraction is not implemented; selected clips have zero source average speed.'],
                 'files': {p.name: {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
                           for p in sorted(output.iterdir())}}
+    if include_pounce:
+        manifest['pounce_staging'] = 'Append-only source pounce TRS palette; isolated from production hunt and installed hare assets.'
+        manifest['limitations'][0] = 'Idle/run/walk and six attack clips; no Animator transitions, AI or ragdoll. Pounce is staged only; its action, skill and contact owners remain separate.'
     (output/'hare-manifest.json').write_text(json.dumps(manifest, sort_keys=True, indent=2)+'\n')
     return manifest
 

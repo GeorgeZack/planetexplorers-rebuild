@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October7 source-only continuation adds [Adventure camera activity/recovery](CAMERA_ENVIRONMENT.md), [isolated hare-pounce preparation](HARE_POUNCE_PREPARATION.md) and [defense wave planning/member credit](TOWN_DEFENSE_SPAWN.md). Camera math is integrated with the real snapshot; pounce and9077 remain disconnected until their host prerequisites are qualified. No new desktop/physical acceptance is claimed.
+
 The latest [inventory increment](SANDBOX_INVENTORY.md) adds four source420-cell Adventure categories, paged split/swap/merge/sort controls and PECSv19 identity-preserving migration. [Harvesting fidelity](SANDBOX_HARVESTING.md) replaces provisional loot with qualified tree48 hardness and source primary/fallback/optional herb and tree production, preserving inventory/RNG on failure. These are source-derived and headlessly tested; Gather animation and final visual acceptance remain separate.
 
 The preceding [fixed vegetation patch](SANDBOX_VEGETATION.md) adds two trees, six harvestable herbs and two decorative plants near new-sandbox spawn, plus an explicit option for old saves. Wild assets and rules are recovered offline; PECSv18 retains depletion. Procedural spawning and regrowth remain deferred. [Selling/buyback](TOWN_SELL_BUYBACK.md) and [construction undo/redo](CONSTRUCTION_HISTORY.md) are also implemented. These increments have no new physical acceptance; ordinary hunt completion remains a separate check.

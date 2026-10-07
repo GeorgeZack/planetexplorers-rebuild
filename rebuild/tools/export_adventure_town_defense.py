@@ -3,6 +3,8 @@
 import argparse
 from contextlib import closing
 import json
+import hashlib
+import re
 from pathlib import Path
 import sqlite3
 import sys
@@ -12,6 +14,7 @@ DEFAULT_OUTPUT = ROOT/'rebuild/generated'
 SOURCE_FILES = (
     'Assets/Scripts/Scene/SceneEntityMissionPointTowerDefense.cs',
     'Assets/Scripts/Scene/EntityMonsterBeacon.cs',
+    'Assets/Scripts/Scene/SceneEntityPosAgent.cs',
     'Assets/Scripts/Scene/MonsterEntityCreator.cs',
     'Assets/Scripts/AiScripts/AiSpawn/SPClass.cs',
     'Assets/Scripts/AiScripts/AiHelper/AiUtil.cs',
@@ -22,6 +25,39 @@ SOURCE_FILES = (
     'Assets/Scripts/PuJi/Town/Tool/VArtifactUtil.cs',
 )
 WAVE_CONTRACT = '0_501_8_10_0_360,503_2_3_0_360;20_510_8_10_0_360,503_2_3_0_360'
+
+
+# Whitespace-normalized method guards pin the active branch, including draw
+# order and deferred creation. A changed body requires a renewed source audit.
+SPAWN_METHODS = (
+    ('Assets/Scripts/Scene/EntityMonsterBeacon.cs', 'public static EntityMonsterBeacon CreateMonsterBeaconByTDID(', '1c8cada20bb1f2ca53a0714873e67efadec26a6cb058d79abc50a8b0ced49029'),
+    ('Assets/Scripts/Scene/EntityMonsterBeacon.cs', 'IEnumerator RefreshTowerMission()', '53e291f5913d7a1d30918c59b7dd17438b72203e2eae82790200b0a8871ea259'),
+    ('Assets/Scripts/Scene/EntityMonsterBeacon.cs', 'public virtual void OnMonsterCreated(PeEntity e)', 'f019d61a9250cd729b63df9c8f1b7a850b6bc1e55a02f5331e9872a4be256cb6'),
+    ('Assets/Scripts/AiScripts/AiHelper/AiUtil.cs', 'public static Vector3 GetRandomPosition(Vector3 center, float minRadius, float maxRadius, Vector3 direction, float minAngle, float maxAngle)', 'eeab7dc61ad6e4efae7d3bdbccfb2b4b2f253c934164699754b9e30035a9c162'),
+    ('Assets/Scripts/Scene/SceneEntityMissionPointTowerDefense.cs', 'void OnOneDeath()', '207eda8c028b17b4cbf22ff35558e614651461ccbc385799dd484e33768ae6ba'),
+    ('Assets/Scripts/Scene/SceneEntityPosAgent.cs', 'IEnumerator TryCreateEntityUnstatic()', '1d63249b872e96aee0b84311a8462bc2ae9ab419b5ac11fcb00c657c4234bb46'),
+)
+
+
+def validate_spawn_sources(root=ROOT):
+    methods=[]
+    for path,signature,expected in SPAWN_METHODS:
+        source=(root/path).read_text(encoding='utf-8-sig')
+        if source.count(signature)!=1:raise ValueError('Ambiguous source method '+signature)
+        start=source.index('{',source.index(signature));end=start+1;depth=1
+        while end<len(source) and depth:
+            depth+=(source[end]=='{')-(source[end]=='}');end+=1
+        if depth:raise ValueError('Unclosed source method '+signature)
+        digest=hashlib.sha256(re.sub(r'\s+','',source[start:end]).encode()).hexdigest()
+        if digest!=expected:raise ValueError('Defense planner source changed: '+signature)
+        methods.append(dict(path=path,method=signature,normalized_sha256=digest))
+    beacon=re.sub(r'\s+','',(root/'Assets/Scripts/Scene/EntityMonsterBeacon.cs').read_text(encoding='utf-8-sig'))
+    agent=re.sub(r'\s+','',(root/'Assets/Scripts/Scene/SceneEntityPosAgent.cs').read_text(encoding='utf-8-sig'))
+    for expected in ('constintMonsterBeaconPlayerID=8;','constintMonsterBeaconCampID=26;',
+                     'go.transform.rotation=Quaternion.identity;','bcn._forward=go.transform.forward;'):
+        if expected not in beacon:raise ValueError('Defense permission/orientation constant changed')
+    if 'publicconstfloatPosYTBD=0.0f;' not in agent:raise ValueError('Deferred Y constant changed')
+    return methods
 
 
 def expect(row, values, label):
@@ -50,6 +86,7 @@ def parse_waves(value):
 
 
 def build_outputs(database=DEFAULT_DATABASE, localization=DEFAULT_LOCALIZATION):
+    guarded_methods=validate_spawn_sources()
     with closing(connect_readonly(database)) as db:
         quests,_=numeric_rows(db,'AdRandomQuest_List','ID')
         targets,_=numeric_rows(db,'AdQuest_TowerDefence','TargetID')
@@ -118,6 +155,9 @@ def build_outputs(database=DEFAULT_DATABASE, localization=DEFAULT_LOCALIZATION):
            '#define PE_TOWN_DEFENSE_KILL_GOAL 15','#define PE_TOWN_DEFENSE_BEACON_TOWN_ID 4',
            '#define PE_TOWN_DEFENSE_INITIAL_SECONDS 30','#define PE_TOWN_DEFENSE_COOLDOWN_SECONDS 10',
            '#define PE_TOWN_DEFENSE_COHORT_AVAILABLE 0',
+           '#define PE_TOWN_DEFENSE_RADIUS_MIN 20.0f','#define PE_TOWN_DEFENSE_RADIUS_MAX 80.0f',
+           '#define PE_TOWN_DEFENSE_DEFERRED_Y 0.0f',
+           '#define PE_TOWN_DEFENSE_PLAYER_ID 8','#define PE_TOWN_DEFENSE_CAMP_ID 26',
            'typedef struct {int wave,delay_seconds,spawn_type,prototype,count_min,count_max_exclusive,angle_min,angle_max;} PeTownDefenseSourceGroup;',
            'static const PeTownDefenseSourceGroup pe_town_defense_source_groups[]={']
     for w in waves:
@@ -128,7 +168,15 @@ def build_outputs(database=DEFAULT_DATABASE, localization=DEFAULT_LOCALIZATION):
     for row in dialogue:lines.append('    {%d,%d,%s},'%(row['id'],row['role'],c_string(row['text'])))
     lines+=['};','#endif','']
     manifest=dict(schema=1,source=describe_source(database),localization=describe_source(localization) if localization else None,
-                  source_files=[describe_source(ROOT/p) for p in SOURCE_FILES],evidence='Source-derived metadata; no live beacon/cohort or runtime implementation.',
+                  source_files=[describe_source(ROOT/p) for p in SOURCE_FILES],guarded_spawn_methods=guarded_methods,
+                  evidence='Source-derived metadata; no live beacon/cohort capture.',
+                  planner_rule=dict(draw_order='group count then each angle then uniform radius',integer_maximum='exclusive',
+                                    real_endpoints='inclusive',positive_y_rotation='forward +Z rotates toward +X',
+                                    deferred_y_value=0,can_ride=False,created_permissions=dict(default_player_id=8,camp_id=26),
+                                    credit='actual beacon-owned member deaths regardless of killer',
+                                    native_adapters=['Atomic whole-wave admission, stable per-beacon agent IDs and death deduplication.',
+                                                     'Pending anchors retained on failed support; no source retry clock is ported.',
+                                                     'Completion latches at15; survivor cleanup and mission completion remain host responsibilities.']),
                   contract=raw,mission_text=mission_text,dialogue=dialogue,waves=waves,species=species,
                   kill_goal=15,total_possible_spawns=dict(minimum=total_min,maximum=total_max),
                   reference=dict(available=False,beacon_position=None,agents=None),

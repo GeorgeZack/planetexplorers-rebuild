@@ -1,19 +1,21 @@
 #ifndef PE_SANDBOX_CAMERA_H
 #define PE_SANDBOX_CAMERA_H
 #include <stdbool.h>
+#include <stdint.h>
+#include "pe_world.h"
 
 #define PE_SANDBOX_CAMERA_DEFAULT_DISTANCE 6.0f
 #define PE_SANDBOX_CAMERA_MIN_DISTANCE 1.8f
 #define PE_SANDBOX_CAMERA_NORMAL_MAX 10.0f
 #define PE_SANDBOX_CAMERA_BUILD_MAX 20.0f
 /* Original PeCamera obstacle mask: Default, SceneStatic, VFVoxelTerrain,
- * Building, Unwalkable, ProxyPlayer. No tree or near-tree layers. The helper
- * makes NO spatial queries; any host collision query must preserve this split. */
+ * Building, Unwalkable, ProxyPlayer. No tree or near-tree layers. The activity
+ * callback and all host collision queries must preserve this split. */
 #define PE_SANDBOX_CAMERA_OBSTACLE_MASK 8468481u
 
 typedef struct {
-    float desired_distance; /* Source DistLevel, with unported activity factor=1. */
-    float distance;         /* Smoothed source Dist, BEFORE host obstruction. */
+    float desired_distance; /* Source DistLevel, independent of activity. */
+    float distance;         /* Source Dist; environment feedback may shorten it. */
     float velocity;         /* Source DistVelocity, persistent across frames. */
 } PeSandboxCamera;
 typedef struct {
@@ -34,6 +36,31 @@ void pe_sandbox_camera_init(PeSandboxCamera *camera);
  * Not a full CameraForge port: no activity-space evaluation, two-second clamp
  * recovery, original anchor, dynamic near-plane, rotation or query ownership. */
 bool pe_sandbox_camera_step(PeSandboxCamera *camera,PeSandboxCameraInput input);
+
+/* Source-first environment slice. The query returns false on backend failure;
+ * otherwise write first-hit distance or maximum on miss. The mask excludes
+ * trees; ignore triggers. Only successful evaluation commits *activity. */
+typedef bool (*PeSandboxCameraRayQuery)(void *context,PeVec3 origin,PeVec3 direction,
+    float maximum,uint32_t mask,float *distance);
+bool pe_sandbox_camera_activity(PeVec3 anchor,PeSandboxCameraRayQuery query,
+    void *context,float *activity);
+typedef struct {
+    float hold_seconds;
+    bool clamp_pending;
+} PeSandboxCameraRecovery;
+void pe_sandbox_camera_recovery_init(PeSandboxCameraRecovery *recovery);
+/* Alternative to step(), never an additional call. Uses source activity target
+ * and the previous display's geometry latch. Hold dt is clamped .001.. .1;
+ * the verified SmoothDamp continues to use actual dt. Pause/dt0/first person
+ * freeze the latch/clock. Modal input blocks wheel, not unpaused recovery.
+ * Desired range remains1.8..10/20; geometry may shorten actual distance to0. */
+bool pe_sandbox_camera_follow_step(PeSandboxCamera *camera,
+    PeSandboxCameraRecovery *recovery,PeSandboxCameraInput input,float activity);
+/* Once after final display geometry, not on intermediate aim queries. True
+ * clamp zeroes velocity and queues source Geometry Clampd for the next follow
+ * update. False is a no-op: it must not erase an unconsumed prior clamp. */
+bool pe_sandbox_camera_feedback(PeSandboxCamera *camera,
+    PeSandboxCameraRecovery *recovery,float actual_distance,bool clamped);
 
 typedef enum {
     PE_SANDBOX_CAMERA_FREE=0,

@@ -1,5 +1,7 @@
 # Sandbox camera: source evidence and integration boundary
 
+Subsequent implementation: [activity-space and obstruction recovery](CAMERA_ENVIRONMENT.md) now supplies source sampling, target scaling and the two-second recovery clock in Adventure, using the existing tree-free snapshot. The framing and capsule geometry below remain native adapters; full near-plane/ring/YawPitchFinding behavior is still unported. This supersedes the earlier missing-activity/lock statements while preserving their evidence.
+
 This is a source-only investigation prompted by recovered tree foliage obscuring the provisional sandbox spawn. It records the supplied project's active CameraForge path, not a new original-client observation. The subsequent bounded host change in `pe_sandbox_view.c` adds explicit third-person wheel zoom: default6m, bounds1.8–10m normally and1.8–20m in construction. Its .8m-per-raylib-notch conversion is an adapter assumption derived below. The host retains a provisional eye+2×direction look target, .5m camera rise and .1m capsule sweep against the sandbox movement snapshot. It does not evaluate the complete source camera graph, activity-space search or near-plane geometry. This audit made no tree-collision or fading change; graphical verification of zoom is separate.
 
 ## Vegetation is excluded from the source obstacle mask

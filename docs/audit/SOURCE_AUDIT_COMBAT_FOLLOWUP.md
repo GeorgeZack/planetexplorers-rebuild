@@ -2,6 +2,8 @@
 
 October 6, 2026, US/Central. Read-only audit of original C#, installed source assets, current C code and preserved animation evidence, following the ordinary sword-root checkpoint `3791d89e763586a5cd3bc7684c6462592288572a` (pushed and remote-verified by the root agent). No game, graphics context, desktop input, save change or runtime edit was used. This document is the only output of this audit. Line references describe the inspected tree and are navigation aids, not immutable identities.
 
+The October7 [pounce preparation increment](HARE_POUNCE_PREPARATION.md) now completes the staged generic clip extraction and disconnected lifecycle recommendation below. Production pounce remains disabled; the selection, motor, skill/Animator integration and final visual gates are still outstanding.
+
 **Recommended next increment: export the existing generic hare pounce clip and source action metadata, then implement a separately tested pounce lifecycle.** This is a bounded C#/asset task with a clearer endpoint than finishing the humanoid engine. Keep production activation separate until branch selection, skill lifetime and collision ownership are integrated. This recommendation is for extraction and headless preparation, **not increased enemy aggression** before ordinary hunt/shield acceptance. Preserve the current production enemy policy during that preparation. In parallel, shield composition can continue offline against existing bakes; repeating the hunt does not supply its missing mathematical operations.
 
 ## Current work must not be rediscovered as missing

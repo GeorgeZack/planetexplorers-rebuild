@@ -1,0 +1,410 @@
+{
+  "format_version": 1,
+  "sources": [
+    {
+      "path": "Assets/PeCamera/Resources/Controllers/PECamera_Update.asset",
+      "sha256": "253ba07513eae22cf3f4e404d63a9942ddea7c13bfb12215bd476000f3760938"
+    },
+    {
+      "path": "Assets/PeCamera/Resources/Controllers/PECamera_Start.asset",
+      "sha256": "e1956bec6ee32bc4c9e304f05211b9114adc2f4d7f44c784fa6fddc206650694"
+    },
+    {
+      "path": "Assets/PeCamera/Scripts/PeCamera.cs",
+      "sha256": "8c3436eec6f52e7a88ee95711f517f9fe80fb25552fa51496ecd90ccdf0eb63f"
+    },
+    {
+      "path": "Assets/PeCamera/Scripts/ScriptModifier/ThirdPersonFollow.cs",
+      "sha256": "8ebbdcca0e791b6d374da00c958738ce401bea34e73ca773f1c9d3c8323dd0a1"
+    },
+    {
+      "path": "Assets/PeCamera/Scripts/ScriptModifier/GeometryClamp.cs",
+      "sha256": "e207bc211d09be330261845669e3b6f097674fc2a6dd904c03b14a7ba009670a"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Utilities/Utils.cs",
+      "sha256": "59e8f0b2b6be7c18290df7b782cace3ce459e93049bc14d8961119bf3e23e526"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Assets/ControllerAsset.cs",
+      "sha256": "2e69314593b98958148274e8eb445ba89c65572df4dd9755bde930d919d0206b"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Core/Controller/PoseNode.cs",
+      "sha256": "815a41e9d966f7483b61ca0381a4c4a17586abc704ff44fc3b8767f0410a5730"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Core/Modifier/Node.cs",
+      "sha256": "7c986e1cdd5ba83041bd49e1043a91fc9fda2829b987724827642ed1818622df"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Core/Modifier/Var.cs",
+      "sha256": "623cfa397b9eab6d4673739a1546531fe7eb3bbad08a5f871b2d0396a83a1ca9"
+    },
+    {
+      "path": "Assets/Camera Forge/Scripts/Assets/ModifierAsset.cs",
+      "sha256": "b9fda7b03a6f2142c5093b6b7e1a0ea47981cc658bc01456a3b443237fe8fcae"
+    }
+  ],
+  "contract": {
+    "activity": {
+      "minimum_argument_unused": 0.5,
+      "maximum": 50,
+      "accuracy": 4,
+      "weight": [
+        0,
+        1,
+        0
+      ],
+      "pitch_min_included": -35,
+      "return_rule": "max(minimum hit distance, weighted average*.5)",
+      "obstacle_mask": 8468481,
+      "ignore_triggers": true
+    },
+    "distance": {
+      "default": 6,
+      "minimum": 1.7999999523162842,
+      "maximum_normal": 10,
+      "maximum_build": 20,
+      "smooth_time": 0.5,
+      "activity_coefficient": [
+        0.15,
+        0.15,
+        1
+      ],
+      "activity_max_multiplier": 2
+    },
+    "recovery": {
+      "seconds": 2,
+      "hold_dt_min": 0.001,
+      "hold_dt_max": 0.1,
+      "damp_dt": "Time.deltaTime, unclamped",
+      "order": [
+        "wheel clears hold",
+        "positive hold decremented by clamped dt",
+        "prior geometry latch sets hold2 and clears latch",
+        "target activity calculated",
+        "unlocked smooth to target; locked only smooth outward if below minimum"
+      ]
+    },
+    "graph": {
+      "follow": 1,
+      "cursor": 24,
+      "geometry": 3,
+      "yaw_pitch_finding": 4,
+      "normal_follow": {
+        "kind": "CameraForge.ThirdPersonFollow",
+        "slots": {
+          "Name": {
+            "input": -1,
+            "value": {
+              "kind": 7,
+              "boolean": 1,
+              "integer": 0,
+              "number": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "text": "3rd Person Follow"
+            }
+          },
+          "Color": {
+            "input": -1,
+            "value": {
+              "kind": 6,
+              "boolean": 1,
+              "integer": 0,
+              "number": 0.699999988079071,
+              "vector": [
+                0.699999988079071,
+                0.800000011920929,
+                1.0,
+                1.0
+              ],
+              "text": ""
+            }
+          },
+          "Sensitivity": {
+            "input": 0,
+            "value": null
+          },
+          "Follow Speed": {
+            "input": 8,
+            "value": null
+          },
+          "Animation Factor": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": 0,
+              "number": 0.4000000059604645,
+              "vector": [
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645
+              ],
+              "text": ""
+            }
+          },
+          "Damp Rate": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": 0,
+              "number": 0.4000000059604645,
+              "vector": [
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645,
+                0.4000000059604645
+              ],
+              "text": ""
+            }
+          },
+          "Lock Cursor": {
+            "input": 9,
+            "value": null
+          },
+          "Distance Min": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": 1,
+              "number": 1.7999999523162842,
+              "vector": [
+                1.7999999523162842,
+                1.7999999523162842,
+                1.7999999523162842,
+                1.7999999523162842
+              ],
+              "text": ""
+            }
+          },
+          "Distance Max": {
+            "input": 7,
+            "value": null
+          },
+          "Pitch Min": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": -70,
+              "number": -70.0,
+              "vector": [
+                -70.0,
+                -70.0,
+                -70.0,
+                -70.0
+              ],
+              "text": ""
+            }
+          },
+          "Pitch Max": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": 55,
+              "number": 55.0,
+              "vector": [
+                55.0,
+                55.0,
+                55.0,
+                55.0
+              ],
+              "text": ""
+            }
+          },
+          "Roll Coef": {
+            "input": 10,
+            "value": null
+          },
+          "Offset": {
+            "input": -1,
+            "value": {
+              "kind": 4,
+              "boolean": 0,
+              "integer": 0,
+              "number": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "text": ""
+            }
+          }
+        },
+        "poses": {
+          "Prev": 2
+        }
+      },
+      "distance_max_node": {
+        "kind": "CameraForge.Lerp",
+        "slots": {
+          "A": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": 10,
+              "number": 10.0,
+              "vector": [
+                10.0,
+                10.0,
+                10.0,
+                10.0
+              ],
+              "text": ""
+            }
+          },
+          "B": {
+            "input": -1,
+            "value": {
+              "kind": 3,
+              "boolean": 1,
+              "integer": 20,
+              "number": 20.0,
+              "vector": [
+                20.0,
+                20.0,
+                20.0,
+                20.0
+              ],
+              "text": ""
+            }
+          },
+          "T": {
+            "input": 5,
+            "value": null
+          }
+        }
+      },
+      "build_mode_input": {
+        "kind": "CameraForge.GetUserVar",
+        "slots": {
+          "Var": {
+            "input": -1,
+            "value": {
+              "kind": 7,
+              "boolean": 1,
+              "integer": 0,
+              "number": 0.0,
+              "vector": [
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "text": "Build Mode"
+            }
+          }
+        }
+      },
+      "initial_distance_nodes": [
+        {
+          "kind": "CameraForge.SetUserVar",
+          "slots": {
+            "Var": {
+              "input": -1,
+              "value": {
+                "kind": 7,
+                "boolean": 1,
+                "integer": 0,
+                "number": 0.0,
+                "vector": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "text": "Dist"
+              }
+            },
+            "Value": {
+              "input": -1,
+              "value": {
+                "kind": 3,
+                "boolean": 1,
+                "integer": 6,
+                "number": 6.0,
+                "vector": [
+                  6.0,
+                  6.0,
+                  6.0,
+                  6.0
+                ],
+                "text": ""
+              }
+            }
+          }
+        },
+        {
+          "kind": "CameraForge.SetUserVar",
+          "slots": {
+            "Var": {
+              "input": -1,
+              "value": {
+                "kind": 7,
+                "boolean": 1,
+                "integer": 0,
+                "number": 0.0,
+                "vector": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "text": "DistWanted"
+              }
+            },
+            "Value": {
+              "input": 6,
+              "value": null
+            }
+          }
+        },
+        {
+          "kind": "CameraForge.SetUserVar",
+          "slots": {
+            "Var": {
+              "input": -1,
+              "value": {
+                "kind": 7,
+                "boolean": 1,
+                "integer": 0,
+                "number": 0.0,
+                "vector": [
+                  0.0,
+                  0.0,
+                  0.0,
+                  0.0
+                ],
+                "text": "DistLevel"
+              }
+            },
+            "Value": {
+              "input": 7,
+              "value": null
+            }
+          }
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Source-derived; no new Unity/native physical observation.",
+    "Native anchor and sphere collision remain host adapters; full near-plane rings, rise, yaw/pitch recovery and graph blends remain separate.",
+    "Native pause/zero-dt/first-person freeze; immediate upper mode bound retained; one display update only.",
+    "C float trigonometry is not a claim of bit-identical Unity physics sampling."
+  ]
+}
