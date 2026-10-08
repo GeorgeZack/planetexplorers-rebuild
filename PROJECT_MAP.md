@@ -35,6 +35,7 @@ The latest running-knife increment adds grounded female third-person Knife33 sta
 | Need | Start here |
 |---|---|
 | Instructions for future agents | [AGENTS.md](AGENTS.md) |
+| Binding per-feature rules | [Feature contracts](docs/FEATURE_CONTRACTS.md) |
 | Build, run and controls | [rebuild/README.md](rebuild/README.md) |
 | Overall scope and delivered systems | [Replication specification](docs/REPLICATION.md) |
 | Next sandbox milestone and live original fixtures | [Sandbox alignment](docs/audit/SANDBOX_ALIGNMENT.md) |
