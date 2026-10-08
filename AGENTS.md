@@ -55,19 +55,22 @@ These recur across features. The contract sections hold the detail; do not rever
 
 ## Evidence and verification
 
-Run checks relevant to the change from the repository root:
+Match the checks to the stage of work, run from the repository root. Skipping the later tiers while iterating is expected; skipping the commit tier is not.
 
-```sh
-make -C rebuild -j"$(nproc)"
-make -C rebuild check
-make -C rebuild check-sanitize
-make -C rebuild check-content
-make -C rebuild cli-test
-```
+| When | Run | Typical time |
+|---|---|---|
+| While iterating on a feature | `python3 rebuild/tools/run_tests.py -k NAME` for the suites being touched, or `rebuild/build/test_core NAME` | seconds |
+| Before every commit | `make -C rebuild check` | 2–3 min |
+| Before pushing, or after changing C code that allocates, copies or owns memory | `make -C rebuild check-sanitize` | ~4 min |
+| After changing an exporter, a shared source list or anything under `rebuild/generated` | `make -C rebuild check-content` and `make -C rebuild check-sources` | up to ~5 min |
+| After changing command-line handling | `make -C rebuild cli-test` | seconds |
+| When a feature is otherwise finished | graphics smoke, private-display acceptance and original-game comparison, as its contract requires | long, partly manual |
+
+The full `check` before each commit is the fixed rule: a failing or unrun suite must not become the baseline the next session builds on. If it fails, fix it or report it with the output before committing; never commit around it. Documentation-only changes need link and claim checks instead, not a test run. Build with `make -C rebuild -j"$(nproc)"`.
 
 `check` is the parallel form of `make test` ([run_tests.py](rebuild/tools/run_tests.py)): it reports every failure and the skip total instead of stopping at the first error; `-k NAME` or `build/test_core NAME` runs one suite. `check-sanitize` runs the same registry under ASan/UBSan with one leak-scanned process per suite; `make sanitize` remains the single-process form. Sources compile once into `build/obj` and binaries link `libpe_core.a`, so never reintroduce `$(CORE)` source lists into a test rule. Register a core suite with one `PE_TEST(name)` line in `tests/test_core_list.h`. UnityPy checks use `build/unity-tools` (`make -C rebuild unity-tools`) when present; after changing an exporter or a shared `SOURCE_FILES` list, run `make -C rebuild check-sources`, which regenerates-and-compares every UnityPy-backed output that `check-content` skips; [exporter checks](docs/audit/EXPORTER_CHECKS.md) lists what it covers and the install-time gates it cannot. Label in-repository sources with `read_reference_adventure.source_label`, never an absolute checkout path.
 
-Choose the relevant subset; documentation-only changes need link/claim checks, not an automatic full graphics rerun. Some checks use recovered assets under `rebuild/build/reference-assets`, and asset-dependent skips are not passes. Graphics changes need an appropriate smoke/manual check. The full supported tutorial progression uses `make -C rebuild training-building-smoke` (15,000 frames); the NPC survey uses `training-npcs-smoke`. Consult the Makefile and README for smaller fixtures and prerequisites.
+Some checks use recovered assets under `rebuild/build/reference-assets`, and asset-dependent skips are not passes. Graphics changes need an appropriate smoke/manual check. The full supported tutorial progression uses `make -C rebuild training-building-smoke` (15,000 frames); the NPC survey uses `training-npcs-smoke`. Consult the Makefile and README for smaller fixtures and prerequisites.
 
 On this machine `/tmp` has previously hit a user quota despite apparent free space. For compiler temporary files, create `rebuild/build/compiler-tmp` and pass its absolute path as `TMPDIR`. Diagnose current errors before assuming the same cause. Do not delete unrelated temporary files to make room.
 
