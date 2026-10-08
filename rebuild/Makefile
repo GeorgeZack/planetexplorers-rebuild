@@ -60,7 +60,10 @@ unity-tools:
 adventure-npc-collider-check:
 	$(UNITY_PYTHON) tools/export_adventure_npc_collider.py --check
 	$(UNITY_PYTHON) tests/test_adventure_npc_collider.py
-.PHONY: check check-sanitize compile-commands
+.PHONY: check check-sanitize check-sources compile-commands
+# Every UnityPy-backed regeneration check. `check-content` cannot run these
+# with the ordinary interpreter, so a shared source list can drift unnoticed.
+check-sources: adventure-npc-collider-check attack-playback-source-check camera-query-source-check camp-repair-source-check capsule-history-source-check hare-perception-assets-check hit-reaction-source-check hunt-loot-source-check hunt-targeting-source-check starter-equipment-check sword-source-check terrain-assets-check
 # Parallel build and run of everything `make test` covers; continues past
 # failures and totals skips. See tools/run_tests.py --help.
 check:

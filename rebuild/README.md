@@ -456,6 +456,7 @@ make -C rebuild check          # parallel build + run of everything `test` cover
 make -C rebuild -j"$(nproc)" test
 make -C rebuild check-sanitize  # ASan/UBSan/leaks, one process per core suite
 make -C rebuild check-content
+make -C rebuild check-sources   # UnityPy-backed regeneration checks (needs unity-tools)
 make -C rebuild cli-test
 make -C rebuild asset-test
 make -C rebuild sandbox-world-test

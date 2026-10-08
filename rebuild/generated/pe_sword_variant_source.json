@@ -24,6 +24,14 @@
     {
       "path": "Assets/PeWorld/PeEntityCreator.cs",
       "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs",
+      "sha256": "12612b0abc184af2e92f5c77345679d2ecbb6ea29da6ff6653c6233f1c504b57"
+    },
+    {
+      "path": "Assets/Scripts/Lilj/SystemSettingData.cs",
+      "sha256": "bbaf09f6410f42a00583469b13ab02f4e4bdcb26fc69750a39992df26a190159"
     }
   ],
   "source_method_guards": {
