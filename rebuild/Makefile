@@ -63,7 +63,31 @@ adventure-npc-collider-check:
 .PHONY: check check-sanitize check-sources compile-commands
 # Every UnityPy-backed regeneration check. `check-content` cannot run these
 # with the ordinary interpreter, so a shared source list can drift unnoticed.
-check-sources: adventure-npc-collider-check attack-playback-source-check camera-query-source-check camp-repair-source-check capsule-history-source-check hare-perception-assets-check hit-reaction-source-check hunt-loot-source-check hunt-targeting-source-check starter-equipment-check sword-source-check terrain-assets-check
+# Exporter --check modes that had no target. Each is read-only and compares
+# regenerated output with the installed or generated files. The capture and
+# save inputs are the local reference profiles the installed groups came from;
+# see docs/audit/EXPORTER_CHECKS.md.
+RUNNING_ROOT_CAPTURE ?= $(HOME)/.local/share/planet-explorers-strafe-reference/pose-captures/female-running-root-06.jsonl
+SETTLEMENT_CAPTURE ?= $(HOME)/.local/share/planet-explorers-settlement-reference/terrain-captures/starttown.pevx
+ROUTE_CAPTURE ?= $(HOME)/.local/share/planet-explorers-route-reference/terrain-captures/annot3.pevx
+ROUTE_SAVE ?= $(HOME)/.local/share/planet-explorers-route-reference/PlanetExplorers/GameSave/save2
+.PHONY: exporter-check
+exporter-check:
+	$(UNITY_PYTHON) tools/export_actor_materials.py --check
+	$(UNITY_PYTHON) tools/export_adventure_population.py --check
+	$(UNITY_PYTHON) tools/export_adventure_settlement.py --check
+	$(UNITY_PYTHON) tools/export_adventure_settlement_assets.py --check
+	$(UNITY_PYTHON) tools/export_adventure_terrain.py --map-type 1 --check
+	$(UNITY_PYTHON) tools/export_adventure_terrain.py --capture '$(SETTLEMENT_CAPTURE)' --check
+	$(UNITY_PYTHON) tools/export_adventure_route.py --capture '$(ROUTE_CAPTURE)' --check
+	$(UNITY_PYTHON) tools/export_adventure_route_assets.py --save-dir '$(ROUTE_SAVE)' --check
+	$(UNITY_PYTHON) tools/export_hare_pounce_assets.py --check
+	$(UNITY_PYTHON) tools/export_sandbox_world_assets.py --check
+	$(UNITY_PYTHON) tools/export_torch_assets.py --check
+	$(UNITY_PYTHON) tools/export_tree_collision.py --check
+	$(UNITY_PYTHON) tools/export_sword_root_motion.py --output build/reference-assets/player-sword-motion --check
+	$(UNITY_PYTHON) tools/export_running_knife_motion.py '$(RUNNING_ROOT_CAPTURE)' --plan build/root-motion-bake/root-06-provenance/running-knife-plan.json --probe-source build/root-motion-bake/root-06-provenance/ReferenceRootMotionBake.cs --probe-assembly build/root-motion-bake/root-06-provenance/ReferenceRootMotionBake.dll --output build/running-motion-20261006 --check
+check-sources: exporter-check adventure-npc-collider-check attack-playback-source-check camera-query-source-check camp-repair-source-check capsule-history-source-check hare-perception-assets-check hit-reaction-source-check hunt-loot-source-check hunt-targeting-source-check starter-equipment-check sword-source-check terrain-assets-check
 # Parallel build and run of everything `make test` covers; continues past
 # failures and totals skips. See tools/run_tests.py --help.
 check:

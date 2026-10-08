@@ -3,11 +3,20 @@
 from contextlib import closing
 import hashlib
 import math
+import os
 from pathlib import Path
 import sqlite3
 import struct
 
 ROOT = Path(__file__).resolve().parents[2]
+
+
+def source_label(path):
+    """Repository-relative label for a source inside this repository, else the
+    absolute path. Not resolved: the Unity original is reached through root
+    links, and a checkout location must not leak into generated manifests."""
+    logical = Path(os.path.abspath(path))
+    return logical.relative_to(ROOT).as_posix() if logical.is_relative_to(ROOT) else str(logical)
 DEFAULT_SAVE = Path.home()/'.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0'
 ARCHIVED_NPCS = {
     'supplier': dict(entity_id=20016, prototype_id=22, adventure_role=2),
@@ -143,5 +152,5 @@ def decode(directory, entity_id=20016, database=ROOT/'Assets/Resources/DataBase/
                 for bit,slot in slot_masks.items():
                     if mask & bit: slots[slot]=path
     entity.update(slots=[slots[i] for i in range(8)],adventure_role=expected['adventure_role'],archive_guid=guid,
-                  sources=[dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sources+[database]])
+                  sources=[dict(path=source_label(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sources+[database]])
     return entity

@@ -58,6 +58,35 @@ class TerrainExportTests(unittest.TestCase):
             metadata['stableConsecutiveFrames']=2; meta.write_text(json.dumps(metadata)); (source/'save.arc').write_bytes(b'changed')
             with self.assertRaisesRegex(ValueError,'save changed'): export.install_capture(capture,output,source)
 
+    def test_capture_baseline_excludes_autosave_slots(self):
+        with tempfile.TemporaryDirectory(dir=TOOLS.parent/'build') as directory:
+            root=Path(directory); source=root/'source'; auto=source/'PlanetExplorers/GameSave/auto0'; auto.mkdir(parents=True)
+            manual=source/'PlanetExplorers/GameSave/save0'; manual.mkdir()
+            (auto/'index.arc').write_bytes(b'autosave'); (manual/'index.arc').write_bytes(b'manual checkpoint')
+            baseline={str(p.relative_to(source)):hashlib.sha256(p.read_bytes()).hexdigest() for p in (auto/'index.arc',manual/'index.arc')}
+            self.assertEqual(list(export.manual_save_baseline(baseline)),['PlanetExplorers/GameSave/save0/index.arc'])
+            profile=root/'profile'; captures=profile/'terrain-captures'; captures.mkdir(parents=True)
+            (profile/'source-save-hashes.json').write_text(json.dumps(baseline))
+            capture=captures/'starttown.pevx'; capture.write_bytes(export.encode_pevx({}))
+            metadata=dict(schema=1,kind='observed-original-loaded-terrain',origin=list(export.ORIGIN),size=list(export.SIZE),
+                          stableConsecutiveFrames=2,loadedChunks=30,layout='x-fastest,y,z;volume,type',frame=10,unity='5.2.4f1')
+            Path(str(capture)+'.json').write_text(json.dumps(metadata))
+            output=root/'assets'/'terrain.pevx'; output.parent.mkdir()
+            # A later original-game session rewrites only the autosave slot.
+            (auto/'index.arc').write_bytes(b'rewritten by a later session')
+            export.install_capture(capture,output,source)
+            installed=output.parent/'terrain-manifest.json'; record=json.loads(installed.read_text())
+            self.assertEqual((record['original_saves_verified'],record['original_autosave_entries_excluded']),(1,1))
+            export.install_capture(capture,output,source,True)
+            # An installation recorded before the exclusion verified the whole
+            # baseline; its literal manifest remains acceptable to --check.
+            legacy=dict(record,original_saves_verified=2); del legacy['original_autosave_entries_excluded']
+            installed.write_text(json.dumps(legacy,indent=2)+'\n'); export.install_capture(capture,output,source,True)
+            legacy['original_saves_verified']=3; installed.write_text(json.dumps(legacy,indent=2)+'\n')
+            with self.assertRaisesRegex(ValueError,'differing'): export.install_capture(capture,output,source,True)
+            installed.write_text(json.dumps(record,indent=2)+'\n'); (manual/'index.arc').write_bytes(b'changed checkpoint')
+            with self.assertRaisesRegex(ValueError,'save changed'): export.install_capture(capture,output,source,True)
+
     @unittest.skipUnless(ART.is_file(),'Installed original town artifact unavailable')
     def test_installed_artifact_slot_mapping_and_volumes(self):
         metadata,voxels=export.read_art(ART,1)

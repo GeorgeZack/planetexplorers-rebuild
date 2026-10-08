@@ -9,13 +9,14 @@ from contextlib import closing
 import hashlib
 import importlib.metadata
 import json
+import os
 from pathlib import Path
 import sqlite3
 import tempfile
 
 from export_adventure_settlement import decode_entities, transform, numeric_vector
 from export_adventure_settlement_assets import recover, GAME
-from read_reference_adventure import ROOT, DEFAULT_SAVE, Reader, records
+from read_reference_adventure import ROOT, DEFAULT_SAVE, Reader, records, source_label
 from export_content import DEFAULT_DATABASE
 
 ORIGIN=[-640.,0.,64.]
@@ -80,8 +81,18 @@ def build_manifest(save,database=DEFAULT_DATABASE,base_save=DEFAULT_SAVE,require
     if len(buildings)>128:raise ValueError('Route building bound exceeded')
     if any(digest(p)!=sha for p,sha in before.items()):raise ValueError('Route sources changed during read')
     return dict(schema=1,archive_guid=guid,baseline_archive_guid=base_guid,crop_origin=ORIGIN,buildings=buildings,
-                sources=[dict(path=str(p),sha256=sha) for p,sha in before.items()])
+                sources=[dict(path=source_label(p),sha256=sha) for p,sha in before.items()])
 
+
+def same_apart_from_checkout(installed,fresh):
+    """Whether an installed manifest equals a fresh one except that it labels an
+    in-repository source by the absolute checkout path it was installed from.
+    Hashes and every other value must match; the installed record is not rewritten."""
+    if isinstance(fresh,dict):return isinstance(installed,dict) and installed.keys()==fresh.keys() and all(same_apart_from_checkout(installed[k],v) for k,v in fresh.items())
+    if isinstance(fresh,list):return isinstance(installed,list) and len(installed)==len(fresh) and all(map(same_apart_from_checkout,installed,fresh))
+    if installed==fresh and type(installed) is type(fresh):return True
+    return (isinstance(installed,str) and isinstance(fresh,str) and os.path.isabs(installed)
+            and not os.path.isabs(fresh) and (ROOT/fresh).is_file() and installed.endswith('/'+fresh))
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--save-dir',type=Path,required=True)
@@ -91,7 +102,7 @@ def main():
     p.add_argument('--check',action='store_true');p.add_argument('--metadata-only',action='store_true')
     a=p.parse_args()
     try:
-        manifest=build_manifest(a.save_dir.resolve(),a.database.resolve(),a.base_save_dir.resolve())
+        manifest=build_manifest(a.save_dir.resolve(),Path(os.path.abspath(a.database)),a.base_save_dir.resolve())
         if a.metadata_only:print(json.dumps(manifest,indent=2));return 0
         if importlib.metadata.version('UnityPy')!='1.25.4':raise ValueError('Requires UnityPy1.25.4')
         output=a.output.resolve();game=a.game_dir.resolve()
@@ -111,7 +122,10 @@ def main():
             (staging/'route-manifest.json').write_text(json.dumps(report,indent=2,sort_keys=True)+'\n')
             if a.check:
                 for path in staging.iterdir():
-                    if not (output/path.name).is_file() or path.read_bytes()!=(output/path.name).read_bytes():raise ValueError('Stale route asset '+path.name)
+                    installed=output/path.name
+                    if not installed.is_file():raise ValueError('Stale route asset '+path.name)
+                    if path.read_bytes()==installed.read_bytes():continue
+                    if path.name!='route-manifest.json' or not same_apart_from_checkout(json.loads(installed.read_text()),json.loads(path.read_text())):raise ValueError('Stale route asset '+path.name)
             else:
                 output.mkdir(exist_ok=True)
                 for path in staging.iterdir():

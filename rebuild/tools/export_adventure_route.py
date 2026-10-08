@@ -12,7 +12,7 @@ from collections import Counter
 import hashlib
 import json
 from pathlib import Path
-from export_adventure_terrain import read_pevx
+from export_adventure_terrain import baseline_manifests, manual_save_baseline, read_pevx
 
 ROOT = Path(__file__).resolve().parents[2]
 ORIGIN = (-640, 0, 64)
@@ -98,7 +98,8 @@ def validate_capture(capture, expected_origin=ORIGIN, expected_size=SIZE):
 def install_capture(capture, output, source_profile, check=False):
     metadata, chunk_hashes, surface = validate_capture(capture)
     hashes_path = capture.parent.parent/'source-save-hashes.json'
-    original_hashes = json.loads(hashes_path.read_text())
+    baseline = json.loads(hashes_path.read_text())
+    original_hashes = manual_save_baseline(baseline)
     if not original_hashes:
         raise ValueError('Missing original-save hash baseline')
     for relative, digest in original_hashes.items():
@@ -124,12 +125,14 @@ def install_capture(capture, output, source_profile, check=False):
                     original_saves_unchanged=True, original_saves_verified=len(original_hashes),
                     origin=list(ORIGIN), size=list(SIZE), chunk_sha256=chunk_hashes,
                     surface_summary=surface, observation=metadata)
+    manifest_path = output.parent/'terrain-manifest.json'
+    accepted = baseline_manifests(manifest, baseline, original_hashes)
     files = {output: data, Path(str(output)+'.json'): metadata_path.read_bytes(),
              output.parent/'town-name.txt': (starting_town['name']+'\n').encode(),
              output.parent/'town-names.json': (json.dumps(towns, indent=2)+'\n').encode(),
-             output.parent/'terrain-manifest.json': (json.dumps(manifest, indent=2)+'\n').encode()}
+             manifest_path: accepted[0]}
     for path, contents in files.items():
-        if path.exists() and path.read_bytes() != contents:
+        if path.exists() and path.read_bytes() not in (accepted if path == manifest_path else [contents]):
             raise ValueError('Refusing to overwrite differing route terrain: '+str(path))
         if check and not path.exists():
             raise ValueError('Missing installed route terrain: '+str(path))

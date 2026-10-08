@@ -14,7 +14,7 @@ import sqlite3
 import tempfile
 import xml.etree.ElementTree as ET
 
-from read_reference_adventure import ROOT, DEFAULT_SAVE, Reader, records, decode
+from read_reference_adventure import ROOT, DEFAULT_SAVE, Reader, records, decode, source_label
 from export_adventure_settlement import decode_entities, decode_progress, transform
 from export_content import DEFAULT_DATABASE, c_string
 
@@ -66,7 +66,7 @@ def build_manifest(save=DEFAULT_SAVE, database=DEFAULT_DATABASE):
                 role_candidates=associations,appearance=appearance))
     if any(digest(p)!=value for p,value in before.items()): raise ValueError('Population inputs changed while reading')
     return dict(schema=1,archive_guid=guid,npcs=people,
-        sources=[dict(path=str(p),sha256=v) for p,v in before.items()],
+        sources=[dict(path=source_label(p),sha256=v) for p,v in before.items()],
         limitations=['Pinned living archived population, not procedural generation.',
                      'Poses preserve archived snapshots; no schedules, wandering or AI.',
                      'Database role candidates are provenance, not inferred saved mission assignments.',
@@ -125,8 +125,8 @@ def extended_manifest(save,database=DEFAULT_DATABASE,observation=DEFAULT_OBSERVA
                 scene=f'adventure-population/{identity}/recording.peas',in_starting_crop=False,role_candidates=candidates,
                 appearance=a,fixed_point=fixed_point(e),selection='saved fixed point inside observed Annot bounds'))
     if any(digest(p)!=sha for p,sha in before.items()):raise ValueError('Annot inputs changed while reading')
-    result['sources'] += [dict(path=str(p),sha256=sha) for p,sha in before.items()]
-    result['extension']=dict(save_directory=str(save.resolve()),observation=str(observation.resolve()),archive_guid=guid,
+    result['sources'] += [dict(path=source_label(p),sha256=sha) for p,sha in before.items()]
+    result['extension']=dict(save_directory=str(save.resolve()),observation=source_label(observation),archive_guid=guid,
                              town=town,excluded_npcs=excluded,baseline_preserved=True)
     result['limitations'].append('Twelve Annot residents appended from the newly observed save; baseline13 retain their original snapshot poses, despite later source wandering/streaming reset.')
     return result
@@ -192,7 +192,7 @@ def main():
             existing=a.output/'pe_adventure_population.json'
             if existing.is_file():
                 extension=json.loads(existing.read_text()).get('extension')
-                if extension:save=Path(extension['save_directory']);a.observation=Path(extension['observation'])
+                if extension:save=Path(extension['save_directory']);a.observation=ROOT/extension['observation']
         a.save_dir=(save or DEFAULT_SAVE).resolve()
         manifest=(build_manifest(a.save_dir,a.database) if a.save_dir==DEFAULT_SAVE.resolve()
                   else extended_manifest(a.save_dir,a.database,a.observation))

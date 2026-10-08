@@ -163,6 +163,31 @@ def read_pevx(path):
     return origin, size, data[HEADER.size:]
 
 
+def manual_save_baseline(hashes):
+    """Baseline entries outside the game's autosave slots.
+
+    The original client rewrites GameSave/autoN during any later session, so
+    those slots cannot show that the documented manual checkpoints a capture
+    was taken from are unchanged. Manual slots and all other files stay pinned.
+    """
+    return {relative: digest for relative, digest in hashes.items()
+            if not re.search(r'(^|/)GameSave/auto\d+/', relative)}
+
+
+def baseline_manifests(manifest, baseline, verified):
+    """Encodings accepted for an installed terrain manifest.
+
+    The first is what a new installation writes. An installation made before
+    autosave slots were excluded truthfully recorded the whole baseline as
+    verified; that record is accepted as-is, never rewritten.
+    """
+    current = dict(manifest, original_saves_verified=len(verified))
+    if len(baseline) != len(verified):
+        current['original_autosave_entries_excluded'] = len(baseline)-len(verified)
+    legacy = dict(manifest, original_saves_verified=len(baseline))
+    return [(json.dumps(m, indent=2)+'\n').encode() for m in (current, legacy)]
+
+
 def install_capture(capture, output, source_profile, check=False):
     origin, size, voxels = read_pevx(capture)
     metadata_path = Path(str(capture)+'.json')
@@ -180,7 +205,8 @@ def install_capture(capture, output, source_profile, check=False):
     if metadata.get('sha256', sha) != sha:
         raise ValueError('Capture hash mismatch')
     hashes_path = capture.parent.parent/'source-save-hashes.json'
-    hashes = json.loads(hashes_path.read_text())
+    baseline = json.loads(hashes_path.read_text())
+    hashes = manual_save_baseline(baseline)
     if not hashes:
         raise ValueError('Missing original-save hash baseline')
     for relative, digest in hashes.items():
@@ -199,11 +225,12 @@ def install_capture(capture, output, source_profile, check=False):
                     materials=dict(Counter(str(v) for v in voxels[1::2])),
                     occupied_materials=dict(Counter(str(voxels[i+1]) for i in range(0,len(voxels),2) if voxels[i]>=128)),
                     observation=metadata)
-    files = {output:data, Path(str(output)+'.json'):metadata_path.read_bytes(),
-             output.parent/'terrain-manifest.json':(json.dumps(manifest,indent=2)+'\n').encode()}
+    manifest_path = output.parent/'terrain-manifest.json'
+    accepted = baseline_manifests(manifest, baseline, hashes)
+    files = {output:data, Path(str(output)+'.json'):metadata_path.read_bytes(), manifest_path:accepted[0]}
     # Validate every destination before any creation; never touch other assets.
     for path, contents in files.items():
-        if path.exists() and path.read_bytes() != contents:
+        if path.exists() and path.read_bytes() not in (accepted if path == manifest_path else [contents]):
             raise ValueError('Refusing to overwrite differing recovered terrain: '+str(path))
         if check and not path.exists():
             raise ValueError('Missing installed terrain: '+str(path))
