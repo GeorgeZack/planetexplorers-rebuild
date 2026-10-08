@@ -45,7 +45,7 @@ python3 rebuild/tests/test_reference_pose.py
 
 # Explicit separate original launch. Use another filename if any capture,
 # arm, stop or launch-manifest file already exists.
-TMPDIR=/home/admin/source/planetexplorers/rebuild/build/compiler-tmp \
+TMPDIR="$PWD/rebuild/build/compiler-tmp" \
 python3 rebuild/tools/reference_hunt_encounter.py --launch \
   --user-data /home/admin/.local/share/planet-explorers-hunt-reference \
   --output /home/admin/.local/share/planet-explorers-hunt-reference/pose-captures/hunt-reload-01.jsonl \

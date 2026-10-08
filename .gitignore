@@ -4,13 +4,6 @@
 /core
 /core.*
 
-# Generated Unity workspace data
-/Library/
-/Temp/
-/Obj/
-/Logs/
-/UserSettings/
-
 # Local credentials and editor state
 .env
 .env.*
