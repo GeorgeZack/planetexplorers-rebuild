@@ -131,7 +131,7 @@ When a user supplies a stopping deadline, check its date/timezone, stop long-run
 
 ## Repository hygiene and navigation index
 
-The working tree may contain substantial uncommitted/untracked rebuild and documentation work. Inspect status; do not reset, clean, overwrite or discard it. In particular, `make clean` removes `rebuild/build`, including expensive recovered assets, local captures and fixtures. Use targeted cleanup of known disposable outputs when needed.
+The working tree may contain substantial uncommitted/untracked rebuild and documentation work. Inspect status; do not reset, clean, overwrite or discard it. `make clean` removes only objects, test logs and the binaries the Makefile defines. Everything else under `rebuild/build` is recovered assets, staged groups, fixtures and captured evidence that this repository cannot regenerate: never delete `rebuild/build` itself, and use targeted cleanup of known disposable outputs when needed.
 
 The local structural graph is an aid to navigation, not semantic authority:
 

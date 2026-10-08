@@ -246,8 +246,14 @@ check-content:
 	python3 tools/export_training_ui_text.py --check
 run: all
 	./$(BUILD)/planet_explorers
+# Remove only what this Makefile can rebuild: objects, dependency files, test
+# logs and the binaries it defines. build/ also holds recovered assets, staged
+# groups, fixtures and captured evidence that cannot be regenerated from this
+# repository, so nothing else under it is touched.
+BUILT_BINARIES := $(addprefix $(BUILD)/,$(shell sed -n 's/^$$(BUILD)\/\([A-Za-z0-9_]*\):.*/\1/p' $(firstword $(MAKEFILE_LIST)) | sort -u))
 clean:
-	rm -rf $(BUILD)
+	rm -rf $(OBJ) $(BUILD)/test-logs
+	rm -f $(BUILT_BINARIES)
 
 $(BUILD)/smoke_fixture: tests/smoke_fixture.c $(CORE_LIB) $(DEPS)/smoke_fixture.d | $(BUILD)
 	$(call DEPGEN,$(CPPFLAGS) $(LZ4_CFLAGS) $(CFLAGS) tests/smoke_fixture.c)
