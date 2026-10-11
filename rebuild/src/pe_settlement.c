@@ -1,15 +1,17 @@
+#include "pe_paths.h"
 #include "pe_settlement.h"
 #include "../generated/pe_adventure_settlement.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
-static char root[4096]=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+static char root[4096];
 static PeSceneCollision *geometry,*route_geometry;
 static void err(char *out,size_t cap,const char *message){if(out&&cap)snprintf(out,cap,"%s",message);}
+static bool default_root(char *error,size_t cap){
+    if(root[0]||pe_paths_default_assets(root,sizeof root))return true;
+    err(error,cap,"Cannot locate settlement assets beside the executable");return false;
+}
 bool pe_settlement_configure(const char *path,char *error,size_t cap){
     if(!path||!*path||strlen(path)>=sizeof root){err(error,cap,"Invalid settlement asset directory");return false;}
     if((geometry||route_geometry)&&strcmp(root,path)){err(error,cap,"Settlement assets cannot change while snapshots borrow their geometry");return false;}
@@ -22,6 +24,7 @@ bool pe_settlement_matches(const PeWorld *w){
     return pe_settlement_is_route(w)||(w&&w->source==1&&pe_world_width(w)==64&&pe_world_size_y(w)==32&&pe_world_depth(w)==128&&w->origin_x==-627&&w->origin_y==16&&w->origin_z==323);
 }
 const PeSceneCollision *pe_settlement_collision_for_world(const PeWorld *w,char *error,size_t cap){
+    if(!default_root(error,cap))return NULL;
     if(!pe_settlement_is_route(w))return pe_settlement_collision(error,cap);
     if(route_geometry)return route_geometry;
     char path[4096];int n=snprintf(path,sizeof path,"%s/adventure-route/route-collision.obj",root);
@@ -31,6 +34,7 @@ const PeSceneCollision *pe_settlement_collision_for_world(const PeWorld *w,char 
     route_geometry=candidate;return route_geometry;
 }
 static bool asset_path(char *path,size_t cap,const char *name,char *error,size_t ec){
+    if(!default_root(error,ec))return false;
     int n=snprintf(path,cap,"%s/adventure-settlement/%s",root,name);
     if(n<0||(size_t)n>=cap){err(error,ec,"Settlement asset path is too long");return false;}return true;
 }

@@ -4,6 +4,7 @@
 Requires UnityPy==1.25.4. Positions retain Unity XYZ in meters; hierarchy and
 room loader placement are baked into meshes. No UnityPy OBJ handedness flip.
 """
+from read_reference_adventure import source_label
 import argparse
 import hashlib
 import json
@@ -117,7 +118,7 @@ def training_kit_source():
             values = tree[field] if isinstance(tree[field], list) else [tree[field]]
             refs.append([(bytes(obj.assets_file.externals[value['m_FileID']-1].guid).hex(),
                           value['m_PathID']) for value in values])
-        sources[name] = {'path': str(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+        sources[name] = {'path': source_label(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
                          'references': refs, 'transform': trees['Transform'][1],
                          'box_collider': trees['BoxCollider'][1]}
     if sources['emergencyKit2']['references'] != sources['emergencyKit3']['references']:

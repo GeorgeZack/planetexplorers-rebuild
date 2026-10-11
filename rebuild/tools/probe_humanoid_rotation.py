@@ -5,6 +5,7 @@ Offline research only: no engine initialization, runtime asset installation or
 claim of complete retargeting. The C helper must be built separately. Source
 root/goal solving, limb twist distribution and layered animation are NOT modeled.
 """
+from read_reference_adventure import source_label
 import argparse
 import ctypes
 import hashlib
@@ -252,7 +253,7 @@ def run(args):
               Path(__file__).with_name('human_rotation_math.h'),
               Path(__file__).with_name('export_reference_player.py'),
               Path(__file__).with_name('analyze_reference_bake.py')]
-    provenance = [{'path': str(p), 'sha256': sha(p)} for p in inputs]
+    provenance = [{'path': source_label(p), 'sha256': sha(p)} for p in inputs]
     rig = json.loads(args.rig.read_text())
     traits_document = json.loads(args.traits.read_text())
     traits = traits_document.get('human_traits', traits_document)

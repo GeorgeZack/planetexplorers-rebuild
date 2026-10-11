@@ -5,12 +5,14 @@ Uses optional UnityPy 1.25.4 only to read the repository prefab. The auxiliary
 actor preserves the first rendered part's actual geometry, adding source joints
 needed by the legs. Never modifies the existing scene or original installation.
 """
+from read_reference_adventure import source_label
 import argparse
 import copy
 import hashlib
 import importlib.metadata
 import json
 import math
+import os
 from pathlib import Path
 import struct
 import tempfile
@@ -222,7 +224,7 @@ def recover(prefab,rig_path,capture,actor_dir,output,extra_captures=()):
     result=dict(schema=1,format='PEHB1',actor_format='PEAC2',sex='female',source_trigger=trigger,entries=entries,
                 defence_records=len(entries),enabled_defence=len(entries),joints=nj,joint_names=extended['parts'][0]['bone_names'],
                 extension=extension,skeleton_hash=f'{fingerprint:016x}',clips=clips,maximum_point_error_m=error,
-                sources=[dict(path=str(p),sha256=sha(p)) for p in provenance],
+                sources=[dict(path=source_label(p),sha256=sha(p)) for p in provenance],
                 files={name:dict(bytes=(output/name).stat().st_size,sha256=sha(output/name)) for name in ['player-defence.peac','player-defence.pehb']},
                 limitations=['Capsule settings are from the repository FemaleModel prefab; installed runtime defence component values were not captured.',
                              'Auxiliary actor reuses actual torso geometry with six added source leg/foot joints; it is not the original first-part skeleton.',
@@ -230,7 +232,7 @@ def recover(prefab,rig_path,capture,actor_dir,output,extra_captures=()):
                              'Instantaneous geometry only: target eligibility, damage permission, swept history and damage application are separate.',
                              'Player movement/collision body and rendered clothing are not defence capsules.'])
     if extra_captures:
-        result['clip_captures']=[dict(path=str(path),sha256=sha(path),clips=[c['name'] for c in item['clips']]) for path,item,_ in groups]
+        result['clip_captures']=[dict(path=source_label(path),sha256=sha(path),clips=[c['name'] for c in item['clips']]) for path,item,_ in groups]
     (output/'player-defence.json').write_text(json.dumps(result,sort_keys=True,indent=2)+'\n')
     return result
 
@@ -249,7 +251,7 @@ def main(argv=None):
         if not output.is_relative_to(ROOT/'rebuild/build'):raise ValueError('Keep recovered output within rebuild/build')
         output.parent.mkdir(parents=True,exist_ok=True)
         with tempfile.TemporaryDirectory(prefix='.player-defence-',dir=output.parent) as tmp:
-            staging=Path(tmp);result=recover(a.prefab.resolve(),a.rig.resolve(),a.capture.expanduser().resolve(),a.actor_dir.resolve(),staging,[p.expanduser().resolve() for p in a.extra_capture])
+            staging=Path(tmp);result=recover(Path(os.path.abspath(a.prefab)),a.rig.resolve(),a.capture.expanduser().resolve(),a.actor_dir.resolve(),staging,[p.expanduser().resolve() for p in a.extra_capture])
             output.mkdir(exist_ok=True)
             for name in ('player-defence.peac','player-defence.pehb','player-defence.json'):(staging/name).replace(output/name)
         print(f'Exported {result["enabled_defence"]} defence capsules, {result["joints"]} joints, {len(result["clips"])} clips; max point error {result["maximum_point_error_m"]:.3g}m')

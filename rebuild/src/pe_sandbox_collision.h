@@ -64,6 +64,11 @@ PeSceneHit pe_sandbox_collision_ray_geometry(const PeSandboxCollision *collision
  * the last successful snapshot. The camera geometry ray remains tree-free. */
 PeSceneHit pe_sandbox_collision_ray_perception(const PeSandboxCollision *collision,
     PeVec3 origin,PeVec3 direction,float range);
+/* Native label visibility: camera-to-label ray through current perception
+ * geometry, excluding the last 2 cm at the anchor. Unready/invalid hides it.
+ * No actor collision or crop boundary fiction; not Unity UI scheduling parity. */
+bool pe_sandbox_collision_label_visible(const PeSandboxCollision *collision,
+    PeVec3 camera,PeVec3 anchor);
 PeSceneHit pe_sandbox_collision_support(const PeSandboxCollision *collision,PeVec3 feet,float radius,float height,float drop,float minimum_normal_y);
 /* Spawn/import recovery only: search upward in .25m increments, then settle on
  * walkable support. No horizontal relocation. max_lift[0,4], max_drop(0,5].

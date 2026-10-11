@@ -1,10 +1,8 @@
+#include "pe_test_paths.h"
 #include "pe_shield_action.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"shield action:%d %s\n",__LINE__,#c);failures++;}}while(0)
 #define BIT(i) PE_SHIELD_ACTION_BIT(i)
@@ -19,7 +17,7 @@ static void atomic(PeShieldAction *a,PeShieldActionInput in){
  * original database/source hashes; no Unity/runtime assets are needed. */
 static void source_row(void){
     static const char *const names[]={"Ground","InAir","InWater","Rotate","Sprint","Jump","Repulsed","Wentfly","Knocked","Death","GetUp","Revive","Step","HoldEquip","SwordAttack","HoldShield","Halt","Fall","GunHold","GunReload","GunShoot","BowHold","BowShoot","BowReload","Sleep","Eat","HoldAimEquip","Dig","Fell","Gather","PickUpItem","GetOnVehicle","JetPack","Parachute","Glider","Climb","Build","HoldFlashlight","Stuned","Pump","Sit","Operation","Draw","Throw","Lie","GetOnTrain","Cutscene","Whacked","Cure","HeavyEquipment","DrillingDig","Hand","Leisure","RopeGunShoot","Abnormal","Ride"};
-    FILE *f=fopen(PE_SOURCE_ROOT "/rebuild/generated/pe_starter_sword_shield_source.json","rb");CHECK(f);if(!f)return;
+    FILE *f=fopen(pe_test_path("rebuild/generated/pe_starter_sword_shield_source.json"),"rb");CHECK(f);if(!f)return;
     char text[131072];size_t size=fread(text,1,sizeof text-1,f);CHECK(!ferror(f)&&feof(f));fclose(f);text[size]=0;
     char *row=strstr(text,"\"ActionType\": \"15\"");CHECK(row);if(!row)return;
     char *end=strchr(row,'}');CHECK(end);if(!end)return;*end=0;

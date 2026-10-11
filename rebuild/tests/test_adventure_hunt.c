@@ -1,3 +1,4 @@
+#include "pe_test_paths.h"
 #include "adventure_test_helpers.h"
 #include "pe_adventure_hunt.h"
 #include "pe_adventure_medicine.h"
@@ -7,9 +8,6 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hunt:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static int hunt_tests(void){
@@ -35,7 +33,7 @@ static int hunt_tests(void){
     CHECK(!pe_adventure_hunt_step(g));g->hunt_destination.x+=1;CHECK(!pe_adventure_hunt_state_valid(g));g->hunt_destination=reference;
     g->medicine_state=PE_MEDICINE_ACTIVE;CHECK(!pe_adventure_hunt_state_valid(g));g->medicine_state=PE_MEDICINE_COMPLETE;
     g->hunt_state=PE_HUNT_NONE;g->hunt_destination=(PeVec3){0};
-    const char *path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/terrain.pevx";
+    const char *path=pe_test_path("rebuild/build/reference-assets/adventure-route/terrain.pevx");
     FILE *asset=fopen(path,"rb");if(!asset){fprintf(stderr,"hunt: route assets absent; positive arrival integration not tested\n");goto done;}fclose(asset);
     CHECK(pe_settlement_load_world(path,world,error,sizeof error));CHECK(pe_game_set_world(g,world,(PeVec3){34,28,284}));
     if(!pe_adventure_hunt_available(g)){

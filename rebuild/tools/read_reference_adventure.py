@@ -17,6 +17,50 @@ def source_label(path):
     links, and a checkout location must not leak into generated manifests."""
     logical = Path(os.path.abspath(path))
     return logical.relative_to(ROOT).as_posix() if logical.is_relative_to(ROOT) else str(logical)
+
+
+def source_path(value, sha256=None):
+    """Resolve a recorded source without depending on a checkout's old name.
+
+    New relative labels are rooted here, independent of the caller's cwd.
+    Historical absolute labels may be relocated only by an exact repository
+    subtree suffix AND the recorded file hash. External paths are not searched.
+    Reading old evidence never changes its labels or bytes.
+    """
+    if isinstance(value, dict):
+        sha256 = value['sha256']
+        value = value['path']
+    if not isinstance(value, (str, os.PathLike)) or not str(value) or '\0' in str(value):
+        raise ValueError('Invalid recorded source path')
+    if sha256 is not None and (not isinstance(sha256, str) or len(sha256) != 64
+                              or any(c not in '0123456789abcdef' for c in sha256)):
+        raise ValueError('Invalid recorded source hash')
+    path = Path(value)
+    if '..' in path.parts:
+        raise ValueError('Recorded source path contains parent traversal')
+    if not path.is_absolute():
+        path = ROOT/path
+    elif not path.exists() and sha256 is not None:
+        anchors = {'rebuild', 'docs', 'Assets', 'ProjectSettings', 'reference',
+                   'ConfigFiles', 'CustomGames', 'CustomSounds', 'RandomTownArt',
+                   'TutorialMode', 'config', 'i18n.db'}
+        candidates = {ROOT.joinpath(*path.parts[i:]) for i, part in enumerate(path.parts)
+                      if part in anchors}
+        matches = []
+        for candidate in candidates:
+            if candidate.is_file():
+                with candidate.open('rb') as stream:
+                    if hashlib.file_digest(stream, 'sha256').hexdigest() == sha256:
+                        matches.append(candidate)
+        if len(matches) != 1:
+            raise ValueError('Recorded source cannot be relocated with its exact hash: '+str(path))
+        path = matches[0]
+    if sha256 is not None:
+        with path.open('rb') as stream:
+            if hashlib.file_digest(stream, 'sha256').hexdigest() != sha256:
+                raise ValueError('Recorded source hash differs: '+str(path))
+    return path
+
 DEFAULT_SAVE = Path.home()/'.local/share/planet-explorers-sandbox-reference/PlanetExplorers/GameSave/save0'
 ARCHIVED_NPCS = {
     'supplier': dict(entity_id=20016, prototype_id=22, adventure_role=2),

@@ -1,12 +1,10 @@
+#include "pe_test_paths.h"
 #include "pe_running_attack_motion.h"
 #include <float.h>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"running-attack-motion:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static void u32(unsigned char *p,uint32_t n){for(unsigned i=0;i<4;i++)p[i]=(unsigned char)(n>>(8*i));}
@@ -31,7 +29,7 @@ static void rejected(const PeRootMotion *m,PeCombatInterval i,PeVec3 velocity,do
     CHECK(!memcmp(&sentinel,&out,sizeof out));
 }
 int pe_test_running_attack_motion(void){
-    failures=0;char path[1024];snprintf(path,sizeof path,PE_SOURCE_ROOT "/rebuild/build/running-attack-motion-test-%ld.perm",(long)getpid());
+    failures=0;char path[1024];pe_test_format(path,sizeof path,"%s/rebuild/build/running-attack-motion-test-%ld.perm",pe_test_root(),(long)getpid());
     PeRootMotion *m=fixture(path);if(!m)return failures;
     PeCombatInterval i=span(.5,.6);PeVec3 out={0},velocity={0,19,0};
     CHECK(pe_running_attack_motion_request(m,&i,velocity,0,.1,&out)&&near(out,(PeVec3){2,0,4}));

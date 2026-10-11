@@ -1,13 +1,11 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_scene_collision.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 #define CHECK(e) do{if(!(e)){fprintf(stderr,"scene collision:%d: %s\n",__LINE__,#e);failures++;}}while(0)
 static bool fixture(const char *path,const char *data,size_t size){FILE *f=fopen(path,"wb");if(!f)return false;bool ok=fwrite(data,1,size,f)==size;if(fclose(f))ok=false;return ok;}
 static int mesh_constructor_tests(void){
@@ -84,7 +82,7 @@ int pe_test_scene_collision(void){
         "v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1/1/1 2/2/2 3/3/3\n","v 0 0 0\nf 1 1 1\n"};
     for(size_t i=0;i<sizeof bad/sizeof *bad;i++){CHECK(fixture(path,bad[i],strlen(bad[i])));scene=pe_scene_load_obj(path,error,sizeof error);CHECK(scene==NULL&&error[0]);pe_scene_free(scene);}
     const char binary[]="v 0 0 0\n\0f 1 1 1\n";CHECK(fixture(path,binary,sizeof binary-1));scene=pe_scene_load_obj(path,error,sizeof error);CHECK(scene==NULL);pe_scene_free(scene);unlink(path);
-    const char *actual=PE_SOURCE_ROOT "/rebuild/build/reference-assets/room-collision.obj";
+    const char *actual=pe_test_path("rebuild/build/reference-assets/room-collision.obj");
     if(access(actual,R_OK)==0){
         scene=pe_scene_load_obj(actual,error,sizeof error);CHECK(scene!=NULL);
         if(scene){PeSceneStats stats=pe_scene_stats(scene);CHECK(stats.objects==3&&stats.triangles==56446&&stats.vertices==69618);

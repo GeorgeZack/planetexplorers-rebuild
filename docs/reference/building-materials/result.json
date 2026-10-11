@@ -1,0 +1,67 @@
+{
+  "schema": 1,
+  "observed": "Native reported screenshots and controlled private render fixtures",
+  "original_game_launch": false,
+  "normal_player_save_changed": false,
+  "files": {
+    "reported-dwelling.png": {
+      "source_name": "screenshot-2026-10-09_08-34-03.png",
+      "sha256": "adb74b50692c12ad58d289e8c48eb1ed6986a7ddee364b776f4c96c3894a5969"
+    },
+    "reported-store.png": {
+      "source_name": "screenshot-2026-10-09_08-35-13.png",
+      "sha256": "3c4601d5719cb4d62eea657d6b745af142c5a2c36f960f2227604579d7e3b3cf"
+    },
+    "dwelling-legacy.png": {
+      "source_name": "route-dwelling-legacy.png",
+      "sha256": "648df82faed7689380a0dc00ab37ac385d11f40f9d68cd372375fdec5245e449"
+    },
+    "dwelling-corrected.png": {
+      "source_name": "route-dwelling-corrected.png",
+      "sha256": "74895a483a5b0e15342aad18253a12a7ff205cbcc5a06738d6d1c4dcb673c205"
+    },
+    "store-underside-legacy.png": {
+      "source_name": "route-store-underside-legacy.png",
+      "sha256": "06c0aaf605b49a5659999f405103cf6ef7ec8550ac21e8a59c7956a131b80eb4"
+    },
+    "store-underside-corrected.png": {
+      "source_name": "route-store-underside-corrected.png",
+      "sha256": "f57767a999213910813a42d5a8952f8f2c95924e10f656c5d5d62b68602bd4c0"
+    },
+    "labels-legacy.png": {
+      "source_name": "labels-legacy.png",
+      "sha256": "db3184e4849bec1d540b88ef7f5f42245c57005908d9aee210bd32f18129d1aa"
+    },
+    "labels-corrected.png": {
+      "source_name": "labels-corrected.png",
+      "sha256": "814faa0d25c3c4ed69fa34e602999ac24e3f7402d49eb112e1686eeb2aed7206"
+    }
+  },
+  "render_fixture_sha256": "da861bb475234f9e1c67822c0fcf4662fcb42d0ca805874c6dfeb614f24f8190",
+  "user_wall_screenshot": {
+    "name": "screenshot-2026-10-09_08-34-27.png",
+    "sha256": "e1f32f7c348696b00186c4f53bc1ff7bc221def29de9767b692d23d8e4cf931f",
+    "archived": false
+  },
+  "checks": {
+    "regression": {
+      "jobs_passed": 240,
+      "failed": 0,
+      "python_tests": 815,
+      "optional_python_skips": 54
+    },
+    "sanitizers": {
+      "jobs_passed": 93,
+      "failed": 0,
+      "skipped": 0
+    },
+    "focused_unitypy_tests": {
+      "passed": 3,
+      "skipped": 0
+    },
+    "cli_tests": 26,
+    "content_and_source_regeneration": "passed",
+    "private_native_render": "passed",
+    "ordinary_gameplay_acceptance": false
+  }
+}

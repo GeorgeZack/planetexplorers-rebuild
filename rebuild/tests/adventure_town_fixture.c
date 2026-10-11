@@ -1,6 +1,7 @@
 /* TEST-ONLY graphical fixtures: actual source terrain/building collision and
  * archived people. Public welcome/Arrival/supply transactions precede explicit
  * test funding. No graphics, NPC relocation, fake geometry or quest flag edits. */
+#include "pe_test_paths.h"
 #include "adventure_test_helpers.h"
 #include "pe_adventure_npc.h"
 #include "pe_actor_scene.h"
@@ -12,9 +13,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 
 static bool present(const char *path){FILE *file=fopen(path,"rb");if(!file)return false;fclose(file);return true;}
 static bool start_world(PeGame *game,const char *assets,char *error,size_t cap){
@@ -91,7 +89,7 @@ int main(int argc,char **argv){
         fprintf(stderr,"Usage: %s --shop|--annot|--inspect FILE.pesave [--assets ASSET_ROOT]\n",argv[0]);return 2;
     }
     bool annot=!strcmp(argv[1],"--annot"),inspect=!strcmp(argv[1],"--inspect"),ok=false;
-    const char *path=argv[2],*assets=argc==5?argv[4]:PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    const char *path=argv[2],*assets=argc==5?argv[4]:pe_test_path("rebuild/build/reference-assets");
     char error[256]="Fixture allocation failed";float pick_distance=0;
     PeGame *g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded);
     PeSandboxCollision *collision=pe_sandbox_collision_create();PeAdventureNpc npc={0};

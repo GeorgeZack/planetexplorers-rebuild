@@ -168,7 +168,7 @@ def export_actor(game, output, appearance, capture):
         binary,collider=source_capsule(appearance['sex']);(staging/'collider.pesc').write_bytes(binary)
         (research/'bake-report.json').write_text(json.dumps(report,indent=2)+'\n')
         result.update(appearance=appearance,avatar=rig['avatar']['m_Name'],collider=collider,
-                      sources=rig['sources']+appearance['sources']+[dict(path=str(capture),sha256=digest(capture))])
+                      sources=rig['sources']+appearance['sources']+[dict(path=source_label(capture),sha256=digest(capture))])
         (staging/'population-manifest.json').write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
         staging.rename(output)
     return dict(entity_id=appearance['entity_id'],parts=len(result['parts']),frames=result['frames'])
@@ -208,7 +208,7 @@ def main():
                 capture=a.male_bake if n['sex']=='male' else a.female_bake
                 if capture is None: raise ValueError('Male actors require an exact MaleAvatar idle bake')
                 appearance=n['appearance'];appearance['hide_headgear']=False
-                appearance['sources'].append(dict(path=str(config),sha256=digest(config)))
+                appearance['sources'].append(dict(path=source_label(config),sha256=digest(config)))
                 target=a.assets.resolve()/str(n['entity_id'])
                 for source in (a.save_dir.resolve(),a.game_dir.resolve()):
                     if target==source or source in target.parents or target in source.parents: raise ValueError('Output overlaps protected input')

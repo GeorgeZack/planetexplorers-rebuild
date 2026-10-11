@@ -1,11 +1,9 @@
+#include "pe_test_paths.h"
 #include "pe_root_motion.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"root-motion:%d %s\n",__LINE__,#c);failures++;}}while(0)
 enum {COUNT=185,BYTES=32+32*COUNT};
@@ -25,7 +23,7 @@ static PeRootMotion *load(const char *path,const unsigned char *p,size_t bytes){
 }
 static bool close3(PeVec3 a,PeVec3 b){return fabsf(a.x-b.x)<2e-6f&&fabsf(a.y-b.y)<2e-6f&&fabsf(a.z-b.z)<2e-6f;}
 int pe_test_root_motion(void){
-    failures=0;char path[1024];snprintf(path,sizeof path,PE_SOURCE_ROOT "/rebuild/build/root-motion-test-%ld.perm",(long)getpid());
+    failures=0;char path[1024];pe_test_format(path,sizeof path,"%s/rebuild/build/root-motion-test-%ld.perm",pe_test_root(),(long)getpid());
     unsigned char bytes[BYTES+1];fixture(bytes,false);PeRootMotion *m=load(path,bytes,BYTES);CHECK(m);
     if(!m)return failures;
     CHECK(pe_root_motion_count(m)==COUNT&&pe_root_motion_duration(m)==PE_ROOT_MOTION_DURATION);

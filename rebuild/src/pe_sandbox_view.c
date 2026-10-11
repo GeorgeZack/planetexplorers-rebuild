@@ -1443,18 +1443,21 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         if(supplier_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
             PeVec3 p=supplier.position;Vector2 pos=source_screen((Vector3){p.x,p.y+supplier_view.label_height,p.z},camera);
             const char *prompt=picked_role==2&&npc_nearest&&action.npc_interaction?"Eitai  [RMB / E]":"Eitai";
-            if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
+            if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0&&
+               pe_sandbox_collision_label_visible(collision,pv(camera.position),(PeVec3){p.x,p.y+supplier_view.label_height,p.z}))
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->supplies_claimed?LIGHTGRAY:YELLOW);
         }
         if(welcome_visible&&ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE) {
             PeVec3 p=welcome.position;Vector2 pos=source_screen((Vector3){p.x,p.y+welcome_view.label_height,p.z},camera);
             const char *prompt=picked_role==1&&npc_nearest&&action.npc_interaction?"Westina  [RMB / E]":"Westina";
-            if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0)
+            if(Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))>0&&
+               pe_sandbox_collision_label_visible(collision,pv(camera.position),(PeVec3){p.x,p.y+welcome_view.label_height,p.z}))
                 DrawTextEx(pe_ui_font(ui.assets,false),prompt,(Vector2){pos.x-45,pos.y},18,0,game->welcome_page<PE_ADVENTURE_WELCOME_PAGES?YELLOW:LIGHTGRAY);
         }
         if(ui.dialogue.stage==PE_ADVENTURE_DIALOGUE_IDLE&&!ui.history.open&&!ui.town_open&&!ui.repair_open)for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++)if(residents[i].visible){
             PeVec3 p=residents[i].npc.position;
             if(Vector3Distance(rv(p),rv(game->player))>40||Vector3DotProduct(Vector3Subtract(rv(p),camera.position),Vector3Subtract(camera.target,camera.position))<=0)continue;
+            if(!pe_sandbox_collision_label_visible(collision,pv(camera.position),(PeVec3){p.x,p.y+residents[i].view.label_height,p.z}))continue;
             Vector2 screen=source_screen((Vector3){p.x,p.y+residents[i].view.label_height,p.z},camera);
             char label[180];snprintf(label,sizeof label,"%s%s",pe_adventure_population_sources[i].name,picked_resident==i&&npc_nearest&&action.npc_interaction?"  [RMB / E]":"");
             Font f=pe_ui_font(ui.assets,false);Vector2 size=MeasureTextEx(f,label,18,0);

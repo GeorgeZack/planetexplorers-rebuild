@@ -2,6 +2,7 @@
 """Attach recovered safetyaxe1527 or woodaxe26 to source mountMain over exact baked body clocks.
 Standard library. Fresh output only; no runtime, graphics or attack activation.
 """
+from read_reference_adventure import source_label
 import argparse
 import copy
 import hashlib
@@ -73,7 +74,7 @@ def export(bake_path,player_path,assets,body,output):
             old=part['file'];part['file']=old.replace('player-part-',basename+'-part-');(combined/old).rename(combined/part['file'])
         (combined/'recording.peas').write_text('PEAS1\n'+''.join(p['file']+' '+p['texture']+'\n' for p in result['parts']),encoding='ascii')
         result.update(item_id=visual['item_id'],attachment='mountMain',attachment_mode='drawn',source_mount_path=mount_path,source_mount=mount,
-            sources=[dict(path=str(p),sha256=pose.sha256(p)) for p in inputs],body_actors=body_sources,
+            sources=[dict(path=source_label(p),sha256=pose.sha256(p)) for p in inputs],body_actors=body_sources,
             coordinate_space='Exact source baked mountMain matrix times original axe prefab-local geometry; identity rigid bind',
             collision_authorized=False,activation_observed=False,
             limitations=['Fixed drawn mount only; no AxPutOn/AxPutOff transition.',

@@ -1,3 +1,4 @@
+#include "pe_test_paths.h"
 #include "pe_hare.h"
 #include "pe_sandbox_collision.h"
 #include "pe_settlement.h"
@@ -7,9 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hare route:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static PeVec3 source_local(const PeWorld *world,const PeHuntEncounterSourceActor *a){
@@ -28,8 +26,8 @@ static bool stage_pack(PeHare *out,const PeHareQueries *q,const PeWorld *world){
 }
 int pe_test_hare_route(void){
     failures=0;
-    const char *terrain=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/terrain.pevx";
-    const char *buildings=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/route-collision.obj";
+    const char *terrain=pe_test_path("rebuild/build/reference-assets/adventure-route/terrain.pevx");
+    const char *buildings=pe_test_path("rebuild/build/reference-assets/adventure-route/route-collision.obj");
     if(!PE_HUNT_ENCOUNTER_REFERENCE_AVAILABLE||access(terrain,R_OK)||access(buildings,R_OK)){
         fprintf(stderr,"hare route: SKIP real six-anchor preparation; reference/route assets unavailable\n");return 0;
     }

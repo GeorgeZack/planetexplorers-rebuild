@@ -8,9 +8,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/wait.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"repair save:%d %s\n",__LINE__,#x);failures++;}}while(0)
 static uint32_t u32(const unsigned char *p){return(uint32_t)p[0]|(uint32_t)p[1]<<8|(uint32_t)p[2]<<16|(uint32_t)p[3]<<24;}

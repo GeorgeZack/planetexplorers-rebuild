@@ -18,7 +18,7 @@ import analyze_reference_bake as bake
 from export_reference_assets import IDENTITY, multiply, trs, transform_point, transform_normal, property_map
 from export_reference_actor import inverse_affine, skin_position
 from export_reference_player import Assets, avatar_worlds, validate_skin, digest
-from read_reference_adventure import ROOT, DEFAULT_SAVE, ARCHIVED_NPCS, decode
+from read_reference_adventure import ROOT, DEFAULT_SAVE, ARCHIVED_NPCS, decode, source_label
 
 
 def morph_mesh(positions, normals, raw, child, weights):
@@ -230,7 +230,7 @@ def recover(game, output, appearance, npc='supplier'):
         rig['parts']+=knife['parts'];rig['materials']+=knife['materials']
     source_paths=[assets.data/name for name in sorted(assets.files)]+sorted(stream_sources)+attachment_sources
     source_paths += [Path(__file__).resolve(),ROOT/'rebuild/tools/read_reference_adventure.py',ROOT/'Assets/AppearBuilder/AppearBuilder.cs',ROOT/'Assets/AppearBuilder/CustomCharactor.cs',ROOT/'Assets/Scripts/PeEntity/Cmpt/AvatarCmpt.cs',ROOT/'Assets/Scripts/Items/PEEquipment/PESheild.cs',ROOT/'Assets/Scripts/ZhouXun/Voxel Creation/Scripts/WhiteCat/PE-VC/BoneCollector.cs',ROOT/'Assets/Scripts/WuYiqiu/Resources/Shaders/Avatar Standard/PEUnityStandardInput.cginc',ROOT/'Assets/Resources/Prefab/Item/Equip/Armor/Shield/copper_shield.prefab']
-    rig['sources']=[dict(path=str(p),sha256=digest(p)) for p in source_paths]
+    rig['sources']=[dict(path=source_label(p),sha256=digest(p)) for p in source_paths]
     return rig
 
 
@@ -249,7 +249,7 @@ def main():
         config=save.parents[1]/'Config/SystemSaveData.xml'
         settings=ET.parse(config).getroot().find('HideHeadgear')
         if settings is None or settings.get('value')!='False':raise ValueError('This archived appearance requires HideHeadgear=False')
-        appearance['sources'].append(dict(path=str(config),sha256=digest(config)))
+        appearance['sources'].append(dict(path=source_label(config),sha256=digest(config)))
         appearance['hide_headgear']=False
         with tempfile.TemporaryDirectory(prefix=f'.{npc}-',dir=output.parent) as temporary:
             staging=Path(temporary);research=staging/'source';research.mkdir();rig=recover(game,research,appearance,npc);rig_path=research/f'{npc}-rig.json';rig_path.write_text(json.dumps(rig,separators=(',',':'),allow_nan=False)+'\n')
@@ -263,7 +263,7 @@ def main():
             from export_adventure_npc_collider import source_capsule
             binary,collider=source_capsule();(staging/f'{npc}-collider.pesc').write_bytes(binary)
             (research/'bake-report.json').write_text(json.dumps(report,indent=2)+'\n')
-            manifest=dict(schema=1,appearance=appearance,rig=f'source/{npc}-rig.json',collider=collider,parts=len(result['parts']),frames=result['frames'],clip='NormalIdle',sources=rig['sources']+appearance['sources']+[dict(path=str(args.bake),sha256=hashlib.sha256(args.bake.read_bytes()).hexdigest())],
+            manifest=dict(schema=1,appearance=appearance,rig=f'source/{npc}-rig.json',collider=collider,parts=len(result['parts']),frames=result['frames'],clip='NormalIdle',sources=rig['sources']+appearance['sources']+[dict(path=source_label(args.bake),sha256=hashlib.sha256(args.bake.read_bytes()).hexdigest())],
                 limitations=['Exact archived modular selection, base morph weights and colors; not a general random NPC generator.',
                     'Offline reconstruction of source single-frame morph blending/BakeMesh; no live archived NPC BakeMesh comparison or transient abnormal-condition submorphs.',
                     'Diffuse Avatar albedo tint/mask baked to PNG; no original PBR/specular/normal lighting, shader filtering or gamma equivalence.',

@@ -1,5 +1,6 @@
 /* Real recovered blade/defence contacts and the actual route collision. Target
  * positions/HP are arranged to isolate transactions, not difficulty parity. */
+#include "pe_test_paths.h"
 #include "pe_hunt_loot_combat.h"
 #include "pe_hunt_loot.h"
 #include "pe_settlement.h"
@@ -9,9 +10,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 typedef struct {
     PeGame *game;
     PeSandboxCollision *collision;
@@ -42,17 +40,17 @@ static void load_fixture(Fixture *f,int weapon_item){
     assert(pe_settlement_start(f->game,error,sizeof error));
     f->collision=pe_sandbox_collision_create();assert(f->collision);
     assert(pe_game_collision_update(f->game,f->collision,error,sizeof error));
-    f->hare=pe_actor_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",error,sizeof error);
-    f->player=pe_actor_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-defence/player-defence.peac",error,sizeof error);
-    f->body=pe_actor_load(weapon_item==1?PE_SOURCE_ROOT "/rebuild/build/starter-pair-unified-03/player/player-part-0-material-0.peac":
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/player/player-part-0-material-0.peac",error,sizeof error);
-    f->sword=pe_actor_load(weapon_item==1?PE_SOURCE_ROOT "/rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/player-wood-sword-drawn-part-0-material-0.peac":
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-knife-drawn/knife-drawn-part-0-material-0.peac",error,sizeof error);
+    f->hare=pe_actor_load(pe_test_path("rebuild/build/reference-assets/hare.peac"),error,sizeof error);
+    f->player=pe_actor_load(pe_test_path("rebuild/build/reference-assets/player-defence/player-defence.peac"),error,sizeof error);
+    f->body=pe_actor_load(weapon_item==1?pe_test_path("rebuild/build/starter-pair-unified-03/player/player-part-0-material-0.peac"):
+        pe_test_path("rebuild/build/reference-assets/player/player-part-0-material-0.peac"),error,sizeof error);
+    f->sword=pe_actor_load(weapon_item==1?pe_test_path("rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/player-wood-sword-drawn-part-0-material-0.peac"):
+        pe_test_path("rebuild/build/reference-assets/player-knife-drawn/knife-drawn-part-0-material-0.peac"),error,sizeof error);
     if(!f->hare||!f->player||!f->body||!f->sword){fprintf(stderr,"Required loot combat assets: %s\n",error);abort();}
-    f->hare_boxes=pe_hitboxes_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb",f->hare,error,sizeof error);
-    f->player_boxes=pe_hitboxes_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-defence/player-defence.pehb",f->player,error,sizeof error);
-    f->sword_boxes=pe_hitboxes_load(weapon_item==1?PE_SOURCE_ROOT "/rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/wood-sword-drawn.pehb":
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-knife-drawn/knife-drawn.pehb",f->sword,error,sizeof error);
+    f->hare_boxes=pe_hitboxes_load(pe_test_path("rebuild/build/reference-assets/hare.pehb"),f->hare,error,sizeof error);
+    f->player_boxes=pe_hitboxes_load(pe_test_path("rebuild/build/reference-assets/player-defence/player-defence.pehb"),f->player,error,sizeof error);
+    f->sword_boxes=pe_hitboxes_load(weapon_item==1?pe_test_path("rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/wood-sword-drawn.pehb"):
+        pe_test_path("rebuild/build/reference-assets/player-knife-drawn/knife-drawn.pehb"),f->sword,error,sizeof error);
     assert(f->hare_boxes&&f->player_boxes&&f->sword_boxes);
     assert(pe_hunt_combat_prepare(&f->combat,&f->game->world,f->collision,f->hare,f->hare_boxes,f->player,f->player_boxes,0,error,sizeof error));
     assert(pe_inventory_add(&f->game->inventory,weapon_item,1)&&pe_inventory_add(&f->game->inventory,34,1));

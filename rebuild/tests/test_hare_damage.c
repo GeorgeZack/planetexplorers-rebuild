@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_hare_damage.h"
 #include <float.h>
 #include <math.h>
@@ -6,9 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hare damage:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static bool near(float a,float b){return fabsf(a-b)<.0001f;}
@@ -183,16 +181,16 @@ int pe_test_hare_damage(void){
         unchanged(&state,&a,&t,&hp,PE_HARE_DAMAGE_INVALID);t.pose=a.pose=pose;pe_hitboxes_free(bad);}
     blend_tests(path,actor,boxes);
     /* Optional real authored forearm clips/capsules; player fixture is explicit. */
-    const char *hare_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac";FILE *f=fopen(hare_path,"rb");
+    const char *hare_path=pe_test_path("rebuild/build/reference-assets/hare.peac");FILE *f=fopen(hare_path,"rb");
     if(f){fclose(f);char error[256];PeActor *hare=pe_actor_load(hare_path,error,sizeof(error));CHECK(hare);
-        PeHitboxes *hb=hare?pe_hitboxes_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb",hare,error,sizeof(error)):NULL;CHECK(hb);
+        PeHitboxes *hb=hare?pe_hitboxes_load(pe_test_path("rebuild/build/reference-assets/hare.pehb"),hare,error,sizeof(error)):NULL;CHECK(hb);
         if(hb){a.pose=(PeHareDamagePose){.actor=hare,.hitboxes=hb,.scale=1};state=opened(0,.4);a.bone=PE_HARE_RIGHT_FOREARM;
             size_t ci=pe_actor_find_clip(hare,"attack0");PeHitboxCapsule c={0};bool found=false;
             for(size_t i=0;i<pe_hitboxes_count(hb);i++){const PeHitboxDefinition *d=pe_hitboxes_get(hb,i);if(d->kind==PE_HITBOX_ATTACK&&d->group==a.bone&&d->joint!=PE_HITBOX_DISABLED){CHECK(pe_hitbox_pose(hb,hare,i,ci,.4,(PeVec3){0},0,1,&c));found=true;break;}}
             CHECK(found);t.pose.position=c.a;hp=500;CHECK(pe_hare_damage_resolve(&state,&a,&t,&hp,&r)==PE_HARE_DAMAGE_HIT);
-            const char *player_path=PE_SOURCE_ROOT "/rebuild/build/player-defence/player-defence.peac";FILE *pf=fopen(player_path,"rb");
+            const char *player_path=pe_test_path("rebuild/build/player-defence/player-defence.peac");FILE *pf=fopen(player_path,"rb");
             if(pf){fclose(pf);PeActor *player=pe_actor_load(player_path,error,sizeof(error));CHECK(player);
-                PeHitboxes *pb=player?pe_hitboxes_load(PE_SOURCE_ROOT "/rebuild/build/player-defence/player-defence.pehb",player,error,sizeof(error)):NULL;CHECK(pb);
+                PeHitboxes *pb=player?pe_hitboxes_load(pe_test_path("rebuild/build/player-defence/player-defence.pehb"),player,error,sizeof(error)):NULL;CHECK(pb);
                 if(pb){CHECK(pe_hitboxes_count(pb)==16);t.pose=(PeHareDamagePose){.actor=player,.hitboxes=pb,.scale=1};
                     t.clip=pe_actor_find_clip(player,"NormalIdle");CHECK(t.clip!=PE_ACTOR_BIND_POSE);PeHitboxCapsule defence;
                     CHECK(pe_hitbox_pose(pb,player,0,t.clip,0,(PeVec3){0},0,1,&defence));

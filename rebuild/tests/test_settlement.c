@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_settlement.h"
 #include "pe_adventure_npc.h"
 #include "pe_adventure_dialogue.h"
@@ -9,9 +10,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 #define CHECK(e) do{if(!(e)){fprintf(stderr,"settlement:%d: %s (%s)\n",__LINE__,#e,error);failures++;}}while(0)
 static void put32(unsigned char *p,uint32_t value){for(int i=0;i<4;i++)p[i]=(unsigned char)(value>>(i*8));}
 static bool bytes_file(const char *path,const unsigned char *bytes,size_t count){
@@ -19,7 +17,7 @@ static bool bytes_file(const char *path,const unsigned char *bytes,size_t count)
     bool ok=fwrite(bytes,1,count,f)==count;return fclose(f)==0&&ok;
 }
 static int loader_tests(void){
-    int failures=0;char error[256]={0},path[]=PE_SOURCE_ROOT "/rebuild/build/settlement-loader-XXXXXX";
+    int failures=0;char error[256]={0},path[4096];snprintf(path,sizeof path,"%s",pe_test_path("rebuild/build/settlement-loader-XXXXXX"));
     int fd=mkstemp(path);if(fd<0)return 1;close(fd);
     const size_t length=32+2*64*32*128;
     unsigned char *bytes=calloc(length+1,1);PeWorld *w=calloc(1,sizeof *w),*before=calloc(1,sizeof *before);
@@ -63,15 +61,15 @@ static int world_arrival_tests(void){
 }
 static int actual_asset_child(void){
     int failures=0;char error[256]={0};
-    const char *terrain=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-settlement/terrain.pevx";
-    const char *collision=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-settlement/settlement-collision.obj";
+    const char *terrain=pe_test_path("rebuild/build/reference-assets/adventure-settlement/terrain.pevx");
+    const char *collision=pe_test_path("rebuild/build/reference-assets/adventure-settlement/settlement-collision.obj");
     if(access(terrain,R_OK)||access(collision,R_OK)){
         fprintf(stderr,"SKIP settlement actual-asset start/NPC/save test: recovered terrain/collision unavailable\n");return 0;
     }
     PeGame *game=calloc(1,sizeof *game),*loaded=calloc(1,sizeof *loaded);
     PeSandboxCollision *cache=pe_sandbox_collision_create();
     if(!game||!loaded||!cache){free(game);free(loaded);pe_sandbox_collision_free(cache);return 1;}
-    CHECK(pe_settlement_configure(PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    CHECK(pe_settlement_configure(pe_test_path("rebuild/build/reference-assets"),error,sizeof error));
     CHECK(pe_game_init_mode(game,666,PE_GAME_ADVENTURE));
     if(!pe_settlement_start(game,error,sizeof error)){CHECK(false);goto done;}
     CHECK(pe_settlement_matches(&game->world));CHECK(game->world.seed==666);
@@ -86,7 +84,7 @@ static int actual_asset_child(void){
         CHECK(npc.placed&&npc.position.x==anchor.x&&npc.position.z==anchor.z);
         CHECK(fabsf(npc.position.y-anchor.y)<.5f);
     }
-    char save[]=PE_SOURCE_ROOT "/rebuild/build/settlement-save-XXXXXX";
+    char save[4096];snprintf(save,sizeof save,"%s",pe_test_path("rebuild/build/settlement-save-XXXXXX"));
     int fd=mkstemp(save);CHECK(fd>=0);
     if(fd>=0){
         close(fd);CHECK(pe_game_save(game,save,error,sizeof error));CHECK(pe_game_load(loaded,save,error,sizeof error));

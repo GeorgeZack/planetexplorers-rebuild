@@ -5,6 +5,7 @@ Uses the preserved directional capture and the fresh closed running-pose bake.
 Existing installed actors and every retained clip payload remain unchanged.
 No graphics, launch, root-motion generation or runtime combat activation.
 """
+from read_reference_adventure import source_label
 import argparse
 import copy
 import json
@@ -65,7 +66,7 @@ def append_scene(old_dir, new_dir, output):
             raise ValueError('Authored hitbox geometry differs')
     result=copy.deepcopy(old);result['clips']=old['clips']+new['clips']
     result['sources']=old.get('sources',[])+new.get('sources',[])
-    result['append_provenance']=[dict(path=str(p.resolve()),sha256=digest(p)) for p in (old_dir/'recording-manifest.json',new_dir/'recording-manifest.json')]
+    result['append_provenance']=[dict(path=source_label(p),sha256=digest(p)) for p in (old_dir/'recording-manifest.json',new_dir/'recording-manifest.json')]
     result['limitations']=old.get('limitations',[])+['RunSwordAttack is a sampled pose extension only; root displacement and moving attack gameplay require separate validation.']
     output.parent.mkdir(parents=True,exist_ok=True);shutil.copytree(old_dir,output)
     for name,data in actors.items():(output/name).write_bytes(data)
@@ -130,7 +131,7 @@ def export(capture, base_capture, extras, rig, assets, stage):
     validate(stage,assets)
     if hashes(assets)!=before:raise ValueError('Installed assets changed during export')
     manifest=dict(schema='pe-running-player-1',groups=list(GROUPS),body_clips=list(NAMES+(RUN_NAME,)),defence_clips=list(NAMES+EXTRAS+(RUN_NAME,)),
-                  sources=[dict(path=str(p),sha256=digest(p)) for p in (capture,capture.with_suffix('.launch.json'),base_capture,rig,*extras)],
+                  sources=[dict(path=source_label(p),sha256=digest(p)) for p in (capture,capture.with_suffix('.launch.json'),base_capture,rig,*extras)],
                   installed_base_files=before,files=hashes(stage),installed=False,
                   limitations=['Poses only: no authoritative root displacement, moving attack admission, skill change or trajectory.'])
     (stage/'running-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');return manifest

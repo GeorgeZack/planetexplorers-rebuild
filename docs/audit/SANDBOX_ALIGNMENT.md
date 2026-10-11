@@ -1,5 +1,9 @@
 # Sandbox alignment: implementation work order and live reference
 
+October9 visual correction: [building materials and label visibility](BUILDING_MATERIALS.md) recover cutout/two-sided source policies for both settlement crops and hide sandbox NPC names behind current geometry. Private native fixtures establish these corrections; they add no new gameplay or original-game acceptance.
+
+October9 tooling checkpoint: [checkout relocation](PORTABLE_PATHS.md) removes build-machine roots from native asset lookup and reference fixtures, uses relative source labels and hash-checked historical lookup, and repairs movable UnityPy launchers. Archived manifests and capture evidence are preserved; this adds no gameplay or visual acceptance. The reaction lifecycle/motor work below remains the next combat foundation.
+
 Current user review additions: [Adventure debug tools](DEBUG_TOOLS.md) provide optional medicine, combat supplies and explicit hunt travel from in-game Settings, with no automatic saves. These are testing cheats, not source progression. [Actor alpha materials](ACTOR_MATERIALS.md) correct foreground hair/eye depth holes in both hosts using recovered source material policy. Sword/Shield remain gated; the next combat parity target remains reaction lifecycle/motor qualification below.
 
 Current gameplay increment: [hare loot](HUNT_LOOT.md) connects real hunt deaths to independent persistent drops, source-derived rolls and automatic whole-stack pickup. PECSv22 preserves prior save payloads. No new Steam session is needed for this contract; original drop visuals remain an explicit adapter. Next bounded combat parity work is source reaction lifecycle/motor qualification, followed by reaction poses; shield composition, pounce and9077 remain separate gates.

@@ -9,6 +9,7 @@ import sys
 import tempfile
 import unittest
 TOOLS=Path(__file__).resolve().parents[1]/'tools';sys.path.insert(0,str(TOOLS))
+from read_reference_adventure import source_path
 import export_baked_pickaxe as pickaxe
 import export_reference_pickaxe as source
 from test_baked_shovel import fixture as shovel_fixture
@@ -127,7 +128,7 @@ pe_actor_scene_manifest_free(s);return bad;}
         if not (original/'recording.peas').exists():original=root/'pickaxe-staging/player-pickaxe'
         if not (original/'recording-manifest.json').exists():self.skipTest('Optional pickaxe bake unavailable')
         manifest=json.loads((original/'recording-manifest.json').read_text())
-        inputs=[Path(row['path']) for row in manifest['sources']]
+        inputs=[source_path(row) for row in manifest['sources']]
         if not all(p.exists() for p in inputs):self.skipTest('Optional source capture/rig unavailable')
         with tempfile.TemporaryDirectory() as temp:
             output=Path(temp)/'repeat'

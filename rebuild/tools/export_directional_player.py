@@ -5,6 +5,7 @@ No Unity launch or desktop input. Installation preserves each old folder under
 an explicitly fresh backup directory and rolls back directory moves on error.
 Stop the native client before installation. Stage remains as export provenance.
 """
+from read_reference_adventure import source_label
 import argparse
 import hashlib
 import json
@@ -96,7 +97,7 @@ def export(capture, rig, assets, extras, stage):
     run('export_player_defence.py',capture,'--rig',rig,'--actor-dir',stage/'player',*extra_args,'--output',stage/'player-defence')
     validate_groups(stage)
     manifest=dict(schema='pe-directional-player-1',groups=list(GROUPS),clips=list(NAMES),defence_clips=list(NAMES+EXTRAS),
-                  sources=[dict(path=str(p),sha256=digest(p)) for p in (capture,capture.with_suffix('.launch.json'),rig,*extras)],
+                  sources=[dict(path=source_label(p),sha256=digest(p)) for p in (capture,capture.with_suffix('.launch.json'),rig,*extras)],
                   files=file_hashes(stage),limitations=['Pure sampled leaves; no full Animator blending or procedural IK.',
                     'Native fixed-facing side movement may select strafe leaves separately from original third-person turn branches.'])
     (stage/'directional-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

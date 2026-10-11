@@ -1,6 +1,7 @@
 #define _POSIX_C_SOURCE 200809L
 /* Actual host adapters + UI + save pipeline, with staged possessions/position.
  * Requires installed route geometry; no window, GPU, desktop, or travel claim. */
+#include "pe_test_paths.h"
 #include "../src/pe_sandbox_view.c"
 #include <unistd.h>
 static unsigned failures;
@@ -12,10 +13,10 @@ static PeSandboxUIResult click_rect(PeSandboxUI *u,PeGame *g,PeTrainingUIRect r)
 }
 static int item_slot(const PeGame *g,int id){for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==id)return i;return -1;}
 int main(void){
-    char error[256]={0},path[] = PE_SOURCE_ROOT "/rebuild/build/repair-host-XXXXXX";
+    char error[256]={0},path[4096];snprintf(path,sizeof path,"%s",pe_test_path("rebuild/build/repair-host-XXXXXX"));
     int fd=-1;PeGame *g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded);
     PeSandboxCollision *c=pe_sandbox_collision_create();PeSandboxUI u={0};PeSandboxPointerGate pointer={0};
-    REQUIRE(g&&loaded&&c);REQUIRE(pe_settlement_configure(PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    REQUIRE(g&&loaded&&c);REQUIRE(pe_settlement_configure(pe_test_path("rebuild/build/reference-assets"),error,sizeof error));
     REQUIRE(pe_game_init_mode(g,973,PE_GAME_ADVENTURE)&&pe_settlement_start(g,error,sizeof error));
     REQUIRE(pe_settlement_is_route(&g->world)&&pe_game_collision_update(g,c,error,sizeof error));
     PeVec3 anchor;REQUIRE(pe_camp_repair_present(g,c,true,&anchor));

@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_hare.h"
 #include "pe_sandbox_collision.h"
 #include <math.h>
@@ -6,9 +7,6 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hare:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static bool near(float a,float b){return fabsf(a-b)<.003f;}
@@ -133,7 +131,7 @@ int pe_test_hare(void){
     if(edge){CHECK(pe_hare_init(&a,edge,1,1,false));a.mode=PE_HARE_PATROL;a.mode_duration=20;a.goal_valid=true;a.patrol_goal=(PeVec3){15,0,42};
         for(int i=0;i<300;i++){CHECK(pe_hare_step(&a,edge,NULL));CHECK(a.position.y>-.02f);CHECK(!pe_scene_capsule_overlap(edge,a.position,a.radius,a.height));}CHECK(a.position.z<15.2f);pe_scene_free(edge);}
     pe_scene_free(floor);unlink(path);
-    const char *actual=PE_SOURCE_ROOT "/rebuild/build/reference-assets/room-collision.obj";FILE*f=fopen(actual,"rb");if(f){fclose(f);char error[256];PeSceneCollision *room=pe_scene_load_obj(actual,error,sizeof(error));CHECK(room);if(room){CHECK(pe_hare_init(&a,room,1234,1,false));CHECK(near(a.position.x,15)&&near(a.position.z,12)&&a.position.y>1&&a.position.y<2);
+    const char *actual=pe_test_path("rebuild/build/reference-assets/room-collision.obj");FILE*f=fopen(actual,"rb");if(f){fclose(f);char error[256];PeSceneCollision *room=pe_scene_load_obj(actual,error,sizeof(error));CHECK(room);if(room){CHECK(pe_hare_init(&a,room,1234,1,false));CHECK(near(a.position.x,15)&&near(a.position.z,12)&&a.position.y>1&&a.position.y<2);
         for(int i=0;i<900;i++){CHECK(pe_hare_step(&a,room,NULL));CHECK(!pe_scene_capsule_overlap(room,a.position,a.radius,a.height));}pe_scene_free(room);}}
     adventure_queries();
     return failures;

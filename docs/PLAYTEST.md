@@ -1,5 +1,19 @@
 # Original-game playtest and C comparison
 
+## October9 building materials and NPC label visibility
+
+The user's three08:34–08:35 native screenshots exposed fabric/roof depth holes and NPC names through the hotel wall. [Source recovery and implementation](audit/BUILDING_MATERIALS.md) qualify original cutout/two-sided building materials and add a native camera-to-label obstruction rule for Westina, Eitai and residents. Source bundles, both installed OBJ/MTL/PNG groups and their archived manifests retain their exact hashes; only new material sidecars are installed with staging/backups. No world save or gameplay state changes.
+
+Private native render checks pass: legacy depth holes reproduce, corrected cutouts preserve backing geometry, reverse-side cloth renders, mixed material slots sharing a texture retain distinct cutoffs, opaque output ignores source opacity, and caller culling enable/face survives draws. Inspected legacy/corrected views cover dwelling, store, hotel and store underside in both crops. The label fixture hides the blocked anchor while preserving the clear label. Shared player/NPC/tutorial material GPU tests and portraits still pass. Selected [screenshots and hashes](reference/building-materials/result.json) are retained; the wall report includes desktop chrome and is recorded by hash rather than copied.
+
+Production build and full regression pass240 jobs (815 Python tests,54 ordinary-interpreter optional skips). The new source-backed exporter tests pass3 cases with UnityPy and0 skips; content/source regeneration checks and26 CLI checks pass. The final ASan/UBSan/leak run passes all93 jobs with0 failures/skips, including the new headless material parser. Optional Python skips are not passes; a broader UnityPy discovery was terminated before completion and is not claimed as successful. These are controlled native fixtures and automated checks, not ordinary gameplay acceptance or a new original-game visual comparison. No original client, desktop input or normal player save was used.
+
+## October9 checkout relocation — headless validation
+
+[Portable paths](audit/PORTABLE_PATHS.md) replaces compiled checkout roots with executable-relative native assets and runtime fixture discovery. Future exporter source labels are relative; absent historical absolute paths resolve only with exact subtree and SHA256 agreement. Existing manifests and captures were not rewritten. The moved starter-pair checks pass17 tests, including the actual rig/attachment clocks and retained group hashes; actual pickaxe regeneration no longer skips its moved inputs.
+
+Relocation fixtures move a compiled C path probe and a real Python environment to new directories containing spaces, then run from unrelated directories. Console launch and Bash/Zsh activation follow the new interpreter directory. Full regression passes238 jobs (812 Python tests,53 ordinary-interpreter skips); separate UnityPy discovery passes915 tests with0 skips. All92 sanitizer/leak suites,26 CLI checks and content/source regeneration checks pass. The rebuilt game contains no old-checkout strings. No original game, real graphics window, desktop input or normal player save was used; main-menu routing validation uses existing headless stubs.
+
 ## October7 in-game Settings access
 
 Both hosts now expose Esc → Settings through the same `pe_ui_settings` input/view used by main menu. A successful toggle updates the live host preference and the existing configuration file. Back/Esc returns to Pause; opening and closing frames retain modal/pointer ownership and cannot also resume, save/load or attack. No world save payload changed.

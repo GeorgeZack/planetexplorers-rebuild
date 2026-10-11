@@ -1,4 +1,5 @@
 #include "pe_actor_view.h"
+#include "pe_material_view.h"
 #include "pe_hitbox.h"
 #include "pe_hare_attack.h"
 #include <rlgl.h>
@@ -23,27 +24,11 @@ static bool png_bounded(const char *path) {
 static bool draw_material(PeActorView *v,Vector3 pos,float yaw,float scale,Color tint){
     bool restore_culling=false;
     if(v->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY){
-        float cutoff=v->material.alpha_mode==PE_ACTOR_ALPHA_CUTOUT?v->material.cutoff:0;
-        float alpha=v->material.alpha_scale;
-        SetShaderValue(v->model.materials[0].shader,v->cutoff_location,&cutoff,SHADER_UNIFORM_FLOAT);
-        SetShaderValue(v->model.materials[0].shader,v->alpha_location,&alpha,SHADER_UNIFORM_FLOAT);
-        if(v->material.two_sided){
-            /* Restore the caller's actual enable state, including private
-             * previews and the hosts' reflected-projection culling policy. */
-            typedef unsigned char (*IsEnabled)(unsigned int);
-            static IsEnabled query;
-            if(!query){void *address=rlGetProcAddress("glIsEnabled");
-                _Static_assert(sizeof query==sizeof address,"OpenGL function pointer width");
-                memcpy(&query,&address,sizeof query);}
-            if(!query)return false;
-            rlDrawRenderBatchActive();restore_culling=query(0x0B44)!=0; /* GL_CULL_FACE */
-            rlDisableBackfaceCulling();
-        }
+        pe_material_uniforms(v->model.materials[0].shader,v->material,v->cutoff_location,v->alpha_location);
     }
+    if(!pe_material_culling_begin(v->material,&restore_culling))return false;
     DrawModelEx(v->model,pos,(Vector3){0,1,0},yaw,(Vector3){scale,scale,scale},tint);
-    if(v->material.two_sided&&v->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY){
-        rlDrawRenderBatchActive();if(restore_culling)rlEnableBackfaceCulling();
-    }
+    pe_material_culling_end(v->material,restore_culling);
     return true;
 }
 void pe_actor_view_unload(PeActorView *v) {

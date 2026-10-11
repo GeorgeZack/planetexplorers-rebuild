@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_hunt_combat.h"
 #include "pe_settlement.h"
 #include "../generated/pe_starter_outfit_source.h"
@@ -11,9 +12,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hunt combat:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static PeSandboxMeleeGate gate(void){return (PeSandboxMeleeGate){.alive=true,.weapon_owned=true,.grounded=true,.third_person=true,.action_allowed=true,.equipped_item_id=33,.equipped_instance_id=91,.drawn_instance_id=91};}
@@ -344,9 +342,9 @@ static void outgoing_tests(const PeHuntCombat*initial,PeWorld*w,PeSandboxCollisi
 /* Actual modern Wood Sword blade/hand poses against recovered hare capsules.
  * All source cohorts are full HP; geometry is explicitly arranged for overlap. */
 static void sword_wear_tests(const PeHuntCombat *initial,PeWorld*w,PeSandboxCollision*c,PeHuntCombatPlayer p){
-    const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/starter-pair-unified-03/player/player-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/player-wood-sword-drawn-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/wood-sword-drawn.pehb"};
+    const char *paths[]={pe_test_path("rebuild/build/starter-pair-unified-03/player/player-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/player-wood-sword-drawn-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/starter-pair-unified-03/player-wood-sword-drawn/wood-sword-drawn.pehb")};
     for(unsigned i=0;i<3;i++){FILE*f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"hunt sword wear: SKIP staged source Sword fixture %s\n",paths[i]);return;}fclose(f);}
     char error[160];PeActor *body=pe_actor_load(paths[0],error,sizeof error),*sword=pe_actor_load(paths[1],error,sizeof error);
     PeHitboxes *capsule=pe_hitboxes_load(paths[2],sword,error,sizeof error);CHECK(body&&sword&&capsule);if(!body||!sword||!capsule)goto done;
@@ -468,7 +466,7 @@ static PeActor *missing_clip_fixture(const char*source,const PeActor*actor,const
         if(!strcmp((const char*)data+offset,name)){data[offset]='X';changed=true;break;}
         offset+=48+(size_t)read_u32(data+offset+36)*stats.joints*48;
     }
-    char path[]=PE_SOURCE_ROOT "/rebuild/build/hunt-missing-clip-XXXXXX";int fd=mkstemp(path);
+    char path[4096];snprintf(path,sizeof path,"%s",pe_test_path("rebuild/build/hunt-missing-clip-XXXXXX"));int fd=mkstemp(path);
     PeActor*result=NULL;
     if(fd>=0){f=fdopen(fd,"wb");if(f){ok=ok&&changed&&fwrite(data,1,(size_t)length,f)==(size_t)length;ok=fclose(f)==0&&ok;
             if(ok){char error[256];result=pe_actor_load(path,error,sizeof error);}}
@@ -477,7 +475,7 @@ static PeActor *missing_clip_fixture(const char*source,const PeActor*actor,const
     free(data);return result;
 }
 static void running_pending_tests(const PeHuntCombat *initial,PeWorld *w,PeSandboxCollision *c,PeHuntCombatPlayer p){
-    const char *root=getenv("PE_RUNNING_STAGE");if(!root)root=PE_SOURCE_ROOT "/rebuild/build/running-player-20261006";
+    const char *root=getenv("PE_RUNNING_STAGE");if(!root)root=pe_test_path("rebuild/build/running-player-20261006");
     const char *names[]={"player/player-part-0-material-0.peac","player-knife-drawn/knife-drawn-part-0-material-0.peac",
         "player-knife-drawn/knife-drawn.pehb","player-defence/player-defence.peac","player-defence/player-defence.pehb"};
     char paths[5][1024],error[256];
@@ -563,12 +561,12 @@ static void history_tick_tests(PeHuntCombat h,PeWorld *w,PeSandboxCollision *c,P
     puts("hunt history: four real source parts, guide-disabled clocks, activation pin, staged rollback and death reset passed");
 }
 static void actual_assets(void){
-    const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/terrain.pevx",
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb",
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-defence/player-defence.peac",PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-defence/player-defence.pehb",
-        PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/all/player-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/drawn-all/knife-drawn-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/drawn-all/knife-drawn.pehb"};
+    const char *paths[]={pe_test_path("rebuild/build/reference-assets/adventure-route/terrain.pevx"),
+        pe_test_path("rebuild/build/reference-assets/hare.peac"),pe_test_path("rebuild/build/reference-assets/hare.pehb"),
+        pe_test_path("rebuild/build/reference-assets/player-defence/player-defence.peac"),pe_test_path("rebuild/build/reference-assets/player-defence/player-defence.pehb"),
+        pe_test_path("rebuild/build/animator-bake/player-female/all/player-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/animator-bake/player-female/drawn-all/knife-drawn-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/animator-bake/player-female/drawn-all/knife-drawn.pehb")};
     for(unsigned i=0;i<8;i++){FILE*f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"hunt combat: SKIP optional route/actor fixture %s\n",paths[i]);return;}fclose(f);}
     char error[256];PeWorld*w=calloc(1,sizeof *w);PeSandboxCollision*c=pe_sandbox_collision_create();
     PeActor *hare=pe_actor_load(paths[1],error,sizeof error),*player=pe_actor_load(paths[3],error,sizeof error),*body=pe_actor_load(paths[5],error,sizeof error),*knife=pe_actor_load(paths[6],error,sizeof error);

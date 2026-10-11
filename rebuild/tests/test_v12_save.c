@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "adventure_test_helpers.h"
 #include "pe_adventure_hunt.h"
 #include "pe_adventure_medicine.h"
@@ -7,9 +8,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"v12:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static void put32(unsigned char*p,uint32_t n){for(int i=0;i<4;i++)p[i]=(unsigned char)(n>>(8*i));}
@@ -19,14 +17,14 @@ static bool write_bytes(const char*path,unsigned char*b,size_t n,unsigned versio
 }
 static int awarded_reload(void){
     failures=0;
-    const char*assets=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
-    const char*terrain=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/terrain.pevx";
-    const char*collision=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/route-collision.obj";
+    const char*assets=pe_test_path("rebuild/build/reference-assets");
+    const char*terrain=pe_test_path("rebuild/build/reference-assets/adventure-route/terrain.pevx");
+    const char*collision=pe_test_path("rebuild/build/reference-assets/adventure-route/route-collision.obj");
     if(access(terrain,R_OK)||access(collision,R_OK)){
         fprintf(stderr,"v12: SKIP awarded return/reload real-route test; recovered assets unavailable\n");return 0;
     }
     PeGame*g=calloc(1,sizeof *g),*loaded=calloc(1,sizeof *loaded);char error[256];
-    char path[]=PE_SOURCE_ROOT "/rebuild/build/v12-awarded-XXXXXX";int fd=mkstemp(path);
+    char path[4096];snprintf(path,sizeof path,"%s",pe_test_path("rebuild/build/v12-awarded-XXXXXX"));int fd=mkstemp(path);
     if(!g||!loaded||fd<0){failures++;goto done;}close(fd);
     CHECK(pe_game_init_mode(g,89,PE_GAME_ADVENTURE));CHECK(pe_test_ack_welcome(g));
     CHECK(pe_game_arrival_complete(g));CHECK(pe_game_accept_supplies(g));g->annot_complete=true;

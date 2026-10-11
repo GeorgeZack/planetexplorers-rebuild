@@ -56,6 +56,12 @@ PeSceneHit pe_sandbox_collision_ray_perception(const PeSandboxCollision *c,PeVec
     }
     return best;
 }
+bool pe_sandbox_collision_label_visible(const PeSandboxCollision *c,PeVec3 camera,PeVec3 anchor){
+    if(!c||!c->ready||!finite3(camera)||!finite3(anchor))return false;
+    PeVec3 direction=add(anchor,mul(camera,-1));float distance=length(direction);
+    if(!isfinite(distance))return false;
+    return distance<=.02f||!pe_sandbox_collision_ray_perception(c,camera,direction,distance-.02f).hit;
+}
 static bool box_valid(const PeWorld *w,PeSandboxBox b){
     if(!finite3(b.minimum)||!finite3(b.maximum))return false;
     for(int a=0;a<3;a++)if(component(b.minimum,a)<0||component(b.maximum,a)>(a==1?pe_world_size_y(w)-1:(a==2?pe_world_depth(w)-1:pe_world_width(w)-1))||component(b.maximum,a)<=component(b.minimum,a))return false;

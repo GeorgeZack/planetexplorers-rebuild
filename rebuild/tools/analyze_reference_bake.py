@@ -3,6 +3,7 @@
 
 Standard library only. Does not launch Unity, evaluate clips or invent poses.
 """
+from read_reference_adventure import source_label
 import argparse
 from pe_actor_limits import PEAC_MAX_CLIPS
 import json
@@ -243,7 +244,7 @@ def main():
         if report_path in (bake,rig_path,bake.with_suffix('.launch.json')):pose.fail('Report cannot replace inputs')
         if rig_path.stat().st_size>64*1024*1024:pose.fail('Rig too large')
         rig=pose.decode(rig_path.read_text());report,samples=analyze(bake,rig,retain=a.export_dir is not None)
-        report['sources']=[{'path':str(f),'sha256':pose.sha256(f)} for f in (bake,rig_path,Path(__file__).resolve())]
+        report['sources']=[{'path':source_label(f),'sha256':pose.sha256(f)} for f in (bake,rig_path,Path(__file__).resolve())]
         launch_path=bake.with_suffix('.launch.json')
         report['launch_provenance']=None
         if launch_path.is_file():
@@ -254,7 +255,7 @@ def main():
             if plan['avatar']!=report['skeleton']['avatar'] or plan['gender']!=report['skeleton']['gender'] or plan['sample_rate']!=report['header']['sampleRate'] or len(plan['clips'])!=len(report['clips']):pose.fail('Launch/bake identity mismatch')
             for expected,actual in zip(plan['clips'],report['clips']):
                 if expected['name']!=actual['name'] or expected['path_id']!=actual['sourcePathId'] or expected['loop']!=actual['isLooping'] or abs(expected['length']-actual['length'])>.0001 or abs(expected['frame_rate']-actual['sourceFrameRate'])>.001:pose.fail('Launch/bake clip identity mismatch')
-            report['sources'].append({'path':str(launch_path),'sha256':pose.sha256(launch_path)})
+            report['sources'].append({'path':source_label(launch_path),'sha256':pose.sha256(launch_path)})
             report['launch_provenance']=launch
         if a.export_dir:
             out=a.export_dir.expanduser().resolve()

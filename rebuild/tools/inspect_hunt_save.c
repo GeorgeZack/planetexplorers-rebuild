@@ -1,6 +1,7 @@
 /* Read-only current-loader interpretation of one native hunt checkpoint.
  * Does not advance simulation, save, create a fixture or initialize graphics.
  * Older-save migrations happen in memory only, exactly as in the game loader. */
+#include "pe_paths.h"
 #include "pe_game.h"
 #include "pe_settlement.h"
 #include "pe_adventure_hunt.h"
@@ -8,7 +9,11 @@
 #include <stdlib.h>
 int main(int argc,char **argv){
     if(argc<2||argc>3){fprintf(stderr,"Usage: %s SAVE [ASSETS]\n",argv[0]);return 2;}
-    const char *assets=argc==3?argv[2]:PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    char default_assets[4096];
+    if(argc==2&&!pe_paths_default_assets(default_assets,sizeof default_assets)){
+        fprintf(stderr,"Cannot locate assets beside the executable; supply ASSETS.\n");return 1;
+    }
+    const char *assets=argc==3?argv[2]:default_assets;
     char error[256];PeGame *g=calloc(1,sizeof *g);if(!g)return 1;
     if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
         fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;

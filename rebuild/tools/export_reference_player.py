@@ -5,6 +5,7 @@ Optional UnityPy==1.25.4. This does NOT evaluate humanoid muscle animations.
 Outputs are a diffuse OBJ preview and a lossless skin/Avatar JSON research fixture.
 """
 from __future__ import annotations
+from read_reference_adventure import source_label
 import argparse
 from contextlib import closing
 import hashlib
@@ -344,11 +345,11 @@ def recover(game_dir, output, sexes, appearance='default'):
                   'bounds':[[min(p['default_positions'][i][a] for p in parts for i in range(len(p['positions']))) for a in range(3)],
                             [max(p['default_positions'][i][a] for p in parts for i in range(len(p['positions']))) for a in range(3)]]}
         reports.append(report)
-    provenance = [{'path':str(assets.data/name),'sha256':digest(assets.data/name)} for name in sorted(assets.files)]
+    provenance = [{'path':source_label(assets.data/name),'sha256':digest(assets.data/name)} for name in sorted(assets.files)]
     source_paths = [database, Path(__file__).resolve(), ROOT/'Assets/AppearBuilder/CustomMetaData.cs', ROOT/'Assets/AppearBuilder/CustomCharactor.cs']
     if appearance == 'starter':
         source_paths += [ROOT/'Assets/PeWorld/SingleGameInitData.cs', ROOT/'Assets/Scripts/PeEntity/Cmpt/EquipmentCmpt.cs', ROOT/'Assets/Scripts/PeEntity/Cmpt/AvatarCmpt.cs']
-    provenance += [{'path':str(path),'sha256':digest(path)} for path in [*sorted(stream_sources), *source_paths]]
+    provenance += [{'path':source_label(path),'sha256':digest(path)} for path in [*sorted(stream_sources), *source_paths]]
     manifest = {'schema':1,'sources':provenance,'players':reports,'coordinate_convention':'Unity XYZ, Avatar default pose; no root placement or retargeted animation',
                 'limitations':['Source default modular selection with optional starter equipment only; runtime body morphs and other clothing omitted.',
                                'Diffuse materials only; tint/masks/hair transparency differ from Unity shaders.',

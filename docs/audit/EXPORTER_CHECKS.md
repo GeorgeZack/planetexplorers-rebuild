@@ -9,6 +9,7 @@ October 7, 2026. Every exporter with a `--check` mode was run on the development
 | Exporter | Invocation |
 |---|---|
 | `export_actor_materials.py` | `--check` |
+| `export_reference_materials.py` | `--check` for both source-bound settlement OBJ material sidecars; see [building materials](BUILDING_MATERIALS.md) |
 | `export_adventure_population.py` | `--check` |
 | `export_adventure_settlement.py` | `--check` |
 | `export_adventure_settlement_assets.py` | `--check` |

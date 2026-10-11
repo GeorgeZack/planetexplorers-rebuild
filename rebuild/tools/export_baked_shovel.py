@@ -2,6 +2,7 @@
 """Attach recovered woodshovel12 to source mountMain/mountBack over exact baked body clocks.
 Standard library. Fresh output only; no runtime, graphics or attack activation.
 """
+from read_reference_adventure import source_label
 import argparse
 import copy
 import hashlib
@@ -66,7 +67,7 @@ def export(bake_path,player_path,assets,body,output,mode="drawn"):
             old=part['file'];part['file']=old.replace('player-part-','wood-shovel-part-');(combined/old).rename(combined/part['file'])
         (combined/'recording.peas').write_text('PEAS1\n'+''.join(p['file']+' '+p['texture']+'\n' for p in result['parts']),encoding='ascii')
         result.update(item_id=12,attachment=mount_name,attachment_mode=mode,source_mount_path=mount_path,source_mount=mount,
-            sources=[dict(path=str(p),sha256=pose.sha256(p)) for p in inputs],body_actors=body_sources,
+            sources=[dict(path=source_label(p),sha256=pose.sha256(p)) for p in inputs],body_actors=body_sources,
             coordinate_space='Exact source baked '+mount_name+' matrix times original wood-shovel prefab-local geometry; identity rigid bind',
             collision_authorized=False,activation_observed=False,
             limitations=['Fixed selected mount only; no MinePutOn/MinePutOff transition.',

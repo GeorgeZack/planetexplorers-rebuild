@@ -1,4 +1,5 @@
 /* Real blade clocks and host transaction. No window, GPU or desktop input. */
+#include "pe_test_paths.h"
 #include "../src/pe_sandbox_view.c"
 static unsigned failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"blade facing host:%d %s\n",__LINE__,#c);failures++;}}while(0)
@@ -13,9 +14,9 @@ static bool tick(PeSandboxMelee *m,SandboxBladeFacing *f,PeHuntEncounter *e,PeSa
 }
 int main(void){
     char error[256];
-    const char *body_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/player/player-part-0-material-0.peac";
-    const char *blade_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-knife-drawn/knife-drawn-part-0-material-0.peac";
-    const char *box_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-knife-drawn/knife-drawn.pehb";
+    const char *body_path=pe_test_path("rebuild/build/reference-assets/player/player-part-0-material-0.peac");
+    const char *blade_path=pe_test_path("rebuild/build/reference-assets/player-knife-drawn/knife-drawn-part-0-material-0.peac");
+    const char *box_path=pe_test_path("rebuild/build/reference-assets/player-knife-drawn/knife-drawn.pehb");
     PeActor *body=pe_actor_load(body_path,error,sizeof error),*blade=pe_actor_load(blade_path,error,sizeof error);
     PeHitboxes *boxes=blade?pe_hitboxes_load(box_path,blade,error,sizeof error):NULL;
     if(!body||!blade||!boxes){fprintf(stderr,"blade facing host: required assets unavailable: %s\n",error);pe_hitboxes_free(boxes);pe_actor_free(body);pe_actor_free(blade);return 77;}

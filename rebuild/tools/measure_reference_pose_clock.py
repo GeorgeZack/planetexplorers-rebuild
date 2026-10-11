@@ -4,6 +4,7 @@
 Observation-only. Does not infer collider activation, hit eligibility or damage.
 Requires a complete capture and the matching source player rig.
 """
+from read_reference_adventure import source_label
 import argparse
 import json
 import math
@@ -127,7 +128,7 @@ def main():
         if args.source_clip:
             if args.source_clip.stat().st_size>16*1024*1024:raise ValueError('Oversized source clip JSON')
             source=decode(args.source_clip.read_text())
-        result=measure(rows,source);result['sources']=[{'path':str(p),'sha256':sha256(p)} for p in inputs]
+        result=measure(rows,source);result['sources']=[{'path':source_label(p),'sha256':sha256(p)} for p in inputs]
         output.parent.mkdir(parents=True,exist_ok=True)
         with tempfile.NamedTemporaryFile('w',dir=output.parent,delete=False,prefix='.pose-clock-') as stream:
             temporary=Path(stream.name);json.dump(result,stream,indent=2);stream.write('\n')

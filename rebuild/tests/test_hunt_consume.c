@@ -1,6 +1,7 @@
 /* Real UI/pointer/camera -> extracted host movement -> collision/hunt test.
  * Explicit isolated near-hare geometry and preexisting player wound; no desktop,
  * reduced hare HP, synthetic contact, earned-survival or full host rendering claim. */
+#include "pe_test_paths.h"
 #include "pe_hunt_combat.h"
 #include "pe_hunt_loot_combat.h"
 #include "pe_sandbox_ui.h"
@@ -38,7 +39,7 @@ static PeSandboxCameraControlResult controls(PeSandboxCameraControls*c,PeSandbox
 }
 static PeSandboxUIInput ui_input(void){return(PeSandboxUIInput){.focused=true,.mouse_x=640,.mouse_y=350,.frame_dt=PE_FIXED_DT,.quickslot=-1};}
 static int scenario(int medicine,float healing){
-    const char *root=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    const char *root=pe_test_path("rebuild/build/reference-assets");
     const char *names[]={"adventure-route/terrain.pevx","hare.peac","hare.pehb","player-defence/player-defence.peac",
         "player-defence/player-defence.pehb","player/player-part-0-material-0.peac",
         "player-knife-drawn/knife-drawn-part-0-material-0.peac","player-knife-drawn/knife-drawn.pehb"};

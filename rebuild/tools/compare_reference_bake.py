@@ -4,6 +4,7 @@
 No evaluation or fabricated reference. Differences include procedural IK,
 controller layers, retarget initialization and sampled interpolation.
 """
+from read_reference_adventure import source_label
 import argparse
 import json
 import math
@@ -74,7 +75,7 @@ def main():
         if report_path in inputs:pose.fail('Report cannot replace inputs')
         if inputs[2].stat().st_size>64*1024*1024:pose.fail('Rig too large')
         result=compare(inputs[0],inputs[1],pose.decode(inputs[2].read_text()),a.clip,a.first_sample,a.last_sample,a.layer,a.first_person)
-        result['sources']=[{'path':str(f),'sha256':pose.sha256(f)} for f in inputs+[Path(__file__).resolve()]]
+        result['sources']=[{'path':source_label(f),'sha256':pose.sha256(f)} for f in inputs+[Path(__file__).resolve()]]
         report_path.parent.mkdir(parents=True,exist_ok=True)
         with tempfile.NamedTemporaryFile('w',dir=report_path.parent,delete=False) as stream:
             temp=Path(stream.name);json.dump(result,stream,indent=2);stream.write('\n')

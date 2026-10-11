@@ -1,5 +1,9 @@
 # Planet Explorers project map
 
+[Building materials](docs/audit/BUILDING_MATERIALS.md): `export_reference_materials.py` recovers source-bound alpha/culling for both settlement OBJ groups; `pe_reference` retains it and shares `pe_material_view.h` with actors. `pe_sandbox_collision_label_visible` hides sandbox NPC names behind current geometry as a native adapter.
+
+[Checkout relocation](docs/audit/PORTABLE_PATHS.md): `pe_paths.h` owns executable-relative runtime lookup, `read_reference_adventure.source_label/source_path` own portable source labels and hash-checked historical relocation, and `setup_unity_tools.py` repairs movable environment launchers. Archived asset manifests remain unchanged.
+
 [Actor materials](docs/audit/ACTOR_MATERIALS.md): `export_actor_materials.py` recovers alpha/culling policy into optional source-bound sidecars; `pe_actor_scene_manifest` validates them and the shared actor views apply cutouts to both hosts. Existing meshes, textures and animation groups remain unchanged.
 
 [Adventure debug tools](docs/audit/DEBUG_TOOLS.md): `pe_debug` owns atomic medicine/supply/hunt-skip commands; `pe_ui_settings` owns the session toggle and shared controls; `pe_sandbox_view` admits requests and resets transient owners after travel. These are explicit cheats, with no new save format or automatic save.

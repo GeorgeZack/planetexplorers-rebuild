@@ -11,6 +11,7 @@ import tempfile
 import unittest
 
 SCRIPT = Path(__file__).resolve().parents[1] / 'tools/export_reference_assets.py'
+sys.path.insert(0, str(SCRIPT.parent))
 spec = importlib.util.spec_from_file_location('export_reference_assets', SCRIPT)
 exporter = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(exporter)

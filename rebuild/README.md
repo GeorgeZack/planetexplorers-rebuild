@@ -1,5 +1,7 @@
 # Planet Explorers C rebuild
 
+Building fabric/roof transparency now uses recovered cutout and two-sided rules; sandbox NPC names hide behind walls. Restart the rebuilt game to see both corrections. After replacing settlement OBJ assets, regenerate their sidecars using the [building material instructions](../docs/audit/BUILDING_MATERIALS.md#installation-and-verification).
+
 Hairline/eye transparency now uses recovered source alpha/culling rules in the shared actor renderer. The local sidecars are installed; restart the rebuilt game to see the correction. After replacing actor assets, regenerate their metadata using the [actor material recovery instructions](../docs/audit/ACTOR_MATERIALS.md#export-and-installation).
 
 **Unblock testing:** in Adventure, open **Esc → Settings → Debug tools: ON**. Choose **Give 5 Herbal Drinks** to finish the current Naoko turn-in, **Combat supplies + heal**, or **Skip to hare hunt** to equip the Knife and go straight to combat. Back/Esc returns to Pause; Resume continues play. Nothing saves automatically. The toggle resets when you leave the host. Sword/Shield remain unavailable; these tools use the supported Knife. [Scope and safeguards](../docs/audit/DEBUG_TOOLS.md).
@@ -69,6 +71,8 @@ The latest running-knife increment adds grounded female third-person Knife33 sta
 In the Adventure sandbox, equip Knife33 and draw it with a fresh world click. Run on clear ground, then click again while actual speed is above4.5 and at most7m/s; ordinary running is supported, sprinting is not. The attack moves through the existing collision path and shares its clock with blade and defence. Walking attacks are also supported through speed4.5: press Z to toggle walking, keep moving forward/side/back, and click to attack. The attack owns movement until it ends; holding WASD does not cancel it or add extra travel. Ordinary and later combo stages now use source-derived root motion. The required local body/knife/defence and running-motion assets are installed on this machine. This does not enable running attacks in the tutorial.
 
 ## Build and run
+
+The executable finds `reference-assets` beside itself, so moving the checkout does not change its default asset lookup. Use `--assets DIR` for another asset tree. Source exporters label repository-owned inputs relatively; historical absolute records resolve only with their exact recorded hashes. See [checkout relocation](../docs/audit/PORTABLE_PATHS.md). UnityPy console launchers also follow their interpreter after a move; repair an existing environment without reinstalling packages with `python3 rebuild/tools/setup_unity_tools.py --repair`.
 
 Sandbox blade and hare attacks now use sampled capsule history between active poses, with source collider centers recovered offline. This changes contact opportunities in both directions; it is not a damage/stat adjustment. Numerical and headless integration checks are recorded in the [capsule-history audit](../docs/audit/MELEE_CAPSULE_HISTORY.md). The native fixed-tick schedule still differs from Unity's animation/physics ordering; physical combat acceptance remains pending.
 

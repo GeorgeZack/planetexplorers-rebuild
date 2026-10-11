@@ -1,13 +1,11 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_training_melee.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"training melee:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static void u32(unsigned char*p,uint32_t v){for(int i=0;i<4;i++)p[i]=(unsigned char)(v>>(8*i));}
@@ -42,11 +40,11 @@ static unsigned run_action(PeTrainingMelee*h,PeTrainingMeleeFrame f,float*stamin
     CHECK(!h->action.active);return hits;
 }
 static void actual_assets(void){
-    const char*body_path=PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/all/player-part-0-material-0.peac";
-    const char*knife_path=PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/drawn-all/knife-drawn-part-0-material-0.peac";
-    const char*weapon_path=PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/drawn-all/knife-drawn.pehb";
-    const char*target_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac";
-    const char*defence_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb";
+    const char*body_path=pe_test_path("rebuild/build/animator-bake/player-female/all/player-part-0-material-0.peac");
+    const char*knife_path=pe_test_path("rebuild/build/animator-bake/player-female/drawn-all/knife-drawn-part-0-material-0.peac");
+    const char*weapon_path=pe_test_path("rebuild/build/animator-bake/player-female/drawn-all/knife-drawn.pehb");
+    const char*target_path=pe_test_path("rebuild/build/reference-assets/hare.peac");
+    const char*defence_path=pe_test_path("rebuild/build/reference-assets/hare.pehb");
     const char*paths[]={body_path,knife_path,weapon_path,target_path,defence_path};
     for(unsigned i=0;i<5;i++){FILE*f=fopen(paths[i],"rb");if(!f)return;fclose(f);}
     char error[128];PeActor*body=pe_actor_load(body_path,error,sizeof error),*knife=pe_actor_load(knife_path,error,sizeof error),*target=pe_actor_load(target_path,error,sizeof error);

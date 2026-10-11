@@ -1,13 +1,11 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_hitbox.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hitbox:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static bool near(float a,float b){return fabsf(a-b)<.0001f;}
@@ -74,8 +72,8 @@ int pe_test_hitbox(void){
             CHECK(near(c.b.x,-2.25f)&&near(c.b.y,.25f));pe_hitboxes_free(b);}
         pe_actor_free(a);}
     unlink(path);
-    const char*actual=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb";FILE*f=fopen(actual,"rb");if(f){fclose(f);
-        a=pe_actor_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",error,sizeof(error));CHECK(a);b=pe_hitboxes_load(actual,a,error,sizeof(error));CHECK(b);
+    const char*actual=pe_test_path("rebuild/build/reference-assets/hare.pehb");FILE*f=fopen(actual,"rb");if(f){fclose(f);
+        a=pe_actor_load(pe_test_path("rebuild/build/reference-assets/hare.peac"),error,sizeof(error));CHECK(a);b=pe_hitboxes_load(actual,a,error,sizeof(error));CHECK(b);
         if(b){CHECK(pe_hitboxes_count(b)==19);unsigned enabled=0,disabled=0,attacks=0;size_t clip=pe_actor_find_clip(a,"attack2");CHECK(clip!=PE_ACTOR_BIND_POSE);
             for(size_t i=0;i<pe_hitboxes_count(b);i++){const PeHitboxDefinition*d=pe_hitboxes_get(b,i);PeHitboxCapsule c;
                 bool ok=pe_hitbox_pose(b,a,i,clip,.3,(PeVec3){15,2,12},20,1.3f,&c);

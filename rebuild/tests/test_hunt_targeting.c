@@ -1,11 +1,9 @@
+#include "pe_test_paths.h"
 #include "pe_hunt_targeting.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do {if(!(c)){fprintf(stderr,"hunt targeting:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static PeHuntEncounter cohort(const PeActor *actor,const PeHitboxes *boxes){
@@ -22,7 +20,7 @@ int pe_test_hunt_targeting(void){
     CHECK(!pe_hunt_target_acquire(&empty,(PeVec3){NAN,0,0},(PeVec3){0,0,1},&out));
     CHECK(!memcmp(&before,&out,sizeof out));
     CHECK(!pe_hunt_target_acquire(&empty,(PeVec3){0},(PeVec3){0,1,0},&out));
-    const char *base=getenv("PE_HUNT_TARGET_ASSETS");if(!base)base=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    const char *base=getenv("PE_HUNT_TARGET_ASSETS");if(!base)base=pe_test_path("rebuild/build/reference-assets");
     char path[1024],error[256];snprintf(path,sizeof path,"%s/hare.peac",base);
     PeActor *actor=pe_actor_load(path,error,sizeof error);
     if(!actor){fprintf(stderr,"hunt targeting required assets: %s\n",error);return failures+1;}

@@ -1,6 +1,6 @@
 CC ?= cc
 PKG_CONFIG ?= pkg-config
-CPPFLAGS += -Isrc -DPE_SOURCE_ROOT=\"$(abspath ..)\"
+CPPFLAGS += -Isrc
 CFLAGS ?= -O2 -g
 CFLAGS += -std=c11 -Wall -Wextra -Wpedantic
 ASAN_OPTIONS ?= detect_leaks=1
@@ -60,8 +60,9 @@ UNITY_PYTHON ?= $(if $(wildcard build/unity-tools/bin/python),build/unity-tools/
 ASSET_PYTHON ?= $(UNITY_PYTHON)
 .PHONY: unity-tools adventure-npc-collider-check
 unity-tools:
-	python3 -m venv build/unity-tools
+	python3 tools/setup_unity_tools.py
 	build/unity-tools/bin/python -m pip install -r tools/requirements-unity.txt
+	python3 tools/setup_unity_tools.py --repair
 adventure-npc-collider-check:
 	$(UNITY_PYTHON) tools/export_adventure_npc_collider.py --check
 	$(UNITY_PYTHON) tests/test_adventure_npc_collider.py
@@ -79,6 +80,7 @@ ROUTE_SAVE ?= $(HOME)/.local/share/planet-explorers-route-reference/PlanetExplor
 .PHONY: exporter-check
 exporter-check:
 	$(UNITY_PYTHON) tools/export_actor_materials.py --check
+	$(UNITY_PYTHON) tools/export_reference_materials.py --check
 	$(UNITY_PYTHON) tools/export_adventure_population.py --check
 	$(UNITY_PYTHON) tools/export_adventure_settlement.py --check
 	$(UNITY_PYTHON) tools/export_adventure_settlement_assets.py --check
@@ -210,6 +212,8 @@ test: camera-geometry-test shop-quantity-details-ui-test camp-repair-test camp-r
 	python3 tests/test_training_ui_input.py
 	python3 tests/test_training_npc_analysis.py
 	python3 tests/test_reference_npc_bake.py
+	python3 tests/test_source_paths.py
+	python3 tests/test_runtime_paths.py
 $(BUILD)/test_sanitize: $(SANITIZE_OBJS)
 	$(CC) $(SANITIZE_FLAGS) $(SANITIZE_OBJS) -o $@ $(LZ4_LIBS) -lm
 sanitize: $(BUILD)/test_sanitize
@@ -880,3 +884,19 @@ $(BUILD)/render_actor_materials: tests/render_actor_materials.c src/pe_actor_sce
 actor-material-render-capture: $(BUILD)/render_actor_materials
 	python3 tests/run_private_ui_capture.py --materials
 test: actor-material-test
+
+.PHONY: reference-material-test reference-material-sanitize-test reference-material-render-capture
+reference-material-test: asset-test
+	python3 tests/test_reference_material_export.py
+$(BUILD)/test_reference_material_sanitize: tests/test_reference_validation.c src/pe_reference.c $(DEPS)/test_reference_material_sanitize.d | $(BUILD)
+	$(call DEPGEN,$(CPPFLAGS) $(SANITIZE_FLAGS) $(RAYLIB_CFLAGS) tests/test_reference_validation.c src/pe_reference.c)
+	$(CC) $(CPPFLAGS) $(SANITIZE_FLAGS) $(RAYLIB_CFLAGS) tests/test_reference_validation.c src/pe_reference.c -o $@ $(RAYLIB_LIBS) -lm
+reference-material-sanitize-test: $(BUILD)/test_reference_material_sanitize
+	ASAN_OPTIONS=$(ASAN_OPTIONS) ./$(BUILD)/test_reference_material_sanitize
+sanitize: reference-material-sanitize-test
+test: reference-material-test
+$(BUILD)/render_reference_materials: tests/render_reference_materials.c src/pe_reference.c $(CORE_LIB) $(DEPS)/render_reference_materials.d | $(BUILD)
+	$(call DEPGEN,$(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/render_reference_materials.c src/pe_reference.c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/render_reference_materials.c src/pe_reference.c $(CORE_LIB) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+reference-material-render-capture: $(BUILD)/render_reference_materials
+	python3 tests/run_private_ui_capture.py --reference-materials

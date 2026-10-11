@@ -1,5 +1,6 @@
 /* Staged draw-only native UI capture. Run solely on a dedicated private display.
  * No sandbox host, input injection, saves or original-game process is involved. */
+#include "pe_test_paths.h"
 #include "pe_sandbox_ui.h"
 #include "pe_settlement.h"
 #include <stdio.h>
@@ -30,7 +31,7 @@ int main(int argc,char **argv){
     g->inventory=(PeInventory){.next_instance_id=g->inventory.next_instance_id,.categorized=true};g->equipped_instance_id=g->shield_instance_id=0;memset(g->quickslots,0,sizeof g->quickslots);
     REQUIRE(pe_inventory_add(&g->inventory,26,1)&&pe_inventory_add(&g->inventory,877,1)&&pe_inventory_add(&g->inventory,924,7)&&pe_inventory_add(&g->inventory,279,40));g->money=2000;
     g->inventory.slots[bag(g,26)].durability=119;g->known_recipes[g->known_recipe_count++]=pe_item_def(877)->learn_ids[0];
-    PeSandboxUI u={0};REQUIRE(pe_sandbox_ui_load(&u,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    PeSandboxUI u={0};REQUIRE(pe_sandbox_ui_load(&u,pe_test_path("rebuild/build/reference-assets"),error,sizeof error));
     const int sizes[][2]={{1280,720},{640,480},{320,240}};
     for(unsigned k=0;k<3;k++){
         int w=sizes[k][0],h=sizes[k][1];SetWindowSize(w,h);pe_sandbox_ui_resize(&u,(float)w,(float)h);

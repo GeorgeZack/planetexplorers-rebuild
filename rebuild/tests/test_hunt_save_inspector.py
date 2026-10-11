@@ -45,7 +45,7 @@ class InspectorOutput(unittest.TestCase):
         stub.write_text(STUBS)
         cls.binary = folder / 'inspect'
         subprocess.run([os.environ.get('CC', 'cc'), '-std=c11', '-Wall', '-Wextra', '-Werror',
-                        '-DPE_SOURCE_ROOT="."', '-I' + str(ROOT / 'src'),
+                        '-I' + str(ROOT / 'src'),
                         str(ROOT / 'tools/inspect_hunt_save.c'), str(stub), '-o', str(cls.binary)],
                        check=True, capture_output=True, text=True)
 

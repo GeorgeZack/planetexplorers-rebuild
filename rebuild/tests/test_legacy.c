@@ -1,13 +1,11 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_legacy.h"
 #include <lz4.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 #define CHECK(expr) do {if(!(expr)){fprintf(stderr,"legacy: %s:%d: %s\n",__FILE__,__LINE__,#expr);failures++;}}while(0)
 static void le32(unsigned char *p,uint32_t v){for(int i=0;i<4;i++)p[i]=(unsigned char)(v>>(8*i));}
 static bool write_file(const char *path,const unsigned char *data,size_t size){FILE *f=fopen(path,"wb");if(!f)return false;bool ok=fwrite(data,1,size,f)==size;if(fclose(f)!=0)ok=false;return ok;}
@@ -24,8 +22,8 @@ int pe_test_legacy(void) {
     uint8_t *chunk=malloc(PE_LEGACY_CHUNK_BYTES);PeWorld *world=calloc(1,sizeof *world),*before=malloc(sizeof *before);
     if(!chunk||!world||!before){free(chunk);free(world);free(before);return 1;}
     for(int lod=0;lod<=4;lod++)for(int water=0;water<2;water++) {
-        if(lod)snprintf(path,sizeof path,"%s/TutorialMode/Mainland/%s_x0_y0_%d.voxelform",PE_SOURCE_ROOT,water?"water":"map",lod);
-        else snprintf(path,sizeof path,"%s/TutorialMode/Mainland/%s_x0_y0.voxelform",PE_SOURCE_ROOT,water?"water":"map");
+        if(lod)pe_test_format(path,sizeof path,"%s/TutorialMode/Mainland/%s_x0_y0_%d.voxelform",pe_test_root(),water?"water":"map",lod);
+        else pe_test_format(path,sizeof path,"%s/TutorialMode/Mainland/%s_x0_y0.voxelform",pe_test_root(),water?"water":"map");
         PeLegacyFile *f=pe_legacy_open(path,lod,error,sizeof error);CHECK(f!=NULL);if(!f)continue;
         PeLegacyInfo info=pe_legacy_info(f);CHECK(info.lod==lod&&info.sample_step==(1<<lod)&&info.extent_x==6144);
         CHECK(pe_legacy_chunk(f,0,0,0,chunk,error,sizeof error));
@@ -44,7 +42,7 @@ int pe_test_legacy(void) {
         if(lod){CHECK(!pe_legacy_sample(f,1,0,0,&sample,error,sizeof error));CHECK(!pe_legacy_crop(f,0,0,0,world,error,sizeof error));}
         pe_legacy_close(f);
     }
-    snprintf(path,sizeof path,"%s/CustomGames/Dragon Desert/Worlds/Dragon Desert/map_x0_y0.voxelform",PE_SOURCE_ROOT);
+    pe_test_format(path,sizeof path,"%s/CustomGames/Dragon Desert/Worlds/Dragon Desert/map_x0_y0.voxelform",pe_test_root());
     PeLegacyFile *desert=pe_legacy_open(path,0,error,sizeof error);CHECK(desert!=NULL);
     if(desert) {
         int x,y,z;CHECK(pe_legacy_find_surface(desert,&x,&y,&z,error,sizeof error));

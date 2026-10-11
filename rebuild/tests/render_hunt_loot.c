@@ -1,4 +1,5 @@
 /* Staged real marker rendering; no game simulation, saves or desktop input. */
+#include "pe_test_paths.h"
 #include "../src/pe_sandbox_view.c"
 #include <assert.h>
 int main(int argc,char **argv){
@@ -7,7 +8,7 @@ int main(int argc,char **argv){
        display[0]!=':'||atoi(display+1)<100||atoi(display+1)>999)return 2;
     PeGame *g=calloc(1,sizeof *g);assert(g);
     InitWindow(1280,720,"Hunt loot staged renderer");
-    char error[256];PeUiAssets *assets=pe_ui_assets_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/ui",error,sizeof error);
+    char error[256];PeUiAssets *assets=pe_ui_assets_load(pe_test_path("rebuild/build/reference-assets/ui"),error,sizeof error);
     if(!assets){fprintf(stderr,"%s\n",error);return 1;}
     PeSandboxUI ui={.assets=assets};
     g->player=(PeVec3){0,0,6};g->hunt_loot.count=7;

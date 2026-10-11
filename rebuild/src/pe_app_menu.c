@@ -1,3 +1,4 @@
+#include "pe_paths.h"
 #include "pe_app_menu.h"
 #include "pe_ui_assets.h"
 #include "pe_ui_settings.h"
@@ -36,8 +37,13 @@ PeAppChoice pe_app_menu(const char *dir,bool can_continue,bool active,const char
     Texture2D logo={0};
     n=snprintf(path,sizeof path,"%s/ui/main-menu-logo.png",dir);
     if(n>0&&n<(int)sizeof path&&FileExists(path))logo=LoadTexture(path);
-    else if(FileExists(PE_SOURCE_ROOT "/Assets/Resources/Texture2d/GameCredits/Logo.png"))
-        logo=LoadTexture(PE_SOURCE_ROOT "/Assets/Resources/Texture2d/GameCredits/Logo.png");
+    else {
+        char project[4096];
+        if(pe_paths_project_root(project,sizeof project)) {
+            n=snprintf(path,sizeof path,"%s/Assets/Resources/Texture2d/GameCredits/Logo.png",project);
+            if(n>0&&n<(int)sizeof path&&FileExists(path))logo=LoadTexture(path);
+        }
+    }
     if(logo.id)SetTextureFilter(logo,TEXTURE_FILTER_BILINEAR);
     n=snprintf(path,sizeof path,"%s/room-collision.obj",dir);
     bool tutorial=n>0&&n<(int)sizeof path&&FileExists(path);

@@ -10,6 +10,7 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
+from read_reference_adventure import source_path
 import export_starter_pair_unified as tool
 from pe_actor_limits import PEAC_MAX_CLIPS
 
@@ -59,7 +60,7 @@ class UnifiedTests(unittest.TestCase):
         self.assertEqual(new['clip_captures'][-1]['clips'],list(tool.SWORD))
         for name,info in new['files'].items():
             p=stage/'player-defence'/name;self.assertEqual(info,dict(bytes=p.stat().st_size,sha256=tool.pair.sha(p)))
-        for p in m['sources']:self.assertEqual(tool.pair.sha(Path(p['path'])),p['sha256'])
+        for p in m['sources']:self.assertEqual(tool.pair.sha(source_path(p)),p['sha256'])
 
     def test_all_body_and_attachment_payloads_are_exact_concatenations(self):
         stage=self.stage();assets=tool.ROOT/'rebuild/build/reference-assets'
@@ -119,11 +120,11 @@ pe_hitboxes_free(h);pe_actor_free(d);for(int k=0;k<4;k++)pe_actor_scene_manifest
     def test_backward33_42_preserves_entire31_40_stage_and_new_exact_payloads(self):
         stage=self.backward_stage();manifest=json.loads((stage/'unified-manifest.json').read_text())
         self.assertEqual(manifest['schema'],'pe-starter-pair-unified-backward-1')
-        before=Path(manifest['base_stage']['path'])
+        before=source_path(Path(manifest['base_stage']['path'])/'unified-manifest.json',manifest['base_stage']['manifest_sha256']).parent
         self.assertEqual(tool.pair.file_hashes(before),manifest['base_stage']['files'])
         self.assertEqual(tool.validate(stage,before/'player',before/'player-defence',backward=True),dict(body_clips=33,defence_clips=42,defence_actor_clip_counts=[42]))
         current=tool.pair.file_hashes(stage);current.pop('unified-manifest.json');self.assertEqual(current,manifest['files'])
-        for p in manifest['sources']:self.assertEqual(tool.pair.sha(Path(p['path'])),p['sha256'])
+        for p in manifest['sources']:self.assertEqual(tool.pair.sha(source_path(p)),p['sha256'])
         self.assertFalse(manifest['installed']);self.assertFalse(manifest['shield_block_pose_recovered'])
         fresh=tool.ROOT/'rebuild/build/starter-pair-sword-backward-assets-02'
         for group in ('player',*tool.pair.GROUPS):

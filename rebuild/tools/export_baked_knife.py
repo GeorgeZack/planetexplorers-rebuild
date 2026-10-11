@@ -7,6 +7,7 @@ knife-only PEAS scene with the body's exact ordered PEAC2 clip clocks. No Unity
 launch, hand transition, attack activation or damage is inferred. Drawn mode
 exports source capsule geometry, which still requires host event/permission gates.
 """
+from read_reference_adventure import source_label
 import argparse
 import copy
 import hashlib
@@ -133,7 +134,7 @@ def check_body(path, expected):
         data = actor.read_bytes(); total += len(data)
         if total > 512*1024*1024: raise ValueError('Body byte bound exceeded')
         if clip_headers(data) != expected: raise ValueError('Body and stowed knife ordered clip clocks differ')
-        sources.append(dict(path=str(actor), sha256=hashlib.sha256(data).hexdigest()))
+        sources.append(dict(path=source_label(actor), sha256=hashlib.sha256(data).hexdigest()))
     return sources
 
 
@@ -170,7 +171,7 @@ def export(bake_path, player_path, collision_path, assets, body, output, attachm
         (combined/'recording.peas').write_text('PEAS1\n'+''.join(p['file']+' '+p['texture']+'\n' for p in result['parts']), encoding='ascii')
         result.update(attachment=mount_name, attachment_mode=attachment, source_mount_path=mount_path, source_mount=mount,
             coordinate_space=f'baked Animator-model-local {mount_name} world matrix * prefab-local knife OBJ; rigid identity bind',
-            sources=[dict(path=str(p), sha256=pose.sha256(p)) for p in paths], body_actors=body_sources,
+            sources=[dict(path=source_label(p), sha256=pose.sha256(p)) for p in paths], body_actors=body_sources,
             collision_authorized=False, activation_observed=False,
             limitations=['Fixed selected mount only; no animated draw/put-away transition.',
                          'Pure baked source clips exclude controller transitions and procedural IK.',

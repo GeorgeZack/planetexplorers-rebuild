@@ -107,6 +107,9 @@ class Resolver:
         path=Path(bundle)
         if path.is_absolute() or '..' in path.parts or path.parts[0]!='AssetBundles':raise ValueError('Invalid NPC bundle path')
         source=self.assets.data.parent/path
+        self.register_bundle(source)
+    def register_bundle(self,source):
+        """Register only attached, enabled per-renderer shader replacements."""
         env=self.assets.UnityPy.load(str(source))
         for obj in env.objects:
             name=obj.assets_file.name
@@ -122,6 +125,7 @@ class Resolver:
             if tree.get('m_Enabled') and script.get('m_FileID')==0 and script_record and script_record[0]=='MonoScript' and script_record[1].get('m_ClassName')=='ReplaceShaderU3D':
                 for renderer,material,chain in replacement_materials(local,tree):
                     self.replacements[(obj.assets_file.name,material,renderer)]=dict(component_path_id=obj.path_id,component_sha256=hashlib.sha256(obj.get_raw_data()).hexdigest(),renderer_path_id=renderer,transform_chain=chain)
+        return env
     def material(self,material,renderer_id=None):
         key=(material.get('asset'),material.get('path_id'))
         if not isinstance(key[0],str) or not isinstance(key[1],int):raise ValueError('Missing recorded material identity')

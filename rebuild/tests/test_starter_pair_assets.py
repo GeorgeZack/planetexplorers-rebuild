@@ -13,6 +13,7 @@ import unittest
 import zlib
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
+from read_reference_adventure import source_path
 import export_starter_pair_assets as exporter
 from export_reference_actor import inverse_affine
 
@@ -114,7 +115,7 @@ class PairAssetTests(unittest.TestCase):
         self.assertEqual(manifest['groups'],list(exporter.GROUPS))
         actual=exporter.file_hashes(stage);actual.pop('starter-pair-manifest.json')
         self.assertEqual(actual,manifest['files'])
-        body=Path(next(p['path'] for p in manifest['sources'] if p['path'].endswith('recording.peas')))
+        body=source_path(next(p for p in manifest['sources'] if p['path'].endswith('recording.peas')))
         exporter.validate_stage(stage,body,manifest['clips'])
         visual=json.loads((stage/'visual/visual-manifest.json').read_text())
         self.assertEqual(visual['items']['sword']['component_class'],'PeSword')
@@ -130,8 +131,8 @@ class PairAssetTests(unittest.TestCase):
 
     def test_every_attachment_palette_matches_the_actual_rendered_body_joint(self):
         stage=self.stage();manifest=json.loads((stage/'starter-pair-manifest.json').read_text())
-        body=Path(next(p['path'] for p in manifest['sources'] if p['path'].endswith('recording.peas')))
-        rig_path=Path(next(p['path'] for p in manifest['sources'] if p['path'].endswith('-rig.json')))
+        body=source_path(next(p for p in manifest['sources'] if p['path'].endswith('recording.peas')))
+        rig_path=source_path(next(p for p in manifest['sources'] if p['path'].endswith('-rig.json')))
         rig=json.loads(rig_path.read_text());body_manifest=json.loads((body.parent/'recording-manifest.json').read_text())
         def palettes(data,joint):
             exporter.clip_headers(data)

@@ -1,4 +1,5 @@
 /* New native C frontend. Original content provenance: generated/content_manifest.json. */
+#include "pe_paths.h"
 #include "pe_game.h"
 #include "pe_legacy.h"
 #include "pe_reference.h"
@@ -116,7 +117,8 @@ int main(int argc,char **argv) {
     const char *save_path="planet_explorers.pesave",*screenshot=NULL,*terrain_path=NULL,*load_path=NULL,*smoke_panel=NULL,*reference_path=NULL,*training_path=NULL,*actor_path=NULL,*actor_scene_path=NULL;
     int origin[3]={0};bool origin_given=false,save_given=false;
     bool direct=false,main_menu=false,vegetation_examples=false;
-    const char *assets=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    char default_assets[4096];
+    const char *assets=NULL;
     for(int i=1;i<argc;i++) {
         if(!strcmp(argv[i],"--help")) {usage(argv[0]);return 0;}
         if(!strcmp(argv[i],"--sandbox")){direct=true;continue;}
@@ -183,6 +185,12 @@ int main(int argc,char **argv) {
             fprintf(stderr,"--reference-room cannot combine with terrain, load, save, or panels\n");return 2;
         }
         return reference_preview(reference_path,smoke_frames,screenshot);
+    }
+    if(!assets) {
+        if(!pe_paths_default_assets(default_assets,sizeof default_assets)) {
+            fprintf(stderr,"Cannot locate assets beside the executable.\n");return 1;
+        }
+        assets=default_assets;
     }
     PeGame *game=NULL;int result=0;char error[256]={0};
     if(!pe_settlement_configure(assets,error,sizeof error)){fprintf(stderr,"%s\n",error);return 1;}

@@ -4,6 +4,7 @@
 Fresh staging only: no installation, Unity launch or fabricated Sword/block pose.
 Requires UnityPy1.25.4. Uses ResourceManager, never legacy Item bundles.
 """
+from read_reference_adventure import source_label, source_path
 import argparse
 import copy
 import hashlib
@@ -138,7 +139,7 @@ def visual_assets(game,output,source):
     metadata.verify_installed(game,source['prefabs'])
     paths=sorted({assets.data/n for n in assets.files}|streams)
     manifest=dict(schema='pe-starter-pair-visuals-1',items=visuals,
-                  sources=[dict(path=str(p),sha256=sha(p)) for p in paths],
+                  sources=[dict(path=source_label(p),sha256=sha(p)) for p in paths],
                   source_metadata_sha256=hashlib.sha256((json.dumps(source,ensure_ascii=False,indent=2)+'\n').encode()).hexdigest(),
                   files={p.name:sha(p) for p in sorted(output.iterdir()) if p.is_file()},
                   limitations=['Diffuse textures and exact material slots only; original Unity shader/specular behavior not reproduced.',
@@ -286,9 +287,9 @@ def export(game,capture,running,rig_path,body,output,pose_set='normal'):
         validate_stage(stage,body,expected)
         if before!={p:sha(p) for p in paths}:raise ValueError('Source input changed during export')
         for original in visual['sources']:
-            if sha(Path(original['path']))!=original['sha256']:raise ValueError('Installed source changed during export')
+            if sha(source_path(original))!=original['sha256']:raise ValueError('Installed source changed during export')
         manifest=dict(schema='pe-starter-pair-attachments-1',groups=list(GROUPS),clips=list(expected),installed=False,
-                      source_metadata_sha256=sha(paths[4]),sources=[dict(path=str(p),sha256=digest) for p,digest in before.items()],
+                      source_metadata_sha256=sha(paths[4]),sources=[dict(path=source_label(p),sha256=digest) for p,digest in before.items()],
                       files=file_hashes(stage),pose_set=pose_set,normal_locomotion_adapter=pose_set=='normal',shield_block_pose_recovered=False,
                       limitations=['No replacement body/assets installed, no gameplay/equipment enabled.',
                                    'Masked shield layer and draw/stow transitions are not reconstructed.'])

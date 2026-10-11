@@ -1,6 +1,7 @@
 /* Headless integration of the actual staged female408 pose/qualified root group.
  * Ordinary core APIs only; this is a constructed collision fixture, not a live
  * gameplay/kill proof. Missing recovered assets are explicitly skipped. */
+#include "pe_test_paths.h"
 #include "pe_game.h"
 #include "pe_running_attack_motion.h"
 #include "pe_sandbox_melee.h"
@@ -8,9 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"running pipeline:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static bool near(PeVec3 a,PeVec3 b,float epsilon){return fabsf(a.x-b.x)<epsilon&&fabsf(a.y-b.y)<epsilon&&fabsf(a.z-b.z)<epsilon;}
@@ -92,8 +90,8 @@ static void scenario(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetup setup,c
     CHECK(pe_sandbox_melee_resolve(&melee,&frame,NULL,0,&update)&&!melee.tick_pending&&update.advance==PE_COMBAT_IDLE);
 }
 static void outgoing_contacts(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetup setup,const PeRootMotion *curve){
-    const char *actor_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac";
-    const char *boxes_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb";
+    const char *actor_path=pe_test_path("rebuild/build/reference-assets/hare.peac");
+    const char *boxes_path=pe_test_path("rebuild/build/reference-assets/hare.pehb");
     const char *paths[]={actor_path,boxes_path};
     for(unsigned i=0;i<2;i++){FILE *f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"running pipeline: SKIP recovered hare contact fixture missing: %s\n",paths[i]);return;}fclose(f);}
     char error[256];PeActor *hare=pe_actor_load(actor_path,error,sizeof error);
@@ -164,8 +162,8 @@ static void outgoing_contacts(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetu
  done:pe_hitboxes_free(boxes);pe_actor_free(hare);
 }
 int pe_test_running_attack_pipeline(void){
-    failures=0;const char *root=getenv("PE_RUNNING_STAGE");if(!root)root=PE_SOURCE_ROOT "/rebuild/build/running-player-20261006";
-    const char *motion=getenv("PE_RUNNING_MOTION");if(!motion)motion=PE_SOURCE_ROOT "/rebuild/build/running-motion-20261006/running-knife.perm";
+    failures=0;const char *root=getenv("PE_RUNNING_STAGE");if(!root)root=pe_test_path("rebuild/build/running-player-20261006");
+    const char *motion=getenv("PE_RUNNING_MOTION");if(!motion)motion=pe_test_path("rebuild/build/running-motion-20261006/running-knife.perm");
     const char *names[]={"player/player-part-0-material-0.peac","player-knife-drawn/knife-drawn-part-0-material-0.peac","player-knife-drawn/knife-drawn.pehb"};
     char paths[3][2048],error[256];
     for(unsigned i=0;i<3;i++){

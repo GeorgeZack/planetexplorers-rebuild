@@ -6,6 +6,7 @@ PEAC output is a recording of selected captured poses, not humanoid retargeting.
 One file per source part/material preserves the current single-material format.
 """
 from __future__ import annotations
+from read_reference_adventure import source_label
 import argparse
 import bisect
 import hashlib
@@ -492,8 +493,8 @@ def main():
         rig=decode(rig_path.read_text())
         if integer(rig['schema'],'rig schema')!=1 or not 1<=len(rig['parts'])<=64: fail('Unsupported source rig')
         report,samples=analyze(capture,rig,allow_incomplete=args.allow_incomplete,first_sample=args.first_sample,last_sample=args.last_sample,hypothesis=args.hypothesis,retain=export_dir is not None)
-        report['sources']=[{'path':str(p),'sha256':sha256(p)} for p in [capture,rig_path,Path(__file__).resolve()]]
-        if args.hypothesis: report['sources'].append({'path':str(args.hypothesis),'sha256':sha256(args.hypothesis)})
+        report['sources']=[{'path':source_label(p),'sha256':sha256(p)} for p in [capture,rig_path,Path(__file__).resolve()]]
+        if args.hypothesis: report['sources'].append({'path':source_label(args.hypothesis),'sha256':sha256(args.hypothesis)})
         if export_dir:
             export_dir.parent.mkdir(parents=True,exist_ok=True)
             with tempfile.TemporaryDirectory(prefix='.pose-recording-',dir=export_dir.parent) as temporary:

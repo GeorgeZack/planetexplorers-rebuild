@@ -10,6 +10,7 @@ name32/fpsf32/frame_countu32/durationf32/loopu32 followed by frame-major joint
 skin palettes (12 f32 each). Palettes ALREADY include inverse binds. Preserve
 Unity XYZ. Playback loops on source duration, not dense frame count / fps.
 """
+from read_reference_adventure import source_label
 import argparse
 import hashlib
 import importlib.metadata
@@ -194,7 +195,7 @@ def melee_provenance(objects):
     paths = [database, root/'Assets/Scripts/Assist/AnimationStateInfo/PEAnimatorAttackTrigger.cs',
              root/'Assets/Scripts/Assist/AnimationStateInfo/PEAnimatorAttackTriggerEX.cs',
              root/'Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs']
-    sources = [{'path': str(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()} for path in paths]
+    sources = [{'path': source_label(path), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()} for path in paths]
     return reports, {'sources': sources, 'controller_path_id': CONTROLLER_ID,
                      'missing_hurt_death_clips': True,
                      'death_evidence': 'BiologyViewCmpt.OnDeath calls ActivateRagdoll(null, false); no hurt/death clip or state is present in this hare controller.',

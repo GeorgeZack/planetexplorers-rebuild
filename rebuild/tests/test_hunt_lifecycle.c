@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "adventure_test_helpers.h"
 #include "pe_adventure_hunt.h"
 #include "pe_adventure_medicine.h"
@@ -9,9 +10,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 /* A persistence/transaction fixture, not a gameplay bot: player contact poses
  * are arranged to overlap recovered hare capsules. All hare HP/defence stay at
  * their captured values, and only real knife resolver deaths advance progress.
@@ -79,10 +77,10 @@ static bool checkpoint(PeGame *g,PeGame *loaded,const char *path,unsigned count)
     pe_game_destroy(g);pe_game_move(g,loaded);return true;
 }
 static void actual_lifecycle(void){
-    const char *root=PE_SOURCE_ROOT "/rebuild/build/reference-assets";
+    const char *root=pe_test_path("rebuild/build/reference-assets");
     const char *names[]={"adventure-route/terrain.pevx","hare.peac","hare.pehb","player/player-part-0-material-0.peac",
         "player-knife-drawn/knife-drawn-part-0-material-0.peac","player-knife-drawn/knife-drawn.pehb"};
-    char paths[6][2048],error[256],save[]=PE_SOURCE_ROOT "/rebuild/build/hunt-lifecycle-XXXXXX";
+    char paths[6][2048],error[256],save[4096];snprintf(save,sizeof save,"%s",pe_test_path("rebuild/build/hunt-lifecycle-XXXXXX"));
     for(unsigned i=0;i<6;i++){
         int n=snprintf(paths[i],sizeof paths[i],"%s/%s",root,names[i]);CHECK(n>0&&(size_t)n<sizeof paths[i]);
         FILE *f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"hunt lifecycle: SKIP recovered fixture missing: %s\n",paths[i]);return;}fclose(f);

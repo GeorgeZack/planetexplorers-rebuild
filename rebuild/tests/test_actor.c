@@ -1,13 +1,11 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_actor.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do { if(!(c)){fprintf(stderr,"actor:%d: %s\n",__LINE__,#c);failures++;} } while(0)
 static void u32(unsigned char *p,uint32_t x) { for(int i=0;i<4;i++)p[i]=(unsigned char)(x>>(8*i)); }
@@ -162,7 +160,7 @@ int pe_test_actor(void) {
     malformed(path,b,n,340,0x3f000000); /* duration .5 == penultimate */
     malformed(path,b,n,340,0x3e800000); /* duration .25 < penultimate */
     unlink(path);
-    const char *actual=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac";
+    const char *actual=pe_test_path("rebuild/build/reference-assets/hare.peac");
     FILE *f=fopen(actual,"rb");if(f) {
         fclose(f);a=pe_actor_load(actual,error,sizeof(error));CHECK(a);
         if(a) {

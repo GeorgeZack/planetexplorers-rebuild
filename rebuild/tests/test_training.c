@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_training.h"
 #include "pe_training_terrain.h"
 #include "pe_training_text.h"
@@ -7,9 +8,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"FAIL training %s:%d: %s\n",__FILE__,__LINE__,#x);failures++;}}while(0)
 static void quad(FILE *f,int *index,PeVec3 a,PeVec3 b,PeVec3 c,PeVec3 d){
@@ -107,7 +105,7 @@ static void synthetic_tests(void){
     pe_scene_free(scene);
 }
 static void original_room_test(void){
-    const char *path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/room-collision.obj";
+    const char *path=pe_test_path("rebuild/build/reference-assets/room-collision.obj");
     FILE *f=fopen(path,"rb");if(!f){puts("Training original-room fixture: SKIP (export optional reference assets)");return;}fclose(f);
     char error[160];PeSceneCollision *scene=pe_scene_load_obj(path,error,sizeof error);CHECK(scene!=NULL);if(!scene)return;
     PeTraining t;CHECK(pe_training_init(&t,scene));

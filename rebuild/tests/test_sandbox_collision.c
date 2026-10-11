@@ -167,6 +167,11 @@ static int perception_snapshot(PeSandboxCollision *c,PeWorld *w){
     CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,trees,2,error,sizeof(error)));
     PeVec3 origin={17,floor+1.5f,20},direction={3,0,0};
     CHECK(!pe_sandbox_collision_ray_geometry(c,origin,direction,20).hit);
+    CHECK(!pe_sandbox_collision_label_visible(c,origin,(PeVec3){27,origin.y,20}));
+    CHECK(pe_sandbox_collision_label_visible(c,origin,(PeVec3){18.5f,origin.y,20}));
+    CHECK(pe_sandbox_collision_label_visible(c,origin,origin));
+    CHECK(!pe_sandbox_collision_label_visible(NULL,origin,origin));
+    CHECK(!pe_sandbox_collision_label_visible(c,origin,(PeVec3){NAN,0,0}));
     PeHarePerception perception;CHECK(pe_hare_perception_init(&perception,100,1));
     PeHarePerceptionQueries queries={c,perception_block};
     PeHarePerceptionTarget target={true,true,true,false,{27,floor,20},{27,floor+1.5f,20},.3f};
@@ -185,6 +190,7 @@ static int perception_snapshot(PeSandboxCollision *c,PeWorld *w){
     PeSandboxBox box={{18,floor,19},{18.1f,floor+4,21}};
     CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,&box,1,trees,2,error,sizeof(error)));
     hit=pe_sandbox_collision_ray_perception(c,origin,direction,20);CHECK(hit.hit&&hit.distance==1&&hit.triangle!=UINT32_MAX);
+    CHECK(!pe_sandbox_collision_label_visible(c,origin,(PeVec3){18.5f,origin.y,20}));
     CHECK(pe_sandbox_collision_ray_geometry(c,origin,direction,20).hit);
     CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,trees,2,error,sizeof(error)));
     trees[0].center.x=30;CHECK(pe_sandbox_collision_ray_perception(c,origin,direction,20).distance==2); /* Borrowed inputs copied. */
@@ -194,6 +200,7 @@ static int perception_snapshot(PeSandboxCollision *c,PeWorld *w){
     CHECK(hit.hit&&fabsf(hit.distance-5)<.00001f&&hit.normal.y>.99f);
     CHECK(pe_sandbox_collision_update_with_trees(c,w,NULL,0,NULL,0,NULL,0,error,sizeof(error)));
     CHECK(!pe_sandbox_collision_ray_perception(c,origin,direction,20).hit);
+    CHECK(pe_sandbox_collision_label_visible(c,origin,(PeVec3){27,origin.y,20}));
     perception.vision_updates=39;perception.hearing_updates=31;
     CHECK(pe_hare_perception_vision(&perception,(PeHareVisionConfig){20,60},sensor,target,&queries));
     CHECK(pe_hare_perception_hearing(&perception,(PeHareHearingConfig){15,false},origin,target,&queries));

@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_sandbox_melee.h"
 #include "pe_running_attack_motion.h"
 #include <math.h>
@@ -6,9 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"sandbox melee:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static void u32(unsigned char*p,uint32_t v){for(int i=0;i<4;i++)p[i]=(unsigned char)(v>>(8*i));}
@@ -47,10 +45,10 @@ static unsigned run(PeSandboxMelee*h,PeSandboxMeleeFrame f,PeKnifeContactTarget*
     CHECK(!h->action.active&&h->instance_id==0);return hits;
 }
 static void actual_assets(void){
-    const char*paths[]={PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/all/player-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/drawn-all/knife-drawn-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/animator-bake/player-female/drawn-all/knife-drawn.pehb",
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb"};
+    const char*paths[]={pe_test_path("rebuild/build/animator-bake/player-female/all/player-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/animator-bake/player-female/drawn-all/knife-drawn-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/animator-bake/player-female/drawn-all/knife-drawn.pehb"),
+        pe_test_path("rebuild/build/reference-assets/hare.peac"),pe_test_path("rebuild/build/reference-assets/hare.pehb")};
     for(unsigned i=0;i<5;i++){FILE*f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"sandbox melee: optional authored actor fixture absent, not tested\n");return;}fclose(f);}
     char error[160];PeActor*body=pe_actor_load(paths[0],error,sizeof error),*knife=pe_actor_load(paths[1],error,sizeof error),*hare=pe_actor_load(paths[3],error,sizeof error);
     PeHitboxes*w=pe_hitboxes_load(paths[2],knife,error,sizeof error),*d=pe_hitboxes_load(paths[4],hare,error,sizeof error);
@@ -148,8 +146,8 @@ static void running_tests(const char *path){
  done:pe_hitboxes_free(w);pe_hitboxes_free(d);pe_actor_free(a);pe_actor_free(old);
 }
 static void actual_running_playback(PeSandboxMeleeSetup setup){
-    const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/running-motion-20261006/running-knife.perm",
-        PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb"};
+    const char *paths[]={pe_test_path("rebuild/build/running-motion-20261006/running-knife.perm"),
+        pe_test_path("rebuild/build/reference-assets/hare.peac"),pe_test_path("rebuild/build/reference-assets/hare.pehb")};
     for(unsigned i=0;i<3;i++){FILE *f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"sandbox melee playback: SKIP qualified408 root/hare fixture %s\n",paths[i]);return;}fclose(f);}
     char error[200];PeRootMotion *curve=pe_root_motion_load(paths[0],error,sizeof error);
     PeActor *hare=pe_actor_load(paths[1],error,sizeof error);PeHitboxes *boxes=hare?pe_hitboxes_load(paths[2],hare,error,sizeof error):NULL;
@@ -262,9 +260,9 @@ static void actual_running_playback(PeSandboxMeleeSetup setup){
  done:pe_hitboxes_free(boxes);pe_actor_free(hare);pe_root_motion_free(curve);
 }
 static void actual_running_assets(void){
-    const char *paths[]={PE_SOURCE_ROOT "/rebuild/build/running-player-20261006/player/player-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/running-player-20261006/player-knife-drawn/knife-drawn-part-0-material-0.peac",
-        PE_SOURCE_ROOT "/rebuild/build/running-player-20261006/player-knife-drawn/knife-drawn.pehb"};
+    const char *paths[]={pe_test_path("rebuild/build/running-player-20261006/player/player-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/running-player-20261006/player-knife-drawn/knife-drawn-part-0-material-0.peac"),
+        pe_test_path("rebuild/build/running-player-20261006/player-knife-drawn/knife-drawn.pehb")};
     for(unsigned i=0;i<3;i++){FILE *f=fopen(paths[i],"rb");if(!f){fprintf(stderr,"sandbox melee: optional staged running actor fixture absent, not tested\n");return;}fclose(f);}
     char error[160];PeActor *body=pe_actor_load(paths[0],error,sizeof error),*knife=pe_actor_load(paths[1],error,sizeof error);
     PeHitboxes *boxes=knife?pe_hitboxes_load(paths[2],knife,error,sizeof error):NULL;CHECK(body&&knife&&boxes);

@@ -1,6 +1,7 @@
 /* Actual menu rendering with scripted keys, only on an owned private display.
  * This is a staged UI check, not physical gameplay acceptance. */
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include <raylib.h>
 #include <rlgl.h>
 #include <stdio.h>
@@ -47,7 +48,7 @@ int main(int argc,char **argv){
         width=sizes[i][0];height=sizes[i][1];frame_index=0;
         PePreferences preferences={0};
         if(!pe_preferences_save(&preferences,path,error,sizeof error))return 1;
-        if(pe_app_menu(PE_SOURCE_ROOT "/rebuild/build/reference-assets",false,false,NULL,0,NULL)!=PE_APP_QUIT)return 1;
+        if(pe_app_menu(pe_test_path("rebuild/build/reference-assets"),false,false,NULL,0,NULL)!=PE_APP_QUIT)return 1;
         if(frame_index!=7||!pe_preferences_load(&preferences,path,error,sizeof error)||!preferences.camera_facing_attacks)return 1;
     }
     /* Staged Adventure capability, using the same shared settings renderer.
@@ -58,7 +59,7 @@ int main(int argc,char **argv){
         InitWindow(width,height,"Shared Settings | Debug render check");
         if(!IsWindowReady())return 1;
         SetExitKey(KEY_NULL);SetTargetFPS(60);
-        PeUiAssets *assets=pe_ui_assets_load(PE_SOURCE_ROOT "/rebuild/build/reference-assets/ui",error,sizeof error);
+        PeUiAssets *assets=pe_ui_assets_load(pe_test_path("rebuild/build/reference-assets/ui"),error,sizeof error);
         if(!assets){CloseWindow();return 1;}
         PeUiSettings panel;pe_ui_settings_init(&panel);panel.debug_available=true;pe_ui_settings_open(&panel);
         for(unsigned enabled=0;enabled<2;enabled++){

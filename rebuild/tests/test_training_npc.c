@@ -1,12 +1,10 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_training_npc.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(x) do{if(!(x)){fprintf(stderr,"FAIL training NPC %d: %s\n",__LINE__,#x);failures++;}}while(0)
 int pe_test_training_npc(void){
@@ -35,7 +33,7 @@ int pe_test_training_npc(void){
         CHECK(!pe_training_npc_ground(&embedded,floor,&root)&&!memcmp(&before,&root,sizeof root));
         CHECK(!pe_training_npc_ground(NULL,floor,&root));pe_scene_free(floor);
     }
-    const char*path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/room-collision.obj";
+    const char*path=pe_test_path("rebuild/build/reference-assets/room-collision.obj");
     if(access(path,R_OK)==0){
         PeSceneCollision*room=pe_scene_load_obj(path,error,sizeof error);CHECK(room!=NULL);
         if(room){

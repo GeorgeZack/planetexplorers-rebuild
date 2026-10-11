@@ -1,12 +1,10 @@
 /* Actual host routing with owned source/captured curves, no raylib execution.
  * Compile with function/data sections and linker garbage collection. */
+#include "pe_test_paths.h"
 #include "../src/pe_sandbox_view.c"
 
 static unsigned failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"sandbox sword motion host:%d %s\n",__LINE__,#c);failures++;}}while(0)
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 static bool readable(const char *path){FILE *f=path?fopen(path,"rb"):NULL;if(!f)return false;fclose(f);return true;}
 static PeCombatInterval interval(PeCombatVariant variant,unsigned stage,double from,double to){
     return (PeCombatInterval){.valid=true,.variant=variant,.gender=PE_COMBAT_FEMALE,
@@ -108,7 +106,7 @@ static const char *pose_paths[]={
 static bool pose_files_present(void){
     char path[2048];
     for(size_t i=0;i<sizeof pose_paths/sizeof *pose_paths;i++){
-        snprintf(path,sizeof path,PE_SOURCE_ROOT "/rebuild/build/reference-assets/%s",pose_paths[i]);
+        pe_test_format(path,sizeof path,"%s/rebuild/build/reference-assets/%s",pe_test_root(),pose_paths[i]);
         if(!readable(path)){fprintf(stderr,"sandbox sword motion host: SKIP77 missing %s\n",path);return false;}
     }
     return true;
@@ -117,7 +115,7 @@ static void pose_clocks(const PeSwordRootMotion *ordinary){
     static const char *names[]={"Attack6","Attack7","Attack8","Attack9"};
     PeActorClip reference[4]={0};char path[2048],error[256];
     for(size_t i=0;i<sizeof pose_paths/sizeof *pose_paths;i++){
-        snprintf(path,sizeof path,PE_SOURCE_ROOT "/rebuild/build/reference-assets/%s",pose_paths[i]);
+        pe_test_format(path,sizeof path,"%s/rebuild/build/reference-assets/%s",pe_test_root(),pose_paths[i]);
         PeActor *actor=pe_actor_load(path,error,sizeof error);CHECK(actor);
         if(!actor){fprintf(stderr,"%s: %s\n",path,error);continue;}
         for(unsigned stage=0;stage<4;stage++){
@@ -136,8 +134,8 @@ static void pose_clocks(const PeSwordRootMotion *ordinary){
 }
 int main(void){
     const char *ordinary_path=getenv("PE_SWORD_ROOT_MOTION");
-    if(!ordinary_path)ordinary_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-sword-motion/sword-root.pesr";
-    const char *running_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-running-motion/running-knife.perm";
+    if(!ordinary_path)ordinary_path=pe_test_path("rebuild/build/reference-assets/player-sword-motion/sword-root.pesr");
+    const char *running_path=pe_test_path("rebuild/build/reference-assets/player-running-motion/running-knife.perm");
     if(!ordinary_path||!readable(ordinary_path)||!readable(running_path)){
         fprintf(stderr,"sandbox sword motion host: SKIP77 requires installed/PE_SWORD_ROOT_MOTION PESR1 and installed captured408 PERM1\n");return 77;
     }

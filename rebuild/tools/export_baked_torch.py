@@ -5,6 +5,7 @@ Uses a closed isolated locomotion bake; does not launch Unity or infer sword
 attacks, draw transitions, procedural IK or the Sword movement controller.
 Shared mesh/material recovery is owned by export_torch_assets.py.
 """
+from read_reference_adventure import source_label
 import argparse
 import copy
 import hashlib
@@ -125,7 +126,7 @@ def export(bake_path,player_path,assets,body,output,attachment,style='normal'):
             old=part['file'];part['file']=old.replace('player-part-',f'torch-{attachment}-part-');(combined/old).rename(combined/part['file'])
         (combined/'recording.peas').write_text('PEAS1\n'+''.join(p['file']+' '+p['texture']+'\n' for p in result['parts']),encoding='ascii')
         result.update(item_id=10,attachment=mount_name,attachment_mode=attachment,source_mount_path=mount_path,source_mount=mount,
-            sources=[dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in paths],body_actors=body_sources,
+            sources=[dict(path=source_label(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in paths],body_actors=body_sources,
             coordinate_space=f'baked Animator-model-local {mount_name} matrix * unrotated prefab-local Torch OBJ; rigid identity bind',
             limitations=['Exact sampled Normal locomotion mounts; Sword movement style/controller layering remains unported.',
                 'Draw/stow selects attachments immediately; SwordPutOn/SwordPutOff transitions and combat are not reconstructed.',

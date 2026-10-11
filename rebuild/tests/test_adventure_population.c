@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_adventure_npc.h"
 #include "pe_settlement.h"
 #include "../generated/pe_adventure_population.h"
@@ -8,9 +9,6 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"population:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static void sex_queries(void){
@@ -27,12 +25,12 @@ static void sex_queries(void){
 }
 static void survey(const char *directory,const char *collision_name){
     char terrain[4096],geometry[4096],error[256]={0};
-    snprintf(terrain,sizeof terrain,PE_SOURCE_ROOT "/rebuild/build/reference-assets/%s/terrain.pevx",directory);
-    snprintf(geometry,sizeof geometry,PE_SOURCE_ROOT "/rebuild/build/reference-assets/%s/%s",directory,collision_name);
+    pe_test_format(terrain,sizeof terrain,"%s/rebuild/build/reference-assets/%s/terrain.pevx",pe_test_root(),directory);
+    pe_test_format(geometry,sizeof geometry,"%s/rebuild/build/reference-assets/%s/%s",pe_test_root(),directory,collision_name);
     if(access(terrain,R_OK)||access(geometry,R_OK)){fprintf(stderr,"SKIP population %s placement: recovered terrain/collision unavailable\n",directory);return;}
     PeWorld *world=calloc(1,sizeof *world);PeSandboxCollision *cache=pe_sandbox_collision_create();
     if(!world||!cache){CHECK(false);free(world);pe_sandbox_collision_free(cache);return;}
-    CHECK(pe_settlement_configure(PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    CHECK(pe_settlement_configure(pe_test_path("rebuild/build/reference-assets"),error,sizeof error));
     if(!pe_settlement_load_world(terrain,world,error,sizeof error)){fprintf(stderr,"population load: %s\n",error);CHECK(false);goto done;}
     const PeSceneCollision *scene=pe_settlement_collision_for_world(world,error,sizeof error);
     if(!scene||!pe_sandbox_collision_update_with_static(cache,world,NULL,0,NULL,0,NULL,0,scene,error,sizeof error)){fprintf(stderr,"population collision: %s\n",error);CHECK(false);goto done;}

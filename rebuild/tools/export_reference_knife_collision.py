@@ -3,6 +3,7 @@
 No graphics, input, process injection, damage or inferred attack activation.
 Requires UnityPy1.25.4 for source/installed prefab reads; geometry tests stdlib.
 """
+from read_reference_adventure import source_label
 import argparse
 import hashlib
 import json
@@ -147,7 +148,7 @@ def capture_samples(path,capsule):
                                knife_model_matrix=multiply(inverse_affine(world[root['id']]),world[parent['id']]),
                                **posed))
     if not ended or not count:raise ValueError('Recording requires completed nonempty capture')
-    return dict(path=str(path),sha256=digest(path),gender=gender,frame_count=count,attachment_counts=counts,
+    return dict(path=source_label(path),sha256=digest(path),gender=gender,frame_count=count,attachment_counts=counts,
                 realtime_duration=frames[-1]['realtime']-frames[0]['realtime'],
                 attack_activation_observed=False,collision_authorized=False,frames=frames)
 

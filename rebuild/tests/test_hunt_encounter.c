@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_hunt_encounter.h"
 #include "pe_settlement.h"
 #include "../generated/pe_adventure_hunt_encounter_source.h"
@@ -9,9 +10,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"hunt encounter:%d: %s\n",__LINE__,#c);failures++;}}while(0)
 static void u32(unsigned char*p,uint32_t v){for(int i=0;i<4;i++)p[i]=(unsigned char)(v>>(i*8));}
@@ -119,9 +117,9 @@ static void check_pending_melee(const PeHuntEncounter *initial,const PeActor*act
     }
 }
 static void actual_route_child(void){
-    const char *world_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/adventure-route/terrain.pevx";
-    const char *actor_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac";
-    const char *defence_path=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb";
+    const char *world_path=pe_test_path("rebuild/build/reference-assets/adventure-route/terrain.pevx");
+    const char *actor_path=pe_test_path("rebuild/build/reference-assets/hare.peac");
+    const char *defence_path=pe_test_path("rebuild/build/reference-assets/hare.pehb");
     const char *files[]={world_path,actor_path,defence_path};
     for(unsigned i=0;i<3;i++){FILE*f=fopen(files[i],"rb");if(!f){fprintf(stderr,"hunt encounter: optional actual route/actor unavailable, not tested\n");return;}fclose(f);}
     PeWorld *world=calloc(1,sizeof *world);PeSandboxCollision *collision=pe_sandbox_collision_create();char error[256];

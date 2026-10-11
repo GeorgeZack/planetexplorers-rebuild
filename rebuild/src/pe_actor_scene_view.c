@@ -1,4 +1,5 @@
 #include "pe_actor_scene_view.h"
+#include "pe_material_view.h"
 #include <rlgl.h>
 #include <math.h>
 #include <stdio.h>
@@ -50,15 +51,7 @@ bool pe_actor_scene_view_upload(PeActorSceneView *v,char *error,size_t cap){
     for(size_t i=0;i<v->count;i++)qualified|=pe_actor_scene_part(v->manifest,i)->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY;
     int cutoff=-1,alpha=-1;
     if(qualified){
-        v->material_shader=LoadShaderFromMemory(NULL,
-            "#version 330\n"
-            "in vec2 fragTexCoord; in vec4 fragColor; uniform sampler2D texture0; uniform vec4 colDiffuse;\n"
-            "uniform float cutoff; uniform float alphaScale; out vec4 finalColor;\n"
-            "void main(){vec4 texel=texture(texture0,fragTexCoord);"
-            "if(texel.a*alphaScale<cutoff)discard;"
-            "finalColor=vec4(texel.rgb*colDiffuse.rgb*fragColor.rgb,colDiffuse.a*fragColor.a);}\n");
-        cutoff=GetShaderLocation(v->material_shader,"cutoff");alpha=GetShaderLocation(v->material_shader,"alphaScale");
-        if(!v->material_shader.id||v->material_shader.id==rlGetShaderIdDefault()||cutoff<0||alpha<0){
+        if(!pe_material_shader_load(&v->material_shader,&cutoff,&alpha)){
             set_error(error,cap,"source actor alpha shader unavailable");pe_actor_scene_view_unload(v);return false;
         }
     }

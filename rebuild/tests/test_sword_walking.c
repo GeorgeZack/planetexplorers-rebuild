@@ -1,5 +1,6 @@
 /* Recovered female Attack6..9 source curves and actual body/blade/hare assets.
  * Constructed CPU fixtures; this is not an ordinary gameplay or kill proof. */
+#include "pe_test_paths.h"
 #include "pe_game.h"
 #include "pe_sandbox_melee.h"
 #include "pe_sword_root_motion.h"
@@ -8,9 +9,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 static int failures;
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"sword walking:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static bool near(PeVec3 a,PeVec3 b,float e){return fabsf(a.x-b.x)<e&&fabsf(a.y-b.y)<e&&fabsf(a.z-b.z)<e;}
@@ -110,7 +108,7 @@ static void scenario(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetup setup,c
     CHECK(pe_sandbox_melee_interval(&melee,&idle)&&!idle.valid);
 }
 static void contact(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetup setup,const PeSwordRootMotion *curve){
-    const char *ap=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.peac",*hp=PE_SOURCE_ROOT "/rebuild/build/reference-assets/hare.pehb";
+    const char *ap=pe_test_path("rebuild/build/reference-assets/hare.peac"),*hp=pe_test_path("rebuild/build/reference-assets/hare.pehb");
     FILE *file=fopen(ap,"rb");if(!file){fprintf(stderr,"sword walking: SKIP recovered hare fixture %s\n",ap);return;}fclose(file);
     char error[160];PeActor *hare=pe_actor_load(ap,error,sizeof error);PeHitboxes *boxes=hare?pe_hitboxes_load(hp,hare,error,sizeof error):NULL;
     CHECK(hare&&boxes);if(!hare||!boxes)goto done;
@@ -150,8 +148,8 @@ done:pe_hitboxes_free(boxes);pe_actor_free(hare);
 }
 int pe_test_sword_walking(void){
     failures=0;const char *motion=getenv("PE_SWORD_ROOT_MOTION");bool explicit_motion=motion&&*motion;
-    if(!explicit_motion)motion=PE_SOURCE_ROOT "/rebuild/build/reference-assets/player-sword-motion/sword-root.pesr";
-    const char *root=getenv("PE_RUNNING_STAGE");if(!root||!*root)root=PE_SOURCE_ROOT "/rebuild/build/running-player-20261006";
+    if(!explicit_motion)motion=pe_test_path("rebuild/build/reference-assets/player-sword-motion/sword-root.pesr");
+    const char *root=getenv("PE_RUNNING_STAGE");if(!root||!*root)root=pe_test_path("rebuild/build/running-player-20261006");
     const char *names[]={"player/player-part-0-material-0.peac","player-knife-drawn/knife-drawn-part-0-material-0.peac","player-knife-drawn/knife-drawn.pehb"};
     char paths[3][2048],error[256];FILE *file=fopen(motion,"rb");
     if(!file){fprintf(stderr,"sword walking: %s source curve absent: %s\n",explicit_motion?"FAIL":"SKIP",motion);return explicit_motion?1:0;}fclose(file);

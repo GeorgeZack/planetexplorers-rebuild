@@ -4,6 +4,7 @@
 Preserves all existing30 defence clip payloads and appends10 qualified Sword
 leaves with matching clocks. No installation or gameplay activation.
 """
+from read_reference_adventure import source_label, source_path
 import argparse
 import copy
 import json
@@ -59,7 +60,7 @@ def append_scene(old_dir,new_dir,output,old_names=BASE,new_names=SWORD):
         if name!=new['hitbox']['file'] or (old_dir/name).read_bytes()!=(new_dir/name).read_bytes():raise ValueError('Exact source capsule binding differs')
     result=copy.deepcopy(old);result['clips']=old['clips']+new['clips']
     result['sources']=old.get('sources',[])+new.get('sources',[])
-    result['append_provenance']=[dict(path=str(p),sha256=pair.sha(p)) for p in (old_dir/'recording-manifest.json',new_dir/'recording-manifest.json')]
+    result['append_provenance']=[dict(path=source_label(p),sha256=pair.sha(p)) for p in (old_dir/'recording-manifest.json',new_dir/'recording-manifest.json')]
     result['pose_scope']=f'Preserved{len(old_names)} poses plus{len(new_names)} qualified Sword leaves'
     result['limitations']=[f'All{len(old_names)} original clip payloads preserved; exact{len(new_names)} source Sword leaves appended.',
                            'Controller transitions/blending and IK remain separate from sampled leaves.',
@@ -111,7 +112,7 @@ def append_defence(old_dir,new_dir,output,old_names=DEFENCE,new_names=SWORD):
     result['sources']=old['sources']+new['sources']
     result['maximum_point_error_m']=max(old['maximum_point_error_m'],new['maximum_point_error_m'])
     result['extension']=f'Retained{len(old_names)} exact defence payloads plus{len(new_names)} qualified Sword leaves'
-    result['append_provenance']=[dict(path=str(p),sha256=pair.sha(p)) for p in (old_dir/'player-defence.json',new_dir/'player-defence.json')]
+    result['append_provenance']=[dict(path=source_label(p),sha256=pair.sha(p)) for p in (old_dir/'player-defence.json',new_dir/'player-defence.json')]
     result['files']={p.name:dict(bytes=p.stat().st_size,sha256=pair.sha(p)) for p in (output/'player-defence.peac',output/'player-defence.pehb')}
     (output/'player-defence.json').write_text(json.dumps(result,indent=2)+'\n')
     return result
@@ -124,7 +125,7 @@ def export(assets,normal_pair,sword_pair,sword_body,capture,rig,output):
     if names(scene_clips(assets/'player/recording.peas'))!=BASE or names(scene_clips(sword_body/'recording.peas'))!=SWORD:
         raise ValueError('Exact21 and10 source bodies required')
     # Require this same capture to have supplied the checked Sword attachment stage.
-    if not any(Path(s['path']).resolve()==capture.resolve() and s['sha256']==pair.sha(capture) for s in sword['sources']):
+    if not any(source_path(s).resolve()==capture.resolve() and s['sha256']==pair.sha(capture) for s in sword['sources']):
         raise ValueError('Sword stage did not use supplied capture')
     previous=pair.file_hashes(assets/'player-defence')
     sources=[normal_pair/'starter-pair-manifest.json',sword_pair/'starter-pair-manifest.json',
@@ -144,7 +145,7 @@ def export(assets,normal_pair,sword_pair,sword_body,capture,rig,output):
         if source_hashes!={p:pair.sha(p) for p in sources}:raise ValueError('Input changed while composing')
         manifest=dict(schema='pe-starter-pair-unified-1',groups=list(GROUPS),body_clips=list(BODY),
                       defence_clips=list(DEFENCE+SWORD),counts=stats,defence_sword_maximum_point_error_m=result['maximum_point_error_m'],
-                      files=pair.file_hashes(stage),sources=[dict(path=str(p),sha256=v) for p,v in source_hashes.items()],
+                      files=pair.file_hashes(stage),sources=[dict(path=source_label(p),sha256=v) for p,v in source_hashes.items()],
                       existing_defence_files=previous,installed=False,shield_block_pose_recovered=False,
                       retained_body_prefix_clips=21,retained_defence_prefix_clips=30,source_pair_manifests=dict(normal=normal['schema'],sword=sword['schema']),
                       limitations=['Requires native PEAC clip limit64; file encoding and all other resource bounds unchanged.',
@@ -167,7 +168,7 @@ def append_backward(base,pair_stage,body,capture,rig,output):
     if names(scene_clips(body/'recording.peas'))!=BACKWARD:raise ValueError('Exact backward body required')
     sources=[base/'unified-manifest.json',pair_stage/'starter-pair-manifest.json',body/'recording-manifest.json',capture,capture.with_suffix('.launch.json'),rig]
     hashes={p:pair.sha(p) for p in sources}
-    if not any(Path(s['path']).resolve()==capture.resolve() and s['sha256']==hashes[capture] for s in fresh['sources']):
+    if not any(source_path(s).resolve()==capture.resolve() and s['sha256']==hashes[capture] for s in fresh['sources']):
         raise ValueError('Backward stage did not use supplied capture')
     output.parent.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.starter-backward-',dir=output.parent) as directory:
@@ -184,8 +185,8 @@ def append_backward(base,pair_stage,body,capture,rig,output):
         manifest=dict(schema='pe-starter-pair-unified-backward-1',groups=list(GROUPS),body_clips=list(BODY+BACKWARD),
             defence_clips=list(DEFENCE+SWORD+BACKWARD),counts=stats,
             defence_backward_maximum_point_error_m=recovered['maximum_point_error_m'],
-            sources=[dict(path=str(p),sha256=h) for p,h in hashes.items()],files=pair.file_hashes(stage),
-            base_stage=dict(path=str(base),manifest_sha256=hashes[base/'unified-manifest.json'],files=before),
+            sources=[dict(path=source_label(p),sha256=h) for p,h in hashes.items()],files=pair.file_hashes(stage),
+            base_stage=dict(path=source_label(base),manifest_sha256=hashes[base/'unified-manifest.json'],files=before),
             retained_body_prefix_clips=31,retained_defence_prefix_clips=40,
             installed=False,shield_block_pose_recovered=False,
             limitations=['Exact backward SwordWB441/SwordRB708 leaves appended; prior31/40 payloads and capsules preserved.',

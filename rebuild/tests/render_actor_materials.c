@@ -1,4 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
+#include "pe_test_paths.h"
 #include "pe_actor_scene_view.h"
 #include <assert.h>
 #include <math.h>
@@ -6,9 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 static void u32(unsigned char *p,uint32_t n){for(unsigned i=0;i<4;i++)p[i]=(unsigned char)(n>>(8*i));}
 static void f32(unsigned char *p,float n){uint32_t b;memcpy(&b,&n,4);u32(p,b);}
 static void matrix(unsigned char *p){for(unsigned i=0;i<12;i++)f32(p+4*i,(i==0||i==5||i==10)?1:0);}
@@ -51,7 +49,7 @@ static void synthetic(const char *root){
     puts("Actor material GPU checks: legacy depth holes reproduced; opaque gloss, source cutoffs and cull-state restoration pass");
 }
 static void portrait(const char *root,const char *name,const char *relative){
-    PeActorSceneView view={0};char path[4096],error[256];snprintf(path,sizeof path,"%s/rebuild/build/reference-assets/%s/recording.peas",PE_SOURCE_ROOT,relative);
+    PeActorSceneView view={0};char path[4096],error[256];pe_test_format(path,sizeof path,"%s/rebuild/build/reference-assets/%s/recording.peas",pe_test_root(),relative);
     if(!pe_actor_scene_view_load(&view,path,error,sizeof error)){fprintf(stderr,"%s: %s\n",path,error);abort();}
     unsigned qualified=0;for(size_t i=0;i<view.count;i++)qualified+=pe_actor_scene_part(view.manifest,i)->material.alpha_mode!=PE_ACTOR_ALPHA_LEGACY;assert(qualified);
     Vector3 lo,hi;assert(pe_actor_scene_view_bounds(&view,&lo,&hi));

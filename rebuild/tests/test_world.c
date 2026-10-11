@@ -1,12 +1,10 @@
+#include "pe_test_paths.h"
 #include "pe_world.h"
 #include "pe_legacy.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT ".."
-#endif
 
 #define CHECK(expr) do { if(!(expr)){fprintf(stderr,"world: %s:%d: %s\n",__FILE__,__LINE__,#expr);failures++;} } while(0)
 static void plane(PeWorld *w) {
@@ -110,7 +108,7 @@ int pe_test_world(void) {
     /* Authored tutorial has non-axis-aligned source triangles which the old
      * trilinear height query missed completely at x13.3,z2.4. */
     char error[256];
-    PeLegacyFile *tutorial=pe_legacy_open(PE_SOURCE_ROOT "/TutorialMode/Mainland/map_x0_y0.voxelform",0,error,sizeof error);
+    PeLegacyFile *tutorial=pe_legacy_open(pe_test_path("TutorialMode/Mainland/map_x0_y0.voxelform"),0,error,sizeof error);
     CHECK(tutorial!=NULL);
     if(tutorial) {
         CHECK(pe_legacy_crop(tutorial,0,0,0,w,error,sizeof error));

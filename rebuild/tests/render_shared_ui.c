@@ -1,6 +1,7 @@
 /* Paired actual UI renderers, staged presentation only. No gameplay host,
  * controller, input routing, saves or source-game session is instantiated.
  * Run only through the explicitly owned high-display supervisor. */
+#include "pe_test_paths.h"
 #include "pe_training_ui.h"
 #include "pe_sandbox_ui.h"
 #include "pe_ui_hud.h"
@@ -10,9 +11,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifndef PE_SOURCE_ROOT
-#define PE_SOURCE_ROOT "."
-#endif
 #define REQUIRE(x) do{if(!(x)){fprintf(stderr,"shared UI render:%d: %s\n",__LINE__,#x);exit(1);}}while(0)
 static void private_display_required(void){
     const char *display=getenv("DISPLAY"),*owned=getenv("PE_UI_PRIVATE_DISPLAY");
@@ -105,8 +103,8 @@ int main(int argc,char **argv){
     game->equipped_instance_id=game->inventory.slots[knife].instance_id;
     REQUIRE(pe_game_equipped_tool(game)&&pe_game_equipped_tool(game)->item_id==33);
     PeTrainingUi tutorial={0};PeSandboxUI sandbox={0};char error[256];
-    REQUIRE(pe_training_ui_load(&tutorial,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
-    REQUIRE(pe_sandbox_ui_load(&sandbox,PE_SOURCE_ROOT "/rebuild/build/reference-assets",error,sizeof error));
+    REQUIRE(pe_training_ui_load(&tutorial,pe_test_path("rebuild/build/reference-assets"),error,sizeof error));
+    REQUIRE(pe_sandbox_ui_load(&sandbox,pe_test_path("rebuild/build/reference-assets"),error,sizeof error));
     REQUIRE(tutorial.assets&&sandbox.assets);tutorial.seconds=sandbox.seconds=0;
     /* Twenty retained, resolved draw-fixture records, independently owned by
        the tutorial UI and sandbox game; no active dialogue/capture hook. */

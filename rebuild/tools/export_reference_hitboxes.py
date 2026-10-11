@@ -6,6 +6,7 @@ PEHB1: <4sIIIQII header (magic,version,count,joints,skeletonhash,reserved0,0),
 then104B records: name32,kind/group/joint/form/material u32,damageScale f32,
 12f32 bind points (endpointA,B,radiusOrigin,radiusXPoint). jointUINT_MAX disables.
 """
+from read_reference_adventure import source_label
 import argparse
 from pe_actor_limits import PEAC_MAX_CLIPS
 import hashlib
@@ -151,7 +152,7 @@ def recover(bundle, actor_directory, output):
                   fingerprint_rule='FNV1a64 of PEAC bytes8..19 and24..end-of-inversebinds (counts, vertices/weights/joints, indices, binds; excludes clips)',
                   joints=nj,records=len(entries),defence_records=15,enabled_defence=sum(e['kind']==0 and e['enabled'] for e in entries),
                   attack_records=4,entries=entries,unexported_triggers=unexported,hierarchy_reconstruction_max_error=max_error,
-                  sources=[dict(path=str(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sources],
+                  sources=[dict(path=source_label(p),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for p in sources],
                   endpoint_rule='offset + radius*axis; offset + (height-radius)*axis',
                   radius_rule='distance(palette*inverse(bind)*zero,palette*inverse(bind)*(radius,0,0)); outer uniform actor scale applies',
                   limitations=['Three source defence parts have null transforms and remain disabled.',

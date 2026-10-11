@@ -6,6 +6,7 @@ writes bounded evidence first. Normal export/--check reads that checked-in
 evidence only, so regeneration needs neither Steam nor the external raw file.
 No runtime actor, random center, respawn sampling or inferred scale is created.
 """
+from read_reference_adventure import source_label
 import argparse
 import hashlib
 import json
@@ -45,8 +46,8 @@ def archive_report(report_path):
     if rows[first] != selected:
         raise ValueError('Selected frame disagrees with raw capture')
     evidence = dict(schema=1, kind='observed-original-hunt-cohort', mission=9126, target=1518,
-                    raw_capture=dict(path=str(raw), sha256=verified['capture_sha256'], frames=verified['frames'], end=verified['end']),
-                    report=dict(path=str(report_path), sha256=hashlib.sha256(report_bytes).hexdigest()),
+                    raw_capture=dict(path=source_label(raw), sha256=verified['capture_sha256'], frames=verified['frames'], end=verified['end']),
+                    report=dict(path=source_label(report_path), sha256=hashlib.sha256(report_bytes).hexdigest()),
                     header=verified['header'], observed_frames=rows[first:first+2],
                     source_sha256={str(path.relative_to(ROOT)):digest(path) for path in SOURCE_PATHS},
                     spawn_policy='Pinned source agentPosition/agentRotation, followed by authoritative native support settling; live entity pose is evidence only.',
