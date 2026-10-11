@@ -1,5 +1,28 @@
 # Original-game playtest and C comparison
 
+## October 10–11 admitted Repulsed — source and headless qualification
+
+[Repulsed qualification](audit/REPULSED_ACTION.md) follows the live female
+BeatParam binding, five authored curves, row 6 action relations and the original
+clock/cleanup order. `pe_repulsed` implements those admitted-action requests in
+an isolated C owner. Neither gameplay host calls it; HumanPhyCtrl consumption,
+reaction poses, shielding and live stun/knockback remain separate gates.
+
+Static REA inspection of the installed UnityEngine assembly derives the
+initial zero-direction angle as 90 degrees. The first admitted reaction cannot
+qualify a shield block from that direction. The focused IL record is checked
+against the pinned assembly; this is static engine evidence, without managed
+execution or a new original-game observation.
+
+Full regression passes 243 jobs, with 834 Python tests and 61 optional skips;
+skips are not passes. All 17 source/prefab exporter cases pass with UnityPy and
+no skips. An independent double Hermite oracle checks 840 force-profile values
+and 404 movement phases within explicit tolerances, without claiming bit-exact
+engine equivalence. All 94 ASan/UBSan/leak jobs pass with no failures or skips.
+Production build, content/source regeneration and all 26 CLI cases pass.
+No graphics, desktop input, normal saves or installed asset
+changes were needed; PECSv22 is unchanged.
+
 ## October9 building materials and NPC label visibility
 
 The user's three08:34–08:35 native screenshots exposed fabric/roof depth holes and NPC names through the hotel wall. [Source recovery and implementation](audit/BUILDING_MATERIALS.md) qualify original cutout/two-sided building materials and add a native camera-to-label obstruction rule for Westina, Eitai and residents. Source bundles, both installed OBJ/MTL/PNG groups and their archived manifests retain their exact hashes; only new material sidecars are installed with staging/backups. No world save or gameplay state changes.

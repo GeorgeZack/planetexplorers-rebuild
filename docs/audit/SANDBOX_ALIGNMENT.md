@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October10 combat foundation: [admitted Repulsed](REPULSED_ACTION.md) qualifies the active female curves, lifecycle clock, action relations and movement/cleanup requests, with a disconnected C owner. Static installed Unity5 IL establishes its initial zero-direction shield angle as90. Next qualify actual HumanPhyCtrl request consumption/collision and reaction poses before host integration. Live reactions, shield composition, pounce and9077 stay gated.
+
 October9 visual correction: [building materials and label visibility](BUILDING_MATERIALS.md) recover cutout/two-sided source policies for both settlement crops and hide sandbox NPC names behind current geometry. Private native fixtures establish these corrections; they add no new gameplay or original-game acceptance.
 
 October9 tooling checkpoint: [checkout relocation](PORTABLE_PATHS.md) removes build-machine roots from native asset lookup and reference fixtures, uses relative source labels and hash-checked historical lookup, and repairs movable UnityPy launchers. Archived manifests and capture evidence are preserved; this adds no gameplay or visual acceptance. The reaction lifecycle/motor work below remains the next combat foundation.

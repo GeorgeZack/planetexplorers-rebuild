@@ -39,6 +39,10 @@ A new installation records the number actually verified and `original_autosave_e
 
 Both are wired into `exporter-check` through `SETTLEMENT_CAPTURE`, `ROUTE_CAPTURE` and `ROUTE_SAVE`.
 
+## Admitted reaction qualification
+
+`repulsed-source-check`, included in `check-sources`, regenerates-and-compares the admitted female Repulsed metadata and runs all17 source/prefab cases with the local UnityPy environment. It additionally binds the focused static angle evidence to the installed UnityEngine bytes. See [the qualification](REPULSED_ACTION.md).
+
 ## Not wired
 
 - **`export_shield_controller.py`.** Its check verifies an existing stage directory, and no stage is retained locally. `tests/test_shield_controller_export.py` exercises the mode against a temporary stage.

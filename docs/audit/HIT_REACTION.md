@@ -1,5 +1,7 @@
 # Source-derived hit-reaction decisions
 
+October10 follow-through: [admitted Repulsed](REPULSED_ACTION.md) now has source-bound female curves, row6 relations and a disconnected C clock/request owner. Installed Unity5 static IL also qualifies the zero-direction angle as90. HumanPhyCtrl consumption, reaction poses, hit IK and host integration remain gated; the decision owner below still changes no live damage or movement.
+
 October7,2026. [pe_hit_reaction](../../rebuild/src/pe_hit_reaction.h) is a disconnected, pure decision owner. It does not change live damage, activate shielding, admit actions, animate a reaction or move any actor. The ordinary Sword/Shield presentation gate remains intact.
 
 [The exporter](../../rebuild/tools/export_hit_reaction.py) follows actual FemaleModel BeatParam11471154 through BiologyViewRoot11424092 and EntityPlayer Motion_Beat11400038. It recovers the two authored three-key angle curves and source air multiplier rather than treating class defaults as the model configuration. [Generated metadata](../../rebuild/generated/pe_hit_reaction_source.json) records input hashes and bindings.

@@ -819,6 +819,8 @@ The shield-ownership increment introduced **PECSv15**, retaining the v14 layout 
 
 ### Offline attack playback and shield action checks
 
+Admitted Repulsed clocks/requests are a disconnected combat foundation; live hit reactions remain gated. `python3 rebuild/tools/run_tests.py -k repulsed` runs its core and independent arithmetic checks from the repository root. `make -C rebuild repulsed-source-check` checks its exporter and all source/prefab cases with UnityPy. [Source contract and physical boundary](../docs/audit/REPULSED_ACTION.md).
+
 The sandbox now applies the recovered0.65s contact-response curve to its shared melee interval. [Playback evidence](../docs/audit/ATTACK_PLAYBACK.md) separates engine arithmetic qualification, trigger notification and skill damage; no attack pose rebake is required. [Shield action admission](../docs/audit/SHIELD_ACTION.md) is a tested headless foundation only; ordinary shield equipment remains gated pending composed poses. That playback increment retained PECSv16; the subsequent wallet increment uses v17. No physical playtest of those changes is claimed.
 
 From the repository root, run the prefab/export checks with the installed offline UnityPy environment:

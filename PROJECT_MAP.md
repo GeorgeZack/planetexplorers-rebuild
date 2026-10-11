@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[Repulsed qualification](docs/audit/REPULSED_ACTION.md): `pe_repulsed` owns disconnected admitted-action clocks and requests; `export_repulsed_action.py` binds the active female curves, row6 relations and static Unity5 angle evidence. Physical motor consumption and reaction presentation remain separate gates.
+
 [Building materials](docs/audit/BUILDING_MATERIALS.md): `export_reference_materials.py` recovers source-bound alpha/culling for both settlement OBJ groups; `pe_reference` retains it and shares `pe_material_view.h` with actors. `pe_sandbox_collision_label_visible` hides sandbox NPC names behind current geometry as a native adapter.
 
 [Checkout relocation](docs/audit/PORTABLE_PATHS.md): `pe_paths.h` owns executable-relative runtime lookup, `read_reference_adventure.source_label/source_path` own portable source labels and hash-checked historical relocation, and `setup_unity_tools.py` repairs movable environment launchers. Archived asset manifests remain unchanged.

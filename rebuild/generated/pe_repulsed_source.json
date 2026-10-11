@@ -1,0 +1,601 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab",
+      "sha256": "1e518e5af9afd09d89e16a3a2dd776abd42846143ff6b40e409fdf4bb08ae441"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "sha256": "6e30c2baf434ca14b29d10b30141985c3b2a64578298634b2c66ab1891ec1e10"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs.meta",
+      "sha256": "80a2dbe920b7ce1a6b60df1cd260c626dd28abba3ca03fac97691394df9dba02"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Param/BeatParam.cs",
+      "sha256": "cd93169de106fc8174940f6a27a1ff597149cf72cced061f39a4d88028412af4"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Param/BeatParam.cs.meta",
+      "sha256": "b380a03ce3300f9905c2fc6cc609d0fe716bc75fa4e356c963273066c1ea0195"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewRoot.cs",
+      "sha256": "db21d9369c8d975bbdc5efb48438c317db004d2c914088045c371cff7360151f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewRoot.cs.meta",
+      "sha256": "f2161d69412565867c9e06be515f47c1c9c96b269c8fa8431c0c2582837278a8"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AvatarCmpt.cs",
+      "sha256": "fb640294118faa17356cc3648c59039cb9a80341c5bf0b660c0e844189097d9d"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "sha256": "a74c7a07590895fda1ba0769bb6a96d115e0e0bfdb4c594710b4cff3e74757a9"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkTriggerEvent.cs",
+      "sha256": "f6e439e4b0b87c5689907847759a05146703fa7ba866a9be09b04ba0e7d2e278"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEffect.cs",
+      "sha256": "6ac51b93608b27ad65f25c5d886eef3f94d06c3a598783dafb6121ff45f5f872"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "sha256": "f6f52e21dda703433c4add331bb1d8779c989f4b6ecaf093b0373d565b975da7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "sha256": "682b1d281e9d4ecfc608a6d11f133e24c547b3c057bb1942d8991af30e95eeda"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "sha256": "84a63a50d399e76077a4bb11aef7c1821334a9a2e3e9b4141fa507d6d539ea6b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Human.cs",
+      "sha256": "3510d27c4bfa86e673a13811097a05614f90d68e963cdf35b708e1dd8a063adb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Human.cs.meta",
+      "sha256": "37635ff81598af2f44b2b2fa7e7f6f3cce6bfd7d4b5615abd50c28da8aeb5e6e"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Motor.cs",
+      "sha256": "b741280b615159e90666c5b0f11bb6d403d7ac3e27864a374a73cd36d1bee3bf"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Motor.cs.meta",
+      "sha256": "e46c53db3f81d5fee68c36b42c66761ace016ba181dbf3ff208d246c61ae5db7"
+    },
+    {
+      "path": "docs/reference/repulsed-unity-vector-angle.json",
+      "sha256": "fd29312b37dfe8271ba58a1eac4bb55b9582c3b565f73802c026ef4192e1ba40"
+    }
+  ],
+  "unity_engine": {
+    "name": "UnityEngine.dll",
+    "sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+    "mvid": "5cf16eb2-32c9-483e-8fb7-9072104d5826",
+    "rea_evidence_id": "ev_f1f0444bcfceecdc4767fd6a28a0733e4bc518f31d1427187dc47a02056067a3",
+    "zero_direction_angle_degrees": 90,
+    "qualification": "Static CIL-derived zero-direction angle; no managed/game execution.",
+    "method_il_sha256": {
+      "0x060004c3": "42f7bb97933b393992990f5ad60c0edcda1ba770de0674c566d2f1ed18f58b25",
+      "0x060004c5": "38269ea82db3035e211bc6c2f41660f1a297912ae209342762ba4c79819de9eb",
+      "0x060004c8": "9c7c3ded1b71a8b02d2c8d994096c617ef5c2662d230c5a441ba67e0cc80c9da",
+      "0x060004cc": "dfd1d9fda3a0c9dd644e7c0092186ee705030f5e2562cb56da88d859c25458f2",
+      "0x060004cf": "a1d306d727ab69259c27586003cd34ea8fb36351c8bb41dc15f26568d38045c4",
+      "0x060004d5": "d309c387d0275359b6ec7b9a3794bea12fb6dfde3bd8ef298a802db180a4f5f7",
+      "0x06000618": "4aea7701ea9683a286099e01917edc2b81ae1f72e9fadb1dfae46fc5ee714160",
+      "0x06000632": "8e29d7db4c26bf9eb22ec1a5b04ba912bb499dac23a9c58fe02bcc906b51088e"
+    }
+  },
+  "binding": {
+    "curves": {
+      "m_TimeVelocityScale": {
+        "m_Curve": [
+          {
+            "time": 0.0,
+            "value": 0.7999999523162842,
+            "inSlope": 2.1856024265289307,
+            "outSlope": 2.1856024265289307,
+            "tangentMode": 0
+          },
+          {
+            "time": 0.25,
+            "value": 1.100000023841858,
+            "inSlope": 0.15674474835395813,
+            "outSlope": 0.15674474835395813,
+            "tangentMode": 0
+          },
+          {
+            "time": 0.8999999761581421,
+            "value": 0.699999988079071,
+            "inSlope": -1.8645925521850586,
+            "outSlope": -1.8645925521850586,
+            "tangentMode": 0
+          },
+          {
+            "time": 1.0,
+            "value": 0.29999998211860657,
+            "inSlope": -7.841334819793701,
+            "outSlope": -7.841334819793701,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ForceToVelocity": {
+        "m_Curve": [
+          {
+            "time": 2.774993896484375,
+            "value": 3.956972122192383,
+            "inSlope": 0.006167263723909855,
+            "outSlope": 0.006167263723909855,
+            "tangentMode": 0
+          },
+          {
+            "time": 400.0,
+            "value": 9.0,
+            "inSlope": 0.023304175585508347,
+            "outSlope": 0.023304175585508347,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 16.0,
+            "inSlope": 0.017762018367648125,
+            "outSlope": 0.017762018367648125,
+            "tangentMode": 0
+          },
+          {
+            "time": 2500.0,
+            "value": 25.0,
+            "inSlope": 0.0051428573206067085,
+            "outSlope": 0.0,
+            "tangentMode": 5
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ForceToMoveTime": {
+        "m_Curve": [
+          {
+            "time": 0.04369223117828369,
+            "value": 0.20519250631332397,
+            "inSlope": 0.00012065123155480251,
+            "outSlope": 0.00012065123155480251,
+            "tangentMode": 0
+          },
+          {
+            "time": 400.0,
+            "value": 0.3499999940395355,
+            "inSlope": 0.001087964978069067,
+            "outSlope": 0.001087964978069067,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 0.550000011920929,
+            "inSlope": 0.0005364544922485948,
+            "outSlope": 0.0005364544922485948,
+            "tangentMode": 0
+          },
+          {
+            "time": 2000.0,
+            "value": 1.5,
+            "inSlope": 0.0005600000149570405,
+            "outSlope": 0.0005600000149570405,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ApplyMoveStopTime": {
+        "m_Curve": [
+          {
+            "time": 1.7486848831176758,
+            "value": 0.09598491340875626,
+            "inSlope": 0.0,
+            "outSlope": 3.9435217331629246e-05,
+            "tangentMode": 17
+          },
+          {
+            "time": 251.70498657226562,
+            "value": 0.1058419942855835,
+            "inSlope": 7.24017372704111e-05,
+            "outSlope": 7.24017372704111e-05,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 0.25,
+            "inSlope": 0.0008457142976112664,
+            "outSlope": 0.0008457142976112664,
+            "tangentMode": 0
+          },
+          {
+            "time": 2000.0,
+            "value": 1.3000000715255737,
+            "inSlope": 0.0005600000149570405,
+            "outSlope": 0.0005600000149570405,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_WentflyTimeCurve": {
+        "m_Curve": [
+          {
+            "time": 700.0,
+            "value": 20.0,
+            "inSlope": 0.001087964978069067,
+            "outSlope": 0.001087964978069067,
+            "tangentMode": 0
+          },
+          {
+            "time": 700.04150390625,
+            "value": 0.5258514285087585,
+            "inSlope": 0.00040698962402530015,
+            "outSlope": 0.00040698962402530015,
+            "tangentMode": 0
+          },
+          {
+            "time": 749.9514770507812,
+            "value": 0.550000011920929,
+            "inSlope": 0.0005364544922485948,
+            "outSlope": 0.0005364544922485948,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 20.0,
+            "inSlope": 0.0005600000149570405,
+            "outSlope": 0.0005600000149570405,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      }
+    },
+    "model_component": 11471154,
+    "entity_component": 11400038,
+    "human_motion_component": 11400024,
+    "generic_motor_present": false,
+    "wentfly_bone": 400106,
+    "wentfly_bone_name": "Bip01 Spine2",
+    "wentfly_force_scale": 0.800000011920929,
+    "unused_entity_curves": {
+      "m_PauseActions": [],
+      "m_Move": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_Behave": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_TimeVelocityScale": {
+        "m_Curve": [
+          {
+            "time": 0.0,
+            "value": 0.7999999523162842,
+            "inSlope": 2.1856024265289307,
+            "outSlope": 2.1856024265289307,
+            "tangentMode": 0
+          },
+          {
+            "time": 0.25,
+            "value": 1.100000023841858,
+            "inSlope": 0.15674474835395813,
+            "outSlope": 0.15674474835395813,
+            "tangentMode": 0
+          },
+          {
+            "time": 0.8999999761581421,
+            "value": 0.699999988079071,
+            "inSlope": -1.8645925521850586,
+            "outSlope": -1.8645925521850586,
+            "tangentMode": 0
+          },
+          {
+            "time": 1.0,
+            "value": 0.29999998211860657,
+            "inSlope": -7.841334819793701,
+            "outSlope": -7.841334819793701,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ForceToVelocity": {
+        "m_Curve": [
+          {
+            "time": 0.04369229078292847,
+            "value": 0.00014291773550212383,
+            "inSlope": 0.0011317094322293997,
+            "outSlope": 0.0011317094322293997,
+            "tangentMode": 0
+          },
+          {
+            "time": 250.0,
+            "value": 1.0,
+            "inSlope": 0.014151453040540218,
+            "outSlope": 0.014151453040540218,
+            "tangentMode": 0
+          },
+          {
+            "time": 400.0,
+            "value": 9.0,
+            "inSlope": 0.023304175585508347,
+            "outSlope": 0.023304175585508347,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 16.0,
+            "inSlope": 0.017762018367648125,
+            "outSlope": 0.017762018367648125,
+            "tangentMode": 0
+          },
+          {
+            "time": 2500.0,
+            "value": 25.0,
+            "inSlope": 0.0051428573206067085,
+            "outSlope": 0.0,
+            "tangentMode": 5
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ForceToMoveTime": {
+        "m_Curve": [
+          {
+            "time": 0.04369229078292847,
+            "value": 0.00014291773550212383,
+            "inSlope": 0.0,
+            "outSlope": 0.000599533086642623,
+            "tangentMode": 17
+          },
+          {
+            "time": 250.0,
+            "value": 0.14999999105930328,
+            "inSlope": 0.0013411511899903417,
+            "outSlope": 0.0013411511899903417,
+            "tangentMode": 0
+          },
+          {
+            "time": 400.0,
+            "value": 0.3499999940395355,
+            "inSlope": 0.001087964978069067,
+            "outSlope": 0.001087964978069067,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 0.550000011920929,
+            "inSlope": 0.0005364544922485948,
+            "outSlope": 0.0005364544922485948,
+            "tangentMode": 0
+          },
+          {
+            "time": 2000.0,
+            "value": 1.5,
+            "inSlope": 0.0005600000149570405,
+            "outSlope": 0.0005600000149570405,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ApplyMoveStopTime": {
+        "m_Curve": [
+          {
+            "time": 0.04369229078292847,
+            "value": 0.00014291773550212383,
+            "inSlope": 0.0,
+            "outSlope": 3.9435220969608054e-05,
+            "tangentMode": 17
+          },
+          {
+            "time": 250.0,
+            "value": 0.009999999776482582,
+            "inSlope": 7.24017372704111e-05,
+            "outSlope": 7.24017372704111e-05,
+            "tangentMode": 0
+          },
+          {
+            "time": 400.0,
+            "value": 0.09999999403953552,
+            "inSlope": 0.0004995447816327214,
+            "outSlope": 0.0004995447816327214,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 0.25,
+            "inSlope": 0.0008457142976112664,
+            "outSlope": 0.0008457142976112664,
+            "tangentMode": 0
+          },
+          {
+            "time": 2000.0,
+            "value": 1.3000000715255737,
+            "inSlope": 0.0005600000149570405,
+            "outSlope": 0.0005600000149570405,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_Param": {
+        "m_FileID": 0,
+        "m_PathID": 0
+      },
+      "m_WentflyTimeCurve": {
+        "m_Curve": [
+          {
+            "time": 700.0,
+            "value": 20.0,
+            "inSlope": 0.001087964978069067,
+            "outSlope": 0.001087964978069067,
+            "tangentMode": 0
+          },
+          {
+            "time": 700.04150390625,
+            "value": 0.5258514285087585,
+            "inSlope": 0.00040698962402530015,
+            "outSlope": 0.00040698962402530015,
+            "tangentMode": 0
+          },
+          {
+            "time": 749.9514770507812,
+            "value": 0.550000011920929,
+            "inSlope": 0.0005364544922485948,
+            "outSlope": 0.0005364544922485948,
+            "tangentMode": 0
+          },
+          {
+            "time": 750.0,
+            "value": 20.0,
+            "inSlope": 0.0005600000149570405,
+            "outSlope": 0.0005600000149570405,
+            "tangentMode": 0
+          }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2
+      },
+      "m_ForceScale": 0.5,
+      "m_ApplayForceBoneName": "Bip01 Spine2"
+    }
+  },
+  "action_relation": {
+    "ActionType": "6",
+    "Name": "Repulsed",
+    "PauseAction": "13,15,18,19,22,24",
+    "EndAction": "0",
+    "EndImmediately": "1,2,3,4,14,16,20,21,23,25,27,44,48,49,56,57,58,60,61",
+    "Ground": "0",
+    "InAir": "2",
+    "InWater": "0",
+    "Rotate": "0",
+    "Sprint": "0",
+    "Jump": "2",
+    "Repulsed": "0",
+    "Wentfly": "2",
+    "Knocked": "2",
+    "Death": "2",
+    "GetUp": "2",
+    "Revive": "2",
+    "Step": "0",
+    "HoldEquip": "0",
+    "SwordAttack": "0",
+    "HoldShield": "0",
+    "Halt": "0",
+    "Fall": "2",
+    "GunHold": "0",
+    "GunReload": "0",
+    "GunShoot": "0",
+    "BowHold": "0",
+    "BowShoot": "0",
+    "BowReload": "0",
+    "Sleep": "2",
+    "Eat": "0",
+    "HoldAimEquip": "0",
+    "Dig": "0",
+    "Fell": "0",
+    "Gather": "0",
+    "PickUpItem": "0",
+    "GetOnVehicle": "2",
+    "JetPack": "2",
+    "Parachute": "2",
+    "Glider": "2",
+    "Climb": "2",
+    "Build": "0",
+    "HoldFlashlight": "0",
+    "Stuned": "0",
+    "Pump": "0",
+    "Sit": "2",
+    "Operation": "2",
+    "Draw": "0",
+    "Throw": "0",
+    "Lie": "2",
+    "GetOnTrain": "2",
+    "Cutscene": "2",
+    "Whacked": "0",
+    "Cure": "2",
+    "HeavyEquipment": "0",
+    "DrillingDig": "0",
+    "Hand": "2",
+    "Leisure": "0",
+    "RopeGunShoot": "0",
+    "Abnormal": "0",
+    "Ride": "2"
+  },
+  "method_guards": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "pattern": "public\\s+override\\s+void\\s+Start\\s*\\(",
+      "sha256": "26487b70b6f579e662db5d2266abe616c1d3f728006afbe1248df65f9e044bf1"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "pattern": "public\\s+void\\s+OnMsg\\s*\\(",
+      "sha256": "da2592018cd8f26703dad2dce118fc8d6666e9a21baa2e7af61e53424942d3b1"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "pattern": "public\\s+class\\s+Action_Repulsed",
+      "sha256": "eac786e4b02e200b7832fa6e94ed4b9345a64eac314a6f8720483b2c7fbfdd3b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "public\\s+bool\\s+DoAction\\s*\\(",
+      "sha256": "f58a6d9b88dc13c74170eeb3c230d55da2a7258d8f45ed591d6bdddaba54bd85"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "class\\s+RunningAction",
+      "sha256": "9578ae9ef45f7372e68b12e71fed364e4fe6b707cb87c3557c95382f16033034"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "pattern": "public\\s+abstract\\s+class\\s+PEAction",
+      "sha256": "c443537080d22ef14706226c3e35a351a17389c010ca95a06bb180cf938ae5f2"
+    }
+  ],
+  "scope": "Disconnected admitted Repulsed lifecycle and velocity requests; no live stun, knockback, shielding, action scheduler, humanoid pose, IK, ragdoll or physical motor equivalence.",
+  "clock": "One Update call, testing the old elapsed time before adding deltaTime; Wentfly and Halt use strict greater-than boundaries.",
+  "repeat": "MotionMgr calls inherited no-op ResetAction for a running Repulsed; it does not restart, rebind or recheck dependencies.",
+  "shield": "Shield angle uses the previous m_MoveDir before assigning/projecting the new hit direction. Unity5 Angle with its initial zero direction is90. This is not equipment-based automatic shielding.",
+  "parameters": "Caller snapshots PEActionParamVVF.param when DoAction executes; source ignores its para argument and reads the shared singleton.",
+  "motor": "Active EntityPlayer has Motion_Move_Human and no Motion_Move_Motor. ApplyMoveRequest is a velocity request to HumanPhyCtrl, not a direct displacement or an additive generic-motor impulse."
+}

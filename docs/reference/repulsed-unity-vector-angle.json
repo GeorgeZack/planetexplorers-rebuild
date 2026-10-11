@@ -1,0 +1,889 @@
+{
+  "schema": 1,
+  "rea_evidence_id": "ev_f1f0444bcfceecdc4767fd6a28a0733e4bc518f31d1427187dc47a02056067a3",
+  "authority": "shipped-artifact",
+  "confidence": "observed",
+  "artifact": {
+    "path": "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client_Data/Managed/UnityEngine.dll",
+    "sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+    "byte_length": 848384,
+    "format": "pe"
+  },
+  "module": {
+    "name": "UnityEngine.dll",
+    "generation": 0,
+    "mvid": "5cf16eb2-32c9-483e-8fb7-9072104d5826",
+    "enc_id": null,
+    "enc_base_id": null,
+    "token": "0x00000001",
+    "row_offset": 197268
+  },
+  "coverage": {
+    "state": "complete",
+    "issues": []
+  },
+  "limitations": [
+    "Metadata tokens are build-local coordinates and are only meaningful with the reported artifact SHA-256 and MVID.",
+    "CIL instruction anchors are decoded from file-backed method bodies only; no target assembly is loaded or executed.",
+    "Signatures are decoded for common ECMA-335 primitive, class, valuetype, pointer, byref, array, and generic variable forms; unsupported forms retain raw signature hashes."
+  ],
+  "methods": [
+    {
+      "token": "0x060004c3",
+      "row_offset": 256650,
+      "declaring_type_token": "0x02000056",
+      "declaring_type": "UnityEngine.Vector3",
+      "name": "Normalize",
+      "rva": 22372,
+      "impl_flags": 0,
+      "flags": 150,
+      "signature": {
+        "raw_length": 8,
+        "raw_sha256": "fbdb3914e97fd345e64319762391e3a8be95422c9fd14f50f8e8a884ad279b62",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 1,
+        "return_type": "valuetype:344",
+        "parameter_types": [
+          "valuetype:344"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "fat",
+        "rva": 22372,
+        "file_offset": 14692,
+        "max_stack": 5,
+        "init_locals": true,
+        "local_var_sig_token": "0x11000020",
+        "il_size": 32,
+        "il_sha256": "42f7bb97933b393992990f5ad60c0edcda1ba770de0674c566d2f1ed18f58b25",
+        "normalized_il_sha256": "404d84ff1263ebc8bd7357c032e23602a5fd70aa5c69c64af2e0b796a91eb25d",
+        "instruction_count": 12,
+        "decoded_instruction_count": 12,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.0": 2,
+          "call": 3,
+          "stloc.0": 1,
+          "ldloc.0": 2,
+          "ldc.r4": 1,
+          "ble.un": 1,
+          "ret": 2
+        },
+        "anchors": [
+          {
+            "il_offset": 1,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004cf"
+          },
+          {
+            "il_offset": 8,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "0.000009999999747378752"
+          },
+          {
+            "il_offset": 13,
+            "opcode": "ble.un",
+            "operand_kind": "branch",
+            "operand": "26"
+          },
+          {
+            "il_offset": 20,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004e4"
+          },
+          {
+            "il_offset": 26,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004d5"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "0228cf0400060a0622acc527374308000000020628e40400062a28d50400062a"
+    },
+    {
+      "token": "0x060004c5",
+      "row_offset": 256682,
+      "declaring_type_token": "0x02000056",
+      "declaring_type": "UnityEngine.Vector3",
+      "name": "get_normalized",
+      "rva": 22488,
+      "impl_flags": 0,
+      "flags": 2182,
+      "signature": {
+        "raw_length": 5,
+        "raw_sha256": "8e2788a534d9cfd25fc4e86e26be45c2687bd1fd722cd65e4cd51f800bcb478c",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default has-this",
+        "generic_parameter_count": null,
+        "parameter_count": 0,
+        "return_type": "valuetype:344",
+        "parameter_types": [],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "tiny",
+        "rva": 22488,
+        "file_offset": 14808,
+        "max_stack": 8,
+        "init_locals": false,
+        "local_var_sig_token": null,
+        "il_size": 12,
+        "il_sha256": "38269ea82db3035e211bc6c2f41660f1a297912ae209342762ba4c79819de9eb",
+        "normalized_il_sha256": "34ea3819e2b9e0eefc2b7740f12b01385085a53202dfe017de356fa572d907a7",
+        "instruction_count": 4,
+        "decoded_instruction_count": 4,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.0": 1,
+          "ldobj": 1,
+          "call": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 1,
+            "opcode": "ldobj",
+            "operand_kind": "type",
+            "operand": "0x02000056"
+          },
+          {
+            "il_offset": 6,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004c3"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "02715600000228c30400062a"
+    },
+    {
+      "token": "0x060004c8",
+      "row_offset": 256730,
+      "declaring_type_token": "0x02000056",
+      "declaring_type": "UnityEngine.Vector3",
+      "name": "Dot",
+      "rva": 22652,
+      "impl_flags": 0,
+      "flags": 150,
+      "signature": {
+        "raw_length": 9,
+        "raw_sha256": "2e7ba20897ff8479eb1ec03e6ee74184e73d17c4c6ffb8c148d7dfa5794349ca",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 2,
+        "return_type": "r4",
+        "parameter_types": [
+          "valuetype:344",
+          "valuetype:344"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "tiny",
+        "rva": 22652,
+        "file_offset": 14972,
+        "max_stack": 8,
+        "init_locals": false,
+        "local_var_sig_token": null,
+        "il_size": 48,
+        "il_sha256": "9c7c3ded1b71a8b02d2c8d994096c617ef5c2662d230c5a441ba67e0cc80c9da",
+        "normalized_il_sha256": "6a81864c77c252947d8507e3ea69f546f982b7d0ffa244fc2e2e374af6b63dc8",
+        "instruction_count": 18,
+        "decoded_instruction_count": 18,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarga.s": 6,
+          "ldfld": 6,
+          "mul": 3,
+          "add": 2,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 0,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 2,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d0"
+          },
+          {
+            "il_offset": 7,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "1"
+          },
+          {
+            "il_offset": 9,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d0"
+          },
+          {
+            "il_offset": 15,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 17,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d1"
+          },
+          {
+            "il_offset": 22,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "1"
+          },
+          {
+            "il_offset": 24,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d1"
+          },
+          {
+            "il_offset": 31,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 33,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d2"
+          },
+          {
+            "il_offset": 38,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "1"
+          },
+          {
+            "il_offset": 40,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d2"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "0f007bd00000040f017bd00000045a0f007bd10000040f017bd10000045a580f007bd20000040f017bd20000045a582a"
+    },
+    {
+      "token": "0x060004cc",
+      "row_offset": 256794,
+      "declaring_type_token": "0x02000056",
+      "declaring_type": "UnityEngine.Vector3",
+      "name": "Angle",
+      "rva": 22796,
+      "impl_flags": 0,
+      "flags": 150,
+      "signature": {
+        "raw_length": 9,
+        "raw_sha256": "2e7ba20897ff8479eb1ec03e6ee74184e73d17c4c6ffb8c148d7dfa5794349ca",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 2,
+        "return_type": "r4",
+        "parameter_types": [
+          "valuetype:344",
+          "valuetype:344"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "fat",
+        "rva": 22796,
+        "file_offset": 15116,
+        "max_stack": 10,
+        "init_locals": true,
+        "local_var_sig_token": null,
+        "il_size": 46,
+        "il_sha256": "dfd1d9fda3a0c9dd644e7c0092186ee705030f5e2562cb56da88d859c25458f2",
+        "normalized_il_sha256": "7a3f751093d593630e87f532125680ccf760e0e25ff6357079559eb86bb2659a",
+        "instruction_count": 12,
+        "decoded_instruction_count": 12,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarga.s": 2,
+          "call": 5,
+          "ldc.r4": 3,
+          "mul": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 0,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 2,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004c5"
+          },
+          {
+            "il_offset": 7,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "1"
+          },
+          {
+            "il_offset": 9,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004c5"
+          },
+          {
+            "il_offset": 14,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x060004c8"
+          },
+          {
+            "il_offset": 19,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "-1"
+          },
+          {
+            "il_offset": 24,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "1"
+          },
+          {
+            "il_offset": 29,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x06000632"
+          },
+          {
+            "il_offset": 34,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x06000618"
+          },
+          {
+            "il_offset": 39,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "57.295780181884766"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "0f0028c50400060f0128c504000628c804000622000080bf220000803f2832060006281806000622e12e65425a2a"
+    },
+    {
+      "token": "0x060004cf",
+      "row_offset": 256842,
+      "declaring_type_token": "0x02000056",
+      "declaring_type": "UnityEngine.Vector3",
+      "name": "Magnitude",
+      "rva": 23008,
+      "impl_flags": 0,
+      "flags": 150,
+      "signature": {
+        "raw_length": 6,
+        "raw_sha256": "886b0b78607c4f0fa9a7718ad9eb9a36e76925eaaa07db1030adbe6858c15685",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 1,
+        "return_type": "r4",
+        "parameter_types": [
+          "valuetype:344"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "fat",
+        "rva": 23008,
+        "file_offset": 15328,
+        "max_stack": 4,
+        "init_locals": true,
+        "local_var_sig_token": null,
+        "il_size": 53,
+        "il_sha256": "a1d306d727ab69259c27586003cd34ea8fb36351c8bb41dc15f26568d38045c4",
+        "normalized_il_sha256": "706f8f0bc424f1ad34321fb5e157896988fb4689bdb83401a57d7c9eebf59a15",
+        "instruction_count": 19,
+        "decoded_instruction_count": 19,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarga.s": 6,
+          "ldfld": 6,
+          "mul": 3,
+          "add": 2,
+          "call": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 0,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 2,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d0"
+          },
+          {
+            "il_offset": 7,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 9,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d0"
+          },
+          {
+            "il_offset": 15,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 17,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d1"
+          },
+          {
+            "il_offset": 22,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 24,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d1"
+          },
+          {
+            "il_offset": 31,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 33,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d2"
+          },
+          {
+            "il_offset": 38,
+            "opcode": "ldarga.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 40,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040000d2"
+          },
+          {
+            "il_offset": 47,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x0600061b"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "0f007bd00000040f007bd00000045a0f007bd10000040f007bd10000045a580f007bd20000040f007bd20000045a58281b0600062a"
+    },
+    {
+      "token": "0x060004d5",
+      "row_offset": 256938,
+      "declaring_type_token": "0x02000056",
+      "declaring_type": "UnityEngine.Vector3",
+      "name": "get_zero",
+      "rva": 23384,
+      "impl_flags": 0,
+      "flags": 2198,
+      "signature": {
+        "raw_length": 5,
+        "raw_sha256": "76358dd341b1dc5403d4f46761299e1a01a0b68404c894384a58a2cc55221886",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 0,
+        "return_type": "valuetype:344",
+        "parameter_types": [],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "tiny",
+        "rva": 23384,
+        "file_offset": 15704,
+        "max_stack": 8,
+        "init_locals": false,
+        "local_var_sig_token": null,
+        "il_size": 21,
+        "il_sha256": "d309c387d0275359b6ec7b9a3794bea12fb6dfde3bd8ef298a802db180a4f5f7",
+        "normalized_il_sha256": "fd0c54eab624e9f3f1d60b2cc5804df4e63c742ff0d92ee5fd2163ffe20b0bb8",
+        "instruction_count": 5,
+        "decoded_instruction_count": 5,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldc.r4": 3,
+          "newobj": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 0,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "0"
+          },
+          {
+            "il_offset": 5,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "0"
+          },
+          {
+            "il_offset": 10,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "0"
+          },
+          {
+            "il_offset": 15,
+            "opcode": "newobj",
+            "operand_kind": "method",
+            "operand": "0x060004a6"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "22000000002200000000220000000073a60400062a"
+    },
+    {
+      "token": "0x06000618",
+      "row_offset": 262106,
+      "declaring_type_token": "0x02000062",
+      "declaring_type": "UnityEngine.Mathf",
+      "name": "Acos",
+      "rva": 39884,
+      "impl_flags": 0,
+      "flags": 150,
+      "signature": {
+        "raw_length": 4,
+        "raw_sha256": "60184e7f6ba24c29f338158452fe25429c653c41583f5de5bcd1af12b380efba",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 1,
+        "return_type": "r4",
+        "parameter_types": [
+          "r4"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "tiny",
+        "rva": 39884,
+        "file_offset": 32204,
+        "max_stack": 8,
+        "init_locals": false,
+        "local_var_sig_token": null,
+        "il_size": 9,
+        "il_sha256": "4aea7701ea9683a286099e01917edc2b81ae1f72e9fadb1dfae46fc5ee714160",
+        "normalized_il_sha256": "f971269e45f163271285b5f550ee159e7377f76dc144bbad074ad3c646a246d0",
+        "instruction_count": 5,
+        "decoded_instruction_count": 5,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.0": 1,
+          "conv.r8": 1,
+          "call": 1,
+          "conv.r4": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 2,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x0a000037"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "026c283700000a6b2a"
+    },
+    {
+      "token": "0x06000632",
+      "row_offset": 262522,
+      "declaring_type_token": "0x02000062",
+      "declaring_type": "UnityEngine.Mathf",
+      "name": "Clamp",
+      "rva": 40440,
+      "impl_flags": 0,
+      "flags": 150,
+      "signature": {
+        "raw_length": 6,
+        "raw_sha256": "2e5dac11367fccb436a2e2366c3389d3698dab88569ec5e54d483d2f133546a4",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 3,
+        "return_type": "r4",
+        "parameter_types": [
+          "r4",
+          "r4",
+          "r4"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "tiny",
+        "rva": 40440,
+        "file_offset": 32760,
+        "max_stack": 8,
+        "init_locals": false,
+        "local_var_sig_token": null,
+        "il_size": 27,
+        "il_sha256": "8e29d7db4c26bf9eb22ec1a5b04ba912bb499dac23a9c58fe02bcc906b51088e",
+        "normalized_il_sha256": "f7cbf47152d4e9501262e52af2368b0b187c3d79bcb900508ca3d2fe5563ca24",
+        "instruction_count": 13,
+        "decoded_instruction_count": 13,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.0": 3,
+          "ldarg.1": 2,
+          "bge.un": 1,
+          "starg.s": 2,
+          "br": 1,
+          "ldarg.2": 2,
+          "ble.un": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 2,
+            "opcode": "bge.un",
+            "operand_kind": "branch",
+            "operand": "15"
+          },
+          {
+            "il_offset": 8,
+            "opcode": "starg.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 10,
+            "opcode": "br",
+            "operand_kind": "branch",
+            "operand": "25"
+          },
+          {
+            "il_offset": 17,
+            "opcode": "ble.un",
+            "operand_kind": "branch",
+            "operand": "25"
+          },
+          {
+            "il_offset": 23,
+            "opcode": "starg.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "02034108000000031000380a00000002044303000000041000022a"
+    }
+  ],
+  "scope": "Focused static method excerpt; complete member inventory remains ignored under build. No assembly or game execution.",
+  "call_edges": [
+    {
+      "caller_token": "0x060004c3",
+      "caller": "UnityEngine.Vector3.Normalize",
+      "opcode": "call",
+      "target_token": "0x060004cf",
+      "target_kind": "method-def",
+      "target_name": "Magnitude"
+    },
+    {
+      "caller_token": "0x060004c3",
+      "caller": "UnityEngine.Vector3.Normalize",
+      "opcode": "call",
+      "target_token": "0x060004e4",
+      "target_kind": "method-def",
+      "target_name": "op_Division"
+    },
+    {
+      "caller_token": "0x060004c3",
+      "caller": "UnityEngine.Vector3.Normalize",
+      "opcode": "call",
+      "target_token": "0x060004d5",
+      "target_kind": "method-def",
+      "target_name": "get_zero"
+    },
+    {
+      "caller_token": "0x060004c5",
+      "caller": "UnityEngine.Vector3.get_normalized",
+      "opcode": "call",
+      "target_token": "0x060004c3",
+      "target_kind": "method-def",
+      "target_name": "Normalize"
+    },
+    {
+      "caller_token": "0x060004cc",
+      "caller": "UnityEngine.Vector3.Angle",
+      "opcode": "call",
+      "target_token": "0x060004c5",
+      "target_kind": "method-def",
+      "target_name": "get_normalized"
+    },
+    {
+      "caller_token": "0x060004cc",
+      "caller": "UnityEngine.Vector3.Angle",
+      "opcode": "call",
+      "target_token": "0x060004c5",
+      "target_kind": "method-def",
+      "target_name": "get_normalized"
+    },
+    {
+      "caller_token": "0x060004cc",
+      "caller": "UnityEngine.Vector3.Angle",
+      "opcode": "call",
+      "target_token": "0x060004c8",
+      "target_kind": "method-def",
+      "target_name": "Dot"
+    },
+    {
+      "caller_token": "0x060004cc",
+      "caller": "UnityEngine.Vector3.Angle",
+      "opcode": "call",
+      "target_token": "0x06000632",
+      "target_kind": "method-def",
+      "target_name": "Clamp"
+    },
+    {
+      "caller_token": "0x060004cc",
+      "caller": "UnityEngine.Vector3.Angle",
+      "opcode": "call",
+      "target_token": "0x06000618",
+      "target_kind": "method-def",
+      "target_name": "Acos"
+    },
+    {
+      "caller_token": "0x060004cf",
+      "caller": "UnityEngine.Vector3.Magnitude",
+      "opcode": "call",
+      "target_token": "0x0600061b",
+      "target_kind": "method-def",
+      "target_name": "Sqrt"
+    },
+    {
+      "caller_token": "0x060004d5",
+      "caller": "UnityEngine.Vector3.get_zero",
+      "opcode": "newobj",
+      "target_token": "0x060004a6",
+      "target_kind": "method-def",
+      "target_name": ".ctor"
+    },
+    {
+      "caller_token": "0x06000618",
+      "caller": "UnityEngine.Mathf.Acos",
+      "opcode": "call",
+      "target_token": "0x0a000037",
+      "target_kind": "member-ref",
+      "target_name": "Acos"
+    }
+  ],
+  "member_refs": [
+    {
+      "token": "0x0a000037",
+      "row_offset": 470282,
+      "parent_token": "0x01000012",
+      "name": "Acos",
+      "signature": {
+        "raw_length": 4,
+        "raw_sha256": "5ec2ae82f46843573128416c6a34c659a1a89c1d36d25ce9b7b16e4d4b921f96",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 1,
+        "return_type": "r8",
+        "parameter_types": [
+          "r8"
+        ],
+        "field_type": null,
+        "issue": null
+      }
+    }
+  ],
+  "static_inference": {
+    "zero_direction_angle_degrees": 90,
+    "reason": "Normalize returns zero for zero magnitude; Angle normalizes both inputs, clamps their dot product, evaluates Acos and multiplies by its float radian-to-degree constant."
+  }
+}
