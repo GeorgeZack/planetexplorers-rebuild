@@ -1,5 +1,37 @@
 # Original-game playtest and C comparison
 
+## October 12 Wentfly, Knocked and GetUp — source-derived, headless only
+
+[Ragdoll action lifecycles](audit/RAGDOLL_ACTIONS.md) are implemented in the
+disconnected `pe_ragdoll_action`: ordered mask/view/motor/freeze requests,
+exact source relations, partial source-fault reporting, readiness and deferred
+force helpers. The player prefab overrides Knocked's default delay to 2s.
+Its expiry requests immediate GetUp while keeping the action registered until
+GetUp's relation cancels it. GetUp waits for actual view state rather than an
+invented clip-length timer. No host connects this foundation.
+
+No game was launched, no desktop input was sent, and no player saves or
+recovered runtime asset groups were changed. No ragdoll physics, get-up pose,
+live reaction, invulnerability or difficulty equivalence is established.
+Installed AnimFollow base behavior, FinalIK solving and the prepared reaction
+bake remain separate prerequisites.
+
+Focused core and all six UnityPy exporter tests pass with no skips. The final
+runtime build passes. Full `make -C rebuild check` passes 255 jobs, 889 Python
+tests and 84 ordinary-interpreter skips (skips are not passes).
+`check-sanitize` passes all 100 suites with ASan/UBSan and leak detection.
+`check-content` and `check-sources` pass, the latter comparing the new outputs
+and running all six new exporter tests with UnityPy and no skips. Documentation
+links and whitespace checks pass.
+
+Full check and sanitizer ran outside sandbox supervision because the preceding
+round established LeakSanitizer's ptrace restriction. A preliminary focused
+fixture failed: it began with no view, then erroneously supplied a present view
+when asserting missing-view cleanup. Supplying the absent-view update fixes
+the fixture; that failed assertion is not counted as a pass. Local logs and
+next work are listed in [the handoff](HANDOFF.md).
+
+
 ## October 12 hit IK — source-derived, headless only
 
 [Female hit IK](audit/HIT_IK.md) is implemented in the disconnected `pe_hit_ik`

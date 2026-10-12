@@ -1,5 +1,7 @@
 # Whacked and Repulsed animation contract
 
+October12 follow-through: [Wentfly/Knocked/GetUp lifecycles](RAGDOLL_ACTIONS.md) and [hit IK](HIT_IK.md) now have disconnected C request owners. Their source requests do not recover ragdoll physics, FinalIK solving or reaction/get-up poses.
+
 October 12, 2026. Source-derived from the installed controller, checked-in C#
 and installed CIL, with a disconnected C owner for the Whacked lifecycle.
 Neither gameplay host calls it. No reaction pose exists in the rebuild yet;
@@ -150,7 +152,9 @@ mix.
 
 ## Next animation set: get-up and sprint attack
 
-Recovered from the installed controller on October 12; no C owner yet.
+The clip/state identities below were recovered from the installed controller
+on October 12. The [action lifecycle](RAGDOLL_ACTIONS.md) is now recovered
+separately; no get-up pose or state presenter is qualified yet.
 
 **Halt, Wentfly and Knocked play no clip.** `Action_Halt` runs a procedural
 `IKAnimEffectCtrl.StopMove` on the controller velocity, now

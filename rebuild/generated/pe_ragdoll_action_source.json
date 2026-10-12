@@ -1,0 +1,440 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "sha256": "6e30c2baf434ca14b29d10b30141985c3b2a64578298634b2c66ab1891ec1e10"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs.meta",
+      "sha256": "80a2dbe920b7ce1a6b60df1cd260c626dd28abba3ca03fac97691394df9dba02"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "sha256": "682b1d281e9d4ecfc608a6d11f133e24c547b3c057bb1942d8991af30e95eeda"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "sha256": "f6f52e21dda703433c4add331bb1d8779c989f4b6ecaf093b0373d565b975da7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "sha256": "84a63a50d399e76077a4bb11aef7c1821334a9a2e3e9b4141fa507d6d539ea6b"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "sha256": "dbf15ded3ca9803505102c1c780361ae06680c647114fe2f38022e3d277988ff"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "sha256": "4b60e324d175f0ace304fde8e589ef39ddd94eef6ad122af23037fb4af0ad20d"
+    }
+  ],
+  "binding": {
+    "component": 11400038,
+    "knocked_get_up_time": 2.0
+  },
+  "relations": [
+    {
+      "action": 7,
+      "name": "Wentfly",
+      "row": {
+        "ActionType": "7",
+        "Name": "Wentfly",
+        "PauseAction": "40",
+        "EndAction": "0",
+        "EndImmediately": "1,2,3,4,13,14,15,16,17,18,19,20,21,22,23,24,25,27,28,29,30,31,32,33,35,36,37,38,39,41,43,44,47,48,49,50,51,52,56,57,58,60,61,62",
+        "Ground": "0",
+        "InAir": "0",
+        "InWater": "0",
+        "Rotate": "0",
+        "Sprint": "0",
+        "Jump": "0",
+        "Repulsed": "0",
+        "Wentfly": "0",
+        "Knocked": "2",
+        "Death": "2",
+        "GetUp": "2",
+        "Revive": "2",
+        "Step": "0",
+        "HoldEquip": "0",
+        "SwordAttack": "0",
+        "HoldShield": "0",
+        "Halt": "0",
+        "Fall": "0",
+        "GunHold": "0",
+        "GunReload": "0",
+        "GunShoot": "0",
+        "BowHold": "0",
+        "BowShoot": "0",
+        "BowReload": "0",
+        "Sleep": "2",
+        "Eat": "0",
+        "HoldAimEquip": "0",
+        "Dig": "0",
+        "Fell": "0",
+        "Gather": "0",
+        "PickUpItem": "0",
+        "GetOnVehicle": "2",
+        "JetPack": "0",
+        "Parachute": "0",
+        "Glider": "0",
+        "Climb": "0",
+        "Build": "0",
+        "HoldFlashlight": "0",
+        "Stuned": "0",
+        "Pump": "0",
+        "Sit": "0",
+        "Operation": "0",
+        "Draw": "0",
+        "Throw": "0",
+        "Lie": "2",
+        "GetOnTrain": "2",
+        "Cutscene": "2",
+        "Whacked": "0",
+        "Cure": "2",
+        "HeavyEquipment": "0",
+        "DrillingDig": "0",
+        "Hand": "0",
+        "Leisure": "0",
+        "RopeGunShoot": "0",
+        "Abnormal": "0",
+        "Ride": "0"
+      },
+      "required": 0,
+      "forbidden": 404622443286272,
+      "pause": 1099511627776,
+      "end": 0,
+      "immediate": 8583749821846773790
+    },
+    {
+      "action": 8,
+      "name": "Knocked",
+      "row": {
+        "ActionType": "8",
+        "Name": "Knocked",
+        "PauseAction": "40",
+        "EndAction": "0",
+        "EndImmediately": "1,2,3,4,13,14,15,16,17,18,19,20,21,22,23,24,25,27,28,29,30,31,32,33,35,36,37,38,39,41,43,44,47,48,49,50,51,52,56,57,58,60,61,62",
+        "Ground": "0",
+        "InAir": "0",
+        "InWater": "0",
+        "Rotate": "0",
+        "Sprint": "0",
+        "Jump": "0",
+        "Repulsed": "0",
+        "Wentfly": "2",
+        "Knocked": "0",
+        "Death": "2",
+        "GetUp": "2",
+        "Revive": "2",
+        "Step": "0",
+        "HoldEquip": "0",
+        "SwordAttack": "0",
+        "HoldShield": "0",
+        "Halt": "0",
+        "Fall": "0",
+        "GunHold": "0",
+        "GunReload": "0",
+        "GunShoot": "0",
+        "BowHold": "0",
+        "BowShoot": "0",
+        "BowReload": "0",
+        "Sleep": "2",
+        "Eat": "0",
+        "HoldAimEquip": "0",
+        "Dig": "0",
+        "Fell": "0",
+        "Gather": "0",
+        "PickUpItem": "0",
+        "GetOnVehicle": "2",
+        "JetPack": "0",
+        "Parachute": "0",
+        "Glider": "0",
+        "Climb": "0",
+        "Build": "0",
+        "HoldFlashlight": "0",
+        "Stuned": "0",
+        "Pump": "0",
+        "Sit": "0",
+        "Operation": "0",
+        "Draw": "0",
+        "Throw": "0",
+        "Lie": "0",
+        "GetOnTrain": "2",
+        "Cutscene": "2",
+        "Whacked": "0",
+        "Cure": "2",
+        "HeavyEquipment": "0",
+        "DrillingDig": "0",
+        "Hand": "0",
+        "Leisure": "0",
+        "RopeGunShoot": "0",
+        "Abnormal": "0",
+        "Ride": "2"
+      },
+      "required": 0,
+      "forbidden": 36415827276205696,
+      "pause": 1099511627776,
+      "end": 0,
+      "immediate": 8583749821846773790
+    },
+    {
+      "action": 10,
+      "name": "GetUp",
+      "row": {
+        "ActionType": "10",
+        "Name": "GetUp",
+        "PauseAction": "40",
+        "EndAction": "0",
+        "EndImmediately": "7,8",
+        "Ground": "0",
+        "InAir": "0",
+        "InWater": "0",
+        "Rotate": "0",
+        "Sprint": "0",
+        "Jump": "0",
+        "Repulsed": "0",
+        "Wentfly": "0",
+        "Knocked": "1",
+        "Death": "2",
+        "GetUp": "0",
+        "Revive": "0",
+        "Step": "0",
+        "HoldEquip": "0",
+        "SwordAttack": "0",
+        "HoldShield": "0",
+        "Halt": "0",
+        "Fall": "2",
+        "GunHold": "0",
+        "GunReload": "0",
+        "GunShoot": "0",
+        "BowHold": "0",
+        "BowShoot": "0",
+        "BowReload": "0",
+        "Sleep": "0",
+        "Eat": "0",
+        "HoldAimEquip": "0",
+        "Dig": "0",
+        "Fell": "0",
+        "Gather": "0",
+        "PickUpItem": "0",
+        "GetOnVehicle": "0",
+        "JetPack": "0",
+        "Parachute": "0",
+        "Glider": "0",
+        "Climb": "0",
+        "Build": "0",
+        "HoldFlashlight": "0",
+        "Stuned": "0",
+        "Pump": "0",
+        "Sit": "0",
+        "Operation": "0",
+        "Draw": "0",
+        "Throw": "0",
+        "Lie": "1",
+        "GetOnTrain": "2",
+        "Cutscene": "0",
+        "Whacked": "0",
+        "Cure": "0",
+        "HeavyEquipment": "0",
+        "DrillingDig": "0",
+        "Hand": "0",
+        "Leisure": "0",
+        "RopeGunShoot": "0",
+        "Abnormal": "0",
+        "Ride": "2"
+      },
+      "required": 17592186044672,
+      "forbidden": 36063981391184384,
+      "pause": 1099511627776,
+      "end": 0,
+      "immediate": 384
+    }
+  ],
+  "method_guards": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "pattern": "public\\s+enum\\s+PEActionType",
+      "sha256": "cbce9c7ae392fa5889f6af6fa98bff526e5d669d2eb38d6c516b4e43dacfb72e"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "pattern": "public\\s+enum\\s+PEActionMask",
+      "sha256": "8bd60ed668797604e6f8a4e042c849fb2eaa0b14b1a98c58ef428c16500f4af7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "pattern": "public\\s+static\\s+void\\s+LoadActionRelation",
+      "sha256": "5c5a06c1ee1e16aca4107baba07c840d183707e34558099c16167a896b85da74"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "pattern": "public\\s+class\\s+Action_Wentfly",
+      "sha256": "1e19c2bc04b9fdfeb8e4268afa48c64cf51c2ec7936b2fdecfa36a9f9db3ed96"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "pattern": "public\\s+class\\s+Action_Knocked",
+      "sha256": "e1b800bbcb3e47873736dd273231563bb6a4dbf80b8b613a91b2a85c329c0df7"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "pattern": "public\\s+class\\s+Action_GetUp",
+      "sha256": "f23ce483d9eaa8546094ec2fae3ce9ab62459a4580d203f8ed55c266ed08870d"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/PEAction.cs",
+      "pattern": "public\\s+abstract\\s+class\\s+PEAction",
+      "sha256": "c443537080d22ef14706226c3e35a351a17389c010ca95a06bb180cf938ae5f2"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "pattern": "public\\s+override\\s+void\\s+Start",
+      "sha256": "26487b70b6f579e662db5d2266abe616c1d3f728006afbe1248df65f9e044bf1"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "pattern": "public\\s+void\\s+OnMsg",
+      "sha256": "da2592018cd8f26703dad2dce118fc8d6666e9a21baa2e7af61e53424942d3b1"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Beat.cs",
+      "pattern": "void\\s+ApplyMoveEffect",
+      "sha256": "f16ea238ae2415af3396ffa506fe629797df06e855d89f4052213644da1945e9"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "class\\s+RunningAction",
+      "sha256": "9578ae9ef45f7372e68b12e71fed364e4fe6b707cb87c3557c95382f16033034"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "public\\s+bool\\s+DoAction\\s*\\(",
+      "sha256": "f58a6d9b88dc13c74170eeb3c230d55da2a7258d8f45ed591d6bdddaba54bd85"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "public\\s+void\\s+DoActionImmediately",
+      "sha256": "b05053ac901f0c4da27ec9c37bc71a6a2b2535a33f9d18b4fb9b933d4898fa00"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "public\\s+bool\\s+EndAction\\s*\\(",
+      "sha256": "2fe01d7142c112249396f199a723341b7a7275d38424ec4d064499c650fef473"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "public\\s+bool\\s+EndImmediately",
+      "sha256": "d0357e0e7a7c2579ed61efda714e1df20d47bbdfc63f56df8657179e1a7c866a"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "public\\s+void\\s+FreezePhyState\\s*\\(",
+      "sha256": "a405225c6ce6e89df7d3fc52a8f0a7a1d5389249dd7afb21b0b2992383db8520"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/MotionMgrCmpt.cs",
+      "pattern": "void\\s+UpdatePhy",
+      "sha256": "5d1044c12ecc150cea9991046bfc03748a4e1bcccb974a34070b2f17a5c1059c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "public\\s+bool\\s+IsRagdoll",
+      "sha256": "24ec8452792c039143602e80b1ae403708c03a241a77ca9102f9558537acd84c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "public\\s+bool\\s+IsReadyGetUp",
+      "sha256": "d62dd5920dab17b40fac8a7f7282f1f052b1f1c46c952b5b3a1ebe3811696a3c"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "public\\s+Transform\\s+GetRagdollTransform",
+      "sha256": "a1a3de73400319d53ee641025880f011defe38d4d9d02f484599469333adaf60"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "public\\s+void\\s+ActivateRagdoll\\s*\\(",
+      "sha256": "eff41649d7198d53f8cd86ff47384746519512e2f55f8c08c62064cf46f6a277"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "public\\s+void\\s+DeactivateRagdoll",
+      "sha256": "cc5b680136607e36cdb7e5d5ca2a75beb401875efb3faebd6905c88b2a71a1b4"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "public\\s+void\\s+ActivateInjured",
+      "sha256": "fa159f021a2644e6a5fe5e19e37e58d7d943e62c969298cf0fd8bad484d60ce3"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "void\\s+DoActivateInjured",
+      "sha256": "b97a7fefd7e671e23291d1d75e1a32d5923e479e81d23abd4702fc688e46bdb8"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/BiologyViewCmpt.cs",
+      "pattern": "void\\s+IRagdollHandler.OnGetupFinished",
+      "sha256": "552a085d20efb2985a765b7c2451f993f4893d2b10a7c769178d77b183fedbc8"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "public\\s+void\\s+Activate\\s*\\(",
+      "sha256": "5b3f788dff1523d03b549cc2eba57a7b30837775357c61c4489c8dd2e82aae46"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "public\\s+void\\s+Deactivate",
+      "sha256": "e4a76b36b7150bb0d70b0f5f01f1ce7382245357af4b6f5156e5fa47859d6bc4"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "IEnumerator\\s+AddForce",
+      "sha256": "cf96e711975588d82ec26b2ed43f2695c90816d0a388f03c52ccf8891261e336"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "public\\s+bool\\s+IsReadyGetUp",
+      "sha256": "d49d487a0a663aa586b39d88206abb04f4d539bdc0a1e5daa462d15f4bc98c72"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "protected\\s+override\\s+bool\\s+IsGetupReady",
+      "sha256": "2c2052a8c2e2d3cb0efbe87e44c003e3a3e949396f2363300d5041e7813ca119"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "protected\\s+override\\s+void\\s+OnFallBegin",
+      "sha256": "4aef09649d3178ee5392237154338cb312b9d2f4ebb5d8e53a0bab54911e329e"
+    },
+    {
+      "path": "Assets/Scripts/Assist/PERagdollController.cs",
+      "pattern": "protected\\s+override\\s+void\\s+OnGetupFinished",
+      "sha256": "4b0d3c32b04dfae640f2b856b02ed8a756e9ca9ca7aa5b451c67e4c55224dc6b"
+    }
+  ],
+  "scope": "Disconnected admitted-action lifecycle, ordered view/motor/freeze requests, readiness predicate and deferred force scaling only. No ragdoll simulation, PhysX, AnimFollow, get-up pose or host integration.",
+  "quirks": [
+    "Knocked player prefab delay is 2s, overriding the class default 3s.",
+    "Knocked clears its mask and freeze, requests immediate GetUp, but Update still returns false.",
+    "GetUp immediate dispatch bypasses normal admission and immediately ends Wentfly and Knocked.",
+    "Normal GetUp admission requires both Knocked and Lie masks; immediate dispatch bypasses them.",
+    "Wentfly missing view dereferences null in Update; C reports a source fault rather than inventing cleanup.",
+    "Knocked reaction decision routes to Wentfly; it does not start Action_Knocked.",
+    "View_Ragdoll_Getup_Finished action-ending branch in Motion_Beat is commented out.",
+    "Freeze requests are keyed by action class; action freeze disables model physics, system freeze alone disables ragdoll physics.",
+    "BiologyViewCmpt.IsRagdoll reads the inherited controller active, not PERagdollController.IsRagdoll()."
+  ],
+  "view_contract": "Deactivate(false) sets get-up readiness; it does not immediately clear ragdoll state. Deactivate(true) stops falling/gettingUp, disables animFollow and invokes OnGetupFinished. ActivateInjured sets defence-trigger admission, cancels an older delayed request, and applies or invokes its replacement.",
+  "deferred_force": "AddForce waits for the next FixedUpdate; with a valid hit transform and Rigidbody it calls AddForceAtPosition(hitForce * 100, hitPoint) with default Force mode. It is not a velocity impulse.",
+  "readiness": "PERagdollController.IsReadyGetUp is falling && root Rigidbody velocity magnitude < settledSpeed. The inherited threshold, active lifecycle and pose are caller inputs, not fabricated constants."
+}

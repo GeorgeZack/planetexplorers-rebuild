@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October12 ragdoll lifecycles: [Wentfly, Knocked and GetUp](RAGDOLL_ACTIONS.md) now have disconnected ordered requests in `pe_ragdoll_action`, including the player's2s Knocked override, immediate GetUp dispatch and class-keyed model freezes. No physics, pose or host integration is enabled. Next offline need is the installed AnimFollow base lifecycle; the prepared reaction bake remains separate.
+
 October12 hit IK: [the offset requests](HIT_IK.md) now have a disconnected `pe_hit_ik` owner and source exporter, including exact transform routing, concurrent/restarted parts and root-position pins. The FinalIK solve and visible reactions remain gated. Next source-portable work is Wentfly/Knocked/GetUp lifecycle extraction; the prepared reaction bake remains a separate engine need.
 
 October12 Halt: [the stop effect](HALT_STOP_EFFECT.md) is recovered into the disconnected `pe_halt`: lifecycle, speed-chosen .2–.9s duration, foot choice and seven effector offsets per frame. The FinalIK solve is unrecovered, so there is no pose. Open decision: the original's Halt mask blocks Move and Jump for that duration after every stop; the live sandbox does not, and adopting it is a feel change awaiting a user choice. Hit IK shares the same controller and is the next source-portable piece.

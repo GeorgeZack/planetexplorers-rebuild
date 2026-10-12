@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[Ragdoll action lifecycles](docs/audit/RAGDOLL_ACTIONS.md): `pe_ragdoll_action` owns disconnected Wentfly/Knocked/GetUp ordered requests and class-keyed freeze reduction; `export_ragdoll_actions.py` binds source methods, rows7/8/10 and the player’s2s Knocked override. Physical ragdoll and get-up poses remain gated.
+
 [Hit IK](docs/audit/HIT_IK.md): `pe_hit_ik` owns disconnected per-part clocks and additive effector requests; `export_hit_ik.py` binds the female transform lists, pinned/duplicate links and force profile. [Current handoff](docs/HANDOFF.md) records the next work.
 
 [Halt stop effect](docs/audit/HALT_STOP_EFFECT.md): `pe_halt` owns the disconnected Halt lifecycle and foot-stop effector offsets; `export_halt_effect.py` binds the C# rules, the female prefab curves and relation row50.
