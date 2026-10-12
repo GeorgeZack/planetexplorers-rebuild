@@ -32,7 +32,10 @@ bool pe_sandbox_actor_set_action(PeSandboxActor *a,const PeSandboxActionPose *po
 }
 bool pe_sandbox_actor_set_melee_item(PeSandboxActor *a,int item,uint32_t instance,bool held,const PeCombat *clock){
     if(!a||a->fail_melee)return false;
-    record(a,'M');a->melee_calls++;a->pose=(PeSandboxActionPose){.item_id=item,.instance_id=instance,.held=held};
+    /* The real melee setter owns its action binding; the host no longer clears it first. */
+    PeSandboxActionPose pose={.item_id=item,.instance_id=instance,.held=held};
+    if(!pe_sandbox_actor_set_action(a,&pose))return false;
+    record(a,'M');a->melee_calls++;
     a->clock_pointer=clock;if(clock)a->combat=*clock;else memset(&a->combat,0,sizeof a->combat);return true;
 }
 bool pe_sandbox_actor_body_pose(const PeSandboxActor *a,const PeGame *g,PeSandboxBodyPose *out){
@@ -112,6 +115,9 @@ static void sword_poses(PeGame *g){
     CHECK(a.pose.held&&!a.ground_calls&&a.clock_pointer==&melee.action&&!memcmp(&a.combat,&original,sizeof original));
     CHECK(hunt_player_pose(&a,g,(const PeActor*)&defence_identity,&melee,&queried)&&queried.clip==2&&queried.seconds==original.clip_time);
     CHECK(!memcmp(&melee.action,&original,sizeof original)&&stamina==95);
+    melee.tick_cancelled=true;reset_callbacks(&a);CHECK(sandbox_action_pose(&a,g,&tool,&melee,true));
+    CHECK(!a.clock_pointer&&!a.combat.active&&!memcmp(&melee.action,&original,sizeof original));
+    melee.tick_cancelled=false;
     pe_combat_stop(&melee.action);reset_callbacks(&a);CHECK(sandbox_action_pose(&a,g,&tool,&melee,true)&&!a.pose.held);
     /* Input draw/stow affects binding without adding elapsed time. */
     a.ground=true;CHECK(sandbox_action_pose(&a,g,&tool,&melee,false)&&!a.pose.held);

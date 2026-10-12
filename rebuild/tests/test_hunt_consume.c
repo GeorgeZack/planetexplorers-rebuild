@@ -7,11 +7,16 @@
 #include "pe_sandbox_ui.h"
 #include "pe_sandbox_camera.h"
 #include "pe_settlement.h"
+#include "pe_sandbox_actor.h"
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+static unsigned actor_cancels;
+bool pe_sandbox_actor_set_action(PeSandboxActor *actor,const PeSandboxActionPose *pose){
+    assert(!actor&&!pose);actor_cancels++;return true;
+}
 static bool held_w;
 static bool key_down(int key){return held_w&&key==KEY_W;}
 static bool key_pressed(int key){(void)key;return false;}
@@ -39,6 +44,7 @@ static PeSandboxCameraControlResult controls(PeSandboxCameraControls*c,PeSandbox
 }
 static PeSandboxUIInput ui_input(void){return(PeSandboxUIInput){.focused=true,.mouse_x=640,.mouse_y=350,.frame_dt=PE_FIXED_DT,.quickslot=-1};}
 static int scenario(int medicine,float healing){
+    actor_cancels=0;
     const char *root=pe_test_path("rebuild/build/reference-assets");
     const char *names[]={"adventure-route/terrain.pevx","hare.peac","hare.pehb","player-defence/player-defence.peac",
         "player-defence/player-defence.pehb","player/player-part-0-material-0.peac",

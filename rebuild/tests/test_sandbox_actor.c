@@ -548,6 +548,34 @@ int main(void) {
     g->inventory.slots[0].instance_id=2;g->equipped_instance_id=2;draw(a,g);CHECK(draws[0].clip<PE_LOCOMOTION_COUNT&&draws[1].view==KNIFE);
     g->inventory.slots[0].instance_id=1;g->equipped_instance_id=1;g->hp=0;draw(a,g);CHECK(draws[0].clip<PE_LOCOMOTION_COUNT&&draws[1].view==KNIFE);g->hp=100;
     combat.active=false;CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));draw(a,g);CHECK(draws[0].clip<PE_LOCOMOTION_COUNT&&draws[1].view==KNIFE_HELD);
+    /* Natural completion carries a display-only tail into the SAME body,
+     * held attachment and defence-facing snapshot, including while walking. */
+    g->grounded=true;combat.active=true;combat.stage=0;combat.event_index=4;combat.clip_time=.69;
+    CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));
+    combat.active=false;combat.event_index=5;combat.clip_time=.71;
+    PeCombat mechanical=combat;
+    CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));draw(a,g);
+    CHECK(draws[0].blended&&draws[1].blended&&same_samples(draws[0].samples,draws[1].samples,draws[0].count));
+    CHECK(draws[0].samples[draws[0].count-1].weight==1);
+    CHECK(draws[0].samples[draws[0].count-1].clip==PE_LOCOMOTION_COUNT);
+    PeSandboxBodyPose recovery_before,recovery_after;
+    CHECK(pe_sandbox_actor_body_pose(a,g,&recovery_before));
+    pe_sandbox_actor_update(a,0,g);CHECK(pe_sandbox_actor_body_pose(a,g,&recovery_after)&&same_pose(&recovery_before,&recovery_after));
+    g->player.z+=.15f;pe_sandbox_actor_update(a,.05f,g);
+    CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));draw(a,g);
+    CHECK(draws[0].samples[draws[0].count-1].weight>0&&draws[0].samples[draws[0].count-1].weight<1);
+    CHECK(fabs(draws[0].samples[draws[0].count-1].seconds-.76)<1e-6);
+    CHECK(pe_sandbox_actor_body_pose(a,g,&recovery_after)&&recovery_after.blend_count==draws[0].count);
+    CHECK(!memcmp(&combat,&mechanical,sizeof combat));
+    g->inventory.slots[0].instance_id=2;g->equipped_instance_id=2;draw(a,g);
+    for(size_t i=0;i<draws[0].count;i++)CHECK(draws[0].samples[i].clip<PE_LOCOMOTION_COUNT);
+    g->inventory.slots[0].instance_id=1;g->equipped_instance_id=1;
+    pe_sandbox_actor_update(a,.1f,g);draw(a,g);
+    for(size_t i=0;i<draws[0].count;i++)CHECK(draws[0].samples[i].clip<PE_LOCOMOTION_COUNT);
+    combat.active=true;combat.event_index=4;CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));
+    combat.active=false;combat.event_index=5;CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));
+    CHECK(pe_sandbox_actor_set_action(a,NULL));draw(a,g);
+    for(size_t i=0;i<draws[0].count;i++)CHECK(draws[0].samples[i].clip<PE_LOCOMOTION_COUNT);
     CHECK(pe_sandbox_actor_set_melee(a,1,false,NULL));draw(a,g);CHECK(draws[0].clip<PE_LOCOMOTION_COUNT&&draws[1].view==KNIFE);
     combat.active=true;CHECK(pe_sandbox_actor_set_melee(a,1,true,&combat));CHECK(pe_sandbox_actor_set_action(a,NULL));draw(a,g);CHECK(draws[0].clip<PE_LOCOMOTION_COUNT&&draws[1].view==KNIFE);
     g->inventory.slots[0].item_id=12;draw(a,g);CHECK(draw_count==2&&draws[1].view==SHOVEL_STOWED);

@@ -106,6 +106,10 @@ bool pe_sandbox_actor_melee_assets(const PeSandboxActor *actor,const PeActor **b
  * instance is the currently presented equipped Knife33 identity; zero is valid
  * only with held=false and no active combat. Invalid snapshots are atomic.
  * General set_action clears this snapshot; set_melee replaces general action.
+ * A natural end (event_index5) starts a native150ms inactive pose recovery;
+ * action/contact/root clocks remain untouched. Body/held/defence share weights
+ * and the continuing clip at rate1. NULL combat, explicit NULL action, stow,
+ * reset, death, airborne or an instance change cancels it immediately.
  * Draw rechecks equipment identity and life, and ignores attacks in preview. */
 bool pe_sandbox_actor_set_melee(PeSandboxActor *actor,uint32_t instance,bool held,const PeCombat *combat);
 

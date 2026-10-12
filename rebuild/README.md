@@ -1,5 +1,7 @@
 # Planet Explorers C rebuild
 
+Knife attacks now blend back to idle/walking over150ms after natural completion. Restart the rebuild and repeat one click, then wait, standing and walking forward; damage and stamina timing are unchanged. [Scope and retest](../docs/audit/KNIFE_RECOVERY.md).
+
 The staged reaction animation review now has a private-display fixture: `make -C rebuild reaction-render-capture REACTION_CAPTURE_OUTPUT=build/reaction-review-01`. Choose a fresh output directory. It renders25 isolated leaves with sword/shield props and defence wires; it does not enable live combat. [Images, prerequisites and scope](../docs/audit/REACTION_PREVIEW.md).
 
 Building fabric/roof transparency now uses recovered cutout and two-sided rules; sandbox NPC names hide behind walls. Restart the rebuilt game to see both corrections. After replacing settlement OBJ assets, regenerate their sidecars using the [building material instructions](../docs/audit/BUILDING_MATERIALS.md#installation-and-verification).

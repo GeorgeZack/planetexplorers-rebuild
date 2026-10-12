@@ -1,5 +1,28 @@
 # Original-game playtest and C comparison
 
+## October12 Knife single-click recovery — user feedback and C fixture
+
+The user reported an abrupt/early-looking ending when standing or moving
+forward, with one click then waiting. This is qualitative native feedback,
+not exact timing or original-game observation. [Natural recovery](audit/KNIFE_RECOVERY.md)
+now mixes the inactive tail into locomotion for a native150ms, without changing
+mechanical combat/root clocks. Focused actor and exported-host consume checks
+pass. A private optimized fixture passes25 Knife leaves/200 panels plus idle
+and walking recovery sheets; both recovery sheets were inspected. The final
+run exits0, checks readback tokens and unchanged staged inputs. No desktop
+input, original launch, save or installed asset changed. User retest is pending.
+
+The first full check could not compile the extracted input host after its
+new actor-cancellation callback; its tracked extractor and mock were corrected.
+The equipment-host mock also needed its action binding moved into the mocked
+melee setter. Focused host tests and actor ASan/UBSan/leak scanning pass; the
+full sanitizer registry passes101 suites with zero skips. The final full
+check passes258 jobs/905 Python tests with87 ordinary-interpreter skips
+(skips are not passes); CLI passes26 tests. Links, retained image hashes and
+`git diff --check` pass, and the structural index is rebuilt. Logs: `knife-recovery-check-final3.log`,
+`knife-recovery-sanitize.log`, `knife-recovery-cli.log` and
+`knife-recovery-render-02.log`, all under `rebuild/build`.
+
 ## October12 native reaction animation preview — observed in fixture
 
 The [private-display preview](audit/REACTION_PREVIEW.md) passes actual optional

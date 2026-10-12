@@ -62,6 +62,7 @@ static PeInput host_motion(PeGame *game, PeSandboxUIResult action,
     bool build_mode=false,third_person=camera_control.third_person,knife_ready=true,knife_tool=true;
     bool autorun=false,jump_pending=false,walk=false;
     PeSandboxMelee melee=*blade;
+    PeSandboxActor *actor=NULL; /* Drawing is mocked by this input-only fixture. */
     SandboxBladeFacing blade_facing={0};
     if(action.consume_actions)attack_pending=false;
 ''' + cancel + '\n    PeInput input={0};\n' + movement + '''

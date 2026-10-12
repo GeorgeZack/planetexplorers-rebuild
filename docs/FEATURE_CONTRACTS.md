@@ -24,6 +24,8 @@ The PECSv21 history suffix remains unchanged within current PECSv22 saves: prese
 
 ## Actor presentation and locomotion
 
+Natural blade completion now retains a native150ms inactive recovery pose, advancing at rate1 and mixing into the existing locomotion snapshot. Body, held attachment and defence-facing query share all weights/clocks; capacity13 reserves one leaf beyond the12 locomotion contributors. Active damage/root/combo clocks stay unchanged. Explicit cancellation, stow, death, airborne, reset/load and instance changes clear recovery immediately; pause freezes it. This is a frame-skinned presentation adapter, not the original Animator exit/layer solve. See [Knife recovery](audit/KNIFE_RECOVERY.md).
+
 The [staged reaction preview](audit/REACTION_PREVIEW.md) is fixture-only: explicit separate-group selection, matching body/attachment/defence clocks and per-clip readback checks. Its real GPU load and isolated leaf images do not enable runtime reaction/get-up/sprint or shield admission. Preserve fresh output directories and the verified private high-display launcher.
 
 Actors and static reference models share the shader and scoped culling in `pe_material_view.h`; changes must preserve actor cutoffs, opaque eye alpha and caller culling state. See [building materials](audit/BUILDING_MATERIALS.md).

@@ -78,7 +78,8 @@ Full pre-commit and sanitizer registry results are in [PLAYTEST](../PLAYTEST.md)
 The registry sanitizer run covers core suites; the actual GPU fixture ran
 optimized, so this does not establish GPU-driver leak acceptance.
 
-Next: qualify Knife33 sprint attachments and add a distinct clip401 root reader
+[Knife33 attachments and natural-end recovery](KNIFE_RECOVERY.md) are now
+qualified in a separate fixture. Next: add a distinct clip401 root reader
 with outgoing-interval motion/contact routing. [Sprint source knots](SPRINT_ROOT_CHANNELS.md)
 are already staged. Live hit reactions, ragdoll/get-up, stun/knockback and shield
 remain closed: this fixture supplies neither the Animator layer/blend solve,

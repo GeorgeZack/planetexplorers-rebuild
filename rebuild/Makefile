@@ -983,3 +983,7 @@ $(BUILD)/render_reaction_group: tests/render_reaction_group.c $(REACTION_RENDER_
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/render_reaction_group.c $(REACTION_RENDER_OBJS) $(CORE_LIB) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
 reaction-render-capture: $(BUILD)/render_reaction_group
 	python3 tests/run_private_ui_capture.py --reactions --output $(REACTION_CAPTURE_OUTPUT)
+
+.PHONY: knife-reaction-render-capture
+knife-reaction-render-capture: $(BUILD)/render_reaction_group
+	python3 tests/run_private_ui_capture.py --reactions --knife-reactions --output $(REACTION_CAPTURE_OUTPUT)

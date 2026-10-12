@@ -72,6 +72,8 @@ struct PeSandboxActor {
     double elapsed;
     size_t melee_body[4],melee_knife[4];
     bool running_ready;
+    /* Native 150ms natural-end pose recovery; never an action/contact clock. */
+    struct {bool was_active,active;int item;uint32_t instance;size_t body_clip,tool_clip;double seconds,age;} recovery;
     struct {bool active;size_t body_clip,knife_clip;double seconds;} melee;
     struct { int item_id,phase;uint32_t instance_id;bool held;double seconds; } action;
 };
@@ -261,7 +263,7 @@ bool pe_sandbox_actor_sword_ground_ready(const PeSandboxActor *a,const PeGame *g
 }
 bool pe_sandbox_actor_set_action(PeSandboxActor *a,const PeSandboxActionPose *p) {
     if(!a||!a->ok)return false;
-    if(!p){memset(&a->action,0,sizeof a->action);a->action.phase=-1;memset(&a->melee,0,sizeof a->melee);return true;}
+    if(!p){memset(&a->recovery,0,sizeof a->recovery);memset(&a->action,0,sizeof a->action);a->action.phase=-1;memset(&a->melee,0,sizeof a->melee);return true;}
     if(!isfinite(p->seconds)||p->seconds<0||p->seconds>1000000||p->item_id<0||
        (p->held&&(!p->instance_id||!pe_sandbox_actor_hold_ready(a,p->item_id))))return false;
     if(a->shield_instance&&p->held&&!pe_sandbox_actor_shield_ready_for_item(a,p->item_id))return false;
@@ -274,6 +276,8 @@ bool pe_sandbox_actor_set_action(PeSandboxActor *a,const PeSandboxActionPose *p)
         if(phase<0||(phase!=1&&p->seconds>action_duration[kind][phase]+1e-6))return false;
     }
     if(!p->item_id&&(p->instance_id||p->held||p->clip))return false;
+    if(p->clip||(p->item_id&&(!p->held||p->instance_id!=a->recovery.instance||p->item_id!=a->recovery.item)))
+        memset(&a->recovery,0,sizeof a->recovery);
     a->action.item_id=p->item_id;a->action.instance_id=p->instance_id;a->action.held=p->held;
     a->action.phase=phase;a->action.seconds=p->seconds;memset(&a->melee,0,sizeof a->melee);return true;
 }
@@ -301,7 +305,17 @@ bool pe_sandbox_actor_set_melee_item(PeSandboxActor *a,int item,uint32_t instanc
         if(!clocks_match(body,knife)||combat->clip_time>body->duration+1e-6)return false;
     }
     PeSandboxActionPose pose={.item_id=instance?item:0,.instance_id=instance,.held=held};
+    bool natural=!active&&combat&&combat->event_index==5&&a->recovery.was_active&&held&&
+        a->recovery.item==item&&a->recovery.instance==instance;
     if(!pe_sandbox_actor_set_action(a,&pose))return false;
+    if(active){
+        a->recovery.was_active=true;a->recovery.active=false;a->recovery.item=item;a->recovery.instance=instance;
+        a->recovery.body_clip=body_clip;a->recovery.tool_clip=knife_clip;a->recovery.seconds=combat->clip_time;
+    }else{
+        a->recovery.was_active=false;
+        if(natural){a->recovery.active=true;a->recovery.age=0;a->recovery.seconds=combat->clip_time;}
+        else if(!held||!combat||a->recovery.item!=item||a->recovery.instance!=instance)memset(&a->recovery,0,sizeof a->recovery);
+    }
     a->melee.active=active;
     if(active){a->melee.body_clip=body_clip;a->melee.knife_clip=knife_clip;a->melee.seconds=combat->clip_time;}
     return true;
@@ -338,6 +352,12 @@ static float turn_toward(float current,float target,float dt){
 void pe_sandbox_actor_update(PeSandboxActor *a,float dt,const PeGame *g){
     if(!a||!a->ok||!g||!isfinite(dt)||dt<0||dt>1||!finite3(g->player)||!finite3(g->velocity)||!isfinite(g->yaw))return;
     if(dt==0)return;
+    if(a->recovery.active){
+        a->recovery.age+=dt;a->recovery.seconds+=dt;
+        const PeSlot *slot=pe_game_equipped_tool(g);
+        if(a->recovery.age>=.15||g->hp<=0||!g->grounded||!slot||
+           slot->item_id!=a->recovery.item||slot->instance_id!=a->recovery.instance)memset(&a->recovery,0,sizeof a->recovery);
+    }
     PeVec3 measured={0,g->velocity.y,0};bool reset=false;
     if(!a->have_facing)pe_sandbox_actor_face_camera(a,g);
     if(a->have_previous){
@@ -349,7 +369,7 @@ void pe_sandbox_actor_update(PeSandboxActor *a,float dt,const PeGame *g){
         else{measured.x=dx/dt;measured.z=dz/dt;}
     }
     if(reset){double durations[PE_LOCOMOTION_COUNT];memcpy(durations,a->locomotion.duration,sizeof durations);pe_player_locomotion_init(&a->locomotion,durations);measured=(PeVec3){0};}
-    if(reset)pe_sandbox_actor_face_camera(a,g);
+    if(reset){memset(&a->recovery,0,sizeof a->recovery);pe_sandbox_actor_face_camera(a,g);}
     if(!a->facing_locked&&!a->melee.active&&a->action.phase<0){
         if(!a->free_facing)pe_sandbox_actor_face_camera(a,g);
         else if(hypotf(measured.x,measured.z)>.05f)
@@ -400,7 +420,12 @@ static bool select_pose(const PeSandboxActor *a,const PeGame *g,PePlayerLocomoti
     }
     *out=(SelectedPose){body,tool,body_clip,tool_clip,seconds,locomotion,sword};return true;
 }
-static size_t locomotion_samples(const PeSandboxActor *a,int view,bool sword,PeActorBlendSample samples[PE_ACTOR_BLEND_MAX]){
+static bool recovery_bound(const PeSandboxActor *a,const PeGame *g){
+    const PeSlot *slot=pe_game_equipped_tool(g);
+    return a->recovery.active&&slot&&slot->item_id==a->recovery.item&&slot->instance_id==a->recovery.instance&&
+        a->action.held&&a->action.instance_id==slot->instance_id&&g->hp>0&&g->grounded;
+}
+static size_t locomotion_samples(const PeSandboxActor *a,int view,bool sword,bool recover,PeActorBlendSample samples[PE_ACTOR_BLEND_MAX]){
     PePlayerLocomotionPose pose;if(!pe_player_locomotion_snapshot(&a->locomotion,&pose))return 0;
     size_t count=0;
     for(int i=0;i<PE_LOCOMOTION_COUNT;i++)if(pose.weights[i]>0){
@@ -408,6 +433,14 @@ static size_t locomotion_samples(const PeSandboxActor *a,int view,bool sword,PeA
         const PeActorClip *definition=pe_actor_scene_view_clip_at(&a->views[view],clip);if(!definition)return 0;
         double seconds=sword?pose.seconds[i]/a->locomotion.duration[i]*definition->duration:pose.seconds[i];
         samples[count++]=(PeActorBlendSample){clip,seconds,(float)pose.weights[i]};
+    }
+    if(recover&&(view==BODY||view==melee_view(a->recovery.item)||view==WOOD_SHIELD)){
+        const PeActorClip *source=pe_actor_scene_view_clip_at(&a->views[BODY],a->recovery.body_clip);
+        size_t clip=source?pe_actor_scene_view_find_clip(&a->views[view],source->name):PE_ACTOR_BIND_POSE;
+        if(clip==PE_ACTOR_BIND_POSE||count>=PE_ACTOR_BLEND_MAX)return 0;
+        float attack=(float)fmax(0,1-a->recovery.age/.15);
+        for(size_t i=0;i<count;i++)samples[i].weight*=1-attack;
+        samples[count++]=(PeActorBlendSample){clip,a->recovery.seconds,attack};
     }
     return count;
 }
@@ -420,7 +453,7 @@ bool pe_sandbox_actor_body_pose(const PeSandboxActor *a,const PeGame *g,PeSandbo
     PeSandboxBodyPose result={.clip=clip->name,.seconds=p.seconds,.duration=clip->duration,.loop=clip->loop};
     result.yaw=pe_sandbox_actor_yaw(a,g);
     if(p.locomotion){
-        PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];result.blend_count=locomotion_samples(a,p.body,p.sword,samples);
+        PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];result.blend_count=locomotion_samples(a,p.body,p.sword,recovery_bound(a,g),samples);
         if(!result.blend_count)return false;
         for(size_t i=0;i<result.blend_count;i++){
             const PeActorClip *definition=pe_actor_scene_view_clip_at(&a->views[p.body],samples[i].clip);
@@ -444,16 +477,16 @@ static void draw_pose(PeSandboxActor *a,const PeGame *g,PePlayerLocomotionClip c
     int body=p.body,tool=p.tool;size_t body_clip=p.body_clip,tool_clip=p.tool_clip;seconds=p.seconds;
     bool ok;
     if(p.locomotion){
-        PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,body,p.sword,samples);
+        PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,body,p.sword,recovery_bound(a,g),samples);
         ok=count&&pe_actor_scene_view_draw_blend(&a->views[body],samples,count,position,yaw,1,WHITE);
-        if(tool>=0&&a->views[tool].loaded){count=locomotion_samples(a,tool,p.sword,samples);
+        if(tool>=0&&a->views[tool].loaded){count=locomotion_samples(a,tool,p.sword,recovery_bound(a,g),samples);
             ok=count&&pe_actor_scene_view_draw_blend(&a->views[tool],samples,count,position,yaw,1,WHITE)&&ok;}
     }else{
         ok=pe_actor_scene_view_draw_clip(&a->views[body],body_clip,seconds,position,yaw,1,WHITE);
         if(tool>=0&&a->views[tool].loaded)ok=pe_actor_scene_view_draw_clip(&a->views[tool],tool_clip,seconds,position,yaw,1,WHITE)&&ok;
     }
     if(shield_bound(a,g)){
-        if(p.locomotion){PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,WOOD_SHIELD,p.sword,samples);
+        if(p.locomotion){PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,WOOD_SHIELD,p.sword,recovery_bound(a,g),samples);
             ok=count&&pe_actor_scene_view_draw_blend(&a->views[WOOD_SHIELD],samples,count,position,yaw,1,WHITE)&&ok;
         }else{const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[body],body_clip);
             size_t shield_clip=c?pe_actor_scene_view_find_clip(&a->views[WOOD_SHIELD],c->name):PE_ACTOR_BIND_POSE;
@@ -470,7 +503,7 @@ static bool torch_point(const PeSandboxActor *a,const PeGame *g,const float poin
        a->action.item_id!=10||!a->action.held)return false;
     const PeActorSceneView *view=&a->views[TORCH_HELD];
     if(!view->count||!view->parts||!view->parts[0].actor)return false;
-    float local[3];PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,TORCH_HELD,false,samples);
+    float local[3];PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,TORCH_HELD,false,false,samples);
     if(!count||!pe_actor_pose_joint_point_blend(view->parts[0].actor,samples,count,0,point,local))return false;
     float yaw=pe_sandbox_actor_yaw(a,g)*DEG2RAD,c=cosf(yaw),s=sinf(yaw);
     PeVec3 result={g->player.x+c*local[0]+s*local[2],g->player.y+local[1],

@@ -22,8 +22,10 @@ def main():
     parser.add_argument('--materials',action='store_true',help='verify actor alpha materials and capture portraits')
     parser.add_argument('--reference-materials',action='store_true',help='verify static model materials and capture buildings')
     parser.add_argument('--reactions',action='store_true',help='render all staged reaction leaves with attachments and defence')
+    parser.add_argument('--knife-reactions',action='store_true',help='use staged Knife33 attachments and blade geometry in the reaction fixture')
     parser.add_argument('--output',type=Path,help='fresh output directory for reaction captures')
     args = parser.parse_args()
+    if args.knife_reactions and not args.reactions: parser.error('--knife-reactions requires --reactions')
     if args.output and not args.reactions: parser.error('--output requires --reactions')
     if sum((args.shared,args.settings,args.loot,args.materials,args.reference_materials,args.reactions))>1: parser.error('select one capture type')
     out = root/('rebuild/build/ui-shared-captures' if args.shared else 'rebuild/build/ui-details-captures')
@@ -59,9 +61,17 @@ def main():
             if (assets/name).exists() or (assets/name).is_symlink():
                 (assets/name).unlink()
             (assets/name).symlink_to(stage/folder,target_is_directory=True)
+        knife_sources={}
+        if args.knife_reactions:
+            for attachment in ('drawn','stowed'):
+                source=root/f'rebuild/build/knife-reaction-01-{attachment}'
+                if not (source/'recording.peas').is_file(): parser.error('staged Knife33 reaction scenes required')
+                (assets/f'player-reaction-knife-{attachment}').symlink_to(source,target_is_directory=True)
+                knife_sources.update({f'knife-{attachment}/{p.relative_to(source)}':p for p in source.rglob('*') if p.is_file()})
         binary='render_reaction_group'
         stage_hashes={str(p.relative_to(stage)):hashlib.sha256(p.read_bytes()).hexdigest()
                       for p in stage.rglob('*') if p.is_file()}
+        stage_hashes.update({key:hashlib.sha256(p.read_bytes()).hexdigest() for key,p in knife_sources.items()})
     else:
         out.mkdir(exist_ok=True)
     server = None
@@ -76,11 +86,13 @@ def main():
             with (out/'render.log').open('w') as render_log:
                 command=[str(root/'rebuild/build'/binary),str(out)]
                 if args.reactions: command.append(str(assets))
+                if args.knife_reactions: command.append('knife')
                 result = subprocess.run(command,
                     env=env,cwd=root,stdout=render_log,stderr=subprocess.STDOUT,timeout=180)
             if args.reactions and result.returncode==0:
                 after={str(p.relative_to(stage)):hashlib.sha256(p.read_bytes()).hexdigest()
                        for p in stage.rglob('*') if p.is_file()}
+                after.update({key:hashlib.sha256(p.read_bytes()).hexdigest() for key,p in knife_sources.items()})
                 if stage_hashes!=after: raise private.ToolError('staged input changed during render')
                 with (out/'poses.csv').open() as stream: rows=list(csv.DictReader(stream))
                 names=list(dict.fromkeys(row['clip'] for row in rows))
@@ -91,8 +103,9 @@ def main():
                         'clips':names,'panels':200,'stage_sha256':stage_hashes,
                         'images_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in images},
                         'poses_sha256':hashlib.sha256((out/'poses.csv').read_bytes()).hexdigest(),
+                        'recovery_images_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('knife-recovery-*.png')},
                         'renderer_sha256':hashlib.sha256((root/'rebuild/build'/binary).read_bytes()).hexdigest(),
-                        'stage_unchanged':True,'live_admission':False}
+                        'stage_unchanged':True,'live_admission':False,'attachment':'knife33' if args.knife_reactions else 'wood-sword-shield'}
                 with (out/'result.json').open('x') as stream: json.dump(report,stream,indent=2);stream.write('\n')
             print((out/'render.log').read_text())
             return result.returncode
