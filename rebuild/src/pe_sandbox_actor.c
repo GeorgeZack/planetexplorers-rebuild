@@ -12,11 +12,13 @@ _Static_assert(PE_LOCOMOTION_COUNT<=PE_ACTOR_BLEND_MAX,"locomotion blend capacit
 
 enum { BODY, KNIFE_STOWED, SHOVEL_STOWED, SHOVEL_HELD, AXE_HELD, WOOD_AXE_HELD,
        PICKAXE_STOWED, PICKAXE_HELD, TORCH_STOWED, TORCH_HELD, KNIFE_HELD, DIG_BODY, DIG_TOOL, FELL_BODY, FELL_TOOL, WOOD_FELL_TOOL,
-       MINE_BODY, MINE_TOOL, WOOD_SWORD_STOWED, WOOD_SWORD_HELD, WOOD_SHIELD, VIEW_COUNT };
+       MINE_BODY, MINE_TOOL, WOOD_SWORD_STOWED, WOOD_SWORD_HELD, WOOD_SHIELD,
+       REACTION_BODY, REACTION_SWORD_STOWED, REACTION_SWORD_HELD, REACTION_SHIELD, VIEW_COUNT };
 static const char *const folders[VIEW_COUNT]={"player","player-knife-stowed","player-shovel-stowed",
     "player-shovel","player-axe","player-wood-axe","player-pickaxe-stowed","player-pickaxe",
     "player-torch-stowed","player-torch","player-knife-drawn",
-    "player-dig","player-shovel-dig","player-cut","player-axe-cut","player-wood-axe-cut","player-mine","player-pickaxe-mine","player-wood-sword-stowed","player-wood-sword-drawn","player-wood-shield"};
+    "player-dig","player-shovel-dig","player-cut","player-axe-cut","player-wood-axe-cut","player-mine","player-pickaxe-mine","player-wood-sword-stowed","player-wood-sword-drawn","player-wood-shield",
+    "player-reaction","player-reaction-wood-sword-stowed","player-reaction-wood-sword-drawn","player-reaction-wood-shield"};
 static const char *const action_names[3][3]={{"Spade1","Spade2","Spade3"},{"Felling1","Felling2","Felling3"},{"Mine1","Mine2","Mine3"}};
 /* Exact female source clocks. Shovel/Felling native captures09/08 and installed
  * female Mine clips221/228/237. Mine poses require their separate recovered
@@ -40,6 +42,21 @@ static const char *const sword_leaf_names[]={"AttackIdle","SwordWF","SwordRF","S
 static const double sword_leaf_duration[]={1.7333335876464844,1.0999984741210938,.6666679382324219,.6000001430511475,1.0333404541015625,.6666717529296875,1.066680908203125,1.4000015258789062,1.0000038146972656,.23333740234375,.8000030517578125,.6666717529296875};
 static const unsigned sword_leaf_frames[]={54,34,22,20,33,22,34,44,32,9,26,22};
 static const bool sword_leaf_loop[]={true,true,true,true,false,false,false,false,true,false,true,true};
+/* Capture female-reaction-01 in bake order. Index0 is the NormalIdle anchor and
+ * must equal the body's own clip; the rest are exact female source clocks.
+ * Loop flags are the source clips', including the unlooped FowardRightFast. */
+enum { REACTION_CLIPS=25 };
+static const char *const reaction_names[REACTION_CLIPS]={"NormalIdle","IdleBeHit","SwordBeHit",
+    "ForwardFast","FowardRightFast","RightFast","BackRightFast","BackFast","ForwardLeftFast","LeftFast","BackLeftFast",
+    "Forward","ForwardRight","Right","BackRight","Back","ForwardLeft","Left","BackLeft","BlockRepulsed",
+    "GetUpBackMirror","GetUpFrontMirror","GetUpBack","GetUpFront","SprintSwordAttack"};
+static const double reaction_duration[REACTION_CLIPS]={0,.9333336353302002,.9333419799804688,
+    1.0000009536743164,1.0000009536743164,1.0000019073486328,1,1.0000009536743164,1.0000009536743164,1.0000019073486328,1,
+    1.9666669368743896,1.9666671752929688,.9666671752929688,1.9666681289672852,1.9666669368743896,1.9666671752929688,.9666671752929688,1.9666681289672852,1.0000152587890625,
+    1.4666709899902344,1.0666694641113281,1.4666709899902344,1.0666694641113281,1.8000068664550781};
+static const unsigned reaction_frames[REACTION_CLIPS]={0,30,30,32,32,32,31,32,32,32,31,61,61,31,61,61,61,31,61,32,46,34,46,34,56};
+static const bool reaction_loop[REACTION_CLIPS]={true,false,false,true,false,true,true,true,true,true,true,
+    true,true,true,true,true,true,true,true,true,false,false,false,false,false};
 static int melee_view(int item){return item==33?KNIFE_HELD:item==1?WOOD_SWORD_HELD:-1;}
 static const int action_bodies[3]={DIG_BODY,FELL_BODY,MINE_BODY};
 static int action_kind(int item){return item==12?0:(item==26||item==1527)?1:item==19?2:-1;}
@@ -79,6 +96,9 @@ PeSandboxActor *pe_sandbox_actor_load(const char *root,char *error,size_t cap){
     bool pickaxe_group=present[PICKAXE_STOWED]||present[PICKAXE_HELD]||present[MINE_BODY]||present[MINE_TOOL];
     bool torch_group=present[TORCH_STOWED]||present[TORCH_HELD];
     bool wood_pair=present[WOOD_SWORD_STOWED]||present[WOOD_SWORD_HELD]||present[WOOD_SHIELD];
+    bool reaction_group=false,reaction_complete=true;
+    for(int v=REACTION_BODY;v<VIEW_COUNT;v++){reaction_group=reaction_group||present[v];reaction_complete=reaction_complete&&present[v];}
+    if(reaction_group&&!reaction_complete){error_set(error,cap,"Reaction assets must form the complete body/sword/shield group");goto fail;}
     if((present[KNIFE_HELD]&&!present[KNIFE_STOWED])||
        (torch_group&&!(present[TORCH_STOWED]&&present[TORCH_HELD]))||
        (wood_pair&&!(present[WOOD_SWORD_STOWED]&&present[WOOD_SWORD_HELD]&&present[WOOD_SHIELD]))||
@@ -92,6 +112,7 @@ PeSandboxActor *pe_sandbox_actor_load(const char *root,char *error,size_t cap){
        Actor-scene retains the exact validated bytes through GPU upload. */
     for(int v=0;v<VIEW_COUNT;v++)if(present[v]) {
         if(!pe_actor_scene_view_prepare(&a->views[v],paths[v],error,cap))goto fail;
+        if(v>=REACTION_BODY)continue; /* Validated below as one ordered group. */
         if(v<DIG_BODY||v>=WOOD_SWORD_STOWED)for(int i=0;i<PE_LOCOMOTION_COUNT;i++) {
             a->clips[v][i]=pe_actor_scene_view_find_clip(&a->views[v],pe_player_locomotion_name(i));
             const PeActorClip *clip=pe_actor_scene_view_clip_at(&a->views[v],a->clips[v][i]);
@@ -177,6 +198,22 @@ PeSandboxActor *pe_sandbox_actor_load(const char *root,char *error,size_t cap){
             }
         }
     }
+    if(reaction_group){
+        const PeActorClip *idle=pe_actor_scene_view_clip_at(&a->views[BODY],a->clips[BODY][PE_LOCOMOTION_IDLE]);
+        for(int v=REACTION_BODY;v<VIEW_COUNT;v++){
+            PeActorSceneView *view=&a->views[v];
+            if(pe_actor_scene_view_clip_count(view)!=REACTION_CLIPS){error_set(error,cap,"Reaction group requires exactly the25 captured clips");goto fail;}
+            for(size_t i=0;i<REACTION_CLIPS;i++){
+                const PeActorClip *clip=pe_actor_scene_view_clip_at(view,i);
+                if(!clip||strcmp(clip->name,reaction_names[i])){error_set(error,cap,"Reaction group clip names/order differ from the capture");goto fail;}
+                if(i?clip->fps!=30||clip->frames!=reaction_frames[i]||fabs(clip->duration-reaction_duration[i])>1e-6||clip->loop!=reaction_loop[i]||!clip->terminal_at_duration
+                    :!clocks_match(idle,clip)){
+                    error_set(error,cap,i?"Reaction group differs from exact recovered female source clock":"Reaction group NormalIdle anchor differs from the body");goto fail;}
+                if(v!=REACTION_BODY&&!clocks_match(pe_actor_scene_view_clip_at(&a->views[REACTION_BODY],i),clip)){
+                    error_set(error,cap,"Reaction body and attachment clocks differ");goto fail;}
+            }
+        }
+    }
     if(!pe_player_locomotion_init(&a->locomotion,durations)){error_set(error,cap,"Invalid sandbox locomotion durations");goto fail;}
     for(int v=0;v<VIEW_COUNT;v++)if(a->views[v].manifest&&!pe_actor_scene_view_upload(&a->views[v],error,cap))goto fail;
     a->action.phase=-1;a->ok=true;return a;
@@ -201,6 +238,16 @@ bool pe_sandbox_actor_hold_ready(const PeSandboxActor *a,int item) {
 bool pe_sandbox_actor_running_ready_for_item(const PeSandboxActor *a,int item){return (item==1||item==33)&&pe_sandbox_actor_action_ready(a,item)&&a->running_ready;}
 bool pe_sandbox_actor_running_ready(const PeSandboxActor *a){return pe_sandbox_actor_running_ready_for_item(a,33);}
 bool pe_sandbox_actor_shield_ready_for_item(const PeSandboxActor *a,int item){return a&&a->ok&&a->views[WOOD_SHIELD].loaded&&(item==0||item==1);}
+bool pe_sandbox_actor_reaction_ready(const PeSandboxActor *a){
+    if(!a||!a->ok)return false;
+    for(int v=REACTION_BODY;v<VIEW_COUNT;v++)if(!a->views[v].loaded)return false;
+    return true;
+}
+bool pe_sandbox_actor_reaction_defence_ready(const PeSandboxActor *a,const PeActor *defence){
+    if(!pe_sandbox_actor_reaction_ready(a)||!defence||pe_actor_stats(defence).clips!=REACTION_CLIPS)return false;
+    for(size_t i=0;i<REACTION_CLIPS;i++)if(!clocks_match(pe_actor_scene_view_clip_at(&a->views[REACTION_BODY],i),pe_actor_clip(defence,i)))return false;
+    return true;
+}
 bool pe_sandbox_actor_shield_ready(const PeSandboxActor *a){return pe_sandbox_actor_shield_ready_for_item(a,0);}
 bool pe_sandbox_actor_set_shield(PeSandboxActor *a,uint32_t instance){
     if(!a||!a->ok||(instance&&(!pe_sandbox_actor_shield_ready(a)||(a->action.held&&!pe_sandbox_actor_shield_ready_for_item(a,a->action.item_id)))))return false;

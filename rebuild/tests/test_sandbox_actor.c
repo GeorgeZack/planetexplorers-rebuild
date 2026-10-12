@@ -12,11 +12,13 @@
 #define CHECK(e) do{if(!(e)){fprintf(stderr,"sandbox actor:%d: %s\n",__LINE__,#e);failures++;}}while(0)
 enum { BODY,KNIFE,SHOVEL_STOWED,SHOVEL_HELD,AXE_HELD,WOOD_AXE_HELD,PICKAXE_STOWED,PICKAXE_HELD,
        TORCH_STOWED,TORCH_HELD,KNIFE_HELD,
-       DIG_BODY,DIG_TOOL,FELL_BODY,FELL_TOOL,WOOD_FELL_TOOL,MINE_BODY,MINE_TOOL,LEGACY_VIEWS,WOOD_SWORD_STOWED=LEGACY_VIEWS,WOOD_SWORD_HELD,WOOD_SHIELD,VIEWS };
+       DIG_BODY,DIG_TOOL,FELL_BODY,FELL_TOOL,WOOD_FELL_TOOL,MINE_BODY,MINE_TOOL,LEGACY_VIEWS,WOOD_SWORD_STOWED=LEGACY_VIEWS,WOOD_SWORD_HELD,WOOD_SHIELD,
+       REACTION_BODY,REACTION_SWORD_STOWED,REACTION_SWORD_HELD,REACTION_SHIELD,VIEWS };
 static const char *const folders[]={"player","player-knife-stowed","player-shovel-stowed","player-shovel","player-axe","player-wood-axe",
-    "player-pickaxe-stowed","player-pickaxe","player-torch-stowed","player-torch","player-knife-drawn","player-dig","player-shovel-dig","player-cut","player-axe-cut","player-wood-axe-cut","player-mine","player-pickaxe-mine","player-wood-sword-stowed","player-wood-sword-drawn","player-wood-shield"};
+    "player-pickaxe-stowed","player-pickaxe","player-torch-stowed","player-torch","player-knife-drawn","player-dig","player-shovel-dig","player-cut","player-axe-cut","player-wood-axe-cut","player-mine","player-pickaxe-mine","player-wood-sword-stowed","player-wood-sword-drawn","player-wood-shield",
+    "player-reaction","player-reaction-wood-sword-stowed","player-reaction-wood-sword-drawn","player-reaction-wood-shield"};
 static PeActorClip clips[VIEWS][33];
-static bool window=true,optional=true,draw_failure=false,missing_clip=false,wood_pair=false;
+static bool window=true,optional=true,draw_failure=false,missing_clip=false,wood_pair=false,reaction_group=false;
 static int missing_view=-1,bad_clock_view=-1,bad_source_view=-1;
 static unsigned pickaxe_mask=15,running_mask;
 static bool running_in_view(int v){return (v==BODY&&(running_mask&1))||(v==KNIFE_HELD&&(running_mask&2))||(v==KNIFE&&(running_mask&4));}
@@ -44,7 +46,7 @@ static int path_view(const char *path) {
 bool IsWindowReady(void){return window;}
 bool FileExists(const char *path){
     int v=path_view(path),bit=v==PICKAXE_STOWED?0:v==PICKAXE_HELD?1:v==MINE_BODY?2:v==MINE_TOOL?3:-1;
-    return v>=0&&(v<LEGACY_VIEWS||wood_pair)&&optional&&v!=missing_view&&(bit<0||(pickaxe_mask&(1u<<bit)));
+    return v>=0&&(v<LEGACY_VIEWS||(v<REACTION_BODY?wood_pair:reaction_group))&&optional&&v!=missing_view&&(bit<0||(pickaxe_mask&(1u<<bit)));
 }
 void BeginMode3D(Camera3D camera){(void)camera;mode_depth++;}
 void EndMode3D(void){mode_depth--;}
@@ -70,7 +72,7 @@ bool pe_actor_scene_view_upload(PeActorSceneView *v,char *error,size_t cap) {
 }
 size_t pe_actor_scene_view_clip_count(const PeActorSceneView *v){
     int id=(int)(uintptr_t)v->manifest-1;
-    return id==wrong_count_view?4:wood_pair&&(id==BODY||id>=WOOD_SWORD_STOWED)?33:id>=DIG_BODY?3:((id==BODY||id==KNIFE_HELD)?PE_LOCOMOTION_COUNT+4:PE_LOCOMOTION_COUNT)+(running_in_view(id)?1:0);
+    return id==wrong_count_view?4:id>=REACTION_BODY?25:wood_pair&&(id==BODY||id>=WOOD_SWORD_STOWED)?33:id>=DIG_BODY?3:((id==BODY||id==KNIFE_HELD)?PE_LOCOMOTION_COUNT+4:PE_LOCOMOTION_COUNT)+(running_in_view(id)?1:0);
 }
 size_t pe_actor_scene_view_find_clip(const PeActorSceneView *v,const char *name) {
     int id=(int)(uintptr_t)v->manifest-1;
@@ -176,7 +178,22 @@ static void init_clips(void) {
             PeActorClip *c=&clips[BODY][17+i];snprintf(c->name,sizeof c->name,"%s",names[i]);c->duration=times[i];c->frames=frames[i];c->fps=30;c->terminal_at_duration=true;
             c->loop=i<4||i==8||i>=10;
         }
-        for(int v=WOOD_SWORD_STOWED;v<VIEWS;v++)memcpy(clips[v],clips[BODY],sizeof clips[v]);
+        for(int v=WOOD_SWORD_STOWED;v<REACTION_BODY;v++)memcpy(clips[v],clips[BODY],sizeof clips[v]);
+    }
+    {
+        static const char *const names[25]={"NormalIdle","IdleBeHit","SwordBeHit","ForwardFast","FowardRightFast","RightFast","BackRightFast","BackFast","ForwardLeftFast","LeftFast","BackLeftFast",
+            "Forward","ForwardRight","Right","BackRight","Back","ForwardLeft","Left","BackLeft","BlockRepulsed","GetUpBackMirror","GetUpFrontMirror","GetUpBack","GetUpFront","SprintSwordAttack"};
+        static const float times[25]={0,.9333336353302002f,.9333419799804688f,1.0000009536743164f,1.0000009536743164f,1.0000019073486328f,1,1.0000009536743164f,1.0000009536743164f,1.0000019073486328f,1,
+            1.9666669368743896f,1.9666671752929688f,.9666671752929688f,1.9666681289672852f,1.9666669368743896f,1.9666671752929688f,.9666671752929688f,1.9666681289672852f,1.0000152587890625f,
+            1.4666709899902344f,1.0666694641113281f,1.4666709899902344f,1.0666694641113281f,1.8000068664550781f};
+        static const unsigned counts[25]={0,30,30,32,32,32,31,32,32,32,31,61,61,31,61,61,61,31,61,32,46,34,46,34,56};
+        for(int v=REACTION_BODY;v<VIEWS;v++){
+            memset(clips[v],0,sizeof clips[v]);clips[v][0]=clips[BODY][PE_LOCOMOTION_IDLE];
+            for(unsigned i=1;i<25;i++){
+                PeActorClip *c=&clips[v][i];snprintf(c->name,sizeof c->name,"%s",names[i]);c->fps=30;c->duration=times[i];c->frames=counts[i];
+                c->loop=i>=3&&i<20&&i!=4;c->terminal_at_duration=true;
+            }
+        }
     }
     static const float length[3][3]={{.6999969482421875f,1.3333358764648438f,.8333358764648438f},{.6000003814697266f,1.100006103515625f,.6000003814697266f},
         {.6999969482421875f,1.3333358764648438f,.8333358764648438f}};
@@ -185,6 +202,60 @@ static void init_clips(void) {
         int kind=v>=MINE_BODY?2:v>=FELL_BODY?1:0;snprintf(clips[v][i].name,sizeof clips[v][i].name,"%s%d",kind==2?"Mine":kind==1?"Felling":"Spade",i+1);
         clips[v][i].fps=30;clips[v][i].duration=length[kind][i];clips[v][i].frames=frames[kind][i];clips[v][i].loop=i==1;clips[v][i].terminal_at_duration=true;
     }
+}
+/* The separate reaction defence actor is a fake view-id handle here. */
+PeActorStats pe_actor_stats(const PeActor *a){int id=(int)(uintptr_t)a-1;return (PeActorStats){.clips=id==wrong_count_view?4:id>=REACTION_BODY?25:0};}
+const PeActorClip *pe_actor_clip(const PeActor *a,size_t i){int id=(int)(uintptr_t)a-1;return id>=REACTION_BODY&&id<VIEWS&&i<25?&clips[id][i]:NULL;}
+static int reaction_actor_tests(void){
+    int failures=0;char error[256];uploads=0;
+    PeActor *defence=(PeActor*)(uintptr_t)(REACTION_SHIELD+1);
+    PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);
+    CHECK(a&&!pe_sandbox_actor_reaction_ready(a)&&!pe_sandbox_actor_reaction_ready(NULL));
+    CHECK(!pe_sandbox_actor_reaction_defence_ready(a,defence));
+    pe_sandbox_actor_unload(a);CHECK(allocated==0);uploads=0;
+    reaction_group=true;init_clips();
+    for(missing_view=REACTION_BODY;missing_view<VIEWS;missing_view++){
+        CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);
+        CHECK(strstr(error,"complete body/sword/shield")!=NULL);
+    }
+    missing_view=-1;
+    for(wrong_count_view=REACTION_BODY;wrong_count_view<VIEWS;wrong_count_view++){
+        CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);
+    }
+    wrong_count_view=-1;
+    for(bad_source_view=REACTION_BODY;bad_source_view<VIEWS;bad_source_view++){
+        CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);
+    }
+    bad_source_view=-1;
+    for(unsigned field=0;field<7;field++){
+        if(field==0)clips[REACTION_BODY][0].duration+=.1f;                 /* anchor differs from body */
+        if(field==1)clips[REACTION_SHIELD][7].name[0]='X';                 /* name */
+        if(field==2){PeActorClip t=clips[REACTION_SWORD_HELD][11];clips[REACTION_SWORD_HELD][11]=clips[REACTION_SWORD_HELD][12];clips[REACTION_SWORD_HELD][12]=t;} /* order */
+        if(field==3)for(int v=REACTION_BODY;v<VIEWS;v++)clips[v][24].frames++;   /* coherent but not the source clock */
+        if(field==4)for(int v=REACTION_BODY;v<VIEWS;v++)clips[v][4].loop=true;  /* source FowardRightFast is unlooped */
+        if(field==5)clips[REACTION_SWORD_STOWED][20].duration+=.001f;      /* attachment clock */
+        if(field==6)for(int v=REACTION_BODY;v<VIEWS;v++)clips[v][1].duration=1; /* invented stun length */
+        CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);
+        CHECK(strstr(error,"Reaction")!=NULL);init_clips();
+    }
+    a=pe_sandbox_actor_load("assets",error,sizeof error);
+    CHECK(a&&pe_sandbox_actor_reaction_ready(a)&&allocated==LEGACY_VIEWS+4&&uploads==LEGACY_VIEWS+4);
+    /* Loading the group changes no existing capability and presents nothing. */
+    CHECK(pe_sandbox_actor_hold_ready(a,33)&&!pe_sandbox_actor_hold_ready(a,1)&&!pe_sandbox_actor_shield_ready(a));
+    PeGame *g=calloc(1,sizeof *g);if(!g)return failures+1;
+    g->mode=PE_GAME_ADVENTURE;g->hp=500;g->grounded=true;pe_sandbox_actor_reset_motion(a,g);
+    PeSandboxBodyPose pose={0};CHECK(pe_sandbox_actor_body_pose(a,g,&pose)&&!strcmp(pose.clip,"NormalIdle"));
+    draw(a,g);CHECK(draw_count>0);for(int i=0;i<draw_count&&i<16;i++)CHECK(draws[i].view<REACTION_BODY);
+    PeSandboxActionPose reaction={.item_id=33,.instance_id=1,.held=true,.clip="IdleBeHit",.seconds=.1};
+    CHECK(!pe_sandbox_actor_set_action(a,&reaction));
+    CHECK(pe_sandbox_actor_reaction_defence_ready(a,defence));
+    CHECK(!pe_sandbox_actor_reaction_defence_ready(a,NULL));
+    CHECK(!pe_sandbox_actor_reaction_defence_ready(a,(PeActor*)(uintptr_t)(WOOD_SHIELD+1)));
+    clips[REACTION_SHIELD][9].frames++;CHECK(!pe_sandbox_actor_reaction_defence_ready(a,defence));clips[REACTION_SHIELD][9].frames--;
+    wrong_count_view=REACTION_SHIELD;CHECK(!pe_sandbox_actor_reaction_defence_ready(a,defence));wrong_count_view=-1;
+    free(g);pe_sandbox_actor_unload(a);CHECK(allocated==0);
+    reaction_group=false;uploads=0;init_clips();failures+=pose_failures;pose_failures=0;
+    return failures;
 }
 static int running_actor_tests(void){
     int failures=0;char error[256];uploads=0;
@@ -245,7 +316,7 @@ static int running_actor_tests(void){
 }
 static int sword_actor_tests(void){
     int failures=0;char error[256];wood_pair=true;running_mask=7;init_clips();uploads=0;
-    for(missing_view=WOOD_SWORD_STOWED;missing_view<VIEWS;missing_view++){
+    for(missing_view=WOOD_SWORD_STOWED;missing_view<REACTION_BODY;missing_view++){
         CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);
     }
     missing_view=-1;
@@ -256,7 +327,7 @@ static int sword_actor_tests(void){
         if(invalid==3)wrong_count_view=WOOD_SHIELD;
         CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);wrong_count_view=-1;init_clips();
     }
-    PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);CHECK(a&&allocated==VIEWS);
+    PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);CHECK(a&&allocated==REACTION_BODY);
     PeGame *g=calloc(1,sizeof *g);if(!a||!g){free(g);pe_sandbox_actor_unload(a);return failures+1;}
     g->player=(PeVec3){20,10,20};g->yaw=PI;g->grounded=true;g->hp=500;
     g->inventory.slots[0]=(PeSlot){.item_id=1,.instance_id=77,.count=1};g->equipped_instance_id=77;
@@ -301,7 +372,7 @@ static int sword_actor_tests(void){
     return failures;
 }
 int main(void) {
-    int failures=0;char error[256];init_clips();failures+=running_actor_tests();failures+=sword_actor_tests();
+    int failures=0;char error[256];init_clips();failures+=reaction_actor_tests();failures+=running_actor_tests();failures+=sword_actor_tests();
     window=false;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0);window=true;
     missing_clip=true;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);missing_clip=false;
     for(missing_direction_view=0;missing_direction_view<DIG_BODY;missing_direction_view++){

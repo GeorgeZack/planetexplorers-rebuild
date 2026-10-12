@@ -82,4 +82,73 @@ return 0;}
             subprocess.run([str(binary),str(assets),str(stage)],check=True)
 
 
+    @unittest.skipUnless(shutil.which('cc'),'C compiler required')
+    def test_installed_assets_with_the_staged_reaction_group_under_its_host_names(self):
+        stage=ROOT/'rebuild/build/starter-pair-reaction-01';assets=ROOT/'rebuild/build/reference-assets'
+        sword=ROOT/'rebuild/build/starter-pair-unified-03/player-defence/player-defence.peac'
+        if not (stage/'unified-manifest.json').is_file() or not (assets/'player/recording.peas').is_file() or not sword.is_file():
+            self.skipTest('Installed assets, staged reaction group and33/42 stage required')
+        src=ROOT/'rebuild/src'
+        with tempfile.TemporaryDirectory() as directory:
+            folder=Path(directory);code=folder/'reaction.c';binary=folder/'reaction'
+            code.write_text(r"""#include "pe_sandbox_actor.h"
+#include "pe_actor_scene_view.h"
+#include "pe_hitbox.h"
+#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+static const char *base,*stage;static int hidden;static unsigned draws;
+/* Host folder names map onto the staged group; everything else is installed. */
+static void resolve(const char *path,char out[4096]){
+const char *part=strchr(path,'/');assert(part);part++;
+if(!strncmp(part,"player-reaction/",16))snprintf(out,4096,"%s/player/%s",stage,part+16);
+else if(!strncmp(part,"player-reaction-",16))snprintf(out,4096,"%s/player-%s",stage,part+16);
+else snprintf(out,4096,"%s/%s",base,part);}
+bool IsWindowReady(void){return true;}
+bool FileExists(const char *path){char out[4096];resolve(path,out);
+if(hidden==1&&strstr(path,"player-reaction"))return false;
+if(hidden==2&&strstr(path,"player-reaction-wood-shield"))return false;
+return access(out,F_OK)==0;}
+void BeginMode3D(Camera3D c){(void)c;}void EndMode3D(void){}
+bool pe_actor_scene_view_prepare(PeActorSceneView*v,const char *path,char *err,size_t cap){char out[4096];resolve(path,out);
+v->manifest=pe_actor_scene_manifest_load(out,err,cap);if(!v->manifest)return false;
+v->count=pe_actor_scene_part_count(v->manifest);v->parts=calloc(v->count,sizeof *v->parts);assert(v->parts);
+for(size_t i=0;i<v->count;i++){v->parts[i].actor=(PeActor*)pe_actor_scene_actor(v->manifest,i);}return true;}
+bool pe_actor_scene_view_upload(PeActorSceneView*v,char *e,size_t c){(void)e;(void)c;v->loaded=true;return true;}
+void pe_actor_scene_view_unload(PeActorSceneView*v){pe_actor_scene_manifest_free(v->manifest);free(v->parts);memset(v,0,sizeof *v);}
+size_t pe_actor_scene_view_clip_count(const PeActorSceneView*v){return pe_actor_scene_clip_count(v->manifest);}
+size_t pe_actor_scene_view_find_clip(const PeActorSceneView*v,const char*n){return pe_actor_scene_find_clip(v->manifest,n);}
+const PeActorClip *pe_actor_scene_view_clip_at(const PeActorSceneView*v,size_t i){return pe_actor_scene_clip_at(v->manifest,i);}
+/* No reaction scene may be drawn: its 25-clip count identifies it. */
+bool pe_actor_scene_view_draw_clip(PeActorSceneView*v,size_t i,double t,Vector3 p,float yaw,float scale,Color color){
+(void)i;(void)t;(void)p;(void)yaw;(void)scale;(void)color;assert(pe_actor_scene_clip_count(v->manifest)!=25);draws++;return true;}
+bool pe_actor_scene_view_draw_blend(PeActorSceneView*v,const PeActorBlendSample*s,size_t n,Vector3 p,float yaw,float scale,Color color){
+(void)s;(void)n;(void)p;(void)yaw;(void)scale;(void)color;assert(pe_actor_scene_clip_count(v->manifest)!=25);draws++;return true;}
+const PeSlot*pe_game_equipped_tool(const PeGame*g){(void)g;return NULL;}
+const PeSlot*pe_shield_equipped(const PeGame*g){(void)g;return NULL;}
+int main(int argc,char **argv){assert(argc==4);base=argv[1];stage=argv[2];char error[256],path[4096];
+hidden=1;PeSandboxActor*a=pe_sandbox_actor_load("x",error,sizeof error);if(!a){puts(error);return 2;}
+bool knife=pe_sandbox_actor_hold_ready(a,33),sword=pe_sandbox_actor_hold_ready(a,1),pick=pe_sandbox_actor_action_ready(a,19),running=pe_sandbox_actor_running_ready(a);
+assert(!pe_sandbox_actor_reaction_ready(a));pe_sandbox_actor_unload(a);
+hidden=2;a=pe_sandbox_actor_load("x",error,sizeof error);assert(!a&&strstr(error,"complete body/sword/shield"));
+hidden=0;a=pe_sandbox_actor_load("x",error,sizeof error);if(!a){puts(error);return 3;}
+assert(pe_sandbox_actor_reaction_ready(a));
+assert(pe_sandbox_actor_hold_ready(a,33)==knife&&pe_sandbox_actor_hold_ready(a,1)==sword&&pe_sandbox_actor_action_ready(a,19)==pick&&pe_sandbox_actor_running_ready(a)==running);
+snprintf(path,sizeof path,"%s/player-defence/player-defence.peac",stage);PeActor*d=pe_actor_load(path,error,sizeof error);if(!d){puts(error);return 4;}
+assert(pe_actor_stats(d).clips==25&&pe_sandbox_actor_reaction_defence_ready(a,d));
+snprintf(path,sizeof path,"%s/player-defence/player-defence.pehb",stage);PeHitboxes*h=pe_hitboxes_load(path,d,error,sizeof error);assert(h&&pe_hitboxes_count(h)==16);
+PeActor*old=pe_actor_load(argv[3],error,sizeof error);assert(old&&pe_actor_stats(old).clips==42&&!pe_sandbox_actor_reaction_defence_ready(a,old));
+PeGame*g=calloc(1,sizeof *g);assert(g);g->mode=PE_GAME_ADVENTURE;g->hp=500;g->grounded=true;pe_sandbox_actor_reset_motion(a,g);
+PeSandboxBodyPose pose={0};assert(pe_sandbox_actor_body_pose(a,g,&pose)&&!strcmp(pose.clip,"NormalIdle"));
+pe_sandbox_actor_draw(a,g);assert(pe_sandbox_actor_ok(a)&&draws);
+free(g);pe_actor_free(old);pe_hitboxes_free(h);pe_actor_free(d);pe_sandbox_actor_unload(a);return 0;}
+""")
+            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_hitbox.c','pe_inventory.c')],str(ROOT/'rebuild/generated/pe_content.c'),'-lm','-o',str(binary)]
+            if os.environ.get('PE_TEST_SANITIZE'):command[1:1]=['-g','-fsanitize=address,undefined','-fno-omit-frame-pointer']
+            subprocess.run(command,check=True)
+            subprocess.run([str(binary),str(assets),str(stage),str(sword)],check=True)
+
+
 if __name__=='__main__':unittest.main()

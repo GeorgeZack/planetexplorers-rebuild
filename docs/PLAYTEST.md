@@ -1,5 +1,24 @@
 # Original-game playtest and C comparison
 
+## October 12 host reaction group — implemented in C, headless only
+
+`pe_sandbox_actor` now validates the staged reaction set as an
+[optional second group](audit/REACTION_PRESENTATION.md#host-reaction-group),
+and the sandbox host requires its matching 25-clip defence actor when the
+group is present. Nothing selects or draws a reaction clip, the group is not
+installed, and the live game loads what it did before. No game was launched,
+no desktop input was sent and no save or installed asset changed.
+
+Mocked and real-asset actor tests pass, the latter with the installed assets
+plus the staged group mapped to its host folder names. The sandbox host's
+start-up path with the group present was not run in a window, and no
+graphics smoke was run for this change.
+
+`make -C rebuild check` passes 257 jobs and 900 Python tests with 87
+ordinary-interpreter skips (skips are not passes). `check-sanitize` passes
+all 101 suites, the real-asset actor test also passes under ASan/UBSan, and
+`cli-test` passes.
+
 ## October 12 reaction pose bake — observed original capture, staged headless
 
 Observed in the original: one supervised isolated-sampler session produced

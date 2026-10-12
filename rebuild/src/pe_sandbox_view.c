@@ -693,7 +693,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     char error[256]={0};int result=0,frame=0;
     PeDeployableView deploy_view={0};
     PeVegetationView *vegetation_view=NULL;
-    PeActorView hunt_view={0};PeActor *player_defence=NULL;PeHitboxes *hare_boxes=NULL,*player_boxes=NULL;
+    PeActorView hunt_view={0};PeActor *player_defence=NULL,*reaction_defence=NULL;PeHitboxes *hare_boxes=NULL,*player_boxes=NULL,*reaction_boxes=NULL;
     PeHuntCombat hunt={0};bool hunt_assets=false,hunt_attempted=false,return_prompted=false;
     PeTerrainMaterialView surface={0};PeReferenceModel settlement={0};bool settlement_route=false;
     TerrainCache *terrain=calloc(1,sizeof *terrain);
@@ -741,6 +741,20 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         result=1;goto cleanup;
     }
     melee=blade_templates[0];
+    /* Optional reaction group: checked as a whole and presented nowhere. A
+       supplied group without its matching defence actor and capsules fails
+       closed rather than leaving a half-usable set for a later host. */
+    if(pe_sandbox_actor_reaction_ready(actor)){char path[4096];
+        int n=snprintf(path,sizeof path,"%s/player-reaction-defence/player-defence.peac",assets);
+        if(n<0||(size_t)n>=sizeof path){snprintf(error,sizeof error,"Reaction defence path too long");result=1;goto cleanup;}
+        reaction_defence=pe_actor_load(path,error,sizeof error);
+        snprintf(path,sizeof path,"%s/player-reaction-defence/player-defence.pehb",assets);
+        if(reaction_defence)reaction_boxes=pe_hitboxes_load(path,reaction_defence,error,sizeof error);
+        if(!reaction_boxes||!pe_sandbox_actor_reaction_defence_ready(actor,reaction_defence)){
+            if(!*error)snprintf(error,sizeof error,"Reaction group requires its matching25-clip defence actor and capsules");
+            result=1;goto cleanup;
+        }
+    }
     /* Optional recovered combat group: absence keeps the explicit quest gate. */
     {char path[4096],texture[4096];
         snprintf(path,sizeof path,"%s/hare.peac",assets);snprintf(texture,sizeof texture,"%s/hare-diffuse.png",assets);
@@ -1529,7 +1543,7 @@ cleanup:
         (unsigned long long)hunt.hare_hits,(unsigned long long)hunt.player_hits,game->hunt_kills);
     printf("Sandbox running knife: %llu starts; qualified motion %s\n",(unsigned long long)running_starts,running_motion?"available":"unavailable");
     printf("Sandbox walking blade: %llu starts; source motion %s\n",(unsigned long long)walking_starts,ordinary_motion?"available":"unavailable");
-    pe_hitboxes_free(hare_boxes);pe_hitboxes_free(player_boxes);pe_actor_free(player_defence);pe_actor_view_unload(&hunt_view);
+    pe_hitboxes_free(hare_boxes);pe_hitboxes_free(player_boxes);pe_actor_free(player_defence);pe_hitboxes_free(reaction_boxes);pe_actor_free(reaction_defence);pe_actor_view_unload(&hunt_view);
     pe_hitboxes_free(knife_capsule);pe_hitboxes_free(sword_capsule);pe_root_motion_free(running_motion);pe_sword_root_motion_free(ordinary_motion);
     pe_deployable_view_unload(&deploy_view);
     pe_vegetation_view_unload(vegetation_view);

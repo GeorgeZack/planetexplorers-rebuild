@@ -12,7 +12,8 @@ October 12: the 25 hit-reaction, get-up and sprint-attack leaves are staged
 apart from this group as `rebuild/build/starter-pair-reaction-01`
 (`export_starter_pair_unified.py --standalone-reaction`), because appending
 them to the 42-clip defence actor would pass the 64-clip limit. The 33/42
-stage below is unchanged. See
+stage below is unchanged, and the host validates the reaction set as its own
+optional group. See
 [the reaction contract](REACTION_PRESENTATION.md#bake-result-and-staged-group).
 
 ## Current33/42 stage

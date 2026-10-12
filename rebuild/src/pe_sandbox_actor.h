@@ -128,5 +128,18 @@ bool pe_sandbox_actor_sword_ground_ready(const PeSandboxActor *actor,const PeGam
 bool pe_sandbox_actor_shield_ready(const PeSandboxActor *actor);
 bool pe_sandbox_actor_shield_ready_for_item(const PeSandboxActor *actor,int item_id);
 bool pe_sandbox_actor_set_shield(PeSandboxActor *actor,uint32_t instance);
+/* Optional second group holding the isolated hit-reaction, get-up and
+ * sprint-attack leaves: player-reaction, player-reaction-wood-sword-stowed,
+ * player-reaction-wood-sword-drawn and player-reaction-wood-shield. All four
+ * or none; each must hold exactly the25 ordered clocks of capture
+ * female-reaction-01, with NormalIdle equal to the body's own. It is kept
+ * apart from the33-clip group so the defence actor stays within64 clips.
+ * Loaded and validated only: nothing draws or selects these clips, and
+ * readiness is not permission to present or enable a reaction, get-up,
+ * sprint attack or block. The poses already carry source clip mirroring. */
+bool pe_sandbox_actor_reaction_ready(const PeSandboxActor *actor);
+/* True only when the separate reaction defence actor holds those same25
+ * ordered clocks. Capsule binding stays the host's hitbox load. */
+bool pe_sandbox_actor_reaction_defence_ready(const PeSandboxActor *actor,const PeActor *defence);
 
 #endif

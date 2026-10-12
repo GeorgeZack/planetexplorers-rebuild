@@ -206,15 +206,60 @@ TMPDIR="$PWD/rebuild/build/compiler-tmp" rebuild/build/unity-tools/bin/python \
 
 The group is standalone because the retained defence actor has 42 clips and
 24 more would pass the native 64-clip actor limit. The
-[33/42 stage](STARTER_SWORD_POSE_GROUP.md) is unchanged, and the current host
-accepts only that exact 33-clip body, so it cannot load this group. Joining
-them needs a decision: raise the limit, or teach the host a second reaction
-group. Neither is made here.
+[33/42 stage](STARTER_SWORD_POSE_GROUP.md) is unchanged. The user chose a
+second host group over raising the limit; see
+[Host reaction group](#host-reaction-group).
 
 Twenty-one stage and attachment tests pass with UnityPy and no skips; the ten
 stage tests also pass under ASan/UBSan, including native loading of all four
 scenes and every defence frame of all 25 clips. These are headless checks. No
 asset was installed, no gameplay changed and no native graphics ran.
+
+## Host reaction group
+
+Implemented in C, October 12, as loading and validation only.
+`pe_sandbox_actor` accepts an optional second group beside the 33-clip one,
+under these folders of the asset root:
+
+| Host folder | Staged source |
+|---|---|
+| `player-reaction` | `player` |
+| `player-reaction-wood-sword-stowed` | `player-wood-sword-stowed` |
+| `player-reaction-wood-sword-drawn` | `player-wood-sword-drawn` |
+| `player-reaction-wood-shield` | `player-wood-shield` |
+| `player-reaction-defence` | `player-defence` |
+
+The four scenes are all-or-nothing. Each must hold exactly the 25 clips in
+capture order, with the exact recovered frame counts, durations and loop
+flags; NormalIdle must equal the body's own NormalIdle; and every attachment
+clock must equal the reaction body's. Any difference fails the whole actor
+load before GPU upload. An entirely absent group changes nothing.
+
+When the group is present, the sandbox host also requires
+`player-reaction-defence` with the same 25 ordered clocks and loadable
+capsules, and refuses to start without it. The 42-clip defence actor is
+rejected in that role.
+
+`pe_sandbox_actor_reaction_ready` and
+`pe_sandbox_actor_reaction_defence_ready` report the result. Nothing reads
+them to draw: no reaction clip is selected, drawn or offered as an action
+pose, and existing knife, sword, shield, tool and running readiness are
+unchanged with the group loaded. Readiness is not permission to present a
+reaction, get-up, sprint attack or block.
+
+The group is **not installed**. `rebuild/build/reference-assets` has none of
+these folders, so the live game loads exactly what it did before. Installing
+is a copy under the names above and belongs with host composition. Until
+something presents the clips, an installed group would also upload a second
+copy of the body mesh and textures for no visible effect.
+
+The mocked actor test covers every incomplete combination, wrong counts,
+names, order, anchor, source clock, loop flag and attachment clock, and the
+defence check. A real-asset test loads the installed assets with the staged
+group mapped to the host names, confirms unchanged readiness, the 25-clip
+defence with its 16 capsules, rejection of the 42-clip actor, and that an
+idle draw touches no reaction scene. Both are headless; the sandbox host's
+own start-up path with the group present has not been run in a window.
 
 ## Next animation set: get-up and sprint attack
 
@@ -298,7 +343,7 @@ Still unqualified:
 - **Other reaction paths.** Hit IK (`m_ForceToHitWeight`/`m_ForceToHitTime`),
   Halt, Wentfly, Knocked, GetUp and ragdoll are separate.
 
-Before gameplay integration: decide how the staged reaction group joins the
-33/42 stage, capture SprintSwordAttack root motion, then compose reaction,
+Before gameplay integration: capture SprintSwordAttack root motion, install
+the reaction group under its host names, then compose reaction,
 body, attachments, defence and cancellation with the actual host. This increment supplies no permission to
 enable live stun or knockback.
