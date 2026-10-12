@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[HumanPhyCtrl qualification](docs/audit/HUMAN_PHY_CTRL.md): `pe_human_phy` owns the disconnected request latch, ground/water/drag state and FixedUpdate force requests; `export_human_phy.py` binds the committed CIL excerpt to the installed assemblies, female prefab and project physics settings. `cil_disasm.py` decodes compiled-only method bodies for reading. PhysX integration and host scheduling remain separate gates.
+
 [Repulsed qualification](docs/audit/REPULSED_ACTION.md): `pe_repulsed` owns disconnected admitted-action clocks and requests; `export_repulsed_action.py` binds the active female curves, row6 relations and static Unity5 angle evidence. Physical motor consumption and reaction presentation remain separate gates.
 
 [Building materials](docs/audit/BUILDING_MATERIALS.md): `export_reference_materials.py` recovers source-bound alpha/culling for both settlement OBJ groups; `pe_reference` retains it and shares `pe_material_view.h` with actors. `pe_sandbox_collision_label_visible` hides sandbox NPC names behind current geometry as a native adapter.

@@ -1,5 +1,30 @@
 # Original-game playtest and C comparison
 
+## October 12 HumanPhyCtrl consumption — static CIL and headless qualification
+
+[HumanPhyCtrl qualification](audit/HUMAN_PHY_CTRL.md) reads the compiled-only
+controller from the installed Assembly-CSharp CIL and binds it to the female
+model's serialized values, Rigidbody, capsule and the project's 0.02 s fixed
+step. `pe_human_phy` implements the request latch, ground/water/drag state and
+per-FixedUpdate force requests in an isolated C owner. Neither gameplay host
+calls it. It integrates and collides nothing.
+
+Source-derived, not observed in play: requests add and are held to 10 m/s; a
+request is consumed one frame after it is made; only two FixedUpdate calls run
+per Update; a grounded body's whole velocity is replaced by the request. The
+PhysX velocity-snapshot assumption, contact response and Mono float width are
+unqualified.
+
+Results: `make -C rebuild check` passes 246 jobs (852 Python tests, 67
+ordinary-interpreter skips, which are not passes). `check-sanitize` passes all
+95 ASan/UBSan/leak suites. `check-content` and `check-sources` pass; the latter
+runs the sixteen HumanPhyCtrl cases with UnityPy and no skips and compares the
+committed CIL excerpt with the installed assemblies. The decoder's instruction
+count equals REA's for all 51,847 method bodies in the three assemblies.
+
+No game, desktop input, normal save, pose capture or installed asset
+modification was needed. PECSv22 and live damage remain unchanged.
+
 ## October 10–11 admitted Repulsed — source and headless qualification
 
 [Repulsed qualification](audit/REPULSED_ACTION.md) follows the live female

@@ -1,0 +1,1760 @@
+{
+ "schema": 1,
+ "authority": "shipped-artifact",
+ "confidence": "observed",
+ "provider": "rea-agents 6.0.0 inspect-managed-members (CLI); raw CIL sliced by cil_disasm.py",
+ "scope": "Focused static method excerpt. Complete inventories stay ignored under rebuild/build. No assembly or game execution.",
+ "limitations": [
+  "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+  "CIL is read from file bytes; no JIT, floating-point or PhysX behavior is observed.",
+  "external_callers lists static call sites, not which run for the single-player female controller."
+ ],
+ "assemblies": {
+  "Assembly-CSharp.dll": {
+   "sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+   "byte_length": 8437760,
+   "mvid": "7ddcc464-5353-4750-b969-fe628ee474da",
+   "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+   "methods": [
+    {
+     "token": "0x06006b27",
+     "declaring_type": "Pathea.Action_Repulsed",
+     "name": "Update",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2850488,
+      "il_size": 676,
+      "il_sha256": "32ae79858841bf5ca7f0b4f7b41b27064fac25cfea693312514aec19efdfbad6",
+      "instruction_count": 205
+     },
+     "raw_il_hex": "140228a26d0006284b00000a3a1100000014027b615c0004284b00000a3908000000026f286b0006172a14027b705c0004283000000a397d000000027b665c0004027b6e5c0004436c00000028c16d00060a06027c625c0004281e00000a7d875e000406027b615c00047bd55e0004027b6f5c00045a7d885e00040602289e6d00066f937300066fa07300067d895e000406027b705c00046f0300000a7d8a5e000402289e6d00061d066f056a000626026f286b0006172a027b665c0004027b655c000441d3010000220000803f0b027b615c00047bd05e0004391e000000027b615c00047bd05e0004027b665c0004027b655c00045b6f5e07000a0b02027b635c0004075a7d645c0004140228236b0006283000000a391c0000000228236b0006027b625c0004027b645c0004285f00000a6f1ba3000614027b5b5c0004283000000a391d000000027b5b5c0004027b625c0004027b645c0004285f00000a186ffc6a0006027b685c00043a27000000027b665c0004027b675c0004431600000002177d685c000402289e6d00061f32146f056a00062602257b665c0004280e00000a587d665c0004140228a86d0006283000000a39df000000140228236b0006283000000a39ce0000000228a26d00066fc0700006285b00000a0228236b00066f03a30006288000000a0c0228a86d0006725f67037012027b1d00000a6fc76700060228a86d0006727967037012027b1c00000a6fc76700060228a86d0006723d6803700228a86d0006723d6803706fce670006220000803f7e6a5c0004280e00000a5a287b00000a6fc76700060228a86d000672236803700228a86d000672236803706fce670006027b715c0004390a000000220000803f380500000022000000007e6a5c0004280e00000a5a287b00000a6fc7670006162a026f286b0006172a"
+    },
+    {
+     "token": "0x06006b28",
+     "declaring_type": "Pathea.Action_Repulsed",
+     "name": "EndImmediately",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2851176,
+      "il_size": 163,
+      "il_sha256": "16da4be8bfbc9570bb52eba8e91968fa5b58b379e9492e128d87ecd41f59c8e7",
+      "instruction_count": 47
+     },
+     "raw_il_hex": "140228a86d0006283000000a392a0000000228a86d0006723d68037022000000006fc76700060228a86d0006722368037022000000006fc767000602289e6d00061c166ffd69000602027b655c00047d665c0004140228236b0006283000000a391b0000000228236b0006282200000a6f08a300060228236b00066f1ca3000614027b5b5c0004283000000a3911000000027b5b5c0004282200000a186ffc6a00062a"
+    },
+    {
+     "token": "0x0600a2f0",
+     "declaring_type": "HumanPhyCtrl",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4479156,
+      "il_size": 234,
+      "il_sha256": "4c68dce5b0a5bff0c6561a08044f0df1f4e80eb8e9a6328cd0747eb556e22ffa",
+      "instruction_count": 66
+     },
+     "raw_il_hex": "02220000803f7daa89000402229a99993e7dae89000402220000803e7daf89000402220000e03f7db089000402226666a63f7db189000402220000803f7db28900040222cdcc4c3d7db38900040222cdcccc3d7db489000402220000a0407db58900040222000040417db689000402220000803f7db789000402220000003f7db889000402220ad7233e7db98900040222a69bc43b7dba89000402177dc18900040222000020417dc28900040222cdcc4c3d7dc58900040222000070427dc88900040222000040407dcc89000402220000803f7dcd8900040222000048427dce89000402280100000a2a"
+    },
+    {
+     "token": "0x0600a2f1",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_moveSpeed",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479404,
+      "il_size": 7,
+      "il_sha256": "f85d1dd3fb108818e75cf902b07f71ed4a3ab4ff1d074b8d4a96263906a0460d",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bb58900042a"
+    },
+    {
+     "token": "0x0600a2f2",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_freezeUpdate",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479412,
+      "il_size": 7,
+      "il_sha256": "408d572f4451c9caa6ba370353678ecaf2049f51c3a6af15cfd903ac0c06fec6",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd08900042a"
+    },
+    {
+     "token": "0x0600a2f3",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_freezeUpdate",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479420,
+      "il_size": 8,
+      "il_sha256": "e72c77123d2049df6d5054be773a0087334b84f7f493db64348f4a6866c9077f",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd08900042a"
+    },
+    {
+     "token": "0x0600a2f4",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_gravity",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479432,
+      "il_size": 7,
+      "il_sha256": "5be26eb76b07ab9bf890ce9d83afca3ff21e34ca7d2244cd6e77b96a37e7d8b7",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd18900042a"
+    },
+    {
+     "token": "0x0600a2f5",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_gravity",
+     "signature": {
+      "raw_sha256": "7d50df739f41b3d5cdf6efc05539b18b1ea19e25f1aedd96a433ddc45068958f",
+      "return_type": "void",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479440,
+      "il_size": 8,
+      "il_sha256": "f82ceb610acd496992051e4b5ef375c3fc74bbbf5f565cb30d0c63bb96225269",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd18900042a"
+    },
+    {
+     "token": "0x0600a2f6",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_useRopeGun",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479452,
+      "il_size": 7,
+      "il_sha256": "615887a91ef6b6e15ddf5c9e8e2ee1f0b9516d3371c055145d1db80caf167fd5",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd28900042a"
+    },
+    {
+     "token": "0x0600a2f7",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_useRopeGun",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479460,
+      "il_size": 8,
+      "il_sha256": "e46176eb289d1ca1ce6b229142656d1587a2092e108e05133c35cb97ddbae435",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd28900042a"
+    },
+    {
+     "token": "0x0600a2f8",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_feetInWater",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479472,
+      "il_size": 7,
+      "il_sha256": "4a8821c6687adf7284c86df937ed9c36a5a2e45876fd45c7483b28718308052b",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd38900042a"
+    },
+    {
+     "token": "0x0600a2f9",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_feetInWater",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479480,
+      "il_size": 8,
+      "il_sha256": "3fc03dc98931aa86687164fb809b41ca5ab8d7c0460cfb6756ceacd3e60025d4",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd38900042a"
+    },
+    {
+     "token": "0x0600a2fa",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_spineInWater",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479492,
+      "il_size": 7,
+      "il_sha256": "8560b5b5b620ac6a90e63c8d34677b831a4100e1dac58e772f7e8cf73a9885a3",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd48900042a"
+    },
+    {
+     "token": "0x0600a2fb",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_spineInWater",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479500,
+      "il_size": 8,
+      "il_sha256": "b295431a4ee60a62a13ba883fe959833c22aed6e47754a9c8f255716f76f89c1",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd48900042a"
+    },
+    {
+     "token": "0x0600a2fc",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_headInWater",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479512,
+      "il_size": 7,
+      "il_sha256": "240fb9149ee5205155813c6e98ce6510ec3a40b84fb4a392ab97b987c5799d68",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd58900042a"
+    },
+    {
+     "token": "0x0600a2fd",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_headInWater",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479520,
+      "il_size": 8,
+      "il_sha256": "cdd25174cd2e6f12683d1d15a06a3f79e36922212637a069f5d929b60def6150",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd58900042a"
+    },
+    {
+     "token": "0x0600a2fe",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_grounded",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479532,
+      "il_size": 7,
+      "il_sha256": "d1c35ecb2da233d8ac5b35f47b24f8ed03f31014b8051f389d9a000e1483f994",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd68900042a"
+    },
+    {
+     "token": "0x0600a2ff",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_grounded",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479540,
+      "il_size": 8,
+      "il_sha256": "21ab98ca38d6559ee78b78d08c79cbb621155f560c92d5d9ab7c8f34632d1bf5",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd68900042a"
+    },
+    {
+     "token": "0x0600a300",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_fallGround",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479552,
+      "il_size": 7,
+      "il_sha256": "fd8ba3c8591f6a0865e2c32c14354440dd57441472ae982dee759c84c9168dd3",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd78900042a"
+    },
+    {
+     "token": "0x0600a301",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_fallGround",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479560,
+      "il_size": 8,
+      "il_sha256": "b2211e5c32bc86a2cbf023f017c298fb75104828e5ad6d5bf00ce46b7b45f810",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd78900042a"
+    },
+    {
+     "token": "0x0600a302",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_impacting",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479572,
+      "il_size": 21,
+      "il_sha256": "47b3bdcfe1fe2f9e2fa82e7954b6708b881c8660ae409cc25f696edbc666e183",
+      "instruction_count": 8
+     },
+     "raw_il_hex": "288e01000a027bab89000459027bc5890004fe042a"
+    },
+    {
+     "token": "0x0600a303",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_velocity",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479596,
+      "il_size": 12,
+      "il_sha256": "68d41c1575db623d06439e9143c37714678b3074568a1dd3a282c6871c431246",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "027bc78900046f7e00000a2a"
+    },
+    {
+     "token": "0x0600a304",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_velocity",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479612,
+      "il_size": 30,
+      "il_sha256": "f8880c50921c25cfdf15373abc74eb96f7c1e54178ed22c49d3bf01b3a2b556f",
+      "instruction_count": 10
+     },
+     "raw_il_hex": "027bc789000403027bc78900046f7e00000a280c00000a186f6308000a2a"
+    },
+    {
+     "token": "0x0600a305",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_inertiaVelocity",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479644,
+      "il_size": 7,
+      "il_sha256": "4b00d0c94435d3d85a7fc41f419dcc3df664bbbceb6d8451df4f615e5d075346",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd88900042a"
+    },
+    {
+     "token": "0x0600a306",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_inertiaVelocity",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479652,
+      "il_size": 8,
+      "il_sha256": "a2eb5bf0fe7f14ebaf869b3f54d571e537e1c16236e9f75d557d228429cdbf28",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd88900042a"
+    },
+    {
+     "token": "0x0600a307",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_desiredMovementDirection",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479664,
+      "il_size": 7,
+      "il_sha256": "213f86e606b2efcd4e481c275e8a7878bc608fdaa53f7e4132381dcf0c2d3741",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd98900042a"
+    },
+    {
+     "token": "0x0600a308",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_desiredMovementDirection",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479672,
+      "il_size": 8,
+      "il_sha256": "f5fa83dd62129424b7df59ee73ddd40ab9e1827b0102f6a341cb3dcc56470fba",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd98900042a"
+    },
+    {
+     "token": "0x0600a309",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_currentDesiredMovementDirection",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479684,
+      "il_size": 18,
+      "il_sha256": "ede544564c55246bf893fbd8619a075ff46ab122d601ab687c71461aeaf14c64",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "022805a30006027bb589000428a701000a2a"
+    },
+    {
+     "token": "0x0600a30a",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_desiredVelocity",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4479704,
+      "il_size": 45,
+      "il_sha256": "f95e0f958cc8093b37a098d4564049b98504df586a5a00bd8c5f9a6a4fe59b43",
+      "instruction_count": 13
+     },
+     "raw_il_hex": "022807a30006282200000a28a401000a3906000000282200000a2a022807a30006027bb5890004285f00000a2a"
+    },
+    {
+     "token": "0x0600a30b",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get__rigidbody",
+     "signature": {
+      "raw_sha256": "9e1907cff4758c20a5b532513232b031db92db76adc36cd4fdda5e182d78d991",
+      "return_type": "class:29",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479764,
+      "il_size": 7,
+      "il_sha256": "5e22d1b249daaa1404b9160bc46eef297b2f05f1c47dcbd282633cdd93eecfa9",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bc78900042a"
+    },
+    {
+     "token": "0x0600a30c",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "get_forwardGroundAngle",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479772,
+      "il_size": 28,
+      "il_sha256": "f8069fea1d89878e7835d20220214153a750dc42c80675736175a7c366176d62",
+      "instruction_count": 8
+     },
+     "raw_il_hex": "027bc1890004390b000000027bcb890004380500000022000000002a"
+    },
+    {
+     "token": "0x0600a30d",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "set_forwardGroundAngle",
+     "signature": {
+      "raw_sha256": "7d50df739f41b3d5cdf6efc05539b18b1ea19e25f1aedd96a433ddc45068958f",
+      "return_type": "void",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4479804,
+      "il_size": 8,
+      "il_sha256": "e2648ff9b145d148c0ec4275863c589acf257ac8e2cbbdce15c956a57b11cc26",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dcb8900042a"
+    },
+    {
+     "token": "0x0600a30e",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "Awake",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4479816,
+      "il_size": 111,
+      "il_sha256": "1312422029eb164a13695ae9f0bbcfb64754c50932997666001099846d13d28c",
+      "instruction_count": 34
+     },
+     "raw_il_hex": "0202281600002b7dc7890004027bc7890004176f9911000a027bc7890004166f5600000a0273b901000a7dc989000402282200000a7dc089000402289e08000a0a12007b1900000a28f5a2000602282200000a2806a30006022200000000280da3000602281100000a7dca8900042a"
+    },
+    {
+     "token": "0x0600a30f",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "FixedUpdate",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4479940,
+      "il_size": 985,
+      "il_sha256": "82f0f6f4263f091cd1f74be4ee10a1d87a16e359e1b0b049c4fad32b08657cda",
+      "instruction_count": 303
+     },
+     "raw_il_hex": "0228f2a2000639010000002a282200000a0a02280aa300060b07027bc4890004280d00000a0b07027bcd890004285f00000a0b02280ba300066fab08000a3942000000027bc18900043a2600000002280ba3000602280600000a6f0b00000a07282900000a285f00000a280d00000a6fae08000a02280ba30006282200000a6fb400000a2a02257bcf89000425130517587dcf8900041105183f010000002a0228fea200063ac60000000228f8a2000639bb000000027cc08900047b1900000a220000000042a600000012017b1900000a22000000004395000000027bbc890004027bb1890004027bb389000459437d000000027bbc890004220000003458027bb08900044166000000120122000000007d1900000a02280600000a6f0b00000a0c1202027bbd890004027bb189000459027bb3890004597d1900000a02280600000a6f0b00000a130612067b1900000a12027b1900000a59027bb1890004410c00000002280600000a086f1000000a07282200000a28a301000a396a000000027bbe8900043a160000000228faa200063a0b0000000228f6a2000639170000000702280ba300066f7e00000a280c00000a0a38320000000702280600000a6f1a00000a289411000a02280ba300066f7e00000a02280600000a6f1a00000a289411000a280c00000a0a022803a300061307120728ad00000a2200401c46430c000000022803a3000628b603000a0a02280ba3000606186f6308000a02280ba300060228f4a20006027bca890004281200000a1b6f6308000a02280ba30006027bbf8900041b6f6308000a02280ba30006027bc08900041b6f6308000a07282200000a28a401000a394100000002280ba30006027bbb8900046502280ba300066f7e00000a1308120828ad00000a5a02280ba300066f7e00000a13091209281e00000a281200000a1b6f6308000a02280aa30006282200000a28a401000a3941000000027bc0890004282200000a28a301000a392c000000022803a30006130a120a28ad00000a027bb4890004027bb48900045a410b00000002282200000a2804a3000602280600000a6f0b00000a130b120b7b1900000a2200401cc6415400000002280600000a02280600000a6f0b00000a130c120c7b1c00000a22000020c102280600000a6f0b00000a130d120d7b1d00000a731b00000a6f1000000a02280ba30006022803a3000628b603000a186f6308000a022803a30006130e120e28ad00000a027bce890004027bce8900045a4341000000022803a30006130f120f281e00000a0d022803a3000613101210286c00000a130402280ba300060928b603000a1104027bce89000459285f00000a186f6308000a2a"
+    },
+    {
+     "token": "0x0600a310",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "Update",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4480940,
+      "il_size": 26,
+      "il_sha256": "233879b1bf2be2b56c671c7db723d0aaaf10dd844b88b4b724fd57ca2844fdee",
+      "instruction_count": 10
+     },
+     "raw_il_hex": "02167dcf890004022815a30006022816a30006022817a300062a"
+    },
+    {
+     "token": "0x0600a311",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "LateUpdate",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4480968,
+      "il_size": 36,
+      "il_sha256": "31c241bbe124867ed010ce3a5a14ef8d7544ce0338597fcbd7b9c1d3acf49c85",
+      "instruction_count": 12
+     },
+     "raw_il_hex": "02022803a300062806a3000602027bc38900047dc489000402282200000a7dc38900042a"
+    },
+    {
+     "token": "0x0600a312",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "OnCollisionEnter",
+     "signature": {
+      "raw_sha256": "a3e0728a0b7afde47df24f4a611c31bc624d9bab79e91b93b710a34e607c26d3",
+      "return_type": "void",
+      "parameter_types": [
+       "class:125"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4481008,
+      "il_size": 8,
+      "il_sha256": "c20d469918e20ea3d96a274959b56f2305c768c9fd29d9ed7c1a29a36dcf5c63",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02032814a300062a"
+    },
+    {
+     "token": "0x0600a313",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "OnCollisionStay",
+     "signature": {
+      "raw_sha256": "a3e0728a0b7afde47df24f4a611c31bc624d9bab79e91b93b710a34e607c26d3",
+      "return_type": "void",
+      "parameter_types": [
+       "class:125"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4481020,
+      "il_size": 8,
+      "il_sha256": "c20d469918e20ea3d96a274959b56f2305c768c9fd29d9ed7c1a29a36dcf5c63",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02032814a300062a"
+    },
+    {
+     "token": "0x0600a314",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "AddCollision",
+     "signature": {
+      "raw_sha256": "a3e0728a0b7afde47df24f4a611c31bc624d9bab79e91b93b710a34e607c26d3",
+      "return_type": "void",
+      "parameter_types": [
+       "class:125"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4481032,
+      "il_size": 87,
+      "il_sha256": "89ff1373a479dd1ed75babd11a256c7d05233548b43d65ae2a37fe7aa858ed0a",
+      "instruction_count": 34
+     },
+     "raw_il_hex": "160a384100000017036f9a11000a6faa00000a1f1f5f62027cac890004284e03000a5f391c000000027bc9890004036fba08000a068ffc00000128be08000a6fe501000a0617580a06036fba08000a8e693fb1ffffff2a"
+    },
+    {
+     "token": "0x0600a315",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "UpdateGroundState",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4481132,
+      "il_size": 508,
+      "il_sha256": "827acd9c75603b529c25d6619f5dfcf02ac3474c767ee48f10cb9af5e505d8ec",
+      "instruction_count": 158
+     },
+     "raw_il_hex": "0228fea200060a022802a300063a410000000202281da300067dbe890004027bbe890004390b00000002288e01000a7dc689000402288e01000a027bc689000459027bc5890004fe0428ffa2000638130000000216130702110728ffa2000611077dbe89000402063a080000000228fea200062b01162801a300060228faa200063a3d010000027bc98900046fad01000a163e2c010000282200000a0b02282200000a7dca89000402280ba300066fab08000a3a69000000160c3851000000027bc9890004086faf01000a0d09281100000a288206000a13041104027bc8890004411200000002257bca89000409280d00000a7dca8900041104220000b44241080000000709280d00000a0b0817580c08027bc98900046fad01000a3f9effffff027bc98900046fba01000a282200000a0728a401000a390b000000281100000a0b3847000000120128bd01000a02280600000a6f1700000a281100000a281614000a130507281100000a1105285000000a281614000a13060211061105288206000a220000b44259280da30006282200000a027bca89000428a401000a391000000002281100000a7dca890004380b000000027cca89000428bd01000a383800000002281100000a7dca8900040202280ca300062200000000027bcc890004280e00000a5a287b00000a280da30006027bc98900046fba01000a2a"
+    },
+    {
+     "token": "0x0600a316",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "UpdateWaterState",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4481652,
+      "il_size": 388,
+      "il_sha256": "e6b4f5f78e65808fe70cffd2f54069db5eec6255114a66e34d170f1c31ab00ad",
+      "instruction_count": 115
+     },
+     "raw_il_hex": "021628fba20006021628f9a20006021628fda2000602280600000a6f0b00000a0228fea20006390a000000220000003f38050000002200000000281100000a281200000a280d00000a2884650006220000003f43ff00000002280600000a6f0b00000a027bb0890004281100000a281200000a280d00000a287c00000a12002200000040027cad890004284e03000a28ae00000a391a00000002120028a000000a0b12017b1900000a7dbd89000438260000000202280600000a6f0b00000a0c12027b1900000a027bb089000458220000003f587dbd89000402027bbd89000402280600000a6f0b00000a0d12037b1900000a592200000000027bb0890004282701000a7dbc890004027bbc890004027bb28900044307000000021728f9a20006027bbc890004027bb18900044307000000021728fba20006027bbc890004220000003458027bb08900044407000000021728fda20006020228faa20006390c0000000228f4a200066538050000002200000000281100000a281200000a7dbf8900042a"
+    },
+    {
+     "token": "0x0600a317",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "UpdateDrag",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4482052,
+      "il_size": 69,
+      "il_sha256": "5da3597a8c193ecedda240f0e7fe4e5cd227eeb31679d77d3d8fc9b87d8a175a",
+      "instruction_count": 21
+     },
+     "raw_il_hex": "0228fea20006391100000002027bb88900047dbb89000438280000000228faa20006391100000002027bb98900047dbb890004380c00000002027bba8900047dbb8900042a"
+    },
+    {
+     "token": "0x0600a318",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "ResetSpeed",
+     "signature": {
+      "raw_sha256": "7d50df739f41b3d5cdf6efc05539b18b1ea19e25f1aedd96a433ddc45068958f",
+      "return_type": "void",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4482136,
+      "il_size": 45,
+      "il_sha256": "5a0106ca75a5694a037bdbd461712d1781c87415625e6d654df511fa9649a556",
+      "instruction_count": 16
+     },
+     "raw_il_hex": "0322cdcccc3d410700000022cdcccc3d100102037db589000402257bb5890004027baa8900045a7db58900042a"
+    },
+    {
+     "token": "0x0600a319",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "ResetInertiaVelocity",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4482196,
+      "il_size": 12,
+      "il_sha256": "d0e403d43ed4cd565368a89e486e33980a09525366a44695d0d628d4cec7f01b",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02282200000a2806a300062a"
+    },
+    {
+     "token": "0x0600a31a",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "ApplyImpact",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4482212,
+      "il_size": 41,
+      "il_sha256": "0bc1216e88ced71d61a4c4d23e08cfd612f14aaf4226f74c7bc4ddc0b7f38074",
+      "instruction_count": 17
+     },
+     "raw_il_hex": "027bc789000403186f6308000a02288e01000a7dab89000402160a020628ffa20006067dbe8900042a"
+    },
+    {
+     "token": "0x0600a31b",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "ApplyMoveRequest",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4482268,
+      "il_size": 69,
+      "il_sha256": "9d0a5d911f272b2a6ac95fbdffb271fa932c7da495b9152a876b1a337814bf60",
+      "instruction_count": 21
+     },
+     "raw_il_hex": "02257bc389000403280d00000a7dc3890004027cc3890004286c00000a027bc2890004431c00000002027bc2890004027cc3890004281e00000a281200000a7dc38900042a"
+    },
+    {
+     "token": "0x0600a31c",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "CancelMoveRequest",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 4482352,
+      "il_size": 23,
+      "il_sha256": "bc911732a244c54dbd0f197c3f93d495df93eee1916a5f9bf5237ed529d0bcd8",
+      "instruction_count": 7
+     },
+     "raw_il_hex": "02282200000a7dc389000402282200000a7dc48900042a"
+    },
+    {
+     "token": "0x0600a31d",
+     "declaring_type": "HumanPhyCtrl",
+     "name": "CheckGround",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 4482376,
+      "il_size": 151,
+      "il_sha256": "7f9d4b36d71bcd50c71d1c6fe692220cec331fae6a7a825be2967fa8e20cdb08",
+      "instruction_count": 54
+     },
+     "raw_il_hex": "027bc18900043920000000027bc98900046fad01000a163d0d000000027bc78900046fab08000a2b01172a02280600000a6f0b00000a027baf890004281100000a281200000a280d00000a027bae890004027cac890004284e03000a28c511000a0a160b382300000006079a6f0600000a02280600000a6f3201000a6f4513000a3a02000000172a0717580b07068e693fd4ffffff162a"
+    }
+   ],
+   "fields": [
+    {
+     "token": "0x040089a9",
+     "name": "MaxSpeed",
+     "type": "r4",
+     "flags": 32849
+    },
+    {
+     "token": "0x040089aa",
+     "name": "mSpeedTimes",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089ab",
+     "name": "m_ImpactTime",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089ac",
+     "name": "m_GroundLayer",
+     "type": "valuetype:177",
+     "flags": 6
+    },
+    {
+     "token": "0x040089ad",
+     "name": "m_WaterLayer",
+     "type": "valuetype:177",
+     "flags": 6
+    },
+    {
+     "token": "0x040089ae",
+     "name": "m_CheckGroundRadius",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089af",
+     "name": "m_CheckGroundOffsetHeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b0",
+     "name": "m_HuamnHeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b1",
+     "name": "m_SpineHeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b2",
+     "name": "m_FeetHeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b3",
+     "name": "m_SpineFixedHeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b4",
+     "name": "m_StopSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b5",
+     "name": "m_MoveSpeed",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089b6",
+     "name": "m_FlotageAcc",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b7",
+     "name": "m_FlotageMaxSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b8",
+     "name": "m_GroundDrag",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089b9",
+     "name": "m_WaterDrag",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089ba",
+     "name": "m_AirDrag",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089bb",
+     "name": "m_Drag",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089bc",
+     "name": "m_WaterToRoot",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089bd",
+     "name": "m_WaterHeight",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089be",
+     "name": "phyGround",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089bf",
+     "name": "m_WaterAcc",
+     "type": "valuetype:33",
+     "flags": 6
+    },
+    {
+     "token": "0x040089c0",
+     "name": "m_SubAcc",
+     "type": "valuetype:33",
+     "flags": 6
+    },
+    {
+     "token": "0x040089c1",
+     "name": "m_IsContrler",
+     "type": "bool",
+     "flags": 6
+    },
+    {
+     "token": "0x040089c2",
+     "name": "MaxSubSpeed",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089c3",
+     "name": "m_RequestSubVelocity",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x040089c4",
+     "name": "m_ApplySubVelocity",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x040089c5",
+     "name": "m_LeaveGroundTime",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089c6",
+     "name": "m_LastGroundTime",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089c7",
+     "name": "m_Rigidbody",
+     "type": "class:29",
+     "flags": 1
+    },
+    {
+     "token": "0x040089c8",
+     "name": "m_MaxGroundBalanceAngle",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089c9",
+     "name": "m_GroundColNormals",
+     "type": null,
+     "flags": 1
+    },
+    {
+     "token": "0x040089ca",
+     "name": "m_GravityUpDir",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x040089cb",
+     "name": "m_ForwardGroundAngle",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089cc",
+     "name": "forwardAngleLerpSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089cd",
+     "name": "netMoveSpeedScale",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089ce",
+     "name": "maxSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x040089cf",
+     "name": "_cntFixedUpdate",
+     "type": "i4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d0",
+     "name": "<freezeUpdate>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d1",
+     "name": "<gravity>k__BackingField",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d2",
+     "name": "<useRopeGun>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d3",
+     "name": "<feetInWater>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d4",
+     "name": "<spineInWater>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d5",
+     "name": "<headInWater>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d6",
+     "name": "<grounded>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d7",
+     "name": "<fallGround>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d8",
+     "name": "<inertiaVelocity>k__BackingField",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x040089d9",
+     "name": "<desiredMovementDirection>k__BackingField",
+     "type": "valuetype:33",
+     "flags": 1
+    }
+   ],
+   "external_callers": {
+    "ApplyImpact": [
+     "Pathea.Action_Jump::DoAction",
+     "Pathea.MainPlayerCmpt::UpdateMoveState",
+     "Pathea.Motion_Move_Human::UpdateNetMove"
+    ],
+    "ApplyMoveRequest": [
+     "Pathea.Action_Repulsed::Update",
+     "Pathea.Action_Rotate::Update",
+     "Pathea.Action_Step::Update",
+     "Pathea.Action_SwordAttack::UpdateSkillState",
+     "Pathea.MainPlayerCmpt::UpdateMoveState"
+    ],
+    "CancelMoveRequest": [
+     "Pathea.Action_Climb::DoAction",
+     "Pathea.Action_Knocked::DoAction",
+     "Pathea.Action_Repulsed::EndImmediately",
+     "Pathea.Action_RopeGunShoot::ResetPhy",
+     "Pathea.Action_Rotate::EndImmediately",
+     "Pathea.Action_Sleep::DoAction",
+     "Pathea.Action_Step::EndImmediately",
+     "Pathea.Action_SwordAttack::OnEndAction",
+     "Pathea.Action_Wentfly::DoAction",
+     "Pathea.Motion_Move_Human::ResetNetMoveState",
+     "Pathea.Motion_Move_Human::UpdateNetMove"
+    ],
+    "ResetInertiaVelocity": [
+     "Pathea.Action_RopeGunShoot::ResetPhy",
+     "Pathea.Action_SwordAttack::EndImmediately"
+    ],
+    "ResetSpeed": [
+     "Pathea.Action_Fall::DoAction",
+     "Pathea.Action_Glider::Update",
+     "Pathea.Action_JetPack::DoAction",
+     "Pathea.Action_Jump::DoAction",
+     "Pathea.Action_Move::DoAction",
+     "Pathea.Action_Move::Update",
+     "Pathea.Action_Parachute::DoAction",
+     "Pathea.Action_RopeGunShoot::UpdateClimbing",
+     "Pathea.Action_Sprint::DoAction",
+     "Pathea.Action_Sprint::Update"
+    ],
+    "get__rigidbody": [
+     "Pathea.Action_Glider::Update",
+     "Pathea.Action_RopeGunShoot::ResetPhy",
+     "Pathea.Action_RopeGunShoot::StartClimb",
+     "Pathea.Motion_Move_Human::SetIsKinematic"
+    ],
+    "get_currentDesiredMovementDirection": [
+     "Pathea.Action_Fall::DoAction",
+     "Pathea.Action_JetPack::DoAction",
+     "Pathea.Action_Jump::DoAction",
+     "Pathea.Action_Move::ContinueAction",
+     "Pathea.Action_Move::DoAction",
+     "Pathea.Action_Parachute::DoAction",
+     "Pathea.Action_Sprint::ContinueAction",
+     "Pathea.Action_Sprint::DoAction",
+     "Pathea.Motion_Move_Human::UpdateAnimState"
+    ],
+    "get_desiredMovementDirection": [
+     "Pathea.Action_Fall::Update",
+     "Pathea.Action_JetPack::Update",
+     "Pathea.Action_Parachute::Update",
+     "Pathea.Action_Sprint::Update"
+    ],
+    "get_fallGround": [
+     "FootprintDecalMgr::Update"
+    ],
+    "get_feetInWater": [
+     "ItemAsset.EquipSelect::GetBetterAtkObj",
+     "ItemAsset.SelectItem::EquipCanAttack",
+     "Pathea.Action_Fall::Update",
+     "Pathea.Action_Jump::Update",
+     "Pathea.Motion_Move_Human::UpdateLocation"
+    ],
+    "get_forwardGroundAngle": [
+     "Pathea.Action_Move::DoAction",
+     "Pathea.Action_Move::Update",
+     "Pathea.Action_Sprint::DoAction",
+     "Pathea.Action_Sprint::Update",
+     "Pathea.Motion_Move_Human::UpdateAnimState"
+    ],
+    "get_gravity": [
+     "Pathea.Action_Glider::DoAction"
+    ],
+    "get_grounded": [
+     "Pathea.Action_Fall::Update",
+     "Pathea.Action_JetPack::Update",
+     "Pathea.Action_Jump::Update",
+     "Pathea.Action_RopeGunShoot::UpdateClimbing",
+     "Pathea.Motion_Move_Human::CheckFall",
+     "Pathea.Motion_Move_Human::UpdateAnimState",
+     "Pathea.Motion_Move_Human::UpdateLocation",
+     "Pathea.Motion_Move_Human::get_grounded"
+    ],
+    "get_headInWater": [
+     "BGManager::Update",
+     "PEAT_InWater::Hit",
+     "Pathea.MainPlayerCmpt::UpdateMoveState",
+     "Pathea.Motion_Move_Human::UpdateLocation"
+    ],
+    "get_inertiaVelocity": [
+     "Pathea.Action_Glider::Update"
+    ],
+    "get_moveSpeed": [
+     "Pathea.Action_Fall::DoAction",
+     "Pathea.Action_Jump::DoAction"
+    ],
+    "get_spineInWater": [
+     "BGManager::Update",
+     "HeavyEquipmentCtrl::Update",
+     "Pathea.Action_JetPack::Update",
+     "Pathea.Action_Move::Update",
+     "Pathea.Action_Rotate::CanDoAction",
+     "Pathea.Action_Sprint::Update",
+     "Pathea.Action_SwordAttack::ApplySkill",
+     "Pathea.Action_SwordAttack::ResetAction",
+     "Pathea.Action_SwordAttack::UpdateSkillState",
+     "Pathea.MainPlayerCmpt::UpdateCamDirection",
+     "Pathea.MainPlayerCmpt::UpdateMoveState",
+     "Pathea.Motion_Move_Human::UpdateAnimState",
+     "Pathea.Motion_Move_Human::UpdateLocation"
+    ],
+    "get_velocity": [
+     "FootprintDecalMgr::Update",
+     "Pathea.Action_Fall::Update",
+     "Pathea.Action_Glider::CanDoAction",
+     "Pathea.Action_Glider::Update",
+     "Pathea.Action_Halt::DoAction",
+     "Pathea.Action_JetPack::Update",
+     "Pathea.Action_Jump::Update",
+     "Pathea.Action_Move::Update",
+     "Pathea.Action_Parachute::CanDoAction",
+     "Pathea.Action_Parachute::Update",
+     "Pathea.Action_Repulsed::Update",
+     "Pathea.Action_RopeGunShoot::UpdateClimbing",
+     "Pathea.Action_Rotate::CanDoAction",
+     "Pathea.Action_Rotate::DoAction",
+     "Pathea.Action_Sprint::DoAction",
+     "Pathea.Action_Sprint::Update",
+     "Pathea.Action_Step::DoAction",
+     "Pathea.Action_SwordAttack::EndImmediately",
+     "Pathea.Action_SwordAttack::UpdateSkillState",
+     "Pathea.MainPlayerCmpt::UpdateImpactDamage",
+     "Pathea.Motion_Move_Human::get_velocity"
+    ],
+    "set_desiredMovementDirection": [
+     "Pathea.Action_Fall::DoAction",
+     "Pathea.Action_Fall::EndImmediately",
+     "Pathea.Action_Fall::Update",
+     "Pathea.Action_Glider::DoAction",
+     "Pathea.Action_JetPack::DoAction",
+     "Pathea.Action_JetPack::EndImmediately",
+     "Pathea.Action_JetPack::Update",
+     "Pathea.Action_Jump::OnEndAction",
+     "Pathea.Action_Jump::Update",
+     "Pathea.Action_Knocked::DoAction",
+     "Pathea.Action_Move::ContinueAction",
+     "Pathea.Action_Move::DoAction",
+     "Pathea.Action_Move::EndAction",
+     "Pathea.Action_Move::EndImmediately",
+     "Pathea.Action_Move::PauseAction",
+     "Pathea.Action_Move::Update",
+     "Pathea.Action_Parachute::DoAction",
+     "Pathea.Action_Parachute::EndImmediately",
+     "Pathea.Action_Parachute::Update",
+     "Pathea.Action_Repulsed::EndImmediately",
+     "Pathea.Action_RopeGunShoot::ResetPhy",
+     "Pathea.Action_RopeGunShoot::UpdateClimbing",
+     "Pathea.Action_Sprint::ContinueAction",
+     "Pathea.Action_Sprint::DoAction",
+     "Pathea.Action_Sprint::EndAction",
+     "Pathea.Action_Sprint::EndImmediately",
+     "Pathea.Action_Sprint::PauseAction",
+     "Pathea.Action_Sprint::Update",
+     "Pathea.Action_Step::EndImmediately",
+     "Pathea.Action_SwordAttack::OnEndAction",
+     "Pathea.Action_Wentfly::DoAction",
+     "Pathea.Motion_Move_Human::ResetNetMoveState",
+     "Pathea.Motion_Move_Human::UpdateNetMove"
+    ],
+    "set_freezeUpdate": [
+     "Pathea.Action_Glider::DoAction",
+     "Pathea.Action_Glider::EndImmediately"
+    ],
+    "set_gravity": [
+     "Pathea.Motion_Move_Human::OnMsg",
+     "Pathea.Motion_Move_Human::UpdateContrlerPhy"
+    ],
+    "set_grounded": [
+     "Pathea.Motion_Beat::OnMsg"
+    ],
+    "set_useRopeGun": [
+     "Pathea.Action_RopeGunShoot::ResetPhy",
+     "Pathea.Action_RopeGunShoot::StartClimb"
+    ],
+    "set_velocity": [
+     "Pathea.Action_Climb::DoAction",
+     "Pathea.Action_Glider::Update",
+     "Pathea.Action_Sleep::DoAction",
+     "Pathea.Action_SwordAttack::EndImmediately",
+     "Pathea.Motion_Move_Human::UpdateSafePlace",
+     "Pathea.Motion_Move_Human::set_velocity"
+    ]
+   }
+  },
+  "Assembly-CSharp-firstpass.dll": {
+   "sha256": "9fb0f052d0458840220be7cde5f1696ab3e1502154ba9cbcd826c1f3dbe399df",
+   "byte_length": 614400,
+   "mvid": "7b178142-9afb-4aa1-ad2b-b1f8d0d56dee",
+   "rea_evidence_id": "ev_3ac0cdbddbd24f5f46943cc0d024a44269ebae318491c3294e6db3e534fc29a6",
+   "methods": [
+    {
+     "token": "0x060004e3",
+     "declaring_type": "Util",
+     "name": "ProjectOntoPlane",
+     "signature": {
+      "raw_sha256": "1c20952886dd2d9f82b6416cba32fe589210bd800b4c3b201dd3d5e31d94e664",
+      "return_type": "valuetype:9",
+      "parameter_types": [
+       "valuetype:9",
+       "valuetype:9"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 62480,
+      "il_size": 14,
+      "il_sha256": "ca3550f70111a10dcd20681ddadad491560167a1fc712b598e401885374afe9f",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "020203286d00000a284900000a2a"
+    }
+   ]
+  },
+  "UnityEngine.dll": {
+   "sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+   "byte_length": 848384,
+   "mvid": "5cf16eb2-32c9-483e-8fb7-9072104d5826",
+   "rea_evidence_id": "ev_f1f0444bcfceecdc4767fd6a28a0733e4bc518f31d1427187dc47a02056067a3",
+   "methods": [
+    {
+     "token": "0x060004c3",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "Normalize",
+     "signature": {
+      "raw_sha256": "fbdb3914e97fd345e64319762391e3a8be95422c9fd14f50f8e8a884ad279b62",
+      "return_type": "valuetype:344",
+      "parameter_types": [
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 14692,
+      "il_size": 32,
+      "il_sha256": "42f7bb97933b393992990f5ad60c0edcda1ba770de0674c566d2f1ed18f58b25",
+      "instruction_count": 12
+     },
+     "raw_il_hex": "0228cf0400060a0622acc527374308000000020628e40400062a28d50400062a"
+    },
+    {
+     "token": "0x060004c4",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "Normalize",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 14736,
+      "il_size": 58,
+      "il_sha256": "e2365fb3849727b8a46c17c00078776442125039ad3df68eaf9140e6dc761afc",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "02715600000228cf0400060a0622acc527374317000000020271560000020628e40400068156000002380b0000000228d504000681560000022a"
+    },
+    {
+     "token": "0x060004c5",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "get_normalized",
+     "signature": {
+      "raw_sha256": "8e2788a534d9cfd25fc4e86e26be45c2687bd1fd722cd65e4cd51f800bcb478c",
+      "return_type": "valuetype:344",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 14808,
+      "il_size": 12,
+      "il_sha256": "38269ea82db3035e211bc6c2f41660f1a297912ae209342762ba4c79819de9eb",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02715600000228c30400062a"
+    },
+    {
+     "token": "0x060004c8",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "Dot",
+     "signature": {
+      "raw_sha256": "2e7ba20897ff8479eb1ec03e6ee74184e73d17c4c6ffb8c148d7dfa5794349ca",
+      "return_type": "r4",
+      "parameter_types": [
+       "valuetype:344",
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 14972,
+      "il_size": 48,
+      "il_sha256": "9c7c3ded1b71a8b02d2c8d994096c617ef5c2662d230c5a441ba67e0cc80c9da",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "0f007bd00000040f017bd00000045a0f007bd10000040f017bd10000045a580f007bd20000040f017bd20000045a582a"
+    },
+    {
+     "token": "0x060004c9",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "Project",
+     "signature": {
+      "raw_sha256": "ac3538d7ce59533791572784e2853c28630b0ebdfefb3383075fe077e908b188",
+      "return_type": "valuetype:344",
+      "parameter_types": [
+       "valuetype:344",
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 15024,
+      "il_size": 45,
+      "il_sha256": "c82c8c3f2cb291bb145a5945c6d487fc548e9f89667a148aeaed10d5251ee05a",
+      "instruction_count": 17
+     },
+     "raw_il_hex": "030328c80400060a067e09010004410600000028d50400062a03020328c804000628e20400060628e40400062a"
+    },
+    {
+     "token": "0x060004ca",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "ProjectOnPlane",
+     "signature": {
+      "raw_sha256": "ac3538d7ce59533791572784e2853c28630b0ebdfefb3383075fe077e908b188",
+      "return_type": "valuetype:344",
+      "parameter_types": [
+       "valuetype:344",
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 15084,
+      "il_size": 14,
+      "il_sha256": "726c74874b814c18219bcb9ecdffe41ef9b8fef6cbfa30801a4bb9d72dd3a65f",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "02020328c904000628e00400062a"
+    },
+    {
+     "token": "0x060004cc",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "Angle",
+     "signature": {
+      "raw_sha256": "2e7ba20897ff8479eb1ec03e6ee74184e73d17c4c6ffb8c148d7dfa5794349ca",
+      "return_type": "r4",
+      "parameter_types": [
+       "valuetype:344",
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 15116,
+      "il_size": 46,
+      "il_sha256": "dfd1d9fda3a0c9dd644e7c0092186ee705030f5e2562cb56da88d859c25458f2",
+      "instruction_count": 12
+     },
+     "raw_il_hex": "0f0028c50400060f0128c504000628c804000622000080bf220000803f2832060006281806000622e12e65425a2a"
+    },
+    {
+     "token": "0x060004cf",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "Magnitude",
+     "signature": {
+      "raw_sha256": "886b0b78607c4f0fa9a7718ad9eb9a36e76925eaaa07db1030adbe6858c15685",
+      "return_type": "r4",
+      "parameter_types": [
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 15328,
+      "il_size": 53,
+      "il_sha256": "a1d306d727ab69259c27586003cd34ea8fb36351c8bb41dc15f26568d38045c4",
+      "instruction_count": 19
+     },
+     "raw_il_hex": "0f007bd00000040f007bd00000045a0f007bd10000040f007bd10000045a580f007bd20000040f007bd20000045a58281b0600062a"
+    },
+    {
+     "token": "0x060004d0",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "get_magnitude",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 15396,
+      "il_size": 47,
+      "il_sha256": "98bae80c837f9ee14c4597eadbc5063e1fc92152e1d92d42056a76af234f622f",
+      "instruction_count": 19
+     },
+     "raw_il_hex": "027bd0000004027bd00000045a027bd1000004027bd10000045a58027bd2000004027bd20000045a58281b0600062a"
+    },
+    {
+     "token": "0x060004d1",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "SqrMagnitude",
+     "signature": {
+      "raw_sha256": "886b0b78607c4f0fa9a7718ad9eb9a36e76925eaaa07db1030adbe6858c15685",
+      "return_type": "r4",
+      "parameter_types": [
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 15456,
+      "il_size": 48,
+      "il_sha256": "5802844972686e88838634fb1f1a71f01260f87568bfc6eef4b86e3e603e86d0",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "0f007bd00000040f007bd00000045a0f007bd10000040f007bd10000045a580f007bd20000040f007bd20000045a582a"
+    },
+    {
+     "token": "0x060004d2",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "get_sqrMagnitude",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 15508,
+      "il_size": 42,
+      "il_sha256": "2c92ee323d3f64255f5a5868c05c660b157218b7bec535ee40acb3f0e87c0af3",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "027bd0000004027bd00000045a027bd1000004027bd10000045a58027bd2000004027bd20000045a582a"
+    },
+    {
+     "token": "0x060004e5",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "op_Equality",
+     "signature": {
+      "raw_sha256": "7a413f3a855ba4942720251b0e3f4e8eac7b6630aedc7447afc6bd15e94af1aa",
+      "return_type": "bool",
+      "parameter_types": [
+       "valuetype:344",
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 16276,
+      "il_size": 20,
+      "il_sha256": "ae0d16da66891285315acfd96ca0a86842f716c6d50d03a7127da4fe13e4fcf8",
+      "instruction_count": 7
+     },
+     "raw_il_hex": "020328e004000628d104000622fee6db2efe042a"
+    },
+    {
+     "token": "0x060004e6",
+     "declaring_type": "UnityEngine.Vector3",
+     "name": "op_Inequality",
+     "signature": {
+      "raw_sha256": "7a413f3a855ba4942720251b0e3f4e8eac7b6630aedc7447afc6bd15e94af1aa",
+      "return_type": "bool",
+      "parameter_types": [
+       "valuetype:344",
+       "valuetype:344"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 16300,
+      "il_size": 23,
+      "il_sha256": "ab34448d2fee44fe1d2ebd59ee6bc352422fe296226e9da5585033573e04e5f5",
+      "instruction_count": 9
+     },
+     "raw_il_hex": "020328e004000628d104000622fee6db2efe0516fe012a"
+    },
+    {
+     "token": "0x06000634",
+     "declaring_type": "UnityEngine.Mathf",
+     "name": "Clamp01",
+     "signature": {
+      "raw_sha256": "60184e7f6ba24c29f338158452fe25429c653c41583f5de5bcd1af12b380efba",
+      "return_type": "r4",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 32816,
+      "il_size": 36,
+      "il_sha256": "b04ca9ae958ff79618e914cfea5881eb68014929416f1241c8c6d692c4e841e3",
+      "instruction_count": 12
+     },
+     "raw_il_hex": "022200000000410600000022000000002a02220000803f4306000000220000803f2a022a"
+    },
+    {
+     "token": "0x06000635",
+     "declaring_type": "UnityEngine.Mathf",
+     "name": "Lerp",
+     "signature": {
+      "raw_sha256": "2e5dac11367fccb436a2e2366c3389d3698dab88569ec5e54d483d2f133546a4",
+      "return_type": "r4",
+      "parameter_types": [
+       "r4",
+       "r4",
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 32856,
+      "il_size": 13,
+      "il_sha256": "33d03da858b358c879f4274bf36dd54e6b97a50e20ff289ec3d1fbd14649998c",
+      "instruction_count": 9
+     },
+     "raw_il_hex": "020302590428340600065a582a"
+    }
+   ]
+  }
+ }
+}

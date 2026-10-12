@@ -3,6 +3,11 @@
 October 10–11, 2026. Source-derived and implemented in a disconnected C owner.
 Neither gameplay host calls `pe_repulsed`; live hit reactions remain gated.
 
+October 12 follow-through: [HumanPhyCtrl consumption](HUMAN_PHY_CTRL.md) is now
+read from installed CIL and held by the disconnected `pe_human_phy`. The
+controller sums requests, holds them to 10 m/s and applies them one frame
+later; `pe_repulsed` still reports the unclamped request.
+
 ## Active source contract
 
 `Motion_Beat.Start` registers `Action_Repulsed` and assigns its optional
@@ -112,10 +117,11 @@ Full checkpoint results are recorded in [PLAYTEST](../PLAYTEST.md). No game,
 desktop input, normal save, new pose capture or installed asset modification
 was needed. PECSv22 and live damage remain unchanged.
 
-Before gameplay integration, qualify HumanPhyCtrl's request consumption,
-collision and motor ordering; recover Whacked/Repulsed poses and animation
+Before gameplay integration, recover Whacked/Repulsed poses and animation
 events; and compose reaction/body/attachments/defence and cancellation with the
 actual host. Angle/projection and final Wentfly normalization remain caller
 operations. MotionMgr scheduling, shared parameter lifetime, Halt/IK effects,
 ragdoll and shield composition require their own owners or explicit adapters.
+HumanPhyCtrl's request and force order is [qualified separately](HUMAN_PHY_CTRL.md);
+PhysX integration and contact response remain unrecovered engine behavior.
 This increment supplies no permission to enable live stun/knockback.

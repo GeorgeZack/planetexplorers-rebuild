@@ -43,6 +43,8 @@ Both are wired into `exporter-check` through `SETTLEMENT_CAPTURE`, `ROUTE_CAPTUR
 
 `repulsed-source-check`, included in `check-sources`, regenerates-and-compares the admitted female Repulsed metadata and runs all17 source/prefab cases with the local UnityPy environment. It additionally binds the focused static angle evidence to the installed UnityEngine bytes. See [the qualification](REPULSED_ACTION.md).
 
+`human-phy-source-check`, also in `check-sources`, regenerates-and-compares the HumanPhyCtrl metadata and runs all16 decoder/evidence/prefab cases with UnityPy. It compares every excerpted CIL body with the installed Assembly-CSharp, Assembly-CSharp-firstpass and UnityEngine bytes, so the target needs the pinned Steam installation. Run on its own, the test file skips the installed-byte and regeneration cases when that installation is absent. Refreshing the excerpt itself needs saved REA inventories (`export_human_phy.py --excerpt`) and is not part of any check. See [the qualification](HUMAN_PHY_CTRL.md).
+
 ## Not wired
 
 - **`export_shield_controller.py`.** Its check verifies an existing stage directory, and no stage is retained locally. `tests/test_shield_controller_export.py` exercises the mode against a temporary stage.

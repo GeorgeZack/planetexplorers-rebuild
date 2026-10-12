@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October12 combat foundation: [HumanPhyCtrl consumption](HUMAN_PHY_CTRL.md) is recovered from installed CIL into the disconnected `pe_human_phy`: summed requests held to10 m/s, a one-frame LateUpdate latch, the two-FixedUpdate limit and the VelocityChange/Acceleration order. The controller has no collision response of its own; PhysX integration and contacts stay unrecovered. Next recover Whacked/Repulsed poses and animation events from existing exports, then the Halt/Wentfly/Knocked callers, before any host composition. Live reactions, shield composition, pounce and9077 stay gated.
+
 October10 combat foundation: [admitted Repulsed](REPULSED_ACTION.md) qualifies the active female curves, lifecycle clock, action relations and movement/cleanup requests, with a disconnected C owner. Static installed Unity5 IL establishes its initial zero-direction shield angle as90. Next qualify actual HumanPhyCtrl request consumption/collision and reaction poses before host integration. Live reactions, shield composition, pounce and9077 stay gated.
 
 October9 visual correction: [building materials and label visibility](BUILDING_MATERIALS.md) recover cutout/two-sided source policies for both settlement crops and hide sandbox NPC names behind current geometry. Private native fixtures establish these corrections; they add no new gameplay or original-game acceptance.
