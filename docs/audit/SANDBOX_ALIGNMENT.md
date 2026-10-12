@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October12 sprint attack: skill20110013 timing (clip401 events, then Attack7–9) and fail-closed admission are in `pe_combat`/`pe_sandbox_melee`; see [the contract](REACTION_PRESENTATION.md). It stays unavailable in play until the prepared bake supplies its pose and a separate root capture supplies its motion.
+
 October12 lunge: [blade root motion now follows the source controller order](SWORD_LUNGE_MOTOR.md) through `pe_sword_motor`: previous-frame delta, the10 m/s hold, a one-tick latch, coasting before the first request and cancellation at the end. A running lunge in the live host after this change still needs a look at the desktop; the sprint attack remains unsupported and needs an engine capture.
 
 October12 reaction presentation: [Whacked/Repulsed animation contract](REACTION_PRESENTATION.md) recovers the BeHit state, its `HitAnimEnd` exit signal (a state behaviour, not a clip event or timer), the per-style hit clips and the separate BeatWeight stagger set, with the disconnected `pe_whacked` lifecycle owner. No existing capture holds these poses. Next is the one prepared engine bake (`reference_animator_bake.py --preset hit-reaction`, now25 clips,1,052 samples with the get-up and sprint-attack clips), which needs a supervised original-game session; meanwhile Halt/Wentfly/Knocked/GetUp callers and hit IK remain source-portable. Live reactions, shield composition, pounce and9077 stay gated.

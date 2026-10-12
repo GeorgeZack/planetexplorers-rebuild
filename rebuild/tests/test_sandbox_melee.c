@@ -87,6 +87,18 @@ static void running_tests(const char *path){
     g.velocity.x=nextafterf(4.5f,0);CHECK(!pe_sandbox_melee_begin(&h,g,&stamina));
     g.velocity.x=nextafterf(7,INFINITY);CHECK(!pe_sandbox_melee_begin(&h,g,&stamina));
     CHECK(stamina==100&&!memcmp(&h,&before,sizeof h));
+    {   /* Sprint stays closed: claiming readiness without SprintSwordAttack
+         * poses fails initialization, and a male host cannot claim it at all. */
+        PeSandboxMeleeSetup sprint=setup;PeSandboxMelee other;memset(&other,0x5A,sizeof other);PeSandboxMelee untouched=other;
+        sprint.sprint_motion_ready=true;
+        CHECK(!pe_sandbox_melee_init(&other,&sprint)&&!memcmp(&other,&untouched,sizeof other));
+        sprint.gender=PE_COMBAT_MALE;CHECK(!pe_sandbox_melee_init(&other,&sprint));
+        /* An action forced into the sprint variant without readiness is invalid, not run. */
+        PeSandboxMelee forced=h;float energy=100;
+        CHECK(pe_combat_begin_variant(&forced.action,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_SPRINT,1,&energy));
+        forced.instance_id=g.equipped_instance_id;
+        CHECK(!pe_sandbox_melee_advance(&forced,g,&energy));
+    }
     /* Actual installed Vector3.magnitude rounds this diagonal to4.5; the old
      * double-only predicate called it running. Ordinary moving presentation
      * is still unavailable, so this press must not debit or start408. */

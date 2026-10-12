@@ -16,6 +16,7 @@ static bool gate_common(const PeSandboxMelee *h,PeSandboxMeleeGate g){
 static bool stationary_allowed(PeSandboxMeleeGate g){return !g.move_requested&&hypot(g.velocity.x,g.velocity.z)<=.05;}
 static bool action_allowed(const PeSandboxMelee *h,PeSandboxMeleeGate g){
     return gate_common(h,g)&&(h->action.variant==PE_COMBAT_RUNNING?h->setup.running_motion_ready:
+        h->action.variant==PE_COMBAT_SPRINT?h->setup.sprint_motion_ready:
         (h->setup.ordinary_motion_ready||stationary_allowed(g)));
 }
 static bool begin_variant(const PeSandboxMelee *h,PeSandboxMeleeGate g,PeCombatVariant *variant){
@@ -24,6 +25,7 @@ static bool begin_variant(const PeSandboxMelee *h,PeSandboxMeleeGate g,PeCombatV
     if(!pe_sword_variant_select((PeSwordVariantInput){.velocity=g.velocity,.movement_present=true,
         .in_air=!g.grounded,.motor_present=true,.spine_in_water=g.in_water},&selected))return false;
     if(selected==PE_SWORD_VARIANT_RUNNING){if(!h->setup.running_motion_ready)return false;*variant=PE_COMBAT_RUNNING;return true;}
+    if(selected==PE_SWORD_VARIANT_SPRINT){if(!h->setup.sprint_motion_ready)return false;*variant=PE_COMBAT_SPRINT;return true;}
     if(selected!=PE_SWORD_VARIANT_ORDINARY)return false;
     if(!h->setup.ordinary_motion_ready&&!stationary_allowed(g))return false;
     *variant=PE_COMBAT_STATIONARY;return true;
@@ -42,7 +44,8 @@ static bool valid(const PeSandboxMelee *h){
         for(unsigned j=0;j<i;j++)if(h->effected[i]==h->effected[j])return false;
     }
     return h->ready&&setup_valid(&h->setup)&&pe_combat_variant_clip(h->action.gender,h->action.view,h->action.variant,h->action.stage)&&
-        (h->action.variant!=PE_COMBAT_RUNNING||h->setup.running_motion_ready)&&h->action.target_count<=PE_COMBAT_TARGET_CAPACITY&&
+        (h->action.variant!=PE_COMBAT_RUNNING||h->setup.running_motion_ready)&&
+        (h->action.variant!=PE_COMBAT_SPRINT||h->setup.sprint_motion_ready)&&h->action.target_count<=PE_COMBAT_TARGET_CAPACITY&&
         (!h->action.active||(h->instance_id&&h->action.gender==h->setup.gender&&h->action.view==PE_COMBAT_THIRD_PERSON));
 }
 static bool weapon_valid(const PeSandboxMelee*h,const PeSandboxMeleeFrame*f,const PeSlot*w,float base){
@@ -96,6 +99,17 @@ bool pe_sandbox_melee_init(PeSandboxMelee *h,const PeSandboxMeleeSetup *s){
         for(unsigned i=0;i<5;i++)if(events->events[i].time>a->duration)return false;
         PeHitboxCapsule capsule;
         if(!pe_hitbox_pose(s->drawn_capsule,s->drawn_weapon,0,next.running_weapon_clip,0,(PeVec3){0},0,1,&capsule))return false;
+    }
+    if(s->sprint_motion_ready){
+        if(s->gender!=PE_COMBAT_FEMALE)return false;
+        next.sprint_body_clip=pe_actor_find_clip(s->body,"SprintSwordAttack");
+        next.sprint_weapon_clip=pe_actor_find_clip(s->drawn_weapon,"SprintSwordAttack");
+        const PeActorClip *a=pe_actor_clip(s->body,next.sprint_body_clip),*b=pe_actor_clip(s->drawn_weapon,next.sprint_weapon_clip);
+        if(!clocks_equal(a,b)||a->loop)return false;
+        const PeCombatClip *events=pe_combat_variant_clip(s->gender,PE_COMBAT_THIRD_PERSON,PE_COMBAT_SPRINT,0);
+        for(unsigned i=0;i<5;i++)if(events->events[i].time>a->duration)return false;
+        PeHitboxCapsule capsule;
+        if(!pe_hitbox_pose(s->drawn_capsule,s->drawn_weapon,0,next.sprint_weapon_clip,0,(PeVec3){0},0,1,&capsule))return false;
     }
     next.ready=true;*h=next;return true;
 }
@@ -160,7 +174,8 @@ bool pe_sandbox_melee_resolve_with_weapon(PeSandboxMelee*h,const PeSandboxMeleeF
     if(count)memcpy(staged,targets,count*sizeof *targets);
     if(!next.action.active||!next.action.contact_open){next.history_active=false;next.effected_count=0;}
     if(next.action.active){
-        size_t clip=next.action.variant==PE_COMBAT_RUNNING&&next.action.stage==0?next.running_weapon_clip:next.weapon_clip[next.action.stage];
+        size_t clip=next.action.stage?next.weapon_clip[next.action.stage]:next.action.variant==PE_COMBAT_RUNNING?next.running_weapon_clip:
+                next.action.variant==PE_COMBAT_SPRINT?next.sprint_weapon_clip:next.weapon_clip[0];
         if(!pe_hitbox_pose(next.setup.drawn_capsule,next.setup.drawn_weapon,0,clip,next.action.clip_time,
                           f->player_position,f->player_yaw,f->player_scale,&result.weapon))return false;
         result.weapon_valid=true;

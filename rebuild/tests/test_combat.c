@@ -1,4 +1,5 @@
 #include "pe_combat.h"
+#include "../generated/pe_reaction_presentation_source.h"
 #include <float.h>
 #include <math.h>
 #include <stdio.h>
@@ -212,4 +213,32 @@ static void running_tests(void){
     CHECK(!memcmp(&a,&saved,sizeof a)&&!memcmp(&span,&saved_span,sizeof span)&&stamina==saved_stamina);
     a.variant=(PeCombatVariant)9;CHECK(!pe_combat_pose_name(&a));
 }
-int pe_test_combat(void){failures=0;window_tests();combo_tests();guards_tests();damage_tests();calibrated_clock_tests();running_tests();return failures;}
+static void sprint_tests(void){
+    /* Source timing of skill20110013 only; no pose or root curve exists yet. */
+    PeCombat a={0};float stamina=100;PeCombatInterval span;
+    CHECK(!pe_combat_begin_variant(&a,PE_COMBAT_MALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_SPRINT,1,&stamina));
+    CHECK(!pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_FIRST_PERSON,PE_COMBAT_SPRINT,1,&stamina)&&stamina==100);
+    CHECK(pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_SPRINT,1,&stamina));
+    CHECK(!strcmp(pe_combat_pose_name(&a),"SprintSwordAttack")&&stamina==95);
+    const PeCombatClip *clip=pe_combat_variant_clip(a.gender,a.view,a.variant,0);
+    CHECK(clip&&clip->path_id==pe_sprint_attack_source_clip&&clip!=pe_combat_variant_clip(a.gender,a.view,PE_COMBAT_RUNNING,0));
+    const PeCombatEventType order[5]={PE_COMBAT_HIT_START,PE_COMBAT_COMBO_START,PE_COMBAT_HIT_END,PE_COMBAT_COMBO_END,PE_COMBAT_ACTION_END};
+    for(unsigned i=0;i<5;i++)CHECK(clip->events[i].type==order[i]&&clip->events[i].time==pe_sprint_attack_source_events[i]);
+    CHECK(clip->events[4].time<pe_sprint_attack_source_length);
+    /* The sprint blade opens earlier (.169 s) and closes earlier (.568 s) than the running lunge. */
+    CHECK(to_time(&a,.168534517288208-1e-9,&stamina)==PE_COMBAT_ADVANCED&&!a.contact_open);
+    CHECK(to_time(&a,.168534517288208,&stamina)==PE_COMBAT_ADVANCED&&a.contact_open);
+    CHECK(to_time(&a,.350311279296875,&stamina)==PE_COMBAT_ADVANCED&&a.combo_window&&pe_combat_queue_combo(&a));
+    double from=a.clip_time;
+    CHECK(pe_combat_advance_interval(&a,.4,.4,&stamina,&span)==PE_COMBAT_NEXT_STAGE);
+    CHECK(span.valid&&span.variant==PE_COMBAT_SPRINT&&span.stage==0&&span.from==from&&span.to==.5679532289505005);
+    /* skEffect41 continues with attack7..9: the ordinary later stages. */
+    CHECK(a.stage==1&&a.clip_time==0&&stamina==90&&!strcmp(pe_combat_pose_name(&a),"Attack7"));
+    for(unsigned stage=1;stage<4;stage++)
+        CHECK(pe_combat_variant_clip(a.gender,a.view,a.variant,stage)==pe_combat_clip(a.gender,a.view,stage));
+    pe_combat_stop(&a);
+    CHECK(pe_combat_begin_variant(&a,PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_SPRINT,1,&stamina));
+    CHECK(pe_combat_advance_interval(&a,1.4,1.4,&stamina,&span)==PE_COMBAT_ENDED);
+    CHECK(span.valid&&span.stage==0&&span.from==0&&span.to==1.1924036741256714&&!a.active);
+}
+int pe_test_combat(void){failures=0;sprint_tests();window_tests();combo_tests();guards_tests();damage_tests();calibrated_clock_tests();running_tests();return failures;}

@@ -823,6 +823,39 @@
       "events": 0
     }
   ],
+  "sprint_attack": {
+    "state": "FullBody.Attack.SprintSwordAttack",
+    "clip": 401,
+    "male_clip": 310,
+    "length": 1.8000068664550781,
+    "events": [
+      {
+        "name": "StartAttack_SingleHandSword",
+        "time": 0.168534517288208
+      },
+      {
+        "name": "WeightInputStart",
+        "time": 0.350311279296875
+      },
+      {
+        "name": "EndAttack",
+        "time": 0.5679532289505005
+      },
+      {
+        "name": "WeightInputEnd",
+        "time": 0.7163605690002441
+      },
+      {
+        "name": "EndAction",
+        "time": 1.1924036741256714
+      }
+    ],
+    "skill": 20110013,
+    "effect": 41,
+    "animations": "inc,SprintSwordAttack,attack7,attack8,attack9",
+    "trigger_events": "237",
+    "interruptable": false
+  },
   "scope": "Disconnected Whacked lifecycle and hit/Repulsed clip selection contract. No humanoid poses, blend-weight algorithm, Animator transition evaluation, hit IK, ragdoll, live stun or knockback.",
   "end": "Whacked has no timer. It ends when AnimatorEventSender on the BeHit state sends its exit event HitAnimEnd; the clips carry no events. The only authored exit starts at normalized time .9 and lasts .1 of the state, so the nominal end is one full state length.",
   "selection": "BeHit blends per-style clips by the MoveStyle float, which Motion_Move_Human smooths toward the MoveStyle enum by Lerp(5*deltaTime). Repulsed plays the BeatWeight 1 branch of the locomotion tree, selected by local RightSpeed/ForwardSpeed; straight-back leaves blend to BlockRepulsed by SheildBlockF.",

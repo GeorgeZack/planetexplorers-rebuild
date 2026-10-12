@@ -548,6 +548,8 @@ static bool sandbox_melee_delta(const PeRootMotion *running,const PeSwordRootMot
        !pe_combat_variant_clip(interval->gender,interval->view,interval->variant,interval->stage))return false;
     if(interval->variant==PE_COMBAT_RUNNING&&interval->stage==0)
         return pe_running_attack_motion_delta(running,interval,yaw,world_delta);
+    /* No sprint root curve is recovered; never borrow408 or an ordinary stage. */
+    if(interval->variant==PE_COMBAT_SPRINT&&interval->stage==0)return false;
     if(ordinary)return pe_sword_root_motion_world_delta(ordinary,interval,yaw,world_delta);
     /* Earlier asset groups retain their explicit stationary zero-root adapter. */
     world_delta[0]=world_delta[1]=world_delta[2]=0;return true;

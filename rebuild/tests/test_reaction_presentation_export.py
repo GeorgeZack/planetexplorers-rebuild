@@ -98,6 +98,18 @@ class SourceAndEvidence(unittest.TestCase):
                     self.assertEqual(db.execute(f'UPDATE ActionRelation SET {field}=? WHERE CAST(ActionType AS TEXT)=?',(value,'5')).rowcount,1)
                 with self.assertRaises(ValueError): e.read_relation(target)
 
+    def test_sprint_skill_rows(self):
+        data=e.read_sprint_skill(e.DEFAULT_DATABASE)
+        self.assertEqual(data['animations'],'inc,SprintSwordAttack,attack7,attack8,attack9')
+        self.assertFalse(data['interruptable'])   # unlike running 20110014 and stationary 20110011
+        for table,key,field,value in [('skMain','20110013','_effMainEachTime','42'),('skMain','20110013','_triggerEvents','493'),
+                                      ('skMain','20110013','_interruptable','1'),('skEffect','41','_anms','inc,RunSwordAttack,attack7,attack8,attack9')]:
+            with self.subTest(field=field),tempfile.TemporaryDirectory(prefix='reaction-db-') as directory:
+                target=Path(directory)/'data'; shutil.copyfile(e.DEFAULT_DATABASE,target)
+                with sqlite3.connect(target) as db:
+                    self.assertEqual(db.execute(f'UPDATE {table} SET {field}=? WHERE CAST(_id AS TEXT)=?',(value,key)).rowcount,1)
+                with self.assertRaises(ValueError): e.read_sprint_skill(target)
+
     def test_behaviour_decoding(self):
         hit=(HEADER+text('')+text('HitAnimEnd')+struct.pack('<I',0)).hex()
         self.assertEqual(e.behaviour(hit,SCRIPT_NAMES),dict(script='AnimatorEventSender',enter_event='',exit_event='HitAnimEnd',timed_events=0))
@@ -179,6 +191,21 @@ class ControllerGuards(unittest.TestCase):
         self.changed(lambda d:d['clips'][691].__setitem__('loop',False))
         self.changed(lambda d:d['overridden'].pop(210))
         self.changed(lambda d:d['overridden'].__setitem__(139,140))
+
+    def test_sprint_attack_state_and_events(self):
+        data=e.qualify_sprint(self.installed)
+        self.assertEqual((data['clip'],data['male_clip']),(401,310))
+        self.assertEqual([x['name'] for x in data['events']],['StartAttack_SingleHandSword','WeightInputStart','EndAttack','WeightInputEnd','EndAction'])
+        def bad(change):
+            copy_=copy.deepcopy(self.installed); change(copy_)
+            with self.assertRaises(ValueError): e.qualify_sprint(copy_)
+        bad(lambda d:d['sprint']['events'].__setitem__(1,('StartAttack_SingleHandSword',0.2968580424785614))) # the running lunge's time
+        bad(lambda d:d['sprint']['events'].pop())
+        bad(lambda d:d['sprint'].__setitem__('length',1.8333396911621094))
+        bad(lambda d:d['sprint'].__setitem__('male',401))
+        bad(lambda d:d['sprint'].__setitem__('loop',True))
+        bad(lambda d:self.state(d,1,e.SPRINT_STATE).__setitem__('m_Speed',1.37))
+        bad(lambda d:self.state(d,1,e.SPRINT_STATE)['m_BlendTreeConstantArray'][0]['data']['m_NodeArray'][0]['data'].__setitem__('m_ClipID',0))
 
     def test_regeneration_check_and_portable_labels(self):
         outputs=e.build_outputs(); self.assertEqual(outputs,e.build_outputs())

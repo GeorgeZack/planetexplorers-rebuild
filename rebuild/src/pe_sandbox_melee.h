@@ -17,6 +17,10 @@ typedef struct {
     /* Explicit host qualification of immutable female408 root data; default
      * false keeps running disabled. Does not load or own a motion curve. */
     bool running_motion_ready;
+    /* Same contract for female401 SprintSwordAttack (skill20110013). No host
+     * sets this yet: its poses and root curve are not recovered, so a press
+     * above the sprint threshold is still rejected before any stamina debit. */
+    bool sprint_motion_ready;
     /* Complete qualified female ordinary source-root group, not a zero-root
      * fallback. Host owns the four immutable curves and their motion sweep. */
     bool ordinary_motion_ready;
@@ -44,7 +48,7 @@ typedef struct {
     PeSandboxMeleeSetup setup;
     PeCombat action;
     size_t body_clip[4],weapon_clip[4];
-    size_t running_body_clip,running_weapon_clip;
+    size_t running_body_clip,running_weapon_clip,sprint_body_clip,sprint_weapon_clip;
     uint32_t instance_id;
     bool tick_pending,tick_cancelled;
     PeCombatAdvance tick_advance;

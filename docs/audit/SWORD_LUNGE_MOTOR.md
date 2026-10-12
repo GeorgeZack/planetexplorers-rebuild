@@ -104,9 +104,10 @@ cannot resolve a two-frame lag or a 7 cm difference.
 
 ## Still not the original
 
-- Sprint attack (`m_SkillInSprint`, above 7 m/s), air and water attacks, first
-  person and male remain unsupported. The sprint attack needs its own pose and
-  root capture from the engine.
+- Sprint attack (`m_SkillInSprint` 20110013, above 7 m/s) has its
+  [timing and admission](REACTION_PRESENTATION.md) in C but stays closed: it
+  needs its own pose and root capture from the engine. Air and water attacks,
+  first person and male remain unsupported.
 - Attack7–9 after a running first stage still use the stationary continuation
   clocks.
 - Aim IK, `m_RotateAcc` facing, hit IK and reactions are separate.

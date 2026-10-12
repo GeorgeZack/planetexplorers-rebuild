@@ -43,6 +43,10 @@ static const PeReactionBeatLeaf pe_repulsed_source_water_leaves[5]={
     {2.0f,0.0f,313,0}, /* SwimFR */
     {-2.0f,0.0f,308,0}, /* SwimFL */
 };
+/* SprintSwordAttack 401: hit start, combo start, hit end, combo end, action end. */
+static const double pe_sprint_attack_source_events[5]={0.168534517288208,0.350311279296875,0.5679532289505005,0.7163605690002441,1.1924036741256714};
+static const int pe_sprint_attack_source_clip=401;
+static const double pe_sprint_attack_source_length=1.8000068664550781;
 static const float pe_whacked_source_exit_time=0.899999976f;
 static const float pe_whacked_source_exit_duration=0.100000001f;
 static const float pe_whacked_source_move_style_lerp_speed=5.0f;

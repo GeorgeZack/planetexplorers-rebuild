@@ -7,7 +7,9 @@
  * Animator retargeting or collision queries are supplied by this module. */
 typedef enum { PE_COMBAT_FEMALE, PE_COMBAT_MALE } PeCombatGender;
 typedef enum { PE_COMBAT_THIRD_PERSON, PE_COMBAT_FIRST_PERSON } PeCombatView;
-typedef enum { PE_COMBAT_STATIONARY, PE_COMBAT_RUNNING } PeCombatVariant;
+/* SPRINT is the source timing of skill20110013 (clip401, then Attack7..9). Its
+ * poses and root curve are not recovered; hosts keep it unavailable until then. */
+typedef enum { PE_COMBAT_STATIONARY, PE_COMBAT_RUNNING, PE_COMBAT_SPRINT } PeCombatVariant;
 typedef enum {
     PE_COMBAT_HIT_START, PE_COMBAT_HIT_END, PE_COMBAT_COMBO_START,
     PE_COMBAT_COMBO_END, PE_COMBAT_ACTION_END

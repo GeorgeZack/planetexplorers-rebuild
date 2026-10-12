@@ -52,19 +52,30 @@ static const PeCombatClip running_female={408,{
     {0.7872685194015503,PE_COMBAT_COMBO_END},
     {1.1680725812911987,PE_COMBAT_ACTION_END}}};
 
+/* SprintSwordAttack401, skill20110013 (skEffect41: SprintSwordAttack, then
+ * attack7..9). StartAttack/WeightInputStart/EndAttack/WeightInputEnd/EndAction
+ * from the installed clip, bound by export_reaction_presentation.py. */
+static const PeCombatClip sprint_female={401,{
+    {0.168534517288208,PE_COMBAT_HIT_START},
+    {0.350311279296875,PE_COMBAT_COMBO_START},
+    {0.5679532289505005,PE_COMBAT_HIT_END},
+    {0.7163605690002441,PE_COMBAT_COMBO_END},
+    {1.1924036741256714,PE_COMBAT_ACTION_END}}};
 const PeCombatClip *pe_combat_clip(PeCombatGender gender,PeCombatView view,unsigned stage){
     if(gender<PE_COMBAT_FEMALE||gender>PE_COMBAT_MALE||view<PE_COMBAT_THIRD_PERSON||view>PE_COMBAT_FIRST_PERSON||stage>=4)return NULL;
     return &clips[gender][view][stage];
 }
 const PeCombatClip *pe_combat_variant_clip(PeCombatGender gender,PeCombatView view,PeCombatVariant variant,unsigned stage){
     if(variant==PE_COMBAT_STATIONARY)return pe_combat_clip(gender,view,stage);
-    if(variant!=PE_COMBAT_RUNNING||gender!=PE_COMBAT_FEMALE||view!=PE_COMBAT_THIRD_PERSON||stage>=4)return NULL;
-    return stage?pe_combat_clip(gender,view,stage):&running_female;
+    if((variant!=PE_COMBAT_RUNNING&&variant!=PE_COMBAT_SPRINT)||gender!=PE_COMBAT_FEMALE||view!=PE_COMBAT_THIRD_PERSON||stage>=4)return NULL;
+    if(stage)return pe_combat_clip(gender,view,stage);
+    return variant==PE_COMBAT_SPRINT?&sprint_female:&running_female;
 }
 const char *pe_combat_pose_name(const PeCombat *a){
     static const char *const names[]={"Attack6","Attack7","Attack8","Attack9"};
     if(!a||!pe_combat_variant_clip(a->gender,a->view,a->variant,a->stage))return NULL;
-    return a->variant==PE_COMBAT_RUNNING&&a->stage==0?"RunSwordAttack":names[a->stage];
+    if(a->stage)return names[a->stage];
+    return a->variant==PE_COMBAT_RUNNING?"RunSwordAttack":a->variant==PE_COMBAT_SPRINT?"SprintSwordAttack":names[0];
 }
 void pe_combat_init(PeCombat *a){if(a)memset(a,0,sizeof *a);}
 void pe_combat_stop(PeCombat *a){

@@ -75,6 +75,12 @@ BEAT = (((0,0),'NormalIdle',684),((0,5),'ForwardFast',226),((3.5,3.5),'FowardRig
 WATER_BEAT = (((0,0),'SwimIdle',351),((0,2),'SwimFF',303),((0,-2),'SwimFB',319),((2,0),'SwimFR',313),((-2,0),'SwimFL',308))
 MIRRORED = {235,243,250,154,136,170,313}
 UNLOOPED = {139,157,188,173,200,220,210,227,116,235}
+SPRINT_CLIP, SPRINT_MALE_CLIP, SPRINT_SKILL, SPRINT_EFFECT = 401, 310, 20110013, 41
+SPRINT_STATE = 'FullBody.Attack.SprintSwordAttack'
+# Authored events of female clip 401, in clip order after the time-0 effect event.
+SPRINT_EVENTS = (('StartAttack_SingleHandSword',0.168534517288208),('WeightInputStart',0.350311279296875),
+                 ('EndAttack',0.5679532289505005),('WeightInputEnd',0.7163605690002441),('EndAction',1.1924036741256714))
+SPRINT_LENGTH = 1.8000068664550781
 MALE_OVERRIDES = {684:688, 210:110} # NormalIdle and MineBeHit; male MineBeHit is .9 s, not .9333
 
 
@@ -161,7 +167,10 @@ def read_installed(game=GAME):
         behaviours[pointer['m_PathID']]=serialized.objects[pointer['m_PathID']].get_raw_data().hex()
     replaced={x['m_OriginalClip']['m_PathID']:x['m_OverrideClip']['m_PathID'] for x in override['m_Clips']
               if x['m_OriginalClip']['m_PathID'] in wanted and x['m_OverrideClip']['m_PathID']!=x['m_OriginalClip']['m_PathID']}
+    sprint=serialized.objects[SPRINT_CLIP].read_typetree()
     return dict(controller=controller,overridden=replaced,override_controller=override['m_Controller'],
+        sprint=dict(clip_row(SPRINT_CLIP,sprint),events=[(e['data'],e['time']) for e in sprint['m_Events']],
+            male=next((x['m_OverrideClip']['m_PathID'] for x in override['m_Clips'] if x['m_OriginalClip']['m_PathID']==SPRINT_CLIP),None)),
         clips={i:clip_row(i,serialized.objects[i].read_typetree()) for i in sorted(wanted|set(replaced.values()))},
         behaviours=behaviours,
         scripts={i:scripts.objects[i].read_typetree()['m_ClassName'] for i in (SENDER_SCRIPT,FADER_SCRIPT)})
@@ -302,10 +311,49 @@ def qualify_controller(installed):
                       water=move('Base Layer.WaterLocomotion.Move',25,WATER_BEAT)))
 
 
+def qualify_sprint(installed):
+    """FullBody.Attack.SprintSwordAttack: a direct speed-1 leaf of clip 401 with its exact events."""
+    controller=installed['controller']; names=dict(controller['m_TOS']); sprint=installed['sprint']
+    machine=controller['m_Controller']['m_StateMachineArray'][1]['data']; states=[s['data'] for s in machine['m_StateConstantArray']]
+    found=[i for i,s in enumerate(states) if names.get(s['m_FullPathID'])==SPRINT_STATE]
+    require(len(found)==1,'Missing sprint attack state')
+    state=states[found[0]]; trees=state['m_BlendTreeConstantArray']
+    require(state['m_Speed']==1.0 and not state['m_Mirror'] and len(trees)==1 and len(trees[0]['data']['m_NodeArray'])==1,'Sprint attack state changed')
+    leaf=trees[0]['data']['m_NodeArray'][0]['data']
+    require(not leaf['m_ChildIndices'] and controller['m_AnimationClips'][leaf['m_ClipID']]=={'m_FileID':0,'m_PathID':SPRINT_CLIP},'Sprint attack leaf changed')
+    entries=[[names.get(c['data']['m_EventID']) for c in t['data']['m_ConditionConstantArray']]
+             for t in machine['m_AnyStateTransitionConstantArray'] if t['data']['m_DestinationState']==found[0]]
+    require(entries==[['SprintSwordAttack']],'Sprint attack entry changed')
+    require(sprint['name']=='SprintSwordAttack' and sprint['length']==SPRINT_LENGTH and sprint['frame_rate']==30.0 and not sprint['loop']
+            and not sprint['mirror'] and sprint['humanoid_bindings']==127 and sprint['male']==SPRINT_MALE_CLIP,'Sprint attack clip changed')
+    require(sprint['events'][0][1]==0.0 and tuple(tuple(e) for e in sprint['events'][1:])==SPRINT_EVENTS,'Sprint attack events changed')
+    return dict(state=SPRINT_STATE,clip=SPRINT_CLIP,male_clip=SPRINT_MALE_CLIP,length=SPRINT_LENGTH,
+                events=[dict(name=n,time=t) for n,t in SPRINT_EVENTS])
+
+
+def read_sprint_skill(database):
+    db=connect_readonly(database)
+    try:
+        def row(table,key):
+            columns=[c[1] for c in db.execute('pragma table_info("%s")'%table)]
+            rows=db.execute('select * from "%s" where cast("_id" as text)=?'%table,(str(key),)).fetchall()
+            require(len(rows)==1,'Missing %s %s'%(table,key))
+            return {k:(v.decode() if isinstance(v,bytes) else v) for k,v in zip(columns,rows[0])}
+        skill=row('skMain',SPRINT_SKILL); effect=row('skEffect',SPRINT_EFFECT)
+        require(skill['_effMainEachTime']==str(SPRINT_EFFECT) and skill['_triggerEvents']=='237'
+                and skill['_interruptable'] in ('','0',None) and skill['_coolingTime']=='.2'
+                and skill['_cond']=='CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;CondTstFunc,SwordAttack;False','Sprint skill changed')
+        require(effect['_anms']=='inc,SprintSwordAttack,attack7,attack8,attack9','Sprint skill animations changed')
+        return dict(skill=SPRINT_SKILL,effect=SPRINT_EFFECT,animations=effect['_anms'],trigger_events=skill['_triggerEvents'],interruptable=False)
+    finally:
+        db.close()
+
+
 def build_outputs(root=ROOT,database=DEFAULT_DATABASE,game=GAME):
     sources=validate_sources(root); evidence,found=load_evidence(root)
     cil_evidence.qualify_installed(evidence,ASSEMBLIES,game/'PE_Client_Data/Managed')
-    graph=qualify_controller(read_installed(game)); relation=read_relation(database)
+    installed=read_installed(game); graph=qualify_controller(installed); relation=read_relation(database)
+    sprint=dict(qualify_sprint(installed),**read_sprint_skill(database))
     hit=graph['be_hit']; clips={c['path_id']:c for c in graph['clips']}
     metadata=dict(schema=1,source=describe_source(database),source_files=sources,
         installed_assets={ASSET:ASSET_SHA256,SCRIPTS:SCRIPTS_SHA256},
@@ -316,6 +364,7 @@ def build_outputs(root=ROOT,database=DEFAULT_DATABASE,game=GAME):
         whacked=dict(action_type=WHACKED_ACTION,mask=WHACKED_MASK,action_relation=relation,
                      move_style_lerp_speed=5.0,**graph['be_hit']),
         full_body=graph['full_body'],repulsed=graph['repulsed'],controller=graph['controller'],clips=graph['clips'],
+        sprint_attack=sprint,
         scope='Disconnected Whacked lifecycle and hit/Repulsed clip selection contract. No humanoid poses, blend-weight algorithm, Animator transition evaluation, hit IK, ragdoll, live stun or knockback.',
         end='Whacked has no timer. It ends when AnimatorEventSender on the BeHit state sends its exit event HitAnimEnd; the clips carry no events. The only authored exit starts at normalized time .9 and lasts .1 of the state, so the nominal end is one full state length.',
         selection='BeHit blends per-style clips by the MoveStyle float, which Motion_Move_Human smooths toward the MoveStyle enum by Lerp(5*deltaTime). Repulsed plays the BeatWeight 1 branch of the locomotion tree, selected by local RightSpeed/ForwardSpeed; straight-back leaves blend to BlockRepulsed by SheildBlockF.',
@@ -329,6 +378,10 @@ def build_outputs(root=ROOT,database=DEFAULT_DATABASE,game=GAME):
         header+='static const PeReactionBeatLeaf pe_repulsed_source_%s_leaves[%d]={\n'%(name,len(branch['leaves']))
         header+=''.join('    {%s,%s,%d,%d}, /* %s */\n'%(f(l['right_speed']),f(l['forward_speed']),l['clip']['path_id'],
             l.get('shield_block_clip',{}).get('path_id',0),l['clip']['name']) for l in branch['leaves'])+'};\n'
+    header+='/* SprintSwordAttack %d: hit start, combo start, hit end, combo end, action end. */\n'%SPRINT_CLIP
+    header+='static const double pe_sprint_attack_source_events[5]={%s};\n'%','.join(repr(t) for _,t in SPRINT_EVENTS)
+    header+='static const int pe_sprint_attack_source_clip=%d;\n'%SPRINT_CLIP
+    header+='static const double pe_sprint_attack_source_length=%r;\n'%SPRINT_LENGTH
     header+='static const float pe_whacked_source_exit_time=%s;\n'%f(hit['exit']['exit_time'])
     header+='static const float pe_whacked_source_exit_duration=%s;\n'%f(hit['exit']['duration'])
     header+='static const float pe_whacked_source_move_style_lerp_speed=5.0f;\n'

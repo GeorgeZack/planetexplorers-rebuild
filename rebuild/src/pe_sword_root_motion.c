@@ -89,7 +89,7 @@ bool pe_sword_root_motion_world_delta(const PeSwordRootMotion *motion,const PeCo
                                       double body_yaw_degrees,double world_delta[3]){
     if(!motion||!interval||!world_delta||!interval->valid||interval->gender!=PE_COMBAT_FEMALE||
        interval->view!=PE_COMBAT_THIRD_PERSON||!isfinite(body_yaw_degrees)||
-       (interval->variant==PE_COMBAT_RUNNING&&interval->stage==0))return false;
+       (interval->variant!=PE_COMBAT_STATIONARY&&interval->stage==0))return false;
     const PeCombatClip *clip=pe_combat_variant_clip(interval->gender,interval->view,interval->variant,interval->stage);
     PeVec3 delta;
     if(!clip||!pe_sword_root_motion_delta(motion,(uint32_t)clip->path_id,interval->from,interval->to,&delta))return false;

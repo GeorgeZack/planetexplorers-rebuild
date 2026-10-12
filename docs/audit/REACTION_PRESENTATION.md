@@ -177,9 +177,30 @@ controller picks, and its pose blend from the ragdoll, are not recovered.
 401 (male override 310), 1.8 s, entered by the `SprintSwordAttack` trigger. Its
 authored events are StartAttack 0.1685 s, WeightInputStart 0.3503 s, EndAttack
 0.5680 s, WeightInputEnd 0.7164 s and EndAction 1.1924 s. The original selects
-it above the sword's sprint threshold (7 m/s in the installed prefab). The
-rebuild still rejects that branch. Besides poses it needs a root-motion capture
-like the one behind the running lunge; that is a second, separate probe.
+it above the sword's sprint threshold (7 m/s in the installed prefab).
+
+The weapon's sprint skill is 20110013. Its effect row 41 plays
+`SprintSwordAttack, attack7, attack8, attack9`, so a chained sprint attack
+continues with the ordinary second to fourth swings, exactly as the running
+attack does after `RunSwordAttack`. It uses the same damage trigger 237 and the
+same three combo conditions. Unlike the running (20110014) and stationary
+(20110011) skills it is not marked interruptable; what that flag gates in the
+skill system is not traced here. Compared with the running lunge the blade
+opens earlier (0.169 s against 0.297 s) and closes earlier (0.568 s against
+0.709 s).
+
+Implemented in C on October 12 as timing and admission only:
+`PE_COMBAT_SPRINT` carries the clip-401 event clock and the stage sequence,
+and `pe_sandbox_melee` accepts the sprint branch only when a host declares
+`sprint_motion_ready` with matching SprintSwordAttack poses. No host does.
+**In the live game a press above 7 m/s is still rejected before any stamina
+debit**, the motion router refuses a sprint first stage rather than borrow the
+running curve, and nothing about sprinting or attacking changes.
+
+To open it: bake the pose (in the prepared preset), stage body, held weapon
+and defence clips as a complete group, and capture its root motion with the
+existing root sampler as was done for clip 408. That root capture is a second,
+separate probe.
 
 ## Validation and remaining gate
 

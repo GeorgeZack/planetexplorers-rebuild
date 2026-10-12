@@ -1,5 +1,16 @@
 # Original-game playtest and C comparison
 
+## October 12 sprint attack timing — source-derived, headless only
+
+Skill 20110013 and clip 401 are bound by the reaction exporter; `pe_combat`
+gains the sprint event clock and `pe_sandbox_melee` a fail-closed readiness
+flag. No host sets it, so live play is unchanged: a press above 7 m/s is still
+rejected. Nothing was observed in the original or the rebuilt game for this
+increment. `make -C rebuild check` passes 249 jobs (871 Python tests, 74
+ordinary-interpreter skips, which are not passes); `check-sanitize` passes all
+97 suites; `check-content` and `check-sources` pass, the latter running the
+sixteen reaction-contract cases with UnityPy and no skips.
+
 ## October 12 sword lunge motor — implemented, headless and private-display checks
 
 [The lunge motor](audit/SWORD_LUNGE_MOTOR.md) changes the live Adventure
