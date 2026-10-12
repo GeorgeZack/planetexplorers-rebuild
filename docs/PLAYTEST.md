@@ -1,5 +1,19 @@
 # Original-game playtest and C comparison
 
+## October 12 Halt stop effect — source-derived, headless only
+
+[Halt](audit/HALT_STOP_EFFECT.md) is recovered from checked-in C#, the female
+prefab curves and the action table into the disconnected `pe_halt`. Neither
+host calls it; nothing was observed in the original or rebuilt game. It yields
+IK effector offsets, not a pose: the FinalIK solver is not recovered. The
+original's Halt mask blocks Move and Jump for 0.2–0.9 s after a stop; the live
+sandbox is unchanged and does not.
+
+Results: `make -C rebuild check` passes 251 jobs (877 Python tests, 77
+ordinary-interpreter skips, which are not passes); `check-sanitize` passes all
+98 suites; `check-content` and `check-sources` pass, the latter running the
+six Halt exporter cases with UnityPy and no skips.
+
 ## October 12 sprint attack timing — source-derived, headless only
 
 Skill 20110013 and clip 401 are bound by the reaction exporter; `pe_combat`

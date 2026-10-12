@@ -153,7 +153,8 @@ mix.
 Recovered from the installed controller on October 12; no C owner yet.
 
 **Halt, Wentfly and Knocked play no clip.** `Action_Halt` runs a procedural
-`IKAnimEffectCtrl.StopMove` on the controller velocity. `Action_Wentfly` and
+`IKAnimEffectCtrl.StopMove` on the controller velocity, now
+[recovered separately](HALT_STOP_EFFECT.md). `Action_Wentfly` and
 `Action_Knocked` hand the body to the ragdoll. They need IK and ragdoll owners
 or explicit adapters, not a bake.
 

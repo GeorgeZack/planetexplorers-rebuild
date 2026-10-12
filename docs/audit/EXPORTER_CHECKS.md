@@ -47,6 +47,8 @@ Both are wired into `exporter-check` through `SETTLEMENT_CAPTURE`, `ROUTE_CAPTUR
 
 `reaction-presentation-source-check`, also in `check-sources`, regenerates-and-compares the Whacked/Repulsed animation contract and runs all14 cases with UnityPy. It reads the installed `sharedassets1.assets` and `sharedassets0.assets` by pinned hash and compares the committed CIL excerpt, including resolved string literals, with the installed Assembly-CSharp. It does not run or check the prepared `hit-reaction` bake. See [the contract](REACTION_PRESENTATION.md).
 
+`halt-source-check`, also in `check-sources`, regenerates-and-compares the Halt stop-effect metadata and runs all six cases with UnityPy. It needs only the reference project, not the Steam installation. See [the audit](HALT_STOP_EFFECT.md).
+
 ## Not wired
 
 - **`export_shield_controller.py`.** Its check verifies an existing stage directory, and no stage is retained locally. `tests/test_shield_controller_export.py` exercises the mode against a temporary stage.
