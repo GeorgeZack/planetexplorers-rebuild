@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[Lunge motor](docs/audit/SWORD_LUNGE_MOTOR.md): `pe_sword_motor` applies blade root motion to the live Adventure player in source controller order, using the `pe_human_phy` request latch; `pe_sandbox_view.c` calls it around the existing collision step.
+
 [Reaction animation contract](docs/audit/REACTION_PRESENTATION.md): `pe_whacked` owns the disconnected Whacked lifecycle and BeHit exit clock; `export_reaction_presentation.py` binds the installed controller graph, state behaviours, clip identities, relation row5 and a CIL excerpt. `cil_evidence.py` is the shared excerpt builder/checker. `inventory_reference_bake.py` and `reference_animator_bake.py --preset hit-reaction` hold the prepared, unrun pose bake.
 
 [HumanPhyCtrl qualification](docs/audit/HUMAN_PHY_CTRL.md): `pe_human_phy` owns the disconnected request latch, ground/water/drag state and FixedUpdate force requests; `export_human_phy.py` binds the committed CIL excerpt to the installed assemblies, female prefab and project physics settings. `cil_disasm.py` decodes compiled-only method bodies for reading. PhysX integration and host scheduling remain separate gates.

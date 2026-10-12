@@ -5,6 +5,7 @@
 #include "pe_game.h"
 #include "pe_running_attack_motion.h"
 #include "pe_sandbox_melee.h"
+#include "pe_sword_motor.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -161,6 +162,63 @@ static void outgoing_contacts(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetu
     }
  done:pe_hitboxes_free(boxes);pe_actor_free(hare);
 }
+/* The same recovered lunge through the source controller order used by the
+ * live host: consume the latched request, move, then request/animate/latch. */
+static float motor_lunge(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetup setup,const PeRootMotion *curve,bool direct){
+    CHECK(flat(g,c,0));PeSandboxMelee melee;CHECK(pe_sandbox_melee_init(&melee,&setup));
+    PeSwordMotor motor;pe_sword_motor_reset(&motor);const PeInput none={0};
+    PeVec3 start=g->player;unsigned ticks=0,owned=0,coasted=0,tail=0;float peak=0;double held=0,direct_peak=0;
+    bool press=true;
+    while(ticks<600){
+        bool before=melee.action.active;
+        if(press){CHECK(pe_sandbox_melee_begin(&melee,gate(g),&g->stamina));press=false;}
+        CHECK(pe_sandbox_melee_advance(&melee,gate(g),&g->stamina));
+        PeCombatInterval span;CHECK(pe_sandbox_melee_interval(&melee,&span));
+        double delta[3]={0};
+        if(span.valid)CHECK(pe_running_attack_motion_delta(curve,&span,90,delta));
+        direct_peak=fmax(direct_peak,hypot(delta[0],delta[2])/PE_SANDBOX_MELEE_DT);
+        PeVec3 at=g->player;
+        if(direct){
+            PeVec3 request={0};
+            if(span.valid){CHECK(pe_running_attack_motion_request(curve,&span,g->velocity,90,PE_SANDBOX_MELEE_DT,&request));
+                CHECK(pe_game_step_collision_motion(g,none,PE_FIXED_DT,c,request));}
+        }else{
+            PeSwordMotorStep step;
+            CHECK(pe_sword_motor_consume(&motor,before,g->velocity,g->grounded,PE_SANDBOX_MELEE_DT,&step));
+            if(step.owns_motion){
+                owned++;coasted+=step.coasting;if(!before)tail++;
+                CHECK(hypotf(step.velocity.x,step.velocity.z)<=10.0001f); /* MaxSubSpeed hold */
+                CHECK(pe_game_step_collision_motion(g,none,PE_FIXED_DT,c,step.velocity));
+            }
+            CHECK(pe_sword_motor_update(&motor,before,span.valid?delta:NULL,g->velocity,PE_SANDBOX_MELEE_DT));
+            if(hypotf(step.velocity.x,step.velocity.z)>9.9999f)held+=PE_FIXED_DT;
+        }
+        peak=fmaxf(peak,hypotf(g->player.x-at.x,g->player.z-at.z)/(float)PE_FIXED_DT);
+        PeSandboxMeleeFrame frame={.gate=gate(g),.player_position=g->player,.player_yaw=90,.player_scale=1,.attacker_eligible=true};
+        PeSandboxMeleeUpdate update;CHECK(pe_sandbox_melee_resolve(&melee,&frame,NULL,0,&update));
+        ticks++;
+        if(!melee.action.active&&!motor.engaged&&!before)break;
+    }
+    CHECK(ticks<600&&!melee.action.active);
+    float distance=g->player.x-start.x;
+    if(direct){CHECK(peak>13&&peak<14);CHECK(direct_peak>13);}
+    else{
+        CHECK(peak<=10.0002f&&held>.03&&held<.09); /* the 13.7 m/s burst is held for about three ticks */
+        CHECK(tail==1);                             /* exactly one tick after the action ends, then release */
+        CHECK(coasted>=1);                          /* nothing is latched on the first owned tick */
+        CHECK(!motor.has_last_move&&motor.phy.applied_velocity.x==0&&motor.phy.applied_velocity.z==0);
+        printf("running pipeline: controller-order lunge owns %u ticks, %.3f s at the 10 m/s hold\n",owned,held);
+    }
+    return distance;
+}
+static void controller_order(PeGame *g,PeSandboxCollision *c,PeSandboxMeleeSetup setup,const PeRootMotion *curve){
+    float direct=motor_lunge(g,c,setup,curve,true),source=motor_lunge(g,c,setup,curve,false);
+    /* Entry velocity 5 m/s: the old path replaced it at once; the source
+     * order coasts one tick, holds the burst to 10 m/s and drops the last delta. */
+    CHECK(direct>3.8f&&direct<4.1f);
+    CHECK(source<direct&&direct-source>.05f&&direct-source<.35f);
+    printf("running pipeline: lunge distance %.4f m direct, %.4f m in source controller order (%.4f m shorter)\n",direct,source,direct-source);
+}
 int pe_test_running_attack_pipeline(void){
     failures=0;const char *root=getenv("PE_RUNNING_STAGE");if(!root)root=pe_test_path("rebuild/build/running-player-20261006");
     const char *motion=getenv("PE_RUNNING_MOTION");if(!motion)motion=pe_test_path("rebuild/build/running-motion-20261006/running-knife.perm");
@@ -181,6 +239,7 @@ int pe_test_running_attack_pipeline(void){
         scenario(g,c,setup,curve,0,false);scenario(g,c,setup,curve,0,true);
         scenario(g,c,setup,curve,1,false);scenario(g,c,setup,curve,2,false);
         outgoing_contacts(g,c,setup,curve);
+        controller_order(g,c,setup,curve);
     }
     pe_sandbox_collision_free(c);if(g)pe_game_destroy(g);free(g);pe_root_motion_free(curve);pe_hitboxes_free(boxes);pe_actor_free(body);pe_actor_free(knife);
     if(!failures)puts("running pipeline: recovered408 advance/motion/sweep/resolve, single clocks, combos, wall/tree and no deferred displacement passed");

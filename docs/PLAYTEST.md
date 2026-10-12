@@ -1,5 +1,30 @@
 # Original-game playtest and C comparison
 
+## October 12 sword lunge motor — implemented, headless and private-display checks
+
+[The lunge motor](audit/SWORD_LUNGE_MOTOR.md) changes the live Adventure
+sandbox: blade root motion now reaches the player in the original controller's
+order (previous-frame delta, 10 m/s hold, one-tick latch, coast before the
+first request, cancelled tail) instead of in the tick that produced it.
+
+Implemented in C and checked headless: in the constructed flat fixture the real
+staged RunSwordAttack lunge travels 3.9405 m by the earlier direct path and
+3.8666 m in source order, never exceeds 10 m/s per tick and owns exactly one
+tick after the action ends.
+
+Actual native observation, private display `:100`, production build, unchanged
+checkpoint `strafe-physical-start.pesave`: the knife was drawn and four blade
+attacks started with no motion error. None was a running start, because the
+private input tool cannot hold a movement key while clicking. The session was
+stopped by the tool, not by a menu quit.
+
+Not observed: a running lunge in the live host after this change, and any
+trajectory comparison with the original game.
+
+Results: `make -C rebuild check` passes 249 jobs (868 Python tests, 73
+ordinary-interpreter skips, which are not passes); `check-sanitize` passes all
+97 ASan/UBSan/leak suites. PECSv22 is unchanged.
+
 ## October 12 reaction animation contract — static and headless qualification
 
 [The animation contract](audit/REACTION_PRESENTATION.md) reads the installed

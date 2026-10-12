@@ -14,6 +14,7 @@
 #include "pe_hunt_targeting.h"
 #include "pe_running_attack_motion.h"
 #include "pe_sword_root_motion.h"
+#include "pe_sword_motor.h"
 #include "pe_hunt_combat.h"
 #include "pe_hunt_loot.h"
 #include "pe_hunt_loot_combat.h"
@@ -538,17 +539,18 @@ static bool sandbox_hunt_runs(const PeSandboxUI *ui,PeSandboxUIResult action){
     /* The get-up modal owns player input, not the other actors' clocks. */
     return !action.consume_world||ui->revival_open;
 }
-static bool sandbox_melee_motion(const PeRootMotion *running,const PeSwordRootMotion *ordinary,
-    const PeCombatInterval *interval,PeVec3 velocity,double yaw,double dt,PeVec3 *request){
-    if(!interval||!interval->valid||!request||!isfinite(interval->from)||!isfinite(interval->to)||
-       interval->from<0||interval->from>interval->to||!isfinite(dt)||dt<=0||!isfinite(yaw)||
-       !isfinite(velocity.x)||!isfinite(velocity.y)||!isfinite(velocity.z)||
+/* This tick's authored root displacement in world space. pe_sword_motor turns
+ * it into the body's velocity two ticks later, as the original controller does. */
+static bool sandbox_melee_delta(const PeRootMotion *running,const PeSwordRootMotion *ordinary,
+    const PeCombatInterval *interval,double yaw,double world_delta[3]){
+    if(!interval||!interval->valid||!world_delta||!isfinite(interval->from)||!isfinite(interval->to)||
+       interval->from<0||interval->from>interval->to||!isfinite(yaw)||
        !pe_combat_variant_clip(interval->gender,interval->view,interval->variant,interval->stage))return false;
     if(interval->variant==PE_COMBAT_RUNNING&&interval->stage==0)
-        return pe_running_attack_motion_request(running,interval,velocity,yaw,dt,request);
-    if(ordinary)return pe_sword_root_motion_request(ordinary,interval,velocity,yaw,dt,request);
+        return pe_running_attack_motion_delta(running,interval,yaw,world_delta);
+    if(ordinary)return pe_sword_root_motion_world_delta(ordinary,interval,yaw,world_delta);
     /* Earlier asset groups retain their explicit stationary zero-root adapter. */
-    *request=(PeVec3){0};return true;
+    world_delta[0]=world_delta[1]=world_delta[2]=0;return true;
 }
 static void sandbox_health_contacts(PeGame *game,uint64_t previous_hits,uint64_t committed_hits){
     if(game&&committed_hits!=previous_hits&&game->mode==PE_GAME_ADVENTURE)
@@ -709,6 +711,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     bool tool_drawn=false;uint32_t tool_instance=0;uint64_t tool_edits=0;
     bool placing_torch=false,attack_pending=false;
     PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;
+    PeSwordMotor sword_motor;pe_sword_motor_reset(&sword_motor);bool blade_was_active=false;
     PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0;
     SandboxBladeFacing blade_facing={0};
     bool captured=false,walk=false,autorun=false,jump_pending=false,third_person=true,build_mode=false;
@@ -934,6 +937,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
             if(!loaded)snprintf(game->message,sizeof game->message,"%.159s",error);
+            /* A loaded body keeps its saved velocity: this is not an attack ending. */
+            if(loaded){pe_sword_motor_reset(&sword_motor);blade_was_active=false;}
             if(loaded&&debug_action==PE_DEBUG_START_HUNT){
                 sandbox_debug_hunt_controls(&ui,&camera_controls,&third_person,&build_mode);
                 fprintf(stderr,"Sandbox debug: skipped to hunt; kills=%u, player=%.6f,%.6f,%.6f\n",
@@ -1226,6 +1231,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     .scaled_time=(float)sandbox_attribute_clock.seconds};
                 bool melee_stamina_lock=melee.ready&&melee.action.active;
                 PeCombatInterval attack_interval={0};bool began=false,rejected=false;
+                const bool blade_active_before=melee.ready&&melee.action.active;
                 float attack_yaw=pe_sandbox_actor_yaw(actor,game);
                 PeVec3 attack_request;
                 if(melee.ready&&(!pe_melee_facing_request((PeVec3){input.move_x,0,input.move_z},
@@ -1249,13 +1255,28 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 }
                 if(rejected)snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
                 attack_pending=false;
-                bool action_motion=attack_interval.valid;
-                PeVec3 motion_request={0};
-                if(action_motion&&
-                   !sandbox_melee_motion(running_motion,ordinary_motion,&attack_interval,game->velocity,
-                      pe_sandbox_actor_yaw(actor,game),PE_SANDBOX_MELEE_DT,&motion_request)){
+                /* Root motion reaches the body in the source controller order:
+                 * this tick moves with the request latched last tick, and this
+                 * tick's displacement is requested on the next. An action cut
+                 * short (no terminal interval, or ended between ticks) follows
+                 * source EndImmediately: horizontal velocity and requests drop. */
+                const bool blade_active_after=melee.ready&&melee.action.active;
+                const bool blade_cut=(blade_was_active&&!blade_active_before)||
+                    (blade_active_before&&!blade_active_after&&!attack_interval.valid);
+                blade_was_active=blade_active_after;
+                if(blade_cut){game->velocity.x=0;game->velocity.z=0;pe_sword_motor_reset(&sword_motor);}
+                const bool blade_motor_active=blade_active_before&&!blade_cut;
+                double blade_delta[3];PeSwordMotorStep blade_step={0};
+                if((attack_interval.valid&&
+                    !sandbox_melee_delta(running_motion,ordinary_motion,&attack_interval,
+                      pe_sandbox_actor_yaw(actor,game),blade_delta))||
+                   (game->mode!=PE_GAME_LEGACY&&
+                    !pe_sword_motor_consume(&sword_motor,blade_motor_active,game->velocity,game->grounded,
+                      PE_SANDBOX_MELEE_DT,&blade_step))){
                     snprintf(error,sizeof error,"Invalid qualified blade motion");result=1;break;
                 }
+                const bool action_motion=blade_step.owns_motion;
+                const PeVec3 motion_request=blade_step.velocity;
                 PeSandboxActionInput use={.enabled=world_input&&!build_mode&&third_person&&timed_tool&&
                     game->grounded&&!jump_pending&&fabsf(input.move_x)+fabsf(input.move_z)<.001f&&
                     tool_ready,
@@ -1290,6 +1311,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     pe_game_step_collision_motion(game,input,PE_FIXED_DT,collision,motion_request):
                     pe_game_step_collision(game,input,PE_FIXED_DT,collision))) {
                     snprintf(error,sizeof error,"Player capsule intersects world geometry");result=1;break;
+                }
+                if(game->mode!=PE_GAME_LEGACY&&
+                   !pe_sword_motor_update(&sword_motor,blade_motor_active,attack_interval.valid?blade_delta:NULL,
+                      game->velocity,PE_SANDBOX_MELEE_DT)){
+                    snprintf(error,sizeof error,"Invalid blade motion request");result=1;break;
                 }
                 melee_gate.alive=game->hp>0;melee_gate.grounded=game->grounded;melee_gate.velocity=game->velocity;
                 if(melee.ready&&(!hunt.encounter.active||!sandbox_hunt_runs(&ui,action))){

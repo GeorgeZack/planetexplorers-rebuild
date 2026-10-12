@@ -85,11 +85,9 @@ bool pe_sword_root_motion_delta(const PeSwordRootMotion *motion,uint32_t id,doub
     *out=(PeVec3){(float)((end[0]-start[0])*HUMAN_SCALE),0,(float)((end[1]-start[1])*HUMAN_SCALE)};
     return true;
 }
-bool pe_sword_root_motion_request(const PeSwordRootMotion *motion,
-                                  const PeCombatInterval *interval,
-                                  PeVec3 current_velocity,double body_yaw_degrees,
-                                  double dt,PeVec3 *request){
-    if(!motion||!interval||!request||!interval->valid||interval->gender!=PE_COMBAT_FEMALE||
+bool pe_sword_root_motion_world_delta(const PeSwordRootMotion *motion,const PeCombatInterval *interval,
+                                      double body_yaw_degrees,double world_delta[3]){
+    if(!motion||!interval||!world_delta||!interval->valid||interval->gender!=PE_COMBAT_FEMALE||
        interval->view!=PE_COMBAT_THIRD_PERSON||!isfinite(body_yaw_degrees)||
        (interval->variant==PE_COMBAT_RUNNING&&interval->stage==0))return false;
     const PeCombatClip *clip=pe_combat_variant_clip(interval->gender,interval->view,interval->variant,interval->stage);
@@ -97,6 +95,14 @@ bool pe_sword_root_motion_request(const PeSwordRootMotion *motion,
     if(!clip||!pe_sword_root_motion_delta(motion,(uint32_t)clip->path_id,interval->from,interval->to,&delta))return false;
     const double radians=remainder(body_yaw_degrees,360.0)*.017453292519943295769;
     const double c=cos(radians),s=sin(radians);
-    const double world_delta[3]={c*delta.x+s*delta.z,0,c*delta.z-s*delta.x};
+    world_delta[0]=c*delta.x+s*delta.z;world_delta[1]=0;world_delta[2]=c*delta.z-s*delta.x;
+    return true;
+}
+bool pe_sword_root_motion_request(const PeSwordRootMotion *motion,
+                                  const PeCombatInterval *interval,
+                                  PeVec3 current_velocity,double body_yaw_degrees,
+                                  double dt,PeVec3 *request){
+    double world_delta[3];
+    if(!request||!pe_sword_root_motion_world_delta(motion,interval,body_yaw_degrees,world_delta))return false;
     return pe_sword_motion_request(world_delta,current_velocity,dt,request);
 }

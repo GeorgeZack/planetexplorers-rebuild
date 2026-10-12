@@ -4,6 +4,13 @@
 #include "../src/pe_sandbox_view.c"
 
 static unsigned failures;
+/* The host now routes displacements; the source request conversion is checked on top of them. */
+static bool sandbox_melee_motion(const PeRootMotion *running,const PeSwordRootMotion *ordinary,
+    const PeCombatInterval *interval,PeVec3 velocity,double yaw,double dt,PeVec3 *request){
+    double delta[3];
+    if(!request||!sandbox_melee_delta(running,ordinary,interval,yaw,delta))return false;
+    return pe_sword_motion_request(delta,velocity,dt,request);
+}
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"sandbox sword motion host:%d %s\n",__LINE__,#c);failures++;}}while(0)
 static bool readable(const char *path){FILE *f=path?fopen(path,"rb"):NULL;if(!f)return false;fclose(f);return true;}
 static PeCombatInterval interval(PeCombatVariant variant,unsigned stage,double from,double to){

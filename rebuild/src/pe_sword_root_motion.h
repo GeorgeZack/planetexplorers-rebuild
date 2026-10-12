@@ -27,6 +27,9 @@ bool pe_sword_root_motion_delta(const PeSwordRootMotion *motion,uint32_t source_
  * running stage0 remains owned by the captured408/PERM1 wrapper.
  * Rotate by body yaw once (x=c*x+s*z,z=c*z-s*x), then apply the shared
  * horizontal request cap using game dt. No simulation or contact advance. */
+/* Validated, yaw-rotated interval displacement before the velocity conversion. */
+bool pe_sword_root_motion_world_delta(const PeSwordRootMotion *motion,const PeCombatInterval *interval,
+                                      double body_yaw_degrees,double world_delta[3]);
 bool pe_sword_root_motion_request(const PeSwordRootMotion *motion,
                                   const PeCombatInterval *interval,
                                   PeVec3 current_velocity,double body_yaw_degrees,

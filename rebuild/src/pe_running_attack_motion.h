@@ -15,6 +15,10 @@
  * No clock/state advance, dt integration, walking addition or collision occurs.
  * Unsupported stages/invalid inputs returnfalse and leave *request unchanged;
  * the caller explicitly owns the zero-horizontal policy for later stages. */
+/* The same validated, yaw-rotated interval displacement without the velocity
+ * conversion: world XYZ metres, Y retained as evidence only. */
+bool pe_running_attack_motion_delta(const PeRootMotion *motion,const PeCombatInterval *interval,
+                                    double body_yaw_degrees,double world_delta[3]);
 bool pe_running_attack_motion_request(const PeRootMotion *motion,
                                      const PeCombatInterval *interval,
                                      PeVec3 current_velocity,

@@ -1,5 +1,7 @@
 # Sandbox grounded running Knife33
 
+October12 update: the request described below is no longer applied to the body in the tick that produced it. [The lunge motor](SWORD_LUNGE_MOTOR.md) delays it two ticks, holds it to10 m/s and drops the ending displacement, following the original controller. The lunge is about7 cm shorter in the flat fixture. The rest of this page keeps its October6 scope.
+
 October6,2026. The Adventure sandbox now implements a bounded female third-person running first stage using source skill20110014, RunSwordAttack408, the qualified root06 curve and matching body/knife/defence assets. Existing stationary Knife33 actions remain available. This is a sandbox increment; the training host retains its existing stationary attack policy.
 
 Full optimized core and ASan/UBSan with leak detection pass. The original live03 capture confirms the running branch and installed thresholds. Separate native physical sessions verify running starts/presentation and aggregate hunt contact, with both sessions exiting0. They do not establish four-kill completion, partial-progress reload or exact Unity motor parity.
