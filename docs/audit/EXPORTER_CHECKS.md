@@ -18,6 +18,7 @@ October 7, 2026. Every exporter with a `--check` mode was run on the development
 | `export_sandbox_world_assets.py` | `--check` |
 | `export_torch_assets.py` | `--check` |
 | `export_tree_collision.py` | `--check` |
+| `export_sprint_root_motion.py` | `--output build/sprint-source-motion-01 --check`; separate uninstalled source group, see [qualification](SPRINT_ROOT_CHANNELS.md) |
 | `export_sword_root_motion.py` | `--output build/reference-assets/player-sword-motion --check` |
 | `export_running_knife_motion.py` | retained `root-06` capture, plan and probe; override the capture with `RUNNING_ROOT_CAPTURE=` |
 

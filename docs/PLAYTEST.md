@@ -1,5 +1,22 @@
 # Original-game playtest and C comparison
 
+## October 12 sprint root animation stage — source-derived only
+
+[Sprint clip401 extraction](audit/SPRINT_ROOT_CHANNELS.md) passes the unchanged
+bounded native root proof and its own starting-basis arithmetic replay. The
+separate56-knot source group regenerates exactly; five synthetic exporter tests
+pass. Source EndAction displacement is approximately2.70m forward, not an
+observed sprint distance. The group is uninstalled and has no runtime reader.
+No game launch, desktop input, save or installed-asset change occurred.
+`make -C rebuild check` passes258 jobs and905 Python tests with87
+ordinary-interpreter skips (skips are not passes). Logs are
+`rebuild/build/sprint-source-check.log` and `sprint-source-content.log`.
+`make -C rebuild check-content check-sources` also passes, including the new
+sprint stage and the installed reaction/AnimFollow source checks. Local link
+targets and `git diff --check` pass; the structural index was rebuilt. No C
+code, allocation or ownership changed, so no new sanitizer or graphics
+acceptance is claimed.
+
 ## October 12 host reaction group — implemented in C, headless only
 
 `pe_sandbox_actor` now validates the staged reaction set as an

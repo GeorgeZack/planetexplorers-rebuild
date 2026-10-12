@@ -1,0 +1,293 @@
+{
+  "schema": "pe-sprint-root-source-1",
+  "sprint_source_extraction_qualified": true,
+  "sprint_observed_sequentially": false,
+  "sprint_runtime_motion_qualified": false,
+  "exporter_sha256": "456ff4ec68f0ecdd9c92adf2d69a70f6958ae243f7cc507fccd5f73d4ca8792c",
+  "clip": {
+    "id": 401,
+    "name": "SprintSwordAttack",
+    "duration": 1.8000068664550781,
+    "dense_frames": 56,
+    "rate": 30.0,
+    "begin": 0.0,
+    "flags": {
+      "m_LoopTime": false,
+      "m_LoopBlend": false,
+      "m_LoopBlendOrientation": true,
+      "m_LoopBlendPositionY": true,
+      "m_LoopBlendPositionXZ": false,
+      "m_KeepOriginalOrientation": true,
+      "m_KeepOriginalPositionY": true,
+      "m_KeepOriginalPositionXZ": false,
+      "m_HeightFromFeet": false,
+      "m_Mirror": false
+    },
+    "start_transform": {
+      "t": {
+        "x": 0.024183766916394234,
+        "y": 1.037711262702942,
+        "z": 0.1304534673690796,
+        "w": 0.0
+      },
+      "q": {
+        "x": -0.3139062523841858,
+        "y": -0.09792420268058777,
+        "z": 0.023919671773910522,
+        "w": -0.9440877437591553
+      },
+      "s": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0,
+        "w": 1.0
+      }
+    },
+    "root_scalar_indices": [
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32
+    ],
+    "end_action": 1.1924036741256714,
+    "candidate_at_action_end": [
+      -0.052490628034608265,
+      0,
+      2.698236135062036
+    ],
+    "candidate_at_clip_end": [
+      -0.08202675599383415,
+      0,
+      2.6863013201691253
+    ],
+    "isolated_arithmetic": {
+      "scope": "Call-free arithmetic only: source projection/product/normalize/rotate; no Animator or ELF initialization",
+      "routines": [
+        {
+          "name": "project",
+          "start": "0xc1dc20",
+          "end_exclusive": "0xc1dd5b",
+          "sha256": "e9844006478388791e5665aa43b0aed9da571a63cf6f3c553e4f5b3b68af7f10",
+          "relocations": [
+            {
+              "instruction": "0xc1dc26",
+              "constant": "0x16fee10",
+              "sha256": "5f3c8b9a8f3315d236ae24bb97e22326b2397050eb8bc8078e924c8795e406a0"
+            },
+            {
+              "instruction": "0xc1dc38",
+              "constant": "0x1684c60",
+              "sha256": "6855960ee428276148fc8745625c44bde7ae835a9e2fa181cc917af9bcad0d6a"
+            },
+            {
+              "instruction": "0xc1dc44",
+              "constant": "0x16fee00",
+              "sha256": "e6f5977890faecbaaeae2be9a6d83aabe8eb65ee982895f61c751ab0e1c7321c"
+            },
+            {
+              "instruction": "0xc1dc5e",
+              "constant": "0x1684c60",
+              "sha256": "6855960ee428276148fc8745625c44bde7ae835a9e2fa181cc917af9bcad0d6a"
+            },
+            {
+              "instruction": "0xc1dca9",
+              "constant": "0x168c140",
+              "sha256": "34885ea2ef8490886fae553c8ce7ffb5a27563825e5f6ce02784875d1ace0e47"
+            },
+            {
+              "instruction": "0xc1dcfa",
+              "constant": "0x16fb440",
+              "sha256": "b6f8b05a7f43e714b2ab52ae201371c4caf2b2ea35f21eb1a699e739f0966075"
+            },
+            {
+              "instruction": "0xc1dd07",
+              "constant": "0x16fc6c0",
+              "sha256": "08f6f382bedc5e88c89eb7f2d592ee77ab0cb22638ca6a3b22b753bf476a2a0e"
+            },
+            {
+              "instruction": "0xc1dd13",
+              "constant": "0x16fee20",
+              "sha256": "f184e6bb505882a540c51366151356f09989c1fff462b226c219e3932e91cb4d"
+            },
+            {
+              "instruction": "0xc1dd33",
+              "constant": "0x16fb430",
+              "sha256": "6e61409fbe1daa29609667028dfcedcbe5a0f391de561d8a6ea03143d27e4753"
+            },
+            {
+              "instruction": "0xc1dd3a",
+              "constant": "0x16d1b50",
+              "sha256": "369e786dd8667d126b8eecc3feb9037096f2ad846fef5dcb8459410470c695e9"
+            },
+            {
+              "instruction": "0xc1dd47",
+              "constant": "0x16fb450",
+              "sha256": "1dc5c8e021c663cd8f7ecf1fb0c6d4112bc8d7f3c9e0095cd26bd7af7b8d7f13"
+            }
+          ],
+          "prefix_inherited_constant": null
+        },
+        {
+          "name": "product",
+          "start": "0xc1a7a0",
+          "end_exclusive": "0xc1a7fb",
+          "sha256": "7c265d53c22ecd068b3ebd7d8c608ed830bb9d45d5d2af007abf0a26da007a11",
+          "relocations": [
+            {
+              "instruction": "0xc1a7eb",
+              "constant": "0x16fc6c0",
+              "sha256": "08f6f382bedc5e88c89eb7f2d592ee77ab0cb22638ca6a3b22b753bf476a2a0e"
+            }
+          ],
+          "prefix_inherited_constant": null
+        },
+        {
+          "name": "rotate",
+          "start": "0xc1a740",
+          "end_exclusive": "0xc1a798",
+          "sha256": "21121d58f758313ff8064c22b89d84f5bd61980ed155b9464cff9881f4274660",
+          "relocations": [
+            {
+              "instruction": "0xc1a75d",
+              "constant": "0x1684c10",
+              "sha256": "d0737abfd3abdacfeb15d559e28c2f0b3662a7aa03ac5b7a58afc422110db75a"
+            }
+          ],
+          "prefix_inherited_constant": null
+        },
+        {
+          "name": "normalize",
+          "start": "0xc1dd1a",
+          "end_exclusive": "0xc1dd5b",
+          "sha256": "15287b44629fb62d09fce3e44951560a875da577352040042f1878a5f2529767",
+          "relocations": [
+            {
+              "instruction": "0xc1dd33",
+              "constant": "0x16fb430",
+              "sha256": "6e61409fbe1daa29609667028dfcedcbe5a0f391de561d8a6ea03143d27e4753"
+            },
+            {
+              "instruction": "0xc1dd3a",
+              "constant": "0x16d1b50",
+              "sha256": "369e786dd8667d126b8eecc3feb9037096f2ad846fef5dcb8459410470c695e9"
+            },
+            {
+              "instruction": "0xc1dd47",
+              "constant": "0x16fb450",
+              "sha256": "1dc5c8e021c663cd8f7ecf1fb0c6d4112bc8d7f3c9e0095cd26bd7af7b8d7f13"
+            }
+          ],
+          "prefix_inherited_constant": {
+            "address": "0x16fb440",
+            "sha256": "b6f8b05a7f43e714b2ab52ae201371c4caf2b2ea35f21eb1a699e739f0966075"
+          }
+        }
+      ],
+      "operand_order_check": {
+        "product": [
+          -0.0,
+          -0.0,
+          1.0,
+          0.0
+        ],
+        "rotation": [
+          [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.3499999940395355,
+            0.0,
+            1.399999976158142,
+            0.0
+          ]
+        ],
+        "normalization": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      "cases": [
+        {
+          "start_q": [
+            -0.3139062523841858,
+            -0.09792420268058777,
+            0.023919671773910522,
+            -0.9440877437591553
+          ],
+          "projected_q": [
+            -0.0,
+            -0.10317014902830124,
+            0.0,
+            -0.9946638941764832
+          ],
+          "baked_basis_q": [
+            -0.0,
+            -0.0,
+            -0.0,
+            1.0
+          ],
+          "maximum_planar_vector_error": 0.0,
+          "rotated_vectors": [
+            [
+              1.0,
+              0.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              0.0,
+              1.0,
+              0.0
+            ],
+            [
+              -0.3499999940395355,
+              0.0,
+              1.399999976158142,
+              0.0
+            ]
+          ]
+        }
+      ]
+    }
+  },
+  "formula": "(linearly_sampled_RootT.xz(t)-RootT.xz(0))*Avatar.Human.m_Scale; Y=0",
+  "output": {
+    "file": "sprint-root.pesr",
+    "bytes": 952,
+    "sha256": "cef1567cb5495ed7de7f5b9ec9cff14c24ec3ce5792ea4e1d677f2f0b70987d4"
+  },
+  "scope": "Single unblended female humanoid clip401, same exact bounded importer/channel predicate as the running408 oracle; its starting quaternion is independently replayed through the pinned native arithmetic.",
+  "limitations": [
+    "No observed sprint root playback, transition/layer mixing or motor/collision qualification.",
+    "Dense double interpolation and native fixed-step integration remain adapters.",
+    "Separate one-record staging group, rejected by the four-record ordinary runtime loader; no host admission or installation."
+  ],
+  "inputs": {
+    "asset": "PE_Client_Data/sharedassets1.assets",
+    "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+    "native_elf": "PE_Client.x86_64",
+    "native_sha256": "1eb5ad6ff19dddb960a71453603ed7c67403403186c9dfeadc798a6021c4d2a6",
+    "running_oracle": "female-running-root-06.jsonl",
+    "running_oracle_sha256": "b6ccd0199470a14b10182943d18db566409a03d27029a65bea657a06e63a43b4",
+    "verifier_sha256": "16d92eb37249cb6c799085d2c61bc6b3bb6c169a3c33140f897cb014abacedf5",
+    "dependency_sha256": {
+      "export_reference_player.py": "acb2ff38bb35ae7784a99fb5212f6fc624bc9f546f2b1f280b0946547622e698",
+      "analyze_reference_root_motion.py": "1892bedfe7d76c3031936fa70a6fa4813f6f5472072d79241ab076568defc80f"
+    }
+  }
+}

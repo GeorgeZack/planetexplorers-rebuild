@@ -313,10 +313,13 @@ and `pe_sandbox_melee` accepts the sprint branch only when a host declares
 debit**, the motion router refuses a sprint first stage rather than borrow the
 running curve, and nothing about sprinting or attacking changes.
 
-To open it: bake the pose (in the prepared preset), stage body, held weapon
-and defence clips as a complete group, and capture its root motion with the
-existing root sampler as was done for clip 408. That root capture is a second,
-separate probe.
+The completed reaction bake supplies its isolated pose. The separate
+[source root qualification](SPRINT_ROOT_CHANNELS.md) now supplies clip401
+knots through the unchanged native branch proof and running408 oracle; a new
+engine root probe is optional corroboration. Both groups are staged and
+uninstalled. Opening sprint still requires its own runtime reader, matching
+body/held/defence playback, shared collision/contact routing and presentation
+acceptance. No host sets sprint readiness.
 
 ## Validation and remaining gate
 

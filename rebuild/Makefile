@@ -101,6 +101,7 @@ exporter-check:
 	$(UNITY_PYTHON) tools/export_torch_assets.py --check
 	$(UNITY_PYTHON) tools/export_tree_collision.py --check
 	$(UNITY_PYTHON) tools/export_sword_root_motion.py --output build/reference-assets/player-sword-motion --check
+	$(UNITY_PYTHON) tools/export_sprint_root_motion.py --output build/sprint-source-motion-01 --check
 	$(UNITY_PYTHON) tools/export_running_knife_motion.py '$(RUNNING_ROOT_CAPTURE)' --plan build/root-motion-bake/root-06-provenance/running-knife-plan.json --probe-source build/root-motion-bake/root-06-provenance/ReferenceRootMotionBake.cs --probe-assembly build/root-motion-bake/root-06-provenance/ReferenceRootMotionBake.dll --output build/running-motion-20261006 --check
 check-sources: exporter-check adventure-npc-collider-check attack-playback-source-check camera-query-source-check camp-repair-source-check capsule-history-source-check hare-perception-assets-check hit-reaction-source-check hunt-loot-source-check hunt-targeting-source-check starter-equipment-check sword-source-check terrain-assets-check
 # Parallel build and run of everything `make test` covers; continues past
@@ -145,6 +146,7 @@ test: camera-geometry-test shop-quantity-details-ui-test camp-repair-test camp-r
 	python3 tests/test_sword_variant_export.py
 	python3 tests/test_player_root_channels.py
 	python3 tests/test_sword_root_export.py
+	python3 tests/test_sprint_root_export.py
 	python3 tests/test_revival_export.py
 	python3 tests/test_stamina_recovery_export.py
 	python3 tests/test_passive_recovery_export.py
