@@ -12,6 +12,7 @@ CORE += src/pe_sword_motor.c
 CORE += src/pe_halt.c
 CORE += src/pe_hit_ik.c
 CORE += src/pe_ragdoll_action.c
+CORE += src/pe_animfollow.c
 UI_SHARED = src/pe_ui_history.c src/pe_ui_draw.c src/pe_ui_hud.c
 FRONTEND = src/pe_ui_settings.c $(UI_SHARED) src/pe_vegetation_view.c src/pe_deployable_view.c src/pe_terrain_material_view.c src/pe_adventure_npc_view.c src/pe_sandbox_world_view.c src/pe_app_menu.c src/pe_sandbox_view.c src/pe_sandbox_actor.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/main.c src/pe_reference.c src/pe_training_view.c src/pe_training_terrain_view.c src/pe_training_npc_view.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_shader.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_ui_assets.c src/pe_actor_view.c src/pe_actor_scene.c src/pe_actor_scene_view.c
 TESTS = tests/test_main.c tests/test_block.c $(shell sed -n 's|^PE_TEST(\(.*\))$$|tests/test_\1.c|p' tests/test_core_list.h)
@@ -962,3 +963,12 @@ ragdoll-action-source-check:
 	$(UNITY_PYTHON) tests/test_ragdoll_action_export.py
 test: ragdoll-action-source-test
 check-sources: ragdoll-action-source-check
+
+.PHONY: animfollow-source-test animfollow-source-check
+animfollow-source-test:
+	python3 tests/test_animfollow_export.py
+animfollow-source-check:
+	$(UNITY_PYTHON) tools/export_animfollow.py --check
+	$(UNITY_PYTHON) tests/test_animfollow_export.py
+test: animfollow-source-test
+check-sources: animfollow-source-check

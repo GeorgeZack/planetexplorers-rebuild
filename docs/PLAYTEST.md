@@ -1,5 +1,43 @@
 # Original-game playtest and C comparison
 
+## October 12 installed AnimFollow — compiled/serialized evidence, headless only
+
+[AnimFollow lifecycle](audit/ANIMFOLLOW_LIFECYCLE.md) is implemented in the
+disconnected `pe_animfollow`, bound to shipped Assembly-CSharp CIL and the
+installed female's complete serialized component payloads. It supplies active
+admission/body policy, controller flags, exact state/signal names and scalar
+requests. PD error, velocity, Animator state, water/ray queries, quaternion
+alignment, physics/joints/friction and scene cadence remain caller inputs or
+requests. This establishes no rig solve, pose or physical/visual parity.
+
+The view's ragdoll state reads mActive, distinct from the wrapper callback
+flag. Source control reads the preceding drive error, waits for entry-transition
+exit before orientation, and uses actual error/idle admission for completion.
+The actual setter's RagdollLock tag is bound by the exporter, distinct from
+collision-ignore tag IgnoreMe. No game or target assembly was executed, no
+desktop input was sent and no player saves or recovered runtime asset groups
+were changed. Live reaction/shield/pounce/defense gates stay closed.
+
+Focused core and all six UnityPy exporter tests pass without skips. The final
+runtime build passes. Final `make -C rebuild check` passes 257 jobs, 895 Python
+tests and 87 ordinary-interpreter skips (skips are not passes).
+`check-sanitize` passes all 101 suites with ASan/UBSan and leak detection.
+`check-content` and `check-sources` pass; the latter compares regenerated
+AnimFollow outputs and runs all six exporter cases with UnityPy and zero skips.
+Documentation link and whitespace checks pass.
+
+The initial core fixture expected the third-call alignment capture on its
+fourth call and was corrected before full verification. Initial complete
+MonoBehaviour reads exposed the stripped header limitation; a pinned metadata
+layout now consumes every byte of both installed components. Final review
+also corrected an assumed IgnoreMe body-policy label to the actual
+RagdollLock setter literal and added its exported getter/test. Both full check
+and sanitizer were rerun successfully after that correction; use the final
+logs, not the preceding runs, as this checkpoint's baseline. Full leak-scanned
+runs used unsandboxed supervision because of the already established ptrace
+restriction. [The handoff](HANDOFF.md) records logs and next work.
+
+
 ## October 12 Wentfly, Knocked and GetUp — source-derived, headless only
 
 [Ragdoll action lifecycles](audit/RAGDOLL_ACTIONS.md) are implemented in the

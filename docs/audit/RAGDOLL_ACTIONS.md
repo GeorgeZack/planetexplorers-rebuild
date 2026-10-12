@@ -1,5 +1,7 @@
 # Wentfly, Knocked and GetUp lifecycle requests
 
+October12 follow-through: [the installed AnimFollow lifecycle](ANIMFOLLOW_LIFECYCLE.md) now qualifies the inherited active getter, serialized threshold/settings and get-up decision requests in disconnected `pe_animfollow`. Physics, PD error, quaternion/Animator evaluation and poses remain unresolved.
+
 October 12, 2026. Source-derived from checked-in C#, action relations and the
 player prefab; implemented in the disconnected `pe_ragdoll_action`. No gameplay
 host calls it. No game was launched, and no ragdoll or get-up pose is recovered

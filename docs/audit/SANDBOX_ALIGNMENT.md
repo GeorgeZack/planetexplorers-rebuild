@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October12 AnimFollow: [the installed base lifecycle](ANIMFOLLOW_LIFECYCLE.md) now has a disconnected `pe_animfollow` owner bound to shipped CIL and exact serialized female settings. mActive, transition-exit orientation, actual error-based completion and scalar caps are recovered requests, not a physical solve. Next offline need is the PD/joint and body contract; reaction/get-up poses still require the prepared engine bake.
+
 October12 ragdoll lifecycles: [Wentfly, Knocked and GetUp](RAGDOLL_ACTIONS.md) now have disconnected ordered requests in `pe_ragdoll_action`, including the player's2s Knocked override, immediate GetUp dispatch and class-keyed model freezes. No physics, pose or host integration is enabled. Next offline need is the installed AnimFollow base lifecycle; the prepared reaction bake remains separate.
 
 October12 hit IK: [the offset requests](HIT_IK.md) now have a disconnected `pe_hit_ik` owner and source exporter, including exact transform routing, concurrent/restarted parts and root-position pins. The FinalIK solve and visible reactions remain gated. Next source-portable work is Wentfly/Knocked/GetUp lifecycle extraction; the prepared reaction bake remains a separate engine need.

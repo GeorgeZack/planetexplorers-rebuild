@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[AnimFollow lifecycle](docs/audit/ANIMFOLLOW_LIFECYCLE.md): `pe_animfollow` owns disconnected installed female state/scalar requests and active body policy; `export_animfollow.py` binds shipped CIL and stripped prefab settings through the committed bounded excerpt. Physics, PD and poses remain gated.
+
 [Ragdoll action lifecycles](docs/audit/RAGDOLL_ACTIONS.md): `pe_ragdoll_action` owns disconnected Wentfly/Knocked/GetUp ordered requests and class-keyed freeze reduction; `export_ragdoll_actions.py` binds source methods, rows7/8/10 and the player’s2s Knocked override. Physical ragdoll and get-up poses remain gated.
 
 [Hit IK](docs/audit/HIT_IK.md): `pe_hit_ik` owns disconnected per-part clocks and additive effector requests; `export_hit_ik.py` binds the female transform lists, pinned/duplicate links and force profile. [Current handoff](docs/HANDOFF.md) records the next work.

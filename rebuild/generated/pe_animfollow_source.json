@@ -1,0 +1,1607 @@
+{
+  "schema": 1,
+  "evidence": {
+    "path": "docs/reference/animfollow-lifecycle-il.json",
+    "sha256": "2ddc093f2b0512ce6a67ebf048a2b1697b41a65bf2c9a2b9b14ff5265b66bef5"
+  },
+  "artifact_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+  "methods_digest": "0ce488147dcfc9f7ff0adba4311175d11c2553e40dbb96440958a4f5ea96e950",
+  "fields_digest": "bfb49eae6e4a1cfbb79843d722f59e5edbeec515a63dbffa5ecd157a480bbdef",
+  "installed_sources": [
+    {
+      "path": "installed/PE_Client_Data/mainData",
+      "sha256": "177d35cee6842910112d6de5c963136c6fe1fa0c9fdb24dc47df75e5c0c1ad5c"
+    },
+    {
+      "path": "installed/PE_Client_Data/resources.assets",
+      "sha256": "363d02dc06aa3cd5ecccbeb67ac417077e0552cb32d0173205e6950ba93a3cb5"
+    },
+    {
+      "path": "installed/PE_Client_Data/sharedassets0.assets",
+      "sha256": "7266577940dc7ecf4392a241d668248410f98fdf17cad3573f38a27daed13b1b"
+    }
+  ],
+  "components": {
+    "AnimFollow_AF": {
+      "file": "resources.assets",
+      "id": 324352,
+      "raw_sha256": "c7e4f2dfabdc73feae02ec649c52087615348af21d56da3f2baad4f5a308f12f",
+      "byte_length": 2496,
+      "values": {
+        "master": {
+          "file": 0,
+          "id": 46283
+        },
+        "masterTransforms": [
+          {
+            "file": 0,
+            "id": 150703
+          },
+          {
+            "file": 0,
+            "id": 152210
+          },
+          {
+            "file": 0,
+            "id": 150806
+          },
+          {
+            "file": 0,
+            "id": 152296
+          },
+          {
+            "file": 0,
+            "id": 151390
+          },
+          {
+            "file": 0,
+            "id": 151838
+          },
+          {
+            "file": 0,
+            "id": 150173
+          },
+          {
+            "file": 0,
+            "id": 151009
+          },
+          {
+            "file": 0,
+            "id": 151222
+          },
+          {
+            "file": 0,
+            "id": 150541
+          },
+          {
+            "file": 0,
+            "id": 152104
+          },
+          {
+            "file": 0,
+            "id": 151626
+          },
+          {
+            "file": 0,
+            "id": 151415
+          },
+          {
+            "file": 0,
+            "id": 152378
+          },
+          {
+            "file": 0,
+            "id": 150625
+          },
+          {
+            "file": 0,
+            "id": 151948
+          },
+          {
+            "file": 0,
+            "id": 150071
+          },
+          {
+            "file": 0,
+            "id": 151247
+          },
+          {
+            "file": 0,
+            "id": 149835
+          },
+          {
+            "file": 0,
+            "id": 149712
+          },
+          {
+            "file": 0,
+            "id": 151744
+          },
+          {
+            "file": 0,
+            "id": 151767
+          },
+          {
+            "file": 0,
+            "id": 151858
+          },
+          {
+            "file": 0,
+            "id": 150875
+          },
+          {
+            "file": 0,
+            "id": 150585
+          },
+          {
+            "file": 0,
+            "id": 150943
+          },
+          {
+            "file": 0,
+            "id": 150269
+          },
+          {
+            "file": 0,
+            "id": 151067
+          },
+          {
+            "file": 0,
+            "id": 152060
+          },
+          {
+            "file": 0,
+            "id": 152356
+          },
+          {
+            "file": 0,
+            "id": 151119
+          },
+          {
+            "file": 0,
+            "id": 151880
+          },
+          {
+            "file": 0,
+            "id": 151366
+          },
+          {
+            "file": 0,
+            "id": 151345
+          },
+          {
+            "file": 0,
+            "id": 152168
+          },
+          {
+            "file": 0,
+            "id": 152276
+          },
+          {
+            "file": 0,
+            "id": 149959
+          },
+          {
+            "file": 0,
+            "id": 150453
+          },
+          {
+            "file": 0,
+            "id": 151522
+          },
+          {
+            "file": 0,
+            "id": 151297
+          },
+          {
+            "file": 0,
+            "id": 150501
+          },
+          {
+            "file": 0,
+            "id": 151675
+          },
+          {
+            "file": 0,
+            "id": 152148
+          },
+          {
+            "file": 0,
+            "id": 152232
+          },
+          {
+            "file": 0,
+            "id": 151171
+          },
+          {
+            "file": 0,
+            "id": 151497
+          },
+          {
+            "file": 0,
+            "id": 151790
+          },
+          {
+            "file": 0,
+            "id": 150771
+          },
+          {
+            "file": 0,
+            "id": 151926
+          },
+          {
+            "file": 0,
+            "id": 150909
+          },
+          {
+            "file": 0,
+            "id": 151904
+          },
+          {
+            "file": 0,
+            "id": 151698
+          },
+          {
+            "file": 0,
+            "id": 150838
+          },
+          {
+            "file": 0,
+            "id": 152317
+          },
+          {
+            "file": 0,
+            "id": 151272
+          },
+          {
+            "file": 0,
+            "id": 150400
+          },
+          {
+            "file": 0,
+            "id": 152015
+          },
+          {
+            "file": 0,
+            "id": 151601
+          },
+          {
+            "file": 0,
+            "id": 151035
+          },
+          {
+            "file": 0,
+            "id": 151995
+          },
+          {
+            "file": 0,
+            "id": 211686
+          },
+          {
+            "file": 0,
+            "id": 150735
+          },
+          {
+            "file": 0,
+            "id": 151197
+          },
+          {
+            "file": 0,
+            "id": 152188
+          },
+          {
+            "file": 0,
+            "id": 151815
+          },
+          {
+            "file": 0,
+            "id": 150979
+          },
+          {
+            "file": 0,
+            "id": 151652
+          },
+          {
+            "file": 0,
+            "id": 152040
+          },
+          {
+            "file": 0,
+            "id": 150341
+          },
+          {
+            "file": 0,
+            "id": 180041
+          },
+          {
+            "file": 0,
+            "id": 199869
+          },
+          {
+            "file": 0,
+            "id": 151145
+          },
+          {
+            "file": 0,
+            "id": 151548
+          },
+          {
+            "file": 0,
+            "id": 150667
+          },
+          {
+            "file": 0,
+            "id": 151321
+          },
+          {
+            "file": 0,
+            "id": 152124
+          },
+          {
+            "file": 0,
+            "id": 151443
+          }
+        ],
+        "slaveTransforms": [
+          {
+            "file": 0,
+            "id": 152418
+          },
+          {
+            "file": 0,
+            "id": 152398
+          },
+          {
+            "file": 0,
+            "id": 149581
+          },
+          {
+            "file": 0,
+            "id": 149444
+          },
+          {
+            "file": 0,
+            "id": 148515
+          },
+          {
+            "file": 0,
+            "id": 148081
+          },
+          {
+            "file": 0,
+            "id": 147849
+          },
+          {
+            "file": 0,
+            "id": 147614
+          },
+          {
+            "file": 0,
+            "id": 147357
+          },
+          {
+            "file": 0,
+            "id": 148304
+          },
+          {
+            "file": 0,
+            "id": 147103
+          },
+          {
+            "file": 0,
+            "id": 146849
+          },
+          {
+            "file": 0,
+            "id": 146597
+          },
+          {
+            "file": 0,
+            "id": 146327
+          },
+          {
+            "file": 0,
+            "id": 149311
+          },
+          {
+            "file": 0,
+            "id": 146057
+          },
+          {
+            "file": 0,
+            "id": 145792
+          },
+          {
+            "file": 0,
+            "id": 145526
+          },
+          {
+            "file": 0,
+            "id": 143486
+          },
+          {
+            "file": 0,
+            "id": 143181
+          },
+          {
+            "file": 0,
+            "id": 142874
+          },
+          {
+            "file": 0,
+            "id": 141902
+          },
+          {
+            "file": 0,
+            "id": 140599
+          },
+          {
+            "file": 0,
+            "id": 140273
+          },
+          {
+            "file": 0,
+            "id": 141577
+          },
+          {
+            "file": 0,
+            "id": 139943
+          },
+          {
+            "file": 0,
+            "id": 139616
+          },
+          {
+            "file": 0,
+            "id": 141251
+          },
+          {
+            "file": 0,
+            "id": 139285
+          },
+          {
+            "file": 0,
+            "id": 138946
+          },
+          {
+            "file": 0,
+            "id": 140927
+          },
+          {
+            "file": 0,
+            "id": 142550
+          },
+          {
+            "file": 0,
+            "id": 142225
+          },
+          {
+            "file": 0,
+            "id": 145247
+          },
+          {
+            "file": 0,
+            "id": 138606
+          },
+          {
+            "file": 0,
+            "id": 138266
+          },
+          {
+            "file": 0,
+            "id": 137920
+          },
+          {
+            "file": 0,
+            "id": 136509
+          },
+          {
+            "file": 0,
+            "id": 137570
+          },
+          {
+            "file": 0,
+            "id": 137220
+          },
+          {
+            "file": 0,
+            "id": 136869
+          },
+          {
+            "file": 0,
+            "id": 144966
+          },
+          {
+            "file": 0,
+            "id": 136157
+          },
+          {
+            "file": 0,
+            "id": 135803
+          },
+          {
+            "file": 0,
+            "id": 135453
+          },
+          {
+            "file": 0,
+            "id": 134735
+          },
+          {
+            "file": 0,
+            "id": 133200
+          },
+          {
+            "file": 0,
+            "id": 132788
+          },
+          {
+            "file": 0,
+            "id": 134370
+          },
+          {
+            "file": 0,
+            "id": 132369
+          },
+          {
+            "file": 0,
+            "id": 131927
+          },
+          {
+            "file": 0,
+            "id": 133992
+          },
+          {
+            "file": 0,
+            "id": 131471
+          },
+          {
+            "file": 0,
+            "id": 130998
+          },
+          {
+            "file": 0,
+            "id": 133602
+          },
+          {
+            "file": 0,
+            "id": 135093
+          },
+          {
+            "file": 0,
+            "id": 144675
+          },
+          {
+            "file": 0,
+            "id": 144384
+          },
+          {
+            "file": 0,
+            "id": 144086
+          },
+          {
+            "file": 0,
+            "id": 143786
+          },
+          {
+            "file": 0,
+            "id": 181169
+          },
+          {
+            "file": 0,
+            "id": 149176
+          },
+          {
+            "file": 0,
+            "id": 130513
+          },
+          {
+            "file": 0,
+            "id": 129986
+          },
+          {
+            "file": 0,
+            "id": 129427
+          },
+          {
+            "file": 0,
+            "id": 149032
+          },
+          {
+            "file": 0,
+            "id": 128805
+          },
+          {
+            "file": 0,
+            "id": 128092
+          },
+          {
+            "file": 0,
+            "id": 127303
+          },
+          {
+            "file": 0,
+            "id": 179153
+          },
+          {
+            "file": 0,
+            "id": 196394
+          },
+          {
+            "file": 0,
+            "id": 148878
+          },
+          {
+            "file": 0,
+            "id": 148712
+          },
+          {
+            "file": 0,
+            "id": 126390
+          },
+          {
+            "file": 0,
+            "id": 125386
+          },
+          {
+            "file": 0,
+            "id": 123706
+          },
+          {
+            "file": 0,
+            "id": 151095
+          }
+        ],
+        "slaveRigidbodies": [
+          {
+            "file": 0,
+            "id": 299397
+          },
+          {
+            "file": 0,
+            "id": 299393
+          },
+          {
+            "file": 0,
+            "id": 299385
+          },
+          {
+            "file": 0,
+            "id": 299389
+          },
+          {
+            "file": 0,
+            "id": 299381
+          },
+          {
+            "file": 0,
+            "id": 299377
+          },
+          {
+            "file": 0,
+            "id": 299373
+          },
+          {
+            "file": 0,
+            "id": 299359
+          },
+          {
+            "file": 0,
+            "id": 299345
+          },
+          {
+            "file": 0,
+            "id": 299366
+          },
+          {
+            "file": 0,
+            "id": 299352
+          }
+        ],
+        "_meshRenderers": [],
+        "_skinnedRenderers": [],
+        "slaveRigidTransforms": [],
+        "slaveExcludeTransforms": [],
+        "maxTorque": 100.0,
+        "maxForce": 100.0,
+        "maxJointTorque": 10000.0,
+        "jointDamping": 0.5,
+        "maxTorqueProfile": [
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0,
+          100.0
+        ],
+        "maxForceProfile": [
+          1.0,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224,
+          1.0,
+          1.0,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224,
+          0.20000000298023224
+        ],
+        "maxJointTorqueProfile": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          0.5,
+          1.0,
+          1.0,
+          0.5,
+          1.0,
+          1.0
+        ],
+        "jointDampingProfile": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "PTorque": 0.10100000351667404,
+        "PForce": 27.200000762939453,
+        "DTorque": 0.0011599999852478504,
+        "DForce": 0.00930000003427267,
+        "PTorqueProfile": [
+          20.0,
+          30.0,
+          10.0,
+          30.0,
+          10.0,
+          30.0,
+          30.0,
+          30.0,
+          30.0,
+          10.0,
+          30.0,
+          10.0
+        ],
+        "PForceProfile": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "angularDrag": 1.0,
+        "drag": 0.5,
+        "mimicNonRigids": true,
+        "secondaryUpdate": 2,
+        "hideMaster": true,
+        "useGravity": true,
+        "totalTorqueError": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "totalForceError": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "forceErrorWeightProfile": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "layout": [
+        {
+          "token": "0x04000044",
+          "name": "master",
+          "type": "class:89",
+          "offset": 32,
+          "end": 44
+        },
+        {
+          "token": "0x04000045",
+          "name": "masterTransforms",
+          "type": "class:21[]",
+          "offset": 44,
+          "end": 972
+        },
+        {
+          "token": "0x04000047",
+          "name": "slaveTransforms",
+          "type": "class:21[]",
+          "offset": 972,
+          "end": 1900
+        },
+        {
+          "token": "0x04000048",
+          "name": "slaveRigidbodies",
+          "type": "class:29[]",
+          "offset": 1900,
+          "end": 2036
+        },
+        {
+          "token": "0x04000049",
+          "name": "_meshRenderers",
+          "type": "class:93[]",
+          "offset": 2036,
+          "end": 2040
+        },
+        {
+          "token": "0x0400004a",
+          "name": "_skinnedRenderers",
+          "type": "class:97[]",
+          "offset": 2040,
+          "end": 2044
+        },
+        {
+          "token": "0x0400004b",
+          "name": "slaveRigidTransforms",
+          "type": "class:21[]",
+          "offset": 2044,
+          "end": 2048
+        },
+        {
+          "token": "0x0400004c",
+          "name": "slaveExcludeTransforms",
+          "type": "class:21[]",
+          "offset": 2048,
+          "end": 2052
+        },
+        {
+          "token": "0x04000050",
+          "name": "maxTorque",
+          "type": "r4",
+          "offset": 2052,
+          "end": 2056
+        },
+        {
+          "token": "0x04000051",
+          "name": "maxForce",
+          "type": "r4",
+          "offset": 2056,
+          "end": 2060
+        },
+        {
+          "token": "0x04000052",
+          "name": "maxJointTorque",
+          "type": "r4",
+          "offset": 2060,
+          "end": 2064
+        },
+        {
+          "token": "0x04000053",
+          "name": "jointDamping",
+          "type": "r4",
+          "offset": 2064,
+          "end": 2068
+        },
+        {
+          "token": "0x04000054",
+          "name": "maxTorqueProfile",
+          "type": "r4[]",
+          "offset": 2068,
+          "end": 2120
+        },
+        {
+          "token": "0x04000055",
+          "name": "maxForceProfile",
+          "type": "r4[]",
+          "offset": 2120,
+          "end": 2172
+        },
+        {
+          "token": "0x04000056",
+          "name": "maxJointTorqueProfile",
+          "type": "r4[]",
+          "offset": 2172,
+          "end": 2224
+        },
+        {
+          "token": "0x04000057",
+          "name": "jointDampingProfile",
+          "type": "r4[]",
+          "offset": 2224,
+          "end": 2276
+        },
+        {
+          "token": "0x04000058",
+          "name": "PTorque",
+          "type": "r4",
+          "offset": 2276,
+          "end": 2280
+        },
+        {
+          "token": "0x04000059",
+          "name": "PForce",
+          "type": "r4",
+          "offset": 2280,
+          "end": 2284
+        },
+        {
+          "token": "0x0400005a",
+          "name": "DTorque",
+          "type": "r4",
+          "offset": 2284,
+          "end": 2288
+        },
+        {
+          "token": "0x0400005b",
+          "name": "DForce",
+          "type": "r4",
+          "offset": 2288,
+          "end": 2292
+        },
+        {
+          "token": "0x0400005c",
+          "name": "PTorqueProfile",
+          "type": "r4[]",
+          "offset": 2292,
+          "end": 2344
+        },
+        {
+          "token": "0x0400005d",
+          "name": "PForceProfile",
+          "type": "r4[]",
+          "offset": 2344,
+          "end": 2396
+        },
+        {
+          "token": "0x0400005e",
+          "name": "angularDrag",
+          "type": "r4",
+          "offset": 2396,
+          "end": 2400
+        },
+        {
+          "token": "0x0400005f",
+          "name": "drag",
+          "type": "r4",
+          "offset": 2400,
+          "end": 2404
+        },
+        {
+          "token": "0x04000063",
+          "name": "mimicNonRigids",
+          "type": "bool",
+          "offset": 2404,
+          "end": 2408
+        },
+        {
+          "token": "0x04000064",
+          "name": "secondaryUpdate",
+          "type": "i4",
+          "offset": 2408,
+          "end": 2412
+        },
+        {
+          "token": "0x04000066",
+          "name": "hideMaster",
+          "type": "bool",
+          "offset": 2412,
+          "end": 2416
+        },
+        {
+          "token": "0x04000067",
+          "name": "useGravity",
+          "type": "bool",
+          "offset": 2416,
+          "end": 2420
+        },
+        {
+          "token": "0x0400006f",
+          "name": "totalTorqueError",
+          "type": "valuetype:33",
+          "offset": 2420,
+          "end": 2432
+        },
+        {
+          "token": "0x04000075",
+          "name": "totalForceError",
+          "type": "valuetype:33",
+          "offset": 2432,
+          "end": 2444
+        },
+        {
+          "token": "0x04000076",
+          "name": "forceErrorWeightProfile",
+          "type": "r4[]",
+          "offset": 2444,
+          "end": 2496
+        }
+      ]
+    },
+    "PERagdollController": {
+      "file": "resources.assets",
+      "id": 324629,
+      "raw_sha256": "75247af888e99b929f587261f02fb6f1f08dc798ce66d472fff404542039e5cf",
+      "byte_length": 564,
+      "values": {
+        "animFollow": {
+          "file": 0,
+          "id": 324352
+        },
+        "anim": {
+          "file": 0,
+          "id": 305720
+        },
+        "ragdollRootBone": {
+          "file": 0,
+          "id": 149581
+        },
+        "master": {
+          "file": 0,
+          "id": 46283
+        },
+        "slaveRigidBodies": [
+          {
+            "file": 0,
+            "id": 299397
+          },
+          {
+            "file": 0,
+            "id": 299393
+          },
+          {
+            "file": 0,
+            "id": 299385
+          },
+          {
+            "file": 0,
+            "id": 299389
+          },
+          {
+            "file": 0,
+            "id": 299381
+          },
+          {
+            "file": 0,
+            "id": 299377
+          },
+          {
+            "file": 0,
+            "id": 299373
+          },
+          {
+            "file": 0,
+            "id": 299359
+          },
+          {
+            "file": 0,
+            "id": 299345
+          },
+          {
+            "file": 0,
+            "id": 299366
+          },
+          {
+            "file": 0,
+            "id": 299352
+          }
+        ],
+        "masterRootBone": {
+          "file": 0,
+          "id": 150806
+        },
+        "IceOnGetup": [],
+        "ignoreCollidersWithTag": [
+          "IgnoreMe"
+        ],
+        "getupAngularDrag": 35.0,
+        "getupDrag": 17.0,
+        "localAngularDrag": 25.0,
+        "localDrag": 15.0,
+        "fallLerp": 1.5,
+        "residualTorque": 0.03999999910593033,
+        "residualForce": 0.10000000149011612,
+        "residualJointTorque": 80.0,
+        "residualIdleFactor": 0.0,
+        "graceSpeed": 8.0,
+        "noGhostLimit": 0.5,
+        "noGhostLimit2": 15.0,
+        "glideFree": 0.30000001192092896,
+        "falling": false,
+        "gettingUp": false,
+        "jointLimits": false,
+        "fellOnSpeed": false,
+        "limbErrorMagnitude": 0.0,
+        "settledSpeed": 0.20000000298023224,
+        "masterFallAnimatorSpeedFactor": 0.25,
+        "getup1AnimatorSpeedFactor": 0.3499999940395355,
+        "getup2AnimatorSpeedFactor": 0.75,
+        "contactTorque": 4.0,
+        "contactForce": 3.0,
+        "contactJointTorque": 5.0,
+        "getupLerp1": 0.15000000596046448,
+        "getupLerp2": 2.0,
+        "wakeUpStrength": 0.5,
+        "toContactLerp": 70.0,
+        "fromContactLerp": 1.0,
+        "maxTorque": 100.0,
+        "maxForce": 100.0,
+        "maxJointTorque": 10000.0,
+        "maxErrorWhenMatching": 0.30000001192092896,
+        "orientateY": 0.0,
+        "collisionSpeed": 0.0,
+        "numberOfCollisions": 0,
+        "shotByBullet": false,
+        "m_Renderers": [],
+        "m_Alpha": {
+          "file": 0,
+          "id": 0
+        },
+        "m_RagdollEffect": {
+          "file": 0,
+          "id": 356822
+        },
+        "m_Colliders": [
+          {
+            "file": 0,
+            "id": 300993
+          },
+          {
+            "file": 0,
+            "id": 308035
+          },
+          {
+            "file": 0,
+            "id": 308029
+          },
+          {
+            "file": 0,
+            "id": 308032
+          },
+          {
+            "file": 0,
+            "id": 308026
+          },
+          {
+            "file": 0,
+            "id": 300736
+          },
+          {
+            "file": 0,
+            "id": 308023
+          },
+          {
+            "file": 0,
+            "id": 308015
+          },
+          {
+            "file": 0,
+            "id": 307610
+          },
+          {
+            "file": 0,
+            "id": 308020
+          },
+          {
+            "file": 0,
+            "id": 308011
+          }
+        ]
+      },
+      "layout": [
+        {
+          "token": "0x0400008b",
+          "name": "animFollow",
+          "type": "class:32",
+          "offset": 32,
+          "end": 44
+        },
+        {
+          "token": "0x0400008c",
+          "name": "anim",
+          "type": "class:53",
+          "offset": 44,
+          "end": 56
+        },
+        {
+          "token": "0x0400008d",
+          "name": "ragdollRootBone",
+          "type": "class:21",
+          "offset": 56,
+          "end": 68
+        },
+        {
+          "token": "0x0400008e",
+          "name": "master",
+          "type": "class:89",
+          "offset": 68,
+          "end": 80
+        },
+        {
+          "token": "0x0400008f",
+          "name": "slaveRigidBodies",
+          "type": "class:29[]",
+          "offset": 80,
+          "end": 216
+        },
+        {
+          "token": "0x04000090",
+          "name": "masterRootBone",
+          "type": "class:21",
+          "offset": 216,
+          "end": 228
+        },
+        {
+          "token": "0x04000091",
+          "name": "IceOnGetup",
+          "type": "class:21[]",
+          "offset": 228,
+          "end": 232
+        },
+        {
+          "token": "0x04000092",
+          "name": "ignoreCollidersWithTag",
+          "type": "string[]",
+          "offset": 232,
+          "end": 248
+        },
+        {
+          "token": "0x04000093",
+          "name": "getupAngularDrag",
+          "type": "r4",
+          "offset": 248,
+          "end": 252
+        },
+        {
+          "token": "0x04000094",
+          "name": "getupDrag",
+          "type": "r4",
+          "offset": 252,
+          "end": 256
+        },
+        {
+          "token": "0x04000095",
+          "name": "localAngularDrag",
+          "type": "r4",
+          "offset": 256,
+          "end": 260
+        },
+        {
+          "token": "0x04000096",
+          "name": "localDrag",
+          "type": "r4",
+          "offset": 260,
+          "end": 264
+        },
+        {
+          "token": "0x04000097",
+          "name": "fallLerp",
+          "type": "r4",
+          "offset": 264,
+          "end": 268
+        },
+        {
+          "token": "0x04000098",
+          "name": "residualTorque",
+          "type": "r4",
+          "offset": 268,
+          "end": 272
+        },
+        {
+          "token": "0x04000099",
+          "name": "residualForce",
+          "type": "r4",
+          "offset": 272,
+          "end": 276
+        },
+        {
+          "token": "0x0400009a",
+          "name": "residualJointTorque",
+          "type": "r4",
+          "offset": 276,
+          "end": 280
+        },
+        {
+          "token": "0x0400009b",
+          "name": "residualIdleFactor",
+          "type": "r4",
+          "offset": 280,
+          "end": 284
+        },
+        {
+          "token": "0x0400009c",
+          "name": "graceSpeed",
+          "type": "r4",
+          "offset": 284,
+          "end": 288
+        },
+        {
+          "token": "0x0400009d",
+          "name": "noGhostLimit",
+          "type": "r4",
+          "offset": 288,
+          "end": 292
+        },
+        {
+          "token": "0x0400009e",
+          "name": "noGhostLimit2",
+          "type": "r4",
+          "offset": 292,
+          "end": 296
+        },
+        {
+          "token": "0x0400009f",
+          "name": "glideFree",
+          "type": "r4",
+          "offset": 296,
+          "end": 300
+        },
+        {
+          "token": "0x040000a0",
+          "name": "falling",
+          "type": "bool",
+          "offset": 300,
+          "end": 304
+        },
+        {
+          "token": "0x040000a1",
+          "name": "gettingUp",
+          "type": "bool",
+          "offset": 304,
+          "end": 308
+        },
+        {
+          "token": "0x040000a2",
+          "name": "jointLimits",
+          "type": "bool",
+          "offset": 308,
+          "end": 312
+        },
+        {
+          "token": "0x040000a4",
+          "name": "fellOnSpeed",
+          "type": "bool",
+          "offset": 312,
+          "end": 316
+        },
+        {
+          "token": "0x040000a5",
+          "name": "limbErrorMagnitude",
+          "type": "r4",
+          "offset": 316,
+          "end": 320
+        },
+        {
+          "token": "0x040000a6",
+          "name": "settledSpeed",
+          "type": "r4",
+          "offset": 320,
+          "end": 324
+        },
+        {
+          "token": "0x040000a7",
+          "name": "masterFallAnimatorSpeedFactor",
+          "type": "r4",
+          "offset": 324,
+          "end": 328
+        },
+        {
+          "token": "0x040000a8",
+          "name": "getup1AnimatorSpeedFactor",
+          "type": "r4",
+          "offset": 328,
+          "end": 332
+        },
+        {
+          "token": "0x040000a9",
+          "name": "getup2AnimatorSpeedFactor",
+          "type": "r4",
+          "offset": 332,
+          "end": 336
+        },
+        {
+          "token": "0x040000aa",
+          "name": "contactTorque",
+          "type": "r4",
+          "offset": 336,
+          "end": 340
+        },
+        {
+          "token": "0x040000ab",
+          "name": "contactForce",
+          "type": "r4",
+          "offset": 340,
+          "end": 344
+        },
+        {
+          "token": "0x040000ac",
+          "name": "contactJointTorque",
+          "type": "r4",
+          "offset": 344,
+          "end": 348
+        },
+        {
+          "token": "0x040000ad",
+          "name": "getupLerp1",
+          "type": "r4",
+          "offset": 348,
+          "end": 352
+        },
+        {
+          "token": "0x040000ae",
+          "name": "getupLerp2",
+          "type": "r4",
+          "offset": 352,
+          "end": 356
+        },
+        {
+          "token": "0x040000af",
+          "name": "wakeUpStrength",
+          "type": "r4",
+          "offset": 356,
+          "end": 360
+        },
+        {
+          "token": "0x040000b0",
+          "name": "toContactLerp",
+          "type": "r4",
+          "offset": 360,
+          "end": 364
+        },
+        {
+          "token": "0x040000b1",
+          "name": "fromContactLerp",
+          "type": "r4",
+          "offset": 364,
+          "end": 368
+        },
+        {
+          "token": "0x040000b2",
+          "name": "maxTorque",
+          "type": "r4",
+          "offset": 368,
+          "end": 372
+        },
+        {
+          "token": "0x040000b3",
+          "name": "maxForce",
+          "type": "r4",
+          "offset": 372,
+          "end": 376
+        },
+        {
+          "token": "0x040000b4",
+          "name": "maxJointTorque",
+          "type": "r4",
+          "offset": 376,
+          "end": 380
+        },
+        {
+          "token": "0x040000b5",
+          "name": "maxErrorWhenMatching",
+          "type": "r4",
+          "offset": 380,
+          "end": 384
+        },
+        {
+          "token": "0x040000b6",
+          "name": "orientateY",
+          "type": "r4",
+          "offset": 384,
+          "end": 388
+        },
+        {
+          "token": "0x040000b7",
+          "name": "collisionSpeed",
+          "type": "r4",
+          "offset": 388,
+          "end": 392
+        },
+        {
+          "token": "0x040000b8",
+          "name": "numberOfCollisions",
+          "type": "i4",
+          "offset": 392,
+          "end": 396
+        },
+        {
+          "token": "0x040000c2",
+          "name": "shotByBullet",
+          "type": "bool",
+          "offset": 396,
+          "end": 400
+        },
+        {
+          "token": "0x040027ca",
+          "name": "m_Renderers",
+          "type": "class:101[]",
+          "offset": 400,
+          "end": 404
+        },
+        {
+          "token": "0x040027cb",
+          "name": "m_Alpha",
+          "type": "class:19324",
+          "offset": 404,
+          "end": 416
+        },
+        {
+          "token": "0x040027cc",
+          "name": "m_RagdollEffect",
+          "type": "class:7892",
+          "offset": 416,
+          "end": 428
+        },
+        {
+          "token": "0x040027cd",
+          "name": "m_Colliders",
+          "type": "class:85[]",
+          "offset": 428,
+          "end": 564
+        }
+      ]
+    }
+  },
+  "names": [
+    "Base Layer.GroundLocomotion.Move",
+    "Base Layer.WaterLocomotion.Move",
+    "Base Layer.Locomotion",
+    "GetUpFront",
+    "GetUpBack",
+    "GetUpFrontMirror",
+    "GetUpBackMirror",
+    "Base Layer.Ragdoll.GetupFront",
+    "Base Layer.Ragdoll.GetupBack",
+    "Base Layer.Ragdoll.GetupFrontMirror",
+    "Base Layer.Ragdoll.GetupBackMirror",
+    "Base Layer.Ragdoll.GetupFront_Water",
+    "Base Layer.Ragdoll.GetupBack_Water",
+    "Base Layer.Ragdoll.GetupFrontMirror_Water",
+    "Base Layer.Ragdoll.GetupBackMirror_Water",
+    "AnyState -> GetupFront",
+    "AnyState -> GetupBack",
+    "AnyState -> GetupFrontMirror",
+    "AnyState -> GetupBackMirror",
+    "AnyState -> GetupFront_Water",
+    "AnyState -> GetupBack_Water",
+    "AnyState -> GetupFrontMirror_Water",
+    "AnyState -> GetupBackMirror_Water"
+  ],
+  "body_lock_tag": "RagdollLock",
+  "scope": "Disconnected female lifecycle/scalar drive requests and active body policy. No PhysX, PD solve, joint updates, root orientation solve or Animator evaluation.",
+  "limitations": [
+    "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+    "CIL is read from file bytes; no JIT, floating-point or engine behavior is observed.",
+    "Field serialization layout is derived from pinned member flags/SerializeField attributes and checked by complete installed component byte consumption.",
+    "Static caller inventory does not establish actual enabled scene scheduling.",
+    "Installed component fields are decoded with a pinned serialization layout; constructor defaults are not substituted for serialized settings.",
+    "Get-up selection emits the compiled SetBool(hash,true) request, not an assumed SetTrigger implementation."
+  ]
+}
