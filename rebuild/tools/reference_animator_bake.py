@@ -18,13 +18,14 @@ import sys
 
 import launch_reference
 import reference_pose
-from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS, DIRECTIONAL_CLIPS, REACTION_CLIPS
+from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS, DIRECTIONAL_CLIPS, REACTION_CLIPS, RECOVERY_CLIPS
 
 TOOLS = Path(__file__).resolve().parent
 BUILD = TOOLS.parent/'build/animator-bake'
 MAX_CLIPS = 32
 # NormalIdle first as the repeatability anchor shared with earlier bakes.
-REACTION_SELECTION = ('NormalIdle',)+tuple(REACTION_CLIPS)
+# The ground get-up clips and the sprint blade attack ride along in the same session.
+REACTION_SELECTION = ('NormalIdle',)+tuple(REACTION_CLIPS)+tuple(RECOVERY_CLIPS)
 DEFAULT_CLIPS = ('NormalIdle', 'NormalWF', 'NormalRF', 'Jump', 'Fall', 'Land', 'Attack6', 'Attack7', 'Attack8', 'Attack9')
 
 

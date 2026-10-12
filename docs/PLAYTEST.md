@@ -38,7 +38,7 @@ by `MoveStyle`; Repulsed plays a separate stagger clip set selected by local
 velocity. No reaction pose is baked. Unity's transition frame timing, blend
 weights and layer mixing are unqualified.
 
-A `hit-reaction` bake preset (20 clips, 836 samples at 30 Hz) is prepared. Its
+A `hit-reaction` bake preset is prepared (later the same day extended to 25 clips, 1,052 samples at 30 Hz, with the get-up and sprint-attack clips). Its
 clip plan validates against the installed controller and the sampler compiles;
 the original game was not launched.
 

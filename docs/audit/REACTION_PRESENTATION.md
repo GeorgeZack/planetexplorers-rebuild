@@ -120,12 +120,14 @@ Unresolved question: the humanoid poses of the reaction clips. Source, assets
 and existing captures cannot answer it, because the clips are muscle curves
 that only the original engine retargets.
 
-Smallest useful capture: one isolated female bake of twenty clips with the
+Smallest useful capture: one isolated female bake of twenty-five clips with the
 existing [sampler](ANIMATOR_BAKE.md) — NormalIdle as the repeatability anchor,
-IdleBeHit, SwordBeHit, the sixteen stagger leaves and BlockRepulsed. At 30 Hz
-that is 836 samples, inside the 32-clip and 3,600-sample bounds. The other
-eight per-weapon hit clips and the swim branch are left out until those
-weapons or swimming are supported.
+IdleBeHit, SwordBeHit, the sixteen stagger leaves and BlockRepulsed, plus the
+next animation set described below (four ground get-up clips and
+SprintSwordAttack) so one session answers all of them. At 30 Hz that is 1,052
+samples, inside the 32-clip and 3,600-sample bounds. The other eight
+per-weapon hit clips, the swim branch and the water get-ups are left out until
+those weapons or swimming are supported.
 
 ```sh
 rebuild/build/unity-tools/bin/python rebuild/tools/inventory_reference_bake.py \
@@ -145,6 +147,39 @@ Review points for that bake: the seven mirrored clips should show right-hand
 motion (the plan records `clip_mirror`); the sampler evaluates leaves in
 isolation, so it gives neither the directional blend nor the full-body layer
 mix.
+
+## Next animation set: get-up and sprint attack
+
+Recovered from the installed controller on October 12; no C owner yet.
+
+**Halt, Wentfly and Knocked play no clip.** `Action_Halt` runs a procedural
+`IKAnimEffectCtrl.StopMove` on the controller velocity. `Action_Wentfly` and
+`Action_Knocked` hand the body to the ragdoll. They need IK and ragdoll owners
+or explicit adapters, not a bake.
+
+**Get-up.** `Action_GetUp` deactivates the ragdoll and holds its mask until the
+view reports the ragdoll gone. The clips are four base-layer states under
+`Ragdoll`, each a direct speed-1 leaf entered by its own Any State trigger and
+left at normalized time 1. State and clip names are crossed in the controller:
+
+| State | Trigger | Clip | Length |
+|---|---|---|---|
+| GetupBack | GetUpBack | GetUpBackMirror 322 (mirrored) | 1.4667 s |
+| GetupFront | GetUpFront | GetUpFrontMirror 326 (mirrored) | 1.0667 s |
+| GetupBackMirror | GetUpBackMirror | GetUpBack 311 | 1.4667 s |
+| GetupFrontMirror | GetUpFrontMirror | GetUpFront 317 | 1.0667 s |
+
+Each entry is also conditioned on `ragdollInWater`; four `_Water` states hold
+the swimming variants. The clips carry no events. Which trigger the ragdoll
+controller picks, and its pose blend from the ragdoll, are not recovered.
+
+**Sprint attack.** `FullBody.Attack.SprintSwordAttack` is a direct leaf of clip
+401 (male override 310), 1.8 s, entered by the `SprintSwordAttack` trigger. Its
+authored events are StartAttack 0.1685 s, WeightInputStart 0.3503 s, EndAttack
+0.5680 s, WeightInputEnd 0.7164 s and EndAction 1.1924 s. The original selects
+it above the sword's sprint threshold (7 m/s in the installed prefab). The
+rebuild still rejects that branch. Besides poses it needs a root-motion capture
+like the one behind the running lunge; that is a second, separate probe.
 
 ## Validation and remaining gate
 

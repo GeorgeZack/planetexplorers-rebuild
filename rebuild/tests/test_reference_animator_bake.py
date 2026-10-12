@@ -295,16 +295,41 @@ class BakeTests(unittest.TestCase):
             if change=='missing':machine(bad,1).clear()
             with self.subTest(change=change),self.assertRaises(ValueError):inventory.reaction_states(bad)
 
+    def test_getup_states_cross_named_clips_and_triggers(self):
+        names=[(i,n) for i,n in enumerate(['GetUpBack','GetUpFront','GetUpBackMirror','GetUpFrontMirror','ragdollInWater']+
+                                         [row[1] for row in inventory.GETUP_STATES.values()])]
+        ids={n:i for i,n in names};states=[];anys=[];refs=[]
+        for index,(clip,(path_id,path,trigger)) in enumerate(inventory.GETUP_STATES.items()):
+            node=dict(m_ChildIndices=[],m_ClipID=index);refs.append(dict(m_FileID=0,m_PathID=path_id))
+            states.append({'data':dict(m_FullPathID=ids[path],m_Speed=1,m_Mirror=False,m_BlendTreeConstantArray=[{'data':{'m_NodeArray':[{'data':node}]}}])})
+            anys.append({'data':dict(m_DestinationState=index,m_ConditionConstantArray=[{'data':{'m_EventID':ids[trigger]}},{'data':{'m_EventID':ids['ragdollInWater']}}])})
+        c=dict(m_TOS=names,m_AnimationClips=refs,m_Controller={'m_StateMachineArray':[{'data':{'m_StateConstantArray':states,'m_AnyStateTransitionConstantArray':anys}}]})
+        result=inventory.getup_states(c)
+        self.assertEqual(result['GetUpBackMirror']['path'],'Base Layer.Ragdoll.GetupBack') # state and clip names cross
+        self.assertEqual(result['GetUpBack']['entry_conditions'][0],'GetUpBackMirror')
+        for change in ('uncross','trigger','speed','mirror','external','missing','second-entry'):
+            bad=copy.deepcopy(c);m=bad['m_Controller']['m_StateMachineArray'][0]['data']
+            if change=='uncross':bad['m_AnimationClips'][0]['m_PathID']=311
+            if change=='trigger':m['m_AnyStateTransitionConstantArray'][0]['data']['m_ConditionConstantArray'][0]['data']['m_EventID']=ids['GetUpFront']
+            if change=='speed':m['m_StateConstantArray'][1]['data']['m_Speed']=1.5
+            if change=='mirror':m['m_StateConstantArray'][2]['data']['m_Mirror']=True
+            if change=='external':bad['m_AnimationClips'][3]['m_FileID']=1
+            if change=='missing':m['m_StateConstantArray'].pop()
+            if change=='second-entry':m['m_AnyStateTransitionConstantArray'].append(copy.deepcopy(m['m_AnyStateTransitionConstantArray'][0]))
+            with self.subTest(change=change),self.assertRaises(ValueError):inventory.getup_states(bad)
+
     def test_hit_reaction_preset_is_separate_bounded_and_build_only(self):
         lengths={'IdleBeHit':.9333336353302002,'SwordBeHit':.9333419799804688,'BlockRepulsed':1.0000152587890625}
         self.data['genders']['female']['clips']=[dict(name=n,path_id=p,length=lengths.get(n,1.),frame_rate=30,
             loop=n not in lengths or n=='BlockRepulsed',humanoid_bindings=127) for n,p in inventory.CLIPS.items()]
         self.save();selection=tool.REACTION_SELECTION;p=self.read(selection)
-        self.assertEqual(selection[0],'NormalIdle');self.assertEqual(selection[1:],tuple(inventory.REACTION_CLIPS))
-        self.assertEqual(len(p['clips']),20);self.assertLessEqual(len(selection),tool.MAX_CLIPS)
+        self.assertEqual(selection[0],'NormalIdle');self.assertEqual(selection[1:20],tuple(inventory.REACTION_CLIPS))
+        self.assertEqual(selection[20:],('GetUpBackMirror','GetUpFrontMirror','GetUpBack','GetUpFront','SprintSwordAttack'))
+        self.assertEqual(len(p['clips']),25);self.assertLessEqual(len(selection),tool.MAX_CLIPS)
         self.assertEqual([c['path_id'] for c in p['clips'][1:3]],[139,157])
         self.assertLessEqual(p['planned_samples'],3600)
         self.assertIn('IdleBeHit|0.933333635|30|139|0',p['spec'])
+        self.assertEqual([c['path_id'] for c in p['clips'][20:]],[322,326,311,317,401])
         self.assertTrue(set(inventory.REACTION_CLIPS).isdisjoint(tool.DEFAULT_CLIPS+tuple(inventory.DIRECTIONAL_CLIPS)+tuple(inventory.SWORD_CLIPS)))
         self.assertEqual(len(tool.DEFAULT_CLIPS),10)
         args=self.args()[:-2]+['--preset','hit-reaction']

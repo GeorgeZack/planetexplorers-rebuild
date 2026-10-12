@@ -59,6 +59,16 @@ REACTION_BRANCHES = {
 }
 REACTION_CLIPS = {name: row[0] for name,row in REACTION_BRANCHES.items()}
 CLIPS.update(REACTION_CLIPS)
+# Ground get-up leaves entered from the ragdoll, and the sprint blade attack.
+# The controller crosses names: state GetupBack plays clip GetUpBackMirror and
+# state GetupBackMirror plays clip GetUpBack; likewise for Front.
+GETUP_STATES = {'GetUpBackMirror': (322,'Base Layer.Ragdoll.GetupBack','GetUpBack'),
+                'GetUpFrontMirror': (326,'Base Layer.Ragdoll.GetupFront','GetUpFront'),
+                'GetUpBack': (311,'Base Layer.Ragdoll.GetupBackMirror','GetUpBackMirror'),
+                'GetUpFront': (317,'Base Layer.Ragdoll.GetupFrontMirror','GetUpFrontMirror')}
+RECOVERY_CLIPS = {name: row[0] for name,row in GETUP_STATES.items()}
+RECOVERY_CLIPS['SprintSwordAttack'] = 401
+CLIPS.update(RECOVERY_CLIPS)
 DIRECTIONAL_BRANCHES = {
     'NormalWB': ((0,1,2,33), (0,-2), None),
     'NormalWL': ((0,1,2,34,36), (-2,0), ('FirstPerson',1)),
@@ -144,6 +154,34 @@ def reaction_states(controller):
             raise ValueError('Reaction leaf differs from exact source clip')
         result[name]=dict(path=path,clip_index=clip_index,speed=state['m_Speed'],node_path=node_path,branches=branches)
     return result
+
+
+def getup_states(controller):
+    """Each ground get-up state is a direct leaf entered by its own Any State trigger."""
+    names=dict(controller['m_TOS']);result={}
+    for machine in controller['m_Controller']['m_StateMachineArray']:
+        states=[e['data'] for e in machine['data']['m_StateConstantArray']]
+        for name,(clip,path,trigger) in GETUP_STATES.items():
+            found=[i for i,s in enumerate(states) if names.get(s['m_FullPathID'])==path]
+            if not found:continue
+            if name in result or len(found)!=1:raise ValueError('Duplicate get-up state')
+            state=states[found[0]];trees=state['m_BlendTreeConstantArray']
+            if len(trees)!=1 or len(trees[0]['data']['m_NodeArray'])!=1 or state['m_Speed']!=1 or state['m_Mirror']:
+                raise ValueError('Get-up state is not a direct speed-1 leaf')
+            leaf=trees[0]['data']['m_NodeArray'][0]['data'];index=leaf['m_ClipID']
+            if leaf['m_ChildIndices'] or index>=len(controller['m_AnimationClips']) or \
+                    controller['m_AnimationClips'][index]!={'m_FileID':0,'m_PathID':clip}:
+                raise ValueError('Get-up state references a different source clip')
+            entries=[[names.get(c['data']['m_EventID']) for c in t['data']['m_ConditionConstantArray']]
+                     for t in machine['data']['m_AnyStateTransitionConstantArray'] if t['data']['m_DestinationState']==found[0]]
+            if len(entries)!=1 or trigger not in entries[0]:raise ValueError('Get-up entry trigger differs')
+            result[name]=dict(path=path,clip_index=index,speed=state['m_Speed'],entry_conditions=entries[0])
+    if len(result)!=len(GETUP_STATES):raise ValueError('Missing verified get-up states')
+    return result
+
+
+def sprint_attack_states(controller):
+    return direct_states(controller,'FullBody.Attack.',('SprintSwordAttack',))
 
 
 def directional_states(controller):
@@ -259,7 +297,7 @@ def inventory(asset):
     refs = {x['m_PathID'] for x in controller['m_AnimationClips'] if x['m_FileID'] == 0}
     replacements = {x['m_OriginalClip']['m_PathID']: x['m_OverrideClip']['m_PathID']
                     for x in override['m_Clips']}
-    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller),**reaction_states(controller)}
+    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller),**reaction_states(controller),**getup_states(controller),**sprint_attack_states(controller)}
     with asset.open('rb') as stream:
         asset_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
     result = {'schema': 1, 'asset': str(asset), 'asset_sha256': asset_hash,
