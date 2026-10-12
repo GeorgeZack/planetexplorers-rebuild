@@ -1,5 +1,31 @@
 # Original-game playtest and C comparison
 
+## October 12 hit IK — source-derived, headless only
+
+[Female hit IK](audit/HIT_IK.md) is implemented in the disconnected `pe_hit_ik`
+from checked-in C# and prefab data: force/random-draw profile, exact transform
+routing, concurrent/restarted part effects and additive FinalIK effector
+requests, including pinned root displacement and duplicate links. No game
+was launched, no desktop input was sent and no player saves or recovered asset
+groups were changed. No visible reaction, stun/knockback, physical behavior or
+original-game observation is established. The FinalIK solve remains missing.
+
+Focused core and all six UnityPy exporter tests pass without skips. The
+runtime build passes. Full `make -C rebuild check` passes 253 jobs, 883 Python
+tests and 81 ordinary-interpreter skips (skips are not passes).
+`check-sanitize` passes all 99 suites with ASan/UBSan and leak detection.
+`check-content` and `check-sources` pass; the latter compares the regenerated
+hit-IK outputs and runs its six exporter tests with UnityPy and zero skips.
+Documentation link and whitespace checks pass.
+
+The first sandboxed sanitizer invocation failed at LeakSanitizer's ptrace
+restriction. The sandboxed full check also failed five existing leak-scanned
+subprocess suites (directional player, running player, baked shovel, baked
+pickaxe and training UI input). Both complete checks were rerun successfully
+outside sandbox supervision; the failed attempts are not passes. Local logs
+and next work are listed in [the handoff](HANDOFF.md).
+
+
 ## October 12 Halt stop effect — source-derived, headless only
 
 [Halt](audit/HALT_STOP_EFFECT.md) is recovered from checked-in C#, the female

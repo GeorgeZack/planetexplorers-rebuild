@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[Hit IK](docs/audit/HIT_IK.md): `pe_hit_ik` owns disconnected per-part clocks and additive effector requests; `export_hit_ik.py` binds the female transform lists, pinned/duplicate links and force profile. [Current handoff](docs/HANDOFF.md) records the next work.
+
 [Halt stop effect](docs/audit/HALT_STOP_EFFECT.md): `pe_halt` owns the disconnected Halt lifecycle and foot-stop effector offsets; `export_halt_effect.py` binds the C# rules, the female prefab curves and relation row50.
 
 [Lunge motor](docs/audit/SWORD_LUNGE_MOTOR.md): `pe_sword_motor` applies blade root motion to the live Adventure player in source controller order, using the `pe_human_phy` request latch; `pe_sandbox_view.c` calls it around the existing collision step.

@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October12 hit IK: [the offset requests](HIT_IK.md) now have a disconnected `pe_hit_ik` owner and source exporter, including exact transform routing, concurrent/restarted parts and root-position pins. The FinalIK solve and visible reactions remain gated. Next source-portable work is Wentfly/Knocked/GetUp lifecycle extraction; the prepared reaction bake remains a separate engine need.
+
 October12 Halt: [the stop effect](HALT_STOP_EFFECT.md) is recovered into the disconnected `pe_halt`: lifecycle, speed-chosen .2–.9s duration, foot choice and seven effector offsets per frame. The FinalIK solve is unrecovered, so there is no pose. Open decision: the original's Halt mask blocks Move and Jump for that duration after every stop; the live sandbox does not, and adopting it is a feel change awaiting a user choice. Hit IK shares the same controller and is the next source-portable piece.
 
 October12 sprint attack: skill20110013 timing (clip401 events, then Attack7–9) and fail-closed admission are in `pe_combat`/`pe_sandbox_melee`; see [the contract](REACTION_PRESENTATION.md). It stays unavailable in play until the prepared bake supplies its pose and a separate root capture supplies its motion.
