@@ -1,11 +1,16 @@
 # Whacked and Repulsed animation contract
 
+October12 bake: the prepared engine bake below was run and qualified, and its
+25 clips are staged as a standalone, uninstalled group. See
+[Bake result and staged group](#bake-result-and-staged-group). Statements
+below that no reaction pose exists describe the state before that capture.
+
 October12 follow-through: [Wentfly/Knocked/GetUp lifecycles](RAGDOLL_ACTIONS.md) and [hit IK](HIT_IK.md) now have disconnected C request owners. Their source requests do not recover ragdoll physics, FinalIK solving or reaction/get-up poses.
 
 October 12, 2026. Source-derived from the installed controller, checked-in C#
 and installed CIL, with a disconnected C owner for the Whacked lifecycle.
-Neither gameplay host calls it. No reaction pose exists in the rebuild yet;
-live hit reactions, stun and knockback remain gated.
+Neither gameplay host calls it. No reaction pose is installed or presented in
+the rebuild; live hit reactions, stun and knockback remain gated.
 
 ## What existing exports hold
 
@@ -150,6 +155,67 @@ motion (the plan records `clip_mirror`); the sampler evaluates leaves in
 isolation, so it gives neither the directional blend nor the full-body layer
 mix.
 
+## Bake result and staged group
+
+Observed in the original, October 12: `female-reaction-01.jsonl` was captured
+in a supervised session (tutorial, female player, `-force-gfx-direct`, no Zink
+override, Steam client running). It holds all 25 clips and 1,052 poses, ends
+`complete`, and the player log carries the 120-frame post-cleanup marker. The
+process then ended with signal 9, as on earlier bakes; teardown is not
+validated. [Compact evidence](../reference/reaction-pose-result.json) records
+hashes, per-clip figures and the checks below.
+
+Strict analysis passes: every clip moves all 42 mapped bones, none is missing,
+and the maximum hierarchy matrix error is 1.07e-6. Three cross-checks were
+made on the capture:
+
+- **Anchor.** NormalIdle matches validated capture 06 to 4e-7 in local and
+  world matrices when matched by bone path. This capture's hierarchy has 78
+  nodes against 77, so index order is not comparable.
+- **Mirroring.** The engine applied authored clip mirroring in the isolated
+  graph. GetUpBack/GetUpBackMirror, GetUpFront/GetUpFrontMirror, Left/Right
+  and LeftFast/RightFast are left/right mirror images to within 3.5 mm at the
+  hands, against 0.13–0.45 m unmirrored. A native mirror pass must not be
+  added on top of these poses.
+- **BlockRepulsed** moves each hand about 1.5 cm over the clip. It is a near
+  static braced pose, not a sampling failure: all 42 bones change.
+
+Implemented as staged data only: `rebuild/build/starter-pair-reaction-01` is
+a complete 25-clip group with the body, Wood Sword drawn/stowed and Wood
+Shield attachments and a 25-clip defence actor, all on identical clocks. Its
+16 defence capsules are byte-identical to the 33/42 stage's.
+
+```sh
+python3 rebuild/tools/analyze_reference_bake.py \
+  ~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.jsonl \
+  --rig rebuild/build/reference-player-starter/player-female-starter-rig.json \
+  --report rebuild/build/animator-bake/female-reaction-01-report.json \
+  --export-dir rebuild/build/animator-bake/player-female-reaction
+TMPDIR="$PWD/rebuild/build/compiler-tmp" rebuild/build/unity-tools/bin/python \
+  rebuild/tools/export_starter_pair_assets.py --pose-set reaction \
+  --capture ~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.jsonl \
+  --body-scene rebuild/build/animator-bake/player-female-reaction/all/recording.peas \
+  --output rebuild/build/starter-pair-reaction-assets-FRESH
+TMPDIR="$PWD/rebuild/build/compiler-tmp" rebuild/build/unity-tools/bin/python \
+  rebuild/tools/export_starter_pair_unified.py --standalone-reaction \
+  --sword-pair rebuild/build/starter-pair-reaction-assets-01 \
+  --sword-body rebuild/build/animator-bake/player-female-reaction/all \
+  --sword-capture ~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.jsonl \
+  --output rebuild/build/starter-pair-reaction-FRESH
+```
+
+The group is standalone because the retained defence actor has 42 clips and
+24 more would pass the native 64-clip actor limit. The
+[33/42 stage](STARTER_SWORD_POSE_GROUP.md) is unchanged, and the current host
+accepts only that exact 33-clip body, so it cannot load this group. Joining
+them needs a decision: raise the limit, or teach the host a second reaction
+group. Neither is made here.
+
+Twenty-one stage and attachment tests pass with UnityPy and no skips; the ten
+stage tests also pass under ASan/UBSan, including native loading of all four
+scenes and every defence frame of all 25 clips. These are headless checks. No
+asset was installed, no gameplay changed and no native graphics ran.
+
 ## Next animation set: get-up and sprint attack
 
 The clip/state identities below were recovered from the installed controller
@@ -221,7 +287,8 @@ PECSv22 and live damage are unchanged.
 
 Still unqualified:
 
-- **Poses.** None baked; see above.
+- **Poses.** Baked and staged as isolated leaves, not installed or presented.
+  The directional blend, layer mix and ragdoll-to-get-up blend are not in them.
 - **Animator evaluation.** The frame on which Unity consumes the trigger,
   starts the exit and calls `OnStateExit`, and how a mid-transition state is
   mixed, are engine behavior. The C clock is the authored nominal and may
@@ -231,7 +298,7 @@ Still unqualified:
 - **Other reaction paths.** Hit IK (`m_ForceToHitWeight`/`m_ForceToHitTime`),
   Halt, Wentfly, Knocked, GetUp and ragdoll are separate.
 
-Before gameplay integration: run and qualify the bake, export the clips as a
-complete staged group, then compose reaction, body, attachments, defence and
-cancellation with the actual host. This increment supplies no permission to
+Before gameplay integration: decide how the staged reaction group joins the
+33/42 stage, capture SprintSwordAttack root motion, then compose reaction,
+body, attachments, defence and cancellation with the actual host. This increment supplies no permission to
 enable live stun or knockback.

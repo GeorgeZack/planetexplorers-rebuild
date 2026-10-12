@@ -1,5 +1,31 @@
 # Original-game playtest and C comparison
 
+## October 12 reaction pose bake — observed original capture, staged headless
+
+Observed in the original: one supervised isolated-sampler session produced
+`female-reaction-01.jsonl` with the [prepared preset](audit/REACTION_PRESENTATION.md#bake-result-and-staged-group).
+Mode: tutorial with a female player. Settings: isolated bake profile,
+1280×720 windowed, `-force-gfx-direct`, no Zink override, Steam client
+running. Inputs: the user entered the tutorial; the tool sent none, and the
+arm file was created once the player stood in the scene. Outcome: 25 clips,
+1,052 poses, end `complete`, 120-frame post-cleanup marker, then signal 9.
+How the window was closed was not observed, so teardown is not validated.
+
+Strict analysis validates every sample with all 42 bones moving in every
+clip. NormalIdle repeats capture 06 to 4e-7 by bone path. The four mirrored
+pairs are mirror images within 3.5 mm at the hands, so the engine applied
+clip mirroring. BlockRepulsed is nearly static (about 1.5 cm hand travel).
+
+Implemented as staged data: `rebuild/build/starter-pair-reaction-01` holds
+the 25-clip body, sword, shield and defence group. It is standalone, not
+installed, and not loadable by the current host. Twenty-one stage/attachment
+tests pass with UnityPy and no skips; the ten stage tests pass under
+ASan/UBSan. No native graphics, desktop input to the rebuild, save or
+installed-asset change occurred. Poses are isolated leaves: no directional
+blend, layer mix, ragdoll blend or root motion. Live reaction, get-up,
+sprint-attack, shield, pounce and defense gates stay closed.
+[Compact evidence](reference/reaction-pose-result.json).
+
 ## October 12 installed AnimFollow — compiled/serialized evidence, headless only
 
 [AnimFollow lifecycle](audit/ANIMFOLLOW_LIFECYCLE.md) is implemented in the

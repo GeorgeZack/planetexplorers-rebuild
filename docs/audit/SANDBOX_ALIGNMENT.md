@@ -1,5 +1,7 @@
 # Sandbox alignment: implementation work order and live reference
 
+October12 reaction bake: [the prepared capture ran and is staged](REACTION_PRESENTATION.md#bake-result-and-staged-group) as the standalone 25-clip `starter-pair-reaction-01` group (body, sword, shield, defence), uninstalled. The engine applied clip mirroring; NormalIdle repeats capture 06. Open decision: joining it to the 33/42 stage would pass the 64-clip actor limit. Next engine need is the separate SprintSwordAttack root capture; next offline need is unchanged (AnimFollow PD/joint contract or the FinalIK solve). Live reactions, get-up, sprint attack, shield composition, pounce and 9077 stay gated.
+
 October12 AnimFollow: [the installed base lifecycle](ANIMFOLLOW_LIFECYCLE.md) now has a disconnected `pe_animfollow` owner bound to shipped CIL and exact serialized female settings. mActive, transition-exit orientation, actual error-based completion and scalar caps are recovered requests, not a physical solve. Next offline need is the PD/joint and body contract; reaction/get-up poses still require the prepared engine bake.
 
 October12 ragdoll lifecycles: [Wentfly, Knocked and GetUp](RAGDOLL_ACTIONS.md) now have disconnected ordered requests in `pe_ragdoll_action`, including the player's2s Knocked override, immediate GetUp dispatch and class-keyed model freezes. No physics, pose or host integration is enabled. Next offline need is the installed AnimFollow base lifecycle; the prepared reaction bake remains separate.

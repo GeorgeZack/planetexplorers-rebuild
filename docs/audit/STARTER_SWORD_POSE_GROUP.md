@@ -6,6 +6,15 @@ October 6, 2026. This records source/capture asset qualification and the subsequ
 
 The original `female-sword-01.jsonl` capture supplied304 poses for ten exact female Sword leaves. It completed with120 cleanup watchdog frames; root observed a responsive original UI and Quit confirmation followed by native exit137, not a clean zero exit. These sampled leaves do not recover controller blending, masked shield blocking, draw/stow transitions or inverse kinematics.
 
+## Separate reaction group
+
+October 12: the 25 hit-reaction, get-up and sprint-attack leaves are staged
+apart from this group as `rebuild/build/starter-pair-reaction-01`
+(`export_starter_pair_unified.py --standalone-reaction`), because appending
+them to the 42-clip defence actor would pass the 64-clip limit. The 33/42
+stage below is unchanged. See
+[the reaction contract](REACTION_PRESENTATION.md#bake-result-and-staged-group).
+
 ## Current33/42 stage
 
 The completed `female-sword-backward-02.jsonl` capture now qualifies SwordWB441 and SwordRB708 separately:26+22 samples, looping at30Hz, exact lengths0.8000030517578125s and0.6666717529296875s. All42 body bones map; maximum hierarchy matrix error is1.036415e−6. Source clip identity, length, loop and launch provenance pass the analyzer. These are isolated sampled poses, not measured root motion or the full controller graph.

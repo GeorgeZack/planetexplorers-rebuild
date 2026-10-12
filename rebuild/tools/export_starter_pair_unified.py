@@ -24,6 +24,7 @@ BASE=NAMES+('RunSwordAttack',)
 SWORD=tuple(SWORD_CLIPS)
 BODY=BASE+SWORD
 BACKWARD=tuple(SWORD_BACKWARD_CLIPS)
+REACTION=pair.REACTION
 DEFENCE=NAMES+EXTRAS+('RunSwordAttack',)
 GROUPS=('player',*pair.GROUPS,'player-defence')
 
@@ -196,23 +197,63 @@ def append_backward(base,pair_stage,body,capture,rig,output):
     return manifest
 
 
+def stage_reaction(pair_stage,body,capture,rig,output):
+    """Standalone reaction group. The unified stage is not extended:42 retained
+    defence clips plus these would pass the native64-clip actor limit."""
+    output=pair.fresh_output(output,[pair_stage,body,capture,rig,ROOT/'Assets'])
+    fresh=checked_stage(pair_stage,REACTION)
+    headers=scene_clips(body/'recording.peas')
+    if names(headers)!=REACTION:raise ValueError('Exact reaction body required')
+    sources=[pair_stage/'starter-pair-manifest.json',body/'recording-manifest.json',capture,capture.with_suffix('.launch.json'),rig]
+    hashes={p:pair.sha(p) for p in sources}
+    if not any(source_path(s).resolve()==capture.resolve() and s['sha256']==hashes[capture] for s in fresh['sources']):
+        raise ValueError('Reaction stage did not use supplied capture')
+    output.parent.mkdir(parents=True,exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='.starter-reaction-',dir=output.parent) as directory:
+        stage=Path(directory);shutil.copytree(body,stage/'player')
+        for group in pair.GROUPS:
+            shutil.copytree(pair_stage/group,stage/group);check_body(stage/group/'recording.peas',headers)
+        (stage/'player-defence').mkdir()
+        recovered=defence.recover(ROOT/'Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab',rig,capture,body,stage/'player-defence')
+        for clip in REACTION:shutil.rmtree(stage/'player-defence'/clip) # Only this exporter's per-clip scratch.
+        if clip_headers((stage/'player-defence/player-defence.peac').read_bytes())!=headers:
+            raise ValueError('Body/defence source clocks differ')
+        if hashes!={p:pair.sha(p) for p in sources} or pair.file_hashes(body)!=pair.file_hashes(stage/'player'):
+            raise ValueError('Source changed during staging')
+        manifest=dict(schema='pe-starter-pair-reaction-1',groups=list(GROUPS),body_clips=list(REACTION),defence_clips=list(REACTION),
+            counts=dict(body_clips=len(headers),defence_clips=len(headers)),
+            defence_maximum_point_error_m=recovered['maximum_point_error_m'],
+            sources=[dict(path=source_label(p),sha256=h) for p,h in hashes.items()],files=pair.file_hashes(stage),
+            installed=False,shield_block_pose_recovered=False,
+            limitations=['Standalone group: not appended to the33/42 unified stage and not loadable by the current host.',
+                'Isolated leaves only: no BeatWeight directional blend, full-body layer mix, ragdoll blend or sprint root motion.',
+                'Shield follows the sampled forearm; BlockRepulsed is a body leaf, not a masked block pose.',
+                'No runtime installation, gameplay activation or graphical claim.'])
+        (stage/'unified-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');stage.rename(output)
+    return manifest
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--assets',type=Path,default=ROOT/'rebuild/build/reference-assets')
     p.add_argument('--normal-pair',type=Path);
     p.add_argument('--append-backward-to',type=Path,help='Existing qualified31/40 stage; Sword arguments then specify the separate two-clip backward group')
+    p.add_argument('--standalone-reaction',action='store_true',help='Stage the separate reaction group; Sword arguments then specify its pair stage, body and capture')
     p.add_argument('--sword-pair',type=Path,required=True)
     p.add_argument('--sword-body',type=Path,required=True);p.add_argument('--sword-capture',type=Path,required=True)
     p.add_argument('--rig',type=Path,default=ROOT/'rebuild/build/reference-player-starter/player-female-starter-rig.json')
     p.add_argument('--output',type=Path,required=True);a=p.parse_args()
     try:
-        if a.append_backward_to:
+        if a.standalone_reaction:
+            if a.normal_pair or a.append_backward_to:raise ValueError('Standalone reaction stage accepts neither --normal-pair nor --append-backward-to')
+            r=stage_reaction(*[x.expanduser().resolve() for x in (a.sword_pair,a.sword_body,a.sword_capture,a.rig)],a.output.expanduser())
+        elif a.append_backward_to:
             if a.normal_pair:raise ValueError('Backward extension does not accept --normal-pair')
             r=append_backward(*[x.expanduser().resolve() for x in (a.append_backward_to,a.sword_pair,a.sword_body,a.sword_capture,a.rig)],a.output.expanduser())
         else:
             if not a.normal_pair:raise ValueError('Initial stage requires --normal-pair')
             r=export(*[x.expanduser().resolve() for x in (a.assets,a.normal_pair,a.sword_pair,a.sword_body,a.sword_capture,a.rig)],a.output.expanduser())
-        print(f'Staged{r["counts"]["body_clips"]} body/wood clips; unified defence{r["counts"]["defence_clips"]} preserved; no install: {a.output}')
+        print(f'Staged{r["counts"]["body_clips"]} body/wood clips; defence{r["counts"]["defence_clips"]}; no install: {a.output}')
     except (OSError,ValueError,KeyError,TypeError,IndexError,ImportError) as error:p.exit(1,str(error)+'\n')
 
 

@@ -104,6 +104,20 @@ class PairAssetTests(unittest.TestCase):
             if kind=='missing':r['clips'].pop()
             with self.subTest(kind=kind),self.assertRaises(ValueError):exporter.validate_capture(r,launch,capture,tuple(exporter.SWORD_BACKWARD_CLIPS))
 
+    def test_reaction_capture_requires_the_anchor_first_and_the_exact25(self):
+        names=exporter.POSE_SETS['reaction'];self.assertEqual(len(names),25);self.assertEqual(names[0],'NormalIdle')
+        capture=Path('/reaction.jsonl');clips=[dict(name=n,sourcePathId=exporter.CLIPS[n],isLooping=False,length=1.,sourceFrameRate=30) for n in names]
+        report=dict(skeleton=dict(gender='Female',avatar='FemaleAvatar'),header=dict(sampleRate=30),clips=clips)
+        launch=dict(schema='pe-animator-bake-launch-1',capture=str(capture),plan=dict(avatar='FemaleAvatar',gender='Female',sample_rate=30,
+            clips=[dict(name=c['name'],path_id=c['sourcePathId'],loop=False,length=1.,frame_rate=30) for c in clips]))
+        exporter.validate_capture(report,launch,capture,names)
+        for kind in ('no-anchor','identity','missing'):
+            r=copy.deepcopy(report)
+            if kind=='no-anchor':r['clips'].pop(0)
+            if kind=='identity':r['clips'][1]['sourcePathId']=157
+            if kind=='missing':r['clips'].pop()
+            with self.subTest(kind=kind),self.assertRaises(ValueError):exporter.validate_capture(r,launch,capture,names)
+
     def stage(self):
         stage=Path(os.environ.get('PE_STARTER_PAIR_STAGE',str(exporter.ROOT/'rebuild/build/starter-pair-assets-01')))
         if not (stage/'starter-pair-manifest.json').is_file():self.skipTest('Fresh recovered starter-pair stage unavailable')

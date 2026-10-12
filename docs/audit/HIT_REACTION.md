@@ -1,6 +1,6 @@
 # Source-derived hit-reaction decisions
 
-October12 presentation follow-through: the [animation contract](REACTION_PRESENTATION.md) and disconnected `pe_whacked` recover what Whacked and Repulsed play and when Whacked ends. Reaction poses await one prepared engine bake.
+October12 presentation follow-through: the [animation contract](REACTION_PRESENTATION.md) and disconnected `pe_whacked` recover what Whacked and Repulsed play and when Whacked ends. Reaction poses are now baked and staged as an uninstalled standalone group; nothing presents them.
 
 October12 follow-through: [HumanPhyCtrl consumption](HUMAN_PHY_CTRL.md) of the Repulsed velocity request is qualified from installed CIL in the disconnected `pe_human_phy`. Reaction poses, hit IK and host integration remain gated.
 

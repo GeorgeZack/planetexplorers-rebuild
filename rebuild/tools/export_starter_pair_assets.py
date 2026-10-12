@@ -26,7 +26,7 @@ from export_reference_assets import IDENTITY, multiply, trs, transform_point, tr
 from export_reference_hitboxes import local_points, skeleton_data, HEADER, RECORD
 from export_reference_knife_collision import obj_parts
 from export_reference_player import Assets
-from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS
+from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS, REACTION_CLIPS, RECOVERY_CLIPS
 
 ROOT=metadata.ROOT
 GROUPS={'player-wood-sword-drawn':('sword','mountMain'),
@@ -34,6 +34,11 @@ GROUPS={'player-wood-sword-drawn':('sword','mountMain'),
         'player-wood-shield':('shield','Bone L Forearm')}
 RESOURCES={'sword':'prefab/item/equip/weapon/sword/wood_sword',
            'shield':'prefab/item/equip/armor/shield/wood_shield'}
+
+
+# The reaction set keeps the capture's NormalIdle repeatability anchor first.
+REACTION=('NormalIdle',)+tuple(REACTION_CLIPS)+tuple(RECOVERY_CLIPS)
+POSE_SETS={'normal':NAMES,'sword':tuple(SWORD_CLIPS),'sword-backward':tuple(SWORD_BACKWARD_CLIPS),'reaction':REACTION}
 
 
 def sha(path):
@@ -236,8 +241,8 @@ def export(game,capture,running,rig_path,body,output,pose_set='normal'):
     paths=[capture,capture.with_suffix('.launch.json'),rig_path,body,ROOT/'rebuild/generated/pe_starter_sword_shield_source.json']
     if paths[-1].read_bytes()!=data['pe_starter_sword_shield_source.json']:raise ValueError('Stale source metadata')
     if running:paths.extend([running,running.with_suffix('.launch.json')])
-    if pose_set not in ('normal','sword','sword-backward') or pose_set!='normal' and running:raise ValueError('Invalid pose set/running combination')
-    base_names=NAMES if pose_set=='normal' else tuple(SWORD_CLIPS) if pose_set=='sword' else tuple(SWORD_BACKWARD_CLIPS)
+    if pose_set not in POSE_SETS or pose_set!='normal' and running:raise ValueError('Invalid pose set/running combination')
+    base_names=POSE_SETS[pose_set]
     before={p:sha(p) for p in paths};expected=base_names+(('RunSwordAttack',) if running else ())
     output.parent.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='.starter-pair-',dir=output.parent) as temporary:
@@ -270,9 +275,9 @@ def export(game,capture,running,rig_path,body,output,pose_set='normal'):
             result.update(item_id=1 if kind=='sword' else 34,attachment=mount_name,source_mount_path=path,source_mount=chain[-1],
                           source_prefab=dict(path=str(prefab.relative_to(ROOT)),sha256=sha(prefab)),
                           mount_validation=mount_validation[group],
-                          pose_scope=('Qualified existing Normal/Attack6-9 leaves' if pose_set=='normal' else f'Qualified{len(base_names)} Sword locomotion leaves')+(' plus running408' if running else ''),
+                          pose_scope=('Qualified existing Normal/Attack6-9 leaves' if pose_set=='normal' else f'Qualified{len(base_names)} isolated hit-reaction, get-up and sprint-attack leaves' if pose_set=='reaction' else f'Qualified{len(base_names)} Sword locomotion leaves')+(' plus running408' if running else ''),
                           collision_authorized=False,activation_observed=False,
-                          limitations=[('Normal locomotion adapter, not recovered Sword locomotion.' if pose_set=='normal' else 'Exact Sword locomotion leaves; full controller blending is not reconstructed.'),
+                          limitations=[('Normal locomotion adapter, not recovered Sword locomotion.' if pose_set=='normal' else 'Isolated reaction leaves; no BeatWeight directional blend, full-body layer mix, ragdoll blend or sprint root motion.' if pose_set=='reaction' else 'Exact Sword locomotion leaves; full controller blending is not reconstructed.'),
                                        'Shield follows unblocked source forearm poses; no masked block pose or mitigation enabled.',
                                        'Fixed mounts; no animated draw/stow transitions, original IK or shader equivalence.',
                                        'Sampled408 pose only; no root-motion or running sword action qualification.'])
@@ -302,7 +307,7 @@ def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--game',type=Path,default=Path.home()/'.local/share/Steam/steamapps/common/Planet Explorers')
     p.add_argument('--capture',type=Path,required=True);p.add_argument('--running-capture',type=Path)
-    p.add_argument('--pose-set',choices=('normal','sword','sword-backward'),default='normal',help='Explicit complete source leaf group; Sword requires its separate matching body')
+    p.add_argument('--pose-set',choices=tuple(POSE_SETS),default='normal',help='Explicit complete source leaf group; Sword requires its separate matching body')
     p.add_argument('--rig',type=Path,default=ROOT/'rebuild/build/reference-player-starter/player-female-starter-rig.json')
     p.add_argument('--body-scene',type=Path,default=ROOT/'rebuild/build/reference-assets/player/recording.peas')
     p.add_argument('--output',type=Path,required=True);a=p.parse_args()

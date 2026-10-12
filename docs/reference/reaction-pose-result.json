@@ -1,0 +1,346 @@
+{
+  "schema": "pe-reaction-pose-result-1",
+  "date": "2026-10-12",
+  "evidence_scope": "Completed original isolated pose sampling plus offline export and native loader qualification; no installed assets or native gameplay changed",
+  "sources": [
+    {
+      "path": "~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.jsonl",
+      "sha256": "276cd82445bff2e2138f6c37bba66100f94a5e0a821693b3555d9a926c6fa78b",
+      "bytes": 24863061
+    },
+    {
+      "path": "~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.launch.json",
+      "sha256": "ae4a6ff537ca465bea153ab92c037d45870eed8d291af7351133f9601422a9c0",
+      "bytes": 25735
+    },
+    {
+      "path": "~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.exit.json",
+      "sha256": "b9293c11a065ba010d9122957b371886a8bee0da34e31c821022b65ec94bf0ee",
+      "bytes": 243
+    },
+    {
+      "path": "~/.local/share/planet-explorers-bake-reference/pose-captures/female-reaction-01.player.log",
+      "sha256": "4c20a399d936918a3ac8a9509bf3a6e52038beb5837410ad35a4991bd829f6d0",
+      "bytes": 46454
+    },
+    {
+      "path": "rebuild/build/animator-bake/clip-plan-reaction.json",
+      "sha256": "ea056b008e0a6cd5c926832cfad3932ee7a751d71a618aa125e58904fc5eda84",
+      "bytes": 150783
+    },
+    {
+      "path": "rebuild/build/animator-bake/female-reaction-01-report.json",
+      "sha256": "6b7ffa9c840d3e5a84c8669b309a7cbd3131f3455350c8778ef56005dad06106",
+      "bytes": 341977
+    },
+    {
+      "path": "rebuild/build/animator-bake/player-female-reaction/all/recording-manifest.json",
+      "sha256": "10de3ff3d1746840fba04d457e7fe7bbac2ab8e48a64a641bdef9a5c8ef6f326",
+      "bytes": 364092
+    },
+    {
+      "path": "rebuild/build/starter-pair-reaction-assets-01/starter-pair-manifest.json",
+      "sha256": "ac5b28400340330880fa82f9e0d4565fa789e6951d0864dd8dcf53be5fe94cc0",
+      "bytes": 4173
+    },
+    {
+      "path": "rebuild/build/starter-pair-reaction-01/unified-manifest.json",
+      "sha256": "43dc9f959a52cd8c22a641c10c1f081383d7d4a658c2dbf3831f7500bb8d2bea",
+      "bytes": 6797
+    }
+  ],
+  "capture": {
+    "preset": "hit-reaction",
+    "launch_options": [
+      "-force-gfx-direct"
+    ],
+    "graphics_override": "none (no Zink environment)",
+    "steam_client_running": true,
+    "scene": "tutorial, female player; armed by the agent after the operator reported the player standing in the scene",
+    "clips": 25,
+    "samples": 1052,
+    "end_reason": "complete",
+    "post_cleanup_marker": "[bake] Post-cleanup alive120frames",
+    "returncode": -9,
+    "signal": 9,
+    "exit_observed_utc": "2026-10-12T18:29:48.052092+00:00",
+    "exit_note": "Signal 9 matches earlier bakes. How the window was closed was not observed by the agent; process teardown is not validated."
+  },
+  "analysis": {
+    "complete": true,
+    "missing_bones": 0,
+    "changing_bones_every_clip": 42,
+    "maximum_hierarchy_matrix_error": 1.0696995138559373e-06,
+    "general_retargeting_validated": false,
+    "root_motion_validated": false,
+    "clips": [
+      {
+        "name": "NormalIdle",
+        "source_path_id": 684,
+        "length": 2.00001526,
+        "samples": 62,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.010119
+      },
+      {
+        "name": "IdleBeHit",
+        "source_path_id": 139,
+        "length": 0.933333635,
+        "samples": 30,
+        "loop": false,
+        "maximum_bone_position_change_m": 0.940205
+      },
+      {
+        "name": "SwordBeHit",
+        "source_path_id": 157,
+        "length": 0.933342,
+        "samples": 30,
+        "loop": false,
+        "maximum_bone_position_change_m": 1.194694
+      },
+      {
+        "name": "ForwardFast",
+        "source_path_id": 226,
+        "length": 1.000001,
+        "samples": 32,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.606341
+      },
+      {
+        "name": "FowardRightFast",
+        "source_path_id": 235,
+        "length": 1.000001,
+        "samples": 32,
+        "loop": false,
+        "maximum_bone_position_change_m": 0.512011
+      },
+      {
+        "name": "RightFast",
+        "source_path_id": 243,
+        "length": 1.00000191,
+        "samples": 32,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.51867
+      },
+      {
+        "name": "BackRightFast",
+        "source_path_id": 250,
+        "length": 1,
+        "samples": 31,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.523317
+      },
+      {
+        "name": "BackFast",
+        "source_path_id": 257,
+        "length": 1.000001,
+        "samples": 32,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.558198
+      },
+      {
+        "name": "ForwardLeftFast",
+        "source_path_id": 265,
+        "length": 1.000001,
+        "samples": 32,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.594337
+      },
+      {
+        "name": "LeftFast",
+        "source_path_id": 271,
+        "length": 1.00000191,
+        "samples": 32,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.518746
+      },
+      {
+        "name": "BackLeftFast",
+        "source_path_id": 278,
+        "length": 1,
+        "samples": 31,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.522964
+      },
+      {
+        "name": "Forward",
+        "source_path_id": 109,
+        "length": 1.96666694,
+        "samples": 61,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.702939
+      },
+      {
+        "name": "ForwardRight",
+        "source_path_id": 154,
+        "length": 1.96666718,
+        "samples": 61,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.696687
+      },
+      {
+        "name": "Right",
+        "source_path_id": 136,
+        "length": 0.9666672,
+        "samples": 31,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.640444
+      },
+      {
+        "name": "BackRight",
+        "source_path_id": 170,
+        "length": 1.96666813,
+        "samples": 61,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.611028
+      },
+      {
+        "name": "Back",
+        "source_path_id": 186,
+        "length": 1.96666694,
+        "samples": 61,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.630458
+      },
+      {
+        "name": "ForwardLeft",
+        "source_path_id": 198,
+        "length": 1.96666718,
+        "samples": 61,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.696579
+      },
+      {
+        "name": "Left",
+        "source_path_id": 209,
+        "length": 0.9666672,
+        "samples": 31,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.63409
+      },
+      {
+        "name": "BackLeft",
+        "source_path_id": 218,
+        "length": 1.96666813,
+        "samples": 61,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.611776
+      },
+      {
+        "name": "BlockRepulsed",
+        "source_path_id": 691,
+        "length": 1.00001526,
+        "samples": 32,
+        "loop": true,
+        "maximum_bone_position_change_m": 0.02041
+      },
+      {
+        "name": "GetUpBackMirror",
+        "source_path_id": 322,
+        "length": 1.466671,
+        "samples": 46,
+        "loop": false,
+        "maximum_bone_position_change_m": 1.336762
+      },
+      {
+        "name": "GetUpFrontMirror",
+        "source_path_id": 326,
+        "length": 1.06666946,
+        "samples": 34,
+        "loop": false,
+        "maximum_bone_position_change_m": 1.242645
+      },
+      {
+        "name": "GetUpBack",
+        "source_path_id": 311,
+        "length": 1.466671,
+        "samples": 46,
+        "loop": false,
+        "maximum_bone_position_change_m": 1.33618
+      },
+      {
+        "name": "GetUpFront",
+        "source_path_id": 317,
+        "length": 1.06666946,
+        "samples": 34,
+        "loop": false,
+        "maximum_bone_position_change_m": 1.24166
+      },
+      {
+        "name": "SprintSwordAttack",
+        "source_path_id": 401,
+        "length": 1.80000687,
+        "samples": 56,
+        "loop": false,
+        "maximum_bone_position_change_m": 1.354152
+      }
+    ]
+  },
+  "cross_checks": {
+    "normal_idle_anchor": {
+      "against": "female-clips-06.jsonl",
+      "matched_by": "bone path (77 shared of 77/78 nodes)",
+      "samples": 62,
+      "maximum_local_matrix_difference": 3.68e-07,
+      "maximum_world_matrix_difference": 4e-07
+    },
+    "mirrored_pairs": {
+      "method": "hand world positions, other clip left/right swapped with X negated, maximum over shared samples",
+      "maximum_mirrored_difference_m": {
+        "GetUpBack/GetUpBackMirror": 0.0031,
+        "GetUpFront/GetUpFrontMirror": 0.0023,
+        "LeftFast/RightFast": 0.0019,
+        "Left/Right": 0.0035
+      },
+      "maximum_unmirrored_difference_m": {
+        "GetUpBack/GetUpBackMirror": 0.4402,
+        "GetUpFront/GetUpFrontMirror": 0.4513,
+        "LeftFast/RightFast": 0.1275,
+        "Left/Right": 0.29
+      },
+      "conclusion": "The engine applied authored clip mirroring in the isolated graph."
+    },
+    "hand_travel_m": {
+      "IdleBeHit": {
+        "left": 0.626,
+        "right": 0.454
+      },
+      "SwordBeHit": {
+        "left": 0.917,
+        "right": 0.189
+      },
+      "BlockRepulsed": {
+        "left": 0.015,
+        "right": 0.013
+      }
+    }
+  },
+  "stage": {
+    "path": "rebuild/build/starter-pair-reaction-01",
+    "schema": "pe-starter-pair-reaction-1",
+    "groups": [
+      "player",
+      "player-wood-sword-drawn",
+      "player-wood-sword-stowed",
+      "player-wood-shield",
+      "player-defence"
+    ],
+    "counts": {
+      "body_clips": 25,
+      "defence_clips": 25
+    },
+    "defence_maximum_point_error_m": 1.5497427109369105e-07,
+    "installed": false,
+    "defence_capsules_identical_to": "rebuild/build/starter-pair-unified-03/player-defence/player-defence.pehb",
+    "standalone_reason": "42 retained defence clips plus 24 new ones would exceed the native 64-clip actor limit; the 33/42 unified stage is unchanged."
+  },
+  "checks": {
+    "test_starter_pair": "21 tests pass with UnityPy, zero skips",
+    "test_starter_pair_unified_sanitized": "10 tests pass under ASan/UBSan, zero skips"
+  },
+  "limitations": [
+    "Isolated leaves: no BeatWeight directional blend, full-body layer mix, ragdoll-to-get-up blend or Animator transitions.",
+    "No root motion: SprintSwordAttack still needs the separate root capture.",
+    "Not installed, not loadable by the current host, no gameplay gate opened, no native graphical check."
+  ]
+}

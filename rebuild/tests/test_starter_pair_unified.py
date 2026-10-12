@@ -83,7 +83,7 @@ class UnifiedTests(unittest.TestCase):
     def native_stage(self,stage):
         src=tool.ROOT/'rebuild/src'
         manifest=json.loads((stage/'unified-manifest.json').read_text());bc=manifest['counts']['body_clips'];dc=manifest['counts']['defence_clips']
-        self.assertIn((bc,dc),((31,40),(33,42)))
+        self.assertIn((bc,dc),((31,40),(33,42),(25,25)))
         with tempfile.TemporaryDirectory() as folder:
             root=Path(folder);code=root/'check.c';binary=root/'check'
             code.write_text(r'''#include "pe_actor_scene.h"
@@ -143,6 +143,37 @@ pe_hitboxes_free(h);pe_actor_free(d);for(int k=0;k<4;k++)pe_actor_scene_manifest
     @unittest.skipUnless(shutil.which('cc'),'C compiler required')
     def test_native33_body_wood_and42_defence_all_frames(self):
         self.native_stage(self.backward_stage())
+
+
+    def reaction_stage(self):
+        stage=tool.ROOT/'rebuild/build/starter-pair-reaction-01'
+        if not (stage/'unified-manifest.json').is_file():self.skipTest('Standalone reaction stage unavailable')
+        return stage
+
+    def test_reaction_set_is_anchor_reaction_then_recovery_and_cannot_join_the_union(self):
+        self.assertEqual(tool.REACTION[0],'NormalIdle');self.assertEqual(len(tool.REACTION),25)
+        self.assertEqual(len(set(tool.REACTION)),25)
+        self.assertEqual(tool.REACTION[-5:],('GetUpBackMirror','GetUpFrontMirror','GetUpBack','GetUpFront','SprintSwordAttack'))
+        # The reason this stage is standalone: the retained defence actor has no room.
+        self.assertGreater(len(tool.DEFENCE+tool.SWORD+tool.BACKWARD)+len(tool.REACTION)-1,PEAC_MAX_CLIPS)
+
+    def test_standalone_reaction_stage_hashes_sources_clocks_and_capsules(self):
+        stage=self.reaction_stage();manifest=json.loads((stage/'unified-manifest.json').read_text())
+        self.assertEqual(manifest['schema'],'pe-starter-pair-reaction-1')
+        self.assertEqual(manifest['body_clips'],list(tool.REACTION));self.assertEqual(manifest['defence_clips'],list(tool.REACTION))
+        current=tool.pair.file_hashes(stage);current.pop('unified-manifest.json');self.assertEqual(current,manifest['files'])
+        for p in manifest['sources']:self.assertEqual(tool.pair.sha(source_path(p)),p['sha256'])
+        self.assertFalse(manifest['installed']);self.assertFalse(manifest['shield_block_pose_recovered'])
+        body=tool.scene_clips(stage/'player/recording.peas');self.assertEqual(tool.names(body),tool.REACTION)
+        for group in tool.pair.GROUPS:tool.check_body(stage/group/'recording.peas',body)
+        self.assertEqual(tool.clip_headers((stage/'player-defence/player-defence.peac').read_bytes()),body)
+        self.assertEqual(sorted(p.name for p in (stage/'player-defence').iterdir()),['player-defence.json','player-defence.peac','player-defence.pehb'])
+        base=tool.ROOT/'rebuild/build/starter-pair-unified-03/player-defence/player-defence.pehb'
+        if base.is_file():self.assertEqual((stage/'player-defence/player-defence.pehb').read_bytes(),base.read_bytes())
+
+    @unittest.skipUnless(shutil.which('cc'),'C compiler required')
+    def test_native25_reaction_body_wood_and_defence_all_frames(self):
+        self.native_stage(self.reaction_stage())
 
 
 if __name__=='__main__':unittest.main()
