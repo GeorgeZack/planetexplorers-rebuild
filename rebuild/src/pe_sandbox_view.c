@@ -14,6 +14,7 @@
 #include "pe_hunt_targeting.h"
 #include "pe_running_attack_motion.h"
 #include "pe_sword_root_motion.h"
+#include "pe_sprint_root_motion.h"
 #include "pe_sword_motor.h"
 #include "pe_hunt_combat.h"
 #include "pe_hunt_loot.h"
@@ -540,15 +541,17 @@ static bool sandbox_hunt_runs(const PeSandboxUI *ui,PeSandboxUIResult action){
 }
 /* This tick's authored root displacement in world space. pe_sword_motor turns
  * it into the body's velocity two ticks later, as the original controller does. */
-static bool sandbox_melee_delta(const PeRootMotion *running,const PeSwordRootMotion *ordinary,
+static bool sandbox_melee_delta(const PeRootMotion *running,const PeSwordRootMotion *ordinary,const PeSprintRootMotion *sprint,
     const PeCombatInterval *interval,double yaw,double world_delta[3]){
     if(!interval||!interval->valid||!world_delta||!isfinite(interval->from)||!isfinite(interval->to)||
        interval->from<0||interval->from>interval->to||!isfinite(yaw)||
        !pe_combat_variant_clip(interval->gender,interval->view,interval->variant,interval->stage))return false;
     if(interval->variant==PE_COMBAT_RUNNING&&interval->stage==0)
         return pe_running_attack_motion_delta(running,interval,yaw,world_delta);
-    /* No sprint root curve is recovered; never borrow408 or an ordinary stage. */
-    if(interval->variant==PE_COMBAT_SPRINT&&interval->stage==0)return false;
+    /* Sprint stage0 has its own source curve; never borrow408, an ordinary
+     * stage or the zero-root adapter when it is absent. */
+    if(interval->variant==PE_COMBAT_SPRINT&&interval->stage==0)
+        return pe_sprint_root_motion_world_delta(sprint,interval,yaw,world_delta);
     if(ordinary)return pe_sword_root_motion_world_delta(ordinary,interval,yaw,world_delta);
     /* Earlier asset groups retain their explicit stationary zero-root adapter. */
     world_delta[0]=world_delta[1]=world_delta[2]=0;return true;
@@ -711,9 +714,9 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     Vector2 right_press_pointer={0};
     bool tool_drawn=false;uint32_t tool_instance=0;uint64_t tool_edits=0;
     bool placing_torch=false,attack_pending=false;
-    PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;
+    PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;PeSprintRootMotion *sprint_motion=NULL;
     PeSwordMotor sword_motor;pe_sword_motor_reset(&sword_motor);bool blade_was_active=false;
-    PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0;
+    PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0,sprint_starts=0;
     SandboxBladeFacing blade_facing={0};
     bool captured=false,walk=false,autorun=false,jump_pending=false,third_person=true,build_mode=false;
     if(!terrain||!collision||!pe_terrain_material_view_load(&surface,assets,error,sizeof error)||
@@ -817,6 +820,26 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 }
             }
             melee=blade_templates[0];
+        }
+    }
+    {char path[4096];snprintf(path,sizeof path,"%s/player-sprint-motion/sprint-root.pesr",assets);
+        if(FileExists(path)){
+            sprint_motion=pe_sprint_root_motion_load(path,error,sizeof error);
+            PeSandboxMeleeSetup setup=blade_templates[0].setup;
+            const PeActorClip *body=setup.body?pe_actor_clip(setup.body,pe_actor_find_clip(setup.body,"SprintSwordAttack")):NULL;
+            const PeActorClip *defence=player_defence?pe_actor_clip(player_defence,pe_actor_find_clip(player_defence,"SprintSwordAttack")):NULL;
+            if(!sprint_motion||!ordinary_motion||!blade_templates[0].ready||!pe_sandbox_actor_sprint_ready(actor)||
+               !body||!defence||body->duration!=pe_sprint_root_motion_duration(sprint_motion)||
+               body->duration!=defence->duration||body->fps!=defence->fps||body->frames!=defence->frames||
+               body->loop||defence->loop||body->terminal_at_duration!=defence->terminal_at_duration){
+                if(!*error)snprintf(error,sizeof error,"Sprint401 requires complete source motion and matching Knife/body/defence clocks");
+                result=1;goto cleanup;
+            }
+            setup.sprint_motion_ready=true;
+            if(!pe_sandbox_melee_init(&blade_templates[0],&setup)){snprintf(error,sizeof error,"Sprint401 Knife geometry unavailable");result=1;goto cleanup;}
+            melee=blade_templates[0];
+        }else if(pe_sandbox_actor_sprint_ready(actor)){
+            snprintf(error,sizeof error,"Supplied SprintSwordAttack poses require their source root curve");result=1;goto cleanup;
         }
     }
     world_view=pe_sandbox_world_view_load(assets,error,sizeof error);
@@ -1224,10 +1247,12 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 .movement_present=true,.in_air=!game->grounded,.motor_present=true},&attack_branch);
             bool running_press=!melee.action.active&&melee.setup.running_motion_ready&&branch_valid&&attack_branch==PE_SWORD_VARIANT_RUNNING;
             bool running_active=melee.action.active&&melee.action.variant==PE_COMBAT_RUNNING;
+            bool sprint_press=!melee.action.active&&melee.setup.sprint_motion_ready&&branch_valid&&attack_branch==PE_SWORD_VARIANT_SPRINT;
+            bool sprint_active=melee.action.active&&melee.setup.sprint_motion_ready&&melee.action.variant==PE_COMBAT_SPRINT;
             bool ordinary_press=!melee.action.active&&melee.setup.ordinary_motion_ready&&branch_valid&&attack_branch==PE_SWORD_VARIANT_ORDINARY;
             bool ordinary_active=melee.action.active&&melee.setup.ordinary_motion_ready&&melee.action.variant==PE_COMBAT_STATIONARY;
             if((attack_pending||melee.action.active)&&(!game->grounded||jump_pending||
-               (!running_active&&!running_press&&!ordinary_press&&!ordinary_active&&(fabsf(input.move_x)+fabsf(input.move_z)>.001f||hypotf(game->velocity.x,game->velocity.z)>.05f)))){
+               (!running_active&&!running_press&&!sprint_press&&!sprint_active&&!ordinary_press&&!ordinary_active&&(fabsf(input.move_x)+fabsf(input.move_z)>.001f||hypotf(game->velocity.x,game->velocity.z)>.05f)))){
                 if(attack_pending&&!melee.action.active)snprintf(game->message,sizeof game->message,"This movement is not supported for blade attacks; use a grounded third-person stance.");
                 attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};
             }
@@ -1258,7 +1283,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                     snprintf(error,sizeof error,"Invalid sandbox blade facing/action clock");result=1;break;
                 }
                 if(began){
-                    melee_stamina_lock=true;melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;
+                    melee_stamina_lock=true;melee_swings++;running_starts+=melee.action.variant==PE_COMBAT_RUNNING;sprint_starts+=melee.action.variant==PE_COMBAT_SPRINT;
                     walking_starts+=melee.action.variant==PE_COMBAT_STATIONARY&&melee.setup.ordinary_motion_ready&&
                         (melee_gate.move_requested||hypotf(melee_gate.velocity.x,melee_gate.velocity.z)>.05f);
                     if(combat_trace&&combat_trace_lines<4096){
@@ -1283,7 +1308,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 const bool blade_motor_active=blade_active_before&&!blade_cut;
                 double blade_delta[3];PeSwordMotorStep blade_step={0};
                 if((attack_interval.valid&&
-                    !sandbox_melee_delta(running_motion,ordinary_motion,&attack_interval,
+                    !sandbox_melee_delta(running_motion,ordinary_motion,sprint_motion,&attack_interval,
                       pe_sandbox_actor_yaw(actor,game),blade_delta))||
                    (game->mode!=PE_GAME_LEGACY&&
                     !pe_sword_motor_consume(&sword_motor,blade_motor_active,game->velocity,game->grounded,
@@ -1541,9 +1566,10 @@ cleanup:
     printf("Sandbox knife: %llu swing stages; hunt contacts %llu outgoing, %llu incoming; kills %u/4\n",(unsigned long long)melee_swings,
         (unsigned long long)hunt.hare_hits,(unsigned long long)hunt.player_hits,game->hunt_kills);
     printf("Sandbox running knife: %llu starts; qualified motion %s\n",(unsigned long long)running_starts,running_motion?"available":"unavailable");
+    printf("Sandbox sprint knife: %llu starts; source motion %s\n",(unsigned long long)sprint_starts,sprint_motion?"available":"unavailable");
     printf("Sandbox walking blade: %llu starts; source motion %s\n",(unsigned long long)walking_starts,ordinary_motion?"available":"unavailable");
     pe_hitboxes_free(hare_boxes);pe_hitboxes_free(player_boxes);pe_actor_free(player_defence);pe_hitboxes_free(reaction_boxes);pe_actor_free(reaction_defence);pe_actor_view_unload(&hunt_view);
-    pe_hitboxes_free(knife_capsule);pe_hitboxes_free(sword_capsule);pe_root_motion_free(running_motion);pe_sword_root_motion_free(ordinary_motion);
+    pe_hitboxes_free(knife_capsule);pe_hitboxes_free(sword_capsule);pe_root_motion_free(running_motion);pe_sword_root_motion_free(ordinary_motion);pe_sprint_root_motion_free(sprint_motion);
     pe_deployable_view_unload(&deploy_view);
     pe_vegetation_view_unload(vegetation_view);
     pe_reference_unload(&settlement);

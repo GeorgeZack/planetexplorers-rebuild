@@ -1,5 +1,41 @@
 # Original-game playtest and C comparison
 
+## October12 sprint Knife — source, C fixture and normal native session
+
+[The sprint integration](audit/SANDBOX_SPRINT_KNIFE.md) installs only the
+qualified401 leaf and distinct source-root curve. Body/Knife22 and defence31
+replace complete old groups with preserved backups. No original client or
+live desktop input was used. The separate reaction/get-up/shield gates stay
+closed; PECSv22 is unchanged.
+
+Actual exported-asset C fixtures pass open/wall collision, four-stage combos,
+three handoffs,89 ticks/88 blade samples, shared post-move blade/16 defence
+clocks, once-only contact advancement and exact combat/movement stamina.
+Synthetic tests cover strict curve profile/malformed bytes, optional pose
+admission, exporter selection and installation rollback. Normal production
+private-input testing observes one sprint start and visible lunge, zero new
+contacts/kills and unchanged checkpoint. Free third person, camera-facing
+attacks ON, and Shift+s around one LMB pulse are recorded in
+[the bounded result](reference/sprint-native-20261012.json). Existing4/4 hunt
+kills belong to the loaded baseline. The sandbox returned main menu result2;
+explicit supervisor stop then ended the process-15. Do not claim process
+exit0, new progression, exact observed root timing/distance, user sprint
+acceptance or original-game parity.
+
+The user subsequently accepted the previous standing/walking one-click
+recovery with “feels good!”; this is qualitative feedback, with exact
+settings/timing unrecorded. The150ms natural recovery remains a native adapter.
+
+Final sanitizer passes102 suites/0 skips (`sprint-final-sanitize.log`);
+CLI passes26 cases (`sprint-cli.log`). Final full regression passes261 jobs/911 Python tests, with87 optional skips
+(`sprint-final-check4.log`); skips are not passes. Content/source regeneration
+passes (`sprint-final-content2.log`), including the sprint-only stage06. Earlier full checks caught old tool
+and starter-sword tests comparing historical21/30 exports with the expanded
+live body/defence. Their preserved baseline fixture paths now retain exact
+clock, palette, prefix and input-hash assertions; no assertion was relaxed.
+Local evidence links, screenshot hash and installed/staged hashes agree.
+
+
 ## October12 Knife single-click recovery — user feedback and C fixture
 
 The user reported an abrupt/early-looking ending when standing or moving

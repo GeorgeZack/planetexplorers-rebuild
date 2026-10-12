@@ -20,8 +20,9 @@ static const char *const folders[]={"player","player-knife-stowed","player-shove
 static PeActorClip clips[VIEWS][33];
 static bool window=true,optional=true,draw_failure=false,missing_clip=false,wood_pair=false,reaction_group=false;
 static int missing_view=-1,bad_clock_view=-1,bad_source_view=-1;
-static unsigned pickaxe_mask=15,running_mask;
+static unsigned pickaxe_mask=15,running_mask,sprint_mask;
 static bool running_in_view(int v){return (v==BODY&&(running_mask&1))||(v==KNIFE_HELD&&(running_mask&2))||(v==KNIFE&&(running_mask&4));}
+static bool sprint_in_view(int v){return (v==BODY&&(sprint_mask&1))||(v==KNIFE_HELD&&(sprint_mask&2))||(v==KNIFE&&(sprint_mask&4));}
 static int wrong_count_view=-1;
 static int missing_direction_view=-1;
 static int allocated,uploads,fail_upload,draw_count,mode_depth;
@@ -72,7 +73,7 @@ bool pe_actor_scene_view_upload(PeActorSceneView *v,char *error,size_t cap) {
 }
 size_t pe_actor_scene_view_clip_count(const PeActorSceneView *v){
     int id=(int)(uintptr_t)v->manifest-1;
-    return id==wrong_count_view?4:id>=REACTION_BODY?25:wood_pair&&(id==BODY||id>=WOOD_SWORD_STOWED)?33:id>=DIG_BODY?3:((id==BODY||id==KNIFE_HELD)?PE_LOCOMOTION_COUNT+4:PE_LOCOMOTION_COUNT)+(running_in_view(id)?1:0);
+    return id==wrong_count_view?4:id>=REACTION_BODY?25:wood_pair&&(id==BODY||id>=WOOD_SWORD_STOWED)?33:id>=DIG_BODY?3:((id==BODY||id==KNIFE_HELD)?PE_LOCOMOTION_COUNT+4:PE_LOCOMOTION_COUNT)+(running_in_view(id)?1:0)+(sprint_in_view(id)?1:0);
 }
 size_t pe_actor_scene_view_find_clip(const PeActorSceneView *v,const char *name) {
     int id=(int)(uintptr_t)v->manifest-1;
@@ -170,6 +171,10 @@ static void init_clips(void) {
         snprintf(c->name,sizeof c->name,"RunSwordAttack");c->fps=30;c->duration=1.8333396911621094f;
         c->frames=57;c->loop=false;c->terminal_at_duration=true;
     }
+    for(unsigned j=0;j<3;j++)if(sprint_in_view(running_views[j])){
+        int view=running_views[j];size_t index=PE_LOCOMOTION_COUNT+(view==KNIFE?0:4)+(running_in_view(view)?1:0);
+        clips[view][index]=(PeActorClip){.name="SprintSwordAttack",.fps=30,.frames=56,.duration=1.8000068664550781f,.terminal_at_duration=true};
+    }
     if(wood_pair){
         const char *names[]={"AttackIdle","SwordWF","SwordRF","SwordSprint","SwordJump","SwordFall","SwordLand","SwordRunJump","SwordRunFall","SwordRunLand","SwordWB","SwordRB","NormalWalkTurnLeft","NormalWalkTurnRight","NormalRunTurnLeft","NormalRunTurnRight"};
         const float times[]={1.7333335876464844f,1.0999984741210938f,.6666679382324219f,.6000001430511475f,1.0333404541015625f,.6666717529296875f,1.066680908203125f,1.4000015258789062f,1.0000038146972656f,.23333740234375f,.8000030517578125f,.6666717529296875f,1.1000022888183594f,1.100006103515625f,.6666717529296875f,.6666717529296875f};
@@ -256,6 +261,28 @@ static int reaction_actor_tests(void){
     free(g);pe_sandbox_actor_unload(a);CHECK(allocated==0);
     reaction_group=false;uploads=0;init_clips();failures+=pose_failures;pose_failures=0;
     return failures;
+}
+static int sprint_actor_tests(void){
+    int failures=0;running_mask=7;
+    CHECK(!pe_sandbox_actor_sprint_ready(NULL));
+    for(sprint_mask=1;sprint_mask<7;sprint_mask++){
+        init_clips();char error[128];PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);
+        CHECK(!a&&strstr(error,"SprintSwordAttack"));pe_sandbox_actor_unload(a);CHECK(allocated==0);
+    }
+    sprint_mask=7;
+    for(unsigned mutation=0;mutation<5;mutation++){
+        init_clips();PeActorClip *clip=&clips[KNIFE_HELD][PE_LOCOMOTION_COUNT+5];
+        if(mutation==0)bad_clock_view=KNIFE_HELD;
+        if(mutation==1)clip->frames++;
+        if(mutation==2)clip->duration+=.01f;
+        if(mutation==3)clip->loop=true;
+        if(mutation==4)bad_source_view=KNIFE_HELD;
+        char error[128];PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);CHECK(!a);pe_sandbox_actor_unload(a);CHECK(allocated==0);
+        bad_clock_view=bad_source_view=-1;
+    }
+    init_clips();char error[128];PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);
+    CHECK(a&&pe_sandbox_actor_sprint_ready(a));pe_sandbox_actor_unload(a);CHECK(allocated==0);
+    sprint_mask=running_mask=0;init_clips();return failures;
 }
 static int running_actor_tests(void){
     int failures=0;char error[256];uploads=0;
@@ -372,7 +399,7 @@ static int sword_actor_tests(void){
     return failures;
 }
 int main(void) {
-    int failures=0;char error[256];init_clips();failures+=reaction_actor_tests();failures+=running_actor_tests();failures+=sword_actor_tests();
+    int failures=0;char error[256];init_clips();failures+=reaction_actor_tests();failures+=running_actor_tests();failures+=sprint_actor_tests();failures+=sword_actor_tests();
     window=false;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0);window=true;
     missing_clip=true;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);missing_clip=false;
     for(missing_direction_view=0;missing_direction_view<DIG_BODY;missing_direction_view++){

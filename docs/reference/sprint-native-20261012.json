@@ -1,0 +1,17 @@
+{
+  "classification": "observed in native C rebuild; not original-game observation",
+  "mode": "Adventure sandbox, normal saved checkpoint, free third person",
+  "camera_facing_attacks": true,
+  "input": "draw Knife; Shift_L+s held 1s before LMB pulse .12s and 1.2s after",
+  "sprint_starts": 1,
+  "outgoing_contacts": 0,
+  "incoming_contacts": 0,
+  "preexisting_hunt_kills": 4,
+  "baseline_unchanged": true,
+  "sandbox_result": 2,
+  "supervisor_game_returncode": -15,
+  "limits": "Screenshot is qualitative. No exact timing, distance, new kills, progression, reaction or original parity claim.",
+  "screenshot_sha256": "70a53ac930a58005e3799d176f4fd46625f8daefe743a09ebe910d894bbfce9c",
+  "baseline_sha256": "26a9d5963a3bd9d6e292b3590039d09052cf3c33e420fb98a3d400769e035c5e",
+  "binary_sha256": "08bf84f71dfd7ce64a9138abcf517b20cd4f7e969165641d34851e162a8cd0de"
+}

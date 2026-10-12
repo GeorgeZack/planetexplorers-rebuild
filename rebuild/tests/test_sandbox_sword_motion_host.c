@@ -2,13 +2,15 @@
  * Compile with function/data sections and linker garbage collection. */
 #include "pe_test_paths.h"
 #include "../src/pe_sandbox_view.c"
+#include "pe_sword_motion.h"
 
 static unsigned failures;
 /* The host now routes displacements; the source request conversion is checked on top of them. */
+static const PeSprintRootMotion *sprint_curve;
 static bool sandbox_melee_motion(const PeRootMotion *running,const PeSwordRootMotion *ordinary,
     const PeCombatInterval *interval,PeVec3 velocity,double yaw,double dt,PeVec3 *request){
     double delta[3];
-    if(!request||!sandbox_melee_delta(running,ordinary,interval,yaw,delta))return false;
+    if(!request||!sandbox_melee_delta(running,ordinary,sprint_curve,interval,yaw,delta))return false;
     return pe_sword_motion_request(delta,velocity,dt,request);
 }
 #define CHECK(c) do{if(!(c)){fprintf(stderr,"sandbox sword motion host:%d %s\n",__LINE__,#c);failures++;}}while(0)
@@ -20,7 +22,11 @@ static PeCombatInterval interval(PeCombatVariant variant,unsigned stage,double f
 static void routed(const PeRootMotion *running,const PeSwordRootMotion *ordinary,PeCombatInterval span){
     PeCombatInterval before=span;PeVec3 current={.3f,-2,.5f},out={99,88,77},expected={0};
     bool is_running=span.variant==PE_COMBAT_RUNNING&&span.stage==0;
-    CHECK(is_running?pe_running_attack_motion_request(running,&span,current,37,.125,&expected):
+    double sprint_delta[3];
+    if(span.variant==PE_COMBAT_SPRINT&&span.stage==0)
+        CHECK(pe_sprint_root_motion_world_delta(sprint_curve,&span,37,sprint_delta)&&
+            pe_sword_motion_request(sprint_delta,current,.125,&expected));
+    else CHECK(is_running?pe_running_attack_motion_request(running,&span,current,37,.125,&expected):
         pe_sword_root_motion_request(ordinary,&span,current,37,.125,&expected));
     CHECK(sandbox_melee_motion(running,ordinary,&span,current,37,.125,&out));
     CHECK(!memcmp(&out,&expected,sizeof out)&&!memcmp(&span,&before,sizeof span));
@@ -71,6 +77,39 @@ static void retained_combo(const PeRootMotion *running,const PeSwordRootMotion *
     CHECK(pe_combat_advance_interval(&action,.01,.01,&stamina,&span)==PE_COMBAT_ADVANCED);
     CHECK(span.valid&&span.stage==1&&span.from==0&&span.to==.01);
     routed(running,ordinary,span);
+}
+/* Stage0 of skill20110013 is owned by the clip401 curve alone. */
+static void sprint_routing(const PeRootMotion *running,const PeSwordRootMotion *ordinary){
+    bool differs_run=false,differs_normal=false;
+    for(unsigned sample=0;sample<12;sample++){
+        double from=.05*sample,to=from+.04;
+        PeCombatInterval dash=interval(PE_COMBAT_SPRINT,0,from,to),run=interval(PE_COMBAT_RUNNING,0,from,to),
+            normal=interval(PE_COMBAT_STATIONARY,0,from,to);
+        PeVec3 a={0},b={0},c={0};
+        CHECK(sandbox_melee_motion(running,ordinary,&dash,(PeVec3){0},0,1,&a));
+        CHECK(sandbox_melee_motion(running,ordinary,&run,(PeVec3){0},0,1,&b));
+        CHECK(sandbox_melee_motion(running,ordinary,&normal,(PeVec3){0},0,1,&c));
+        if(hypot((double)a.x-b.x,(double)a.z-b.z)>1e-4)differs_run=true;
+        if(hypot((double)a.x-c.x,(double)a.z-c.z)>1e-4)differs_normal=true;
+    }
+    CHECK(differs_run&&differs_normal);
+    routed(running,ordinary,interval(PE_COMBAT_SPRINT,0,.1,.12));
+    for(unsigned stage=1;stage<4;stage++)routed(running,ordinary,interval(PE_COMBAT_SPRINT,stage,.1,.12));
+    /* Source EndAction displacement, unrotated: about2.70m forward. */
+    const PeCombatClip *events=pe_combat_variant_clip(PE_COMBAT_FEMALE,PE_COMBAT_THIRD_PERSON,PE_COMBAT_SPRINT,0);
+    double delta[3]={0};PeCombatInterval whole=interval(PE_COMBAT_SPRINT,0,0,1.1924036741256714);
+    CHECK(events&&events->path_id==401&&sandbox_melee_delta(running,ordinary,sprint_curve,&whole,0,delta));
+    CHECK(fabs(delta[0]+.052491)<1e-5&&delta[1]==0&&fabs(delta[2]-2.698236)<1e-5);
+    /* Past the source clip there is no extrapolation. */
+    PeCombatInterval late=interval(PE_COMBAT_SPRINT,0,1.79,1.81);double kept[3]={7,8,9},same[3]={7,8,9};
+    CHECK(!sandbox_melee_delta(running,ordinary,sprint_curve,&late,0,kept)&&!memcmp(kept,same,sizeof kept));
+    /* A missing sprint owner fails closed whatever other curves are present. */
+    const PeSprintRootMotion *owned=sprint_curve;sprint_curve=NULL;
+    PeCombatInterval dash=interval(PE_COMBAT_SPRINT,0,.1,.12);PeVec3 out={7,8,9},before=out;
+    CHECK(!sandbox_melee_motion(running,ordinary,&dash,(PeVec3){0},37,.125,&out)&&!memcmp(&out,&before,sizeof out));
+    CHECK(!sandbox_melee_motion(running,NULL,&dash,(PeVec3){0},37,.125,&out)&&!memcmp(&out,&before,sizeof out));
+    CHECK(!sandbox_melee_delta(running,ordinary,NULL,&dash,37,kept)&&!memcmp(kept,same,sizeof kept));
+    sprint_curve=owned;
 }
 static void invalid(const PeRootMotion *running,const PeSwordRootMotion *ordinary){
     for(unsigned k=0;k<12;k++){
@@ -143,16 +182,23 @@ int main(void){
     const char *ordinary_path=getenv("PE_SWORD_ROOT_MOTION");
     if(!ordinary_path)ordinary_path=pe_test_path("rebuild/build/reference-assets/player-sword-motion/sword-root.pesr");
     const char *running_path=pe_test_path("rebuild/build/reference-assets/player-running-motion/running-knife.perm");
-    if(!ordinary_path||!readable(ordinary_path)||!readable(running_path)){
-        fprintf(stderr,"sandbox sword motion host: SKIP77 requires installed/PE_SWORD_ROOT_MOTION PESR1 and installed captured408 PERM1\n");return 77;
+    const char *sprint_path=getenv("PE_SPRINT_ROOT_MOTION");
+    if(!sprint_path)sprint_path=pe_test_path("rebuild/build/sprint-source-motion-01/sprint-root.pesr");
+    if(!ordinary_path||!readable(ordinary_path)||!readable(running_path)||!sprint_path||!readable(sprint_path)){
+        fprintf(stderr,"sandbox sword motion host: SKIP77 requires installed/PE_SWORD_ROOT_MOTION PESR1, installed captured408 PERM1 and staged/PE_SPRINT_ROOT_MOTION clip401 PESR1\n");return 77;
     }
     if(!pose_files_present())return 77;
     char error[256];PeSwordRootMotion *ordinary=pe_sword_root_motion_load(ordinary_path,error,sizeof error);
     if(!ordinary){fprintf(stderr,"sandbox sword motion host: %s\n",error);return 1;}
     PeRootMotion *running=pe_root_motion_load(running_path,error,sizeof error);
     if(!running){fprintf(stderr,"sandbox sword motion host: %s\n",error);pe_sword_root_motion_free(ordinary);return 1;}
+    PeSprintRootMotion *sprint=pe_sprint_root_motion_load(sprint_path,error,sizeof error);
+    if(!sprint){fprintf(stderr,"sandbox sword motion host: %s\n",error);pe_root_motion_free(running);pe_sword_root_motion_free(ordinary);return 1;}
+    sprint_curve=sprint;
     pose_clocks(ordinary);routing(running,ordinary);retained_combo(running,ordinary,PE_COMBAT_STATIONARY);
-    retained_combo(running,ordinary,PE_COMBAT_RUNNING);invalid(running,ordinary);
+    retained_combo(running,ordinary,PE_COMBAT_RUNNING);sprint_routing(running,ordinary);
+    retained_combo(running,ordinary,PE_COMBAT_SPRINT);invalid(running,ordinary);
+    sprint_curve=NULL;pe_sprint_root_motion_free(sprint);
     pe_root_motion_free(running);pe_sword_root_motion_free(ordinary);
     printf("Sandbox sword motion host: %s (%u failures; no graphics or asset skips)\n",failures?"FAILED":"PASS",failures);
     return failures?1:0;

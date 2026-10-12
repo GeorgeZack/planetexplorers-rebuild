@@ -17,9 +17,9 @@ typedef struct {
     /* Explicit host qualification of immutable female408 root data; default
      * false keeps running disabled. Does not load or own a motion curve. */
     bool running_motion_ready;
-    /* Same contract for female401 SprintSwordAttack (skill20110013). No host
-     * sets this yet: its poses and root curve are not recovered, so a press
-     * above the sprint threshold is still rejected before any stamina debit. */
+    /* Explicit host qualification of female401 SprintSwordAttack, skill20110013.
+     * Requires its distinct curve and complete matching body/Knife/defence poses;
+     * false rejects an unsupported sprint press before stamina debit. */
     bool sprint_motion_ready;
     /* Complete qualified female ordinary source-root group, not a zero-root
      * fallback. Host owns the four immutable curves and their motion sweep. */

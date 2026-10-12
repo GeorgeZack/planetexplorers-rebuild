@@ -1,107 +1,43 @@
 # Rebuild handoff — October 12, 2026
 
-## Current checkpoint
+The user accepted the single-click standing/walking Knife ending (“feels
+good!”). [The150ms natural recovery](audit/KNIFE_RECOVERY.md) remains a native
+presentation adapter; mechanical contact/root/combo clocks are unchanged.
 
-Claude continued after the AnimFollow checkpoint with commits `f2c7b9a` and
-`adb377d`: completed the original female reaction bake, staged its complete
-25-clip group and added optional sandbox actor/defence loading validation.
-Checkpoint `ca92709` completed [SprintSwordAttack source root extraction](audit/SPRINT_ROOT_CHANNELS.md)
-without another original-game launch. Checkpoint `09f2d53` added the
-[native reaction preview](audit/REACTION_PREVIEW.md). This continuation stages
-matching Knife33 drawn/stowed25-clip attachments and fixes the user-reported
-single-click abrupt ending with [native150ms recovery](audit/KNIFE_RECOVERY.md).
-Sprint/reaction admission remains closed.
+The next animation item is now implemented: grounded female third-person
+Knife33 sprint, source skill20110013/clip401 and ordinary Attack7–9
+continuations. [The sprint audit](audit/SANDBOX_SPRINT_KNIFE.md) records owners,
+assets, exact clocks, installation backups and bounded native acceptance.
+Installed scenes are22 body/Knife clips and31 defence clips; the separate
+33/42 Wood Sword stage and full25-clip reaction group remain uninstalled.
+The distinct root reader fails closed; only a complete matching supported
+Knife group enables readiness. Missing groups still reject before debit.
 
-The earlier claim that the reaction bake was unrun is superseded. The capture
-`female-reaction-01.jsonl` has25 clips/1,052 poses, a complete ending and a120-frame
-post-cleanup window. The reference process ended with signal9; its closure
-method was not observed. Do not claim clean teardown. NormalIdle agrees with
-capture06; mirroring was evaluated by the engine. These are isolated leaf
-poses, not reaction layers or ragdoll-to-get-up blending.
+Local stages/baselines/backups are preserved under `rebuild/build` and must
+not be removed. `sprint-player-06` regenerates from `sprint-base-01` and the
+qualified body/Knife/defence reaction stages; complete replaced installed
+folders are in `sprint-install-backup-01`. No source Unity input was edited.
+No original client or desktop input was needed for this increment.
 
-## Staged animation assets
+Actual exported-asset C fixtures passed open/wall collision, four-stage combo,
+blade/defence clock ordering and stamina. The normal production sandbox's
+private-input session observed one sprint start and a visible lunge, with no
+new contacts or kills and unchanged baseline. It returned to main menu before
+explicit supervisor termination-15. Full checks and their skips are recorded
+in [PLAYTEST](PLAYTEST.md); do not describe skipped assets as passed.
 
-`rebuild/build/starter-pair-reaction-01` contains matching body, drawn/stowed
-wood sword, wood shield and defence for25 clips. It is not installed. Existing
-33/42-clip groups cannot simply absorb it under the64-clip actor limit.
-`pe_sandbox_actor` validates it as an optional second group, all-or-nothing,
-with matching clocks and NormalIdle; no code selects or draws these clips.
-Host roles and installation mappings are in
-[the reaction audit](audit/REACTION_PRESENTATION.md#host-reaction-group).
-The base group holds wood sword attachments. Newly regenerated Knife33
-attachments are separate in `rebuild/build/knife-reaction-01-drawn` and
-`...-stowed`, from unchanged `export_baked_knife.py`, closed reaction01, source
-knife metadata and matching body. They are uninstalled. Private fixture
-`knife-recovery-captures-02` validates their exact25 clocks and blade geometry;
-all staged hashes agree before/after the capture.
+For a user retest, restart the rebuilt sandbox, draw Knife with LMB, hold
+Shift+W until sprinting, then make a fresh LMB press and wait. Existing
+camera-facing-attacks settings affect requested heading. Broader sprint
+combat/difficulty/reload and full original transition parity remain untested.
 
-`rebuild/build/sprint-source-motion-01` now holds `sprint-root.pesr/json`.
-The exporter checks the pinned asset/native ELF and unchanged running408
-oracle, applies the exact existing importer/channel predicate to401 and
-replays401's starting quaternion through the pinned arithmetic slices.
-The 56 dense30Hz knots are source-derived; source EndAction displacement is
-about2.70m forward. No observed sprint root playback is claimed.
-The one-record PESR1 is separate from the installed four-record ordinary
-profile and captured PERM1. The ordinary loader rejects it intentionally.
-Regenerate with `export_sprint_root_motion.py --output ...`; use `--check`
-for an existing stage. Never hand-edit or overwrite another recovered group.
-
-## Next animation items
-
-First collect the user retest: restart the rebuilt game, make one click and
-wait while standing, then walking forward. The user reported the abrupt end
-in that exact input pattern. The renderer had dropped the attack immediately
-at mechanical EndAction; its new150ms inactive recovery is a labelled native
-adapter, not the original Animator transition/layer solve. Damage, root, combo
-and stamina clocks are unchanged. Tests cover shared pose weights, pause,
-instance binding, expiration and cancellation. Host cancellation clears
-presentation too; all tail state is transient. Live visual feel remains a
-user retest, separate from the inspected private idle/walking sheets.
-
-The private-display fixture is completed. Final evidence is
-`rebuild/build/reaction-captures-04`: actual sandbox actor GPU load,25 clip
-sheets,100 pose-clock records, input/output hashes and exit0. All sheets were
-reviewed, sprint/get-up in detail. First diagnostic capture01 read the prior
-frame; it is unqualified. The final renderer draws twice and checks each
-readback token. Captures02/03 are intermediate. No full sandbox-host startup or
-live dispatch was tested. Reproduce with `reaction-render-capture` and a fresh
-`REACTION_CAPTURE_OUTPUT=build/reaction-review-01`. Read the linked audit for
-prerequisites and limits; never adopt an unrelated display.
-
-Next implement a distinct sprint root reader and retained outgoing-interval
-routing, with the separately staged matching Knife33/body/defence presentation
-and shared
-collision/contact ordering. Only complete supported assets and integration
-checks may justify setting sprint_motion_ready. Do not substitute408 or zero
-motion, borrow the ordinary four-record loader or debit stamina on an
-unsupported start. A new original sprint root capture is optional
-corroboration; available source now answers bounded unblended extraction.
-
-For live reactions/get-up, the remaining numerical work is AnimFollow PD,
-body/joint contracts and FinalIK, plus reaction layer/blend qualification.
-Reuse the saved REA inventory `rebuild/build/humanphy-AssemblyCSharp-members.json`
-and the committed [AnimFollow CIL excerpt](reference/animfollow-lifecycle-il.json).
+Next offline animation work remains AnimFollow PD/body/joint and FinalIK:
+reuse `rebuild/build/humanphy-AssemblyCSharp-members.json` and the committed
+[AnimFollow lifecycle excerpt](reference/animfollow-lifecycle-il.json).
 `DoAnimFollow`, `PDControl`, `SetJointTorque`, `EnableJointLimits` and
-`SyncTransforms` remain next offline targets; no request owner supplies a
-physical rig or pose. Installed female settings are components324352/324629
-in resources.assets, not constructor defaults.
-
-## Validation and gates
-
-Current results and ignored log names are in [PLAYTEST](PLAYTEST.md).
-Only the native graphics fixture was launched on its owned private display.
-No original-game launch, desktop input, save or installed asset change
-occurred. The C fixture owns and unloads its actor, scenes, capsules and GPU
-render target; the actor now owns unsaved natural-end recovery, and the host clears it on
-explicit cancellation. Core combat and save format are unchanged. Staged input hashes agree
-before/after the final capture. Current full-check/sanitizer and26 CLI results are in PLAYTEST. The first
-full-check build failed in the extracted consume-host fixture because it lacked
-the new actor cancellation context; the tracked extractor/mock were corrected. The equipment-host mock also
-needed to model the melee setter owning its action binding; focused checks
-pass. Final full check passes258 jobs/905 Python tests with87 skips; full
-sanitizer passes101 suites and CLI passes26 tests. Focused actor ASan/UBSan
-and leak scanning also passes. No generated file was edited by hand. The optimized GPU fixture does not establish driver leak acceptance.
-Live reactions/stun/knockback, get-up, shield readiness, pounce/aggression
-and Town Defense remain closed. Halt Move/Jump blocking still needs an
-explicit user choice. PECSv22 is unchanged. Follow [AGENTS.md](../AGENTS.md)
-and [feature contracts](FEATURE_CONTRACTS.md); full check precedes each commit.
+`SyncTransforms` are the next source targets. No owner yet supplies a physical
+rig/pose. Isolated engine-evaluated reaction/get-up leaves and the
+[private preview](audit/REACTION_PREVIEW.md) do not qualify reaction layers or
+ragdoll blending. Live reactions/stun/knockback, get-up, shield readiness,
+pounce/aggression and Town Defense remain closed. Halt Move/Jump blocking
+still requires the user's explicit choice. PECSv22 remains unchanged.

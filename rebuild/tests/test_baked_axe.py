@@ -103,15 +103,18 @@ bad|=!pe_actor_pose_vertex(a,1,.5,0,&p)||fabsf(p.position[0]-10.5f)>1e-6f;pe_act
         self.assertEqual(source['source_equipment']['m_StaminaCost'],4)
         self.assertEqual(source['source_equipment']['m_AnimSpeed'],1)
         for tool_name,body_name,count in [('player-wood-axe','player',None),('player-wood-axe-cut','player-cut',3)]:
+            body=root/body_name
+            baseline=TOOLS.parent/'build/sprint-base-01/player'
+            if body_name=='player' and baseline.is_dir():body=baseline
             output=root/tool_name;result=json.loads((output/'recording-manifest.json').read_text())
             self.assertEqual(result['item_id'],26)
             if count is None:
-                expected=json.loads((root/body_name/'recording-manifest.json').read_text())['clips']
+                expected=json.loads((body/'recording-manifest.json').read_text())['clips']
                 expected=[c for c in expected if c['clip']!='RunSwordAttack']
                 self.assertEqual([c['clip'] for c in result['clips']],[c['clip'] for c in expected])
             else:self.assertEqual(len(result['clips']),count)
-            first=(root/body_name/'recording.peas').read_text().splitlines()[1].split()[0]
-            body_headers=axe.clip_headers((root/body_name/first).read_bytes())
+            first=(body/'recording.peas').read_text().splitlines()[1].split()[0]
+            body_headers=axe.clip_headers((body/first).read_bytes())
             if count is None and body_headers[-1][:32].rstrip(b'\0')==b'RunSwordAttack':
                 body_headers=body_headers[:-1] # Knife-only extension; every axe clock still matches.
             self.assertEqual(axe.clip_headers((output/result['parts'][0]['file']).read_bytes()),body_headers)

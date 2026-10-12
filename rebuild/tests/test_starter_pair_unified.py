@@ -10,9 +10,21 @@ import sys
 import tempfile
 import unittest
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from read_reference_adventure import source_path
+from read_reference_adventure import source_path as original_source_path
 import export_starter_pair_unified as tool
 from pe_actor_limits import PEAC_MAX_CLIPS
+
+
+def source_path(row, sha256=None):
+    if not isinstance(row,dict):return original_source_path(row,sha256)
+    # Historical manifests name the installed folder before the sprint append.
+    label=row['path'];marker='rebuild/build/reference-assets/'
+    baseline=tool.ROOT/'rebuild/build/sprint-base-01'
+    if marker in label and baseline.is_dir():
+        relative=Path(label.split(marker,1)[1])
+        if relative.parts[0] in ('player','player-defence') and '..' not in relative.parts:
+            return original_source_path(dict(path=str(baseline/relative),sha256=row['sha256']))
+    return original_source_path(row)
 
 
 def actor(names):
@@ -53,6 +65,8 @@ class UnifiedTests(unittest.TestCase):
         files=tool.pair.file_hashes(stage);files.pop('unified-manifest.json')
         self.assertEqual(files,m['files']);self.assertFalse(m['installed']);self.assertFalse(m['shield_block_pose_recovered'])
         assets=tool.ROOT/'rebuild/build/reference-assets'
+        baseline=tool.ROOT/'rebuild/build/sprint-base-01'
+        if baseline.is_dir():assets=baseline
         self.assertEqual(tool.validate(stage,assets/'player',assets/'player-defence'),dict(body_clips=31,defence_clips=40,defence_actor_clip_counts=[40]))
         self.assertEqual(m['existing_defence_files'],tool.pair.file_hashes(assets/'player-defence'))
         old=json.loads((assets/'player-defence/player-defence.json').read_text());new=json.loads((stage/'player-defence/player-defence.json').read_text())
@@ -64,6 +78,8 @@ class UnifiedTests(unittest.TestCase):
 
     def test_all_body_and_attachment_payloads_are_exact_concatenations(self):
         stage=self.stage();assets=tool.ROOT/'rebuild/build/reference-assets'
+        baseline=tool.ROOT/'rebuild/build/sprint-base-01'
+        if baseline.is_dir():assets=baseline
         normal=tool.ROOT/'rebuild/build/starter-pair-assets-01';sword=tool.ROOT/'rebuild/build/starter-pair-sword-assets-01'
         pairs=[('player',assets/'player',tool.ROOT/'rebuild/build/sword-body-01/all')]
         pairs.extend((g,normal/g,sword/g) for g in tool.pair.GROUPS)

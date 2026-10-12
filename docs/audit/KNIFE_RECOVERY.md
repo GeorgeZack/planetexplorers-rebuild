@@ -97,3 +97,7 @@ pose selection and retained outgoing-interval routing through shared
 collision/contact handling. Root knots and Knife attachments are staged;
 sprint readiness is still false. Live reactions/get-up and shield gates remain
 closed.
+
+The user subsequently reported “feels good!” after the one-click retest. This
+is qualitative native acceptance of the standing/walking ending; exact
+settings and timing were not recorded.

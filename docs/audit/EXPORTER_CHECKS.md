@@ -53,3 +53,11 @@ Both are wired into `exporter-check` through `SETTLEMENT_CAPTURE`, `ROUTE_CAPTUR
 ## Not wired
 
 - **`export_shield_controller.py`.** Its check verifies an existing stage directory, and no stage is retained locally. `tests/test_shield_controller_export.py` exercises the mode against a temporary stage.
+
+`export_sprint_player.py --base build/sprint-base-01 --output
+build/sprint-player-06 --check` regenerates the sprint-only append and hashes
+of all four complete groups. `check-sources` runs it. Installation requires
+`--check --install FRESH_BACKUP`, qualified root metadata and exact current
+baseline hashes; rename failures roll back. The strict reader and native host
+checks remain separate from byte regeneration. See
+[the integration audit](SANDBOX_SPRINT_KNIFE.md).

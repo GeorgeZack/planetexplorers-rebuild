@@ -13,6 +13,7 @@ CORE += src/pe_halt.c
 CORE += src/pe_hit_ik.c
 CORE += src/pe_ragdoll_action.c
 CORE += src/pe_animfollow.c
+CORE += src/pe_sprint_root_motion.c
 UI_SHARED = src/pe_ui_history.c src/pe_ui_draw.c src/pe_ui_hud.c
 FRONTEND = src/pe_ui_settings.c $(UI_SHARED) src/pe_vegetation_view.c src/pe_deployable_view.c src/pe_terrain_material_view.c src/pe_adventure_npc_view.c src/pe_sandbox_world_view.c src/pe_app_menu.c src/pe_sandbox_view.c src/pe_sandbox_actor.c src/pe_sandbox_ui.c src/pe_sandbox_ui_input.c src/main.c src/pe_reference.c src/pe_training_view.c src/pe_training_terrain_view.c src/pe_training_npc_view.c src/pe_training_ui.c src/pe_training_ui_minimap.c src/pe_training_ui_shader.c src/pe_training_ui_replicator.c src/pe_training_ui_mission.c src/pe_ui_assets.c src/pe_actor_view.c src/pe_actor_scene.c src/pe_actor_scene_view.c
 TESTS = tests/test_main.c tests/test_block.c $(shell sed -n 's|^PE_TEST(\(.*\))$$|tests/test_\1.c|p' tests/test_core_list.h)
@@ -102,6 +103,7 @@ exporter-check:
 	$(UNITY_PYTHON) tools/export_tree_collision.py --check
 	$(UNITY_PYTHON) tools/export_sword_root_motion.py --output build/reference-assets/player-sword-motion --check
 	$(UNITY_PYTHON) tools/export_sprint_root_motion.py --output build/sprint-source-motion-01 --check
+	python3 tools/export_sprint_player.py --base build/sprint-base-01 --output build/sprint-player-06 --check
 	$(UNITY_PYTHON) tools/export_running_knife_motion.py '$(RUNNING_ROOT_CAPTURE)' --plan build/root-motion-bake/root-06-provenance/running-knife-plan.json --probe-source build/root-motion-bake/root-06-provenance/ReferenceRootMotionBake.cs --probe-assembly build/root-motion-bake/root-06-provenance/ReferenceRootMotionBake.dll --output build/running-motion-20261006 --check
 check-sources: exporter-check adventure-npc-collider-check attack-playback-source-check camera-query-source-check camp-repair-source-check capsule-history-source-check hare-perception-assets-check hit-reaction-source-check hunt-loot-source-check hunt-targeting-source-check starter-equipment-check sword-source-check terrain-assets-check
 # Parallel build and run of everything `make test` covers; continues past
@@ -147,6 +149,7 @@ test: camera-geometry-test shop-quantity-details-ui-test camp-repair-test camp-r
 	python3 tests/test_player_root_channels.py
 	python3 tests/test_sword_root_export.py
 	python3 tests/test_sprint_root_export.py
+	python3 tests/test_sprint_player_export.py
 	python3 tests/test_revival_export.py
 	python3 tests/test_stamina_recovery_export.py
 	python3 tests/test_passive_recovery_export.py
@@ -987,3 +990,11 @@ reaction-render-capture: $(BUILD)/render_reaction_group
 .PHONY: knife-reaction-render-capture
 knife-reaction-render-capture: $(BUILD)/render_reaction_group
 	python3 tests/run_private_ui_capture.py --reactions --knife-reactions --output $(REACTION_CAPTURE_OUTPUT)
+
+.PHONY: sprint-attack-test
+$(BUILD)/test_sprint_attack: tests/test_sprint_attack.c $(CORE_LIB) $(DEPS)/test_sprint_attack.d | $(BUILD)
+	$(call DEPGEN,$(CPPFLAGS) $(CFLAGS) tests/test_sprint_attack.c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) tests/test_sprint_attack.c $(CORE_LIB) -o $@ $(LZ4_LIBS) -lm
+sprint-attack-test: $(BUILD)/test_sprint_attack
+	@./$(BUILD)/test_sprint_attack; result=$$?; if [ $$result -eq 77 ]; then echo "sprint fixture: asset-dependent regression SKIPPED (not passed)"; elif [ $$result -ne 0 ]; then exit $$result; fi
+test: sprint-attack-test

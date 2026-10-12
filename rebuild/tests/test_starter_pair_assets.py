@@ -13,9 +13,21 @@ import unittest
 import zlib
 
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'tools'))
-from read_reference_adventure import source_path
+from read_reference_adventure import source_path as original_source_path
 import export_starter_pair_assets as exporter
 from export_reference_actor import inverse_affine
+
+
+def source_path(row, sha256=None):
+    if not isinstance(row,dict):return original_source_path(row,sha256)
+    # Historical manifests name the installed folder before the sprint append.
+    label=row['path'];marker='rebuild/build/reference-assets/'
+    baseline=exporter.ROOT/'rebuild/build/sprint-base-01'
+    if marker in label and baseline.is_dir():
+        relative=Path(label.split(marker,1)[1])
+        if relative.parts[0] in ('player','player-defence') and '..' not in relative.parts:
+            return original_source_path(dict(path=str(baseline/relative),sha256=row['sha256']))
+    return original_source_path(row)
 
 
 class PairAssetTests(unittest.TestCase):

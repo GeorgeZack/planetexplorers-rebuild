@@ -27,7 +27,7 @@ BINARY = ROOT / 'rebuild/build/planet_explorers'
 XVFB = ROOT / 'rebuild/build/private-xvfb/usr/bin/Xvfb'
 WIDTH, HEIGHT = 1280, 720
 MAX_HOLD, MAX_LIFETIME = 5.0, 3600.0
-INPUT_ACTIONS = frozenset(('key','click','button','burst','look'))
+INPUT_ACTIONS = frozenset(('key','key-button','click','button','burst','look'))
 SETUP_LEASE_SECONDS, RELEASE_GRACE_SECONDS = 5.0, 1.0
 MAX_LEASE_SECONDS = MAX_HOLD + .12 + RELEASE_GRACE_SECONDS
 WATCHDOG_INTERVAL = .05
@@ -335,13 +335,18 @@ def perform_input(action, args, target, record, sleep=time.sleep, clock=time.mon
             pressed_buttons.discard(number)
         record({'event':'button','button':number,'down':down})
     try:
-        if action == 'key':
+        if action in ('key','key-button'):
             codes = [target.code(k) for k in args.keys]
             for code in codes:
                 pressed_keys.append(code)
                 key(code,True)
             target.flush()
-            sleep(args.seconds)
+            if action=='key-button':
+                sleep(args.before)
+                button(args.button,True);target.flush();sleep(args.pulse)
+                button(args.button,False);target.flush();sleep(args.after)
+            else:
+                sleep(args.seconds)
         elif action in ('click','button'):
             if action == 'click':
                 target.motion(args.x,args.y)
@@ -583,7 +588,7 @@ def stop_owned(session, directory):
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='action',required=True)
-    for action in ('start','status','stop','key','click','button','burst','look','shot'):
+    for action in ('start','status','stop','key','key-button','click','button','burst','look','shot'):
         q = sub.add_parser(action)
         q.add_argument('directory',type=Path)
         if action == 'start':
@@ -592,6 +597,9 @@ def parser():
         elif action == 'key':
             q.add_argument('keys')
             q.add_argument('seconds',type=float,nargs='?',default=.15)
+        elif action == 'key-button':
+            q.add_argument('keys');q.add_argument('before',type=float);q.add_argument('after',type=float)
+            q.add_argument('--pulse',type=float,default=.12);q.add_argument('--button',type=int,default=1)
         elif action in ('click','button'):
             if action == 'click':
                 q.add_argument('x',type=int)
@@ -613,11 +621,15 @@ def validate_arguments(args):
     if args.action == 'start':
         args.baseline = args.baseline.resolve()
         args.lifetime = bounded_seconds(args.lifetime,MAX_LIFETIME)
-    if args.action in ('key','click','button','burst'):
+    if args.action=='key-button':
+        require(math.isfinite(args.before) and math.isfinite(args.after) and args.before>=0 and args.after>=0,'Invalid key/button segment duration')
+        args.pulse=bounded_seconds(args.pulse)
+        args.seconds=bounded_seconds(args.before+args.pulse+args.after)
+    if args.action in ('key','key-button','click','button','burst'):
         args.seconds = bounded_seconds(args.seconds)
-    if args.action == 'key':
+    if args.action in ('key','key-button'):
         args.keys = chord(args.keys)
-    if args.action in ('click','button','burst'):
+    if args.action in ('key-button','click','button','burst'):
         require(args.button in (1,3), 'Only left1/right3 buttons are supported')
     if args.action == 'click':
         require(0<=args.x<WIDTH and 0<=args.y<HEIGHT, 'UI click is outside the private1280x720 display')

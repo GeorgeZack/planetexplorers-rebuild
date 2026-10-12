@@ -89,6 +89,27 @@ class PrivateInputTests(unittest.TestCase):
         with self.assertRaises(KeyboardInterrupt):
             m.perform_input('button',args,target,lambda e:None,sleep=interrupt)
         self.assertEqual(target.events,[('button',1,True),('button',1,False)])
+    def test_key_button_bounds_order_duration_and_nonwarping(self):
+        args=self.arguments('key-button','unused','Shift_L+w','.7','1.2')
+        self.assertAlmostEqual(m.input_seconds('key-button',args),2.02)
+        target=FakeInput();delays=[]
+        m.perform_input('key-button',args,target,lambda event:None,sleep=delays.append)
+        self.assertEqual(delays,[.7,.12,1.2])
+        self.assertEqual(target.events,[('key',50,True),('key',25,True),('button',1,True),('button',1,False),('key',25,False),('key',50,False)])
+        for before,after,pulse,button in [('-1','1','.12','1'),('nan','1','.12','1'),('3','3','.12','1'),('0','0','0','1'),('0','0','.12','2')]:
+            with self.assertRaises(m.ToolError):self.arguments('key-button','unused','Shift_L+w',before,after,'--pulse',pulse,'--button',button)
+
+    def test_key_button_interrupts_release_every_control(self):
+        args=self.arguments('key-button','unused','Shift_L+w','.7','1.2')
+        for interrupted in range(3):
+            target=FakeInput();calls=[0]
+            def sleep(seconds):
+                index=calls[0];calls[0]+=1
+                if index==interrupted:raise KeyboardInterrupt()
+            with self.assertRaises(KeyboardInterrupt):m.perform_input('key-button',args,target,lambda event:None,sleep=sleep)
+            self.assertIn(('key',25,False),target.events);self.assertIn(('key',50,False),target.events)
+            if interrupted==1:self.assertEqual(target.events[-1],('button',1,False))
+
     def test_keys_release_reverse_order_even_when_logging_fails(self):
         target=FakeInput();args=self.arguments('key','unused','Shift_L+w','.3')
         def record(event):

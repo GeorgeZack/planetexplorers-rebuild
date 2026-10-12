@@ -107,6 +107,8 @@ pe_actor_scene_manifest_free(s);return bad;}
         tested=0
         for tool,body,mount in groups:
             output=root/tool;body=root/body
+            baseline=TOOLS.parent/'build/sprint-base-01/player'
+            if body.name=='player' and baseline.is_dir():body=baseline
             if not (output/'recording.peas').exists():
                 output=TOOLS.parent/'build/pickaxe-staging'/tool
             if not (output/'recording.peas').exists():continue

@@ -141,6 +141,9 @@ bool pe_sandbox_actor_set_shield(PeSandboxActor *actor,uint32_t instance);
  * Loaded and validated only: nothing draws or selects these clips, and
  * readiness is not permission to present or enable a reaction, get-up,
  * sprint attack or block. The poses already carry source clip mirroring. */
+/* Exact optional female401 body/drawn/stowed Knife group; no root or host
+ * admission implied. Wood Sword sprint remains unavailable. */
+bool pe_sandbox_actor_sprint_ready(const PeSandboxActor *actor);
 bool pe_sandbox_actor_reaction_ready(const PeSandboxActor *actor);
 /* True only when the separate reaction defence actor holds those same25
  * ordered clocks. Capsule binding stays the host's hitbox load. */

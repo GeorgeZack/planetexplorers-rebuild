@@ -71,7 +71,7 @@ struct PeSandboxActor {
     float body_yaw;
     double elapsed;
     size_t melee_body[4],melee_knife[4];
-    bool running_ready;
+    bool running_ready,sprint_ready;
     /* Native 150ms natural-end pose recovery; never an action/contact clock. */
     struct {bool was_active,active;int item;uint32_t instance;size_t body_clip,tool_clip;double seconds,age;} recovery;
     struct {bool active;size_t body_clip,knife_clip;double seconds;} melee;
@@ -169,6 +169,21 @@ PeSandboxActor *pe_sandbox_actor_load(const char *root,char *error,size_t cap){
         }
         a->running_ready=true;
     }
+    const int sprint_views[]={BODY,KNIFE_HELD,KNIFE_STOWED};
+    const PeActorClip *sprint[3]={0};unsigned sprint_count=0;
+    for(unsigned i=0;i<3;i++)if(present[sprint_views[i]]){
+        PeActorSceneView *v=&a->views[sprint_views[i]];
+        sprint[i]=pe_actor_scene_view_clip_at(v,pe_actor_scene_view_find_clip(v,"SprintSwordAttack"));
+        sprint_count+=sprint[i]!=NULL;
+    }
+    if(sprint_count){
+        if(sprint_count!=3||!clocks_match(sprint[0],sprint[1])||!clocks_match(sprint[0],sprint[2])||
+           sprint[0]->loop||!sprint[0]->terminal_at_duration||sprint[0]->fps!=30||sprint[0]->frames!=56||
+           sprint[0]->duration!=1.8000068664550781){
+            error_set(error,cap,"SprintSwordAttack requires exact female401 body/held/stowed Knife clocks");goto fail;
+        }
+        a->sprint_ready=true;
+    }
     if(wood_pair){
         const PeActorClip *run=pe_actor_scene_view_clip_at(&a->views[BODY],pe_actor_scene_view_find_clip(&a->views[BODY],"RunSwordAttack"));
         if(!run||run->loop||!run->terminal_at_duration||run->fps!=30||run->frames!=57||fabs(run->duration-running_duration)>1e-6){error_set(error,cap,"Wood sword running408 clock differs");goto fail;}
@@ -240,6 +255,7 @@ bool pe_sandbox_actor_hold_ready(const PeSandboxActor *a,int item) {
 bool pe_sandbox_actor_running_ready_for_item(const PeSandboxActor *a,int item){return (item==1||item==33)&&pe_sandbox_actor_action_ready(a,item)&&a->running_ready;}
 bool pe_sandbox_actor_running_ready(const PeSandboxActor *a){return pe_sandbox_actor_running_ready_for_item(a,33);}
 bool pe_sandbox_actor_shield_ready_for_item(const PeSandboxActor *a,int item){return a&&a->ok&&a->views[WOOD_SHIELD].loaded&&(item==0||item==1);}
+bool pe_sandbox_actor_sprint_ready(const PeSandboxActor *a){return a&&a->ok&&a->sprint_ready;}
 bool pe_sandbox_actor_reaction_ready(const PeSandboxActor *a){
     if(!a||!a->ok)return false;
     for(int v=REACTION_BODY;v<VIEW_COUNT;v++)if(!a->views[v].loaded)return false;
@@ -296,7 +312,8 @@ bool pe_sandbox_actor_set_melee_item(PeSandboxActor *a,int item,uint32_t instanc
        combat->gender!=PE_COMBAT_FEMALE||combat->view!=PE_COMBAT_THIRD_PERSON||!pe_combat_pose_name(combat)))return false;
     size_t body_clip=0,knife_clip=0;
     if(active){
-        if(!held||(combat->variant==PE_COMBAT_RUNNING&&!pe_sandbox_actor_running_ready_for_item(a,item)))return false;
+        if(!held||(combat->variant==PE_COMBAT_RUNNING&&!pe_sandbox_actor_running_ready_for_item(a,item))||
+           (combat->variant==PE_COMBAT_SPRINT&&(item!=33||!pe_sandbox_actor_sprint_ready(a))))return false;
         const char *name=pe_combat_pose_name(combat);
         body_clip=pe_actor_scene_view_find_clip(&a->views[BODY],name);
         knife_clip=pe_actor_scene_view_find_clip(&a->views[view],name);

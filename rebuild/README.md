@@ -881,3 +881,9 @@ Run `make -C rebuild camp-repair-test camp-repair-save-test camp-repair-interact
 ### Isolated automated native acceptance
 
 [The private-input supervisor](../docs/audit/NATIVE_PRIVATE_INPUT.md) starts the normal game on a dedicated Xvfb display using an unchanged copy of an earned checkpoint. It provides bounded ordinary input, screenshots and a journal without taking the user desktop. It does not fabricate gameplay or launch the Steam original. Run `make -C rebuild hunt-save-inspector-test native-private-input-test` for26 focused tooling cases; these targets never open graphics. Actual private sessions are explicit operator actions.
+
+Grounded female third-person Knife sprint attacks are supported when the
+complete optional sprint group is installed: restart the sandbox, draw Knife
+with LMB, hold Shift+W until sprinting, then make a fresh LMB press. See
+[the sprint audit](../docs/audit/SANDBOX_SPRINT_KNIFE.md) for qualified assets,
+backups, `sprint-attack-test` and current acceptance limits.

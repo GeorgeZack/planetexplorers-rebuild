@@ -65,6 +65,9 @@ class BakedTorchTests(unittest.TestCase):
     def test_installed_scenes_native_loader_clocks_and_emitter(self):
         assets=TOOLS.parent/'build/reference-assets'
         paths=[assets/name/'recording.peas' for name in ('player','player-torch','player-torch-stowed')]
+        # Compare this historical tool export with its preserved 21-clip body.
+        baseline=TOOLS.parent/'build/sprint-base-01/player/recording.peas'
+        if baseline.is_file():paths[0]=baseline
         if not all(p.is_file() for p in paths):self.skipTest('Recovered player/Torch scenes unavailable')
         if not shutil.which('cc'):self.skipTest('C compiler unavailable')
         with tempfile.TemporaryDirectory() as d:

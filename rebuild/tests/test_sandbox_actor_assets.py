@@ -17,6 +17,13 @@ class ActorAssets(unittest.TestCase):
         src=ROOT/'rebuild/src'
         with tempfile.TemporaryDirectory() as directory:
             folder=Path(directory);code=folder/'actor.c';binary=folder/'actor'
+            retained=ROOT/'rebuild/build/sprint-base-01'
+            if (retained/'player/recording.peas').is_file():
+                legacy=folder/'legacy-assets';legacy.mkdir()
+                for source in assets.iterdir():
+                    selected=retained/source.name if (retained/source.name).is_dir() else source
+                    (legacy/source.name).symlink_to(selected,target_is_directory=selected.is_dir())
+                assets=legacy
             code.write_text(r'''#include "pe_sandbox_actor.h"
 #include "pe_actor_scene_view.h"
 #include "pe_shield.h"
@@ -130,12 +137,12 @@ const PeSlot*pe_game_equipped_tool(const PeGame*g){(void)g;return NULL;}
 const PeSlot*pe_shield_equipped(const PeGame*g){(void)g;return NULL;}
 int main(int argc,char **argv){assert(argc==4);base=argv[1];stage=argv[2];char error[256],path[4096];
 hidden=1;PeSandboxActor*a=pe_sandbox_actor_load("x",error,sizeof error);if(!a){puts(error);return 2;}
-bool knife=pe_sandbox_actor_hold_ready(a,33),sword=pe_sandbox_actor_hold_ready(a,1),pick=pe_sandbox_actor_action_ready(a,19),running=pe_sandbox_actor_running_ready(a);
+bool knife=pe_sandbox_actor_hold_ready(a,33),sword=pe_sandbox_actor_hold_ready(a,1),pick=pe_sandbox_actor_action_ready(a,19),running=pe_sandbox_actor_running_ready(a),sprint=pe_sandbox_actor_sprint_ready(a);
 assert(!pe_sandbox_actor_reaction_ready(a));pe_sandbox_actor_unload(a);
 hidden=2;a=pe_sandbox_actor_load("x",error,sizeof error);assert(!a&&strstr(error,"complete body/sword/shield"));
 hidden=0;a=pe_sandbox_actor_load("x",error,sizeof error);if(!a){puts(error);return 3;}
 assert(pe_sandbox_actor_reaction_ready(a));
-assert(pe_sandbox_actor_hold_ready(a,33)==knife&&pe_sandbox_actor_hold_ready(a,1)==sword&&pe_sandbox_actor_action_ready(a,19)==pick&&pe_sandbox_actor_running_ready(a)==running);
+assert(pe_sandbox_actor_hold_ready(a,33)==knife&&pe_sandbox_actor_hold_ready(a,1)==sword&&pe_sandbox_actor_action_ready(a,19)==pick&&pe_sandbox_actor_running_ready(a)==running&&pe_sandbox_actor_sprint_ready(a)==sprint);
 snprintf(path,sizeof path,"%s/player-defence/player-defence.peac",stage);PeActor*d=pe_actor_load(path,error,sizeof error);if(!d){puts(error);return 4;}
 assert(pe_actor_stats(d).clips==25&&pe_sandbox_actor_reaction_defence_ready(a,d));
 snprintf(path,sizeof path,"%s/player-defence/player-defence.pehb",stage);PeHitboxes*h=pe_hitboxes_load(path,d,error,sizeof error);assert(h&&pe_hitboxes_count(h)==16);

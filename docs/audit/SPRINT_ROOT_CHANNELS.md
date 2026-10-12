@@ -1,7 +1,8 @@
 # SprintSwordAttack source root qualification
 
-October 12, 2026. **Source-derived, staged; no observed sprint root playback
-or C runtime integration.** This supersedes the mandatory new sprint capture
+October 12, 2026. **Source-derived extraction; later C integration and native observation are
+recorded in [the sprint audit](SANDBOX_SPRINT_KNIFE.md). No original live
+sprint root playback is claimed.** This supersedes the mandatory new sprint capture
 in the earlier [reaction plan](REACTION_PRESENTATION.md). Claude's completed
 25-clip pose bake includes clip401; its root-removed poses do not establish
 root displacement.
@@ -60,9 +61,39 @@ these guards only. Real installed inputs regenerate exactly. Full validation
 is recorded in [PLAYTEST](../PLAYTEST.md).
 
 The [separate presentation fixture](REACTION_PREVIEW.md) now renders the staged
-reaction body/attachments/defence and sprint pose. Next is an explicit sprint reader,
-outgoing stage routing and shared collision/contact integration. Use the
-qualified private display for presentation checks. A new original sprint
-root capture is optional corroboration, not needed to extract this bounded
-source curve. Live reactions, get-up, stun/knockback and shield gameplay remain
-closed; isolated leaf poses do not qualify their blending or physics.
+reaction body/attachments/defence and sprint pose.
+
+## Reader and host routing
+
+**Implemented in C; supported host admission is qualified separately in
+[the sprint audit](SANDBOX_SPRINT_KNIFE.md).**
+[`pe_sprint_root_motion`](../../rebuild/src/pe_sprint_root_motion.h) is the
+distinct owner of this one-record profile. It admits only the exact Avatar777,
+scale, clip401, 56-knot, duration, start and 30Hz header, finite bounded knots
+and the exact 952-byte length; the ordinary four-record PESR1 and PERM1 fail.
+Sampling is the same double linear interpolation adapter, relative to authored
+time 0, with no extrapolation past the clip endpoint. Its world delta accepts
+only a valid female third-person sprint stage0 interval and rotates once by
+body yaw, as the ordinary owner does.
+
+`sandbox_melee_delta` in `pe_sandbox_view` now sends a retained outgoing sprint
+stage0 interval to that owner and fails closed when it is absent; sprint
+stages1–3 remain the ordinary Attack7–9 continuations. The host now loads its distinct installed curve and sets Knife readiness only
+after complete matching presentation/defence validation. Missing optional
+assets still reject the press before stamina debit.
+
+`make -C rebuild sandbox-sword-motion-host-test` reads the staged file
+(`PE_SPRINT_ROOT_MOTION` selects another) and checks: sprint stage0 differs
+from both408 and ordinary stage0, the routed request equals the owner's delta
+through the shared request cap, the unrotated EndAction delta reproduces the
+source figures above to 1e-5m, a queued sprint combo routes its retained
+stage0 interval and then Attack7 from 0, and a missing owner or a query past
+the clip fails without touching the output. A missing staged file is a skip,
+not a pass. That target is not part of `check`; before this change it no
+longer compiled (missing `pe_sword_motion.h` include), which is fixed here.
+The core suite `sprint_root_motion` covers the reader with synthetic bytes.
+
+The complete matching group is now installed with preserved backups; see
+[installation and shared collision/contact checks](SANDBOX_SPRINT_KNIFE.md).
+A new original sprint root capture is optional corroboration. Live reactions,
+get-up, stun/knockback and shield gameplay remain closed.
