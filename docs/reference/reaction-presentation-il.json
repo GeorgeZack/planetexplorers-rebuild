@@ -1,0 +1,342 @@
+{
+ "schema": 1,
+ "authority": "shipped-artifact",
+ "confidence": "observed",
+ "provider": "rea-agents 6.0.0 inspect-managed-members (CLI); raw CIL sliced by cil_disasm.py",
+ "scope": "Focused static method excerpt for the Whacked action and its animator state behaviours. No assembly or game execution.",
+ "limitations": [
+  "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+  "CIL is read from file bytes; no JIT, floating-point or engine behavior is observed."
+ ],
+ "assemblies": {
+  "Assembly-CSharp.dll": {
+   "sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+   "byte_length": 8437760,
+   "mvid": "7ddcc464-5353-4750-b969-fe628ee474da",
+   "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+   "methods": [
+    {
+     "token": "0x06002e75",
+     "declaring_type": "AnimatorEventSender",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1249028,
+      "il_size": 7,
+      "il_sha256": "6d984c9c623daafbecd0c9d9c09e5f567b68eecad7364c2480ae43c59f5881ae",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "0228d713000a2a"
+    },
+    {
+     "token": "0x06002e76",
+     "declaring_type": "AnimatorEventSender",
+     "name": "OnStateEnter",
+     "signature": {
+      "raw_sha256": "b425c0f29271cd071c7d8a58bd88d45960f0e6df4161b83a0379847d254d0f05",
+      "return_type": "void",
+      "parameter_types": [
+       "class:53",
+       "valuetype:145",
+       "i4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1249036,
+      "il_size": 91,
+      "il_sha256": "522f11bda47eec1c43a589cd1691310d39fc06ea6db43154add6fca7134cb341",
+      "instruction_count": 39
+     },
+     "raw_il_hex": "0203040528d813000a14027bdf250004284b00000a390c00000002036f6a02002b7ddf2500040203027bdd25000428792e0006160a3812000000027be0250004069a167de32500040617580a06027be02500048e693fe0ffffff2a"
+    },
+    {
+     "token": "0x06002e77",
+     "declaring_type": "AnimatorEventSender",
+     "name": "OnStateExit",
+     "signature": {
+      "raw_sha256": "b425c0f29271cd071c7d8a58bd88d45960f0e6df4161b83a0379847d254d0f05",
+      "return_type": "void",
+      "parameter_types": [
+       "class:53",
+       "valuetype:145",
+       "i4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1249140,
+      "il_size": 115,
+      "il_sha256": "21a1cc17b200ef4622720e83dd6237dd3916361ade029d022ee1e339180ee624",
+      "instruction_count": 47
+     },
+     "raw_il_hex": "0203040528da13000a14027bdf250004284b00000a390c00000002036f6a02002b7ddf2500040203027bde25000428792e0006160a382a000000027be0250004069a7be32500043a140000000203027be0250004069a7be225000428792e00060617580a06027be02500048e693fc8ffffff2a"
+    },
+    {
+     "token": "0x06002e78",
+     "declaring_type": "AnimatorEventSender",
+     "name": "OnStateUpdate",
+     "signature": {
+      "raw_sha256": "b425c0f29271cd071c7d8a58bd88d45960f0e6df4161b83a0379847d254d0f05",
+      "return_type": "void",
+      "parameter_types": [
+       "class:53",
+       "valuetype:145",
+       "i4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1249268,
+      "il_size": 103,
+      "il_sha256": "008106395c716506c26b3094c6b5eb8c49e49a6ba2fb9c02d6cce17f7fa57614",
+      "instruction_count": 42
+     },
+     "raw_il_hex": "160a3851000000027be0250004069a7be32500043a3b000000027be0250004069a7be12500040f02287111000a4222000000027be0250004069a177de32500040203027be0250004069a7be225000428792e00060617580a06027be02500048e693fa1ffffff2a"
+    },
+    {
+     "token": "0x06002e79",
+     "declaring_type": "AnimatorEventSender",
+     "name": "SendMsg",
+     "signature": {
+      "raw_sha256": "9bf4142d12b6fac941799c13051782c28732d6e2a47acf282c25a3732cf0e7db",
+      "return_type": "void",
+      "parameter_types": [
+       "class:53",
+       "string"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1249384,
+      "il_size": 70,
+      "il_sha256": "2657007c9b47e19ef947faf11f220883000de592af02765a532e16a42abab1cf",
+      "instruction_count": 22
+     },
+     "raw_il_hex": "7e4701000a04286a00000a39010000002a14027bdf250004283000000a3911000000027bdf250004046fdf6700063812000000036f4900000a728f56027004176fbb09000a2a",
+     "strings": {
+      "0x7002568f": "AnimatorEvent"
+     }
+    },
+    {
+     "token": "0x06002e7b",
+     "declaring_type": "AnimatorLayerWeightCtr",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1249476,
+      "il_size": 18,
+      "il_sha256": "b3d66d2ddbab4eab8589299490966a92d6727ababe104f9cbf642fb6e2f71f4d",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "02220000a0407de42500040228d713000a2a"
+    },
+    {
+     "token": "0x06002e7c",
+     "declaring_type": "AnimatorLayerWeightCtr",
+     "name": "OnStateUpdate",
+     "signature": {
+      "raw_sha256": "b425c0f29271cd071c7d8a58bd88d45960f0e6df4161b83a0379847d254d0f05",
+      "return_type": "void",
+      "parameter_types": [
+       "class:53",
+       "valuetype:145",
+       "i4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1249496,
+      "il_size": 46,
+      "il_sha256": "1b0dfe5ce94639c1828c4fce81327e1808f86ab46ee441a91f3d53bd0d485618",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "0203040528db13000a030503056fdc13000a2200000000027be4250004280e00000a5a287b00000a6fc011000a2a"
+    },
+    {
+     "token": "0x06002e7d",
+     "declaring_type": "AnimatorLayerWeightCtr",
+     "name": "OnStateExit",
+     "signature": {
+      "raw_sha256": "b425c0f29271cd071c7d8a58bd88d45960f0e6df4161b83a0379847d254d0f05",
+      "return_type": "void",
+      "parameter_types": [
+       "class:53",
+       "valuetype:145",
+       "i4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1249556,
+      "il_size": 22,
+      "il_sha256": "4d2042223a7e57e056217f3f4b7572cd0c2d83f44f2c7d443b8910ebb321bcef",
+      "instruction_count": 10
+     },
+     "raw_il_hex": "0203040528da13000a0305220000803f6fc011000a2a"
+    },
+    {
+     "token": "0x06006ad3",
+     "declaring_type": "Pathea.Motion_Move_Human",
+     "name": "UpdateAnimState",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2838272,
+      "il_size": 1049,
+      "il_sha256": "2c96e7723e6f8f6b81432c42ca5460b89bb6b7375422037fec61940de27e6991",
+      "instruction_count": 290
+     },
+     "raw_il_hex": "140228937300066fcc730006284b00000a3a2b000000140228937300066fcc7300066fbe670006284b00000a3a100000000228937300066f217400063a010000002a0228937300066fcc7300066fbe6700060a0672dd6603700228ad6a0006390a000000220000803f380500000022000000006f6c11000a06726126027014027bf55b0004283000000a3910000000027bf55b00046ffea200063809000000026f886a000617fe016f6d11000a0672f56603700672f56603706f7b11000a14027bf55b0004283000000a391a000000027bf55b00046ffaa20006390a000000220000803f38050000002200000000027bfe5b0004280e00000a5a287b00000a6f6c11000a2235fa8e3c026fb86a00066b5a220000a0415a0b282200000a0c12020672056703706f7b11000a7d1c00000a120206721b6703706f7b11000a7d1900000a282200000a0d072200000000431a000000120307288602000a7d1c00000a120307288702000a7d1900000a0809220000a040280e00000a5a280f00000a0d06720567037012037b1c00000a6f6c11000a06721b67037012037b1900000a6f6c11000a0672316703700672316703706f7b11000a026fb86a00066b220000a040280e00000a5a287b00000a6f6c11000a14027bf55b0004283000000a3910000000027bf55b00046f0ca3000638050000002200000000130414027b195c0004283000000a391d000000027b195c00047b691c0004027b185c000411046f5e07000a7db41c00040672456703700672456703706f7b11000a1104027bfd5b0004280e00000a5a287b00000a6f6c11000a14027bf55b0004283000000a39b7010000140228937300066fb3730006283000000a39a10100000228937300066fbf730006176f026a00063a8b0100000228937300066fbf730006186f026a00063a750100000228937300066fbf7300061c6f026a00063a5f0100000228937300066fbf7300061f236f026a00063a480100000228937300066fbf7300061a6f026a00063a320100000228937300066fbf7300061f246f026a00063a1b0100000228937300066fbf7300061f116f026a00063a040100000228937300066fbf7300061f256f026a00063aed0000000228937300066fbf7300061f0c6f026a00063ad60000000228937300066fbf7300061f0e6f026a00063abf0000000228937300066fb37300066fc0700006285b00000a027bf55b00046f09a30006288000000a130506725f67037006725f6703706f7b11000a12057b1d00000a0228937300066fbf7300066fff690006390a000000220000803f380b000000220000a040280e00000a5a287b00000a6f6c11000a0672796703700672796703706f7b11000a12057b1c00000a0228937300066fbf7300066fff690006390a000000220000803f380b000000220000a040280e00000a5a287b00000a6f6c11000a2a",
+     "strings": {
+      "0x700366dd": "FirstPerson",
+      "0x70022661": "OnGround",
+      "0x700366f5": "InWater",
+      "0x70036705": "MoveStyleH",
+      "0x7003671b": "MoveStyleV",
+      "0x70036731": "MoveStyle",
+      "0x70036745": "ForwardAngle",
+      "0x7003675f": "ForwardSpeed",
+      "0x70036779": "RightSpeed"
+     }
+    },
+    {
+     "token": "0x06006b1b",
+     "declaring_type": "Pathea.Action_Whacked",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 2849640,
+      "il_size": 7,
+      "il_sha256": "94e6720e632f547fbd386b5bf79e69351c185872875e3118f903fd42ed4bf99c",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "02289b6d00062a"
+    },
+    {
+     "token": "0x06006b1c",
+     "declaring_type": "Pathea.Action_Whacked",
+     "name": "get_ActionType",
+     "signature": {
+      "raw_sha256": "9097e4c4095e0766b7b873c3425d47fb0cbee7c47ce6efcfb11cc53a5591f433",
+      "return_type": "valuetype:15772",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 2849648,
+      "il_size": 2,
+      "il_sha256": "54fc02efedc1c846576843c65f871cee652323766f85c3f7982afc16bcd997fb",
+      "instruction_count": 2
+     },
+     "raw_il_hex": "1b2a"
+    },
+    {
+     "token": "0x06006b1d",
+     "declaring_type": "Pathea.Action_Whacked",
+     "name": "DoAction",
+     "signature": {
+      "raw_sha256": "7e6c5b669f3319ffa4d535ec95822dfd65babab311d7f4deaaca34cf6a676359",
+      "return_type": "void",
+      "parameter_types": [
+       "class:15792"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2849652,
+      "il_size": 48,
+      "il_sha256": "89148e444fb021e8c6eea7db2c3c5ec87683ab4909e32799ef8bfea32dce77a1",
+      "instruction_count": 15
+     },
+     "raw_il_hex": "140228a86d0006283000000a39100000000228a86d000672cb6703706fc967000602289e6d00061f2f176ffd6900062a",
+     "strings": {
+      "0x700367cb": "BeHit"
+     }
+    },
+    {
+     "token": "0x06006b1e",
+     "declaring_type": "Pathea.Action_Whacked",
+     "name": "Update",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2849712,
+      "il_size": 43,
+      "il_sha256": "5fc5d411745f7e09376f416a56c454745e3d87cdc6578037b74a88a692d4c5ba",
+      "instruction_count": 15
+     },
+     "raw_il_hex": "140228a86d0006284b00000a3a16000000140228a86d00066fbe670006284b00000a3902000000172a162a"
+    },
+    {
+     "token": "0x06006b1f",
+     "declaring_type": "Pathea.Action_Whacked",
+     "name": "EndImmediately",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2849768,
+      "il_size": 64,
+      "il_sha256": "ed29d2d0b5fd180a4f50332347037d4354b9e9f723e0c9edd352a581614a61b5",
+      "instruction_count": 19
+     },
+     "raw_il_hex": "02289e6d00061f2f166ffd690006140228a86d0006283000000a39200000000228a86d000672d76703706fc96700060228a86d000672cb6703706fca6700062a",
+     "strings": {
+      "0x700367d7": "ResetFullBody",
+      "0x700367cb": "BeHit"
+     }
+    },
+    {
+     "token": "0x06006b20",
+     "declaring_type": "Pathea.Action_Whacked",
+     "name": "OnAnimEvent",
+     "signature": {
+      "raw_sha256": "c65dc7d303e94729245de0fa4db4b80ac687af6d0bb38c5c884bc9c11f01e005",
+      "return_type": "void",
+      "parameter_types": [
+       "string"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 2849844,
+      "il_size": 35,
+      "il_sha256": "0751da1896044a25c57dc000601982f1fd6827d3337b453f18db84d57e972bdb",
+      "instruction_count": 11
+     },
+     "raw_il_hex": "0372f3670370286a00000a391200000002289e6d0006026f1c6b00066f0b6a0006262a",
+     "strings": {
+      "0x700367f3": "HitAnimEnd"
+     }
+    }
+   ]
+  }
+ }
+}

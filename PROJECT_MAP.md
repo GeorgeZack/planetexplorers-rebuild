@@ -1,5 +1,7 @@
 # Planet Explorers project map
 
+[Reaction animation contract](docs/audit/REACTION_PRESENTATION.md): `pe_whacked` owns the disconnected Whacked lifecycle and BeHit exit clock; `export_reaction_presentation.py` binds the installed controller graph, state behaviours, clip identities, relation row5 and a CIL excerpt. `cil_evidence.py` is the shared excerpt builder/checker. `inventory_reference_bake.py` and `reference_animator_bake.py --preset hit-reaction` hold the prepared, unrun pose bake.
+
 [HumanPhyCtrl qualification](docs/audit/HUMAN_PHY_CTRL.md): `pe_human_phy` owns the disconnected request latch, ground/water/drag state and FixedUpdate force requests; `export_human_phy.py` binds the committed CIL excerpt to the installed assemblies, female prefab and project physics settings. `cil_disasm.py` decodes compiled-only method bodies for reading. PhysX integration and host scheduling remain separate gates.
 
 [Repulsed qualification](docs/audit/REPULSED_ACTION.md): `pe_repulsed` owns disconnected admitted-action clocks and requests; `export_repulsed_action.py` binds the active female curves, row6 relations and static Unity5 angle evidence. Physical motor consumption and reaction presentation remain separate gates.

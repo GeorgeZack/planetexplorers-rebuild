@@ -1,5 +1,7 @@
 # Source-derived hit-reaction decisions
 
+October12 presentation follow-through: the [animation contract](REACTION_PRESENTATION.md) and disconnected `pe_whacked` recover what Whacked and Repulsed play and when Whacked ends. Reaction poses await one prepared engine bake.
+
 October12 follow-through: [HumanPhyCtrl consumption](HUMAN_PHY_CTRL.md) of the Repulsed velocity request is qualified from installed CIL in the disconnected `pe_human_phy`. Reaction poses, hit IK and host integration remain gated.
 
 October10 follow-through: [admitted Repulsed](REPULSED_ACTION.md) now has source-bound female curves, row6 relations and a disconnected C clock/request owner. Installed Unity5 static IL also qualifies the zero-direction angle as90. HumanPhyCtrl consumption, reaction poses, hit IK and host integration remain gated; the decision owner below still changes no live damage or movement.

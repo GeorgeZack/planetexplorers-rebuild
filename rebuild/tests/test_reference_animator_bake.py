@@ -244,6 +244,77 @@ class BakeTests(unittest.TestCase):
         self.assertEqual(len(self.read(selection)['clips']),20)
         self.assertEqual(selection[:10],tool.DEFAULT_CLIPS)
 
+    def reaction_controller(self):
+        def node():return dict(m_ChildIndices=[],m_ClipID=4294967295,m_BlendType=0,
+            m_BlendEventID=4294967295,m_BlendEventYID=4294967295,
+            m_Blend1dData={'data':{'m_ChildThresholdArray':[]}},
+            m_Blend2dData={'data':{'m_ChildPositionArray':[]}})
+        paths=['Base Layer.GroundLocomotion.Move','FullBody.BeHit.Blend Tree']
+        names=list(enumerate(paths+['BeatWeight','RightSpeed','ForwardSpeed','SheildBlockF','MoveStyle']))
+        ids={name:i for i,name in names};trees={path:[{'data':node()}] for path in paths};refs=[]
+        for name,(clip,path,steps) in inventory.REACTION_BRANCHES.items():
+            nodes=trees[path];index=0
+            for parameter,parameter_y,value in steps:
+                n=nodes[index]['data'];n['m_BlendEventID']=ids[parameter];n['m_BlendEventYID']=ids.get(parameter_y,4294967295)
+                if isinstance(value,tuple):
+                    n['m_BlendType']=2;values=n['m_Blend2dData']['data']['m_ChildPositionArray'];key=dict(zip(('x','y'),value))
+                else:values=n['m_Blend1dData']['data']['m_ChildThresholdArray'];key=value
+                if key not in values:
+                    values.append(key);n['m_ChildIndices'].append(len(nodes));nodes.append({'data':node()})
+                index=n['m_ChildIndices'][values.index(key)]
+            nodes[index]['data']['m_ClipID']=len(refs);refs.append(dict(m_FileID=0,m_PathID=clip))
+        states=[{'data':dict(m_FullPathID=ids[path],m_Speed=1,m_BlendTreeConstantArray=[{'data':{'m_NodeArray':trees[path]}}])} for path in paths]
+        return dict(m_TOS=names,m_AnimationClips=refs,m_Controller={'m_StateMachineArray':[
+            {'data':{'m_StateConstantArray':[states[0]]}},{'data':{'m_StateConstantArray':[states[1]]}}]}),ids
+
+    def test_reaction_branches_reject_locomotion_and_shield_substitution(self):
+        c,ids=self.reaction_controller();result=inventory.reaction_states(c)
+        self.assertEqual(set(result),set(inventory.REACTION_CLIPS));self.assertEqual(len(result),19)
+        self.assertEqual([b['parameter'] for b in result['SwordBeHit']['branches']],['MoveStyle'])
+        self.assertEqual(result['SwordBeHit']['branches'][0]['value'],1)
+        self.assertEqual([b['parameter'] for b in result['BlockRepulsed']['branches']],['BeatWeight','RightSpeed','SheildBlockF'])
+        self.assertEqual(result['BackFast']['node_path'][:-1],result['BlockRepulsed']['node_path'][:-1])
+        self.assertEqual(result['BackFast']['branches'][-1]['value'],0)
+        # No reaction leaf aliases a Normal or Sword locomotion clip already in the catalog.
+        earlier={v for k,v in inventory.CLIPS.items() if k not in inventory.REACTION_CLIPS}
+        self.assertTrue(earlier.isdisjoint(inventory.REACTION_CLIPS.values()))
+        def machine(bad,i):return bad['m_Controller']['m_StateMachineArray'][i]['data']['m_StateConstantArray']
+        for change in ('normal','external','beat','direction','shield','style','parameter','speed','duplicate','missing'):
+            bad=copy.deepcopy(c);move=machine(bad,0)[0]['data'];hit=machine(bad,1)[0]['data']
+            nodes=move['m_BlendTreeConstantArray'][0]['data']['m_NodeArray'];beat=nodes[nodes[0]['data']['m_ChildIndices'][0]]['data']
+            if change=='normal':bad['m_AnimationClips'][2]['m_PathID']=531
+            if change=='external':bad['m_AnimationClips'][0]['m_FileID']=1
+            if change=='beat':nodes[0]['data']['m_Blend1dData']['data']['m_ChildThresholdArray'][0]=0
+            if change=='direction':beat['m_Blend2dData']['data']['m_ChildPositionArray'][0]['y']=-5
+            if change=='shield':
+                back=nodes[result['BackFast']['node_path'][-2]]['data'];back['m_Blend1dData']['data']['m_ChildThresholdArray'].reverse()
+            if change=='style':hit['m_BlendTreeConstantArray'][0]['data']['m_NodeArray'][0]['data']['m_Blend1dData']['data']['m_ChildThresholdArray']=[1,0]
+            if change=='parameter':beat['m_BlendEventID']=ids['ForwardSpeed']
+            if change=='speed':hit['m_Speed']=1.2
+            if change=='duplicate':machine(bad,1).append(copy.deepcopy(machine(bad,1)[0]))
+            if change=='missing':machine(bad,1).clear()
+            with self.subTest(change=change),self.assertRaises(ValueError):inventory.reaction_states(bad)
+
+    def test_hit_reaction_preset_is_separate_bounded_and_build_only(self):
+        lengths={'IdleBeHit':.9333336353302002,'SwordBeHit':.9333419799804688,'BlockRepulsed':1.0000152587890625}
+        self.data['genders']['female']['clips']=[dict(name=n,path_id=p,length=lengths.get(n,1.),frame_rate=30,
+            loop=n not in lengths or n=='BlockRepulsed',humanoid_bindings=127) for n,p in inventory.CLIPS.items()]
+        self.save();selection=tool.REACTION_SELECTION;p=self.read(selection)
+        self.assertEqual(selection[0],'NormalIdle');self.assertEqual(selection[1:],tuple(inventory.REACTION_CLIPS))
+        self.assertEqual(len(p['clips']),20);self.assertLessEqual(len(selection),tool.MAX_CLIPS)
+        self.assertEqual([c['path_id'] for c in p['clips'][1:3]],[139,157])
+        self.assertLessEqual(p['planned_samples'],3600)
+        self.assertIn('IdleBeHit|0.933333635|30|139|0',p['spec'])
+        self.assertTrue(set(inventory.REACTION_CLIPS).isdisjoint(tool.DEFAULT_CLIPS+tuple(inventory.DIRECTIONAL_CLIPS)+tuple(inventory.SWORD_CLIPS)))
+        self.assertEqual(len(tool.DEFAULT_CLIPS),10)
+        args=self.args()[:-2]+['--preset','hit-reaction']
+        with mock.patch.object(tool,'build',return_value=self.setup_mock_launch()), \
+             mock.patch.object(tool.launch_reference,'launch_command',return_value=(['/original/client'],{})), \
+             mock.patch.object(tool.launch_reference,'prepare_settings') as settings, \
+             mock.patch.object(tool.subprocess,'run') as launch:
+            self.assertEqual(tool.main(args),0);settings.assert_not_called();launch.assert_not_called()
+            self.assertNotEqual(tool.main(args+['--clip','NormalIdle']),0) # a preset excludes explicit clips
+
     def test_managed_configuration_accepts_exactly_inventory_catalog(self):
         # Independent managed guard caused a real pre-capture failure when only
         # Python's catalog grew. Keep both entry-point contracts synchronized.

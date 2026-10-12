@@ -36,10 +36,16 @@ depends on, then compares the excerpt with the installed bytes.
 
 The shipped `Action_Repulsed.Update` matches the checked-in C#: same strict
 Wentfly and Halt comparisons, the same single `ApplyMoveRequest(m_MoveDir *
-m_FinalVelocity)`. The shipped assembly also contains callers that the
-checked-in C# lacks, including `MainPlayerCmpt.UpdateMoveState`
-(`ApplyMoveRequest` with `waterUpSpeed * up`, and `ApplyImpact`),
-`Action_Rotate` and `Action_Step`. The excerpt lists every static caller.
+m_FinalVelocity)`. Other callers of the same request, all also present in the
+checked-in C#, include `MainPlayerCmpt.UpdateMoveState` (`ApplyMoveRequest`
+with `waterUpSpeed * up`, and `ApplyImpact`), `Action_Rotate` and
+`Action_Step`. The excerpt lists every static caller.
+
+Correction, October 12: an earlier revision of this page said the checked-in
+C# lacked those callers. That was a search error: several reference scripts
+are ISO-8859 encoded, and a plain `grep` treats them as binary and hides their
+matches. A binary-safe search finds every caller in the C#. The absence of a
+`HumanPhyCtrl` class file was rechecked the same way and stands.
 
 ## Active female binding
 
@@ -228,8 +234,8 @@ Still unqualified:
   one frame late. The rebuild's running-attack path keeps its documented
   adapter; this increment does not change it.
 
-Before gameplay integration: recover Whacked/Repulsed poses and animation
-events, then compose reaction, body, attachments, defence and cancellation with
+Before gameplay integration: bake the reaction poses whose
+[animation contract](REACTION_PRESENTATION.md) is now recovered, then compose reaction, body, attachments, defence and cancellation with
 the actual host. `Action_Halt`, `Action_Wentfly` and `Action_Knocked` are also
 compiled callers of this controller and need their own owners. This increment
 supplies no permission to enable live stun or knockback.

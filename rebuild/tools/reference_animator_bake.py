@@ -18,11 +18,13 @@ import sys
 
 import launch_reference
 import reference_pose
-from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS, DIRECTIONAL_CLIPS
+from inventory_reference_bake import CLIPS, SWORD_CLIPS, SWORD_BACKWARD_CLIPS, DIRECTIONAL_CLIPS, REACTION_CLIPS
 
 TOOLS = Path(__file__).resolve().parent
 BUILD = TOOLS.parent/'build/animator-bake'
 MAX_CLIPS = 32
+# NormalIdle first as the repeatability anchor shared with earlier bakes.
+REACTION_SELECTION = ('NormalIdle',)+tuple(REACTION_CLIPS)
 DEFAULT_CLIPS = ('NormalIdle', 'NormalWF', 'NormalRF', 'Jump', 'Fall', 'Land', 'Attack6', 'Attack7', 'Attack8', 'Attack9')
 
 
@@ -99,7 +101,7 @@ def main(argv=None):
     p.add_argument('--plan', type=Path, default=BUILD/'clip-plan.json')
     p.add_argument('--sex', choices=('female', 'male'), default='female')
     p.add_argument('--source-entity', type=int, help='read one loaded entity instead of the main player (1..1000000)')
-    p.add_argument('--preset', choices=('default','torch-sword','sword-backward','normal-directional'), default='default', help='bounded clip group; default remains the original ten Normal/attack clips')
+    p.add_argument('--preset', choices=('default','torch-sword','sword-backward','normal-directional','hit-reaction'), default='default', help='bounded clip group; default remains the original ten Normal/attack clips')
     p.add_argument('--clip', choices=tuple(CLIPS), action='append', dest='clips')
     p.add_argument('--fps', type=int, choices=range(1,61), default=30, metavar='1..60')
     p.add_argument('--seconds', type=int, choices=range(1,601), default=180, metavar='1..600')
@@ -115,7 +117,7 @@ def main(argv=None):
         plan_path = a.plan.expanduser().resolve()
         if a.preset!='default' and a.clips:
             raise ValueError('Choose either a preset or explicit clips')
-        selected=a.clips or (tuple(SWORD_CLIPS) if a.preset=='torch-sword' else tuple(SWORD_BACKWARD_CLIPS) if a.preset=='sword-backward' else DEFAULT_CLIPS+tuple(DIRECTIONAL_CLIPS) if a.preset=='normal-directional' else DEFAULT_CLIPS)
+        selected=a.clips or (tuple(SWORD_CLIPS) if a.preset=='torch-sword' else tuple(SWORD_BACKWARD_CLIPS) if a.preset=='sword-backward' else DEFAULT_CLIPS+tuple(DIRECTIONAL_CLIPS) if a.preset=='normal-directional' else REACTION_SELECTION if a.preset=='hit-reaction' else DEFAULT_CLIPS)
         plan = read_plan(plan_path, game, a.sex, selected, a.fps)
         if a.source_entity is not None: plan['source_entity_id'] = a.source_entity
         output, arm, stop, manifest = reference_pose.capture_paths(profile, a.output.expanduser() if a.output else None)

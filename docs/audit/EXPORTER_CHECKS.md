@@ -45,6 +45,8 @@ Both are wired into `exporter-check` through `SETTLEMENT_CAPTURE`, `ROUTE_CAPTUR
 
 `human-phy-source-check`, also in `check-sources`, regenerates-and-compares the HumanPhyCtrl metadata and runs all16 decoder/evidence/prefab cases with UnityPy. It compares every excerpted CIL body with the installed Assembly-CSharp, Assembly-CSharp-firstpass and UnityEngine bytes, so the target needs the pinned Steam installation. Run on its own, the test file skips the installed-byte and regeneration cases when that installation is absent. Refreshing the excerpt itself needs saved REA inventories (`export_human_phy.py --excerpt`) and is not part of any check. See [the qualification](HUMAN_PHY_CTRL.md).
 
+`reaction-presentation-source-check`, also in `check-sources`, regenerates-and-compares the Whacked/Repulsed animation contract and runs all14 cases with UnityPy. It reads the installed `sharedassets1.assets` and `sharedassets0.assets` by pinned hash and compares the committed CIL excerpt, including resolved string literals, with the installed Assembly-CSharp. It does not run or check the prepared `hit-reaction` bake. See [the contract](REACTION_PRESENTATION.md).
+
 ## Not wired
 
 - **`export_shield_controller.py`.** Its check verifies an existing stage directory, and no stage is retained locally. `tests/test_shield_controller_export.py` exercises the mode against a temporary stage.

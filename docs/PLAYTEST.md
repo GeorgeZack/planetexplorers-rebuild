@@ -1,5 +1,35 @@
 # Original-game playtest and C comparison
 
+## October 12 reaction animation contract — static and headless qualification
+
+[The animation contract](audit/REACTION_PRESENTATION.md) reads the installed
+player controller, its state behaviours and clip identities for Whacked and
+Repulsed. `pe_whacked` implements the Whacked lifecycle and its nominal BeHit
+exit clock in an isolated C owner. Neither gameplay host calls it.
+
+Source-derived, not observed in play: Whacked ends on the BeHit state's exit
+event `HitAnimEnd`, nominally 0.933 s after the trigger; the hit clip is chosen
+by `MoveStyle`; Repulsed plays a separate stagger clip set selected by local
+velocity. No reaction pose is baked. Unity's transition frame timing, blend
+weights and layer mixing are unqualified.
+
+A `hit-reaction` bake preset (20 clips, 836 samples at 30 Hz) is prepared. Its
+clip plan validates against the installed controller and the sampler compiles;
+the original game was not launched.
+
+Results: `make -C rebuild check` passes 248 jobs (868 Python tests, 73
+ordinary-interpreter skips, which are not passes). `check-sanitize` passes all
+96 ASan/UBSan/leak suites. `check-content`, `check-sources` and `cli-test`
+pass; `check-sources` runs the fourteen reaction-contract cases with UnityPy
+and no skips.
+
+This increment also corrects the October 12 HumanPhyCtrl page: its statement
+that some `ApplyMoveRequest` callers were absent from the checked-in C# was a
+search error on ISO-8859 source files. The callers are in the C#.
+
+No game, desktop input, normal save or installed asset modification was needed.
+PECSv22 and live damage remain unchanged.
+
 ## October 12 HumanPhyCtrl consumption — static CIL and headless qualification
 
 [HumanPhyCtrl qualification](audit/HUMAN_PHY_CTRL.md) reads the compiled-only

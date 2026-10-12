@@ -105,6 +105,43 @@ def body_bytes(raw,body):
     return code
 
 
+def streams(raw):
+    """Metadata stream name -> (file offset, size), read from PE/CLI headers."""
+    try:
+        pe=struct.unpack_from('<I',raw,0x3c)[0]
+        if raw[pe:pe+4]!=b'PE\0\0': raise ValueError('Not a PE file')
+        count,optional=struct.unpack_from('<H',raw,pe+6)[0],struct.unpack_from('<H',raw,pe+20)[0]
+        magic=struct.unpack_from('<H',raw,pe+24)[0]
+        directories=pe+24+(96 if magic==0x10b else 112)
+        sections=[struct.unpack_from('<IIII',raw,pe+24+optional+40*i+8) for i in range(count)]
+        def offset(rva):
+            for virtual_size,address,raw_size,pointer in sections:
+                if address<=rva<address+max(virtual_size,raw_size): return rva-address+pointer
+            raise ValueError('RVA outside sections')
+        root=offset(struct.unpack_from('<I',raw,offset(struct.unpack_from('<I',raw,directories+14*8)[0])+8)[0])
+        if raw[root:root+4]!=b'BSJB': raise ValueError('Missing CLI metadata')
+        cursor=root+16+struct.unpack_from('<I',raw,root+12)[0]
+        total=struct.unpack_from('<H',raw,cursor+2)[0]; cursor+=4; result={}
+        for _ in range(total):
+            start,size=struct.unpack_from('<II',raw,cursor); end=raw.index(b'\0',cursor+8)
+            result[raw[cursor+8:end].decode('ascii')]=(root+start,size); cursor=(end+4)&~3
+        return result
+    except (struct.error,IndexError) as error:
+        raise ValueError('Malformed PE/CLI metadata') from error
+
+
+def user_string(raw,token,heap=None):
+    """Resolve an ldstr token (0x70......) in the #US heap."""
+    start,size=heap or streams(raw)['#US']; index=token&0xffffff
+    if token>>24!=0x70 or not 0<index<size: raise ValueError('Not a user-string token')
+    cursor=start+index; first=raw[cursor]
+    if first&0x80==0: length,cursor=first,cursor+1
+    elif first&0xc0==0x80: length,cursor=((first&0x3f)<<8)|raw[cursor+1],cursor+2
+    else: length,cursor=((first&0x1f)<<24)|(raw[cursor+1]<<16)|(raw[cursor+2]<<8)|raw[cursor+3],cursor+4
+    if length<1 or cursor+length>start+size: raise ValueError('Malformed user string')
+    return raw[cursor:cursor+length-1].decode('utf-16-le')
+
+
 def listing(code,names=None):
     names=names or {}; lines=[]
     for offset,mnemonic,operand in decode(code):

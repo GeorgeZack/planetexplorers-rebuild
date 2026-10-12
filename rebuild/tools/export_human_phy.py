@@ -13,6 +13,7 @@ from pathlib import Path
 import sys
 
 import cil_disasm
+import cil_evidence
 from export_content import ROOT, describe_source
 from export_capsule_history import DEFAULT_UNITY, UNITY_SHA256
 from export_hit_reaction import MODEL, f
@@ -100,85 +101,32 @@ MODEL_OBJECT, HUMAN_PHY, RIGIDBODY_ID, CAPSULE_ID, MODEL_LAYER = 100170, 1140000
 FIXED_TIMESTEP, MAXIMUM_TIMESTEP, GRAVITY_Y = 0.019999999552965164, 0.3333333432674408, -9.8100004196167
 
 
-def key(method):
-    return method['declaring_type']+'::'+method['name']
-
-
-def methods_digest(evidence):
-    rows=sorted((name,m['token'],m['body']['il_sha256']) for name,part in evidence['assemblies'].items()
-                for m in part['methods'])
-    return hashlib.sha256(json.dumps(rows,separators=(',',':')).encode()).hexdigest()
-
-
 def excerpt(inventories):
     """Build the committed excerpt from saved REA inspect-managed-members results."""
-    assemblies={}
-    for name,path in inventories.items():
-        envelope=json.loads(Path(path).read_text()); data=envelope.get('normalized_result') or envelope
-        raw=(MANAGED/name).read_bytes(); methods=[]
-        if data['coverage']['state']!='complete': raise ValueError('Incomplete inventory for '+name)
-        for method in data['methods']:
-            if not EXCERPT[name](method): continue
-            body=method['body']; keep=dict(token=method['token'],declaring_type=method['declaring_type'],
-                name=method['name'],signature=dict(raw_sha256=method['signature']['raw_sha256'],
-                    return_type=method['signature']['return_type'],
-                    parameter_types=method['signature']['parameter_types']))
-            keep['body']={k:body[k] for k in ('header_format','file_offset','il_size','il_sha256','instruction_count')}
-            keep['raw_il_hex']=cil_disasm.body_bytes(raw,body).hex(); methods.append(keep)
-        tokens={m['token'] for m in methods}; part=dict(sha256=data['artifact']['sha256'],
-            byte_length=data['artifact']['byte_length'],mvid=data['module']['mvid'],
-            rea_evidence_id=envelope.get('evidence_id'),methods=methods)
-        if name=='Assembly-CSharp.dll':
-            part['fields']=[dict(token=x['token'],name=x['name'],type=x['signature'].get('field_type'),flags=x['flags'])
-                            for x in data['fields'] if x.get('declaring_type')=='HumanPhyCtrl']
-            names={x['token']:x['declaring_type']+'::'+x['name'] for x in data['methods']}
-            human={t for t in tokens if names[t].startswith('HumanPhyCtrl::')}; callers={}
-            for edge in data['call_edges']:
-                if edge.get('target_token') in human and edge['caller_token'] not in human:
-                    callers.setdefault(names[edge['target_token']].split('::')[1],set()).add(names[edge['caller_token']])
-            part['external_callers']={k:sorted(v) for k,v in sorted(callers.items())}
-        assemblies[name]=part
-    return dict(schema=1,authority='shipped-artifact',confidence='observed',
-        provider='rea-agents 6.0.0 inspect-managed-members (CLI); raw CIL sliced by cil_disasm.py',
-        scope='Focused static method excerpt. Complete inventories stay ignored under rebuild/build. No assembly or game execution.',
-        limitations=['Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.',
-                     'CIL is read from file bytes; no JIT, floating-point or PhysX behavior is observed.',
-                     'external_callers lists static call sites, not which run for the single-player female controller.'],
-        assemblies=assemblies)
+    data=cil_evidence.excerpt(inventories,MANAGED,EXCERPT,
+        'Focused static method excerpt. Complete inventories stay ignored under rebuild/build. No assembly or game execution.',
+        ['external_callers lists static call sites, not which run for the single-player female controller.'])
+    envelope=json.loads(Path(inventories['Assembly-CSharp.dll']).read_text())
+    source=envelope.get('normalized_result') or envelope; part=data['assemblies']['Assembly-CSharp.dll']
+    part['fields']=[dict(token=x['token'],name=x['name'],type=x['signature'].get('field_type'),flags=x['flags'])
+                    for x in source['fields'] if x.get('declaring_type')=='HumanPhyCtrl']
+    names={x['token']:x['declaring_type']+'::'+x['name'] for x in source['methods']}
+    human={m['token'] for m in part['methods'] if m['declaring_type']=='HumanPhyCtrl'}; callers={}
+    for edge in source['call_edges']:
+        if edge.get('target_token') in human and edge['caller_token'] not in human:
+            callers.setdefault(names[edge['target_token']].split('::')[1],set()).add(names[edge['caller_token']])
+    part['external_callers']={k:sorted(v) for k,v in sorted(callers.items())}
+    return data
 
 
 def load_evidence(root=ROOT):
     """Check the committed excerpt against the pinned identities and bodies."""
-    evidence=json.loads((root/EVIDENCE).read_text()); found={}
-    if set(evidence['assemblies'])!=set(ASSEMBLIES): raise ValueError('Unexpected HumanPhyCtrl evidence assemblies')
-    for name,(digest,mvid) in ASSEMBLIES.items():
-        part=evidence['assemblies'][name]
-        if part['sha256']!=digest or part['mvid']!=mvid: raise ValueError('Unqualified evidence identity for '+name)
-        for method in part['methods']:
-            data=bytes.fromhex(method['raw_il_hex']); body=method['body']
-            if len(data)!=body['il_size'] or hashlib.sha256(data).hexdigest()!=body['il_sha256']:
-                raise ValueError('Method evidence differs from its hash: '+key(method))
-            if len(cil_disasm.decode(data))!=body['instruction_count']:
-                raise ValueError('Undecoded method evidence: '+key(method))
-            found.setdefault(key(method),[]).append(method)
-    if methods_digest(evidence)!=METHODS_DIGEST: raise ValueError('HumanPhyCtrl method evidence changed')
-    selected={}
-    for name,prefix in METHOD_IL.items():
-        # Overloads share a name; the pinned body selects one.
-        match=[m for m in found.get(name,()) if m['body']['il_sha256'].startswith(prefix)]
-        if len(match)!=1: raise ValueError('Unqualified method body: '+name)
-        selected[name]=match[0]
-    return evidence,selected
+    return cil_evidence.load(root/EVIDENCE,ASSEMBLIES,METHODS_DIGEST,METHOD_IL)
 
 
 def qualify_installed(evidence,managed=MANAGED):
     """Bind every excerpted body to the installed assembly bytes."""
-    for name,(digest,_) in ASSEMBLIES.items():
-        raw=(managed/name).read_bytes()
-        if hashlib.sha256(raw).hexdigest()!=digest: raise ValueError('Unqualified installed '+name)
-        for method in evidence['assemblies'][name]['methods']:
-            if cil_disasm.body_bytes(raw,method['body'])!=bytes.fromhex(method['raw_il_hex']):
-                raise ValueError('Method evidence differs from installed bytes: '+key(method))
+    cil_evidence.qualify_installed(evidence,ASSEMBLIES,managed)
 
 
 def literals(method):
@@ -309,7 +257,7 @@ def main(argv=None):
     try:
         if args.excerpt:
             data=excerpt(dict(zip(ASSEMBLIES,args.excerpt)))
-            (ROOT/EVIDENCE).write_text(json.dumps(data,indent=1)+'\n'); print(methods_digest(data)); return 0
+            (ROOT/EVIDENCE).write_text(json.dumps(data,indent=1)+'\n'); print(cil_evidence.digest(data)); return 0
         outputs=build_outputs()
         if args.check:
             for name,data in outputs.items():

@@ -35,6 +35,30 @@ DIRECTIONAL_CLIPS = {'NormalWB': 547, 'NormalWL': 517, 'NormalWR': 524,
 CLIPS.update(DIRECTIONAL_CLIPS)
 # Bounded running first-stage pose; root motion is sampled separately.
 CLIPS['RunSwordAttack'] = 408
+# Hit-reaction leaves, kept apart from every locomotion preset. Whacked plays
+# FullBody.BeHit, a MoveStyle blend: thresholds 0 and 1 are the unarmed and
+# Sword (knife) clips. Repulsed plays the BeatWeight 1 branch of ground Move;
+# its two straight-back points blend to BlockRepulsed by SheildBlockF.
+# Each value is (clip, state path, (parameter, parameter_y, child value)...).
+_MOVE='Base Layer.GroundLocomotion.Move'
+def _beat(clip,point,shield=None):
+    steps=[('BeatWeight',None,1),('RightSpeed','ForwardSpeed',point)]
+    return (clip,_MOVE,tuple(steps+([('SheildBlockF',None,shield)] if shield is not None else [])))
+REACTION_BRANCHES = {
+    'IdleBeHit': (139,'FullBody.BeHit.Blend Tree',(('MoveStyle',None,0),)),
+    'SwordBeHit': (157,'FullBody.BeHit.Blend Tree',(('MoveStyle',None,1),)),
+    'ForwardFast': _beat(226,(0,5)), 'FowardRightFast': _beat(235,(3.5,3.5)),
+    'RightFast': _beat(243,(5,0)), 'BackRightFast': _beat(250,(3.5,-3.5)),
+    'BackFast': _beat(257,(0,-5),0), 'ForwardLeftFast': _beat(265,(-3.5,3.5)),
+    'LeftFast': _beat(271,(-5,0)), 'BackLeftFast': _beat(278,(-3.5,-3.5)),
+    'Forward': _beat(109,(0,3)), 'ForwardRight': _beat(154,(2.1,2.1)),
+    'Right': _beat(136,(3,0)), 'BackRight': _beat(170,(2.1,-2.1)),
+    'Back': _beat(186,(0,-3),0), 'ForwardLeft': _beat(198,(-2.1,2.1)),
+    'Left': _beat(209,(-3,0)), 'BackLeft': _beat(218,(-2.1,-2.1)),
+    'BlockRepulsed': _beat(691,(0,-5),1),
+}
+REACTION_CLIPS = {name: row[0] for name,row in REACTION_BRANCHES.items()}
+CLIPS.update(REACTION_CLIPS)
 DIRECTIONAL_BRANCHES = {
     'NormalWB': ((0,1,2,33), (0,-2), None),
     'NormalWL': ((0,1,2,34,36), (-2,0), ('FirstPerson',1)),
@@ -83,6 +107,42 @@ def _directional_states(controller,selected,clip_ids,style):
         if leaf['m_ChildIndices'] or controller['m_AnimationClips'][index]!={'m_FileID':0,'m_PathID':clip_ids[name]}:
             raise ValueError('Directional leaf differs from exact source clip')
         result[name]=dict(path=path,clip_index=index,speed=state['m_Speed'],node_path=list(indices),branches=branches)
+    return result
+
+
+def reaction_states(controller):
+    """Require each reaction leaf at its exact installed parameters, values and clip."""
+    names=dict(controller['m_TOS']);states={}
+    for machine in controller['m_Controller']['m_StateMachineArray']:
+        for entry in machine['data']['m_StateConstantArray']:
+            path=names.get(entry['data']['m_FullPathID'])
+            if path in states:raise ValueError('Duplicate source state path')
+            states[path]=entry['data']
+    result={}
+    for name,(clip,path,steps) in REACTION_BRANCHES.items():
+        state=states.get(path)
+        if not state or len(state['m_BlendTreeConstantArray'])!=1 or state['m_Speed']!=1:
+            raise ValueError('Reaction state differs')
+        nodes=state['m_BlendTreeConstantArray'][0]['data']['m_NodeArray'];index=0;node_path=[0];branches=[]
+        for parameter,parameter_y,value in steps:
+            node=nodes[index]['data']
+            if names.get(node['m_BlendEventID'])!=parameter or (parameter_y and names.get(node['m_BlendEventYID'])!=parameter_y):
+                raise ValueError('Reaction branch parameter differs')
+            if isinstance(value,tuple):
+                slots=[i for i,p in enumerate(node['m_Blend2dData']['data']['m_ChildPositionArray'])
+                       if abs(p['x']-value[0])<=1e-5 and abs(p['y']-value[1])<=1e-5]
+            else:
+                slots=[i for i,t in enumerate(node['m_Blend1dData']['data']['m_ChildThresholdArray']) if abs(t-value)<=1e-5]
+            if len(slots)!=1 or len(node['m_ChildIndices'])<=slots[0]:raise ValueError('Reaction branch value differs')
+            child=node['m_ChildIndices'][slots[0]]
+            branches.append(dict(node=index,child=child,parameter=parameter,parameter_y=parameter_y,
+                                 blend_type=node['m_BlendType'],value=list(value) if isinstance(value,tuple) else value))
+            index=child;node_path.append(child)
+        leaf=nodes[index]['data'];clip_index=leaf['m_ClipID']
+        if leaf['m_ChildIndices'] or clip_index>=len(controller['m_AnimationClips']) or \
+                controller['m_AnimationClips'][clip_index]!={'m_FileID':0,'m_PathID':clip}:
+            raise ValueError('Reaction leaf differs from exact source clip')
+        result[name]=dict(path=path,clip_index=clip_index,speed=state['m_Speed'],node_path=node_path,branches=branches)
     return result
 
 
@@ -199,7 +259,7 @@ def inventory(asset):
     refs = {x['m_PathID'] for x in controller['m_AnimationClips'] if x['m_FileID'] == 0}
     replacements = {x['m_OriginalClip']['m_PathID']: x['m_OverrideClip']['m_PathID']
                     for x in override['m_Clips']}
-    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller)}
+    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller),**reaction_states(controller)}
     with asset.open('rb') as stream:
         asset_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
     result = {'schema': 1, 'asset': str(asset), 'asset_sha256': asset_hash,
@@ -230,6 +290,7 @@ def inventory(asset):
                           'events': [{'time': e['time'], 'function': e['functionName'], 'data': e['data']}
                                      for e in data['m_Events']]})
             if clip_name in states:clips[-1]['controller_state']=states[clip_name]
+            if clip_name in REACTION_CLIPS:clips[-1]['clip_mirror']=bool(muscle['m_Mirror'])
         result['genders'][sex] = {'avatar': avatar, 'controller': name, 'clips': clips}
     return result
 

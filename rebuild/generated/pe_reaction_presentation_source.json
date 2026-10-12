@@ -1,0 +1,830 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "sha256": "682b1d281e9d4ecfc608a6d11f133e24c547b3c057bb1942d8991af30e95eeda"
+    },
+    {
+      "path": "Assets/Scripts/Anim/AnimatorEventSender.cs",
+      "sha256": "8a093e1e69c6b062cadf72def019d79d74c12abc6e73518ad0c59e168dbf0012"
+    },
+    {
+      "path": "Assets/Scripts/Anim/AnimatorLayerWeightCtr.cs",
+      "sha256": "b2c86bf334bcb8c95e691a52332cad6ff2a88c039b5581bd80d9709b579b6275"
+    },
+    {
+      "path": "docs/reference/reaction-presentation-il.json",
+      "sha256": "8c1b8ad73c14ba7a985b4221b44cbe3544de5d8957baef596c1c8794d77e532d"
+    }
+  ],
+  "installed_assets": {
+    "sharedassets1.assets": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+    "sharedassets0.assets": "7266577940dc7ecf4392a241d668248410f98fdf17cad3573f38a27daed13b1b"
+  },
+  "assemblies": {
+    "Assembly-CSharp.dll": {
+      "sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+      "mvid": "7ddcc464-5353-4750-b969-fe628ee474da",
+      "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243"
+    }
+  },
+  "methods_digest": "7e282ded98aab008b9c31ed2009b05ade06011a6357e7826aa9e49c4428b6b4b",
+  "method_il_sha256": {
+    "Pathea.Action_Whacked::get_ActionType": "54fc02efedc1c846576843c65f871cee652323766f85c3f7982afc16bcd997fb",
+    "Pathea.Action_Whacked::DoAction": "89148e444fb021e8c6eea7db2c3c5ec87683ab4909e32799ef8bfea32dce77a1",
+    "Pathea.Action_Whacked::Update": "5fc5d411745f7e09376f416a56c454745e3d87cdc6578037b74a88a692d4c5ba",
+    "Pathea.Action_Whacked::EndImmediately": "ed29d2d0b5fd180a4f50332347037d4354b9e9f723e0c9edd352a581614a61b5",
+    "Pathea.Action_Whacked::OnAnimEvent": "0751da1896044a25c57dc000601982f1fd6827d3337b453f18db84d57e972bdb",
+    "AnimatorEventSender::OnStateExit": "21a1cc17b200ef4622720e83dd6237dd3916361ade029d022ee1e339180ee624",
+    "AnimatorEventSender::OnStateUpdate": "008106395c716506c26b3094c6b5eb8c49e49a6ba2fb9c02d6cce17f7fa57614",
+    "AnimatorEventSender::SendMsg": "2657007c9b47e19ef947faf11f220883000de592af02765a532e16a42abab1cf",
+    "AnimatorLayerWeightCtr::OnStateUpdate": "1b0dfe5ce94639c1828c4fce81327e1808f86ab46ee441a91f3d53bd0d485618",
+    "AnimatorLayerWeightCtr::OnStateExit": "4d2042223a7e57e056217f3f4b7572cd0c2d83f44f2c7d443b8910ebb321bcef",
+    "Pathea.Motion_Move_Human::UpdateAnimState": "2c96e7723e6f8f6b81432c42ca5460b89bb6b7375422037fec61940de27e6991"
+  },
+  "method_guards": [
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Beat.cs",
+      "pattern": "public\\s+class\\s+Action_Whacked",
+      "sha256": "6a1e6e8cfa2568272daae5d219e85768892a276fd97c34bd05e6ece1fd6b0825"
+    },
+    {
+      "path": "Assets/Scripts/Anim/AnimatorEventSender.cs",
+      "pattern": "public\\s+class\\s+AnimatorEventSender",
+      "sha256": "211f9c7c44b0ddd17231f6811f4cc149799053b8843d3a7487a62e1d1dc6de8a"
+    },
+    {
+      "path": "Assets/Scripts/Anim/AnimatorLayerWeightCtr.cs",
+      "pattern": "public\\s+class\\s+AnimatorLayerWeightCtr",
+      "sha256": "5c90ea3c64fd68da202aca4e457d7c1a8bd2fbb6d9dc91c224b6b7bb36355efb"
+    }
+  ],
+  "whacked": {
+    "action_type": 5,
+    "mask": 47,
+    "action_relation": {
+      "ActionType": "5",
+      "Name": "Whacked",
+      "PauseAction": "13,15,18,19,22,28,47",
+      "EndAction": "0",
+      "EndImmediately": "1,2,3,4,14,20,24,25,27,30,31,32,33,42,43,44,45,46,48,49,50,58,60,61",
+      "Ground": "0",
+      "InAir": "0",
+      "InWater": "0",
+      "Rotate": "0",
+      "Sprint": "0",
+      "Jump": "0",
+      "Repulsed": "2",
+      "Wentfly": "2",
+      "Knocked": "2",
+      "Death": "2",
+      "GetUp": "2",
+      "Revive": "2",
+      "Step": "0",
+      "HoldEquip": "0",
+      "SwordAttack": "0",
+      "HoldShield": "0",
+      "Halt": "0",
+      "Fall": "0",
+      "GunHold": "0",
+      "GunReload": "0",
+      "GunShoot": "0",
+      "BowHold": "0",
+      "BowShoot": "0",
+      "BowReload": "0",
+      "Sleep": "2",
+      "Eat": "0",
+      "HoldAimEquip": "0",
+      "Dig": "0",
+      "Fell": "0",
+      "Gather": "0",
+      "PickUpItem": "0",
+      "GetOnVehicle": "2",
+      "JetPack": "0",
+      "Parachute": "0",
+      "Glider": "0",
+      "Climb": "0",
+      "Build": "0",
+      "HoldFlashlight": "0",
+      "Stuned": "0",
+      "Pump": "0",
+      "Sit": "2",
+      "Operation": "2",
+      "Draw": "0",
+      "Throw": "0",
+      "Lie": "2",
+      "GetOnTrain": "2",
+      "Cutscene": "2",
+      "Whacked": "2",
+      "Cure": "2",
+      "HeavyEquipment": "0",
+      "DrillingDig": "0",
+      "Hand": "0",
+      "Leisure": "0",
+      "RopeGunShoot": "0",
+      "Abnormal": "0",
+      "Ride": "2"
+    },
+    "move_style_lerp_speed": 5.0,
+    "state": "FullBody.BeHit.Blend Tree",
+    "layer": 1,
+    "entry": {
+      "trigger": "BeHit",
+      "any_state": true,
+      "duration": 0.0,
+      "can_transition_to_self": true
+    },
+    "speed": 1.0,
+    "parameter": "MoveStyle",
+    "leaves": [
+      {
+        "threshold": 0,
+        "node": 1,
+        "name": "IdleBeHit",
+        "path_id": 139
+      },
+      {
+        "threshold": 1,
+        "node": 2,
+        "name": "SwordBeHit",
+        "path_id": 157
+      },
+      {
+        "threshold": 2,
+        "node": 3,
+        "name": "RifleBeHit",
+        "path_id": 188
+      },
+      {
+        "threshold": 3,
+        "node": 4,
+        "name": "HandgunBeHit",
+        "path_id": 173
+      },
+      {
+        "threshold": 4,
+        "node": 5,
+        "name": "BowBeHit",
+        "path_id": 200
+      },
+      {
+        "threshold": 5,
+        "node": 6,
+        "name": "ShotgunBeHit",
+        "path_id": 220
+      },
+      {
+        "threshold": 6,
+        "node": 7,
+        "name": "MineBeHit",
+        "path_id": 210
+      },
+      {
+        "threshold": 7,
+        "node": 8,
+        "name": "IdleBeHit",
+        "path_id": 139
+      },
+      {
+        "threshold": 8,
+        "node": 9,
+        "name": "IdleBeHit",
+        "path_id": 139
+      },
+      {
+        "threshold": 9,
+        "node": 10,
+        "name": "GrenadeBeHit",
+        "path_id": 227
+      },
+      {
+        "threshold": 10,
+        "node": 11,
+        "name": "GlovesBeHit",
+        "path_id": 116
+      }
+    ],
+    "exit": {
+      "exit_time": 0.8999999761581421,
+      "duration": 0.10000000149011612,
+      "fixed_duration": false,
+      "destination": "FullBody.DoNothing"
+    },
+    "behaviours": [
+      {
+        "script": "AnimatorEventSender",
+        "enter_event": "",
+        "exit_event": "HitAnimEnd",
+        "timed_events": 0
+      }
+    ]
+  },
+  "full_body": {
+    "reset": {
+      "trigger": "ResetFullBody",
+      "destination": "FullBody.Empty",
+      "duration": 0.0
+    },
+    "empty_exit_time": 0.019999999552965164,
+    "idle": "FullBody.DoNothing",
+    "idle_behaviours": [
+      {
+        "script": "AnimatorEventSender",
+        "enter_event": "OnEndFullAnim",
+        "exit_event": "",
+        "timed_events": 0
+      },
+      {
+        "script": "AnimatorLayerWeightCtr",
+        "fadeout_speed": 5.0
+      }
+    ],
+    "default_weight": 1.0,
+    "blending": "override",
+    "body_mask": "all"
+  },
+  "repulsed": {
+    "ground": {
+      "state": "Base Layer.GroundLocomotion.Move",
+      "beat_node": 193,
+      "blend_type": 2,
+      "leaves": [
+        {
+          "right_speed": 0.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 194,
+            "name": "NormalIdle",
+            "path_id": 684
+          }
+        },
+        {
+          "right_speed": 0.0,
+          "forward_speed": 5.0,
+          "clip": {
+            "node": 195,
+            "name": "ForwardFast",
+            "path_id": 226
+          }
+        },
+        {
+          "right_speed": 3.5,
+          "forward_speed": 3.5,
+          "clip": {
+            "node": 196,
+            "name": "FowardRightFast",
+            "path_id": 235
+          }
+        },
+        {
+          "right_speed": 5.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 197,
+            "name": "RightFast",
+            "path_id": 243
+          }
+        },
+        {
+          "right_speed": 3.5,
+          "forward_speed": -3.5,
+          "clip": {
+            "node": 198,
+            "name": "BackRightFast",
+            "path_id": 250
+          }
+        },
+        {
+          "right_speed": 0.0,
+          "forward_speed": -5.0,
+          "clip": {
+            "node": 200,
+            "name": "BackFast",
+            "path_id": 257
+          },
+          "shield_block_clip": {
+            "node": 201,
+            "name": "BlockRepulsed",
+            "path_id": 691
+          }
+        },
+        {
+          "right_speed": -3.5,
+          "forward_speed": 3.5,
+          "clip": {
+            "node": 202,
+            "name": "ForwardLeftFast",
+            "path_id": 265
+          }
+        },
+        {
+          "right_speed": -5.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 203,
+            "name": "LeftFast",
+            "path_id": 271
+          }
+        },
+        {
+          "right_speed": -3.5,
+          "forward_speed": -3.5,
+          "clip": {
+            "node": 204,
+            "name": "BackLeftFast",
+            "path_id": 278
+          }
+        },
+        {
+          "right_speed": 0.0,
+          "forward_speed": 3.0,
+          "clip": {
+            "node": 205,
+            "name": "Forward",
+            "path_id": 109
+          }
+        },
+        {
+          "right_speed": 2.0999999046325684,
+          "forward_speed": 2.0999999046325684,
+          "clip": {
+            "node": 206,
+            "name": "ForwardRight",
+            "path_id": 154
+          }
+        },
+        {
+          "right_speed": 3.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 207,
+            "name": "Right",
+            "path_id": 136
+          }
+        },
+        {
+          "right_speed": 2.0999999046325684,
+          "forward_speed": -2.0999999046325684,
+          "clip": {
+            "node": 208,
+            "name": "BackRight",
+            "path_id": 170
+          }
+        },
+        {
+          "right_speed": 0.0,
+          "forward_speed": -3.0,
+          "clip": {
+            "node": 210,
+            "name": "Back",
+            "path_id": 186
+          },
+          "shield_block_clip": {
+            "node": 211,
+            "name": "BlockRepulsed",
+            "path_id": 691
+          }
+        },
+        {
+          "right_speed": -2.0999999046325684,
+          "forward_speed": 2.0999999046325684,
+          "clip": {
+            "node": 212,
+            "name": "ForwardLeft",
+            "path_id": 198
+          }
+        },
+        {
+          "right_speed": -3.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 213,
+            "name": "Left",
+            "path_id": 209
+          }
+        },
+        {
+          "right_speed": -2.0999999046325684,
+          "forward_speed": -2.0999999046325684,
+          "clip": {
+            "node": 214,
+            "name": "BackLeft",
+            "path_id": 218
+          }
+        }
+      ]
+    },
+    "water": {
+      "state": "Base Layer.WaterLocomotion.Move",
+      "beat_node": 25,
+      "blend_type": 2,
+      "leaves": [
+        {
+          "right_speed": 0.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 26,
+            "name": "SwimIdle",
+            "path_id": 351
+          }
+        },
+        {
+          "right_speed": 0.0,
+          "forward_speed": 2.0,
+          "clip": {
+            "node": 27,
+            "name": "SwimFF",
+            "path_id": 303
+          }
+        },
+        {
+          "right_speed": 0.0,
+          "forward_speed": -2.0,
+          "clip": {
+            "node": 28,
+            "name": "SwimFB",
+            "path_id": 319
+          }
+        },
+        {
+          "right_speed": 2.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 29,
+            "name": "SwimFR",
+            "path_id": 313
+          }
+        },
+        {
+          "right_speed": -2.0,
+          "forward_speed": 0.0,
+          "clip": {
+            "node": 30,
+            "name": "SwimFL",
+            "path_id": 308
+          }
+        }
+      ]
+    }
+  },
+  "controller": {
+    "name": "FemaleAnimator2",
+    "path_id": 779,
+    "male_override": 780,
+    "male_clip_overrides": {
+      "684": 688,
+      "210": 110
+    }
+  },
+  "clips": [
+    {
+      "path_id": 109,
+      "name": "Forward",
+      "length": 1.9666669368743896,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 110,
+      "name": "MineBeHit",
+      "length": 0.9000000357627869,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 116,
+      "name": "GlovesBeHit",
+      "length": 0.9333343505859375,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 136,
+      "name": "Right",
+      "length": 0.9666671752929688,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 139,
+      "name": "IdleBeHit",
+      "length": 0.9333336353302002,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 154,
+      "name": "ForwardRight",
+      "length": 1.9666671752929688,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 157,
+      "name": "SwordBeHit",
+      "length": 0.9333419799804688,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 170,
+      "name": "BackRight",
+      "length": 1.9666681289672852,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 173,
+      "name": "HandgunBeHit",
+      "length": 0.9333343505859375,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 186,
+      "name": "Back",
+      "length": 1.9666669368743896,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 188,
+      "name": "RifleBeHit",
+      "length": 0.9333343505859375,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 198,
+      "name": "ForwardLeft",
+      "length": 1.9666671752929688,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 200,
+      "name": "BowBeHit",
+      "length": 0.9333419799804688,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 209,
+      "name": "Left",
+      "length": 0.9666671752929688,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 210,
+      "name": "MineBeHit",
+      "length": 0.9333343505859375,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 218,
+      "name": "BackLeft",
+      "length": 1.9666681289672852,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 220,
+      "name": "ShotgunBeHit",
+      "length": 0.9333343505859375,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 226,
+      "name": "ForwardFast",
+      "length": 1.0000009536743164,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 227,
+      "name": "GrenadeBeHit",
+      "length": 0.9333419799804688,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 235,
+      "name": "FowardRightFast",
+      "length": 1.0000009536743164,
+      "frame_rate": 30.0,
+      "loop": false,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 243,
+      "name": "RightFast",
+      "length": 1.0000019073486328,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 250,
+      "name": "BackRightFast",
+      "length": 1.0,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 257,
+      "name": "BackFast",
+      "length": 1.0000009536743164,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 265,
+      "name": "ForwardLeftFast",
+      "length": 1.0000009536743164,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 271,
+      "name": "LeftFast",
+      "length": 1.0000019073486328,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 278,
+      "name": "BackLeftFast",
+      "length": 1.0,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 303,
+      "name": "SwimFF",
+      "length": 1.0666732788085938,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 308,
+      "name": "SwimFL",
+      "length": 1.0666732788085938,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 313,
+      "name": "SwimFR",
+      "length": 1.0666732788085938,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": true,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 319,
+      "name": "SwimFB",
+      "length": 1.0666732788085938,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 351,
+      "name": "SwimIdle",
+      "length": 1.6000022888183594,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 684,
+      "name": "NormalIdle",
+      "length": 2.0000152587890625,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 688,
+      "name": "NormalIdle",
+      "length": 2.266666889190674,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    },
+    {
+      "path_id": 691,
+      "name": "BlockRepulsed",
+      "length": 1.0000152587890625,
+      "frame_rate": 30.0,
+      "loop": true,
+      "mirror": false,
+      "humanoid_bindings": 127,
+      "events": 0
+    }
+  ],
+  "scope": "Disconnected Whacked lifecycle and hit/Repulsed clip selection contract. No humanoid poses, blend-weight algorithm, Animator transition evaluation, hit IK, ragdoll, live stun or knockback.",
+  "end": "Whacked has no timer. It ends when AnimatorEventSender on the BeHit state sends its exit event HitAnimEnd; the clips carry no events. The only authored exit starts at normalized time .9 and lasts .1 of the state, so the nominal end is one full state length.",
+  "selection": "BeHit blends per-style clips by the MoveStyle float, which Motion_Move_Human smooths toward the MoveStyle enum by Lerp(5*deltaTime). Repulsed plays the BeatWeight 1 branch of the locomotion tree, selected by local RightSpeed/ForwardSpeed; straight-back leaves blend to BlockRepulsed by SheildBlockF.",
+  "engine": "Freeform-directional blend weights, the frame on which a transition or state exit is evaluated, and layer mixing are Unity behavior and are not recovered. Poses need an engine bake."
+}

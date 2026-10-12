@@ -93,7 +93,7 @@ class Evidence(unittest.TestCase):
         callers=self.evidence['assemblies']['Assembly-CSharp.dll']['external_callers']
         self.assertIn('Pathea.Action_Repulsed::Update',callers['ApplyMoveRequest'])
         self.assertIn('Pathea.Action_Repulsed::EndImmediately',callers['CancelMoveRequest'])
-        # Callers present in the shipped assembly but absent from the checked-in C#.
+        # Another per-frame caller whose request sums with Repulsed before the clamp.
         self.assertIn('Pathea.MainPlayerCmpt::UpdateMoveState',callers['ApplyMoveRequest'])
 
     def test_changed_body_rejected(self):
