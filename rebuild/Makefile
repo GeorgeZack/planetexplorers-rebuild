@@ -974,3 +974,12 @@ animfollow-source-check:
 	$(UNITY_PYTHON) tests/test_animfollow_export.py
 test: animfollow-source-test
 check-sources: animfollow-source-check
+
+.PHONY: reaction-render-capture
+REACTION_CAPTURE_OUTPUT ?= build/reaction-captures-01
+REACTION_RENDER_OBJS = $(addprefix $(OBJ)/frontend/src/,pe_sandbox_actor.o pe_actor_scene_view.o pe_actor_view.o)
+$(BUILD)/render_reaction_group: tests/render_reaction_group.c $(REACTION_RENDER_OBJS) $(CORE_LIB) $(DEPS)/render_reaction_group.d | $(BUILD)
+	$(call DEPGEN,$(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/render_reaction_group.c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) tests/render_reaction_group.c $(REACTION_RENDER_OBJS) $(CORE_LIB) -o $@ $(RAYLIB_LIBS) $(LZ4_LIBS) -lm
+reaction-render-capture: $(BUILD)/render_reaction_group
+	python3 tests/run_private_ui_capture.py --reactions --output $(REACTION_CAPTURE_OUTPUT)

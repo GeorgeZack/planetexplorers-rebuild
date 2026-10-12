@@ -217,7 +217,7 @@ asset was installed, no gameplay changed and no native graphics ran.
 
 ## Host reaction group
 
-Implemented in C, October 12, as loading and validation only.
+Implemented in C, October 12, as runtime loading and validation only. The separate [native preview fixture](REACTION_PREVIEW.md) now renders all25 leaves with attachments and defence; production selection remains unchanged.
 `pe_sandbox_actor` accepts an optional second group beside the 33-clip one,
 under these folders of the asset root:
 
@@ -258,8 +258,7 @@ names, order, anchor, source clock, loop flag and attachment clock, and the
 defence check. A real-asset test loads the installed assets with the staged
 group mapped to the host names, confirms unchanged readiness, the 25-clip
 defence with its 16 capsules, rejection of the 42-clip actor, and that an
-idle draw touches no reaction scene. Both are headless; the sandbox host's
-own start-up path with the group present has not been run in a window.
+idle draw touches no reaction scene. Both are headless. The later preview qualifies the actual actor GPU load and isolated rendering in a window; the full sandbox host startup and live dispatch remain untested.
 
 ## Next animation set: get-up and sprint attack
 

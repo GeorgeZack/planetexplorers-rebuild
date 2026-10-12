@@ -1,3 +1,5 @@
+[Reaction preview](docs/audit/REACTION_PREVIEW.md): fixture-only `rebuild/tests/render_reaction_group.c` selects staged leaves through the common scene renderer; `reaction-render-capture` uses the existing private capture supervisor, fresh symlink roots and readback tokens. No production action admission changes.
+
 [Sprint root staging](docs/audit/SPRINT_ROOT_CHANNELS.md): `export_sprint_root_motion.py` qualifies clip401 with the unchanged native branch proof and its own arithmetic replay; a separate one-record PESR1 is staged, uninstalled and unsupported by the ordinary runtime loader.
 
 # Planet Explorers project map

@@ -59,8 +59,8 @@ case admission and incomplete base evidence. Synthetic fixtures establish
 these guards only. Real installed inputs regenerate exactly. Full validation
 is recorded in [PLAYTEST](../PLAYTEST.md).
 
-Next animation work is a separate presentation fixture for the staged reaction
-body/attachments/defence and sprint pose, followed by an explicit sprint reader,
+The [separate presentation fixture](REACTION_PREVIEW.md) now renders the staged
+reaction body/attachments/defence and sprint pose. Next is an explicit sprint reader,
 outgoing stage routing and shared collision/contact integration. Use the
 qualified private display for presentation checks. A new original sprint
 root capture is optional corroboration, not needed to extract this bounded

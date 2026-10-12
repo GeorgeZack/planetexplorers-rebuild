@@ -1,5 +1,25 @@
 # Original-game playtest and C comparison
 
+## October12 native reaction animation preview — observed in fixture
+
+The [private-display preview](audit/REACTION_PREVIEW.md) passes actual optional
+reaction-group GPU loading, matching defence and25 clips/200 panels. All sheets
+were reviewed, sprint/get-up in detail; props and sampled capsule wires follow
+the body. Capture04 exits0 and verifies staged inputs unchanged. No live action,
+save, installed asset or desktop input changed. The first capture contained
+stale previous-frame screenshots; double rendering and a per-clip readback
+token corrected it. Capture01 is unqualified.
+
+`make -C rebuild check` passes258 jobs/905 Python tests with87
+ordinary-interpreter skips (skips are not passes). `cli-test` passes26 tests.
+Existing and outside-build output guards reject before display startup; local
+links, retained image hashes and `git diff --check` pass. The structural index
+was rebuilt. `make -C rebuild check-sanitize` passes all101 suites with
+ASan/UBSan and per-suite leak scanning, zero skips. Logs are
+`rebuild/build/reaction-preview-check.log`, `reaction-preview-sanitize.log`,
+`reaction-preview-cli.log` and `reaction-render-04.log`. Registry sanitizer
+coverage does not include the optimized GPU fixture or establish driver leaks.
+
 ## October 12 sprint root animation stage — source-derived only
 
 [Sprint clip401 extraction](audit/SPRINT_ROOT_CHANNELS.md) passes the unchanged

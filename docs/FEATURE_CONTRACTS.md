@@ -24,6 +24,8 @@ The PECSv21 history suffix remains unchanged within current PECSv22 saves: prese
 
 ## Actor presentation and locomotion
 
+The [staged reaction preview](audit/REACTION_PREVIEW.md) is fixture-only: explicit separate-group selection, matching body/attachment/defence clocks and per-clip readback checks. Its real GPU load and isolated leaf images do not enable runtime reaction/get-up/sprint or shield admission. Preserve fresh output directories and the verified private high-display launcher.
+
 Actors and static reference models share the shader and scoped culling in `pe_material_view.h`; changes must preserve actor cutoffs, opaque eye alpha and caller culling state. See [building materials](audit/BUILDING_MATERIALS.md).
 
 Asset provenance uses repository-relative logical source labels. Read historical source records with `read_reference_adventure.source_path`; relocation requires their exact recorded hashes and never authorizes rewriting archived manifests or weakening asset pins. See [checkout relocation](audit/PORTABLE_PATHS.md).

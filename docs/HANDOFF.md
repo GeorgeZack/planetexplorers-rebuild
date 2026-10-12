@@ -5,8 +5,11 @@
 Claude continued after the AnimFollow checkpoint with commits `f2c7b9a` and
 `adb377d`: completed the original female reaction bake, staged its complete
 25-clip group and added optional sandbox actor/defence loading validation.
-This continuation completes [SprintSwordAttack source root extraction](audit/SPRINT_ROOT_CHANNELS.md)
-without another original-game launch. No live animation admission is enabled.
+Checkpoint `ca92709` completed [SprintSwordAttack source root extraction](audit/SPRINT_ROOT_CHANNELS.md)
+without another original-game launch. This continuation adds the
+[native reaction preview](audit/REACTION_PREVIEW.md): actual actor GPU loading,
+25 isolated clip sheets/200 panels, matching attachments and defence. No live
+animation admission is enabled.
 
 The earlier claim that the reaction bake was unrun is superseded. The capture
 `female-reaction-01.jsonl` has25 clips/1,052 poses, a complete ending and a120-frame
@@ -40,15 +43,19 @@ for an existing stage. Never hand-edit or overwrite another recovered group.
 
 ## Next animation items
 
-First create a private-display presentation fixture for the optional reaction
-body/attachments/defence and sprint leaf. It must select the separate group
-without altering gameplay admission, use matching clocks and inspect real
-rendered poses. Claude's load-only increment has no window/graphics acceptance.
-Read [native private input](audit/NATIVE_PRIVATE_INPUT.md) before using its
-supervised explicit high display; never adopt an unrelated display.
+The private-display fixture is completed. Final evidence is
+`rebuild/build/reaction-captures-04`: actual sandbox actor GPU load,25 clip
+sheets,100 pose-clock records, input/output hashes and exit0. All sheets were
+reviewed, sprint/get-up in detail. First diagnostic capture01 read the prior
+frame; it is unqualified. The final renderer draws twice and checks each
+readback token. Captures02/03 are intermediate. No full sandbox-host startup or
+live dispatch was tested. Reproduce with `reaction-render-capture` and a fresh
+`REACTION_CAPTURE_OUTPUT=build/reaction-review-01`. Read the linked audit for
+prerequisites and limits; never adopt an unrelated display.
 
-Then implement a distinct sprint root reader and retained outgoing-interval
-routing, qualify matching Knife33/body/defence presentation and shared
+Next qualify Knife33 sprint attachments (the staged group contains wood sword),
+then implement a distinct sprint root reader and retained outgoing-interval
+routing, with matching Knife33/body/defence presentation and shared
 collision/contact ordering. Only complete supported assets and integration
 checks may justify setting sprint_motion_ready. Do not substitute408 or zero
 motion, borrow the ordinary four-record loader or debit stamina on an
@@ -67,8 +74,13 @@ in resources.assets, not constructor defaults.
 ## Validation and gates
 
 Current results and ignored log names are in [PLAYTEST](PLAYTEST.md).
-No game launch, desktop input, save or installed asset change occurred in
-this continuation. No C code or allocation/ownership changed.
+Only the native graphics fixture was launched on its owned private display.
+No original-game launch, desktop input, save or installed asset change
+occurred. The C fixture owns and unloads its actor, scenes, capsules and GPU
+render target; production runtime code is unchanged. Staged input hashes agree
+before/after the final capture. Full check passes258 jobs/905 Python tests with87 asset-dependent skips;
+sanitizer registry passes101 suites and CLI passes26 tests. Results are in
+PLAYTEST. The optimized GPU fixture does not establish driver leak acceptance.
 Live reactions/stun/knockback, get-up, shield readiness, pounce/aggression
 and Town Defense remain closed. Halt Move/Jump blocking still needs an
 explicit user choice. PECSv22 is unchanged. Follow [AGENTS.md](../AGENTS.md)

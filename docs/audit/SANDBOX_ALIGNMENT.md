@@ -1,3 +1,5 @@
+October12 native animation preview: [the private fixture](REACTION_PREVIEW.md) now checks actual optional-group GPU loading and renders25 isolated leaves/200 panels with shared body/prop/defence clocks. All sheets reviewed; sprint/get-up samples are retained. Staged assets remain unchanged and uninstalled. Next is Knife33 sprint attachment qualification and a distinct clip401 reader/routing; live reaction, ragdoll/get-up and shield gates stay closed.
+
 October12 sprint animation follow-through: [clip401 root knots](SPRINT_ROOT_CHANNELS.md) are now qualified and staged offline using the existing native branch proof, running408 oracle and a new clip401 arithmetic case. No additional original launch is required for extraction. Next presentation work is a separate staged-group fixture, then an explicit sprint reader and collision/contact integration; live readiness remains closed.
 
 # Sandbox alignment: implementation work order and live reference
