@@ -1,5 +1,34 @@
 # Original-game playtest and C comparison
 
+## October12 disconnected AnimFollow drive and rig
+
+[The drive audit](audit/ANIMFOLLOW_DRIVE.md) now records installed11-body/
+10-joint/66-nonrigid correspondence, strength profiles and collider/material
+metadata. The complete saved REA inventory and committed CIL were reused and
+bound to installed bytes. No assembly execution, graphics launch, desktop
+input, save or recovered runtime asset replacement occurred.
+
+The isolated C suite passes source profile/identity checks, PD error history,
+vector caps and unclamped totals,360-degree retention, shared damper, root/null
+joint admission, signed cadence/wrap and atomic invalid/overflow cases. A
+bounded decoded-CIL float32 operator replay agrees bit for bit with259 C force
+requests/777 components. This qualifies the modelled arithmetic adapters,
+not Mono/Unity native operators. Actual quaternion/joint evaluation, physical
+rig consumption, material/friction behavior and reaction blending remain
+unqualified; no gameplay gate was opened.
+
+Focused source regeneration and all five exporter tests pass using UnityPy
+(`animfollow-drive-focused-source.log`); ordinary Python skips its three
+installed cases. Full regression passes263 jobs/916 Python tests with90 optional skips
+(`animfollow-drive-check.log`); skips are not passes. Optimized build and26 CLI
+cases pass. Sanitizer passes103 suites/0 skips with leak scanning enabled
+(`animfollow-drive-sanitize.log`). Content/source regeneration and all five
+installed drive tests pass (`animfollow-drive-content.log`). Local evidence
+links and whitespace checks pass; the structural index is rebuilt. The C and generated
+source owners are unconnected to both hosts; no new visual acceptance is
+claimed. PECSv22 and existing sprint/recovery behavior are unchanged.
+
+
 ## October12 sprint Knife — source, C fixture and normal native session
 
 [The sprint integration](audit/SANDBOX_SPRINT_KNIFE.md) installs only the

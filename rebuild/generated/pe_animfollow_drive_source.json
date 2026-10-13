@@ -1,0 +1,2755 @@
+{
+  "schema": 1,
+  "evidence": {
+    "path": "docs/reference/animfollow-lifecycle-il.json",
+    "sha256": "2ddc093f2b0512ce6a67ebf048a2b1697b41a65bf2c9a2b9b14ff5265b66bef5"
+  },
+  "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+  "artifact_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+  "methods_digest": "0ce488147dcfc9f7ff0adba4311175d11c2553e40dbb96440958a4f5ea96e950",
+  "installed_sources": [
+    {
+      "path": "installed/PE_Client_Data/mainData",
+      "sha256": "177d35cee6842910112d6de5c963136c6fe1fa0c9fdb24dc47df75e5c0c1ad5c"
+    },
+    {
+      "path": "installed/PE_Client_Data/resources.assets",
+      "sha256": "363d02dc06aa3cd5ecccbeb67ac417077e0552cb32d0173205e6950ba93a3cb5"
+    },
+    {
+      "path": "installed/PE_Client_Data/sharedassets0.assets",
+      "sha256": "7266577940dc7ecf4392a241d668248410f98fdf17cad3573f38a27daed13b1b"
+    }
+  ],
+  "source_component": {
+    "id": 324352,
+    "raw_sha256": "c7e4f2dfabdc73feae02ec649c52087615348af21d56da3f2baad4f5a308f12f"
+  },
+  "scalars": {
+    "PTorque": 0.10100000351667404,
+    "DTorque": 0.0011599999852478504,
+    "PForce": 27.200000762939453,
+    "DForce": 0.00930000003427267,
+    "jointDamping": 0.5,
+    "maxTorque": 100.0,
+    "maxForce": 100.0,
+    "maxJointTorque": 10000.0,
+    "drag": 0.5,
+    "angularDrag": 1.0
+  },
+  "serialized_profiles": {
+    "PTorqueProfile": [
+      20.0,
+      30.0,
+      10.0,
+      30.0,
+      10.0,
+      30.0,
+      30.0,
+      30.0,
+      30.0,
+      10.0,
+      30.0,
+      10.0
+    ],
+    "PForceProfile": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "maxTorqueProfile": [
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0,
+      100.0
+    ],
+    "maxForceProfile": [
+      1.0,
+      0.20000000298023224,
+      0.20000000298023224,
+      0.20000000298023224,
+      0.20000000298023224,
+      1.0,
+      1.0,
+      0.20000000298023224,
+      0.20000000298023224,
+      0.20000000298023224,
+      0.20000000298023224,
+      0.20000000298023224
+    ],
+    "maxJointTorqueProfile": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.5,
+      1.0,
+      1.0,
+      0.5,
+      1.0,
+      1.0
+    ],
+    "jointDampingProfile": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "forceErrorWeightProfile": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "profile_resize": "Awake Array.Resize to11 bodies retains first11 entries; trailing twelfth is discarded.",
+  "rigid_bodies": [
+    {
+      "index": 0,
+      "slot": 2,
+      "name": "Bip01 Pelvis",
+      "master_transform": 150806,
+      "slave_transform": 149581,
+      "game_object": 45165,
+      "rigidbody": 299397,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "BoxCollider",
+          "id": 300993,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 45165
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Size": {
+              "x": 0.1860876828432083,
+              "y": 0.18000000715255737,
+              "z": 0.2484467327594757
+            },
+            "m_Center": {
+              "x": -0.09304378181695938,
+              "y": 0.0,
+              "z": 6.92903995513916e-07
+            }
+          },
+          "material": null,
+          "raw_sha256": "8f2e12a4860871a72cff1fb9813657ce8cccb1430b058546c93c0647331da463"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 45165
+        },
+        "m_Mass": 40.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -0.49999964237213135,
+        "y": 0.5000003576278687,
+        "z": 0.49999964237213135,
+        "w": 0.5000003576278687
+      },
+      "slave_local_rotation": {
+        "x": -0.49999964237213135,
+        "y": 0.5000003576278687,
+        "z": 0.49999964237213135,
+        "w": 0.5000003576278687
+      },
+      "joint": null,
+      "body_raw_sha256": "af75dd756cfb3268c55c6420c0d12ea00413640d74d94cd4c789df4126152b6f"
+    },
+    {
+      "index": 1,
+      "slot": 4,
+      "name": "Bip01 L Thigh",
+      "master_transform": 151390,
+      "slave_transform": 148515,
+      "game_object": 44898,
+      "rigidbody": 299393,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308035,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 44898
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.07999999821186066,
+            "m_Height": 0.38571158051490784,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.19285579025745392,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "c6557f4eafbac92ee8a90fd33d571393ae435d425069902ec9fc2ec009590197"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 44898
+        },
+        "m_Mass": 35.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -0.07642504572868347,
+        "y": 0.9970308542251587,
+        "z": 0.00017688196385279298,
+        "w": -0.00941679161041975
+      },
+      "slave_local_rotation": {
+        "x": -0.07642504572868347,
+        "y": 0.9970308542251587,
+        "z": 0.00017688196385279298,
+        "w": -0.00941679161041975
+      },
+      "joint": {
+        "id": 309783,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 44898
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299397
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": 1.196136452108476e-07,
+            "y": 1.4905629086570116e-07,
+            "z": 0.08175012469291687
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -15.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 60.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 10.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 10.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "52a903386439533dedbe44bf2e85459d5cefa603b14e5152928d613256c4ba09"
+      },
+      "body_raw_sha256": "f6d189e9c83873a281bd3b5bda0e04e93fa919c04212e8346dd94b3e99a29ba3"
+    },
+    {
+      "index": 2,
+      "slot": 5,
+      "name": "Bip01 L Calf",
+      "master_transform": 151838,
+      "slave_transform": 148081,
+      "game_object": 44762,
+      "rigidbody": 299385,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308029,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 44762
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.07999999821186066,
+            "m_Height": 0.504379153251648,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.252189576625824,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "19ca1dc78ddc051e89c70706afbd90aaac297deac93fbae098230a4340058b77"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 44762
+        },
+        "m_Mass": 20.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -1.7606850005735808e-11,
+        "y": -2.7963364956917758e-09,
+        "z": 0.035338904708623886,
+        "w": 0.9993754029273987
+      },
+      "slave_local_rotation": {
+        "x": -1.7606850005735808e-11,
+        "y": -2.7963364956917758e-09,
+        "z": 0.035338904708623886,
+        "w": 0.9993754029273987
+      },
+      "joint": {
+        "id": 309780,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 44762
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299393
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.38571181893348694,
+            "y": 3.1741365091875196e-09,
+            "z": -1.3969838619232178e-08
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -80.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 5.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 5.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "f3f7e8efb7011364baa1804781a797defcefd4223f8d13c310c42295d7f81115"
+      },
+      "body_raw_sha256": "ca4dfe896da91d3b4de32fce0786cb693f79c7032bc656f0baacbd23a2371493"
+    },
+    {
+      "index": 3,
+      "slot": 9,
+      "name": "Bip01 R Thigh",
+      "master_transform": 150541,
+      "slave_transform": 148304,
+      "game_object": 44104,
+      "rigidbody": 299389,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308032,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 44104
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.07999999821186066,
+            "m_Height": 0.38571178913116455,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.19285589456558228,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "5d219c83bd92aeaae63c79db7b8f8450db45835835d43b4854bd4f7a69b9169c"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 44104
+        },
+        "m_Mass": 35.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -0.07642501592636108,
+        "y": 0.9970308542251587,
+        "z": -0.00017411328735761344,
+        "w": 0.009416930377483368
+      },
+      "slave_local_rotation": {
+        "x": -0.07642501592636108,
+        "y": 0.9970308542251587,
+        "z": -0.00017411328735761344,
+        "w": 0.009416930377483368
+      },
+      "joint": {
+        "id": 309776,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 44104
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299397
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -1.2792503412129008e-07,
+            "y": -8.157964970223475e-08,
+            "z": -0.08175010979175568
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -15.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 60.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 10.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 10.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "3e9a4a1febdd1ef579e6b85cd50ceb33e793732cdc999cbdbae596b480138d7a"
+      },
+      "body_raw_sha256": "78bae29fea0a77547665c2d721100699bfe5fffb9d0087ff1bc58b7fe475694f"
+    },
+    {
+      "index": 4,
+      "slot": 10,
+      "name": "Bip01 R Calf",
+      "master_transform": 152104,
+      "slave_transform": 147103,
+      "game_object": 43892,
+      "rigidbody": 299381,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308026,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 43892
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.07999999821186066,
+            "m_Height": 0.504379153251648,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.252189576625824,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "fcb0cff3ac487dec56ffbee6d5376c9e8abdf0e63a34004d16ded3f39681ed0b"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 43892
+        },
+        "m_Mass": 20.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": 4.6692500560441275e-11,
+        "y": 2.7973647842571836e-09,
+        "z": 0.035338904708623886,
+        "w": 0.9993754029273987
+      },
+      "slave_local_rotation": {
+        "x": 4.6692500560441275e-11,
+        "y": 2.7973647842571836e-09,
+        "z": 0.035338904708623886,
+        "w": 0.9993754029273987
+      },
+      "joint": {
+        "id": 309773,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 43892
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299389
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.38571178913116455,
+            "y": 1.2591954146046191e-08,
+            "z": -2.9336661100387573e-08
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -80.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 5.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 5.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "479618ec293edcf12a3cac07723fa2c1b3c5b2f9cc9b0dd2213a3cd974cce503"
+      },
+      "body_raw_sha256": "dfc3b9fe90ba5c0b7866acaa08b6627084fe1374d0510562e1080c302010eef8"
+    },
+    {
+      "index": 5,
+      "slot": 15,
+      "name": "Bip01 Spine2",
+      "master_transform": 151948,
+      "slave_transform": 146057,
+      "game_object": 42689,
+      "rigidbody": 299377,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "BoxCollider",
+          "id": 300736,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 42689
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Size": {
+              "x": 0.2518357038497925,
+              "y": 0.21882961690425873,
+              "z": 0.2484467327594757
+            },
+            "m_Center": {
+              "x": -0.1259179413318634,
+              "y": -0.019999999552965164,
+              "z": -1.9371509552001953e-07
+            }
+          },
+          "material": null,
+          "raw_sha256": "8c09470962059bf4409192949db2ebf64bb70b47aaafa65874f6274bbfbe86fa"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 42689
+        },
+        "m_Mass": 70.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -2.184724179343789e-09,
+        "y": -1.3401044895999803e-07,
+        "z": 0.03197140619158745,
+        "w": 0.9994888305664062
+      },
+      "slave_local_rotation": {
+        "x": -2.184724179343789e-09,
+        "y": -1.3401044895999803e-07,
+        "z": 0.03197140619158745,
+        "w": 0.9994888305664062
+      },
+      "joint": {
+        "id": 309770,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 42689
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299397
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.18608762323856354,
+            "y": -0.006859187036752701,
+            "z": 2.7021198434340477e-07
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "38aea5563af029b46f2c673dac36b71b62d46bb7aa4841fb9b728020f5d86308"
+      },
+      "body_raw_sha256": "a9019f5332c88854f9bd26eb7486c075d39dac698bb21ed6ae53dbcd37c73fda"
+    },
+    {
+      "index": 6,
+      "slot": 18,
+      "name": "Bip01 L UpperArm",
+      "master_transform": 149835,
+      "slave_transform": 143486,
+      "game_object": 41915,
+      "rigidbody": 299373,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308023,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 41915
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.06454545259475708,
+            "m_Height": 0.2581818103790283,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.12909090518951416,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "0f95f3fa81ca14296e29229eba0554c23307a0b0895a28a1529114a38efe2746"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 41915
+        },
+        "m_Mass": 20.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -0.11479689180850983,
+        "y": -0.3292175829410553,
+        "z": -0.028724823147058487,
+        "w": 0.9368096590042114
+      },
+      "slave_local_rotation": {
+        "x": -0.11479689180850983,
+        "y": -0.3292175829410553,
+        "z": -0.028724823147058487,
+        "w": 0.9368096590042114
+      },
+      "joint": {
+        "id": 309767,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 41915
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299377
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.2518359422683716,
+            "y": -0.06556280702352524,
+            "z": 0.12422318756580353
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 60.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 10.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "31db4596ebb5ec2fd7079641150d0433bdcb4ad9a2d1ef02c74ef0a554369623"
+      },
+      "body_raw_sha256": "36df4a5919518846ec0478936b15c0e68e6ae173ed2ebd72a590c843e3beb16f"
+    },
+    {
+      "index": 7,
+      "slot": 19,
+      "name": "Bip01 L Forearm",
+      "master_transform": 149712,
+      "slave_transform": 143181,
+      "game_object": 41644,
+      "rigidbody": 299359,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308015,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 41644
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.08223973214626312,
+            "m_Height": 0.4111986458301544,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.2055993229150772,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "175f13c79d9e205d378bb12dbf11cc52bf69bd730c9524cdab043d468ffb91a6"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 41644
+        },
+        "m_Mass": 10.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -1.4844837359362373e-08,
+        "y": -1.2944231242428827e-09,
+        "z": 0.08686724305152893,
+        "w": 0.9962199330329895
+      },
+      "slave_local_rotation": {
+        "x": -1.4844837359362373e-08,
+        "y": -1.2944231242428827e-09,
+        "z": 0.08686724305152893,
+        "w": 0.9962199330329895
+      },
+      "joint": {
+        "id": 309764,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 41644
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299373
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.25818192958831787,
+            "y": 5.960464477539063e-08,
+            "z": 1.2665987014770508e-07
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 90.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 50.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "49671a68583f81356708a81a39ca14ca9547944dfcbf8eebfd08a38c40113c42"
+      },
+      "body_raw_sha256": "1726225894ad6213922d022dd1184dc4c86f1465daf486b4d3a1a3fa4cd3d914"
+    },
+    {
+      "index": 8,
+      "slot": 34,
+      "name": "Bip01 Head",
+      "master_transform": 152168,
+      "slave_transform": 138606,
+      "game_object": 37155,
+      "rigidbody": 299345,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "SphereCollider",
+          "id": 307610,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 37155
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.11999999731779099,
+            "m_Center": {
+              "x": -0.06211168318986893,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "8e5d942ae9f61d082e36acaf2050f3a6fe79a8a2c67952094bd5e43b2031ea32"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 37155
+        },
+        "m_Mass": 20.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -6.492767212762374e-09,
+        "y": -1.47538301575878e-07,
+        "z": 0.09957362711429596,
+        "w": 0.9950302243232727
+      },
+      "slave_local_rotation": {
+        "x": -6.492767212762374e-09,
+        "y": -1.47538301575878e-07,
+        "z": 0.09957362711429596,
+        "w": 0.9950302243232727
+      },
+      "joint": {
+        "id": 309761,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 37155
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299377
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.3698423504829407,
+            "y": -0.027323340997099876,
+            "z": -5.800585967108418e-08
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -50.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 50.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 20.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "95ff6112fde415f39955484e380081517352c1f1a411d9bd59b6d1cb78dc68d8"
+      },
+      "body_raw_sha256": "b3d8ecef0ee1068cd410d74f572f5aa26e851720a4ef560631b4bee5138001f6"
+    },
+    {
+      "index": 9,
+      "slot": 42,
+      "name": "Bip01 R UpperArm",
+      "master_transform": 152148,
+      "slave_transform": 136157,
+      "game_object": 34532,
+      "rigidbody": 299366,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308020,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 34532
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.0645453929901123,
+            "m_Height": 0.2581815719604492,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.1290907859802246,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "3f57ee290b1e91d6cf502f036ef892d09bec51215561bda42cfbbd4a249ff1f2"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 34532
+        },
+        "m_Mass": 20.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": 0.114796943962574,
+        "y": 0.32921740412712097,
+        "z": -0.02872476540505886,
+        "w": 0.9368097186088562
+      },
+      "slave_local_rotation": {
+        "x": 0.114796943962574,
+        "y": 0.32921740412712097,
+        "z": -0.02872476540505886,
+        "w": 0.9368097186088562
+      },
+      "joint": {
+        "id": 309758,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 34532
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299377
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.2518356442451477,
+            "y": -0.06556208431720734,
+            "z": -0.12422357499599457
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": -30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 60.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 10.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "32de45fa934212aa50d117417e6550a087a0efd53288bdc571498371fdfc8ee7"
+      },
+      "body_raw_sha256": "936d748e48e004e751c00e913835a6e207aeb8e5f004fef1a6edf157a9d7b0c4"
+    },
+    {
+      "index": 10,
+      "slot": 43,
+      "name": "Bip01 R Forearm",
+      "master_transform": 152232,
+      "slave_transform": 135803,
+      "game_object": 34194,
+      "rigidbody": 299352,
+      "active_self": true,
+      "tag": 0,
+      "layer": 15,
+      "colliders": [
+        {
+          "kind": "CapsuleCollider",
+          "id": 308011,
+          "data": {
+            "m_GameObject": {
+              "m_FileID": 0,
+              "m_PathID": 34194
+            },
+            "m_Material": {
+              "m_FileID": 0,
+              "m_PathID": 0
+            },
+            "m_IsTrigger": false,
+            "m_Enabled": true,
+            "m_Radius": 0.08223970979452133,
+            "m_Height": 0.41119855642318726,
+            "m_Direction": 0,
+            "m_Center": {
+              "x": -0.20559927821159363,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "material": null,
+          "raw_sha256": "8f59acd2d99a6bea6f65bacbccccbb0fba0e848ca2c05e34551ffe2f3c586013"
+        }
+      ],
+      "body": {
+        "m_GameObject": {
+          "m_FileID": 0,
+          "m_PathID": 34194
+        },
+        "m_Mass": 10.0,
+        "m_Drag": 0.0,
+        "m_AngularDrag": 0.05000000074505806,
+        "m_UseGravity": true,
+        "m_IsKinematic": false,
+        "m_Interpolate": 0,
+        "m_Constraints": 0,
+        "m_CollisionDetection": 0
+      },
+      "master_local_rotation": {
+        "x": -8.716839694500322e-09,
+        "y": 1.4197619080391632e-08,
+        "z": 0.08686725795269012,
+        "w": 0.9962198734283447
+      },
+      "slave_local_rotation": {
+        "x": -8.716839694500322e-09,
+        "y": 1.4197619080391632e-08,
+        "z": 0.08686725795269012,
+        "w": 0.9962198734283447
+      },
+      "joint": {
+        "id": 309755,
+        "data": {
+          "m_GameObject": {
+            "m_FileID": 0,
+            "m_PathID": 34194
+          },
+          "m_ConnectedBody": {
+            "m_FileID": 0,
+            "m_PathID": 299366
+          },
+          "m_Anchor": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_Axis": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": -1.0
+          },
+          "m_AutoConfigureConnectedAnchor": true,
+          "m_ConnectedAnchor": {
+            "x": -0.2581816017627716,
+            "y": 1.1175870895385742e-08,
+            "z": -5.960464477539063e-08
+          },
+          "m_SecondaryAxis": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "m_XMotion": 0,
+          "m_YMotion": 0,
+          "m_ZMotion": 0,
+          "m_AngularXMotion": 1,
+          "m_AngularYMotion": 1,
+          "m_AngularZMotion": 1,
+          "m_LinearLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LinearLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularXLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_LowAngularXLimit": {
+            "limit": 0.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_HighAngularXLimit": {
+            "limit": 90.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularYZLimitSpring": {
+            "spring": 0.0,
+            "damper": 0.0
+          },
+          "m_AngularYLimit": {
+            "limit": 30.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_AngularZLimit": {
+            "limit": 50.0,
+            "bounciness": 0.0,
+            "contactDistance": 0.0
+          },
+          "m_TargetPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_TargetVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_XDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_YDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_TargetRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0,
+            "w": 1.0
+          },
+          "m_TargetAngularVelocity": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "m_RotationDriveMode": 1,
+          "m_AngularXDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_AngularYZDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_SlerpDrive": {
+            "mode": 0,
+            "positionSpring": 0.0,
+            "positionDamper": 0.0,
+            "maximumForce": 3.4028232635611926e+38
+          },
+          "m_ProjectionMode": 0,
+          "m_ProjectionDistance": 0.10000000149011612,
+          "m_ProjectionAngle": 5.0,
+          "m_ConfiguredInWorldSpace": false,
+          "m_SwapBodies": false,
+          "m_BreakForce": "+Infinity",
+          "m_BreakTorque": "+Infinity",
+          "m_EnableCollision": false,
+          "m_EnablePreprocessing": true
+        },
+        "raw_sha256": "7d89de00e4fec678e964d24366f05fd4dc6f81212ec1676df42325e5edfe407d"
+      },
+      "body_raw_sha256": "2c65a4532cd6c83810382d7f8a5490ce440779416ae49ae3ed8a1a113924acf6"
+    }
+  ],
+  "nonrigid_pairs": [
+    {
+      "slot": 0,
+      "master": 150703,
+      "slave": 152418,
+      "name": "Ragdoll"
+    },
+    {
+      "slot": 1,
+      "master": 152210,
+      "slave": 152398,
+      "name": "Bip01"
+    },
+    {
+      "slot": 3,
+      "master": 152296,
+      "slave": 149444,
+      "name": "Bip01 Spine"
+    },
+    {
+      "slot": 6,
+      "master": 150173,
+      "slave": 147849,
+      "name": "Bip01 L Foot"
+    },
+    {
+      "slot": 7,
+      "master": 151009,
+      "slave": 147614,
+      "name": "Bip01 L Toe0"
+    },
+    {
+      "slot": 8,
+      "master": 151222,
+      "slave": 147357,
+      "name": "Bip01 L Toe0Nub"
+    },
+    {
+      "slot": 11,
+      "master": 151626,
+      "slave": 146849,
+      "name": "Bip01 R Foot"
+    },
+    {
+      "slot": 12,
+      "master": 151415,
+      "slave": 146597,
+      "name": "Bip01 R Toe0"
+    },
+    {
+      "slot": 13,
+      "master": 152378,
+      "slave": 146327,
+      "name": "Bip01 R Toe0Nub"
+    },
+    {
+      "slot": 14,
+      "master": 150625,
+      "slave": 149311,
+      "name": "Bip01 Spine1"
+    },
+    {
+      "slot": 16,
+      "master": 150071,
+      "slave": 145792,
+      "name": "Bip01 Spine3"
+    },
+    {
+      "slot": 17,
+      "master": 151247,
+      "slave": 145526,
+      "name": "Bip01 L Clavicle"
+    },
+    {
+      "slot": 20,
+      "master": 151744,
+      "slave": 142874,
+      "name": "Bip01 L Hand"
+    },
+    {
+      "slot": 21,
+      "master": 151767,
+      "slave": 141902,
+      "name": "Bip01 L Finger0"
+    },
+    {
+      "slot": 22,
+      "master": 151858,
+      "slave": 140599,
+      "name": "Bip01 L Finger01"
+    },
+    {
+      "slot": 23,
+      "master": 150875,
+      "slave": 140273,
+      "name": "Bip01 L Finger0Nub"
+    },
+    {
+      "slot": 24,
+      "master": 150585,
+      "slave": 141577,
+      "name": "Bip01 L Finger1"
+    },
+    {
+      "slot": 25,
+      "master": 150943,
+      "slave": 139943,
+      "name": "Bip01 L Finger11"
+    },
+    {
+      "slot": 26,
+      "master": 150269,
+      "slave": 139616,
+      "name": "Bip01 L Finger1Nub"
+    },
+    {
+      "slot": 27,
+      "master": 151067,
+      "slave": 141251,
+      "name": "Bip01 L Finger2"
+    },
+    {
+      "slot": 28,
+      "master": 152060,
+      "slave": 139285,
+      "name": "Bip01 L Finger21"
+    },
+    {
+      "slot": 29,
+      "master": 152356,
+      "slave": 138946,
+      "name": "Bip01 L Finger2Nub"
+    },
+    {
+      "slot": 30,
+      "master": 151119,
+      "slave": 140927,
+      "name": "mountOff"
+    },
+    {
+      "slot": 31,
+      "master": 151880,
+      "slave": 142550,
+      "name": "Bone L Forearm"
+    },
+    {
+      "slot": 32,
+      "master": 151366,
+      "slave": 142225,
+      "name": "mountShied"
+    },
+    {
+      "slot": 33,
+      "master": 151345,
+      "slave": 145247,
+      "name": "Bip01 Neck"
+    },
+    {
+      "slot": 35,
+      "master": 152276,
+      "slave": 138266,
+      "name": "Bip01 HeadNub"
+    },
+    {
+      "slot": 36,
+      "master": 149959,
+      "slave": 137920,
+      "name": "Bip01 Mouth"
+    },
+    {
+      "slot": 37,
+      "master": 150453,
+      "slave": 136509,
+      "name": "Bip01 Ponytail1Nub"
+    },
+    {
+      "slot": 38,
+      "master": 151522,
+      "slave": 137570,
+      "name": "Bone Eyelid"
+    },
+    {
+      "slot": 39,
+      "master": 151297,
+      "slave": 137220,
+      "name": "Bone L Eyeball"
+    },
+    {
+      "slot": 40,
+      "master": 150501,
+      "slave": 136869,
+      "name": "Bone R Eyeball"
+    },
+    {
+      "slot": 41,
+      "master": 151675,
+      "slave": 144966,
+      "name": "Bip01 R Clavicle"
+    },
+    {
+      "slot": 44,
+      "master": 151171,
+      "slave": 135453,
+      "name": "Bip01 R Hand"
+    },
+    {
+      "slot": 45,
+      "master": 151497,
+      "slave": 134735,
+      "name": "Bip01 R Finger0"
+    },
+    {
+      "slot": 46,
+      "master": 151790,
+      "slave": 133200,
+      "name": "Bip01 R Finger01"
+    },
+    {
+      "slot": 47,
+      "master": 150771,
+      "slave": 132788,
+      "name": "Bip01 R Finger0Nub"
+    },
+    {
+      "slot": 48,
+      "master": 151926,
+      "slave": 134370,
+      "name": "Bip01 R Finger1"
+    },
+    {
+      "slot": 49,
+      "master": 150909,
+      "slave": 132369,
+      "name": "Bip01 R Finger11"
+    },
+    {
+      "slot": 50,
+      "master": 151904,
+      "slave": 131927,
+      "name": "Bip01 R Finger1Nub"
+    },
+    {
+      "slot": 51,
+      "master": 151698,
+      "slave": 133992,
+      "name": "Bip01 R Finger2"
+    },
+    {
+      "slot": 52,
+      "master": 150838,
+      "slave": 131471,
+      "name": "Bip01 R Finger21"
+    },
+    {
+      "slot": 53,
+      "master": 152317,
+      "slave": 130998,
+      "name": "Bip01 R Finger2Nub"
+    },
+    {
+      "slot": 54,
+      "master": 151272,
+      "slave": 133602,
+      "name": "mountMain"
+    },
+    {
+      "slot": 55,
+      "master": 150400,
+      "slave": 135093,
+      "name": "Bone R Forearm"
+    },
+    {
+      "slot": 56,
+      "master": 152015,
+      "slave": 144675,
+      "name": "Bow"
+    },
+    {
+      "slot": 57,
+      "master": 151601,
+      "slave": 144384,
+      "name": "Bow_box"
+    },
+    {
+      "slot": 58,
+      "master": 151035,
+      "slave": 144086,
+      "name": "Long_Gun"
+    },
+    {
+      "slot": 59,
+      "master": 151995,
+      "slave": 143786,
+      "name": "mountBack"
+    },
+    {
+      "slot": 60,
+      "master": 211686,
+      "slave": 181169,
+      "name": "mountWaist"
+    },
+    {
+      "slot": 61,
+      "master": 150735,
+      "slave": 149176,
+      "name": "Bone  Bow"
+    },
+    {
+      "slot": 62,
+      "master": 151197,
+      "slave": 130513,
+      "name": "bow   Dummy "
+    },
+    {
+      "slot": 63,
+      "master": 152188,
+      "slave": 129986,
+      "name": "bow  L Hand"
+    },
+    {
+      "slot": 64,
+      "master": 151815,
+      "slave": 129427,
+      "name": "bow  R Hand "
+    },
+    {
+      "slot": 65,
+      "master": 150979,
+      "slave": 149032,
+      "name": "Bone  Long_Gun"
+    },
+    {
+      "slot": 66,
+      "master": 151652,
+      "slave": 128805,
+      "name": " Dummy Long_Gun"
+    },
+    {
+      "slot": 67,
+      "master": 152040,
+      "slave": 128092,
+      "name": " Long_Gun  L Hand"
+    },
+    {
+      "slot": 68,
+      "master": 150341,
+      "slave": 127303,
+      "name": " Long_Gun R Hand"
+    },
+    {
+      "slot": 69,
+      "master": 180041,
+      "slave": 179153,
+      "name": "Doublesword1"
+    },
+    {
+      "slot": 70,
+      "master": 199869,
+      "slave": 196394,
+      "name": "Doublesword2"
+    },
+    {
+      "slot": 71,
+      "master": 151145,
+      "slave": 148878,
+      "name": "Pistol"
+    },
+    {
+      "slot": 72,
+      "master": 151548,
+      "slave": 148712,
+      "name": "Pistol  2"
+    },
+    {
+      "slot": 73,
+      "master": 150667,
+      "slave": 126390,
+      "name": " Dummy Pistol"
+    },
+    {
+      "slot": 74,
+      "master": 151321,
+      "slave": 125386,
+      "name": "Pistol  L Hand"
+    },
+    {
+      "slot": 75,
+      "master": 152124,
+      "slave": 123706,
+      "name": "Pistol  R Hand"
+    },
+    {
+      "slot": 76,
+      "master": 151443,
+      "slave": 151095,
+      "name": "CamTarget"
+    }
+  ],
+  "requests": {
+    "force_mode": 2,
+    "joint_drive_mode": 1,
+    "limits_enabled_motion": 1,
+    "limits_disabled_motion": 2,
+    "pd": "signal = P * (error + (D * (error - lastError)) * reciprocalFixedDeltaTime); lastError = error",
+    "angular": "FixEuler subtracts360 once only if angle>180; exact angle360 clears signal and preserves lastError.",
+    "target_rotation": "inverse(localToJointSpace) * inverse(master.localRotation) * startLocalRotation",
+    "start_local_rotation": "slave.localRotation * localToJointSpace; localToJointSpace = LookRotation(Cross(axis,secondaryAxis), secondaryAxis)",
+    "sync": "For each body, only if body and master transform exist: copy master world position then rotation to body transform; catch throws a new exception named after this object.",
+    "nonrigid": "On secondary tick, refresh indices2 through count-2 when mimicNonRigids. On even frameCounter, write those indices regardless of mimicNonRigids; Quaternion.Lerp factor2/secondaryUpdate only when secondaryUpdate>2.",
+    "controller_order": "DoRagdollControl precedes active test; active drive resets totals and increments frameCounter only after drive."
+  },
+  "scope": "Disconnected numerical drive and indexed joint requests. Rig metadata is not a physics implementation.",
+  "limitations": [
+    "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+    "CIL is read from file bytes; no JIT, floating-point or engine behavior is observed.",
+    "Field serialization layout is derived from pinned member flags/SerializeField attributes and checked by complete installed component byte consumption.",
+    "Static caller inventory does not establish actual enabled scene scheduling.",
+    "Engine Quaternion/Vector3 operations and actual Rigidbody/ConfigurableJoint consumption are not executed or qualified bit-exact.",
+    "Force mode2 and joint motion/drive mode integers are retained literally; no mass-dependent engine solve is supplied.",
+    "All component bytes are bound by whole installed asset hashes; Infinity joint break values are represented as explicit strings.",
+    "Collider material references are retained; a null material uses an unqualified engine default. Numeric GameObject tags are not resolved to tag names."
+  ]
+}

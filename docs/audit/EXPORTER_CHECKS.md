@@ -61,3 +61,9 @@ of all four complete groups. `check-sources` runs it. Installation requires
 baseline hashes; rename failures roll back. The strict reader and native host
 checks remain separate from byte regeneration. See
 [the integration audit](SANDBOX_SPRINT_KNIFE.md).
+
+`animfollow-drive-source-check` qualifies the existing complete AnimFollow CIL
+excerpt and installed female component/assets, regenerates11 ordered body
+profiles plus joint/collider/material metadata, and runs all five drive-export
+tests (including the three skipped without UnityPy). It is part of
+`check-sources`; see [the drive audit](ANIMFOLLOW_DRIVE.md).

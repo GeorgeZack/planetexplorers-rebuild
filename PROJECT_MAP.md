@@ -1,3 +1,5 @@
+[AnimFollow drive](docs/audit/ANIMFOLLOW_DRIVE.md): `pe_animfollow_drive` owns disconnected female per-body PD and indexed joint requests; `export_animfollow_drive.py` binds11 bodies/10 joints/66 nonrigids, profiles and collider/material metadata. It supplies no physics or pose.
+
 [Knife recovery](docs/audit/KNIFE_RECOVERY.md): `pe_sandbox_actor` owns the native inactive150ms recovery blend and shared body/attachment/defence snapshot; `pe_sandbox_view` clears it on explicit cancellation. The user accepted the one-click standing/walking ending qualitatively. Separate Knife33 reaction assets remain staged and previewed.
 
 [Reaction preview](docs/audit/REACTION_PREVIEW.md): fixture-only `rebuild/tests/render_reaction_group.c` selects staged leaves through the common scene renderer; `reaction-render-capture` uses the existing private capture supervisor, fresh symlink roots and readback tokens. No production action admission changes.

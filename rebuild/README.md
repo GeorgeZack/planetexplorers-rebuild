@@ -887,3 +887,9 @@ complete optional sprint group is installed: restart the sandbox, draw Knife
 with LMB, hold Shift+W until sprinting, then make a fresh LMB press. See
 [the sprint audit](../docs/audit/SANDBOX_SPRINT_KNIFE.md) for qualified assets,
 backups, `sprint-attack-test` and current acceptance limits.
+
+Disconnected AnimFollow numerical drive/rig requests are documented in
+[the drive audit](../docs/audit/ANIMFOLLOW_DRIVE.md). Run
+`python3 rebuild/tools/run_tests.py -k core:animfollow_drive` from the root,
+or `make -C rebuild animfollow-drive-source-check` for installed evidence and
+regeneration. Neither target enables physical reactions or get-up gameplay.

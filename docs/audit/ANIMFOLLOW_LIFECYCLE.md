@@ -208,3 +208,7 @@ get-up, shield, pounce or defense gate is opened. Next offline target is the
 already inventoried AnimFollow_AF.PDControl/drive and body/joint contracts, or
 FinalIK's offset solve; isolated reaction/get-up bakes remain a separate engine
 need. Passing this reducer is not physical or visual acceptance.
+
+Subsequent source follow-through: [the drive and installed rig](ANIMFOLLOW_DRIVE.md)
+now have a disconnected C request owner. PD math, indexed profiles and joint
+requests are implemented; actual body/pose/physics consumption remains gated.

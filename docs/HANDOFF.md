@@ -31,13 +31,6 @@ Shift+W until sprinting, then make a fresh LMB press and wait. Existing
 camera-facing-attacks settings affect requested heading. Broader sprint
 combat/difficulty/reload and full original transition parity remain untested.
 
-Next offline animation work remains AnimFollow PD/body/joint and FinalIK:
-reuse `rebuild/build/humanphy-AssemblyCSharp-members.json` and the committed
-[AnimFollow lifecycle excerpt](reference/animfollow-lifecycle-il.json).
-`DoAnimFollow`, `PDControl`, `SetJointTorque`, `EnableJointLimits` and
-`SyncTransforms` are the next source targets. No owner yet supplies a physical
-rig/pose. Isolated engine-evaluated reaction/get-up leaves and the
-[private preview](audit/REACTION_PREVIEW.md) do not qualify reaction layers or
-ragdoll blending. Live reactions/stun/knockback, get-up, shield readiness,
-pounce/aggression and Town Defense remain closed. Halt Move/Jump blocking
-still requires the user's explicit choice. PECSv22 remains unchanged.
+The next offline increment now supplies [AnimFollow drive and rig requests](audit/ANIMFOLLOW_DRIVE.md):11 source bodies/10 joints,66 nonrigid pairs, exact per-body profiles, collider/material metadata and a disconnected numerical C owner. It preserves PD operator order, prior unclamped error,360-degree history skip, shared damper, joint limits/sync admission and original call cadence. A bounded decoded-CIL float32 replay agrees with259 C force samples; this is adapter math comparison, not an engine oracle. No live reaction or new physical pose is enabled. Full verification is in PLAYTEST.
+
+Next animation work is actual quaternion/target evaluation and physical rig consumption, plus FinalIK. The recovered joint recipe and source identities are in the linked audit/generated metadata. Reuse the saved complete Assembly-CSharp inventory and existing lifecycle excerpt; another broad original launch is unnecessary for source questions. Physical collision/constraint response, friction/default materials, renderer handoff and reaction layer blending remain unqualified. Live reactions/stun/knockback, get-up, shield readiness, pounce/aggression and Town Defense remain closed. Halt Move/Jump blocking still requires the user's explicit choice. PECSv22 remains unchanged.

@@ -1,3 +1,5 @@
+October12 AnimFollow drive: [installed rig and drive requests](ANIMFOLLOW_DRIVE.md) now have a disconnected C owner, source-bound11/10/66 body/joint/nonrigid mapping and bounded PD arithmetic comparison. Actual quaternion/joint target evaluation, physics consumption and FinalIK remain prerequisites. Live reaction/get-up/shield gates stay closed.
+
 October12 sprint integration: [grounded Knife33 sprint](SANDBOX_SPRINT_KNIFE.md) now uses qualified distinct clip401 roots and installed matching22/31 presentation/defence. Shared open/wall combo/contact fixtures and a bounded production private-input lunge check pass. Broader combat acceptance remains outstanding. The user accepted the earlier standing/walking single-click recovery. Live reactions/get-up/shield and aggression gates remain closed.
 
 # Sandbox alignment: implementation work order and live reference
