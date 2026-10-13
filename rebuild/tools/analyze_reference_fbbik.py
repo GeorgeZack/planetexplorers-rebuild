@@ -89,7 +89,8 @@ def bind(rig,record):
     require([to(l['parent']) if l['parent']>=0 else 0xff for l in record['limbs']]==rig['limb_parents'],'Live limb parents differ')
     differences=[]
     def same(label,live,source):
-        if live!=source:differences.append('%s: live %r, prefab %r'%(label,live,source))
+        # Captured values are printed single precision; the prefab's are widened floats.
+        if live!=source and not(isinstance(live,float) and isinstance(source,float) and abs(live-source)<=1e-6*max(1.,abs(source))):differences.append('%s: live %r, prefab %r'%(label,live,source))
     same('iterations',record['iterations'],rig['iterations'])
     for key,source in (('spineStiffness','spine_stiffness'),('pullBodyVertical','pull_body_vertical'),('pullBodyHorizontal','pull_body_horizontal')):same(key,record[key],rig[source])
     for c,(live,source) in enumerate(zip(record['chains'],rig['chains'])):

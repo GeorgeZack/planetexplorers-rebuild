@@ -1,5 +1,35 @@
 # Original-game playtest and C comparison
 
+## October12 observed FinalIK solver session
+
+**Observed in the original.** Native Steam client, isolated bake profile,
+launch-only shim, tutorial mode, female player, 1280x720, quality 0. The
+operator stood, walked, ran and stopped sharply for 120 seconds; no input was
+injected. `ReferenceFbbikProbe.cs` added two delegate subscribers to the
+player's `FullBodyBipedIK` and removed them at the end; it wrote no solver
+field, transform, input or save. Capture `female-fbbik-02.jsonl` holds 1,399
+frames and ended at its time limit. A first launch recorded nothing because
+the probe looked for the solver under the wrong object.
+
+Replaying each frame's recorded inputs through `pe_fbbik`
+([audit](audit/FINALIK_FBBIK.md)): no failures; bone position error max
+0.29 mm, mean 0.003 mm; rotation max 0.18°; node position max 0.29 mm, while
+the original's IK moved bones by up to 0.67 m. Live topology and settings
+match the generated rig. Solver weight was 1 and every effector and bend
+weight 0 on all frames, so pins, PullBody and bend goals were not observed.
+Offset writers subscribe as `IKAnimEffectCtrl`, `InteractionSystem`,
+`GrounderFBBIK`. Shoulder offsets reached 11.6 m on a few frames at about
+0.09 s frame time; their writer is unidentified. The live solver root is the
+`IK` object; the exporter now derives it and the rig has 25 transforms.
+
+No gameplay gate was opened and no host calls the solver. Full regression
+passes 266 jobs/926 Python tests with 92 optional skips
+(`fbbik-observed-check.log`); skips are not passes. Sanitizer passes 104
+suites (`fbbik-observed-check-sanitize.log`). Content and source regeneration
+pass, including all six solver-export tests under UnityPy
+(`fbbik-observed-check-content.log`, `fbbik-observed-check-sources.log`). 26
+CLI cases pass. No rebuild graphics check was run; PECSv22 is unchanged.
+
 ## October12 disconnected FinalIK full-body solver
 
 [The solver audit](audit/FINALIK_FBBIK.md) records the installed

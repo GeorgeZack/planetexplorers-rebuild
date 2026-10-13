@@ -21,7 +21,7 @@ public sealed class PoseProbe : MonoBehaviour {
     string arm, stop;
     int samples, frames, maxFrames;
     long bytes;
-    float installed, started = -1, seconds, waitSeconds;
+    float installed, started = -1, seconds, waitSeconds, reported = -10;
     bool finished, pending;
     FullBodyBipedIK ik;
     IKSolverFullBodyBiped solver;
@@ -80,9 +80,18 @@ public sealed class PoseProbe : MonoBehaviour {
         MainPlayerCmpt main = MainPlayerCmpt.gMainPlayer;
         PeEntity e = main == null ? null : main.GetComponent<PeEntity>();
         BiologyViewCmpt view = e == null || !e.hasView ? null : e.GetComponent<BiologyViewCmpt>();
-        Transform model = view == null ? null : view.modelTrans;
-        FullBodyBipedIK found = model == null ? null : model.GetComponentInChildren<FullBodyBipedIK>();
-        if (found == null || !found.isActiveAndEnabled || !found.solver.initiated) return;
+        // The solver sits on the view root's IK child, a sibling of the model controller's object.
+        BiologyViewRoot viewRoot = view == null ? null : view.biologyViewRoot;
+        FullBodyBipedIK found = viewRoot == null ? null : viewRoot.fbbik;
+        if (found == null && e != null) found = e.GetComponentInChildren<FullBodyBipedIK>();
+        if (found == null || !found.isActiveAndEnabled || !found.solver.initiated) {
+            if (Time.realtimeSinceStartup - reported >= 2) {
+                reported = Time.realtimeSinceStartup;
+                Console.Error.WriteLine("[fbbik] Not attached: player=" + (main != null) + " view=" + (view != null) + " viewRoot=" + (viewRoot != null)
+                    + " solver=" + (found != null) + (found == null ? "" : " active=" + found.isActiveAndEnabled + " initiated=" + found.solver.initiated));
+            }
+            return;
+        }
         IKSolverFullBodyBiped s = found.solver; Transform root = s.GetRoot();
         List<Transform> used = new List<Transform>();
         foreach (FBIKChain chain in s.chain) foreach (IKSolver.Node node in chain.nodes) used.Add(node.transform);

@@ -97,6 +97,11 @@ def recover_rig(model):
         if optional and not identity:return NONE
         require(identity in nodes,'Solver reference is not a chain node');return nodes[identity]
     require(point(solver['rootNode'])==0 and ref(solver['root'])!=0,'Root node is not the body chain')
+    # IK.InitiateSolver passes the component's own transform to IKSolver.Initiate, which stores it
+    # as root over the serialized reference.
+    holder=model.get(ref(data['m_GameObject']));require(holder and holder['kind']=='GameObject','FullBodyBipedIK owner is missing')
+    owned=[ref(c[1]) for c in holder['data']['m_Component'] if model.get(ref(c[1]),{}).get('kind')=='Transform']
+    require(len(owned)==1,'FullBodyBipedIK owner transform is ambiguous');solver_root=owned[0]
     constraints=[]
     for item in chains[0]['childConstraints']:
         a,b=point(item['bone1']),point(item['bone2'])
@@ -125,7 +130,7 @@ def recover_rig(model):
     for i,item in enumerate(limbs):
         require([point(item[k]) for k in ('bone1','bone2','bone3')]==[(i+1)*3+n for n in range(3)],'Limb mapping bones changed')
         parents.append(ref(item['parentBone']))
-    used=set(nodes)|set(spine_ids)|{head,ref(solver['root'])}|{p for p in parents if p}
+    used=set(nodes)|set(spine_ids)|{head,solver_root}|{p for p in parents if p}
     def father(t):
         obj=model.get(t);require(obj and obj['kind']=='Transform','Solver reference is not a Transform')
         return ref(obj['data']['m_Father'])
@@ -146,7 +151,7 @@ def recover_rig(model):
         values=vec(tr['m_LocalPosition'])+vec(tr['m_LocalRotation'],'xyzw');require(all(math.isfinite(x) for x in values),'Nonfinite rest pose')
         bones.append(dict(index=index[t],id=t,name=go['m_Name'],parent=index[father(t)] if father(t) else -1,
                           local_position=values[:3],local_rotation=values[3:]))
-    rig=dict(bones=bones,root=index[ref(solver['root'])],iterations=solver['iterations'],
+    rig=dict(bones=bones,root=index[solver_root],iterations=solver['iterations'],
         chain_bones=[[index[ref(n['transform'])] for n in c['nodes']] for c in chains],
         chains=[{k:c[k] for k in ('pin','pull','push','pushParent','reach','reachSmoothing','pushSmoothing')} for c in chains],
         constraints=constraints,effector_nodes=list(EFFECTOR_NODES),effector_planes=planes,body_children=children,

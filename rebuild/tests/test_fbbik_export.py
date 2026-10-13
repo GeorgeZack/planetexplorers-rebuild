@@ -413,7 +413,7 @@ class Portable(unittest.TestCase):
 
     def test_generated_metadata_is_strict_and_scoped(self):
         data=json.loads((GENERATED/'pe_fbbik_source.json').read_text());rig=data['rig']
-        self.assertEqual((len(rig['bones']),rig['iterations'],rig['spine_root_index'],len(rig['constraints'])),(24,1,1,4))
+        self.assertEqual((len(rig['bones']),rig['iterations'],rig['spine_root_index'],len(rig['constraints'])),(25,1,1,4))
         self.assertEqual([rig['bones'][i]['id'] for i in rig['spine']],[400288,400264,400148])
         self.assertEqual(data['grounder']['component'],11400014);self.assertEqual(data['grounder']['enabled'],1)
         self.assertTrue(any('GrounderFBBIK' in x for x in data['limitations']) and any('Initiate' in x for x in data['limitations']))
@@ -435,7 +435,7 @@ class Portable(unittest.TestCase):
             source=Path(folder)/'harness.c';binary=Path(folder)/'harness';source.write_text(HARNESS)
             subprocess.run(['cc','-std=c11','-O2','-I',str(e.ROOT/'rebuild/src'),str(source),str(library),'-lm','-o',str(binary)],check=True)
             result=subprocess.run([str(binary)],input='\n'.join(lines)+'\n',capture_output=True,text=True,check=True)
-        rows=[[float(v) for v in line.split()] for line in result.stdout.splitlines()];self.assertEqual(len(rows),len(cases)*24)
+        rows=[[float(v) for v in line.split()] for line in result.stdout.splitlines()];self.assertEqual(len(rows),len(cases)*25)
         worst_position=worst_rotation=0.;moved=0
         for index,case in enumerate(cases):
             local=replay(dict(rig,iterations=case['iterations']),case['init'],case['pose'],case['weight'],case['effectors'],case['bend'])
@@ -444,7 +444,7 @@ class Portable(unittest.TestCase):
                 bones.append(Transform(None if bone['parent']<0 else bones[bone['parent']],p,q))
                 before.append(Transform(None if bone['parent']<0 else before[bone['parent']],p0,q0))
             for b,(bone,was) in enumerate(zip(bones,before)):
-                row=rows[index*24+b];worst_position=max(worst_position,mag(sub(bone.position,tuple(row[:3]))))
+                row=rows[index*25+b];worst_position=max(worst_position,mag(sub(bone.position,tuple(row[:3]))))
                 worst_rotation=max(worst_rotation,1-abs(sum(x*y for x,y in zip(bone.rotation,row[3:]))))
                 moved+=mag(sub(bone.position,was.position))>.01
         # float32 C against a double replay; a transcription slip moves bones by centimetres.

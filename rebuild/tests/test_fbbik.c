@@ -30,11 +30,11 @@ static void bent(PeFbbikTransform *l){
 }
 int pe_test_fbbik(void){
     failures=0;rig=pe_fbbik_female_rig();
-    CHECK(rig&&rig->bone_count==24&&rig->iterations==1&&rig->spine_count==3&&rig->spine_root_index==1);
+    CHECK(rig&&rig->bone_count==25&&rig->iterations==1&&rig->spine_count==3&&rig->spine_root_index==1);
     CHECK(pe_fbbik_female_bone_id(node_bone(0,0))==400264&&pe_fbbik_female_bone_id(node_bone(1,2))==400246);
     CHECK(pe_fbbik_female_bone_id(node_bone(4,2))==400236&&pe_fbbik_female_bone_id(rig->head)==400284);
-    CHECK(pe_fbbik_female_bone_id(rig->limb_parent[0])==400206&&rig->limb_parent[2]==PE_FBBIK_NONE&&!pe_fbbik_female_bone_id(24));
-    CHECK(pe_fbbik_female_bone_id(rig->root)==400170&&pe_fbbik_female_bone_id(rig->spine[0])==400288);
+    CHECK(pe_fbbik_female_bone_id(rig->limb_parent[0])==400206&&rig->limb_parent[2]==PE_FBBIK_NONE&&!pe_fbbik_female_bone_id(25));
+    CHECK(pe_fbbik_female_bone_id(rig->root)==400224&&pe_fbbik_female_bone_id(rig->spine[0])==400288);
 
     PeFbbikTransform rest[PE_FBBIK_MAX_BONES],pose[PE_FBBIK_MAX_BONES];
     CHECK(pe_fbbik_female_rest(rest));bent(pose);
@@ -139,6 +139,6 @@ int pe_test_fbbik(void){
     PeFbbikRig broken=*rig;broken.parent[5]=7;PeFbbik untouched=state;
     CHECK(!pe_fbbik_init(&state,&broken,rest)&&!memcmp(&untouched,&state,sizeof state));
     broken=*rig;broken.spine_root_index=0;CHECK(!pe_fbbik_init(&state,&broken,rest));
-    CHECK(!pe_fbbik_init(&state,rig,0)&&!pe_fbbik_world(rig,pose,24,&rest[0]));
+    CHECK(!pe_fbbik_init(&state,rig,0)&&!pe_fbbik_world(rig,pose,25,&rest[0]));
     return failures?1:0;
 }

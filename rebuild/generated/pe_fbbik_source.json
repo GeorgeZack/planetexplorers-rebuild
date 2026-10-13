@@ -57,6 +57,23 @@
       },
       {
         "index": 2,
+        "id": 400224,
+        "name": "IK",
+        "parent": 0,
+        "local_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "index": 3,
         "id": 400288,
         "name": "Bip01",
         "parent": 1,
@@ -73,10 +90,10 @@
         ]
       },
       {
-        "index": 3,
+        "index": 4,
         "id": 400176,
         "name": "Bip01 Pelvis",
-        "parent": 2,
+        "parent": 3,
         "local_position": [
           -0.0,
           0.0,
@@ -90,10 +107,10 @@
         ]
       },
       {
-        "index": 4,
+        "index": 5,
         "id": 400166,
         "name": "Bip01 Spine1",
-        "parent": 3,
+        "parent": 4,
         "local_position": [
           -0.0836084708571434,
           -0.0029121015686541796,
@@ -107,10 +124,10 @@
         ]
       },
       {
-        "index": 5,
+        "index": 6,
         "id": 400296,
         "name": "Bip01 Spine",
-        "parent": 3,
+        "parent": 4,
         "local_position": [
           -0.05935867130756378,
           -0.003098239889368415,
@@ -124,10 +141,10 @@
         ]
       },
       {
-        "index": 6,
+        "index": 7,
         "id": 400162,
         "name": "Bip01 R Thigh",
-        "parent": 5,
+        "parent": 6,
         "local_position": [
           0.059320829808712006,
           0.003753518918529153,
@@ -141,10 +158,10 @@
         ]
       },
       {
-        "index": 7,
+        "index": 8,
         "id": 400218,
         "name": "Bip01 L Thigh",
-        "parent": 5,
+        "parent": 6,
         "local_position": [
           0.059320829808712006,
           0.003753070719540119,
@@ -158,10 +175,10 @@
         ]
       },
       {
-        "index": 8,
+        "index": 9,
         "id": 400264,
         "name": "Bip01 Spine2",
-        "parent": 4,
+        "parent": 5,
         "local_position": [
           -0.10255500674247742,
           -8.624076872365549e-05,
@@ -175,10 +192,10 @@
         ]
       },
       {
-        "index": 9,
+        "index": 10,
         "id": 400148,
         "name": "Bip01 Spine3",
-        "parent": 8,
+        "parent": 9,
         "local_position": [
           -0.10851577669382095,
           -0.0001226258318638429,
@@ -192,10 +209,10 @@
         ]
       },
       {
-        "index": 10,
+        "index": 11,
         "id": 400254,
         "name": "Bip01 L Calf",
-        "parent": 7,
+        "parent": 8,
         "local_position": [
           -0.3857116103172302,
           3.5762786065873797e-09,
@@ -209,10 +226,10 @@
         ]
       },
       {
-        "index": 11,
+        "index": 12,
         "id": 400278,
         "name": "Bip01 R Calf",
-        "parent": 6,
+        "parent": 7,
         "local_position": [
           -0.3857116103172302,
           3.5762786065873797e-09,
@@ -226,10 +243,10 @@
         ]
       },
       {
-        "index": 12,
+        "index": 13,
         "id": 400150,
         "name": "Bip01 L Foot",
-        "parent": 10,
+        "parent": 11,
         "local_position": [
           -0.45399942994117737,
           2.38418573772492e-09,
@@ -243,10 +260,10 @@
         ]
       },
       {
-        "index": 13,
+        "index": 14,
         "id": 400206,
         "name": "Bip01 L Clavicle",
-        "parent": 9,
+        "parent": 10,
         "local_position": [
           -0.15801650285720825,
           -0.036497101187705994,
@@ -260,10 +277,10 @@
         ]
       },
       {
-        "index": 14,
+        "index": 15,
         "id": 400214,
         "name": "Bip01 Neck",
-        "parent": 9,
+        "parent": 10,
         "local_position": [
           -0.19747284054756165,
           -0.02339217998087406,
@@ -277,10 +294,10 @@
         ]
       },
       {
-        "index": 15,
+        "index": 16,
         "id": 400236,
         "name": "Bip01 R Foot",
-        "parent": 11,
+        "parent": 12,
         "local_position": [
           -0.45399951934814453,
           0.0,
@@ -294,10 +311,10 @@
         ]
       },
       {
-        "index": 16,
+        "index": 17,
         "id": 400240,
         "name": "Bip01 R Clavicle",
-        "parent": 9,
+        "parent": 10,
         "local_position": [
           -0.1580163538455963,
           -0.0364968478679657,
@@ -311,10 +328,10 @@
         ]
       },
       {
-        "index": 17,
+        "index": 18,
         "id": 400144,
         "name": "Bip01 L UpperArm",
-        "parent": 13,
+        "parent": 14,
         "local_position": [
           -0.07880760729312897,
           0.0,
@@ -328,10 +345,10 @@
         ]
       },
       {
-        "index": 18,
+        "index": 19,
         "id": 400282,
         "name": "Bip01 R UpperArm",
-        "parent": 16,
+        "parent": 17,
         "local_position": [
           -0.07880759239196777,
           0.0,
@@ -345,10 +362,10 @@
         ]
       },
       {
-        "index": 19,
+        "index": 20,
         "id": 400284,
         "name": "Bip01 Head",
-        "parent": 14,
+        "parent": 15,
         "local_position": [
           -0.06741958111524582,
           0.0,
@@ -362,10 +379,10 @@
         ]
       },
       {
-        "index": 20,
+        "index": 21,
         "id": 400142,
         "name": "Bip01 L Forearm",
-        "parent": 17,
+        "parent": 18,
         "local_position": [
           -0.25818175077438354,
           3.814697180359872e-08,
@@ -379,10 +396,10 @@
         ]
       },
       {
-        "index": 21,
+        "index": 22,
         "id": 400290,
         "name": "Bip01 R Forearm",
-        "parent": 18,
+        "parent": 19,
         "local_position": [
           -0.258181631565094,
           0.0,
@@ -396,10 +413,10 @@
         ]
       },
       {
-        "index": 22,
+        "index": 23,
         "id": 400200,
         "name": "Bip01 R Hand",
-        "parent": 21,
+        "parent": 22,
         "local_position": [
           -0.2542317807674408,
           3.814697180359872e-08,
@@ -413,10 +430,10 @@
         ]
       },
       {
-        "index": 23,
+        "index": 24,
         "id": 400246,
         "name": "Bip01 L Hand",
-        "parent": 20,
+        "parent": 21,
         "local_position": [
           -0.25423184037208557,
           -3.814697180359872e-08,
@@ -430,31 +447,31 @@
         ]
       }
     ],
-    "root": 1,
+    "root": 2,
     "iterations": 1,
     "chain_bones": [
       [
-        8
-      ],
-      [
-        17,
-        20,
-        23
+        9
       ],
       [
         18,
         21,
-        22
+        24
+      ],
+      [
+        19,
+        22,
+        23
+      ],
+      [
+        8,
+        11,
+        13
       ],
       [
         7,
-        10,
-        12
-      ],
-      [
-        6,
-        11,
-        15
+        12,
+        16
       ]
     ],
     "chains": [
@@ -593,16 +610,16 @@
       12
     ],
     "spine": [
-      2,
-      8,
-      9
+      3,
+      9,
+      10
     ],
     "spine_root_index": 1,
     "spine_iterations": 3,
     "spine_twist_weight": 1.0,
     "limb_parents": [
-      13,
-      16,
+      14,
+      17,
       255,
       255
     ],
@@ -618,7 +635,7 @@
       1.0,
       1.0
     ],
-    "head": 19,
+    "head": 20,
     "head_maintain_rotation": 0.0,
     "spine_stiffness": 0.5,
     "pull_body_vertical": 0.5,

@@ -5,8 +5,8 @@ C owner.** `pe_fbbik` performs one `IKSolverFullBody.OnUpdate` for the female
 rig: pose read, chain solve and spine/limb mapping. No host calls it. It is the
 solve that [Halt](HALT_STOP_EFFECT.md) and [hit IK](HIT_IK.md) offsets were
 waiting for, but it supplies no visible reaction: the engine's quaternion
-natives are conventional adapters, GrounderFBBIK is unrecovered and nothing
-has been compared with an original pose.
+natives are conventional adapters and GrounderFBBIK is unrecovered. One
+observed session agrees with the original solver to 0.29 mm.
 
 ## Evidence
 
@@ -46,8 +46,8 @@ and C rig.
 | timeStep / fixTransforms | 0 / on |
 
 All effector weights are zero, so in this rig the solver acts only on
-`positionOffset` requests. The solve hierarchy is 24 transforms from
-`FemaleModel` to the hands and feet; serialized scales are one to within
+`positionOffset` requests. The solve hierarchy is 25 transforms: 24 from
+`FemaleModel` to the hands and feet, plus the solver root `IK`; serialized scales are one to within
 1e-6 and the C rig treats them as one.
 
 ## Update order
@@ -141,56 +141,80 @@ make -C rebuild fbbik-source-check
 
 Full results are in [PLAYTEST](../PLAYTEST.md).
 
-## Prepared engine comparison
+## Engine comparison
 
-Not yet run. The source and static evidence cannot supply the engine's native
-quaternion arithmetic, the pose held at `Initiate`, or the order of the offset
-writers, so one supervised original-game session is warranted. The smallest
-useful capture is an observation of the live solver, not an injected test.
+**Observed in the original, October 12, 2026.** One supervised tutorial
+session with the female player, on the isolated bake profile with the
+launch-only shim. The operator stood, walked, ran and stopped sharply for 120
+seconds; no input was injected.
 
-`ReferenceFbbikProbe.cs` attaches to the live female player's
-`FullBodyBipedIK`. It adds two delegate subscribers and removes them at the
-end; it writes no solver field, transform, input or save. Each frame it
-records, at `OnPreRead` (after every `OnPreUpdate` offset writer and before
-the pose read), the solver weight, all nine effectors and the 24 local bone
-transforms; and at `OnPostUpdate` the same transforms plus the 13 node
-positions. Once, it records the live topology and settings, each bend
-constraint's defaults from `Initiate`, the `OnPreUpdate` subscriber order and
-the model's behaviours. Because GrounderFBBIK's offsets arrive as recorded
-inputs, the solver can be qualified without recovering the grounder.
+`ReferenceFbbikProbe.cs` attached to the live player's `FullBodyBipedIK`. It
+added two delegate subscribers and removed them at the end; it wrote no solver
+field, transform, input or save. Each frame it recorded, at `OnPreRead` (after
+every `OnPreUpdate` offset writer, before the pose read), the solver weight,
+nine effectors and the local bone transforms; and at `OnPostUpdate` the same
+transforms plus the 13 node positions. `analyze_reference_fbbik.py` replayed
+every frame through `pe_fbbik` and compared with the original's own output.
+
+| Measure over 1,399 frames | Value |
+|---|---|
+| Solver failures | 0 |
+| Bone position error | max 0.29 mm, mean 0.003 mm |
+| Bone rotation error | max 0.18°, mean 0.002° |
+| Node position error | max 0.29 mm |
+| Original IK displacement being reproduced | max 0.67 m, mean 2.1 cm |
+
+So the conventional native adapters reproduce the engine's solve to well under
+a millimetre on real grounder and Halt inputs. This is agreement on observed
+frames, not bit-for-bit engine arithmetic.
+
+What the session also settled:
+
+- **Topology and settings match the prefab**: chains, constraints, effector
+  bones, spine, limbs, head, iterations 1, limb mapping weights 1.
+- **Offset writer order**: `IKAnimEffectCtrl.ModifyOffset`, then
+  `InteractionSystem.OnPreFBBIK`, then `GrounderFBBIK.OnSolverUpdate`.
+- **The solver root is the component's own object**, `FemaleModel/IK`, a
+  childless sibling of `FemaleModel/Model`. `IK.InitiateSolver` passes its own
+  transform to `IKSolver.Initiate`, which overwrites the serialized `Model`
+  reference; the capture exposed this and the compiled body confirms it. The
+  exporter first used the serialized reference and now derives the owner
+  transform. Only `PullBody` reads the root, and it was inactive (see below),
+  so the measured errors are the same before and after.
+- **Solver weight was 1 and every effector weight and bend weight 0** on every
+  frame. Position/rotation pins, `PullBody` and bend goals were therefore not
+  exercised by the original and remain checked only against the second
+  transcription.
+- **Initiation pose is undetermined but immaterial here.** Replays with the
+  observed bend defaults and with prefab-rest initiation gave identical
+  results.
+- **Inputs are larger than expected.** Shoulder offsets reached 11.6 m for a
+  few frames (frame time about 0.09 s) while the solved displacement stayed
+  under 0.67 m. Their writer was not identified; that belongs to the
+  unrecovered grounder and effect owners, not to the solver.
+
+The first launch recorded nothing: the probe searched under the model
+controller's object and the solver is on its sibling. The capture above is the
+second launch. Raw captures stay in the local profile
+(`pose-captures/female-fbbik-02.jsonl`) and are not committed.
 
 ```sh
 python3 rebuild/tools/reference_fbbik_probe.py          # offline compile only
-python3 rebuild/tools/reference_fbbik_probe.py --launch \
-  --output "$HOME/.local/share/planet-explorers-bake-reference/pose-captures/female-fbbik-01.jsonl"
 python3 rebuild/tools/analyze_reference_fbbik.py CAPTURE.jsonl
 ```
 
-The launch uses the isolated bake profile and the launch-only shim, like the
-earlier probes. In the session: enter the tutorial with the female player,
-create the printed `.arm` file, then stand still, walk, run and stop sharply
-several times (each stop is a Halt effect), and create the `.stop` file. One
-to two minutes is enough; the capture is bounded at 1,800 frames.
-
-`analyze_reference_fbbik.py` checks the live topology and settings against the
-generated rig, replays every frame through `pe_fbbik` twice (with the observed
-bend defaults, and with prefab-rest initiation), and reports bone and node
-errors against the original's own output beside the size of the original's IK
-displacement. Its tests feed it a reordered synthetic capture; they establish
-that the analyzer works, not what the original does.
+The analyzer's own tests feed it a reordered synthetic capture; they establish
+that the tool works, not what the original does.
 
 ## Remaining boundary
 
-- **Engine natives.** No original pose with a known offset exists to compare
-  against. A short engine capture of a stop or a hit would qualify the
-  adapters and the composed result.
-- **Initiation pose.** The prefab rest pose is the only recovered candidate.
-  Only `LimitBend` and the clavicle axis depend on it in this rig.
+- **Unexercised solver paths.** Effector position/rotation weights, `PullBody`
+  and bend goals were zero throughout the observed session.
 - **GrounderFBBIK** (component 11400014, enabled, weight 1) writes foot, pelvis
   and spine offsets into the same solver from raycasts each update. Its
-  settings are recorded; its behavior is not recovered. Its subscription order
-  relative to `IKOffsetModifier` is unknown.
-- **Host composition.** Mapping the 24 solver bones onto recovered actor
+  settings are recorded; its behavior is not recovered. It subscribes after
+  `IKAnimEffectCtrl` and `InteractionSystem` (observed).
+- **Host composition.** Mapping the 24 skeleton bones onto recovered actor
   skeletons, defence capsules, attachments and reaction-layer blending is not
   started. Two AimIK components on the same model run separately.
 

@@ -2,9 +2,10 @@
 #ifndef PE_FBBIK_SOURCE_H
 #define PE_FBBIK_SOURCE_H
 #include "../src/pe_fbbik.h"
-static const unsigned pe_fbbik_source_bone_ids[]={400292,400170,400288,400176,400166,400296,400162,400218,400264,400148,400254,400278,400150,400206,400214,400236,400240,400144,400282,400284,400142,400290,400200,400246};
-/* 0 FemaleModel, 1 Model, 2 Bip01, 3 Bip01 Pelvis, 4 Bip01 Spine1, 5 Bip01 Spine, 6 Bip01 R Thigh, 7 Bip01 L Thigh, 8 Bip01 Spine2, 9 Bip01 Spine3, 10 Bip01 L Calf, 11 Bip01 R Calf, 12 Bip01 L Foot, 13 Bip01 L Clavicle, 14 Bip01 Neck, 15 Bip01 R Foot, 16 Bip01 R Clavicle, 17 Bip01 L UpperArm, 18 Bip01 R UpperArm, 19 Bip01 Head, 20 Bip01 L Forearm, 21 Bip01 R Forearm, 22 Bip01 R Hand, 23 Bip01 L Hand */
+static const unsigned pe_fbbik_source_bone_ids[]={400292,400170,400224,400288,400176,400166,400296,400162,400218,400264,400148,400254,400278,400150,400206,400214,400236,400240,400144,400282,400284,400142,400290,400200,400246};
+/* 0 FemaleModel, 1 Model, 2 IK, 3 Bip01, 4 Bip01 Pelvis, 5 Bip01 Spine1, 6 Bip01 Spine, 7 Bip01 R Thigh, 8 Bip01 L Thigh, 9 Bip01 Spine2, 10 Bip01 Spine3, 11 Bip01 L Calf, 12 Bip01 R Calf, 13 Bip01 L Foot, 14 Bip01 L Clavicle, 15 Bip01 Neck, 16 Bip01 R Foot, 17 Bip01 R Clavicle, 18 Bip01 L UpperArm, 19 Bip01 R UpperArm, 20 Bip01 Head, 21 Bip01 L Forearm, 22 Bip01 R Forearm, 23 Bip01 R Hand, 24 Bip01 L Hand */
 static const PeFbbikTransform pe_fbbik_source_rest[]={
+{{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f,1.0f}},
 {{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f,1.0f}},
 {{0.0f,0.0f,0.0f},{0.0f,0.0f,0.0f,1.0f}},
 {{0.0f,0.900781453f,-0.0137140267f},{-0.468441814f,0.468441129f,0.529681265f,0.529681921f}},
@@ -31,11 +32,11 @@ static const PeFbbikTransform pe_fbbik_source_rest[]={
 {{-0.25423184f,-3.81469718e-08f,0.0f},{-0.657811284f,0.0258664805f,-0.0232739244f,0.752378643f}},
 };
 static const PeFbbikRig pe_fbbik_source_rig={
- .bone_count=24,
- .parent={-1,0,1,2,3,3,5,5,4,8,7,6,10,9,9,11,9,13,16,14,17,18,21,20},
- .root=1,
+ .bone_count=25,
+ .parent={-1,0,0,1,3,4,4,6,6,5,9,8,7,11,10,10,12,10,14,17,15,18,19,22,21},
+ .root=2,
  .iterations=1,
- .chain_bone={{8},{17,20,23},{18,21,22},{7,10,12},{6,11,15}},
+ .chain_bone={{9},{18,21,24},{19,22,23},{8,11,13},{7,12,16}},
  .pin={0.0f,0.0f,0.0f,0.0f,0.0f},
  .pull={1.0f,1.0f,1.0f,1.0f,1.0f},
  .push={0.0f,0.0f,0.0f,0.0f,0.0f},
@@ -51,12 +52,12 @@ static const PeFbbikRig pe_fbbik_source_rig={
  .spine_count=3,
  .spine_root_index=1,
  .spine_iterations=3,
- .spine={2,8,9},
+ .spine={3,9,10},
  .spine_twist_weight=1.0f,
- .limb_parent={13,16,255,255},
+ .limb_parent={14,17,255,255},
  .limb_maintain_rotation={0.0f,0.0f,1.0f,1.0f},
  .limb_weight={1.0f,1.0f,1.0f,1.0f},
- .head=19,
+ .head=20,
  .head_maintain_rotation=0.0f,
  .spine_stiffness=0.5f,
  .pull_body_vertical=0.5f,
