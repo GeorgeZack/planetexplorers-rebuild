@@ -1016,3 +1016,8 @@ fbbik-source-check:
 	$(UNITY_PYTHON) tests/test_fbbik_export.py
 test: fbbik-source-test
 check-sources: fbbik-source-check
+
+.PHONY: fbbik-probe-test
+fbbik-probe-test:
+	python3 tests/test_reference_fbbik.py
+test: fbbik-probe-test

@@ -141,6 +141,44 @@ make -C rebuild fbbik-source-check
 
 Full results are in [PLAYTEST](../PLAYTEST.md).
 
+## Prepared engine comparison
+
+Not yet run. The source and static evidence cannot supply the engine's native
+quaternion arithmetic, the pose held at `Initiate`, or the order of the offset
+writers, so one supervised original-game session is warranted. The smallest
+useful capture is an observation of the live solver, not an injected test.
+
+`ReferenceFbbikProbe.cs` attaches to the live female player's
+`FullBodyBipedIK`. It adds two delegate subscribers and removes them at the
+end; it writes no solver field, transform, input or save. Each frame it
+records, at `OnPreRead` (after every `OnPreUpdate` offset writer and before
+the pose read), the solver weight, all nine effectors and the 24 local bone
+transforms; and at `OnPostUpdate` the same transforms plus the 13 node
+positions. Once, it records the live topology and settings, each bend
+constraint's defaults from `Initiate`, the `OnPreUpdate` subscriber order and
+the model's behaviours. Because GrounderFBBIK's offsets arrive as recorded
+inputs, the solver can be qualified without recovering the grounder.
+
+```sh
+python3 rebuild/tools/reference_fbbik_probe.py          # offline compile only
+python3 rebuild/tools/reference_fbbik_probe.py --launch \
+  --output "$HOME/.local/share/planet-explorers-bake-reference/pose-captures/female-fbbik-01.jsonl"
+python3 rebuild/tools/analyze_reference_fbbik.py CAPTURE.jsonl
+```
+
+The launch uses the isolated bake profile and the launch-only shim, like the
+earlier probes. In the session: enter the tutorial with the female player,
+create the printed `.arm` file, then stand still, walk, run and stop sharply
+several times (each stop is a Halt effect), and create the `.stop` file. One
+to two minutes is enough; the capture is bounded at 1,800 frames.
+
+`analyze_reference_fbbik.py` checks the live topology and settings against the
+generated rig, replays every frame through `pe_fbbik` twice (with the observed
+bend defaults, and with prefab-rest initiation), and reports bone and node
+errors against the original's own output beside the size of the original's IK
+displacement. Its tests feed it a reordered synthetic capture; they establish
+that the analyzer works, not what the original does.
+
 ## Remaining boundary
 
 - **Engine natives.** No original pose with a known offset exists to compare
