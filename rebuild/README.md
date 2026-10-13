@@ -829,7 +829,7 @@ Admitted Repulsed clocks/requests are a disconnected combat foundation; live hit
 
 HumanPhyCtrl request consumption is likewise a disconnected foundation. `python3 rebuild/tools/run_tests.py -k human_phy` runs its core, evidence and independent arithmetic checks; `make -C rebuild human-phy-source-check` adds the UnityPy prefab cases and compares the committed CIL excerpt with the installed assemblies. `python3 rebuild/tools/cil_disasm.py INVENTORY ASSEMBLY Type` prints decoded method bodies from a saved REA member inventory. [Contract and engine boundary](../docs/audit/HUMAN_PHY_CTRL.md).
 
-Halt and its foot-stop effect are a fourth disconnected foundation (`python3 rebuild/tools/run_tests.py -k halt`, `make -C rebuild halt-source-check`); it yields IK effector offsets, not a pose. [Audit](../docs/audit/HALT_STOP_EFFECT.md).
+Halt and its foot-stop effect (`python3 rebuild/tools/run_tests.py -k halt`, `make -C rebuild halt-source-check`) are live in both hosts since October 13: after releasing movement with empty hands, Move and Jump are refused for 0.22–0.9 s and run or sprint stops draw a lunge. Each host's smoke summary prints its stop and locked-step counts. [Audit](../docs/audit/HALT_STOP_EFFECT.md#live-in-both-hosts).
 
 The Whacked lifecycle and the hit/Repulsed clip selection are a third disconnected foundation: `python3 rebuild/tools/run_tests.py -k whacked -k reaction` runs the core and offline exporter cases, and `make -C rebuild reaction-presentation-source-check` adds the installed-controller cases. The reaction poses themselves are not baked; [the contract](../docs/audit/REACTION_PRESENTATION.md) gives the prepared `--preset hit-reaction` commands, which build only unless `--launch` is added.
 

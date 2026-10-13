@@ -227,5 +227,5 @@ that the tool works, not what the original does.
   components on the same model run separately.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town
-Defense gates stay closed. The Halt Move/Jump blocking decision is unchanged.
+Defense gates stay closed. The Halt Move/Jump lock is live since the user's October 13 decision.
 PECSv22 is untouched.

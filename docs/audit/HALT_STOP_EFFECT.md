@@ -1,9 +1,10 @@
 # Halt and the foot-stop effect
 
 October 12, 2026. Source-derived from checked-in C#, the female prefab and the
-action table, implemented in a disconnected C owner. Neither gameplay host
-calls `pe_halt`. Thirteen observed stops agree with its offsets to 2 mm (see
-[observed comparison](#observed-comparison)).
+action table, implemented in C. Thirteen observed stops agree with its offsets
+to 2 mm (see [observed comparison](#observed-comparison)). Since October 13,
+by the user's decision, both hosts apply the lock and draw the effect; see
+[live in both hosts](#live-in-both-hosts).
 
 ## What Halt is
 
@@ -147,8 +148,55 @@ Still unqualified:
 - **Mono arithmetic.** Curve evaluation follows the order qualified earlier for
   Repulsed; not claimed bit-exact.
 
-Not done, and a behavior change if done: applying the Halt movement lock in the
-live sandbox. The rebuild's player can currently move or jump again immediately
-after stopping; the original cannot for 0.2–0.9 s. That lock needs no pose and
-is source-portable, but it changes how movement feels, so it is left for an
-explicit decision.
+## Live in both hosts
+
+October 13, 2026. **User decision: apply the lock as the original does.**
+Implemented in C; the lock itself is source-derived and was not observed.
+
+[pe_halt_host](../../rebuild/src/pe_halt_host.h) is called once per fixed
+movement step by the sandbox and the tutorial, before the step reads its
+input. From `ActionRelation` rows 1, 2, 4 and 50, `MotionMgrCmpt` and
+`Motion_Move_Human`:
+
+| Event | Result | Source |
+|---|---|---|
+| Movement released on the ground while moving | Halt starts with the current velocity | `Action_Move.EndAction`, `Action_Sprint.EndAction` |
+| In the air, in water, dead, or hand equipment drawn | Halt refused | row 50 forbidden masks |
+| Mask set | movement, sprint and jump requests dropped | rows 1, 2 and 4 forbid on the Halt mask |
+| Jump, sprint/run switch, lost ground, action mask | Move ends without a Halt | `EndImmediately` lists |
+| Death | Halt ends at once | row 9 `EndImmediately` |
+
+So an unarmed player cannot move or jump for about 0.22 s after a walk stop,
+0.5 s after a run stop and 0.9 s after a sprint stop. With a tool, knife or
+torch drawn there is no Halt and no lock. Load, revival and reset clear it.
+The source also blocks Gather and PickUpItem on the mask; those are not wired.
+
+The offsets reach drawing through [the always-on solve](PLAYER_IK_DRIVE.md),
+turned from world into the drawn model's frame. They never move the player, a
+capsule or a contact query. Without the staged solver groups the lock still
+applies and nothing extra is drawn. Rebuild speeds are 2, 5 and 8 m/s, so a
+walk stop moves nothing, a run stop has weight 0.17 and a sprint stop weight 1.
+
+Measured over the installed assets by the real sandbox actor: the largest
+vertex displacement from the baked pose is 0.001 mm in a walk stop, 22 cm in a
+run stop and 80 cm in a sprint stop. Mid-effect in a sprint stop the stepping
+foot is 0.54 m along the motion and the chest 0.34 m forward and 0.23 m down,
+the same at every body yaw.
+
+Adapters, not original behavior: the 60 Hz fixed step stands in for the
+original's frame; a running Halt is updated before the step's input is read;
+a Halt begun in a step takes its zero first offset pass in that step; a jump
+requested together with a release wins; the feet for the foot test come from
+the blended staged pose; the velocity is the host controller's. The grounder,
+which shares the foot and shoulder channels, is not connected.
+
+Verification: the `halt_host` core suite covers each row above, lock lengths
+for walk, run and sprint stops, the foot rule, repeat requests, death, reset
+and atomic invalid input. `sandbox-actor-test` covers the world-to-model turn,
+refused offset updates and reset. `test_player_ik_drive.py` runs the three
+stops through the real actor over the installed assets. The tutorial's
+15,000-frame progression passes with 5 stops and 65 locked steps. A
+private-display sandbox session with ordinary key input shows a sprint stop as
+a forward lunge and crouch that recovers within a second
+(`rebuild/build/halt-private-20261013a/`). None of this compares the drawn
+stop with the original's.

@@ -20,6 +20,7 @@
 #include <raymath.h>
 #include <rlgl.h>
 #include "pe_ik_drive.h"
+#include "pe_halt_host.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -461,6 +462,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     /* Optional always-on FinalIK solve shared with the sandbox (pe_ik_drive.h). A present staged pair must
      * load; every loaded animated player scene must bind to its exact geometry or the pose stays baked. */
     PeIkDrive *ik=NULL;bool ik_ready=false;unsigned long long ik_draws=0;
+    PeHaltHost halt={0};unsigned long long halt_starts=0,halt_refusals=0; /* Transient. */
     struct {PeActorSceneView *view;const char *group;} ik_views[]={{&player,"player"},{&stowed,"player-knife-stowed"},
         {&drawn_view,"player-knife-drawn"},{&axe_view,"player-axe"},{&cut_body_view,"player-cut"},{&cut_axe_view,"player-axe-cut"},
         {&shovel_views[0],"player-shovel"},{&shovel_views[1],"player-shovel-stowed"},{&shovel_views[2],"player-dig"},{&shovel_views[3],"player-shovel-dig"}};
@@ -1004,6 +1006,25 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 }
                 attack_pending=false;
                 input.stamina_action=melee.ready&&melee.action.active;
+                /* Source Action_Halt, as in the sandbox: releasing movement on the ground with empty
+                 * hands refuses Move and Jump while the foot-stop effect runs (0.2-0.9 s). */
+                PeHaltHostInput halt_input={.delta_time=PE_TRAINING_DT,.move_requested=hypotf(input.move_x,input.move_z)>.0001f,
+                    .jump_requested=input.jump,.move_admissible=training.grounded,.grounded=training.grounded,.alive=training.hp>0,
+                    .equipment_held=(training.axe_equipped&&training.axe_held)||(training.equipped_shovel>=0&&training.shovel_held)||(training.knife_equipped&&knife_drawn),
+                    .velocity=training.velocity,.left_foot=training.position,.right_foot=training.position};
+                PeHaltHostOutput halt_output;
+                if(ik_ready){
+                    PeIkDriveSample foot_samples[PE_ACTOR_BLEND_MAX];size_t foot_count=0;PePlayerLocomotionPose pose;PeVec3 left,right;
+                    if(pe_player_locomotion_snapshot(&locomotion,&pose))for(int i=0;i<PE_LOCOMOTION_COUNT;i++)if(pose.weights[i]>0)
+                        foot_samples[foot_count++]=(PeIkDriveSample){pe_player_locomotion_name(i),pose.seconds[i],(float)pose.weights[i]};
+                    if(foot_count&&pe_ik_drive_feet(ik,foot_samples,foot_count,&left,&right)){
+                        halt_input.left_foot=pe_ik_drive_world_vector(left,player_yaw);halt_input.right_foot=pe_ik_drive_world_vector(right,player_yaw);
+                    }
+                }
+                if(!pe_halt_host_step(&halt,halt_input,&halt_output)){fprintf(stderr,"Invalid Halt state\n");failed=true;quit=true;break;}
+                if(halt_output.started)halt_starts++;
+                if(halt_output.block_move){input.move_x=input.move_z=0;input.sprint=false;halt_refusals++;}
+                if(halt_output.block_jump)input.jump=jump_pending=false;
                 bool was_jumping=training.jumping;
                 PeVec3 previous_position=training.position;
                 pe_training_step(&training, scene, input);
@@ -1157,7 +1178,10 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                     ik_samples[ik_count++]=(PeIkDriveSample){pe_player_locomotion_name(i),pose.seconds[i],(float)pose.weights[i]};
                 /* Held hand equipment switches the original's arm mapping off. */
                 bool held=(training.axe_equipped&&training.axe_held)||(training.equipped_shovel>=0&&training.shovel_held)||(training.knife_equipped&&knife_drawn);
-                if(ik_count&&pe_ik_drive_solve(ik,ik_samples,ik_count,!held,&ik_solved)) {
+                /* The stop effect's world offsets, turned into the drawn model's frame. */
+                PeVec3 ik_offsets[PE_FBBIK_EFFECTORS]={{0}};
+                for(unsigned i=0;i<halt.offset_count;i++)ik_offsets[halt.offsets[i].effector]=pe_ik_drive_model_vector(halt.offsets[i].offset,player_yaw);
+                if(ik_count&&pe_ik_drive_solve_offsets(ik,ik_samples,ik_count,!held,halt.offset_count?ik_offsets:NULL,&ik_solved)) {
                     ik_draws++;
                     for(size_t i=0;i<ik_view_count;i++)pe_actor_scene_view_set_ik(ik_views[i].view,&ik_solved);
                 }
@@ -1344,6 +1368,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     for(unsigned i=0;i<4;i++)pe_actor_scene_view_unload(&shovel_views[i]);
     pe_training_terrain_view_unload(terrain);free(terrain);
     printf("Training IK: %llu poses drawn through the solve\n",ik_draws);
+    printf("Training halt: %llu stops, %llu steps with the mask held\n",halt_starts,halt_refusals);
     if(melee.ready)printf("Training melee: %u starts, %u contacts, hare HP %.3f / %.3f\n",melee_swings,melee_hits,melee.target_hp,melee.setup.target_max_hp);
     pe_actor_scene_view_unload(&axe_view);pe_actor_scene_view_unload(&cut_body_view);pe_actor_scene_view_unload(&cut_axe_view);
     pe_hitboxes_free(drawn_boxes);pe_hitboxes_free(hare_boxes);pe_actor_scene_view_unload(&drawn_view);

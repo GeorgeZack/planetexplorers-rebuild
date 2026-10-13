@@ -4,6 +4,7 @@
 #include "pe_sandbox_actions.h"
 #include "pe_actor.h"
 #include "pe_combat.h"
+#include "pe_halt.h"
 
 typedef struct PeSandboxActor PeSandboxActor;
 /* Requires an active graphics context. asset_root/player/recording.peas must
@@ -73,6 +74,15 @@ unsigned pe_sandbox_actor_locomotion_seen(const PeSandboxActor *actor);
  * since load. Zero without the staged solver groups. The solve is
  * presentation only: contact, defence and saved state never read it. */
 unsigned long long pe_sandbox_actor_ik_draws(const PeSandboxActor *actor);
+/* World-space positions of the solver's left and right foot bones in the
+ * current body pose, for the Halt foot test. False, with the outputs
+ * untouched, without the staged solver poses or for an unstaged clip. */
+bool pe_sandbox_actor_feet(const PeSandboxActor *actor,const PeGame *game,PeVec3 *left,PeVec3 *right);
+/* Copies this step's additive world-space FinalIK effector offsets from the
+ * Halt stop effect for the following world draws; count 0 clears them, and so
+ * does reset_motion. Presentation only: they never move the player, a capsule
+ * or a contact query, and are ignored when the pose is not driven. */
+bool pe_sandbox_actor_set_ik_offsets(PeSandboxActor *actor,const PeHaltOffset *offsets,unsigned count);
 /* True only for an exact recovered item with complete, clock-validated held,
  * action-body and action-tool scenes (and shovel/pickaxe stowed scene). Host action
  * admission must use this capability; no tool/prototype visual substitution.

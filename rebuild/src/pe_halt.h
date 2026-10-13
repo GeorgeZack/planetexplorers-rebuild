@@ -4,14 +4,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/* Disconnected source Action_Halt and its IKMoveEffect foot-stop effect for
- * the female player. No host calls this.
+/* Source Action_Halt and its IKMoveEffect foot-stop effect for the female
+ * player. Hosts reach it only through pe_halt_host.
  *
  * The original holds the Halt mask, which forbids Move and Jump, for as long
  * as the stop effect runs: .2 to .9 s chosen from the speed at the stop. The
  * effect itself is a set of additive effector offsets handed to FinalIK's
- * full-body solver. That solver is a third-party plugin outside the checked-in
- * source, so this module reports the offsets and never a pose.
+ * full-body solver; this module reports the offsets and never a pose.
  * Caller owns MotionMgr admission, the multiplayer branch, foot positions and
  * the solver. All state is transient; zero-initialize on host creation/load. */
 #define PE_HALT_LINKS 7u

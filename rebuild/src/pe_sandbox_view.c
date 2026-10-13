@@ -6,6 +6,7 @@
 #include "pe_sandbox_view.h"
 #include "pe_ui_settings.h"
 #include "pe_sandbox_ui.h"
+#include "pe_halt_host.h"
 #include "pe_sandbox_actor.h"
 #include "pe_sandbox_actions.h"
 #include "pe_sandbox_melee.h"
@@ -716,6 +717,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     bool placing_torch=false,attack_pending=false;
     PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;PeSprintRootMotion *sprint_motion=NULL;
     PeSwordMotor sword_motor;pe_sword_motor_reset(&sword_motor);bool blade_was_active=false;
+    PeHaltHost halt={0};uint64_t halt_starts=0,halt_refusals=0; /* Transient; never saved. */
     PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0,sprint_starts=0;
     SandboxBladeFacing blade_facing={0};
     bool captured=false,walk=false,autorun=false,jump_pending=false,third_person=true,build_mode=false;
@@ -970,7 +972,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(action.load||debug_action==PE_DEBUG_START_HUNT) {
             loaded=debug_action==PE_DEBUG_START_HUNT||pe_game_load(game,save_path,error,sizeof error);
-            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
+            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
@@ -1178,7 +1180,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             attack_pending=tool_drawn=placing_torch=autorun=jump_pending=false;
             build_mode=ui.building=false;accumulator=0;
             pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
-            pe_sandbox_actor_reset_motion(actor,game);
+            pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);
             /* Preserve the actual cohort, injuries, kill count and encounter
              * clock. Revival must not reload or replace surviving creatures. */
             world_input=action_input=false;
@@ -1343,6 +1345,18 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 if(tool_action.stage!=PE_SANDBOX_ACTION_IDLE){input.move_x=input.move_z=0;input.sprint=false;}
                 /* Refresh AFTER timed edits and before each motion step. */
                 if(!pe_game_collision_update(game,collision,error,sizeof error)){result=1;break;}
+                /* Source Action_Halt: releasing movement on the ground with empty hands holds a
+                 * mask that refuses Move and Jump while the foot-stop effect runs (0.2-0.9 s). */
+                PeHaltHostInput halt_input={.delta_time=PE_FIXED_DT,.move_requested=fabsf(input.move_x)+fabsf(input.move_z)>.001f,
+                    .jump_requested=jump_pending,.move_admissible=game->grounded,.grounded=game->grounded,.alive=game->hp>0,
+                    .equipment_held=tool_drawn,.velocity=game->velocity};
+                PeHaltHostOutput halt_output;
+                if(!pe_sandbox_actor_feet(actor,game,&halt_input.left_foot,&halt_input.right_foot))halt_input.left_foot=halt_input.right_foot=game->player;
+                if(!pe_halt_host_step(&halt,halt_input,&halt_output)){snprintf(error,sizeof error,"Invalid Halt state");result=1;break;}
+                if(halt_output.started)halt_starts++;
+                if(halt_output.block_move){input.move_x=input.move_z=0;input.sprint=false;halt_refusals++;}
+                if(halt_output.block_jump)jump_pending=false;
+                pe_sandbox_actor_set_ik_offsets(actor,halt.offsets,halt.offset_count);
                 input.jump=jump_pending;
                 /* Legacy saves retain their original controller/validator.
                  * Adventure uses the shared rendered-mesh capsule contract. */
@@ -1564,6 +1578,7 @@ cleanup:
     printf("Sandbox camera: mode %d, desired %.3fm, distance %.3fm\n",camera_controls.mode,orbit.desired_distance,orbit.distance);
     printf("Sandbox locomotion: exercised mask %u\n",pe_sandbox_actor_locomotion_seen(actor));
     printf("Sandbox IK: %llu poses drawn through the solve\n",pe_sandbox_actor_ik_draws(actor));
+    printf("Sandbox halt: %llu stops, %llu steps with the mask held\n",(unsigned long long)halt_starts,(unsigned long long)halt_refusals);
     printf("Sandbox knife: %llu swing stages; hunt contacts %llu outgoing, %llu incoming; kills %u/4\n",(unsigned long long)melee_swings,
         (unsigned long long)hunt.hare_hits,(unsigned long long)hunt.player_hits,game->hunt_kills);
     printf("Sandbox running knife: %llu starts; qualified motion %s\n",(unsigned long long)running_starts,running_motion?"available":"unavailable");

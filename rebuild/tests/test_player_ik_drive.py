@@ -23,6 +23,7 @@ POSES=e.ASSETS/'player-ik-pose/player-ik-pose.peik'
 HARNESS=r'''
 #include "pe_sandbox_actor.h"
 #include "pe_actor_scene_view.h"
+#include "pe_halt_host.h"
 #include <assert.h>
 #include <math.h>
 #include <stdio.h>
@@ -95,6 +96,24 @@ int main(int argc,char **argv){
     for(int i=0;i<30;i++){pe_sandbox_actor_update(a,1/30.f,g);pe_sandbox_actor_draw(a,g);}
     report("stop");
     g->hp=0;pe_sandbox_actor_draw(a,g);g->hp=500;report("dead");
+    /* The Halt stop effect as the host runs it: move at a speed, release, and draw every step of the lock. */
+    static const struct {const char *name;float speed;} stops[]={{"halt-walk",2},{"halt-run",5},{"halt-sprint",8}};
+    for(size_t k=0;k<sizeof stops/sizeof stops[0];k++){
+        PeHaltHost halt={0};PeHaltHostOutput out;unsigned locked=0;
+        for(int i=0;i<90;i++){
+            bool release=i>=45;float step=release?0:stops[k].speed/60;g->player.x+=step;
+            PeHaltHostInput in={.delta_time=1/60.f,.move_requested=!release,.move_admissible=true,.grounded=true,.alive=true,.velocity={release?stops[k].speed:0,0,0}};
+            if(i<45)in.velocity.x=stops[k].speed;
+            assert(pe_sandbox_actor_feet(a,g,&in.left_foot,&in.right_foot));
+            assert(pe_halt_host_step(&halt,in,&out));if(out.block_move)locked++;
+            assert(pe_sandbox_actor_set_ik_offsets(a,halt.offsets,halt.offset_count));
+            pe_sandbox_actor_update(a,1/60.f,g);
+            if(release)pe_sandbox_actor_draw(a,g);
+        }
+        printf("%s-steps %u 0 0\n",stops[k].name,locked);report(stops[k].name);
+        assert(pe_sandbox_actor_set_ik_offsets(a,NULL,0));
+        for(int i=0;i<30;i++)pe_sandbox_actor_update(a,1/30.f,g);
+    }
     if(pe_sandbox_actor_hold_ready(a,33)){
         equip(g,33,3);assert(pe_sandbox_actor_set_melee(a,3,false,NULL));
         for(int i=0;i<30;i++){pe_sandbox_actor_update(a,1/30.f,g);pe_sandbox_actor_draw(a,g);}
@@ -193,6 +212,14 @@ class Installed(unittest.TestCase):
         if os.environ.get('PE_TEST_VERBOSE'):print(result.stdout,file=sys.stderr)
         bound,unbound=rows.pop('views');self.assertGreaterEqual(bound,11);self.assertEqual(unbound,0)
         dead=rows.pop('dead');self.assertEqual(dead[0],0);self.assertGreater(dead[1],0)
+        # The stop effect: the lock lasts as the speed profile says, a walk stop moves nothing extra,
+        # a run stop about two decimetres and a sprint stop up to eight (the 45 drawn steps end
+        # before its 0.9 s lock does), with every part still driven.
+        steps={name:rows.pop(name+'-steps')[0] for name in ('halt-walk','halt-run','halt-sprint')}
+        self.assertTrue(12<=steps['halt-walk']<=15 and 29<=steps['halt-run']<=32 and 44<=steps['halt-sprint']<=45,steps)
+        walk,run,sprint=(rows.pop(name) for name in ('halt-walk','halt-run','halt-sprint'))
+        for row in (walk,run,sprint):self.assertGreater(row[0],0);self.assertEqual(row[1],0)
+        self.assertLess(walk[2],.01);self.assertTrue(.05<run[2]<.35,run);self.assertTrue(.4<sprint[2]<1.,sprint)
         self.assertLessEqual({'idle','walk','run','turn','stop'},set(rows))
         for name,(driven,baked,worst) in rows.items():
             # Every part of every drawn scene carries the solve, and it stays a small correction.

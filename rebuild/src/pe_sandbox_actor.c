@@ -75,6 +75,7 @@ struct PeSandboxActor {
     size_t melee_body[4],melee_knife[4];
     bool running_ready,sprint_ready;
     unsigned long long ik_draws;
+    bool ik_offsets;PeVec3 ik_offset[PE_FBBIK_EFFECTORS]; /* world space, Halt stop effect only */
     /* Native 150ms natural-end pose recovery; never an action/contact clock. */
     struct {bool was_active,active;int item;uint32_t instance;size_t body_clip,tool_clip;double seconds,age;} recovery;
     struct {bool active;size_t body_clip,knife_clip;double seconds;} melee;
@@ -365,6 +366,16 @@ void pe_sandbox_actor_reset_motion(PeSandboxActor *a,const PeGame *g){
     double durations[PE_LOCOMOTION_COUNT];memcpy(durations,a->locomotion.duration,sizeof durations);
     pe_player_locomotion_init(&a->locomotion,durations);a->previous=g->player;a->have_previous=true;
     a->was_jumping=g->jumping;a->facing_locked=false;a->shield_instance=0;pe_sandbox_actor_set_action(a,NULL);pe_sandbox_actor_face_camera(a,g);
+    a->ik_offsets=false;
+}
+bool pe_sandbox_actor_set_ik_offsets(PeSandboxActor *a,const PeHaltOffset *offsets,unsigned count){
+    if(!a||count>PE_HALT_LINKS||(count&&!offsets))return false;
+    PeVec3 next[PE_FBBIK_EFFECTORS]={{0}};
+    for(unsigned i=0;i<count;i++){
+        if(offsets[i].effector>=PE_FBBIK_EFFECTORS||!finite3(offsets[i].offset))return false;
+        next[offsets[i].effector]=offsets[i].offset;
+    }
+    memcpy(a->ik_offset,next,sizeof next);a->ik_offsets=count>0;return true;
 }
 static float turn_toward(float current,float target,float dt){
     float delta=remainderf(target-current,2*PI);
@@ -499,21 +510,40 @@ static bool shield_bound(const PeSandboxActor *a,const PeGame *g){
  * effector weights, stops while ragdolled, and loses its arm mapping while
  * hand equipment is held. Every scene drawn for the pose must be bound, and
  * every blended clip staged, or the whole pose stays undriven. */
-static bool ik_frame(const PeSandboxActor *a,const PeGame *g,const SelectedPose *p,PeIkDriveFrame *out){
-    if(!a->ik||!isfinite(g->hp)||g->hp<=0||!a->views[p->body].ik_bound||
-       (p->tool>=0&&a->views[p->tool].loaded&&!a->views[p->tool].ik_bound)||(shield_bound(a,g)&&!a->views[WOOD_SHIELD].ik_bound))return false;
-    PeIkDriveSample samples[PE_ACTOR_BLEND_MAX];size_t count=1;
+static size_t ik_samples(const PeSandboxActor *a,const PeGame *g,const SelectedPose *p,PeIkDriveSample samples[PE_ACTOR_BLEND_MAX]){
+    size_t count=1;
     if(p->locomotion){
         PeActorBlendSample blend[PE_ACTOR_BLEND_MAX];count=locomotion_samples(a,p->body,p->sword,recovery_bound(a,g),blend);
         for(size_t i=0;i<count;i++){
-            const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[p->body],blend[i].clip);if(!c)return false;
+            const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[p->body],blend[i].clip);if(!c)return 0;
             samples[i]=(PeIkDriveSample){c->name,blend[i].seconds,blend[i].weight};
         }
     }else{
-        const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[p->body],p->body_clip);if(!c)return false;
+        const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[p->body],p->body_clip);if(!c)return 0;
         samples[0]=(PeIkDriveSample){c->name,p->seconds,1};
     }
-    return count&&pe_ik_drive_solve(a->ik,samples,count,!p->held,out);
+    return count;
+}
+static bool ik_frame(const PeSandboxActor *a,const PeGame *g,const SelectedPose *p,PeIkDriveFrame *out){
+    if(!a->ik||!isfinite(g->hp)||g->hp<=0||!a->views[p->body].ik_bound||
+       (p->tool>=0&&a->views[p->tool].loaded&&!a->views[p->tool].ik_bound)||(shield_bound(a,g)&&!a->views[WOOD_SHIELD].ik_bound))return false;
+    PeIkDriveSample samples[PE_ACTOR_BLEND_MAX];size_t count=ik_samples(a,g,p,samples);
+    if(!count)return false;
+    if(!a->ik_offsets)return pe_ik_drive_solve(a->ik,samples,count,!p->held,out);
+    /* Halt offsets are world vectors; the solver works in the drawn model's frame. */
+    PeVec3 offsets[PE_FBBIK_EFFECTORS];float yaw=pe_sandbox_actor_yaw(a,g);
+    for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)offsets[e]=pe_ik_drive_model_vector(a->ik_offset[e],yaw);
+    return pe_ik_drive_solve_offsets(a->ik,samples,count,!p->held,offsets,out);
+}
+bool pe_sandbox_actor_feet(const PeSandboxActor *a,const PeGame *g,PeVec3 *left,PeVec3 *right){
+    if(!a||!a->ik||!g||!left||!right||!finite3(g->player)||!isfinite(g->yaw))return false;
+    SelectedPose p;PeIkDriveSample samples[PE_ACTOR_BLEND_MAX];PeVec3 l,r;
+    if(!select_pose(a,g,a->locomotion.clip,a->locomotion.seconds,false,&p))return false;
+    size_t count=ik_samples(a,g,&p,samples);
+    if(!count||!pe_ik_drive_feet(a->ik,samples,count,&l,&r))return false;
+    float yaw=pe_sandbox_actor_yaw(a,g);l=pe_ik_drive_world_vector(l,yaw);r=pe_ik_drive_world_vector(r,yaw);
+    *left=(PeVec3){g->player.x+l.x,g->player.y+l.y,g->player.z+l.z};*right=(PeVec3){g->player.x+r.x,g->player.y+r.y,g->player.z+r.z};
+    return true;
 }
 static void draw_pose(PeSandboxActor *a,const PeGame *g,PePlayerLocomotionClip clip,double seconds,Vector3 position,float yaw,bool preview) {
     if(!isfinite(yaw))return;

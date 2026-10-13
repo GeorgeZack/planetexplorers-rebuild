@@ -61,6 +61,21 @@ bool pe_ik_drive_solve(const PeIkDrive *d,const PeIkDriveSample *samples,size_t 
     ik_solves++;ik_count=count;memcpy(ik_samples,samples,count*sizeof *samples);ik_arms_mapped=arms_mapped;
     memset(out,0,sizeof *out);return true;
 }
+static bool ik_had_offsets;static PeVec3 ik_offsets[PE_FBBIK_EFFECTORS];
+bool pe_ik_drive_solve_offsets(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,const PeVec3 *offsets,PeIkDriveFrame *out){
+    if(!offsets||!pe_ik_drive_solve(d,samples,count,arms_mapped,out))return false;
+    ik_had_offsets=true;memcpy(ik_offsets,offsets,sizeof ik_offsets);return true;
+}
+bool pe_ik_drive_feet(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,PeVec3 *left,PeVec3 *right){
+    if(!d||!samples||!count||ik_solve_failure)return false;
+    *left=(PeVec3){.1f,.05f,.3f};*right=(PeVec3){-.1f,.05f,-.3f};return true;
+}
+/* Quarter turns only, so the frame change is exact: +90 degrees takes model x to world -z. */
+PeVec3 pe_ik_drive_world_vector(PeVec3 m,float yaw){
+    int q=(((int)lroundf(yaw/90))%4+4)%4;
+    return q==0?m:q==1?(PeVec3){m.z,m.y,-m.x}:q==2?(PeVec3){-m.x,m.y,-m.z}:(PeVec3){-m.z,m.y,m.x};
+}
+PeVec3 pe_ik_drive_model_vector(PeVec3 w,float yaw){return pe_ik_drive_world_vector(w,-yaw);}
 bool pe_actor_scene_view_bind_ik(PeActorSceneView *v,const PeIkDrive *d,const char *group){
     int id=(int)(uintptr_t)v->manifest-1;
     v->ik_bound=d&&v->loaded&&id!=ik_unbound_view&&!strcmp(group,folders[id]);return v->ik_bound;
@@ -443,6 +458,25 @@ static int ik_actor_tests(void){
     CHECK(draws[0].blended&&draws[0].driven&&ik_count==draws[0].count&&ik_count>1);
     for(size_t i=0;i<ik_count&&i<draws[0].count;i++)
         CHECK(!strcmp(ik_samples[i].clip,clips[BODY][draws[0].samples[i].clip].name)&&ik_samples[i].seconds==draws[0].samples[i].seconds&&ik_samples[i].weight==draws[0].samples[i].weight);
+    /* Halt offsets reach the solve turned from world into the drawn model's frame, and only while set. */
+    CHECK(pe_sandbox_actor_face_yaw(a,90));
+    PeHaltOffset halt[2]={{0,{1,-.25f,0}},{7,{0,.5f,2}}},wild={PE_FBBIK_EFFECTORS,{0,0,0}},nan={0,{NAN,0,0}};
+    ik_had_offsets=false;draw(a,g);CHECK(!ik_had_offsets);
+    CHECK(pe_sandbox_actor_set_ik_offsets(a,halt,2));draw(a,g);
+    CHECK(ik_had_offsets&&draws[0].driven&&ik_offsets[0].x==0&&ik_offsets[0].y==-.25f&&ik_offsets[0].z==1&&ik_offsets[7].x==-2&&ik_offsets[7].y==.5f&&ik_offsets[7].z==0&&ik_offsets[3].y==0);
+    CHECK(!pe_sandbox_actor_set_ik_offsets(a,&wild,1)&&!pe_sandbox_actor_set_ik_offsets(a,&nan,1)&&!pe_sandbox_actor_set_ik_offsets(a,NULL,1)&&
+          !pe_sandbox_actor_set_ik_offsets(a,halt,PE_HALT_LINKS+1)&&!pe_sandbox_actor_set_ik_offsets(NULL,halt,1));
+    ik_had_offsets=false;draw(a,g);CHECK(ik_had_offsets&&ik_offsets[0].z==1);                 /* refused updates keep the last set */
+    CHECK(pe_sandbox_actor_set_ik_offsets(a,NULL,0));ik_had_offsets=false;draw(a,g);CHECK(!ik_had_offsets&&draws[0].driven);
+    /* Foot bones come back in world space through the same body yaw. */
+    PeVec3 left={9,9,9},right={9,9,9};CHECK(pe_sandbox_actor_feet(a,g,&left,&right));
+    CHECK(fabsf(left.x-(g->player.x+.3f))<1e-5f&&fabsf(left.y-(g->player.y+.05f))<1e-5f&&fabsf(left.z-(g->player.z-.1f))<1e-5f&&fabsf(right.x-(g->player.x-.3f))<1e-5f);
+    ik_solve_failure=true;PeVec3 kept=left;CHECK(!pe_sandbox_actor_feet(a,g,&left,&right)&&!memcmp(&kept,&left,sizeof left));ik_solve_failure=false;
+    CHECK(!pe_sandbox_actor_feet(NULL,g,&left,&right)&&!pe_sandbox_actor_feet(a,g,NULL,&right));
+    /* A motion reset drops them. */
+    CHECK(pe_sandbox_actor_set_ik_offsets(a,halt,2));pe_sandbox_actor_reset_motion(a,g);pe_sandbox_actor_facing_mode(a,true);
+    ik_had_offsets=false;draw(a,g);CHECK(!ik_had_offsets);
+    g->player.x+=.5f;pe_sandbox_actor_update(a,.1f,g);
     /* The inventory preview and a dead player stay baked, and nothing stays active after a draw. */
     ik_solves=0;draw_count=0;pe_sandbox_actor_preview(a,g);CHECK(draw_count==1&&!draws[0].driven&&ik_solves==0);
     g->hp=0;draw(a,g);CHECK(!draws[0].driven&&ik_solves==0);g->hp=500;

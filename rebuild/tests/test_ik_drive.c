@@ -96,6 +96,22 @@ int pe_test_ik_drive(void){
         PeIkDriveFrame held;CHECK(pe_ik_drive_solve(d,mix,2,false,&held));
         CHECK(same(held.delta[L_UPPER_ARM],held.delta[SPINE3],1e-4f)&&same(held.delta[L_HAND],held.delta[SPINE3],1e-4f));
         CHECK(same(held.delta[SPINE3],frame.delta[SPINE3],1e-5f));
+        /* Effector offsets: none is the plain solve; a body drop lowers the chest and leaves the planted feet. */
+        PeIkDriveFrame plain,dropped;PeVec3 offsets[PE_FBBIK_EFFECTORS]={{0}};
+        CHECK(pe_ik_drive_solve(d,&rest,1,true,&plain)&&pe_ik_drive_solve_offsets(d,&rest,1,true,NULL,&dropped)&&!memcmp(&plain,&dropped,sizeof plain));
+        CHECK(pe_ik_drive_solve_offsets(d,&rest,1,true,offsets,&dropped)&&!memcmp(&plain,&dropped,sizeof plain));
+        offsets[0]=(PeVec3){0,-.1f,0};CHECK(pe_ik_drive_solve_offsets(d,&rest,1,true,offsets,&dropped));
+        CHECK(dropped.delta[SPINE3][7]<-.02f&&fabsf(dropped.delta[13][7])<5e-3f&&fabsf(dropped.delta[16][7])<5e-3f);
+        offsets[0].y=NAN;memcpy(&kept,&dropped,sizeof kept);CHECK(!pe_ik_drive_solve_offsets(d,&rest,1,true,offsets,&dropped)&&!memcmp(&kept,&dropped,sizeof kept));
+        /* Foot effector bones of the blended pose, in model space: left at +x of right for this rig's facing or the reverse, never equal. */
+        PeVec3 left={9,9,9},right={9,9,9};CHECK(pe_ik_drive_feet(d,&rest,1,&left,&right));
+        CHECK(fabsf(left.x-right.x)>.05f&&fabsf(left.y-right.y)<.02f&&left.y<.3f&&fabsf(left.x+right.x)<.05f);
+        PeVec3 untouched=left;mix[2].weight=1;CHECK(!pe_ik_drive_feet(d,mix,3,&left,&right)&&!memcmp(&untouched,&left,sizeof left));mix[2].weight=0;
+        CHECK(!pe_ik_drive_feet(NULL,&rest,1,&left,&right)&&!pe_ik_drive_feet(d,&rest,1,NULL,&right)&&!pe_ik_drive_feet(d,&rest,1,&left,NULL));
+        /* The draw transform turns model x toward world -z at +90 degrees; the two helpers are inverses. */
+        PeVec3 turned=pe_ik_drive_world_vector((PeVec3){1,2,0},90);CHECK(fabsf(turned.x)<1e-6f&&turned.y==2&&fabsf(turned.z+1)<1e-6f);
+        PeVec3 round=pe_ik_drive_model_vector(pe_ik_drive_world_vector((PeVec3){.3f,-.2f,.7f},37),37);
+        CHECK(fabsf(round.x-.3f)<1e-6f&&round.y==-.2f&&fabsf(round.z-.7f)<1e-6f);
         /* Unknown or invalid samples leave the output alone. */
         memcpy(&kept,&frame,sizeof kept);mix[2].weight=1;CHECK(!pe_ik_drive_solve(d,mix,3,true,&frame));
         mix[2]=(PeIkDriveSample){NULL,0,1};CHECK(!pe_ik_drive_solve(d,mix,3,true,&frame));

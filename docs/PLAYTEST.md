@@ -1,5 +1,35 @@
 # Original-game playtest and C comparison
 
+## October13 Halt lock and stop effect live in both hosts
+
+By the user's decision to apply the lock as the original does,
+[Halt](audit/HALT_STOP_EFFECT.md#live-in-both-hosts) now runs in the sandbox
+and the tutorial. Implemented in C from source; the Move/Jump refusal was not
+observed in the original, and the drawn stop is not compared with it. No
+original-game launch occurred.
+
+Headless: lock lengths are 14 and 30 steps at 60 Hz for walk and run stops,
+and 53–56 for a sprint stop. Over the installed assets the real sandbox actor's largest
+vertex displacement from the baked pose is 0.001 mm (walk stop), 22 cm (run
+stop) and 80 cm (sprint stop). Mid-effect in a sprint stop the stepping foot
+is 0.54 m along the motion and the chest 0.34 m forward and 0.23 m down, at
+body yaws 0, 90 and 215 degrees.
+
+Rendered: the tutorial 15,000-frame progression passes with the lock active
+(5 stops, 65 locked steps, 14,853 solved poses, building lesson reached). The
+three Adventure smokes pass. One private-display sandbox session on a newly
+owned Xvfb display, with ordinary key input and the Adventure smoke fixture as
+its checkpoint, sprinted sideways for 1.6 s and released: five captures over
+the next 1.5 s show the run, a forward lunge with a deep crouch, then an
+upright stand (`rebuild/build/halt-private-20261013a/stop-sheet.png`). That
+session shows the effect draws a coherent pose; it did not measure the lock,
+and its fixture checkpoint is not earned progress.
+
+Full regression passes 275 jobs/947 Python tests with 94 optional skips;
+skips are not passes. Sanitizer passes 109 suites with leak scanning, and the
+installed-asset drive harness passes under ASan/UBSan. 26 CLI cases pass. No
+exporter changed in this step. PECSv22 is unchanged.
+
 ## October13 always-on FinalIK solve connected to drawing
 
 Implemented in C, not compared with the original: [the zero-offset solve](audit/PLAYER_IK_DRIVE.md)

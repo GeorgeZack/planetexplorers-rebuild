@@ -87,39 +87,66 @@ const unsigned char *pe_ik_drive_drivers(const PeIkDrive *d,const char *group,si
     }
     return NULL;
 }
-bool pe_ik_drive_solve(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,PeIkDriveFrame *out){
-    if(!d||!samples||!out||!count||count>PE_ACTOR_BLEND_MAX)return false;
-    const PeFbbik *solver=&d->solver[arms_mapped?1:0];unsigned bones=solver->rig->bone_count;
+/* Weighted blend of the staged single-clip bone poses. */
+static bool blend(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,unsigned bones,PeFbbikTransform local[PE_FBBIK_MAX_BONES]){
+    if(!d||!samples||!count||count>PE_ACTOR_BLEND_MAX)return false;
     double total=0,position[PE_FBBIK_MAX_BONES][3]={{0}},rotation[PE_FBBIK_MAX_BONES][4]={{0}};
     for(size_t i=0;i<count;i++){
         if(!isfinite(samples[i].weight)||samples[i].weight<0||!isfinite(samples[i].seconds)||samples[i].seconds<0)return false;
         total+=samples[i].weight;
     }
     if(!isfinite(total)||total<=0)return false;
-    PeFbbikTransform local[PE_FBBIK_MAX_BONES]={0},first[PE_FBBIK_MAX_BONES];bool have=false;
+    PeFbbikTransform sampled[PE_FBBIK_MAX_BONES]={0},first[PE_FBBIK_MAX_BONES];bool have=false;
     for(size_t i=0;i<count;i++)if(samples[i].weight>0){
         size_t clip=samples[i].clip?pe_ik_pose_find_clip(d->pose,samples[i].clip):PE_ACTOR_BIND_POSE;
-        if(clip==PE_ACTOR_BIND_POSE||!pe_ik_pose_sample(d->pose,clip,samples[i].seconds,local))return false;
-        if(!have){memcpy(first,local,sizeof first);have=true;}
+        if(clip==PE_ACTOR_BIND_POSE||!pe_ik_pose_sample(d->pose,clip,samples[i].seconds,sampled))return false;
+        if(!have){memcpy(first,sampled,sizeof first);have=true;}
         double w=samples[i].weight/total;
         for(unsigned b=0;b<bones;b++){
-            PeFbbikQuat q=local[b].rotation,f=first[b].rotation;
+            PeFbbikQuat q=sampled[b].rotation,f=first[b].rotation;
             /* Each rotation joins the sum in the first sample's hemisphere. */
             double sign=(double)q.x*f.x+(double)q.y*f.y+(double)q.z*f.z+(double)q.w*f.w<0?-w:w;
-            position[b][0]+=w*local[b].position.x;position[b][1]+=w*local[b].position.y;position[b][2]+=w*local[b].position.z;
+            position[b][0]+=w*sampled[b].position.x;position[b][1]+=w*sampled[b].position.y;position[b][2]+=w*sampled[b].position.z;
             rotation[b][0]+=sign*q.x;rotation[b][1]+=sign*q.y;rotation[b][2]+=sign*q.z;rotation[b][3]+=sign*q.w;
         }
     }
+    memset(sampled,0,sizeof sampled);
     for(unsigned b=0;b<bones;b++){
         double n=sqrt(rotation[b][0]*rotation[b][0]+rotation[b][1]*rotation[b][1]+rotation[b][2]*rotation[b][2]+rotation[b][3]*rotation[b][3]);
         if(!isfinite(n)||n<1e-6)return false;
-        local[b].position=(PeVec3){(float)position[b][0],(float)position[b][1],(float)position[b][2]};
-        local[b].rotation=(PeFbbikQuat){(float)(rotation[b][0]/n),(float)(rotation[b][1]/n),(float)(rotation[b][2]/n),(float)(rotation[b][3]/n)};
+        sampled[b].position=(PeVec3){(float)position[b][0],(float)position[b][1],(float)position[b][2]};
+        sampled[b].rotation=(PeFbbikQuat){(float)(rotation[b][0]/n),(float)(rotation[b][1]/n),(float)(rotation[b][2]/n),(float)(rotation[b][3]/n)};
     }
-    PeFbbikInput input;PeFbbikOutput solved;PeIkDriveFrame frame;
-    if(!pe_fbbik_input(solver,local,&input))return false;
+    memcpy(local,sampled,sizeof sampled);return true;
+}
+bool pe_ik_drive_solve(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,PeIkDriveFrame *out){
+    return pe_ik_drive_solve_offsets(d,samples,count,arms_mapped,NULL,out);
+}
+bool pe_ik_drive_solve_offsets(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,
+                               const PeVec3 *offsets,PeIkDriveFrame *out){
+    if(!d||!out)return false;
+    const PeFbbik *solver=&d->solver[arms_mapped?1:0];unsigned bones=solver->rig->bone_count;
+    PeFbbikTransform local[PE_FBBIK_MAX_BONES];PeFbbikInput input;PeFbbikOutput solved;PeIkDriveFrame frame;
+    if(!blend(d,samples,count,bones,local)||!pe_fbbik_input(solver,local,&input))return false;
     input.weight=1;
+    if(offsets)for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)input.effector[e].position_offset=offsets[e];
     if(!pe_fbbik_solve(solver,&input,&solved)||!pe_ik_skin_deltas(solver->rig,local,solved.local,frame.delta))return false;
     for(unsigned b=bones;b<PE_FBBIK_MAX_BONES;b++)memset(frame.delta[b],0,sizeof frame.delta[b]);
     *out=frame;return true;
+}
+bool pe_ik_drive_feet(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,PeVec3 *left,PeVec3 *right){
+    if(!d||!left||!right)return false;
+    const PeFbbikRig *rig=d->solver[1].rig;PeFbbikTransform local[PE_FBBIK_MAX_BONES],l,r;
+    /* FullBodyBipedEffector LeftFoot and RightFoot sit on the third bone of leg chains 3 and 4. */
+    if(!blend(d,samples,count,rig->bone_count,local)||!pe_fbbik_world(rig,local,rig->chain_bone[3][2],&l)||
+       !pe_fbbik_world(rig,local,rig->chain_bone[4][2],&r))return false;
+    *left=l.position;*right=r.position;return true;
+}
+PeVec3 pe_ik_drive_model_vector(PeVec3 world,float yaw_degrees){
+    double yaw=(double)yaw_degrees*3.14159265358979323846/180,c=cos(yaw),s=sin(yaw);
+    return (PeVec3){(float)(c*world.x-s*world.z),world.y,(float)(s*world.x+c*world.z)};
+}
+PeVec3 pe_ik_drive_world_vector(PeVec3 model,float yaw_degrees){
+    double yaw=(double)yaw_degrees*3.14159265358979323846/180,c=cos(yaw),s=sin(yaw);
+    return (PeVec3){(float)(c*model.x+s*model.z),model.y,(float)(-s*model.x+c*model.z)};
 }

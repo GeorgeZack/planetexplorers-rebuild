@@ -175,9 +175,9 @@ Counts and logs are in [PLAYTEST](../PLAYTEST.md).
 - **No comparison of the drawn result with the original.** The solver is
   observed on the original's own inputs; the rebuild's blended input pose is
   not the Animator's.
-- **Halt and grounder offsets** are still disconnected. The Halt Move/Jump
-  lock still needs the user's decision; the grounder is unobserved on uneven
-  ground.
+- **Halt offsets are connected** since the user's October 13 decision; see
+  [the Halt audit](HALT_STOP_EFFECT.md#live-in-both-hosts). Hit and grounder
+  offsets are not; the grounder is unobserved on uneven ground.
 - **Contact geometry** stays on the baked pose.
 - **Male rig, other clips and NPCs** are not staged.
 
