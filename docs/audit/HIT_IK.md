@@ -4,6 +4,11 @@ October 12, 2026. Source-derived from checked-in C# and the female prefab;
 implemented in a disconnected C owner. Neither game was launched for this
 increment. There is no recovered FinalIK solve or reaction pose.
 
+October 12 follow-through: [the installed solver](FINALIK_FBBIK.md) is now
+read statically into the disconnected `pe_fbbik`, and its suite feeds a head
+hit's offsets through it. `IKOffsetModifier` subscribes to the solver's
+`OnPreUpdate`, so these offsets precede the pose read.
+
 ## Active call chain
 
 `SkAliveEntity.ApplyRepelEff` reaches `Motion_Beat.Beat` and

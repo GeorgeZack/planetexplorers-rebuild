@@ -893,3 +893,9 @@ Disconnected AnimFollow numerical drive/rig requests are documented in
 `python3 rebuild/tools/run_tests.py -k core:animfollow_drive` from the root,
 or `make -C rebuild animfollow-drive-source-check` for installed evidence and
 regeneration. Neither target enables physical reactions or get-up gameplay.
+
+The disconnected FinalIK full-body solver is documented in
+[the solver audit](../docs/audit/FINALIK_FBBIK.md). Run
+`python3 rebuild/tools/run_tests.py -k fbbik` from the root, or
+`make -C rebuild fbbik-source-check` for installed evidence, prefab
+regeneration and the C comparison. It produces no visible pose in either host.

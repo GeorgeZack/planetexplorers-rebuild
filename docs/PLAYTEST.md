@@ -1,5 +1,35 @@
 # Original-game playtest and C comparison
 
+## October12 disconnected FinalIK full-body solver
+
+[The solver audit](audit/FINALIK_FBBIK.md) records the installed
+`IKSolverFullBodyBiped` update read from the saved complete REA inventory, a
+committed 229-method CIL excerpt bound to installed bytes, and the female rig
+regenerated from `FemaleModel.prefab`. No assembly execution, graphics launch,
+desktop input, save or recovered runtime asset replacement occurred.
+
+The isolated C suite passes female bindings, zero-offset pose reproduction,
+the zero-weight return, body/hand offsets with planted feet, position and
+rotation pins, PullBody, the limb reach limit, the offset-only path, rigid
+segment lengths, a `pe_hit_ik` head hit fed through the solver, and atomic
+invalid-input failure. A second double-precision transcription agrees with C
+on 84 random cases to 0.2 mm and 2e-6 quaternion dot. This guards
+transcription only: both share conventional adapters for the engine's
+quaternion natives, and no original pose was compared. GrounderFBBIK, the
+pose held at Initiate and host skeleton mapping remain open; no gameplay gate
+was opened.
+
+Full regression passes 265 jobs/922 Python tests with 92 optional skips
+(`fbbik-check.log`); skips are not passes. Sanitizer passes 104 suites/0 skips
+with leak scanning (`fbbik-check-sanitize.log`). Content regeneration passes
+(`fbbik-check-content.log`); source regeneration passes including all six
+solver-export tests under UnityPy (`fbbik-check-sources.log`); ordinary Python
+skips two of them. 26 CLI cases pass. Whitespace check passes and the
+structural index is rebuilt. The owner is unconnected to both hosts, so no
+graphics check was run and no visual acceptance is claimed. PECSv22 and
+existing sprint/recovery behavior are unchanged.
+
+
 ## October12 disconnected AnimFollow drive and rig
 
 [The drive audit](audit/ANIMFOLLOW_DRIVE.md) now records installed11-body/

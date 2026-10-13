@@ -1,0 +1,723 @@
+{
+  "schema": 1,
+  "evidence": {
+    "path": "docs/reference/finalik-fbbik-il.json",
+    "sha256": "9c7ab90c0d772e7bc90953f01f82f85074c86efd83402264676056ccca1bc221"
+  },
+  "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+  "artifact_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+  "methods_digest": "9622bc0139f4cbe9ad755cb56d64874f2ba3d5fd4b1906fc64ba173a70b3ce04",
+  "fields_digest": "1d89327431c87f6fdf6db609b637ff13edd9117b0d21d795caa6e91b58c38e3a",
+  "sources": [
+    {
+      "path": "Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab",
+      "sha256": "1e518e5af9afd09d89e16a3a2dd776abd42846143ff6b40e409fdf4bb08ae441"
+    }
+  ],
+  "source_component": {
+    "id": 11400016,
+    "script_guid": "a70e525c82ce9413fa4d940ad7fcf1db",
+    "solver_sha256": "2703cdf380577dd4f131f75a45e6861b4fa92419ac04635e66bf5d4900c35e48"
+  },
+  "rig": {
+    "bones": [
+      {
+        "index": 0,
+        "id": 400292,
+        "name": "FemaleModel",
+        "parent": -1,
+        "local_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "index": 1,
+        "id": 400170,
+        "name": "Model",
+        "parent": 0,
+        "local_position": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      },
+      {
+        "index": 2,
+        "id": 400288,
+        "name": "Bip01",
+        "parent": 1,
+        "local_position": [
+          0.0,
+          0.9007814526557922,
+          -0.013714026659727097
+        ],
+        "local_rotation": [
+          -0.46844181418418884,
+          0.4684411287307739,
+          0.5296812653541565,
+          0.529681921005249
+        ]
+      },
+      {
+        "index": 3,
+        "id": 400176,
+        "name": "Bip01 Pelvis",
+        "parent": 2,
+        "local_position": [
+          -0.0,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          -0.49999964237213135,
+          0.5000003576278687,
+          0.49999964237213135,
+          0.5000003576278687
+        ]
+      },
+      {
+        "index": 4,
+        "id": 400166,
+        "name": "Bip01 Spine1",
+        "parent": 3,
+        "local_position": [
+          -0.0836084708571434,
+          -0.0029121015686541796,
+          1.3636891083024238e-07
+        ],
+        "local_rotation": [
+          -2.0710922399302945e-06,
+          6.530298719553684e-07,
+          0.01882684975862503,
+          0.9998227953910828
+        ]
+      },
+      {
+        "index": 5,
+        "id": 400296,
+        "name": "Bip01 Spine",
+        "parent": 3,
+        "local_position": [
+          -0.05935867130756378,
+          -0.003098239889368415,
+          1.0264513150559651e-07
+        ],
+        "local_rotation": [
+          -2.083346316794632e-06,
+          7.044579888315639e-07,
+          -0.005519176367670298,
+          0.9999848008155823
+        ]
+      },
+      {
+        "index": 6,
+        "id": 400162,
+        "name": "Bip01 R Thigh",
+        "parent": 5,
+        "local_position": [
+          0.059320829808712006,
+          0.003753518918529153,
+          -0.08175012469291687
+        ],
+        "local_rotation": [
+          -0.07642501592636108,
+          0.9970308542251587,
+          -0.00017411328735761344,
+          0.009416930377483368
+        ]
+      },
+      {
+        "index": 7,
+        "id": 400218,
+        "name": "Bip01 L Thigh",
+        "parent": 5,
+        "local_position": [
+          0.059320829808712006,
+          0.003753070719540119,
+          0.08175012469291687
+        ],
+        "local_rotation": [
+          -0.07642504572868347,
+          0.9970308542251587,
+          0.00017688196385279298,
+          -0.00941679161041975
+        ]
+      },
+      {
+        "index": 8,
+        "id": 400264,
+        "name": "Bip01 Spine2",
+        "parent": 4,
+        "local_position": [
+          -0.10255500674247742,
+          -8.624076872365549e-05,
+          -2.3856044917280883e-10
+        ],
+        "local_rotation": [
+          -2.184724179343789e-09,
+          -1.3401044895999803e-07,
+          0.03197140619158745,
+          0.9994888305664062
+        ]
+      },
+      {
+        "index": 9,
+        "id": 400148,
+        "name": "Bip01 Spine3",
+        "parent": 8,
+        "local_position": [
+          -0.10851577669382095,
+          -0.0001226258318638429,
+          -3.4065122944682e-10
+        ],
+        "local_rotation": [
+          4.361433436628204e-09,
+          -1.6803141988930292e-07,
+          0.040035784244537354,
+          0.9991982579231262
+        ]
+      },
+      {
+        "index": 10,
+        "id": 400254,
+        "name": "Bip01 L Calf",
+        "parent": 7,
+        "local_position": [
+          -0.3857116103172302,
+          3.5762786065873797e-09,
+          0.0
+        ],
+        "local_rotation": [
+          -1.7606850005735808e-11,
+          -2.7963364956917758e-09,
+          0.035338904708623886,
+          0.9993754029273987
+        ]
+      },
+      {
+        "index": 11,
+        "id": 400278,
+        "name": "Bip01 R Calf",
+        "parent": 6,
+        "local_position": [
+          -0.3857116103172302,
+          3.5762786065873797e-09,
+          0.0
+        ],
+        "local_rotation": [
+          4.6692500560441275e-11,
+          2.7973647842571836e-09,
+          0.035338904708623886,
+          0.9993754029273987
+        ]
+      },
+      {
+        "index": 12,
+        "id": 400150,
+        "name": "Bip01 L Foot",
+        "parent": 10,
+        "local_position": [
+          -0.45399942994117737,
+          2.38418573772492e-09,
+          0.0
+        ],
+        "local_rotation": [
+          -0.0885208249092102,
+          -0.024637578055262566,
+          -0.027037419378757477,
+          0.995402455329895
+        ]
+      },
+      {
+        "index": 13,
+        "id": 400206,
+        "name": "Bip01 L Clavicle",
+        "parent": 9,
+        "local_position": [
+          -0.15801650285720825,
+          -0.036497101187705994,
+          0.047973040491342545
+        ],
+        "local_rotation": [
+          -0.6570405960083008,
+          -0.08366098254919052,
+          0.7456139326095581,
+          0.07320187240839005
+        ]
+      },
+      {
+        "index": 14,
+        "id": 400214,
+        "name": "Bip01 Neck",
+        "parent": 9,
+        "local_position": [
+          -0.19747284054756165,
+          -0.02339217998087406,
+          6.180089329177463e-09
+        ],
+        "local_rotation": [
+          7.789411883519712e-14,
+          3.5648218954520416e-07,
+          -0.12852688133716583,
+          0.9917060136795044
+        ]
+      },
+      {
+        "index": 15,
+        "id": 400236,
+        "name": "Bip01 R Foot",
+        "parent": 11,
+        "local_position": [
+          -0.45399951934814453,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          0.0885208323597908,
+          0.02463749423623085,
+          -0.02703741192817688,
+          0.995402455329895
+        ]
+      },
+      {
+        "index": 16,
+        "id": 400240,
+        "name": "Bip01 R Clavicle",
+        "parent": 9,
+        "local_position": [
+          -0.1580163538455963,
+          -0.0364968478679657,
+          -0.04797324165701866
+        ],
+        "local_rotation": [
+          0.6570407748222351,
+          0.08365888148546219,
+          0.7456141114234924,
+          0.07320008426904678
+        ]
+      },
+      {
+        "index": 17,
+        "id": 400144,
+        "name": "Bip01 L UpperArm",
+        "parent": 13,
+        "local_position": [
+          -0.07880760729312897,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          -0.11479689180850983,
+          -0.3292175829410553,
+          -0.028724823147058487,
+          0.9368096590042114
+        ]
+      },
+      {
+        "index": 18,
+        "id": 400282,
+        "name": "Bip01 R UpperArm",
+        "parent": 16,
+        "local_position": [
+          -0.07880759239196777,
+          0.0,
+          1.5258788721439487e-07
+        ],
+        "local_rotation": [
+          0.114796943962574,
+          0.32921740412712097,
+          -0.02872476540505886,
+          0.9368097186088562
+        ]
+      },
+      {
+        "index": 19,
+        "id": 400284,
+        "name": "Bip01 Head",
+        "parent": 14,
+        "local_position": [
+          -0.06741958111524582,
+          0.0,
+          3.63797872577655e-14
+        ],
+        "local_rotation": [
+          -6.492767212762374e-09,
+          -1.47538301575878e-07,
+          0.09957362711429596,
+          0.9950302243232727
+        ]
+      },
+      {
+        "index": 20,
+        "id": 400142,
+        "name": "Bip01 L Forearm",
+        "parent": 17,
+        "local_position": [
+          -0.25818175077438354,
+          3.814697180359872e-08,
+          7.629394360719743e-08
+        ],
+        "local_rotation": [
+          -1.4844837359362373e-08,
+          -1.2944231242428827e-09,
+          0.08686724305152893,
+          0.9962199330329895
+        ]
+      },
+      {
+        "index": 21,
+        "id": 400290,
+        "name": "Bip01 R Forearm",
+        "parent": 18,
+        "local_position": [
+          -0.258181631565094,
+          0.0,
+          0.0
+        ],
+        "local_rotation": [
+          -8.716839694500322e-09,
+          1.4197619080391632e-08,
+          0.08686725795269012,
+          0.9962198734283447
+        ]
+      },
+      {
+        "index": 22,
+        "id": 400200,
+        "name": "Bip01 R Hand",
+        "parent": 21,
+        "local_position": [
+          -0.2542317807674408,
+          3.814697180359872e-08,
+          0.0
+        ],
+        "local_rotation": [
+          0.6578112840652466,
+          -0.025866487994790077,
+          -0.023273911327123642,
+          0.7523787021636963
+        ]
+      },
+      {
+        "index": 23,
+        "id": 400246,
+        "name": "Bip01 L Hand",
+        "parent": 20,
+        "local_position": [
+          -0.25423184037208557,
+          -3.814697180359872e-08,
+          0.0
+        ],
+        "local_rotation": [
+          -0.6578112840652466,
+          0.02586648054420948,
+          -0.023273924365639687,
+          0.7523786425590515
+        ]
+      }
+    ],
+    "root": 1,
+    "iterations": 1,
+    "chain_bones": [
+      [
+        8
+      ],
+      [
+        17,
+        20,
+        23
+      ],
+      [
+        18,
+        21,
+        22
+      ],
+      [
+        7,
+        10,
+        12
+      ],
+      [
+        6,
+        11,
+        15
+      ]
+    ],
+    "chains": [
+      {
+        "pin": 0.0,
+        "pull": 1.0,
+        "push": 0.0,
+        "pushParent": 0.0,
+        "reach": 0.10000000149011612,
+        "reachSmoothing": 1,
+        "pushSmoothing": 1
+      },
+      {
+        "pin": 0.0,
+        "pull": 1.0,
+        "push": 0.0,
+        "pushParent": 0.0,
+        "reach": 0.10000000149011612,
+        "reachSmoothing": 1,
+        "pushSmoothing": 1
+      },
+      {
+        "pin": 0.0,
+        "pull": 1.0,
+        "push": 0.0,
+        "pushParent": 0.0,
+        "reach": 0.10000000149011612,
+        "reachSmoothing": 1,
+        "pushSmoothing": 1
+      },
+      {
+        "pin": 0.0,
+        "pull": 1.0,
+        "push": 0.0,
+        "pushParent": 0.0,
+        "reach": 0.10000000149011612,
+        "reachSmoothing": 1,
+        "pushSmoothing": 1
+      },
+      {
+        "pin": 0.0,
+        "pull": 1.0,
+        "push": 0.0,
+        "pushParent": 0.0,
+        "reach": 0.10000000149011612,
+        "reachSmoothing": 1,
+        "pushSmoothing": 1
+      }
+    ],
+    "constraints": [
+      {
+        "chain1": 1,
+        "chain2": 4,
+        "push_elasticity": 0.0,
+        "pull_elasticity": 1.0
+      },
+      {
+        "chain1": 2,
+        "chain2": 3,
+        "push_elasticity": 0.0,
+        "pull_elasticity": 1.0
+      },
+      {
+        "chain1": 1,
+        "chain2": 2,
+        "push_elasticity": 0.0,
+        "pull_elasticity": 0.0
+      },
+      {
+        "chain1": 3,
+        "chain2": 4,
+        "push_elasticity": 0.0,
+        "pull_elasticity": 0.0
+      }
+    ],
+    "effector_nodes": [
+      0,
+      3,
+      6,
+      9,
+      12,
+      5,
+      8,
+      11,
+      14
+    ],
+    "effector_planes": [
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        255,
+        255,
+        255
+      ],
+      [
+        3,
+        6,
+        0
+      ],
+      [
+        6,
+        3,
+        0
+      ],
+      [
+        9,
+        12,
+        0
+      ],
+      [
+        12,
+        9,
+        0
+      ]
+    ],
+    "body_children": [
+      9,
+      12
+    ],
+    "spine": [
+      2,
+      8,
+      9
+    ],
+    "spine_root_index": 1,
+    "spine_iterations": 3,
+    "spine_twist_weight": 1.0,
+    "limb_parents": [
+      13,
+      16,
+      255,
+      255
+    ],
+    "limb_maintain_rotation": [
+      0.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "limb_weight": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "head": 19,
+    "head_maintain_rotation": 0.0,
+    "spine_stiffness": 0.5,
+    "pull_body_vertical": 0.5,
+    "pull_body_horizontal": 0.0
+  },
+  "grounder": {
+    "component": 11400014,
+    "enabled": 1,
+    "weight": 1.0,
+    "settings": {
+      "solver": {
+        "layers": {
+          "m_Bits": 620801
+        },
+        "maxStep": 0.4000000059604645,
+        "heightOffset": 0.0,
+        "footSpeed": 2.5,
+        "footRadius": 0.10000000149011612,
+        "prediction": 0.05000000074505806,
+        "footRotationWeight": 1.0,
+        "footRotationSpeed": 10.0,
+        "maxFootRotationAngle": 26.707059860229492,
+        "rotateSolver": 0,
+        "pelvisSpeed": 2.0,
+        "pelvisDamper": 0.009999999776482582,
+        "lowerPelvisWeight": 0.20000000298023224,
+        "liftPelvisWeight": 0.800000011920929,
+        "rootSphereCastRadius": 0.10000000149011612,
+        "quality": 1
+      },
+      "spineBend": 4.5,
+      "spineSpeed": 2.0,
+      "spine": [
+        {
+          "effectorType": 1,
+          "horizontalWeight": 0.800000011920929,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 2,
+          "horizontalWeight": 0.800000011920929,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 0,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 5,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 6,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 7,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 8,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 3,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        },
+        {
+          "effectorType": 4,
+          "horizontalWeight": 0.0,
+          "verticalWeight": 0.0
+        }
+      ]
+    }
+  },
+  "order": {
+    "update": "IKPositionWeight<=0 zeroes every positionOffset and returns; otherwise clamp weight, OnPreRead, ReadPose, OnPreSolve, Solve, OnPostSolve, WritePose, then every effector positionOffset=0.",
+    "read_pose": "SetToTarget, PullBody, spine push elasticity=clamp01(1-spineStiffness) on body constraints 0 and 1; LimitBend per initiated chain; ResetOffset; effector OnPreSolve; chain ReadPose; spine and bone mapping ReadPose when iterations>0; limb mapping ReadPose.",
+    "solve": "Per iteration: end effectors Update, Push, Reach, other effectors Update, SolveTrigonometric(false), Stage1, other effectors Update, Stage2 with clamp(iterations,2,4) constraint passes. Then OnPreBend, end effectors Update, bend rotationOffset copy, SolveTrigonometric(true).",
+    "write_pose": "Spine and bone mappings when iterations>0, then limb mappings: parent swing and FixToNode when iterations>0, RotateToPlane on bones 1 and 2, RotateToMaintain, RotateToEffector.",
+    "scheduling": "SolverManager.LateUpdate calls UpdateSolver every frame when timeStep is 0; Update or FixedUpdate first restores default local state when fixTransforms is set."
+  },
+  "scope": "Disconnected solver arithmetic for the serialized female rig. Not a host integration and not a pose claim.",
+  "limitations": [
+    "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+    "CIL is read from file bytes; no JIT, floating-point or engine behavior is observed.",
+    "Engine Quaternion/Vector3 internal calls are native and absent from this managed evidence.",
+    "Nested types carry bare names in the inventory; declaring_type_token and type_names identify them.",
+    "Static method bodies do not establish which solver delegates are subscribed at runtime.",
+    "Quaternion LookRotation/FromToRotation/Lerp/Inverse and Vector3 Slerp/OrthoNormalize are conventional adapters in C; no engine or Mono arithmetic was executed.",
+    "IKConstraintBend and parent swing defaults are taken from the pose at Initiate; the prefab rest pose is the only recovered candidate and the actual pose at Start is unobserved.",
+    "Solver bone scales are within 1e-6 of one in the prefab and are treated as exactly one.",
+    "GrounderFBBIK is enabled on the same solver and writes foot, pelvis and spine offsets from raycasts each update; it is recorded, not recovered.",
+    "The prefab script GUID has no checked-in MonoScript; class identity rests on the GrounderFBBIK ik reference and the serialized field layout."
+  ]
+}

@@ -67,3 +67,8 @@ excerpt and installed female component/assets, regenerates11 ordered body
 profiles plus joint/collider/material metadata, and runs all five drive-export
 tests (including the three skipped without UnityPy). It is part of
 `check-sources`; see [the drive audit](ANIMFOLLOW_DRIVE.md).
+
+`fbbik-source-check` binds the committed FinalIK CIL excerpt to the installed
+assembly, regenerates the female solver rig from `FemaleModel.prefab`, and
+runs all six solver-export tests (two need UnityPy and the installed game).
+It is part of `check-sources`; see [the solver audit](FINALIK_FBBIK.md).

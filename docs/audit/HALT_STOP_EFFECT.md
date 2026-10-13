@@ -92,7 +92,9 @@ Still unqualified:
 - **The solve.** FinalIK's `FullBodyBipedIK` is a third-party plugin outside
   the checked-in source. Offsets are requests; the resulting pose is unknown.
   It would need the installed plugin assembly read statically, or an engine
-  capture of the stop.
+  capture of the stop. October 12 follow-through: the static read is done in
+  [the solver audit](FINALIK_FBBIK.md); the disconnected `pe_fbbik` turns
+  offsets into a pose with unqualified engine-native adapters.
 - **Frame order.** Whether the action's first `Update` runs in the frame of
   `DoAction`, and the exact solver phase, are nominal here.
 - **Mono arithmetic.** Curve evaluation follows the order qualified earlier for

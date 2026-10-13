@@ -1,3 +1,5 @@
+[FinalIK full-body solver](docs/audit/FINALIK_FBBIK.md): `pe_fbbik` owns the disconnected installed `IKSolverFullBodyBiped` update for the 24-bone female solve hierarchy; `export_fbbik.py` binds the committed CIL excerpt and the prefab's serialized solver. It consumes effector offsets such as `pe_halt`/`pe_hit_ik` requests and returns a local pose; no host uses it.
+
 [AnimFollow drive](docs/audit/ANIMFOLLOW_DRIVE.md): `pe_animfollow_drive` owns disconnected female per-body PD and indexed joint requests; `export_animfollow_drive.py` binds11 bodies/10 joints/66 nonrigids, profiles and collider/material metadata. It supplies no physics or pose.
 
 [Knife recovery](docs/audit/KNIFE_RECOVERY.md): `pe_sandbox_actor` owns the native inactive150ms recovery blend and shared body/attachment/defence snapshot; `pe_sandbox_view` clears it on explicit cancellation. The user accepted the one-click standing/walking ending qualitatively. Separate Knife33 reaction assets remain staged and previewed.
