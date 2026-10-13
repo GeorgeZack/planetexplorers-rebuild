@@ -2,9 +2,9 @@
 #define PE_IK_POSE_H
 #include "pe_actor.h"
 #include "pe_fbbik.h"
-/* Disconnected animated input for pe_fbbik: per-clip local transforms of the
- * female solver bones, baked by the installed engine from single clips and
- * staged by export_player_ik_pose.py as PEIK1. No host calls this.
+/* Animated input for pe_fbbik: per-clip local transforms of the female solver
+ * bones, baked by the installed engine from single clips and staged by
+ * export_player_ik_pose.py as PEIK1. Hosts reach it only through pe_ik_drive.
  *
  * It carries no controller blending, procedural IK or root motion, and the
  * interpolation between baked samples is a rebuild adapter. The file must

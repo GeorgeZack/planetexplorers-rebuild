@@ -52,6 +52,9 @@ void pe_actor_scene_view_unload(PeActorSceneView*v){pe_actor_scene_manifest_free
 size_t pe_actor_scene_view_clip_count(const PeActorSceneView*v){return pe_actor_scene_clip_count(v->manifest);}
 size_t pe_actor_scene_view_find_clip(const PeActorSceneView*v,const char*n){return pe_actor_scene_find_clip(v->manifest,n);}
 const PeActorClip *pe_actor_scene_view_clip_at(const PeActorSceneView*v,size_t i){return pe_actor_scene_clip_at(v->manifest,i);}
+/* The staged solver groups are not under these virtual roots; the pose stays baked. */
+bool pe_actor_scene_view_bind_ik(PeActorSceneView*v,const PeIkDrive*d,const char*g){(void)v;(void)d;(void)g;return false;}
+void pe_actor_scene_view_set_ik(PeActorSceneView*v,const PeIkDriveFrame*f){(void)v;(void)f;}
 bool pe_actor_scene_view_draw_clip(PeActorSceneView*v,size_t i,double t,Vector3 p,float yaw,float scale,Color color){
 (void)p;(void)yaw;(void)scale;(void)color;const PeActorClip*c=pe_actor_scene_view_clip_at(v,i);
 assert(c&&!expected.blend_count&&!strcmp(c->name,expected.clip)&&t==expected.seconds);
@@ -83,7 +86,7 @@ c.variant=PE_COMBAT_RUNNING;c.stage=0;assert(pe_sandbox_actor_set_melee_item(a,1
 pe_sandbox_actor_unload(a);free(g);}
 return 0;}
 ''')
-            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_hitbox.c','pe_shield.c','pe_inventory.c')],str(ROOT/'rebuild/generated/pe_content.c'),'-lm','-o',str(binary)]
+            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_ik_drive.c','pe_ik_pose.c','pe_ik_skin.c','pe_fbbik.c','pe_hitbox.c','pe_shield.c','pe_inventory.c')],str(ROOT/'rebuild/generated/pe_content.c'),'-lm','-o',str(binary)]
             if os.environ.get('PE_TEST_SANITIZE'):command[1:1]=['-g','-fsanitize=address,undefined','-fno-omit-frame-pointer']
             subprocess.run(command,check=True)
             subprocess.run([str(binary),str(assets),str(stage)],check=True)
@@ -128,6 +131,9 @@ void pe_actor_scene_view_unload(PeActorSceneView*v){pe_actor_scene_manifest_free
 size_t pe_actor_scene_view_clip_count(const PeActorSceneView*v){return pe_actor_scene_clip_count(v->manifest);}
 size_t pe_actor_scene_view_find_clip(const PeActorSceneView*v,const char*n){return pe_actor_scene_find_clip(v->manifest,n);}
 const PeActorClip *pe_actor_scene_view_clip_at(const PeActorSceneView*v,size_t i){return pe_actor_scene_clip_at(v->manifest,i);}
+/* The staged solver groups are not under these virtual roots; the pose stays baked. */
+bool pe_actor_scene_view_bind_ik(PeActorSceneView*v,const PeIkDrive*d,const char*g){(void)v;(void)d;(void)g;return false;}
+void pe_actor_scene_view_set_ik(PeActorSceneView*v,const PeIkDriveFrame*f){(void)v;(void)f;}
 /* No reaction scene may be drawn: its 25-clip count identifies it. */
 bool pe_actor_scene_view_draw_clip(PeActorSceneView*v,size_t i,double t,Vector3 p,float yaw,float scale,Color color){
 (void)i;(void)t;(void)p;(void)yaw;(void)scale;(void)color;assert(pe_actor_scene_clip_count(v->manifest)!=25);draws++;return true;}
@@ -152,7 +158,7 @@ PeSandboxBodyPose pose={0};assert(pe_sandbox_actor_body_pose(a,g,&pose)&&!strcmp
 pe_sandbox_actor_draw(a,g);assert(pe_sandbox_actor_ok(a)&&draws);
 free(g);pe_actor_free(old);pe_hitboxes_free(h);pe_actor_free(d);pe_sandbox_actor_unload(a);return 0;}
 """)
-            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_hitbox.c','pe_inventory.c')],str(ROOT/'rebuild/generated/pe_content.c'),'-lm','-o',str(binary)]
+            command=['cc','-std=c11','-Wall','-Wextra','-Werror','-I'+str(src),str(code),*[str(src/f) for f in ('pe_sandbox_actor.c','pe_player_locomotion.c','pe_combat.c','pe_actor.c','pe_actor_scene_manifest.c','pe_ik_drive.c','pe_ik_pose.c','pe_ik_skin.c','pe_fbbik.c','pe_hitbox.c','pe_inventory.c')],str(ROOT/'rebuild/generated/pe_content.c'),'-lm','-o',str(binary)]
             if os.environ.get('PE_TEST_SANITIZE'):command[1:1]=['-g','-fsanitize=address,undefined','-fno-omit-frame-pointer']
             subprocess.run(command,check=True)
             subprocess.run([str(binary),str(assets),str(stage),str(sword)],check=True)

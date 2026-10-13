@@ -41,6 +41,12 @@ static PeActor *fixture(void){
 const PeActorClip *pe_actor_scene_clip_at(const PeActorSceneManifest*m,size_t clip){
     static const PeActorClip c={.name="pose",.fps=1,.duration=1,.frames=2};return m&&clip==0?&c:NULL;
 }
+/* One staged group whose parts all follow solver bone 2; the second part can lose its entry. */
+static bool second_part_staged=true;
+const unsigned char *pe_ik_drive_drivers(const PeIkDrive *drive,const char *group,size_t part,const PeActor *actor){
+    static const unsigned char bone[1]={2};
+    return drive&&actor&&!strcmp(group,"player-test")&&(part==0||(part==1&&second_part_staged))?bone:NULL;
+}
 void UpdateMeshBuffer(Mesh mesh,int index,const void*data,int size,int offset){
     CHECK(data&&size==9*(int)sizeof(float)&&offset==0&&(index==0||index==2));
     CHECK(mesh.vertexCount==3);updates++;
@@ -76,5 +82,26 @@ int main(void){
     blend[0].weight=0;blend[1].weight=1;draws=updates=0;
     CHECK(pe_actor_view_draw_blend(&parts[0],blend,2,(Vector3){0},0,1,WHITE));PeActorVertex exact[3];CHECK(pe_actor_pose(a,0,1,exact,3));
     CHECK(draws==1&&updates==2&&!memcmp(exact,poses[0],sizeof exact));
+    /* Solved-skeleton presentation: bound parts move by their driver bone's motion, in blends and single clips. */
+    const PeIkDrive *drive=(const PeIkDrive*)&marker;static PeIkDriveFrame frame;
+    for(unsigned b=0;b<PE_FBBIK_MAX_BONES;b++)frame.delta[b][0]=frame.delta[b][5]=frame.delta[b][10]=1;
+    frame.delta[2][3]=10;blend[0].weight=1;blend[1].weight=3;
+    pe_actor_scene_view_set_ik(&scene,&frame);CHECK(!scene.ik_active);                       /* nothing bound yet */
+    scene.loaded=false;CHECK(!pe_actor_scene_view_bind_ik(&scene,drive,"player-test"));scene.loaded=true;
+    CHECK(!pe_actor_scene_view_bind_ik(&scene,drive,"player-other")&&!pe_actor_scene_view_bind_ik(&scene,NULL,"player-test")&&!scene.ik_bound);
+    second_part_staged=false;CHECK(!pe_actor_scene_view_bind_ik(&scene,drive,"player-test")&&!parts[0].ik_driver&&!parts[1].ik_driver);
+    pe_actor_scene_view_set_ik(&scene,&frame);CHECK(pe_actor_scene_view_draw_blend(&scene,blend,2,(Vector3){0},0,1,WHITE)&&fabsf(vertices[0][0]-3)<1e-6f);
+    second_part_staged=true;CHECK(pe_actor_scene_view_bind_ik(&scene,drive,"player-test")&&scene.ik_bound&&!scene.ik_active&&parts[0].ik_driver&&parts[1].ik_driver);
+    CHECK(pe_actor_scene_view_draw_blend(&scene,blend,2,(Vector3){0},0,1,WHITE)&&fabsf(vertices[0][0]-3)<1e-6f);   /* bound but no frame */
+    pe_actor_scene_view_set_ik(&scene,&frame);frame.delta[2][3]=99;                                              /* the view keeps its own copy */
+    draws=updates=0;CHECK(pe_actor_scene_view_draw_blend(&scene,blend,2,(Vector3){0},0,1,WHITE));
+    CHECK(draws==2&&updates==4&&fabsf(vertices[0][0]-13)<1e-5f&&fabsf(vertices[1][3]-14)<1e-5f&&fabsf(normals[0][1]-1)<1e-6f);
+    CHECK(pe_actor_scene_view_draw_clip(&scene,0,1,(Vector3){0},0,1,WHITE)&&fabsf(vertices[0][0]-14)<1e-5f&&fabsf(vertices[1][6]-16)<1e-5f);
+    CHECK(!pe_actor_scene_view_draw_clip(&scene,1,0,(Vector3){0},0,1,WHITE)&&!pe_actor_scene_view_draw_clip(&scene,0,NAN,(Vector3){0},0,1,WHITE));
+    /* A motion the skin cannot take falls back to the baked pose instead of failing the draw. */
+    memset(frame.delta[2],0,sizeof frame.delta[2]);pe_actor_scene_view_set_ik(&scene,&frame);
+    CHECK(pe_actor_scene_view_draw_blend(&scene,blend,2,(Vector3){0},0,1,WHITE)&&fabsf(vertices[0][0]-3)<1e-6f);
+    pe_actor_scene_view_set_ik(&scene,NULL);CHECK(!scene.ik_active&&scene.ik_bound);
+    CHECK(pe_actor_scene_view_draw_clip(&scene,0,1,(Vector3){0},0,1,WHITE)&&fabsf(vertices[0][0]-4)<1e-6f);
     pe_actor_free(a);return failures?1:0;
 }

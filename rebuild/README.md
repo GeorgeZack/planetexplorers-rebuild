@@ -910,3 +910,10 @@ Animated solver poses for the staged player clips are documented in
 [the pose audit](../docs/audit/PLAYER_IK_POSE.md). Run
 `python3 rebuild/tools/run_tests.py -k ik_pose`; the real-pose test needs the
 staged `player-ik-pose` group and is skipped without it.
+
+Both hosts draw the player through the zero-offset solve when the
+`player-ik-pose` and `player-ik-drivers` groups are installed; see
+[the always-on solve](../docs/audit/PLAYER_IK_DRIVE.md). Run
+`python3 rebuild/tools/run_tests.py -k ik_drive` and
+`make -C rebuild actor-blend-test sandbox-actor-test`. Each host's smoke
+summary prints how many poses were drawn through the solve.

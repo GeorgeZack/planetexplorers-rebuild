@@ -1563,6 +1563,7 @@ cleanup:
     printf("Sandbox tools: %llu swings, %llu resource changes\n",(unsigned long long)tool_action.swings,(unsigned long long)tool_edits);
     printf("Sandbox camera: mode %d, desired %.3fm, distance %.3fm\n",camera_controls.mode,orbit.desired_distance,orbit.distance);
     printf("Sandbox locomotion: exercised mask %u\n",pe_sandbox_actor_locomotion_seen(actor));
+    printf("Sandbox IK: %llu poses drawn through the solve\n",pe_sandbox_actor_ik_draws(actor));
     printf("Sandbox knife: %llu swing stages; hunt contacts %llu outgoing, %llu incoming; kills %u/4\n",(unsigned long long)melee_swings,
         (unsigned long long)hunt.hare_hits,(unsigned long long)hunt.player_hits,game->hunt_kills);
     printf("Sandbox running knife: %llu starts; qualified motion %s\n",(unsigned long long)running_starts,running_motion?"available":"unavailable");

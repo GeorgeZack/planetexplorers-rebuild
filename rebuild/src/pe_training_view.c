@@ -19,6 +19,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <rlgl.h>
+#include "pe_ik_drive.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -162,11 +163,13 @@ static bool matching_clocks(const PeActorSceneView *a,const PeActorSceneView *b,
      * keeps every used prefix clock and never selects these extra poses. */
     static const char *suffix[]={"RunSwordAttack","AttackIdle","SwordWF","SwordRF","SwordSprint",
         "SwordJump","SwordFall","SwordLand","SwordRunJump","SwordRunFall","SwordRunLand","SwordWB","SwordRB"};
+    /* The installed sprint extension is the 21-clip body plus SprintSwordAttack. */
+    static const char *sprint_suffix[]={"RunSwordAttack","SprintSwordAttack"};
     if(allow_running_suffix&&count>other&&(other==20||other==21)&&
-       (count==21||count==31||count==33)){
+       (count==21||count==22||count==31||count==33)){
         for(size_t i=20;i<count;i++){
             const PeActorClip *extra=pe_actor_scene_view_clip_at(a,i);
-            if(!extra||strcmp(extra->name,suffix[i-20]))return false;
+            if(!extra||strcmp(extra->name,(count==22?sprint_suffix:suffix)[i-20]))return false;
         }
         count=other;
     }
@@ -454,6 +457,20 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     }
     if(!terrain||!building||!load_shovel_views(asset_dir,&player,shovel_views)) {
         fprintf(stderr,"Unable to initialize training terrain or matching shovel scenes\n");failed=true;quit=true;
+    }
+    /* Optional always-on FinalIK solve shared with the sandbox (pe_ik_drive.h). A present staged pair must
+     * load; every loaded animated player scene must bind to its exact geometry or the pose stays baked. */
+    PeIkDrive *ik=NULL;bool ik_ready=false;unsigned long long ik_draws=0;
+    struct {PeActorSceneView *view;const char *group;} ik_views[]={{&player,"player"},{&stowed,"player-knife-stowed"},
+        {&drawn_view,"player-knife-drawn"},{&axe_view,"player-axe"},{&cut_body_view,"player-cut"},{&cut_axe_view,"player-axe-cut"},
+        {&shovel_views[0],"player-shovel"},{&shovel_views[1],"player-shovel-stowed"},{&shovel_views[2],"player-dig"},{&shovel_views[3],"player-shovel-dig"}};
+    const size_t ik_view_count=sizeof ik_views/sizeof ik_views[0];
+    if(pe_ik_drive_present(asset_dir)&&!(ik=pe_ik_drive_load(asset_dir,error,sizeof error))) {
+        fprintf(stderr,"Training IK drive load failed: %s\n",error);failed=true;quit=true;
+    }
+    if(ik&&animated_player&&(animated_stowed||!stowed.loaded)) {
+        ik_ready=true;
+        for(size_t i=0;i<ik_view_count;i++)if(ik_views[i].view->loaded&&!pe_actor_scene_view_bind_ik(ik_views[i].view,ik,ik_views[i].group))ik_ready=false;
     }
     PeReferenceModel receiver_models[2]={0},marker_models[2]={0};
     const char *receiver_names[]={"receiver-upright.obj","receiver-flat.obj"};
@@ -1121,6 +1138,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
             if(!pe_actor_view_draw(&hare,hare_clip,actor_seconds,vector(hare_motion.position),hare_motion.yaw_degrees,hare_motion.scale,(Color){232,232,232,255}))failed=true;
         int cut_phase=training.gathering.tree_stage>=PE_TREE_ENTRY&&training.gathering.tree_stage<=PE_TREE_EXIT?
             (int)training.gathering.tree_stage-PE_TREE_ENTRY:-1;
+        PeIkDriveFrame ik_solved;
         if(player.loaded&&training.camera_mode!=2) {
             PeActorSceneView *body_view=&player;
             size_t clip=animated_player?player_clips[locomotion.clip]:0;
@@ -1132,6 +1150,18 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 seconds=pe_training_dig_clip_seconds(&training.dig);
             }
             bool blending=animated_player&&!(melee.ready&&melee.action.active)&&cut_phase<0&&training.dig.stage==PE_DIG_IDLE;
+            if(ik_ready&&training.hp>0) {
+                PeIkDriveSample ik_samples[PE_ACTOR_BLEND_MAX];size_t ik_count=0;PePlayerLocomotionPose pose;
+                if(!blending){const PeActorClip *c=pe_actor_scene_view_clip_at(body_view,clip);if(c)ik_samples[ik_count++]=(PeIkDriveSample){c->name,seconds,1};}
+                else if(pe_player_locomotion_snapshot(&locomotion,&pose))for(int i=0;i<PE_LOCOMOTION_COUNT;i++)if(pose.weights[i]>0)
+                    ik_samples[ik_count++]=(PeIkDriveSample){pe_player_locomotion_name(i),pose.seconds[i],(float)pose.weights[i]};
+                /* Held hand equipment switches the original's arm mapping off. */
+                bool held=(training.axe_equipped&&training.axe_held)||(training.equipped_shovel>=0&&training.shovel_held)||(training.knife_equipped&&knife_drawn);
+                if(ik_count&&pe_ik_drive_solve(ik,ik_samples,ik_count,!held,&ik_solved)) {
+                    ik_draws++;
+                    for(size_t i=0;i<ik_view_count;i++)pe_actor_scene_view_set_ik(ik_views[i].view,&ik_solved);
+                }
+            }
             if(!(blending?draw_locomotion(body_view,&locomotion,vector(training.position),player_yaw):
                 pe_actor_scene_view_draw_clip(body_view,clip,seconds,vector(training.position),player_yaw,1,WHITE)))failed=true;
         } else if(!player.loaded)draw_avatar(&training);
@@ -1167,6 +1197,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
             Vector3 waist=Vector3Add(vector(training.position),(Vector3){.35f*cosf(yaw),.95f,.35f*sinf(yaw)});
             DrawModelEx(knife.model,waist,(Vector3){0,1,0},180-yaw*RAD2DEG,(Vector3){1,1,1},WHITE);
         }
+        for(size_t i=0;i<ik_view_count;i++)pe_actor_scene_view_set_ik(ik_views[i].view,NULL);
         EndMode3D();
         if(training.tutorial.mission_id==PE_TUTORIAL_LOCATION||training.tutorial.mission_id==PE_TUTORIAL_STORAGE)
             draw_marker(&ui,(Vector3){7,3,12},"Emergency Kit  [E]",camera);
@@ -1312,12 +1343,14 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     if(marker_shader.id&&marker_shader.id!=rlGetShaderIdDefault())UnloadShader(marker_shader);
     for(unsigned i=0;i<4;i++)pe_actor_scene_view_unload(&shovel_views[i]);
     pe_training_terrain_view_unload(terrain);free(terrain);
+    printf("Training IK: %llu poses drawn through the solve\n",ik_draws);
     if(melee.ready)printf("Training melee: %u starts, %u contacts, hare HP %.3f / %.3f\n",melee_swings,melee_hits,melee.target_hp,melee.setup.target_max_hp);
     pe_actor_scene_view_unload(&axe_view);pe_actor_scene_view_unload(&cut_body_view);pe_actor_scene_view_unload(&cut_axe_view);
     pe_hitboxes_free(drawn_boxes);pe_hitboxes_free(hare_boxes);pe_actor_scene_view_unload(&drawn_view);
     pe_actor_view_unload(&hare);
     pe_actor_scene_view_unload(&player);
     pe_actor_scene_view_unload(&stowed);
+    pe_ik_drive_free(ik);
     pe_reference_unload(&knife);
     pe_reference_unload(&kit);
     pe_reference_unload(&reference);

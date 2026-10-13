@@ -83,3 +83,9 @@ and the installed game). It is part of `check-sources`; see
 captures outside the repository. Its staged manifest records each capture's
 hash, and `test_player_ik_pose.py` verifies the installed file against that
 manifest; see [the pose audit](PLAYER_IK_POSE.md).
+
+`export_player_ik_drivers.py` has no `--check` mode either: it reads the
+installed player scenes, the saved starter rig and one bake capture. Its
+manifest records every part's hash, and `test_player_ik_drive.py` verifies the
+installed table and parts against it; see
+[the always-on solve](PLAYER_IK_DRIVE.md).

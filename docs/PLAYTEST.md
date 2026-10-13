@@ -1,5 +1,39 @@
 # Original-game playtest and C comparison
 
+## October13 always-on FinalIK solve connected to drawing
+
+Implemented in C, not compared with the original: [the zero-offset solve](audit/PLAYER_IK_DRIVE.md)
+now draws the player in the sandbox and tutorial hosts. No original-game
+launch, desktop input or save occurred. A new staged group,
+`player-ik-drivers` (64 parts in 23 groups), was installed; nothing was
+replaced.
+
+Headless, over the installed assets, the real sandbox actor drew every part of
+every scene through the solve. The largest vertex displacement from the baked
+pose was 5.6 mm idle, 7.4 mm walking, 2.6 mm running, 1.0 mm in Knife attacks
+6–9, 18.8 mm in the running attack and 5.6 mm in tool actions; a dead player
+stayed baked.
+
+Rendered, unattended and without input: the sandbox 90-frame smoke reported 90
+poses drawn through the solve and the three Adventure smokes passed. The
+tutorial 90-, 1,500- and 15,000-frame smokes passed, the last reaching the
+building lesson with 14,853 solved poses, 8 melee starts and 24 contacts. The
+1,500-frame tutorial frame rendered with and without the staged groups
+differs only in 36 scattered pixels along the player's arm, hip and leg; the
+sandbox frames differ by at most one intensity step. Screenshots and logs are
+in `rebuild/build/ik-drive-check-20261013/`. This establishes that the path
+draws an intact character, not that the pose matches the original.
+
+Found while checking: the tutorial host refused to start with the installed
+22-clip sprint body. Its clock check now also accepts exactly RunSwordAttack
+then SprintSwordAttack after the 20 shared clips.
+
+Full regression passes 274 jobs/947 Python tests with 94 optional skips;
+skips are not passes, and the installed-asset drive tests ran. Sanitizer
+passes 108 suites with leak scanning, and the installed-asset drive harness
+passes under ASan/UBSan. Content and source regeneration pass; 26 CLI cases
+pass. PECSv22 is unchanged.
+
 ## October13 disconnected solver poses for the player clips
 
 [The pose audit](audit/PLAYER_IK_POSE.md) records animated local poses of the

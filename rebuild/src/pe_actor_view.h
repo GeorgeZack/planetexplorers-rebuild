@@ -12,6 +12,7 @@ typedef struct {
     PeActorMaterial material; /* Source policy; scene owns the borrowed shader. */
     int cutoff_location,alpha_location;
     bool loaded;
+    const unsigned char *ik_driver; /* Borrowed per-joint solver bones; NULL is undriven. */
 } PeActorView;
 /* Zero initialize. Requires an active graphics context. Actor validation occurs
  * before graphics allocations; diffuse PNG is optional. No implicit paths. */
@@ -30,6 +31,11 @@ bool pe_actor_view_draw(PeActorView *view,size_t clip,double seconds,
                         Vector3 position,float yaw,float scale,Color tint);
 bool pe_actor_view_draw_blend(PeActorView *view,const PeActorBlendSample *samples,size_t count,
                               Vector3 position,float yaw,float scale,Color tint);
+/* As draw_blend, with each joint moved by bone_delta (PE_ACTOR_DRIVE_BONES
+ * row-major 3x4 motions) through ik_driver. Without a driver or motions, or
+ * when the driven pose is refused, this is exactly draw_blend. */
+bool pe_actor_view_draw_blend_driven(PeActorView *view,const PeActorBlendSample *samples,size_t count,const float *bone_delta,
+                                     Vector3 position,float yaw,float scale,Color tint);
 /* Standalone graphics preview; owns window/context. Nonzero return on asset,
  * screenshot, animation, or incomplete smoke failure. */
 int pe_actor_preview(const char *peac,int smoke,const char *screenshot);

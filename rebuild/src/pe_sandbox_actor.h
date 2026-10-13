@@ -69,6 +69,10 @@ bool pe_sandbox_actor_ok(const PeSandboxActor *actor);
 /* Transient diagnostic coverage: bit N means locomotion enum N was selected.
  * No effect on animation or saved gameplay state. */
 unsigned pe_sandbox_actor_locomotion_seen(const PeSandboxActor *actor);
+/* Transient diagnostic: world poses drawn through the always-on FinalIK solve
+ * since load. Zero without the staged solver groups. The solve is
+ * presentation only: contact, defence and saved state never read it. */
+unsigned long long pe_sandbox_actor_ik_draws(const PeSandboxActor *actor);
 /* True only for an exact recovered item with complete, clock-validated held,
  * action-body and action-tool scenes (and shovel/pickaxe stowed scene). Host action
  * admission must use this capability; no tool/prototype visual substitution.

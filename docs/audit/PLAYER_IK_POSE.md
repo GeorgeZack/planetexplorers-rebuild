@@ -1,10 +1,10 @@
 # Solver poses for the player clips
 
 October 13, 2026. **Derived offline from existing engine bakes and implemented
-in a disconnected C loader.** `pe_ik_pose` supplies the animated local pose of
+in a C loader.** `pe_ik_pose` supplies the animated local pose of
 the 25 solver transforms for each staged female clip, which is the input
-[the full-body solver](FINALIK_FBBIK.md) needs. No host calls it and nothing is
-drawn from it. No game was launched for this.
+[the full-body solver](FINALIK_FBBIK.md) needs. Hosts read it only through
+[the always-on solve](PLAYER_IK_DRIVE.md). No game was launched for this.
 
 ## Why it was missing
 
@@ -75,7 +75,7 @@ correction every frame the solver is enabled, not only during an effect.
 solved pose into one rigid model-space motion per solver transform. Whatever is
 rigidly attached to a bone in the animated pose, such as a skin palette row, a
 defence capsule or an attachment, follows by that bone's motion. It is pure
-arithmetic and no host calls it.
+arithmetic; `pe_ik_drive` is its only caller.
 
 That only works if the staged poses and the staged skin palettes are the same
 motion in the same space. They are: a point skinned to a joint of the staged
@@ -101,13 +101,11 @@ python3 rebuild/tools/run_tests.py -k ik_
 
 ## Remaining boundary
 
-- **Applying a solve to the drawn character.** The per-bone motions exist; which
-  bone drives each skin joint of each rendered part (fingers, twist bones and
-  attachments follow their nearest solver ancestor) is not exported, and
-  `pe_actor` has no entry point that takes them.
-- **Blended poses.** The rebuild blends skinned vertices across clips, not
-  bone transforms; what pose the solver should read during a blend is
-  undecided.
+- **Applying a solve to the drawn character** is now done for the zero-offset
+  solve; see [the always-on solve](PLAYER_IK_DRIVE.md). Contact geometry is
+  not driven.
+- **Blended poses.** The solver reads the weighted blend of single-clip bone
+  poses, a labelled adapter; the original solves the Animator's own pose.
 - **Other clips and the male rig** are not staged.
 
 No gameplay gate was opened. PECSv22 is untouched.

@@ -1,11 +1,12 @@
 # Installed FinalIK full-body biped solver
 
-October 12, 2026. **Shipped-artifact-derived and implemented in a disconnected
-C owner.** `pe_fbbik` performs one `IKSolverFullBody.OnUpdate` for the female
-rig: pose read, chain solve and spine/limb mapping. No host calls it. It is the
+October 12, 2026. **Shipped-artifact-derived and implemented in C.**
+`pe_fbbik` performs one `IKSolverFullBody.OnUpdate` for the female
+rig: pose read, chain solve and spine/limb mapping. Since October 13 both hosts
+run it [every drawn frame with no offsets](PLAYER_IK_DRIVE.md). It is the
 solve that [Halt](HALT_STOP_EFFECT.md) and [hit IK](HIT_IK.md) offsets were
-waiting for, but it supplies no visible reaction: the engine's quaternion
-natives are conventional adapters. One
+waiting for, but it supplies no visible reaction: those offsets stay
+disconnected, and the engine's quaternion natives are conventional adapters. One
 observed session agrees with the original solver to 0.29 mm.
 
 ## Evidence
@@ -219,12 +220,11 @@ that the tool works, not what the original does.
   [recovered separately](FINALIK_GROUNDER.md) into `pe_grounder`, unobserved on
   uneven ground. It subscribes after `IKAnimEffectCtrl` and
   `InteractionSystem` (observed).
-- **Host composition.** [Animated solver poses](PLAYER_IK_POSE.md) for the 31
-  staged player clips now exist and solve cleanly, with per-bone motions from
-  `pe_ik_skin`. Driving each rendered part's skin joints, defence capsules
-  and attachments from them, and choosing the pose to read during a blend,
-  are not started. Two AimIK components on the
-  same model run separately.
+- **Host composition.** [The zero-offset solve](PLAYER_IK_DRIVE.md) now drives
+  the drawn player and attachments in both hosts from
+  [the staged solver poses](PLAYER_IK_POSE.md). Defence and blade capsules
+  stay on the baked pose, and no effector offset is supplied. Two AimIK
+  components on the same model run separately.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town
 Defense gates stay closed. The Halt Move/Jump blocking decision is unchanged.

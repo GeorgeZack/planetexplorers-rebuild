@@ -15,7 +15,7 @@
  * and chain ordinals are FullBodyBipedEffector/FullBodyBipedChain. A node is
  * chain*3+index; chain 0 (body) has one node, each limb chain three.
  *
- * No host calls this. Engine Quaternion/Vector3 natives (LookRotation,
+ * Hosts reach it only through pe_ik_drive, with no effector offsets. Engine Quaternion/Vector3 natives (LookRotation,
  * FromToRotation, Lerp, Slerp, OrthoNormalize) are conventional float
  * adapters, not qualified engine arithmetic. The Animator pose, FixTransforms,
  * GrounderFBBIK, bend goals, effector targets and solver delegates are caller

@@ -1,3 +1,5 @@
+[Always-on FinalIK solve](docs/audit/PLAYER_IK_DRIVE.md): `pe_ik_drive` loads the staged solver poses and the `player-ik-drivers` joint table (`export_player_ik_drivers.py`), solves the drawn clips with no offsets and returns per-bone motions; `pe_actor_pose_blend_driven` and `pe_actor_scene_view_bind_ik`/`set_ik` apply them when `pe_sandbox_actor` and `pe_training_view` draw the player. Presentation only.
+
 [Player solver poses](docs/audit/PLAYER_IK_POSE.md): `pe_ik_pose` loads the staged PEIK1 animated local poses of the solver bones; `export_player_ik_pose.py` derives them offline from the existing isolated-Animator bakes into the `player-ik-pose` group. `pe_ik_skin` gives the rigid per-bone motion from an animated pose to its solved pose.
 
 [FinalIK grounder](docs/audit/FINALIK_GROUNDER.md): `pe_grounder` owns the disconnected installed `GrounderFBBIK` update (root ray, legs, pelvis, spine lean) with a caller ray callback; `export_grounder.py` binds the committed CIL excerpt and regenerates the female settings.

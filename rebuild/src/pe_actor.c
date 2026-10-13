@@ -269,3 +269,46 @@ bool pe_actor_pose_joint_point_blend(const PeActor *a,const PeActorBlendSample *
     if(positive>1)for(int k=0;k<3;k++)result[k]=(float)sum[k];
     memcpy(output,result,sizeof result);return true;
 }
+static bool driven_valid(const PeActor *a,const unsigned char *driver,const float *delta){
+    if(!a||!driver||!delta)return false;
+    for(size_t j=0;j<a->stats.joints;j++){
+        if(driver[j]>=PE_ACTOR_DRIVE_BONES)return false;
+        for(int k=0;k<12;k++)if(!isfinite(delta[driver[j]*12+k])||fabsf(delta[driver[j]*12+k])>1000000)return false;
+    }
+    return true;
+}
+bool pe_actor_pose_blend_driven(const PeActor *a,const PeActorBlendSample *samples,size_t count,const unsigned char *driver,
+                                const float *delta,PeActorVertex *out,size_t capacity){
+    if(!a||!out||capacity<a->stats.vertices||!driven_valid(a,driver,delta))return false;
+    double total;size_t positive;
+    if(!blend_weights(a,samples,count,&total,&positive))return false;
+    static const float identity[12]={1,0,0,0,0,1,0,0,0,0,1,0};
+    float moved[MAX_JOINTS*12];Pose pose={.p={moved,moved}};size_t joints=a->stats.joints;
+    double blended[MAX_JOINTS][12];memset(blended,0,joints*sizeof blended[0]);
+    for(size_t i=0;i<count;i++)if(samples[i].weight>0){
+        Pose p;if(!pose_prepare(a,samples[i].clip,samples[i].seconds,&p,false))return false;
+        double w=(double)samples[i].weight/total;
+        for(size_t j=0;j<joints;j++)for(int k=0;k<12;k++)
+            blended[j][k]+=w*(p.p[0]?(double)p.p[0][j*12+k]*(1-p.alpha)+(double)p.p[1][j*12+k]*p.alpha:identity[k]);
+    }
+    for(size_t j=0;j<joints;j++){
+        const float *d=delta+driver[j]*12;const double *m=blended[j];
+        for(int r=0;r<3;r++)for(int k=0;k<4;k++){
+            double v=(double)d[r*4]*m[k]+(double)d[r*4+1]*m[4+k]+(double)d[r*4+2]*m[8+k]+(k==3?d[r*4+3]:0);
+            if(!isfinite(v)||fabs(v)>1000000)return false;
+            moved[j*12+r*4+k]=(float)v;
+        }
+        if(!normal_matrix(moved+j*12,pose.normals[0]+j*9))return false;
+    }
+    memcpy(pose.normals[1],pose.normals[0],joints*9*sizeof(float));
+    for(size_t i=0;i<a->stats.vertices;i++)vertex_pose(a->vertices+i,&pose,out+i);
+    return true;
+}
+bool pe_actor_pose_joint_point_blend_driven(const PeActor *a,const PeActorBlendSample *samples,size_t count,const unsigned char *driver,
+                                            const float *delta,size_t joint,const float point[3],float output[3]){
+    float p[3];
+    if(!output||!driven_valid(a,driver,delta)||!pe_actor_pose_joint_point_blend(a,samples,count,joint,point,p))return false;
+    const float *d=delta+driver[joint]*12;float result[3];
+    for(int r=0;r<3;r++){result[r]=d[r*4]*p[0]+d[r*4+1]*p[1]+d[r*4+2]*p[2]+d[r*4+3];if(!isfinite(result[r]))return false;}
+    memcpy(output,result,sizeof result);return true;
+}

@@ -2,6 +2,7 @@
  * PEAC/PEAS parsing and skin arithmetic have separate real-file tests. */
 #include "pe_sandbox_actor.h"
 #include "pe_actor_scene_view.h"
+#include "pe_ik_drive.h"
 #include "pe_player_locomotion.h"
 #include "../generated/pe_torch_source.h"
 #include <math.h>
@@ -33,6 +34,7 @@ typedef struct {
      * actual render inputs are always retained and checked in samples[]. */
     size_t clip;double seconds;Vector3 position;float yaw;
     bool blended;size_t count;PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];
+    bool driven; /* The view held solved bone motions when it was drawn. */
 } Draw;
 static Draw draws[16];
 static bool light_pose_failure;
@@ -43,6 +45,31 @@ static PeActorBlendSample light_samples[PE_ACTOR_BLEND_MAX];
 static int path_view(const char *path) {
     for(int i=0;i<VIEWS;i++){char fragment[80];snprintf(fragment,sizeof fragment,"/%s/",folders[i]);if(strstr(path,fragment))return i;}
     return -1;
+}
+/* Staged solver poses and drivers: absent unless a test installs them. */
+static bool ik_staged,ik_load_failure,ik_solve_failure,ik_arms_mapped;
+static int ik_unbound_view=-1,ik_loaded,ik_solves,ik_light_moves;
+static size_t ik_count;static PeIkDriveSample ik_samples[PE_ACTOR_BLEND_MAX];
+bool pe_ik_drive_present(const char *root){(void)root;return ik_staged;}
+PeIkDrive *pe_ik_drive_load(const char *root,char *error,size_t cap){
+    (void)root;(void)error;(void)cap;if(ik_load_failure)return NULL;
+    ik_loaded++;return (PeIkDrive*)(uintptr_t)1;
+}
+void pe_ik_drive_free(PeIkDrive *d){if(d)ik_loaded--;}
+bool pe_ik_drive_solve(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,PeIkDriveFrame *out){
+    if(!d||!samples||!count||count>PE_ACTOR_BLEND_MAX||ik_solve_failure)return false;
+    ik_solves++;ik_count=count;memcpy(ik_samples,samples,count*sizeof *samples);ik_arms_mapped=arms_mapped;
+    memset(out,0,sizeof *out);return true;
+}
+bool pe_actor_scene_view_bind_ik(PeActorSceneView *v,const PeIkDrive *d,const char *group){
+    int id=(int)(uintptr_t)v->manifest-1;
+    v->ik_bound=d&&v->loaded&&id!=ik_unbound_view&&!strcmp(group,folders[id]);return v->ik_bound;
+}
+void pe_actor_scene_view_set_ik(PeActorSceneView *v,const PeIkDriveFrame *frame){v->ik_active=frame&&v->ik_bound;}
+bool pe_actor_pose_joint_point_blend_driven(const PeActor *a,const PeActorBlendSample *samples,size_t count,const unsigned char *driver,
+                                            const float *delta,size_t joint,const float p[3],float out[3]){
+    (void)a;(void)samples;(void)count;(void)driver;(void)joint;(void)p;if(!delta)return false;
+    ik_light_moves++;out[1]+=.25f;return true;
 }
 bool IsWindowReady(void){return window;}
 bool FileExists(const char *path){
@@ -89,13 +116,13 @@ const PeActorClip *pe_actor_scene_view_clip_at(const PeActorSceneView *v,size_t 
     return &clips[id][i];
 }
 bool pe_actor_scene_view_draw_clip(PeActorSceneView *v,size_t clip,double seconds,Vector3 p,float yaw,float scale,Color tint) {
-    (void)scale;(void)tint;if(draw_count<16)draws[draw_count]=(Draw){.view=(int)(uintptr_t)v->manifest-1,.clip=clip,.seconds=seconds,.position=p,.yaw=yaw};draw_count++;return !draw_failure;
+    (void)scale;(void)tint;if(draw_count<16)draws[draw_count]=(Draw){.view=(int)(uintptr_t)v->manifest-1,.clip=clip,.seconds=seconds,.position=p,.yaw=yaw,.driven=v->ik_active};draw_count++;return !draw_failure;
 }
 bool pe_actor_scene_view_draw_blend(PeActorSceneView *v,const PeActorBlendSample *samples,size_t count,Vector3 p,float yaw,float scale,Color tint){
     (void)scale;(void)tint;
     if(!samples||!count||count>PE_ACTOR_BLEND_MAX)return false;
     if(draw_count<16){
-        Draw *d=&draws[draw_count];*d=(Draw){.view=(int)(uintptr_t)v->manifest-1,.clip=PE_ACTOR_BIND_POSE,.position=p,.yaw=yaw,.blended=true,.count=count};
+        Draw *d=&draws[draw_count];*d=(Draw){.view=(int)(uintptr_t)v->manifest-1,.clip=PE_ACTOR_BIND_POSE,.position=p,.yaw=yaw,.blended=true,.count=count,.driven=v->ik_active};
         memcpy(d->samples,samples,count*sizeof *samples);
     }
     draw_count++;return !draw_failure;
@@ -398,8 +425,57 @@ static int sword_actor_tests(void){
     pe_sandbox_actor_unload(a);free(g);CHECK(allocated==0);uploads=0;wood_pair=false;running_mask=0;init_clips();
     return failures;
 }
+/* The always-on solve is presentation only: every drawn scene of a live pose
+ * carries the same bone motions, or none does. */
+static int ik_actor_tests(void){
+    int failures=0;char error[256];
+    ik_staged=true;ik_load_failure=true;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0&&ik_loaded==0);
+    ik_load_failure=false;PeSandboxActor *a=pe_sandbox_actor_load("assets",error,sizeof error);CHECK(a&&ik_loaded==1);
+    PeGame *g=calloc(1,sizeof *g);if(!a||!g){pe_sandbox_actor_unload(a);free(g);ik_staged=false;return failures+1;}
+    g->player=(PeVec3){20,10,20};g->yaw=.4f;g->grounded=true;g->hp=500;
+    pe_sandbox_actor_reset_motion(a,g);
+    /* Unarmed idle: one driven body draw, solved from the locomotion clip by name with the arms mapped. */
+    ik_solves=0;CHECK(pe_sandbox_actor_ik_draws(a)==0);draw(a,g);CHECK(draw_count==1&&draws[0].driven&&ik_solves==1&&ik_arms_mapped);
+    CHECK(pe_sandbox_actor_ik_draws(a)==1&&pe_sandbox_actor_ik_draws(NULL)==0);
+    CHECK(ik_count==1&&!strcmp(ik_samples[0].clip,pe_player_locomotion_name(PE_LOCOMOTION_IDLE))&&ik_samples[0].weight==1);
+    /* A moving blend passes every contributor with the drawn clocks and weights. */
+    pe_sandbox_actor_facing_mode(a,true);g->player.x+=.5f;pe_sandbox_actor_update(a,.1f,g);draw(a,g);
+    CHECK(draws[0].blended&&draws[0].driven&&ik_count==draws[0].count&&ik_count>1);
+    for(size_t i=0;i<ik_count&&i<draws[0].count;i++)
+        CHECK(!strcmp(ik_samples[i].clip,clips[BODY][draws[0].samples[i].clip].name)&&ik_samples[i].seconds==draws[0].samples[i].seconds&&ik_samples[i].weight==draws[0].samples[i].weight);
+    /* The inventory preview and a dead player stay baked, and nothing stays active after a draw. */
+    ik_solves=0;draw_count=0;pe_sandbox_actor_preview(a,g);CHECK(draw_count==1&&!draws[0].driven&&ik_solves==0);
+    g->hp=0;draw(a,g);CHECK(!draws[0].driven&&ik_solves==0);g->hp=500;
+    /* A stowed knife keeps the arm mapping; a drawn one switches it off. Both scenes are driven together. */
+    g->inventory.slots[0]=(PeSlot){.item_id=33,.instance_id=77,.count=1};g->equipped_instance_id=77;
+    CHECK(pe_sandbox_actor_set_melee(a,77,false,NULL));draw(a,g);CHECK(draw_count==2&&draws[0].driven&&draws[1].driven&&draws[1].view==KNIFE&&ik_arms_mapped);
+    CHECK(pe_sandbox_actor_set_melee(a,77,true,NULL));draw(a,g);CHECK(draw_count==2&&draws[0].driven&&draws[1].driven&&draws[1].view==KNIFE_HELD&&!ik_arms_mapped);
+    /* An attack is solved from its own single clip and clock. */
+    PeCombat combat={.active=true,.gender=PE_COMBAT_FEMALE,.view=PE_COMBAT_THIRD_PERSON,.variant=PE_COMBAT_STATIONARY,.stage=1,.clip_time=.25};
+    CHECK(pe_sandbox_actor_set_melee(a,77,true,&combat));draw(a,g);
+    CHECK(draws[0].driven&&draws[1].driven&&ik_count==1&&!strcmp(ik_samples[0].clip,"Attack7")&&ik_samples[0].seconds==.25&&!ik_arms_mapped);
+    CHECK(pe_sandbox_actor_set_melee(a,77,true,NULL));
+    /* A clip without a staged pose, or a failed solve, leaves the whole pose baked. */
+    ik_solve_failure=true;draw(a,g);CHECK(draw_count==2&&!draws[0].driven&&!draws[1].driven&&pe_sandbox_actor_ok(a));ik_solve_failure=false;
+    /* The held torch's emitter moves with the same solve as its mesh. */
+    g->inventory.slots[0]=(PeSlot){.item_id=10,.instance_id=5,.count=1};g->equipped_instance_id=5;
+    PeSandboxActionPose pose={.item_id=10,.instance_id=5,.held=true};CHECK(pe_sandbox_actor_set_action(a,&pose));
+    PeVec3 light,baked;ik_light_moves=0;CHECK(pe_sandbox_actor_torch_light(a,g,&light)&&ik_light_moves==1);
+    ik_solve_failure=true;CHECK(pe_sandbox_actor_torch_light(a,g,&baked)&&ik_light_moves==1&&fabsf(light.y-baked.y-.25f)<1e-5f);ik_solve_failure=false;
+    pe_sandbox_actor_unload(a);CHECK(allocated==0&&ik_loaded==0);
+    /* One drawn scene without drivers for its exact geometry keeps the whole pose baked. */
+    ik_unbound_view=KNIFE_HELD;uploads=0;a=pe_sandbox_actor_load("assets",error,sizeof error);CHECK(a);
+    if(a){
+        g->inventory.slots[0]=(PeSlot){.item_id=33,.instance_id=77,.count=1};g->equipped_instance_id=77;pe_sandbox_actor_reset_motion(a,g);
+        CHECK(pe_sandbox_actor_set_melee(a,77,true,NULL));ik_solves=0;draw(a,g);CHECK(draw_count==2&&!draws[0].driven&&!draws[1].driven&&ik_solves==0);
+        CHECK(pe_sandbox_actor_set_melee(a,77,false,NULL));draw(a,g);CHECK(draw_count==2&&draws[0].driven&&draws[1].driven);
+        pe_sandbox_actor_unload(a);
+    }
+    CHECK(allocated==0&&ik_loaded==0);free(g);ik_unbound_view=-1;ik_staged=false;uploads=0;init_clips();failures+=pose_failures;pose_failures=0;
+    return failures;
+}
 int main(void) {
-    int failures=0;char error[256];init_clips();failures+=reaction_actor_tests();failures+=running_actor_tests();failures+=sprint_actor_tests();failures+=sword_actor_tests();
+    int failures=0;char error[256];init_clips();failures+=ik_actor_tests();failures+=reaction_actor_tests();failures+=running_actor_tests();failures+=sprint_actor_tests();failures+=sword_actor_tests();
     window=false;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0);window=true;
     missing_clip=true;CHECK(!pe_sandbox_actor_load("assets",error,sizeof error));CHECK(allocated==0&&uploads==0);missing_clip=false;
     for(missing_direction_view=0;missing_direction_view<DIG_BODY;missing_direction_view++){

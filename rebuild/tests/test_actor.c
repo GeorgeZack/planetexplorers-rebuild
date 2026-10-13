@@ -68,6 +68,39 @@ static void blend_tests(PeActor *a){
     CHECK(pe_actor_pose_blend(a,mix,PE_ACTOR_BLEND_MAX,posed,3));CHECK(near(posed[0].position[0],last.position[0]));
     memcpy(before,posed,sizeof before);CHECK(!pe_actor_pose_blend(a,mix,2,posed,2));CHECK(!memcmp(before,posed,sizeof posed));
 }
+static void driven_tests(PeActor *a){
+    static float delta[PE_ACTOR_DRIVE_BONES][12];unsigned char driver[2]={3,7};
+    for(unsigned b=0;b<PE_ACTOR_DRIVE_BONES;b++){memset(delta[b],0,sizeof delta[b]);delta[b][0]=delta[b][5]=delta[b][10]=1;}
+    PeActorBlendSample mix[2]={{0,0,1},{0,.25,3}};PeActorVertex plain[3],moved[3],before[3];
+    /* Identity motions reproduce the blended positions; at a sample time they reproduce the normal too. */
+    CHECK(pe_actor_pose_blend(a,mix,2,plain,3)&&pe_actor_pose_blend_driven(a,mix,2,driver,delta[0],moved,3));
+    for(int v=0;v<3;v++){for(int k=0;k<3;k++)CHECK(near(moved[v].position[k],plain[v].position[k]));CHECK(!memcmp(moved[v].uv,plain[v].uv,sizeof plain[v].uv));}
+    CHECK(pe_actor_pose(a,0,.25,plain,3)&&pe_actor_pose_blend_driven(a,mix+1,1,driver,delta[0],moved,3));
+    for(int v=0;v<3;v++)for(int k=0;k<3;k++)CHECK(near(moved[v].position[k],plain[v].position[k])&&near(moved[v].normal[k],plain[v].normal[k]));
+    /* Joint 0 follows bone 3 (lifted 5), joint 1 follows bone 7 (quarter turn about z, then moved 1 along x). */
+    delta[3][7]=5;float turn[12]={0,-1,0,1, 1,0,0,0, 0,0,1,0};memcpy(delta[7],turn,sizeof turn);
+    CHECK(pe_actor_pose_blend_driven(a,mix,2,driver,delta[0],moved,3));
+    for(int v=0;v<3;v++){
+        float bind[3]={1,(float)v,0},p0[3],p1[3];
+        CHECK(pe_actor_pose_joint_point_blend(a,mix,2,0,bind,p0)&&pe_actor_pose_joint_point_blend(a,mix,2,1,bind,p1));
+        float expected[3]={.25f*p0[0]+.75f*(1-p1[1]),.25f*(p0[1]+5)+.75f*p1[0],.25f*p0[2]+.75f*p1[2]};
+        for(int k=0;k<3;k++)CHECK(near(moved[v].position[k],expected[k]));
+        float length=0;for(int k=0;k<3;k++)length+=moved[v].normal[k]*moved[v].normal[k];CHECK(near(length,1));
+        float q[3];CHECK(pe_actor_pose_joint_point_blend_driven(a,mix,2,driver,delta[0],1,bind,q));
+        CHECK(near(q[0],1-p1[1])&&near(q[1],p1[0])&&near(q[2],p1[2]));
+        CHECK(pe_actor_pose_joint_point_blend_driven(a,mix,2,driver,delta[0],0,bind,bind)&&near(bind[1],p0[1]+5));
+    }
+    /* Invalid drivers, motions, samples or capacity leave the output alone. */
+    memcpy(before,moved,sizeof before);float point[3]={1,0,0},kept[3]={9,9,9};unsigned char wild[2]={3,PE_ACTOR_DRIVE_BONES};
+    CHECK(!pe_actor_pose_blend_driven(a,mix,2,wild,delta[0],moved,3)&&!pe_actor_pose_blend_driven(a,mix,2,NULL,delta[0],moved,3));
+    CHECK(!pe_actor_pose_blend_driven(a,mix,2,driver,NULL,moved,3)&&!pe_actor_pose_blend_driven(a,mix,2,driver,delta[0],moved,2));
+    CHECK(!pe_actor_pose_blend_driven(a,mix,0,driver,delta[0],moved,3)&&!pe_actor_pose_joint_point_blend_driven(a,mix,2,wild,delta[0],1,point,kept));
+    CHECK(!pe_actor_pose_joint_point_blend_driven(a,mix,2,driver,delta[0],2,point,kept));
+    delta[7][3]=NAN;CHECK(!pe_actor_pose_blend_driven(a,mix,2,driver,delta[0],moved,3)&&!pe_actor_pose_joint_point_blend_driven(a,mix,2,driver,delta[0],1,point,kept));
+    /* A motion that flattens the palette has no normal transform. */
+    memset(delta[7],0,sizeof delta[7]);CHECK(!pe_actor_pose_blend_driven(a,mix,2,driver,delta[0],moved,3));
+    CHECK(!memcmp(before,moved,sizeof moved)&&kept[0]==9&&kept[1]==9&&kept[2]==9);
+}
 static void many_clip_tests(const char *path){
     unsigned char first[1024],bytes[300+(PE_ACTOR_MAX_CLIPS+1)*336];fixture(first);memcpy(bytes,first,300);
     u32(bytes+4,2);
@@ -94,7 +127,7 @@ int pe_test_actor(void) {
     many_clip_tests(path);
     unsigned char b[1024];size_t n=fixture(b);CHECK(save_file(path,b,n));char error[128];PeActor *a=pe_actor_load(path,error,sizeof(error));CHECK(a&&!*error);
     if(a) {
-        blend_tests(a);
+        blend_tests(a);driven_tests(a);
         float point[3]={1,0,0},posed[3];CHECK(pe_actor_skeleton_hash(a)!=0);
         CHECK(pe_actor_pose_joint_point(a,0,.25,0,point,posed));CHECK(near(posed[0],4)&&near(posed[1],0));
         CHECK(pe_actor_pose_joint_point(a,0,.25,1,point,posed));CHECK(near(posed[0],3)&&near(posed[1],2));

@@ -75,8 +75,23 @@ bool pe_actor_scene_view_load(PeActorSceneView *v,const char *path,char *error,s
 }
 bool pe_actor_scene_view_draw_clip(PeActorSceneView *v,size_t clip,double seconds,Vector3 pos,float yaw,float scale,Color tint){
     if(!v||!v->loaded||!pe_actor_scene_view_clip_at(v,clip)||!isfinite(seconds)||seconds<0||!isfinite(pos.x)||!isfinite(pos.y)||!isfinite(pos.z)||!isfinite(yaw)||!isfinite(scale)||scale<=0||scale>1000)return false;
+    if(v->ik_bound&&v->ik_active){PeActorBlendSample sample={clip,seconds,1};return pe_actor_scene_view_draw_blend(v,&sample,1,pos,yaw,scale,tint);}
     for(size_t i=0;i<v->count;i++)if(!pe_actor_view_draw(&v->parts[i],clip,seconds,pos,yaw,scale,tint))return false;
     return true;
+}
+bool pe_actor_scene_view_bind_ik(PeActorSceneView *v,const PeIkDrive *drive,const char *group){
+    if(!v||!v->loaded||!v->parts||!v->count)return false;
+    bool bound=drive&&group;
+    for(size_t i=0;i<v->count;i++){
+        v->parts[i].ik_driver=bound?pe_ik_drive_drivers(drive,group,i,v->parts[i].actor):NULL;
+        bound=bound&&v->parts[i].ik_driver;
+    }
+    if(!bound)for(size_t i=0;i<v->count;i++)v->parts[i].ik_driver=NULL;
+    v->ik_bound=bound;v->ik_active=false;return bound;
+}
+void pe_actor_scene_view_set_ik(PeActorSceneView *v,const PeIkDriveFrame *frame){
+    if(!v)return;
+    v->ik_active=frame&&v->ik_bound;if(v->ik_active)v->ik=*frame;
 }
 bool pe_actor_scene_view_draw_blend(PeActorSceneView *v,const PeActorBlendSample *samples,size_t count,Vector3 pos,float yaw,float scale,Color tint){
     if(!v||!v->loaded||!v->parts||!v->count||!samples||!count||count>PE_ACTOR_BLEND_MAX||
@@ -87,7 +102,8 @@ bool pe_actor_scene_view_draw_blend(PeActorSceneView *v,const PeActorBlendSample
         if(!p->loaded||!p->pose||p->model.meshCount<1||!p->model.meshes||!p->model.meshes[0].vertices||!p->model.meshes[0].normals||
            !pe_actor_blend_valid(p->actor,samples,count))return false;
     }
-    for(size_t i=0;i<v->count;i++)if(!pe_actor_view_draw_blend(&v->parts[i],samples,count,pos,yaw,scale,tint))return false;
+    const float *delta=v->ik_bound&&v->ik_active?v->ik.delta[0]:NULL;
+    for(size_t i=0;i<v->count;i++)if(!pe_actor_view_draw_blend_driven(&v->parts[i],samples,count,delta,pos,yaw,scale,tint))return false;
     return true;
 }
 bool pe_actor_scene_view_draw(PeActorSceneView *v,double seconds,Vector3 pos,float yaw,float scale,Color tint){

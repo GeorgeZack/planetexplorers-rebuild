@@ -17,6 +17,7 @@ typedef struct { size_t vertices, indices, joints, clips; } PeActorStats;
 #define PE_ACTOR_MAX_CLIPS 64u
 #define PE_ACTOR_BIND_POSE ((size_t)-1)
 #define PE_ACTOR_BLEND_MAX 13u
+#define PE_ACTOR_DRIVE_BONES 32u
 typedef struct { size_t clip; double seconds; float weight; } PeActorBlendSample;
 
 /* Strict bounded PEAC v1/v2 loader. V1 keeps uniform frame/fps timestamps.
@@ -59,4 +60,18 @@ bool pe_actor_pose_vertex_blend(const PeActor *actor,const PeActorBlendSample *s
                                 size_t vertex,PeActorVertex *output);
 bool pe_actor_pose_joint_point_blend(const PeActor *actor,const PeActorBlendSample *samples,size_t count,
                                      size_t joint,const float bind_mesh_point[3],float output[3]);
+/* Presentation adapter for a solved skeleton. Each joint's blended palette is
+ * moved by bone_delta[driver[joint]*12..], a row-major 3x4 rigid motion in
+ * model space, before skinning; bone_delta holds PE_ACTOR_DRIVE_BONES of them. Positions with identity deltas equal the blend above
+ * to float rounding; normals come from the moved blended palette rather than
+ * per-sample normals. driver holds one index below PE_ACTOR_DRIVE_BONES per
+ * joint. No allocations; invalid arguments, nonfinite deltas or a singular
+ * blended palette leave output untouched. */
+bool pe_actor_pose_blend_driven(const PeActor *actor,const PeActorBlendSample *samples,size_t count,
+                                const unsigned char *driver,const float *bone_delta,
+                                PeActorVertex *output,size_t capacity);
+/* The joint point of pe_actor_pose_joint_point_blend carried by the same motion. */
+bool pe_actor_pose_joint_point_blend_driven(const PeActor *actor,const PeActorBlendSample *samples,size_t count,
+                                            const unsigned char *driver,const float *bone_delta,
+                                            size_t joint,const float bind_mesh_point[3],float output[3]);
 #endif

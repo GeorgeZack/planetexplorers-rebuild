@@ -2,6 +2,7 @@
 #define PE_ACTOR_SCENE_VIEW_H
 #include "pe_actor_scene.h"
 #include "pe_actor_view.h"
+#include "pe_ik_drive.h"
 /* Zero initialize. Owns the retained manifest, actor views and temporary CPU
  * images. Treat fields as read-only; dispose before closing the GL context. */
 typedef struct {
@@ -11,6 +12,8 @@ typedef struct {
     Shader material_shader;
     size_t count;
     bool loaded;
+    bool ik_bound,ik_active;
+    PeIkDriveFrame ik;
 } PeActorSceneView;
 /* CPU-only prepare works without a window. All PNGs decode and aggregate
  * dimensions validate before upload. No files are reread during upload. */
@@ -31,6 +34,13 @@ bool pe_actor_scene_view_draw_clip(PeActorSceneView *view,size_t clip,double sec
  * every part before mutating pose buffers or issuing any draw. No allocations. */
 bool pe_actor_scene_view_draw_blend(PeActorSceneView *view,const PeActorBlendSample *samples,size_t count,
                                     Vector3 position,float yaw,float scale,Color tint);
+/* Optional solved-skeleton presentation. bind_ik attaches the staged joint
+ * drivers of one group folder to every part of an uploaded view; all parts must resolve against
+ * their exact geometry or none is bound. The drive must outlive the view.
+ * set_ik copies one frame of bone motions for the following draw_clip and
+ * draw_blend calls; NULL, or an unbound view, draws the undriven pose. */
+bool pe_actor_scene_view_bind_ik(PeActorSceneView *view,const PeIkDrive *drive,const char *group);
+void pe_actor_scene_view_set_ik(PeActorSceneView *view,const PeIkDriveFrame *frame);
 bool pe_actor_scene_view_draw(PeActorSceneView *view,double seconds,
                               Vector3 position,float yaw,float scale,Color tint);
 /* Prepared CPU-only views can unload without a window; uploaded views require

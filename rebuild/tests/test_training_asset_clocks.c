@@ -38,6 +38,10 @@ int main(void){
     CHECK(!matching_clocks(&a,&b,true));
     tool=good;body.clips[20].name[0]='X';CHECK(!matching_clocks(&a,&b,true));
     body.clips[20].name[0]='R';body.count=22;body.clips[21]=body.clips[20];CHECK(!matching_clocks(&a,&b,true));
+    /* The installed sprint extension: exactly RunSwordAttack then SprintSwordAttack. */
+    snprintf(body.clips[21].name,sizeof body.clips[21].name,"SprintSwordAttack");CHECK(matching_clocks(&a,&b,true)&&!matching_clocks(&a,&b,false));
+    tool.count=21;tool.clips[20]=body.clips[20];CHECK(matching_clocks(&a,&b,true));tool=good;
+    snprintf(body.clips[21].name,sizeof body.clips[21].name,"AttackIdle");CHECK(!matching_clocks(&a,&b,true));
     body.count=21;tool=body;CHECK(matching_clocks(&a,&b,false)&&matching_clocks(&a,&b,true));
     tool.clips[20].duration=.9;CHECK(!matching_clocks(&a,&b,true));
     static const char *sword[]={"AttackIdle","SwordWF","SwordRF","SwordSprint","SwordJump","SwordFall","SwordLand",

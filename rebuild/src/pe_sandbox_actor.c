@@ -1,5 +1,6 @@
 #include "pe_sandbox_actor.h"
 #include "pe_actor_scene_view.h"
+#include "pe_ik_drive.h"
 #include "pe_player_locomotion.h"
 #include "pe_shield.h"
 #include "../generated/pe_torch_source.h"
@@ -62,6 +63,7 @@ static const int action_bodies[3]={DIG_BODY,FELL_BODY,MINE_BODY};
 static int action_kind(int item){return item==12?0:(item==26||item==1527)?1:item==19?2:-1;}
 struct PeSandboxActor {
     PeActorSceneView views[VIEW_COUNT];
+    PeIkDrive *ik; /* Optional always-on solve; NULL keeps the baked presentation. */
     size_t clips[VIEW_COUNT][PE_LOCOMOTION_COUNT],sword_clips[VIEW_COUNT][PE_LOCOMOTION_COUNT];
     uint32_t shield_instance;
     PePlayerLocomotion locomotion;
@@ -72,6 +74,7 @@ struct PeSandboxActor {
     double elapsed;
     size_t melee_body[4],melee_knife[4];
     bool running_ready,sprint_ready;
+    unsigned long long ik_draws;
     /* Native 150ms natural-end pose recovery; never an action/contact clock. */
     struct {bool was_active,active;int item;uint32_t instance;size_t body_clip,tool_clip;double seconds,age;} recovery;
     struct {bool active;size_t body_clip,knife_clip;double seconds;} melee;
@@ -80,7 +83,7 @@ struct PeSandboxActor {
 static void error_set(char *error,size_t cap,const char *message){if(error&&cap)snprintf(error,cap,"%s",message);}
 static bool finite3(PeVec3 p){return isfinite(p.x)&&isfinite(p.y)&&isfinite(p.z);}
 static bool clocks_match(const PeActorClip *a,const PeActorClip *b){return a&&b&&!strcmp(a->name,b->name)&&a->fps==b->fps&&a->duration==b->duration&&a->frames==b->frames&&a->loop==b->loop&&a->terminal_at_duration==b->terminal_at_duration;}
-void pe_sandbox_actor_unload(PeSandboxActor *a){if(a){for(int i=0;i<VIEW_COUNT;i++)pe_actor_scene_view_unload(&a->views[i]);free(a);}}
+void pe_sandbox_actor_unload(PeSandboxActor *a){if(a){for(int i=0;i<VIEW_COUNT;i++)pe_actor_scene_view_unload(&a->views[i]);pe_ik_drive_free(a->ik);free(a);}}
 PeSandboxActor *pe_sandbox_actor_load(const char *root,char *error,size_t cap){
     if(error&&cap)*error=0;
     if(!root||!root[0]||!IsWindowReady()){error_set(error,cap,"Sandbox actor requires assets and an active graphics context");return NULL;}
@@ -232,12 +235,16 @@ PeSandboxActor *pe_sandbox_actor_load(const char *root,char *error,size_t cap){
         }
     }
     if(!pe_player_locomotion_init(&a->locomotion,durations)){error_set(error,cap,"Invalid sandbox locomotion durations");goto fail;}
+    /* Staged solver poses and joint drivers are optional as a pair; a present group must load. */
+    if(pe_ik_drive_present(root)&&!(a->ik=pe_ik_drive_load(root,error,cap)))goto fail;
     for(int v=0;v<VIEW_COUNT;v++)if(a->views[v].manifest&&!pe_actor_scene_view_upload(&a->views[v],error,cap))goto fail;
+    if(a->ik)for(int v=0;v<VIEW_COUNT;v++)if(a->views[v].loaded)pe_actor_scene_view_bind_ik(&a->views[v],a->ik,folders[v]);
     a->action.phase=-1;a->ok=true;return a;
 fail:pe_sandbox_actor_unload(a);return NULL;
 }
 bool pe_sandbox_actor_ok(const PeSandboxActor *a){return a&&a->ok;}
 unsigned pe_sandbox_actor_locomotion_seen(const PeSandboxActor *a){return a?a->locomotion_seen:0;}
+unsigned long long pe_sandbox_actor_ik_draws(const PeSandboxActor *a){return a?a->ik_draws:0;}
 bool pe_sandbox_actor_action_ready(const PeSandboxActor *a,int item) {
     if(!a||!a->ok||(a->shield_instance&&item!=1))return false;
     if(item==1)return a->views[WOOD_SWORD_HELD].loaded&&a->views[WOOD_SWORD_STOWED].loaded&&a->views[WOOD_SHIELD].loaded&&a->views[BODY].loaded;
@@ -402,7 +409,7 @@ void pe_sandbox_actor_update(PeSandboxActor *a,float dt,const PeGame *g){
         a->elapsed=fmod(a->elapsed+dt,3600);a->previous=g->player;a->have_previous=true;a->was_jumping=g->jumping;
     }
 }
-typedef struct {int body,tool;size_t body_clip,tool_clip;double seconds;bool locomotion,sword;} SelectedPose;
+typedef struct {int body,tool;size_t body_clip,tool_clip;double seconds;bool locomotion,sword,held;} SelectedPose;
 static bool select_pose(const PeSandboxActor *a,const PeGame *g,PePlayerLocomotionClip clip,double seconds,bool preview,SelectedPose *out) {
     if(!a||!a->ok||!g||clip<0||clip>=PE_LOCOMOTION_COUNT||!isfinite(seconds)||seconds<0)return false;
     const PeSlot *equipped=pe_game_equipped_tool(g);
@@ -435,7 +442,7 @@ static bool select_pose(const PeSandboxActor *a,const PeGame *g,PePlayerLocomoti
     if(!preview&&held&&(equipped->item_id==33||equipped->item_id==1)&&a->melee.active){
         locomotion=false;body_clip=a->melee.body_clip;tool_clip=a->melee.knife_clip;seconds=a->melee.seconds;
     }
-    *out=(SelectedPose){body,tool,body_clip,tool_clip,seconds,locomotion,sword};return true;
+    *out=(SelectedPose){body,tool,body_clip,tool_clip,seconds,locomotion,sword,held};return true;
 }
 static bool recovery_bound(const PeSandboxActor *a,const PeGame *g){
     const PeSlot *slot=pe_game_equipped_tool(g);
@@ -488,11 +495,35 @@ static bool shield_bound(const PeSandboxActor *a,const PeGame *g){
     return slot&&slot->instance_id==a->shield_instance;
 
 }
+/* The original's FullBodyBipedIK runs every frame near the camera with no
+ * effector weights, stops while ragdolled, and loses its arm mapping while
+ * hand equipment is held. Every scene drawn for the pose must be bound, and
+ * every blended clip staged, or the whole pose stays undriven. */
+static bool ik_frame(const PeSandboxActor *a,const PeGame *g,const SelectedPose *p,PeIkDriveFrame *out){
+    if(!a->ik||!isfinite(g->hp)||g->hp<=0||!a->views[p->body].ik_bound||
+       (p->tool>=0&&a->views[p->tool].loaded&&!a->views[p->tool].ik_bound)||(shield_bound(a,g)&&!a->views[WOOD_SHIELD].ik_bound))return false;
+    PeIkDriveSample samples[PE_ACTOR_BLEND_MAX];size_t count=1;
+    if(p->locomotion){
+        PeActorBlendSample blend[PE_ACTOR_BLEND_MAX];count=locomotion_samples(a,p->body,p->sword,recovery_bound(a,g),blend);
+        for(size_t i=0;i<count;i++){
+            const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[p->body],blend[i].clip);if(!c)return false;
+            samples[i]=(PeIkDriveSample){c->name,blend[i].seconds,blend[i].weight};
+        }
+    }else{
+        const PeActorClip *c=pe_actor_scene_view_clip_at(&a->views[p->body],p->body_clip);if(!c)return false;
+        samples[0]=(PeIkDriveSample){c->name,p->seconds,1};
+    }
+    return count&&pe_ik_drive_solve(a->ik,samples,count,!p->held,out);
+}
 static void draw_pose(PeSandboxActor *a,const PeGame *g,PePlayerLocomotionClip clip,double seconds,Vector3 position,float yaw,bool preview) {
     if(!isfinite(yaw))return;
     SelectedPose p;if(!select_pose(a,g,clip,seconds,preview,&p))return;
     int body=p.body,tool=p.tool;size_t body_clip=p.body_clip,tool_clip=p.tool_clip;seconds=p.seconds;
     bool ok;
+    PeIkDriveFrame solved;const PeIkDriveFrame *frame=!preview&&ik_frame(a,g,&p,&solved)?&solved:NULL;
+    pe_actor_scene_view_set_ik(&a->views[body],frame);pe_actor_scene_view_set_ik(&a->views[WOOD_SHIELD],frame);
+    if(tool>=0)pe_actor_scene_view_set_ik(&a->views[tool],frame);
+    if(frame)a->ik_draws++;
     if(p.locomotion){
         PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,body,p.sword,recovery_bound(a,g),samples);
         ok=count&&pe_actor_scene_view_draw_blend(&a->views[body],samples,count,position,yaw,1,WHITE);
@@ -510,6 +541,8 @@ static void draw_pose(PeSandboxActor *a,const PeGame *g,PePlayerLocomotionClip c
             if(shield_clip!=PE_ACTOR_BIND_POSE)ok=pe_actor_scene_view_draw_clip(&a->views[WOOD_SHIELD],shield_clip,seconds,position,yaw,1,WHITE)&&ok;
         }
     }
+    pe_actor_scene_view_set_ik(&a->views[body],NULL);pe_actor_scene_view_set_ik(&a->views[WOOD_SHIELD],NULL);
+    if(tool>=0)pe_actor_scene_view_set_ik(&a->views[tool],NULL);
     if(!ok){a->ok=false;fprintf(stderr,"Sandbox actor pose rendering failed\n");}
 }
 static bool torch_point(const PeSandboxActor *a,const PeGame *g,const float point[3],PeVec3 *out){
@@ -522,6 +555,10 @@ static bool torch_point(const PeSandboxActor *a,const PeGame *g,const float poin
     if(!view->count||!view->parts||!view->parts[0].actor)return false;
     float local[3];PeActorBlendSample samples[PE_ACTOR_BLEND_MAX];size_t count=locomotion_samples(a,TORCH_HELD,false,false,samples);
     if(!count||!pe_actor_pose_joint_point_blend(view->parts[0].actor,samples,count,0,point,local))return false;
+    /* The emitter follows the hand through the same solve as the visible torch. */
+    SelectedPose p;PeIkDriveFrame solved;
+    if(select_pose(a,g,a->locomotion.clip,a->locomotion.seconds,false,&p)&&p.tool==TORCH_HELD&&p.locomotion&&ik_frame(a,g,&p,&solved)&&
+       !pe_actor_pose_joint_point_blend_driven(view->parts[0].actor,samples,count,view->parts[0].ik_driver,solved.delta[0],0,point,local))return false;
     float yaw=pe_sandbox_actor_yaw(a,g)*DEG2RAD,c=cosf(yaw),s=sinf(yaw);
     PeVec3 result={g->player.x+c*local[0]+s*local[2],g->player.y+local[1],
                   g->player.z-s*local[0]+c*local[2]};
