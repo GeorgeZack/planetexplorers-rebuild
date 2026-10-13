@@ -1,3 +1,7 @@
+[Player solver poses](docs/audit/PLAYER_IK_POSE.md): `pe_ik_pose` loads the staged PEIK1 animated local poses of the solver bones; `export_player_ik_pose.py` derives them offline from the existing isolated-Animator bakes into the `player-ik-pose` group. `pe_ik_skin` gives the rigid per-bone motion from an animated pose to its solved pose.
+
+[FinalIK grounder](docs/audit/FINALIK_GROUNDER.md): `pe_grounder` owns the disconnected installed `GrounderFBBIK` update (root ray, legs, pelvis, spine lean) with a caller ray callback; `export_grounder.py` binds the committed CIL excerpt and regenerates the female settings.
+
 [FinalIK full-body solver](docs/audit/FINALIK_FBBIK.md): `pe_fbbik` owns the disconnected installed `IKSolverFullBodyBiped` update for the 25-transform female solve hierarchy; `export_fbbik.py` binds the committed CIL excerpt and the prefab's serialized solver. It consumes effector offsets such as `pe_halt`/`pe_hit_ik` requests and returns a local pose; no host uses it.
 
 [AnimFollow drive](docs/audit/ANIMFOLLOW_DRIVE.md): `pe_animfollow_drive` owns disconnected female per-body PD and indexed joint requests; `export_animfollow_drive.py` binds11 bodies/10 joints/66 nonrigids, profiles and collider/material metadata. It supplies no physics or pose.

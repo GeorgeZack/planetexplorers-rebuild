@@ -206,7 +206,7 @@ def build_outputs(root=ROOT,managed=MANAGED):
         limitations=evidence['limitations']+['Quaternion LookRotation/FromToRotation/Lerp/Inverse and Vector3 Slerp/OrthoNormalize are conventional adapters in C; no engine or Mono arithmetic was executed.',
             'IKConstraintBend and parent swing defaults are taken from the pose at Initiate; the prefab rest pose is the only recovered candidate and the actual pose at Start is unobserved.',
             'Solver bone scales are within 1e-6 of one in the prefab and are treated as exactly one.',
-            'GrounderFBBIK is enabled on the same solver and writes foot, pelvis and spine offsets from raycasts each update; it is recorded, not recovered.',
+            'GrounderFBBIK is enabled on the same solver and writes foot, pelvis and spine offsets from raycasts each update; export_grounder.py recovers it separately.',
             'The prefab script GUID has no checked-in MonoScript; class identity rests on the GrounderFBBIK ik reference and the serialized field layout.'])
     return {'pe_fbbik_source.h':header(rig).encode(),'pe_fbbik_source.json':(json.dumps(metadata,indent=2,allow_nan=False)+'\n').encode()}
 

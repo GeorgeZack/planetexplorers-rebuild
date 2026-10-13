@@ -1,0 +1,2079 @@
+{
+ "schema": 1,
+ "authority": "shipped-artifact",
+ "confidence": "observed",
+ "provider": "rea-agents 6.0.0 inspect-managed-members (CLI); raw CIL sliced by cil_disasm.py",
+ "scope": "Static FinalIK GrounderFBBIK path: grounder, grounding, legs, pelvis and the two helpers they call. Complete inventories stay ignored under rebuild/build. No assembly or game execution.",
+ "limitations": [
+  "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+  "CIL is read from file bytes; no JIT, floating-point or engine behavior is observed.",
+  "Physics.Raycast and the engine Quaternion/Vector3 internal calls are native and absent from this managed evidence.",
+  "Nested types carry bare names in the inventory; declaring_type_token and type_names identify them.",
+  "Static method bodies do not establish collision layers, colliders or what a ray hits at runtime."
+ ],
+ "assemblies": {
+  "Assembly-CSharp.dll": {
+   "sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+   "byte_length": 8437760,
+   "mvid": "7ddcc464-5353-4750-b969-fe628ee474da",
+   "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+   "methods": [
+    {
+     "token": "0x0600232c",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 997964,
+      "il_size": 29,
+      "il_sha256": "8a1172afe63218631111fbdce830411454af681cdafd820b0ac384842081b995",
+      "instruction_count": 9
+     },
+     "raw_il_hex": "02220000803f7d681c00040273652300067d691c000402280100000a2a",
+     "declaring_type_token": "0x020005d5"
+    },
+    {
+     "token": "0x0600232d",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "GetSpineOffsetTarget",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 997996,
+      "il_size": 64,
+      "il_sha256": "4b595f54390c35f9d32242b1edfea99d2dd488309ea09634b52779589fb7ccf4",
+      "instruction_count": 28
+     },
+     "raw_il_hex": "282200000a0a160b381e0000000602027b691c00046f66230006079a282f230006280d00000a0a0717580b07027b691c00046f662300068e693fcfffffff062a",
+     "declaring_type_token": "0x020005d5"
+    },
+    {
+     "token": "0x0600232e",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "LogWarning",
+     "signature": {
+      "raw_sha256": "c65dc7d303e94729245de0fa4db4b80ac687af6d0bb38c5c884bc9c11f01e005",
+      "return_type": "void",
+      "parameter_types": [
+       "string"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 998072,
+      "il_size": 14,
+      "il_sha256": "cc464a8902f3ab348033ae3bc147b6c8a3eb546a6c2fd88c1d1d4e9a6c2c2ce1",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "0302280600000a16289b2700062a",
+     "declaring_type_token": "0x020005d5"
+    },
+    {
+     "token": "0x0600232f",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "GetLegSpineBendVector",
+     "signature": {
+      "raw_sha256": "fe8e19f4c328550e63085e0fc6459f329b0eab79c57182680ca97c45ae45121d",
+      "return_type": "valuetype:33",
+      "parameter_types": [
+       "class:6008"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 998088,
+      "il_size": 94,
+      "il_sha256": "3f67d9ea69a400c7baa44585d747a6899ea7fc683b6a3b055953c3d46580a45b",
+      "instruction_count": 32
+     },
+     "raw_il_hex": "020328302300060a027b691c00046f6c2300066f1700000a1200281e00000a281800000a220000803f58220000003f5a0b036f7e230006036f882300066f0b00000a280c00000a0d1203286c00000a0c0608285f00000a07285f00000a2a",
+     "declaring_type_token": "0x020005d5"
+    },
+    {
+     "token": "0x06002330",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "GetLegSpineTangent",
+     "signature": {
+      "raw_sha256": "fe8e19f4c328550e63085e0fc6459f329b0eab79c57182680ca97c45ae45121d",
+      "return_type": "valuetype:33",
+      "parameter_types": [
+       "class:6008"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 998196,
+      "il_size": 133,
+      "il_sha256": "0fd47c5ed41dc6571eaa779aa8b856815fe60b4af948f23fa0242d2b8f89df15",
+      "instruction_count": 37
+     },
+     "raw_il_hex": "036f882300066f0b00000a027b691c00046f6c2300066f0b00000a280c00000a0a027b691c00047bb51c0004391f000000027b691c00046f6c2300066f1a00000a281100000a28a401000a391900000012007b1c00000a220000000012007b1d00000a731b00000a2a027b691c00046f6c2300066f1a00000a0b12011200283411000a062a",
+     "declaring_type_token": "0x020005d5"
+    },
+    {
+     "token": "0x0600233e",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1000008,
+      "il_size": 53,
+      "il_sha256": "c7f67545588467be608d3d41b261677553173a118b7ba67635e1549d09eee002",
+      "instruction_count": 17
+     },
+     "raw_il_hex": "0222000000407d771c00040222000040407d781c000402168dd80500027d791c000402188d050000017d7a1c000402282c2300062a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x0600233f",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "IsReadyToInitiate",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1000076,
+      "il_size": 44,
+      "il_sha256": "479a4cd326c95880bd1982dd22a2f0b8dce2553108f102ad8aa2523cd5e6f9f9",
+      "instruction_count": 16
+     },
+     "raw_il_hex": "027b761c000414284b00000a3902000000162a027b761c00047be21c00046f502400063a02000000162a172a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002340",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "Update",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1000124,
+      "il_size": 82,
+      "il_sha256": "27a0235e4faebef276618c3b11f801e1359df2517b12ee691500d948cdfe17b8",
+      "instruction_count": 26
+     },
+     "raw_il_hex": "02177d7c1c000402027b681c00042200000000220000803f282701000a7d681c0004027b681c0004220000000042010000002a027b6c1c000439010000002a02283f2300063a010000002a0228412300062a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002341",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "Initiate",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1000220,
+      "il_size": 207,
+      "il_sha256": "886febca7a46b6552f208067817420908fc24bc99f4cf059d48d4769cf3ee98b",
+      "instruction_count": 58
+     },
+     "raw_il_hex": "027b761c00047be21c00046fba240006220000803f7d511d0004027b761c00047be21c00046fbb240006220000803f7d511d000402188d050000017d7a1c0004027b7a1c000416027b761c00047be21c00046fb22400067b1e1d0004a2027b7a1c000417027b761c00047be21c00046fb32400067b1e1d0004a2027b761c00047be21c0004257b6e1d000402fe06422300067343a4000628a101000a74de1500027d6e1d0004027b691c0004027b761c00047be11c00047bce200004027b7a1c00046f7323000602177d6c1c00042a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002342",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "OnSolverUpdate",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1000440,
+      "il_size": 492,
+      "il_sha256": "8b94e448def3dd0a8c697deda9d29475c192b81970a48e89e04ceaa6a33449bb",
+      "instruction_count": 152
+     },
+     "raw_il_hex": "027b7c1c00043a010000002a02167d7c1c00040228c101000a3a010000002a027b681c0004220000000042010000002a027b6a1c0004390b000000027b6a1c00046f40a40006027b691c00046f74230006027b761c00047be11c00047bcf200004256f0b00000a027b691c00046f682300066f9a230006027b681c0004285f00000a280d00000a6f1000000a02027b761c00047be21c00046fb2240006027b691c00046f66230006169a284323000602027b761c00047be21c00046fb3240006027b691c00046f66230006179a2843230006027b771c000422000000003bf300000002027b781c00042200000000027b781c0004282701000a7d781c000402282d230006027b681c0004285f00000a0a02027b7b1c000406027b771c0004285f00000a280e00000a027b781c00045a280f00000a7d7b1c0004027b761c00047be11c00047bce2000046f1a00000a027c7b1c0004286c00000a285f00000a0b160c3861000000027b761c00047be21c0004027b791c0004089a7b7d1c00046fc1240006257b241d0004027b7b1c0004027b791c0004089a7b7e1c0004285f00000a07027b791c0004089a7b7f1c0004285f00000a280d00000a280d00000a7d241d00040817580c08027b791c00048e693f91ffffff027b6b1c0004390b000000027b6b1c00046f40a400062a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002343",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "SetLegIK",
+     "signature": {
+      "raw_sha256": "afa97f74fd386193181b72a2751a7c0f50c9c349b5caa5e7c527330c3ba4cc5d",
+      "return_type": "void",
+      "parameter_types": [
+       "class:6072",
+       "class:6008"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1000944,
+      "il_size": 100,
+      "il_sha256": "9dcb20bb247eccd66fedafc002bbc5f3e705d242149c1de66dfbbba8c5ce714a",
+      "instruction_count": 28
+     },
+     "raw_il_hex": "03257b241d0004046f7e230006037b1e1d00046f0b00000a280c00000a027b681c0004285f00000a280d00000a7d241d0004037b1e1d000428cd01000a046f80230006027b681c000428b501000a037b1e1d00046f1400000a285200000a6f1600000a2a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002344",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "OnDestroy",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1001056,
+      "il_size": 73,
+      "il_sha256": "e7ab0a2af770b48f968ed2b2d0e0084b101eaf6c4aa3d7eef91a062cbfce643c",
+      "instruction_count": 20
+     },
+     "raw_il_hex": "027b6c1c0004393d000000027b761c000414283000000a392c000000027b761c00047be21c0004257b6e1d000402fe06422300067343a4000628a201000a74de1500027d6e1d00042a",
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002345",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "OpenUserManual",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1001144,
+      "il_size": 11,
+      "il_sha256": "d377d36cd831979dce9b942070512180a362e5c03172856e843fd74796fda8c4",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "72d2df0170284111000a2a",
+     "strings": {
+      "0x7001dfd2": "http://www.root-motion.com/finalikdox/html/page11.html"
+     },
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002346",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "OpenScriptReference",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1001156,
+      "il_size": 11,
+      "il_sha256": "92628090e2cbea020e762bee8587178355da8549f8ffa2095d1f0107c699e93b",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "720fe10170284111000a2a",
+     "strings": {
+      "0x7001e10f": "http://www.root-motion.com/finalikdox/html/class_root_motion_1_1_final_i_k_1_1_grounder_f_b_b_i_k.html"
+     },
+     "declaring_type_token": "0x020005d7"
+    },
+    {
+     "token": "0x06002347",
+     "declaring_type": "SpineEffector",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1001168,
+      "il_size": 18,
+      "il_sha256": "2cab7bf77dab6867f55a43a4bddaf95aa5dc46c1738eabea313c7872cf21c9f8",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "02220000803f7d7e1c00040228b600000a2a",
+     "declaring_type_token": "0x020005d8"
+    },
+    {
+     "token": "0x06002365",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1006316,
+      "il_size": 124,
+      "il_sha256": "59441104b7b046cdb0a84b6a620e5c70624ee3844487eb5a4c7647061e07f2de",
+      "instruction_count": 36
+     },
+     "raw_il_hex": "02220000003f7dad1c00040222000020407daf1c000402229a99193e7db01c00040222cdcc4c3d7db11c000402220000803f7db21c000402220000e0407db31c00040222000034427db41c000402220000a0407db61c000402220000803f7db81c00040222cdcccc3d7dba1c000402187dbb1c00040228b600000a2a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002366",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_legs",
+     "signature": {
+      "raw_sha256": "72ab18e247f90876e28615b0114ef96633c6fe1511a4f6bfbf2e5a818e981fe1",
+      "return_type": "class:6008[]",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006452,
+      "il_size": 7,
+      "il_sha256": "a4f502b88e4964b024213da108fd8e0d6a8c5afe302d1f3be7d19afe62c12ef2",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bbd1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002367",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "set_legs",
+     "signature": {
+      "raw_sha256": "8b146399fd980c145b0bf6a35064ea942621f4721039bfdfe668573dea0a6e72",
+      "return_type": "void",
+      "parameter_types": [
+       "class:6008[]"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006460,
+      "il_size": 8,
+      "il_sha256": "cd9ec8a04b20da31baa37a3c329554e0c5d94e428e38ad53e6c47e58faa009b4",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dbd1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002368",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_pelvis",
+     "signature": {
+      "raw_sha256": "3a5eb4955f89c4d4a88880428a07ef945724d3bdde19216d8657bdf526dac567",
+      "return_type": "class:6012",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006472,
+      "il_size": 7,
+      "il_sha256": "8f93afff644f5175da30b77f5fb270b57a796dcab2856c57642ca0ccda1a73fd",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bbe1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002369",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "set_pelvis",
+     "signature": {
+      "raw_sha256": "5dc0522e56d6ec84c31f2f68af1fa9bc12c9fa9739c010dd34d3fabf1332c762",
+      "return_type": "void",
+      "parameter_types": [
+       "class:6012"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006480,
+      "il_size": 8,
+      "il_sha256": "6c1a3dc2bc441bdbb5d627bd70f13f73d5a1cd73bbd3ba53437c7e67c79afce1",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dbe1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600236a",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_isGrounded",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006492,
+      "il_size": 7,
+      "il_sha256": "2d30d57dded6096f9cd936479167f11c6ce27b43cd00f13cb1e3bfeda5116729",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bbf1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600236b",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "set_isGrounded",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006500,
+      "il_size": 8,
+      "il_sha256": "e00b113f1f8ad074d0d9e95de00847b75d94448467e5077c191b031aa9dc2dbc",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dbf1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600236c",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_root",
+     "signature": {
+      "raw_sha256": "f00da200b7e17c0ea0c493090d2aab9d420208b1537973854392b85c7c4801d3",
+      "return_type": "class:21",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006512,
+      "il_size": 7,
+      "il_sha256": "b9fcb86f3878f4a70df1db7874cfce2f2b769bebcce8e8d96073b27b3bdf6111",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bc01c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600236d",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "set_root",
+     "signature": {
+      "raw_sha256": "aea4f0925444e5bc40e7bf81ea5492e68d1a1f65bbd96bf1fda1a86233a8dd4c",
+      "return_type": "void",
+      "parameter_types": [
+       "class:21"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006520,
+      "il_size": 8,
+      "il_sha256": "e04bdedeeed26455b628ea01e22610e8d27558df3e9e53bcb059d543da3d2881",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dc01c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600236e",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_rootHit",
+     "signature": {
+      "raw_sha256": "79d3ffd4aafb0b908a12e4abe953603a1ccd17f98da8b1a3316c9865b1bbf623",
+      "return_type": "valuetype:173",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006532,
+      "il_size": 7,
+      "il_sha256": "b28698f3b98047132f30b267a68402d1fbba9b89c0d664e058bc9307d0e7ac7d",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bc11c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600236f",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "set_rootHit",
+     "signature": {
+      "raw_sha256": "9975eb702c372b008b07f64088ae086a81c39d75db0222bd3980d650f57f4687",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:173"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1006540,
+      "il_size": 8,
+      "il_sha256": "f34838ba78e048205a1d7485877eebb61508736382e5fb65e8cbbb308b0cfd48",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dc11c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002370",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_rootGrounded",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1006552,
+      "il_size": 29,
+      "il_sha256": "4b037090ca9b8f5af186c7bae8fb01ff59de360aa58247539e631d8630f12169",
+      "instruction_count": 11
+     },
+     "raw_il_hex": "02286e2300060a120028c401000a027bad1c000422000000405afe042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002371",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "GetRootHit",
+     "signature": {
+      "raw_sha256": "0e451b0d162372cc330a6b155f908051a9e62b10fd15c5b1654d6d6718a519d8",
+      "return_type": "valuetype:173",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1006596,
+      "il_size": 255,
+      "il_sha256": "5a93897e1e2b6362a974911190149e32b9cb760a5baa1c21e95b6854522818b6",
+      "instruction_count": 85
+     },
+     "raw_il_hex": "1200fe152b0000010228772300060b120002286c2300066f0b00000a07027bad1c0004285f00000a2200002041285f00000a280c00000a28b000000a03220000803f580c1200027bad1c0004085a281c04000a027bad1c000422000000004202000000062a027bbb1c0004183b4300000002286c2300066f0b00000a07027bad1c0004285f00000a280d00000a0728b603000a1200027bad1c0004085a027bac1c000428a700000a17284211000a26384900000002286c2300066f0b00000a07027bad1c0004285f00000a280d00000a027bba1c000402287723000628b603000a1200027bad1c0004085a027bac1c000428a700000a17284311000a26062a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002372",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "IsValid",
+     "signature": {
+      "raw_sha256": "d27920bc8a721f4bf8baa48863c2260a55bf30ad3c92a8a6bda5967e8ee08d49",
+      "return_type": "bool",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1006864,
+      "il_size": 130,
+      "il_sha256": "32875530f5180ed5037244ecd45a5e5591ecf120103e40785e8f87f5432c9568",
+      "instruction_count": 46
+     },
+     "raw_il_hex": "02286c23000614284b00000a391300000003390b00000002724de601702876230006162a0228662300063a1300000003390b0000000272b1e601702876230006162a0228682300063a1300000003390b000000027215e701702876230006162a0228662300068e693a1300000003390b00000002727de701702876230006162a172a",
+     "strings": {
+      "0x7001e64d": "Root transform is null. Can't initiate Grounding.",
+      "0x7001e6b1": "Grounding legs is null. Can't initiate Grounding.",
+      "0x7001e715": "Grounding pelvis is null. Can't initiate Grounding.",
+      "0x7001e77d": "Grounding has 0 legs. Can't initiate Grounding."
+     },
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002373",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "Initiate",
+     "signature": {
+      "raw_sha256": "d1ca8bcc9a0dc84af7e3033c6f748116f4c8565c0a2010a2470ff9decd332bb5",
+      "return_type": "void",
+      "parameter_types": [
+       "class:21",
+       "class:21[]"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1007008,
+      "il_size": 232,
+      "il_sha256": "f164531a2a7719308328e6b6b38bbc23f21097c7464792e8751b2876b9488b4c",
+      "instruction_count": 98
+     },
+     "raw_il_hex": "0203286d23000602167dbc1c0004021202fe152b00000108286f2300060228662300063a0e00000002048e698dde05000228672300060228662300068e69048e693b0e00000002048e698dde0500022867230006160a381e000000022866230006069a3a0d00000002286623000606737b230006a20617580a06048e693fd9ffffff0228682300063a0b0000000273992300062869230006021728722300063a010000002a282902000a3938000000160b3815000000022866230006079a0204079a6f8c2300060717580b07048e693fe2ffffff022868230006026f9e23000602177dbc1c00042a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002374",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "Update",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1007252,
+      "il_size": 403,
+      "il_sha256": "d740e01e39f395c785262cbca80ef71e09ecd3d3b513f46867287c2b7d29ae1f",
+      "instruction_count": 134
+     },
+     "raw_il_hex": "027bbc1c00043a010000002a027bac1c000428a700000a3a0b0000000272dde70170287623000602027bad1c00042200000000027bad1c0004282701000a7dad1c000402027bb01c00042217b7d138027bad1c0004282701000a7db01c000402027bb71c00042200000000220000803f282701000a7db71c000402027bba1c00042217b7d138027bba1c0004282701000a7dba1c000402027bb41c00042200000000220000b442282701000a7db41c000402027bb11c00042200000000027bb11c0004282701000a7db11c000402027baf1c00042200000000027baf1c0004282701000a7daf1c0004020222000020412871230006286f23000622000080ff0a220000807f0b0216286b2300060228662300060d16130438490000000911049a0c086f8e230006086f8a230006064307000000086f8a2300060a086f8a230006074107000000086f8a2300060b086f7c23000639070000000217286b2300061104175813041104098e693fadffffff0228682300060665027bb81c00045a0765027bb91c00045a02286a2300066fa02300062a",
+     "strings": {
+      "0x7001e7dd": "Grounding layers are set to nothing. Please add a ground layer."
+     },
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002375",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "GetLegsPlaneNormal",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1007668,
+      "il_size": 117,
+      "il_sha256": "a0cbf21b858aca89643ac5322e550769c85371911b26bf2152e838e6ccce26c1",
+      "instruction_count": 50
+     },
+     "raw_il_hex": "027bbc1c00043a06000000281100000a2a0228772300060a060b160c3844000000022866230006089a6f7e23000602286c2300066f0b00000a280c00000a0d06130409130512041205283411000a11050928a600000a1306110607288000000a0b0817580c080228662300068e693faeffffff072a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002376",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "LogWarning",
+     "signature": {
+      "raw_sha256": "c65dc7d303e94729245de0fa4db4b80ac687af6d0bb38c5c884bc9c11f01e005",
+      "return_type": "void",
+      "parameter_types": [
+       "string"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1007800,
+      "il_size": 14,
+      "il_sha256": "ad7fba1287f9bdae68d69db5108f423974211be5a24ff235d89babffd3f141fa",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "0302286c23000616289b2700062a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002377",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_up",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1007816,
+      "il_size": 33,
+      "il_sha256": "5cf51f894c4445e1893238f6935c79c80d22e439a6774a0ee50eee2872c3a0b6",
+      "instruction_count": 9
+     },
+     "raw_il_hex": "02287a230006391000000002286c2300066f1a00000a3805000000281100000a2a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002378",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "GetVerticalOffset",
+     "signature": {
+      "raw_sha256": "033db5502dc49fa8a85e3299fceb5838807d7adb3cbc782c7d61eeb6d1e4f50a",
+      "return_type": "r4",
+      "parameter_types": [
+       "valuetype:33",
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1007864,
+      "il_size": 64,
+      "il_sha256": "ca3042b1b7256ddc32d367ce1ce26ffe8fefbf6d732b3dcec6dcbed1c7edab28",
+      "instruction_count": 21
+     },
+     "raw_il_hex": "02287a230006392500000002286c2300066f1400000a285b00000a0304280c00000a288000000a0a12007b1900000a2a0f017b1900000a0f027b1900000a592a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x06002379",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "Flatten",
+     "signature": {
+      "raw_sha256": "95d3c9ff81ceea53b217cb6b1cd391910583e7e0fc70a03f1aaa32dc5d36aad1",
+      "return_type": "valuetype:33",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1007940,
+      "il_size": 56,
+      "il_sha256": "b00ee92a17739030b83f4c107c61e3870df7cc6b7017e9d95a853c05cf0d8208",
+      "instruction_count": 21
+     },
+     "raw_il_hex": "02287a230006391f000000030a02286c2300066f1a00000a0b12011200283411000a0306289508000a2a0f0122000000007d1900000a032a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600237a",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "get_useRootRotation",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1008008,
+      "il_size": 43,
+      "il_sha256": "2375f8ad2d435f7a1c3d02945d8eb15e8812b1969eabdab3e59e28481681f15e",
+      "instruction_count": 15
+     },
+     "raw_il_hex": "027bb51c00043a02000000162a02286c2300066f1a00000a281100000a28a401000a3902000000162a172a",
+     "declaring_type_token": "0x020005dc"
+    },
+    {
+     "token": "0x0600237b",
+     "declaring_type": "Leg",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008064,
+      "il_size": 18,
+      "il_sha256": "51e5bce9170640fc75895dc0fd7fa7d4be74d7abff9bad422bebc24399792c94",
+      "instruction_count": 6
+     },
+     "raw_il_hex": "02281100000a7dcd1c00040228b600000a2a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600237c",
+     "declaring_type": "Leg",
+     "name": "get_isGrounded",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008084,
+      "il_size": 7,
+      "il_sha256": "f0bb26c04b7bcad9e0db257091b82bf7672c9e220c2fac9db6250196949a1670",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bce1c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600237d",
+     "declaring_type": "Leg",
+     "name": "set_isGrounded",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008092,
+      "il_size": 8,
+      "il_sha256": "a9ce089d93f99eb271027d6e1c9f298d0d8346d61c08b3db4610eed7cc0626e8",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dce1c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600237e",
+     "declaring_type": "Leg",
+     "name": "get_IKPosition",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008104,
+      "il_size": 7,
+      "il_sha256": "c60c44ff1f71f5d5657e3e07d28536d6efb18cbad2753399b069726a66552fb8",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bcf1c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600237f",
+     "declaring_type": "Leg",
+     "name": "set_IKPosition",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008112,
+      "il_size": 8,
+      "il_sha256": "c275157e561ac6774489ccee3c27a9b807a852bca871600b02ba0f7db546a95f",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dcf1c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002380",
+     "declaring_type": "Leg",
+     "name": "get_rotationOffset",
+     "signature": {
+      "raw_sha256": "51d1fda934babc4c426b9aa30f1389296ff636005d7b9585709d4ca69676bfd6",
+      "return_type": "valuetype:41",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008124,
+      "il_size": 7,
+      "il_sha256": "f0f8b2b2d76f02e37a0e915072615ca41dcf9ff3b8d51a17bfeb39be386b2ccc",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd01c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002381",
+     "declaring_type": "Leg",
+     "name": "set_rotationOffset",
+     "signature": {
+      "raw_sha256": "b5a925f0b2d626d6422956782fc47707ee610827eadd30769afd3872bc98c60b",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:41"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008132,
+      "il_size": 8,
+      "il_sha256": "9d024cbf36214dd5fcf9ef1db6d21a541b1f034f4ee9ceae2585939a246f852c",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd01c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002382",
+     "declaring_type": "Leg",
+     "name": "get_initiated",
+     "signature": {
+      "raw_sha256": "59a9a8765c535212b9ad71c5c8e1e24ffadbd3331fd04b3bbe1b121ecf6004cc",
+      "return_type": "bool",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008144,
+      "il_size": 7,
+      "il_sha256": "a9f9c299c48f865bc658da66ea71b806872c94dcf583ab47d499335fb77ab069",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd11c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002383",
+     "declaring_type": "Leg",
+     "name": "set_initiated",
+     "signature": {
+      "raw_sha256": "7366e2ddae008ee5e5ba63f1c2504e9a452ccd8cc0f40fdd3d8d03430bae9e33",
+      "return_type": "void",
+      "parameter_types": [
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008152,
+      "il_size": 8,
+      "il_sha256": "4ac9051e0fc5b6ec612967330861b9fcd305808ec6a0a97dc9ac96b187e33498",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd11c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002384",
+     "declaring_type": "Leg",
+     "name": "get_heightFromGround",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008164,
+      "il_size": 7,
+      "il_sha256": "644f4ce58e7bb684dda42725fbf7b3164e6ce6fd1e3bf72b4ed575cbeb5889ea",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd21c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002385",
+     "declaring_type": "Leg",
+     "name": "set_heightFromGround",
+     "signature": {
+      "raw_sha256": "7d50df739f41b3d5cdf6efc05539b18b1ea19e25f1aedd96a433ddc45068958f",
+      "return_type": "void",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008172,
+      "il_size": 8,
+      "il_sha256": "6c8437770f1432e84f98d629dadb8e951dace8b0e8a674c6c233bc51a5a75be5",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd21c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002386",
+     "declaring_type": "Leg",
+     "name": "get_velocity",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008184,
+      "il_size": 7,
+      "il_sha256": "857c7b5dbb3df6cc77f2cf6df77af50964736b289349c58e03241b906106aa5e",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd31c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002387",
+     "declaring_type": "Leg",
+     "name": "set_velocity",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008192,
+      "il_size": 8,
+      "il_sha256": "318ce31803843285b8c351a469767d03201a4602a9d6740ef8d9a48395762fd1",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd31c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002388",
+     "declaring_type": "Leg",
+     "name": "get_transform",
+     "signature": {
+      "raw_sha256": "f00da200b7e17c0ea0c493090d2aab9d420208b1537973854392b85c7c4801d3",
+      "return_type": "class:21",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008204,
+      "il_size": 7,
+      "il_sha256": "831e8e327d0209e265a9e1daa182d13599ebf7b01027ae3a87d0fbaddfffbc95",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd41c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002389",
+     "declaring_type": "Leg",
+     "name": "set_transform",
+     "signature": {
+      "raw_sha256": "aea4f0925444e5bc40e7bf81ea5492e68d1a1f65bbd96bf1fda1a86233a8dd4c",
+      "return_type": "void",
+      "parameter_types": [
+       "class:21"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008212,
+      "il_size": 8,
+      "il_sha256": "b2d8586ba27d5cfa82892f13e3fc37c3199b9f8ab4b0ec7825e4a67c192f9dee",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd41c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600238a",
+     "declaring_type": "Leg",
+     "name": "get_IKOffset",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008224,
+      "il_size": 7,
+      "il_sha256": "6ec5aae07f57749c5b27558b774c820cb6ce4ab53e49a5ef350f40bb7686ca46",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bd51c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600238b",
+     "declaring_type": "Leg",
+     "name": "set_IKOffset",
+     "signature": {
+      "raw_sha256": "7d50df739f41b3d5cdf6efc05539b18b1ea19e25f1aedd96a433ddc45068958f",
+      "return_type": "void",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1008232,
+      "il_size": 8,
+      "il_sha256": "1195df8ac109c898e51a46a98c7595a5f9dad3e7da3a9bb699c5d0f19444015b",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037dd51c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600238c",
+     "declaring_type": "Leg",
+     "name": "Initiate",
+     "signature": {
+      "raw_sha256": "9568155e320f01668648ab4124876fd6ab7be6df071f874359a1b7bf6180a2a2",
+      "return_type": "void",
+      "parameter_types": [
+       "class:6000",
+       "class:21"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1008244,
+      "il_size": 46,
+      "il_sha256": "a7f5454428402c4bfff0529c2d3ddb3cd03ff4e42e496a1ee03bc88ca6bfc183",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "0216288323000602037dc61c00040204288923000602281100000a7dcd1c00040217288323000602288d2300062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600238d",
+     "declaring_type": "Leg",
+     "name": "OnEnable",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1008304,
+      "il_size": 41,
+      "il_sha256": "ea8a5be55bcbb5f701fcb305c8bdfc19b99a5f918793c77000aebf981476c660",
+      "instruction_count": 13
+     },
+     "raw_il_hex": "0228822300063a010000002a020228882300066f0b00000a7dc91c000402280e00000a7dc71c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600238e",
+     "declaring_type": "Leg",
+     "name": "Process",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1008360,
+      "il_size": 958,
+      "il_sha256": "636a1d8ded116c338c19b72ffe956ae67e0060751eff7a412b15717071d0964a",
+      "instruction_count": 278
+     },
+     "raw_il_hex": "0228822300063a010000002a027bc61c00047bad1c0004220000000042010000002a02288e01000a027bc71c0004597dc81c000402288e01000a7dc71c0004027bc81c0004220000000040010000002a02027bc61c00046f772300067dcd1c000402220000807f2885230006020228882300066f0b00000a027bc91c0004280c00000a027bc81c000428a701000a288723000602027bc61c00040228862300066f792300062887230006020228882300066f0b00000a7dc91c0004022886230006027bc61c00047bb11c0004285f00000a0a027bc61c00047bb01c00042200000000420c000000027bc61c0004167dbb1c0004027bc61c00047bbb1c0004130a110a4503000000050000002600000016010000384f010000020628912300060b021201289f00000a120128a000000a2893230006382e0100000202282200000a28912300067dcc1c000402027bc61c00046f6c2300066f1700000a027bc61c00047bb01c0004285f00000a06280d00000a28912300060c02027bc61c00046f6c2300066fcd06000a027bc61c00047bb01c0004285f00000a220000003f285f00000a28912300060d120228a000000a027ccc1c000428a000000a280c00000a120328a000000a027ccc1c000428a000000a280c00000a285000000a130b120b281e00000a13041104027bcd1c0004281800000a22000000004109000000110428b603000a1304021104027ccc1c000428a000000a027ccc1c000428a000000a2894230006383e0000000202282200000a28912300067dcc1c0004020628902300061305021205289f00000a120528a000000a027ccc1c000428a000000a2894230006380000000002022884230006027bc61c00047bad1c0004fe04287d23000602288f2300061306027bc61c00046f702300063a07000000220000000013060202288a2300061106027bc61c00047baf1c0004027bc61c00047baf1c00042876270006288b2300060202288a2300061106027bc81c0004027bc61c00047baf1c00045a287b00000a288b230006027bc61c00040228882300066f0b00000a027bc61c00046f6c2300066f0b00000a6f782300061307027bc61c00047bad1c00041107592200000000027bc61c00047bad1c0004282701000a13080202288a23000611086502288a230006282701000a288b230006022896230006020228882300066f0b00000a027bcd1c000402288a230006285f00000a280c00000a287f230006027bc61c00047bb21c00041309021109220000803f440b000000027bcb1c0004381200000028cd01000a027bcb1c0004110928b501000a28812300062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x0600238f",
+     "declaring_type": "Leg",
+     "name": "get_stepHeightFromGround",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1009332,
+      "il_size": 35,
+      "il_sha256": "10e26c23e0f2a9b791c09ff812a5ada55442751ccd17f00601460a1b17449cfc",
+      "instruction_count": 11
+     },
+     "raw_il_hex": "022884230006027bc61c00047bad1c000465027bc61c00047bad1c0004282701000a2a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002390",
+     "declaring_type": "Leg",
+     "name": "GetCapsuleHit",
+     "signature": {
+      "raw_sha256": "ddb85fe01c3edafc0265560cb1dd0e804582d034a64ee953fc7a0985d5c615fd",
+      "return_type": "valuetype:173",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1009380,
+      "il_size": 220,
+      "il_sha256": "2876d4966da52b0e77bdc2fb06f5a8b70e4af03765868f92ba4355b21950b623",
+      "instruction_count": 67
+     },
+     "raw_il_hex": "1200fe152b0000010228882300066f0b00000a027bc61c00046f6c2300066f1700000a027bc61c00047bb01c0004285f00000a280d00000a0b120007027bcd1c0004027bc61c00047bad1c0004285f00000a2200000040285f00000a280c00000a28b000000a1200027bcd1c000428af00000a07027bc61c00047bad1c0004027bcd1c0004281200000a280d00000a0c0803280d00000a0d0809027bc61c00047bb01c0004027bcd1c000428b603000a1200027bc61c00047bad1c000422000040405a027bc61c00047bac1c000428a700000a17284411000a26062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002391",
+     "declaring_type": "Leg",
+     "name": "GetRaycastHit",
+     "signature": {
+      "raw_sha256": "ddb85fe01c3edafc0265560cb1dd0e804582d034a64ee953fc7a0985d5c615fd",
+      "return_type": "valuetype:173",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1009612,
+      "il_size": 190,
+      "il_sha256": "fdc946206034d4f1261e89609530952957243c730b7624560c3b4e3c8ea39ea8",
+      "instruction_count": 57
+     },
+     "raw_il_hex": "1200fe152b0000010228882300066f0b00000a03280d00000a0b120007027bcd1c0004027bc61c00047bad1c0004285f00000a2200000040285f00000a280c00000a28b000000a1200027bcd1c000428af00000a027bc61c00047bad1c000422000000004202000000062a07027bc61c00047bad1c0004027bcd1c0004281200000a280d00000a027bcd1c000428b603000a1200027bc61c00047bad1c000422000040405a027bc61c00047bac1c000428a700000a17284211000a26062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002392",
+     "declaring_type": "Leg",
+     "name": "RotateNormal",
+     "signature": {
+      "raw_sha256": "95d3c9ff81ceea53b217cb6b1cd391910583e7e0fc70a03f1aaa32dc5d36aad1",
+      "return_type": "valuetype:33",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1009816,
+      "il_size": 55,
+      "il_sha256": "a9a7e901e0ac5d078512a4cd9effecd18376fcc10743d0ed9dfb380f1de81ddf",
+      "instruction_count": 19
+     },
+     "raw_il_hex": "027bc61c00047bbb1c0004184002000000032a027bcd1c000403027bc61c00047bb41c00042235fa8e3c5a027bc81c000428b200000a2a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002393",
+     "declaring_type": "Leg",
+     "name": "SetFootToPoint",
+     "signature": {
+      "raw_sha256": "ba93a02bc7cf9ec14882380fb6dcbe7500756ae9db3db3e17fb534f92dc8c9ea",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33",
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1009884,
+      "il_size": 38,
+      "il_sha256": "9b7a5638a168c76c86c0fcdfa83c1505c79fcf9e4a0a1e4585bcb10dbe9c89c1",
+      "instruction_count": 14
+     },
+     "raw_il_hex": "02027bcd1c00040203289223000628a600000a7dca1c0004020204289523000628852300062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002394",
+     "declaring_type": "Leg",
+     "name": "SetFootToPlane",
+     "signature": {
+      "raw_sha256": "0c3861af54b0277bf2769c0280d5abb9063539788d9cba0fcada6e78c62a84c1",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33",
+       "valuetype:33",
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1009924,
+      "il_size": 129,
+      "il_sha256": "6e35e46ec266e0521d81862a3021740a98186216455e77bd8a047645b767b986",
+      "instruction_count": 44
+     },
+     "raw_il_hex": "02032892230006100102027bcd1c00040328a600000a7dca1c00040228882300066f0b00000a027bcd1c0004027bc61c00047bad1c0004285f00000a280d00000a027bcd1c000428b603000a030428992700060a02020628952300062885230006020528952300060b0202288423000622000080ff07282701000a28852300062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002395",
+     "declaring_type": "Leg",
+     "name": "GetHeightFromGround",
+     "signature": {
+      "raw_sha256": "c3d10189e9e3b8169b00350c55987b4852d9a72ee9d12d4846a22d5f175e55f6",
+      "return_type": "r4",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1010068,
+      "il_size": 31,
+      "il_sha256": "3185cebed66292d60f01125a9de71b24d0b8b23a2a9a20e85220f34813806d33",
+      "instruction_count": 11
+     },
+     "raw_il_hex": "027bc61c00040228882300066f0b00000a036f78230006022898230006592a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002396",
+     "declaring_type": "Leg",
+     "name": "RotateFoot",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1010112,
+      "il_size": 44,
+      "il_sha256": "6f6af5937fed05495b928a86256b394771fb7f8a6aaf9c799c10cd2647c0f906",
+      "instruction_count": 16
+     },
+     "raw_il_hex": "0228972300060a02027bcb1c000406027bc81c0004027bc61c00047bb31c00045a28b501000a7dcb1c00042a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002397",
+     "declaring_type": "Leg",
+     "name": "GetRotationOffsetTarget",
+     "signature": {
+      "raw_sha256": "51d1fda934babc4c426b9aa30f1389296ff636005d7b9585709d4ca69676bfd6",
+      "return_type": "valuetype:41",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1010168,
+      "il_size": 83,
+      "il_sha256": "ecd7d87d377ac047d1c8747451b3894bf3646f3f03a940e89ac5b937832989bf",
+      "instruction_count": 23
+     },
+     "raw_il_hex": "027bc61c00047bb41c00042200000000420600000028cd01000a2a027bc61c00047bb41c000422000034434407000000027bca1c00042a28cd01000a027bca1c0004027bc61c00047bb41c000428c708000a2a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002398",
+     "declaring_type": "Leg",
+     "name": "get_rootYOffset",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1010264,
+      "il_size": 66,
+      "il_sha256": "923c584531737df8748bb26ad50c1d3b86ce4ecb41685138b9ad056967028dcb",
+      "instruction_count": 18
+     },
+     "raw_il_hex": "027bc61c00040228882300066f0b00000a027bc61c00046f6c2300066f0b00000a027bcd1c0004027bc61c00047bae1c0004285f00000a280c00000a6f782300062a",
+     "declaring_type_token": "0x020005de"
+    },
+    {
+     "token": "0x06002399",
+     "declaring_type": "Pelvis",
+     "name": ".ctor",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1010344,
+      "il_size": 7,
+      "il_sha256": "0b6e4ceed5532de49a45edcfe606196922203abae2d9523e8f69a0b50647d5fa",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "0228b600000a2a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x0600239a",
+     "declaring_type": "Pelvis",
+     "name": "get_IKOffset",
+     "signature": {
+      "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+      "return_type": "valuetype:33",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1010352,
+      "il_size": 7,
+      "il_sha256": "0db117ec89e37ba3eac5a503d8ee204ff0d0ae9dee4351b5746413e5fdd96942",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bdb1c00042a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x0600239b",
+     "declaring_type": "Pelvis",
+     "name": "set_IKOffset",
+     "signature": {
+      "raw_sha256": "ebee223fb5512cd9a304641be12c0caa4b5dc538b37b086b2e8b08a775ef8582",
+      "return_type": "void",
+      "parameter_types": [
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1010360,
+      "il_size": 8,
+      "il_sha256": "26571cb65d4ecaba98cac566ce155f861160b6570b6964f4f5b3b8dd9de97450",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037ddb1c00042a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x0600239c",
+     "declaring_type": "Pelvis",
+     "name": "get_heightOffset",
+     "signature": {
+      "raw_sha256": "eca16234748b0f32ae79679381f1be98ef349669e92eeb6deb761f429628a293",
+      "return_type": "r4",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1010372,
+      "il_size": 7,
+      "il_sha256": "7884cc37ce1f0023070740c02edf2819f1fc3c600f4b96c325c35009a01de709",
+      "instruction_count": 3
+     },
+     "raw_il_hex": "027bdc1c00042a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x0600239d",
+     "declaring_type": "Pelvis",
+     "name": "set_heightOffset",
+     "signature": {
+      "raw_sha256": "7d50df739f41b3d5cdf6efc05539b18b1ea19e25f1aedd96a433ddc45068958f",
+      "return_type": "void",
+      "parameter_types": [
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1010380,
+      "il_size": 8,
+      "il_sha256": "29aee50a06c95dd4cb1694bc0c7b75e307c5711bc23a21dd6d4e3e200e9fc410",
+      "instruction_count": 4
+     },
+     "raw_il_hex": "02037ddc1c00042a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x0600239e",
+     "declaring_type": "Pelvis",
+     "name": "Initiate",
+     "signature": {
+      "raw_sha256": "b68a98471d0938664115789900f2da840cb27a20f0ee05674d362c85b286b2a3",
+      "return_type": "void",
+      "parameter_types": [
+       "class:6000"
+      ]
+     },
+     "body": {
+      "header_format": "tiny",
+      "file_offset": 1010392,
+      "il_size": 21,
+      "il_sha256": "a4205339b140d04bfbf70c2d57aa318b1612a548d579a42147e73504d5b2314a",
+      "instruction_count": 9
+     },
+     "raw_il_hex": "02037dd61c000402177dd91c000402289f2300062a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x0600239f",
+     "declaring_type": "Pelvis",
+     "name": "OnEnable",
+     "signature": {
+      "raw_sha256": "0c9373898d2dd1c85902837a9e979cb88484e2548a008ad2b2176cc7119d09df",
+      "return_type": "void",
+      "parameter_types": []
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1010416,
+      "il_size": 51,
+      "il_sha256": "84ea1bc9d2965a8295138f124d84f6e11b59a079da62c0de33c84ff1c0385a29",
+      "instruction_count": 15
+     },
+     "raw_il_hex": "027bd91c00043a010000002a02027bd61c00046f6c2300066f0600000a6f0b00000a7dd71c000402280e00000a7dda1c00042a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x060023a0",
+     "declaring_type": "Pelvis",
+     "name": "Process",
+     "signature": {
+      "raw_sha256": "a9021042c12983754e203cd4cf8c3d323c84e0d42ae8916165bcd8250536f1be",
+      "return_type": "void",
+      "parameter_types": [
+       "r4",
+       "r4",
+       "bool"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1010480,
+      "il_size": 281,
+      "il_sha256": "ec26dcffa3e3f6ea321aae3990a20e0ff3f41ab4c2cdb5261c2fcd7f4e37b10a",
+      "instruction_count": 89
+     },
+     "raw_il_hex": "027bd91c00043a010000002a288e01000a027bda1c0004590a02288e01000a7dda1c000406220000000042010000002a0304580b027bd61c00046f702300063a0600000022000000000b0202289c2300060706027bd61c00047bb61c00045a287b00000a289d230006027bd61c00046f6c2300066f0b00000a027bd71c0004280c00000a0c02027bd61c00046f6c2300066f0b00000a7dd71c000402027bd81c000405390a000000220000803f38050000002200000000220000803f220000204128762700067dd81c00040225289c230006027bd61c000408282200000a6f78230006027bd61c00047bb71c00045a027bd81c00045a59289d23000602027bd61c00046f7723000602289c230006285f00000a289b2300062a",
+     "declaring_type_token": "0x020005df"
+    },
+    {
+     "token": "0x06002776",
+     "declaring_type": "RootMotion.Interp",
+     "name": "LerpValue",
+     "signature": {
+      "raw_sha256": "cff15d12377a778fa961f6db4f11e3d1f1b30e968a35143491c1f8756ea51eb4",
+      "return_type": "r4",
+      "parameter_types": [
+       "r4",
+       "r4",
+       "r4",
+       "r4"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1114096,
+      "il_size": 58,
+      "il_sha256": "fb7c68d94817b0621abf3a16b6a66d9a79eb2c099626b994254fd7ff59b61b86",
+      "instruction_count": 26
+     },
+     "raw_il_hex": "02034002000000032a0203411500000002280e00000a045a5822000080ff03282701000a2a02280e00000a055a5903220000807f282701000a2a",
+     "declaring_type_token": "0x02000686"
+    },
+    {
+     "token": "0x06002799",
+     "declaring_type": "RootMotion.V3Tools",
+     "name": "LineToPlane",
+     "signature": {
+      "raw_sha256": "ab324007fe454d262c2e824696f2ae34d2630a5ef4b3cfa3b9fdbd7289c1db14",
+      "return_type": "valuetype:33",
+      "parameter_types": [
+       "valuetype:33",
+       "valuetype:33",
+       "valuetype:33",
+       "valuetype:33"
+      ]
+     },
+     "body": {
+      "header_format": "fat",
+      "file_offset": 1116300,
+      "il_size": 63,
+      "il_sha256": "3b490533feef90b99ddd10e0f9f206e0866fe22f99de10f34182005b97319461",
+      "instruction_count": 26
+     },
+     "raw_il_hex": "0502280c00000a04281800000a0a0304281800000a0b0722000000004006000000282200000a2a06075b0c020f01281e00000a08285f00000a280d00000a2a",
+     "declaring_type_token": "0x02000688"
+    }
+   ],
+   "type_names": {
+    "0x020005d5": "Grounder",
+    "0x020005d7": "GrounderFBBIK",
+    "0x020005d8": "GrounderFBBIK/SpineEffector",
+    "0x020005dc": "Grounding",
+    "0x020005de": "Grounding/Leg",
+    "0x020005df": "Grounding/Pelvis"
+   },
+   "fields": [
+    {
+     "token": "0x04001c68",
+     "declaring_type_token": "0x020005d5",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "weight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c69",
+     "declaring_type_token": "0x020005d5",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "solver",
+     "type": "class:6000",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c6a",
+     "declaring_type_token": "0x020005d5",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "OnPreGrounder",
+     "type": "class:22388",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c6b",
+     "declaring_type_token": "0x020005d5",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "OnPostGrounder",
+     "type": "class:22388",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c6c",
+     "declaring_type_token": "0x020005d5",
+     "declaring_type": "RootMotion.FinalIK.Grounder",
+     "name": "initiated",
+     "type": "bool",
+     "flags": 4
+    },
+    {
+     "token": "0x04001c76",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "ik",
+     "type": "class:6032",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c77",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "spineBend",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c78",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "spineSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c79",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "spine",
+     "type": "class:5984[]",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c7a",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "feet",
+     "type": "class:21[]",
+     "flags": 1
+    },
+    {
+     "token": "0x04001c7b",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "spineOffset",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001c7c",
+     "declaring_type_token": "0x020005d7",
+     "declaring_type": "RootMotion.FinalIK.GrounderFBBIK",
+     "name": "firstSolve",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x04001c7d",
+     "declaring_type_token": "0x020005d8",
+     "declaring_type": "SpineEffector",
+     "name": "effectorType",
+     "type": "valuetype:6136",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c7e",
+     "declaring_type_token": "0x020005d8",
+     "declaring_type": "SpineEffector",
+     "name": "horizontalWeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001c7f",
+     "declaring_type_token": "0x020005d8",
+     "declaring_type": "SpineEffector",
+     "name": "verticalWeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cac",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "layers",
+     "type": "valuetype:177",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cad",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "maxStep",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cae",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "heightOffset",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001caf",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "footSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb0",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "footRadius",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb1",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "prediction",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb2",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "footRotationWeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb3",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "footRotationSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb4",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "maxFootRotationAngle",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb5",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "rotateSolver",
+     "type": "bool",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb6",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "pelvisSpeed",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb7",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "pelvisDamper",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb8",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "lowerPelvisWeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cb9",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "liftPelvisWeight",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cba",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "rootSphereCastRadius",
+     "type": "r4",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cbb",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "quality",
+     "type": "valuetype:6004",
+     "flags": 6
+    },
+    {
+     "token": "0x04001cbc",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "initiated",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cbd",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "<legs>k__BackingField",
+     "type": "class:6008[]",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cbe",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "<pelvis>k__BackingField",
+     "type": "class:6012",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cbf",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "<isGrounded>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cc0",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "<root>k__BackingField",
+     "type": "class:21",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cc1",
+     "declaring_type_token": "0x020005dc",
+     "declaring_type": "RootMotion.FinalIK.Grounding",
+     "name": "<rootHit>k__BackingField",
+     "type": "valuetype:173",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cc6",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "grounding",
+     "type": "class:6000",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cc7",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "lastTime",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cc8",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "deltaTime",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cc9",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "lastPosition",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cca",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "toHitNormal",
+     "type": "valuetype:41",
+     "flags": 1
+    },
+    {
+     "token": "0x04001ccb",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "r",
+     "type": "valuetype:41",
+     "flags": 1
+    },
+    {
+     "token": "0x04001ccc",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "heelHit",
+     "type": "valuetype:173",
+     "flags": 1
+    },
+    {
+     "token": "0x04001ccd",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "up",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cce",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<isGrounded>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x04001ccf",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<IKPosition>k__BackingField",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd0",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<rotationOffset>k__BackingField",
+     "type": "valuetype:41",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd1",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<initiated>k__BackingField",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd2",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<heightFromGround>k__BackingField",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd3",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<velocity>k__BackingField",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd4",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<transform>k__BackingField",
+     "type": "class:21",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd5",
+     "declaring_type_token": "0x020005de",
+     "declaring_type": "Leg",
+     "name": "<IKOffset>k__BackingField",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd6",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "grounding",
+     "type": "class:6000",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd7",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "lastRootPosition",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd8",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "damperF",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cd9",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "initiated",
+     "type": "bool",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cda",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "lastTime",
+     "type": "r4",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cdb",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "<IKOffset>k__BackingField",
+     "type": "valuetype:33",
+     "flags": 1
+    },
+    {
+     "token": "0x04001cdc",
+     "declaring_type_token": "0x020005df",
+     "declaring_type": "Pelvis",
+     "name": "<heightOffset>k__BackingField",
+     "type": "r4",
+     "flags": 1
+    }
+   ]
+  }
+ }
+}

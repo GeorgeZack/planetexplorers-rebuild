@@ -1,5 +1,57 @@
 # Original-game playtest and C comparison
 
+## October13 disconnected solver poses for the player clips
+
+[The pose audit](audit/PLAYER_IK_POSE.md) records animated local poses of the
+25 solver transforms, derived offline from the existing isolated-Animator bake
+captures for the 31 staged female clips (991 samples) and staged as the new
+`player-ik-pose` group. No game launch, desktop input or save occurred, and no
+existing staged group was replaced.
+
+`pe_fbbik` solves every staged sample. Baked limb segments match the prefab
+rest lengths to a micrometre. Without offsets the solve is exact on 21 clips
+and moves a bone by up to 1.9 cm on the other 10, which agrees with the
+October 12 observation that the original's idle solve moved bones by up to
+3.3 mm. The staged poses and the staged defence actor's skin palettes agree
+to 2.4 micrometres over all samples for the 20 joints they share. Nothing is
+drawn from these poses and no host calls the loader or `pe_ik_skin`.
+
+Full regression passes 272 jobs/941 Python tests with 94 optional skips
+(`ikpose-check.log`); skips are not passes, and the two real-pose tests ran
+because the staged groups are installed on this machine. Sanitizer passes 107 suites
+with leak scanning (`ikpose-check-sanitize.log`). 26 CLI cases pass. Content
+and source regeneration were last run on the grounder tree above; no exporter
+with a `--check` mode changed since. No graphics check was run; PECSv22 is
+unchanged.
+
+## October13 disconnected FinalIK grounder
+
+[The grounder audit](audit/FINALIK_GROUNDER.md) records the installed
+`GrounderFBBIK` update read from the saved complete REA inventory, a committed
+77-method CIL excerpt bound to installed bytes, and the female settings
+regenerated from `FemaleModel.prefab`. No assembly execution, graphics launch,
+desktop input, save or recovered runtime asset replacement occurred.
+
+The isolated C suite passes the female settings, flat ground, one-frame and
+steady-state arithmetic over lower ground, a 0.2 m step, half weight, a drop
+deeper than a step, ground above the root, 10° and 40° slopes, no ground, the
+pelvis damper, first-update and repeated-time cases, disabled and zero weight,
+and atomic invalid-input failure. A second double-precision transcription
+agrees with C over 2,240 updates in 40 terrain scenarios to 4e-7 m and 5e-8
+quaternion dot. This guards transcription only: rays are a caller callback and
+the quaternion natives are conventional adapters. **Nothing was compared with
+the original**; the October 12 capture was on flat ground, where the grounder
+contributes under a millimetre. No gameplay gate was opened and no host calls
+it.
+
+Full regression passes 269 jobs/935 Python tests with 94 optional skips
+(`grounder-check.log`); skips are not passes. Sanitizer passes 105 suites with
+leak scanning (`grounder-check-sanitize.log`). Content regeneration passes
+(`grounder-check-content.log`); source regeneration passes including all six
+grounder-export tests under UnityPy (`grounder-check-sources.log`); ordinary
+Python skips two of them. 26 CLI cases pass. No graphics check was run;
+PECSv22 is unchanged.
+
 ## October12 observed FinalIK solver session
 
 **Observed in the original.** Native Steam client, isolated bake profile,

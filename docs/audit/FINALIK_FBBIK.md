@@ -5,7 +5,7 @@ C owner.** `pe_fbbik` performs one `IKSolverFullBody.OnUpdate` for the female
 rig: pose read, chain solve and spine/limb mapping. No host calls it. It is the
 solve that [Halt](HALT_STOP_EFFECT.md) and [hit IK](HIT_IK.md) offsets were
 waiting for, but it supplies no visible reaction: the engine's quaternion
-natives are conventional adapters and GrounderFBBIK is unrecovered. One
+natives are conventional adapters. One
 observed session agrees with the original solver to 0.29 mm.
 
 ## Evidence
@@ -185,6 +185,9 @@ What the session also settled:
   frame. Position/rotation pins, `PullBody` and bend goals were therefore not
   exercised by the original and remain checked only against the second
   transcription.
+- **The idle solve is small but not zero.** In the 1,082 frames whose summed
+  offsets stayed under 2 mm, the original's solve still moved bones by up to
+  3.3 mm (mean 0.4 mm).
 - **Initiation pose is undetermined but immaterial here.** Replays with the
   observed bend defaults and with prefab-rest initiation gave identical
   results.
@@ -212,12 +215,16 @@ that the tool works, not what the original does.
 - **Unexercised solver paths.** Effector position/rotation weights, `PullBody`
   and bend goals were zero throughout the observed session.
 - **GrounderFBBIK** (component 11400014, enabled, weight 1) writes foot, pelvis
-  and spine offsets into the same solver from raycasts each update. Its
-  settings are recorded; its behavior is not recovered. It subscribes after
-  `IKAnimEffectCtrl` and `InteractionSystem` (observed).
-- **Host composition.** Mapping the 24 skeleton bones onto recovered actor
-  skeletons, defence capsules, attachments and reaction-layer blending is not
-  started. Two AimIK components on the same model run separately.
+  and spine offsets into the same solver from raycasts each update. It is now
+  [recovered separately](FINALIK_GROUNDER.md) into `pe_grounder`, unobserved on
+  uneven ground. It subscribes after `IKAnimEffectCtrl` and
+  `InteractionSystem` (observed).
+- **Host composition.** [Animated solver poses](PLAYER_IK_POSE.md) for the 31
+  staged player clips now exist and solve cleanly, with per-bone motions from
+  `pe_ik_skin`. Driving each rendered part's skin joints, defence capsules
+  and attachments from them, and choosing the pose to read during a blend,
+  are not started. Two AimIK components on the
+  same model run separately.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town
 Defense gates stay closed. The Halt Move/Jump blocking decision is unchanged.

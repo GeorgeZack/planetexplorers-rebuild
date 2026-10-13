@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "evidence": {
+    "path": "docs/reference/finalik-grounder-il.json",
+    "sha256": "3aaf30d6a0ee36855b5d65bf87b52629bcb5776130981034ae6a5e99b1b259fb"
+  },
+  "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+  "artifact_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+  "methods_digest": "194c869a335dcb7b9900faff71de5d2175272041689e0bc319b5195589acfe94",
+  "fields_digest": "44c603dfdefb4ef9c15d76a71e0b65cf7a18bba54b224d26a8d7c4087329c51f",
+  "sources": [
+    {
+      "path": "Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab",
+      "sha256": "1e518e5af9afd09d89e16a3a2dd776abd42846143ff6b40e409fdf4bb08ae441"
+    }
+  ],
+  "source_component": {
+    "id": 11400014,
+    "script_guid": "6c72e1df647af4c0098866e944a04b01",
+    "settings_sha256": "51a4a4b6612078d6c16a1db12f4264fc5c568fb80c2f2e09812963f2615b178a"
+  },
+  "settings": {
+    "component": 11400014,
+    "weight": 1.0,
+    "layers": 620801,
+    "root": "Model",
+    "pelvis": "Bip01",
+    "feet": [
+      "Bip01 L Foot",
+      "Bip01 R Foot"
+    ],
+    "solver": {
+      "maxStep": 0.4000000059604645,
+      "heightOffset": 0.0,
+      "footSpeed": 2.5,
+      "footRadius": 0.10000000149011612,
+      "prediction": 0.05000000074505806,
+      "footRotationWeight": 1.0,
+      "footRotationSpeed": 10.0,
+      "maxFootRotationAngle": 26.707059860229492,
+      "rotateSolver": 0,
+      "pelvisSpeed": 2.0,
+      "pelvisDamper": 0.009999999776482582,
+      "lowerPelvisWeight": 0.20000000298023224,
+      "liftPelvisWeight": 0.800000011920929,
+      "rootSphereCastRadius": 0.10000000149011612,
+      "quality": 1
+    },
+    "spine_bend": 4.5,
+    "spine_speed": 2.0,
+    "spine_horizontal": [
+      0.0,
+      0.800000011920929,
+      0.800000011920929,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "spine_vertical": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "order": {
+    "update": "GrounderFBBIK.Update sets firstSolve and clamps weight. OnSolverUpdate runs once per frame as the last OnPreUpdate subscriber: Grounding.Update, pelvis position += Pelvis.IKOffset*weight, SetLegIK left then right, then the spine offset.",
+    "grounding": "Clamp settings; root ray; each Leg.Process; Pelvis.Process(-max(IKOffset)*lowerPelvisWeight, -min(IKOffset)*liftPelvisWeight, any leg grounded).",
+    "leg": "Elapsed Time.time; flattened foot velocity; heel, forward and side rays; plane normal turned toward the hit plane at most maxFootRotationAngle radians; height is the root height above the plane, capped by the heel hit; IKOffset moves by LerpValue then Lerp toward the clamped height; clamp by leg height; foot rotation Slerp; IKPosition = foot - up*IKOffset.",
+    "pelvis": "heightOffset Lerp toward the summed target, then minus root rise * pelvisDamper * damperF; damperF LerpValue toward grounded at 1 up, 10 down.",
+    "spine": "spineOffset Lerp toward the summed leg bend vectors * weight * spineBend at deltaTime*spineSpeed; each listed effector gets spineOffset*horizontalWeight + root.up*|spineOffset|*verticalWeight."
+  },
+  "scope": "Disconnected grounding arithmetic for the serialized female settings. Not a host integration, not a collision model and not a pose claim.",
+  "limitations": [
+    "Metadata tokens are build-local and only meaningful with the stated artifact SHA-256 and MVID.",
+    "CIL is read from file bytes; no JIT, floating-point or engine behavior is observed.",
+    "Physics.Raycast and the engine Quaternion/Vector3 internal calls are native and absent from this managed evidence.",
+    "Nested types carry bare names in the inventory; declaring_type_token and type_names identify them.",
+    "Static method bodies do not establish collision layers, colliders or what a ray hits at runtime.",
+    "Rays are a caller callback; the original casts against Unity colliders on the serialized layers.",
+    "Quaternion FromToRotation/Slerp and Vector3 RotateTowards are conventional adapters in C; no engine or Mono arithmetic was executed.",
+    "Only rotateSolver off with quality Simple is implemented, as serialized; Fastest and Best are refused.",
+    "The observed tutorial session was on flat ground, where the grounder contributes under a millimetre; no uneven-ground comparison exists."
+  ]
+}

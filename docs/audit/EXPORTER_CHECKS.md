@@ -72,3 +72,14 @@ tests (including the three skipped without UnityPy). It is part of
 assembly, regenerates the female solver rig from `FemaleModel.prefab`, and
 runs all six solver-export tests (two need UnityPy and the installed game).
 It is part of `check-sources`; see [the solver audit](FINALIK_FBBIK.md).
+
+`grounder-source-check` binds the committed FinalIK grounder CIL excerpt to
+the installed assembly, regenerates the female grounding settings from
+`FemaleModel.prefab`, and runs all six grounder-export tests (two need UnityPy
+and the installed game). It is part of `check-sources`; see
+[the grounder audit](FINALIK_GROUNDER.md).
+
+`export_player_ik_pose.py` has no `--check` mode: its inputs are local bake
+captures outside the repository. Its staged manifest records each capture's
+hash, and `test_player_ik_pose.py` verifies the installed file against that
+manifest; see [the pose audit](PLAYER_IK_POSE.md).

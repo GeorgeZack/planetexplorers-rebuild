@@ -899,3 +899,14 @@ The disconnected FinalIK full-body solver is documented in
 `python3 rebuild/tools/run_tests.py -k fbbik` from the root, or
 `make -C rebuild fbbik-source-check` for installed evidence, prefab
 regeneration and the C comparison. It produces no visible pose in either host.
+
+The disconnected FinalIK grounder is documented in
+[the grounder audit](../docs/audit/FINALIK_GROUNDER.md). Run
+`python3 rebuild/tools/run_tests.py -k grounder` from the root, or
+`make -C rebuild grounder-source-check` for installed evidence and settings
+regeneration. No host calls it.
+
+Animated solver poses for the staged player clips are documented in
+[the pose audit](../docs/audit/PLAYER_IK_POSE.md). Run
+`python3 rebuild/tools/run_tests.py -k ik_pose`; the real-pose test needs the
+staged `player-ik-pose` group and is skipped without it.
