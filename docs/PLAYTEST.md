@@ -18,11 +18,18 @@ the original's IK moved bones by up to 0.67 m. Live topology and settings
 match the generated rig. Solver weight was 1 and every effector and bend
 weight 0 on all frames, so pins, PullBody and bend goals were not observed.
 Offset writers subscribe as `IKAnimEffectCtrl`, `InteractionSystem`,
-`GrounderFBBIK`. Shoulder offsets reached 11.6 m on a few frames at about
-0.09 s frame time; their writer is unidentified. The live solver root is the
+`GrounderFBBIK`. The live solver root is the
 `IK` object; the exporter now derives it and the rig has 25 transforms.
 
-No gameplay gate was opened and no host calls the solver. Full regression
+The same capture holds thirteen stops (eight near 4.7 m/s, five at 6.9–7.7).
+[`pe_halt`](audit/HALT_STOP_EFFECT.md#observed-comparison), with foot, start
+frame, speed and heading fitted per stop, reproduces the body, hand and
+vertical shoulder offsets to 2.0 mm, including shoulder offsets up to 11.6 m.
+The fitted foot matches the foot rule on observed foot positions in 13 of 13,
+and fitted speed and heading match observed body motion within 0.47 m/s and
+4.6°. The Halt mask was not observed. Frame rate was about 11 per second.
+
+No gameplay gate was opened and no host calls the solver or the effect. Full regression
 passes 266 jobs/926 Python tests with 92 optional skips
 (`fbbik-observed-check.log`); skips are not passes. Sanitizer passes 104
 suites (`fbbik-observed-check-sanitize.log`). Content and source regeneration

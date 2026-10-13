@@ -1021,3 +1021,8 @@ check-sources: fbbik-source-check
 fbbik-probe-test:
 	python3 tests/test_reference_fbbik.py
 test: fbbik-probe-test
+
+.PHONY: halt-capture-test
+halt-capture-test: $(CORE_LIB)
+	python3 tests/test_reference_halt.py
+test: halt-capture-test

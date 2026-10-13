@@ -2,7 +2,8 @@
 
 October 12, 2026. Source-derived from checked-in C#, the female prefab and the
 action table, implemented in a disconnected C owner. Neither gameplay host
-calls `pe_halt`. No pose results from it yet.
+calls `pe_halt`. Thirteen observed stops agree with its offsets to 2 mm (see
+[observed comparison](#observed-comparison)).
 
 ## What Halt is
 
@@ -77,6 +78,52 @@ ordinals. All state is transient and unsaved.
 source bodies, the three request sites, the serialized curves and links, the
 component identity and relation row 50 including the six rows the mask blocks.
 
+## Observed comparison
+
+**Observed in the original, October 12, 2026.** The supervised
+[solver capture](FINALIK_FBBIK.md#engine-comparison) recorded every effector
+offset on the live female player for 1,399 frames, including thirteen stops. `analyze_reference_halt.py` replays `pe_halt` over the
+recorded frame times and compares.
+
+The capture does not hold the velocity Halt began with, so each stop is
+fitted: foot, start frame, speed and heading. The comparison uses the channels
+only this effect writes (body, both hands, vertical shoulder offsets); the
+grounder shares the feet and horizontal shoulder offsets.
+
+| Measure over 13 stops | Value |
+|---|---|
+| Worst error on Halt-only channels | 2.0 mm |
+| Worst error on grounder-shared channels | 3.3 cm |
+| Fitted foot against the foot rule on observed foot positions | 13 of 13 |
+| Fitted speed against observed body motion | within 0.47 m/s |
+| Fitted heading against observed body motion | within 4.6° |
+| Fitted speeds | 4.5–4.8 m/s (eight stops), 6.9–7.7 m/s (five stops) |
+
+The foot positions and body motion are not seen by the fit, so the last three
+rows are an independent check on it. What this establishes:
+
+- **The curves, crossfade, weight and duration profiles match.** The slower
+  stops last four to five frames at about 11 frames per second, as
+  0.43–0.47 s predicts; the faster ones nine to ten.
+- **The first frame adds nothing.** Every fitted start is exactly one frame
+  before the first nonzero offset, which settles the nominal frame order.
+- **Shoulder offsets really do reach 11.6 m upward** at mid-effect in the
+  fastest stops. That is the serialized shoulder up curve, not a capture artefact. The
+  solver absorbs it: the arm chains pull back and the largest bone
+  displacement in the whole capture is 0.67 m.
+
+Limits: flat tutorial ground, so the grounder's share was small; speed and
+heading are fitted, not measured at `DoAction`; the Halt mask and its Move/Jump
+refusal were not observed at all.
+
+```sh
+python3 rebuild/tools/analyze_reference_halt.py CAPTURE.jsonl
+make -C rebuild halt-capture-test
+```
+
+The tool's own test recovers known stops from a synthetic capture; it checks
+the analyzer, not the original.
+
 ## Validation and remaining gate
 
 The registered core suite covers masks, the speed profile, both feet and the
@@ -93,10 +140,10 @@ Still unqualified:
   the checked-in source. Offsets are requests; the resulting pose is unknown.
   It would need the installed plugin assembly read statically, or an engine
   capture of the stop. October 12 follow-through: the static read is done in
-  [the solver audit](FINALIK_FBBIK.md); the disconnected `pe_fbbik` turns
-  offsets into a pose with unqualified engine-native adapters.
-- **Frame order.** Whether the action's first `Update` runs in the frame of
-  `DoAction`, and the exact solver phase, are nominal here.
+  [the solver audit](FINALIK_FBBIK.md), and an observed session agrees with
+  `pe_fbbik` to 0.29 mm. Feet and pelvis still need the unrecovered grounder.
+- **The mask.** The offsets are observed; the Move/Jump refusal while the
+  effect runs is source-derived only.
 - **Mono arithmetic.** Curve evaluation follows the order qualified earlier for
   Repulsed; not claimed bit-exact.
 

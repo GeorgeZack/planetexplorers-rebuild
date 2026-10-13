@@ -188,10 +188,11 @@ What the session also settled:
 - **Initiation pose is undetermined but immaterial here.** Replays with the
   observed bend defaults and with prefab-rest initiation gave identical
   results.
-- **Inputs are larger than expected.** Shoulder offsets reached 11.6 m for a
-  few frames (frame time about 0.09 s) while the solved displacement stayed
-  under 0.67 m. Their writer was not identified; that belongs to the
-  unrecovered grounder and effect owners, not to the solver.
+- **The large inputs are the Halt effect.** Shoulder offsets reached 11.6 m
+  for a few frames while the solved displacement stayed under 0.67 m.
+  [`pe_halt` reproduces them](HALT_STOP_EFFECT.md#observed-comparison) to
+  2 mm across thirteen stops, so offsets and solve are now both observed for
+  a stop on flat ground.
 
 The first launch recorded nothing: the probe searched under the model
 controller's object and the solver is on its sibling. The capture above is the
