@@ -84,6 +84,25 @@ static V line_to_plane(V origin,V direction,V normal,V point){   /* V3Tools.Line
 
 const PeGrounderSettings *pe_grounder_female_settings(void){return &pe_grounder_source_settings;}
 
+bool pe_grounder_foot_rotation_limit(float angle,float *degrees){
+    if(!degrees||!isfinite(angle))return false;
+    const PeGrounderCurveKey *k=pe_grounder_source_limit_keys,*last=k+PE_GROUNDER_SOURCE_LIMIT_KEYS-1;
+    if(angle<=k->time){*degrees=k->value;return true;}
+    if(angle>=last->time){*degrees=last->value;return true;}
+    while(angle>=k[1].time)k++;
+    float h=k[1].time-k->time,x=(angle-k->time)/h,x2=x*x,x3=x2*x;
+    float result=(2*x3-3*x2+1)*k->value+(x3-2*x2+x)*k->out_slope*h+(3*x2-2*x3)*k[1].value+(x3-x2)*k[1].in_slope*h;
+    if(!isfinite(result))return false;
+    *degrees=result;return true;
+}
+bool pe_grounder_set_live(PeGrounder *g,float forward_ground_angle,bool spine_effect){
+    float limit;
+    if(!g||!g->initiated||!pe_grounder_foot_rotation_limit(forward_ground_angle,&limit))return false;
+    g->settings.max_foot_rotation_angle=limit;
+    g->settings.spine_bend=spine_effect?pe_grounder_source_settings.spine_bend:0;
+    return true;
+}
+
 static bool valid_settings(const PeGrounderSettings *s){
     const float *v=(const float *)s;
     for(size_t i=0;i<sizeof *s/sizeof(float);i++)if(!isfinite(v[i]))return false;

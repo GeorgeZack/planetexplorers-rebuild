@@ -274,8 +274,27 @@ class Portable(unittest.TestCase):
         self.assertEqual((s['component'],s['root'],s['pelvis'],s['feet'],s['layers']),(11400014,'Model','Bip01',['Bip01 L Foot','Bip01 R Foot'],620801))
         self.assertEqual((s['solver']['quality'],s['solver']['rotateSolver'],s['spine_bend'],s['spine_speed']),(1,0,4.5,2.0))
         self.assertEqual([i for i,v in enumerate(s['spine_horizontal']) if v],[1,2]);self.assertFalse(any(s['spine_vertical']))
-        self.assertTrue(any('flat ground' in x for x in data['limitations']) and any('callback' in x for x in data['limitations']))
+        self.assertTrue(any('fitted' in x for x in data['limitations']) and any('callback' in x for x in data['limitations']))
+        live=data['live_settings'];limit=live['foot_rotation_limit']
+        self.assertEqual([(k[0],k[1]) for k in limit['keys']],[(-90.,40.),(-60.,30.),(0.,5.),(60.,30.),(90.,40.)])
+        self.assertEqual((limit['component'],limit['pre_infinity'],limit['post_infinity'],limit['key_fields']),(11400024,2,2,['time','value','inSlope','outSlope']))
+        self.assertEqual((live['spine_bend']['enabled'],live['spine_bend']['disabled']),(4.5,0.))
+        self.assertEqual([x['path'] for x in data['sources']],[e.MODEL,e.PLAYER,e.MOVE,e.MOVE+'.meta',e.IKCMPT])
+        self.assertEqual(e.check_live_sources(),limit['script_guid'])
         self.assertNotIn(str(e.ROOT),json.dumps(data))
+
+    def test_changed_setting_writers_are_rejected(self):
+        for path,old,new in ((e.MOVE,'m_ForwardAngleFootRotate.Evaluate(forwardAngle)','m_ForwardAngleFootRotate.Evaluate(0)'),
+                             (e.MOVE,'anim.SetFloat("ForwardAngle"','m_GroundIk.solver.maxFootRotationAngle = 9;anim.SetFloat("ForwardAngle"'),
+                             (e.IKCMPT,'value ? m_DefaultSpineBend : 0f','value ? m_DefaultSpineBend : 1f')):
+            with tempfile.TemporaryDirectory() as folder:
+                root=Path(folder)
+                for name in (e.MOVE,e.MOVE+'.meta',e.IKCMPT):
+                    (root/name).parent.mkdir(parents=True,exist_ok=True);(root/name).write_bytes((e.ROOT/name).read_bytes())
+                self.assertEqual(len(e.check_live_sources(root)),32)
+                text=(root/path).read_text(encoding='latin-1');self.assertEqual(text.count(old),1,old)
+                (root/path).write_text(text.replace(old,new),encoding='latin-1')
+                with self.assertRaises(ValueError):e.check_live_sources(root)
 
     @unittest.skipUnless(shutil.which('cc'),'C compiler unavailable')
     def test_c_grounder_against_second_transcription(self):
@@ -328,5 +347,18 @@ class Installed(unittest.TestCase):
             elif change=='binding':data['ik']['m_PathID']=0
             else:data['spine'][0]['horizontalWeight']=.5
             with self.assertRaises(ValueError):e.recover_settings(copy_model)
+
+    def test_changed_player_curve_is_rejected(self):
+        player=e.read_objects(e.ROOT/e.PLAYER);guid=e.check_live_sources()
+        self.assertEqual(e.recover_live(player,guid,4.5)['foot_rotation_limit']['curve_sha256'],e.CURVE_DIGEST)
+        for change in ('key','slope','mode','guid','disabled','second'):
+            copy_player=copy.deepcopy(player);data=copy_player[e.MOVE_COMPONENT]['data'];curve=data['m_ForwardAngleFootRotate']
+            if change=='key':curve['m_Curve'][2]['value']=6.0
+            elif change=='slope':curve['m_Curve'][1]['outSlope']=0.0
+            elif change=='mode':curve['m_PostInfinity']=0
+            elif change=='guid':copy_player[e.MOVE_COMPONENT]['script_guid']='0'*32
+            elif change=='disabled':data['m_Enabled']=0
+            else:copy_player[1]=copy.deepcopy(copy_player[e.MOVE_COMPONENT])
+            with self.assertRaises(ValueError):e.recover_live(copy_player,guid,4.5)
 
 if __name__=='__main__':unittest.main()

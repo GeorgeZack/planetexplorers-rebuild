@@ -12,6 +12,22 @@
     {
       "path": "Assets/Resources/Prefab/PlayerPrefab/FemaleModel.prefab",
       "sha256": "1e518e5af9afd09d89e16a3a2dd776abd42846143ff6b40e409fdf4bb08ae441"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Resources/EntityPlayer.prefab",
+      "sha256": "7119a434d3e1527cca656614ab347f87593913510a5302bef117a2e7834e4d3f"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Human.cs",
+      "sha256": "3510d27c4bfa86e673a13811097a05614f90d68e963cdf35b708e1dd8a063adb"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/Motion/Motion_Move_Human.cs.meta",
+      "sha256": "37635ff81598af2f44b2b2fa7e7f6f3cce6bfd7d4b5615abd50c28da8aeb5e6e"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/IKCmpt.cs",
+      "sha256": "c933e6ac0af067e3159a2cdfe3c119c42db992928f48a6aa7a19c7f6117c86e1"
     }
   ],
   "source_component": {
@@ -71,6 +87,60 @@
       0.0
     ]
   },
+  "live_settings": {
+    "foot_rotation_limit": {
+      "writer": "Motion_Move_Human: solver.maxFootRotationAngle = m_ForwardAngleFootRotate.Evaluate(HumanPhyCtrl.forwardGroundAngle), every update; 0 without a physics controller",
+      "component": 11400024,
+      "script_guid": "4dfe353c5d14666459d51f63000eee67",
+      "key_fields": [
+        "time",
+        "value",
+        "inSlope",
+        "outSlope"
+      ],
+      "keys": [
+        [
+          -90.0,
+          40.0,
+          0.0,
+          0.0
+        ],
+        [
+          -60.0,
+          30.0,
+          0.07331371307373047,
+          0.07331371307373047
+        ],
+        [
+          0.0,
+          5.0,
+          0.0,
+          0.0
+        ],
+        [
+          60.0,
+          30.0,
+          -0.07390975952148438,
+          -0.07390975952148438
+        ],
+        [
+          90.0,
+          40.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "pre_infinity": 2,
+      "post_infinity": 2,
+      "curve_sha256": "cd270c0bdcbe6a8f48db589c50e7077538a333caec2782c030bb1ad6c0cf8314"
+    },
+    "spine_bend": {
+      "writer": "IKCmpt.enableGrounderSpineEffect: the prefab value while the spine mask is empty, else 0; set at view build and by SetSpineEffectDeactiveState (Action_Tool, HeavyEquipmentCtrl)",
+      "enabled": 4.5,
+      "disabled": 0.0,
+      "companion": "enableArmMap sets both FullBodyBipedIK arm mapping weights to their default or 0 under the same mask"
+    }
+  },
   "order": {
     "update": "GrounderFBBIK.Update sets firstSolve and clamps weight. OnSolverUpdate runs once per frame as the last OnPreUpdate subscriber: Grounding.Update, pelvis position += Pelvis.IKOffset*weight, SetLegIK left then right, then the spine offset.",
     "grounding": "Clamp settings; root ray; each Leg.Process; Pelvis.Process(-max(IKOffset)*lowerPelvisWeight, -min(IKOffset)*liftPelvisWeight, any leg grounded).",
@@ -88,6 +158,8 @@
     "Rays are a caller callback; the original casts against Unity colliders on the serialized layers.",
     "Quaternion FromToRotation/Slerp and Vector3 RotateTowards are conventional adapters in C; no engine or Mono arithmetic was executed.",
     "Only rotateSolver off with quality Simple is implemented, as serialized; Fastest and Best are refused.",
-    "The observed tutorial session was on flat ground, where the grounder contributes under a millimetre; no uneven-ground comparison exists."
+    "maxFootRotationAngle and spineBend in settings are the prefab values; live_settings names what rewrites them. HumanPhyCtrl.forwardGroundAngle and the spine mask are host inputs.",
+    "AnimationCurve.Evaluate is native; C uses the Hermite form with these keys.",
+    "One observed terrain session agrees with the update; its foot rotation limit was fitted, not recorded, and only voxel terrain was underfoot."
   ]
 }

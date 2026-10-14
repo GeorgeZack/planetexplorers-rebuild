@@ -46,6 +46,10 @@ playing and that capture recorded them only at attach. Rays hit only voxel
 terrain. A first launch aborted before arming and recorded nothing. No host
 calls the grounder; this is not a visual or rendered check.
 
+Follow-up without a launch: the foot rotation curve and both setting writers
+are [source-derived and implemented](audit/FINALIK_GROUNDER.md#settings-written-while-playing).
+The curve's evaluation is checked against exact arithmetic, not the engine.
+
 Full regression passes 275 jobs/947 Python tests with 94 optional skips;
 skips are not passes. Sanitizer passes 109 suites with leak scanning, and the
 installed-asset drive harness passes under ASan/UBSan. 26 CLI cases pass. No

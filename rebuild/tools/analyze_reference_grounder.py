@@ -141,12 +141,29 @@ def replays(frames,seed_all,runs,build=None):
     return out
 def replay(frames,seed_all,live,build=None):return replays(frames,seed_all,[live],build)[0]
 
-def live_settings(frames,record,source):
+def curve(keys,t):
+    """Hermite evaluation of [time, value, inSlope, outSlope] keys with clamped ends."""
+    if t<=keys[0][0]:return keys[0][1]
+    if t>=keys[-1][0]:return keys[-1][1]
+    for a,b in zip(keys,keys[1:]):
+        if t<b[0]:
+            h=b[0]-a[0];x=t-a[0];d=b[1]-a[1];c2=(3*d/h-2*a[3]-b[2])/h;c3=(a[3]+b[2]-2*d/h)/(h*h)
+            return a[1]+a[3]*x+c2*x*x+c3*x**3
+
+def live_settings(frames,record,source,limit_keys=None):
     """Per-frame spineBend and maxFootRotationAngle. Recorded when the probe wrote them per frame;
     otherwise fitted, one update at a time, to the original's own leg rotations and spine offset."""
     if all('spineBend' in f and 'maxFootRotationAngle' in f for f in frames):
-        return [(f['spineBend'],f['maxFootRotationAngle']) for f in frames],dict(source='recorded per frame',
-            spine_bend_values=sorted({f['spineBend'] for f in frames}),max_foot_rotation_angle=stats([f['maxFootRotationAngle'] for f in frames]))
+        info=dict(source='recorded per frame',spine_bend_values=sorted({f['spineBend'] for f in frames}),
+            max_foot_rotation_angle=stats([f['maxFootRotationAngle'] for f in frames]))
+        angled=[f for f in frames if f.get('forwardGroundAngle') is not None]
+        if angled and limit_keys:
+            # Motion_Move_Human's curve at the recorded ground angle against the limit the grounder actually held.
+            info.update(forward_ground_angle=dict(min=min(f['forwardGroundAngle'] for f in angled),max=max(f['forwardGroundAngle'] for f in angled)),
+                limit_curve_error_degrees=stats([abs(curve(limit_keys,f['forwardGroundAngle'])-f['maxFootRotationAngle']) for f in angled]))
+        if all('armMappingWeight' in f for f in frames):
+            info['frames_where_arm_mapping_and_spine_bend_disagree']=sum((f['armMappingWeight']==0)!=(f['spineBend']==0) for f in frames)
+        return [(f['spineBend'],f['maxFootRotationAngle']) for f in frames],info
     count=len(frames);bends=sorted({0.,float(source['spine_bend']),float(record['spineBend'])})
     def leg_error(f,row):
         if row is None:return math.inf
@@ -173,7 +190,8 @@ def live_settings(frames,record,source):
         spine_bend_frames={str(b):sum(1 for x in live if x[0]==b) for b in bends},spine_offset_residual_m=stats(bend_residual),
         max_foot_rotation_angle=stats(chosen),leg_rotation_residual_degrees=stats(residual),
         # A frame pins the limit only while a foot is actually clamped by it.
-        frames_where_the_limit_is_pinned_within_1_degree=len(pinned),pinned_limit_degrees=stats(pinned))
+        frames_where_the_limit_is_pinned_within_1_degree=len(pinned),pinned_limit_degrees=stats(pinned),
+        pinned_limit_range_degrees=[min(pinned),max(pinned)] if pinned else None,curve_range_degrees=limit_keys and [min(k[1] for k in limit_keys),max(k[1] for k in limit_keys)])
 
 def unpack(row):
     it=iter(row);take=lambda n:[next(it) for _ in range(n)]
@@ -245,7 +263,8 @@ def coverage(frames,record):
         verdict='The capture left flat ground.' if largest>=UNEVEN else 'Flat ground only: this capture cannot qualify the grounder on uneven ground.')
 
 def analyze(path,settings=None):
-    source=settings or json.loads(SETTINGS.read_text())['settings'];header=record=end=None;frames=[]
+    generated=json.loads(SETTINGS.read_text());limit_keys=generated['live_settings']['foot_rotation_limit']['keys']
+    source=settings or generated['settings'];header=record=end=None;frames=[]
     with Path(path).open() as stream:
         for line in stream:
             item=json.loads(line);kind=item.get('type')
@@ -262,7 +281,7 @@ def analyze(path,settings=None):
     require(all(numbers(f) for f in frames),'Capture holds a nonfinite value')
     differences=settings_differences(source,record)
     require(not record['rotateSolver'] and record['quality']==source['solver']['quality'],'pe_grounder covers only world-up grounding at the serialized quality')
-    mask=record['layers'];names=record['layerNames'];live,fitted=live_settings(frames,record,source)
+    mask=record['layers'];names=record['layerNames'];live,fitted=live_settings(frames,record,source,limit_keys)
     report=dict(schema='pe-grounder-comparison-1',capture=str(path),frames=len(frames),end=end and end.get('reason'),setting_differences=differences,
         layers={str(bit):names[bit] for bit in range(32) if mask>>bit&1},
         pre_grounder_subscribers=record['preGrounderSubscribers'],post_grounder_subscribers=record['postGrounderSubscribers'],pre_update_subscribers=record['preUpdateSubscribers'],

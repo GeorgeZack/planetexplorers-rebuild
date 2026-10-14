@@ -76,6 +76,7 @@ public sealed class PoseProbe : MonoBehaviour {
         if (grounding != null && grounder == null) { Finish("grounder-destroyed"); return; }
         if (grounding == null) Attach();
     }
+    HumanPhyCtrl phy;
     void Attach() {
         MainPlayerCmpt main = MainPlayerCmpt.gMainPlayer;
         PeEntity e = main == null ? null : main.GetComponent<PeEntity>();
@@ -118,7 +119,7 @@ public sealed class PoseProbe : MonoBehaviour {
         b.Append(",\"preGrounderSubscribers\":").Append(Names(found.OnPreGrounder)).Append(",\"postGrounderSubscribers\":").Append(Names(found.OnPostGrounder))
          .Append(",\"preUpdateSubscribers\":").Append(Names(body.solver.OnPreUpdate)).Append('}');
         Write(b.ToString()); output.Flush();
-        ik = body; grounder = found; grounding = g; onPre = Pre; onPost = Post;
+        ik = body; grounder = found; grounding = g; onPre = Pre; onPost = Post; phy = viewRoot == null ? null : viewRoot.humanPhyCtrl;
         grounder.OnPreGrounder = (Grounder.GrounderDelegate)Delegate.Combine(grounder.OnPreGrounder, onPre);
         grounder.OnPostGrounder = (Grounder.GrounderDelegate)Delegate.Combine(grounder.OnPostGrounder, onPost);
         Console.Error.WriteLine("[grounder] Attached; layers=" + g.layers.value);
@@ -182,7 +183,9 @@ public sealed class PoseProbe : MonoBehaviour {
             StringBuilder b = new StringBuilder(8192); Grounding.Pelvis pelvis = grounding.pelvis; RaycastHit rootHit = grounding.rootHit;
             b.Append("{\"type\":\"frame\",\"sample\":").Append(samples).Append(",\"frame\":").Append(Time.frameCount).Append(",\"time\":").Append(F(Time.time)).Append(",\"dt\":").Append(F(Time.deltaTime))
              // Motion_Move_Human and IKCmpt rewrite these two while playing.
-             .Append(",\"spineBend\":").Append(F(grounder.spineBend)).Append(",\"maxFootRotationAngle\":").Append(F(grounding.maxFootRotationAngle)).Append(',')
+             .Append(",\"spineBend\":").Append(F(grounder.spineBend)).Append(",\"maxFootRotationAngle\":").Append(F(grounding.maxFootRotationAngle))
+             // The curve's input, and the arm mapping weight IKCmpt zeroes under the same spine mask.
+             .Append(",\"forwardGroundAngle\":").Append(phy == null ? "null" : F(phy.forwardGroundAngle)).Append(",\"armMappingWeight\":").Append(F(ik.solver.leftArmMapping.weight)).Append(',')
              .Append(pre).Append(",\"post\":{\"pelvisBone\":").Append(V(ik.references.pelvis.position)).Append(",\"spineOffset\":").Append(V((Vector3)Private(grounder, "spineOffset")))
              .Append(",\"offsets\":"); Offsets(b);
             b.Append(",\"grounded\":").Append(B(grounding.isGrounded)).Append(",\"rootGrounded\":").Append(B(grounding.rootGrounded))

@@ -271,19 +271,60 @@ What this settles:
    buildings, scenery and trees are still unobserved.
 6. `OnPreGrounder` and `OnPostGrounder` had no other subscribers.
 
-Not settled: the curve's keys (the entity prefab holding them is binary) and
-`forwardGroundAngle`, which a host needs to produce the rotation limit; which
-actions held the spine mask in this session; and `IKCmpt`'s companion
-`enableArmMap`, which zeroes the solver's arm mapping weights under the same
-mask and so changes [the solve](FINALIK_FBBIK.md) too.
+Not settled by this capture: the ground angle on each frame, which actions
+held the spine mask, and `IKCmpt`'s companion `enableArmMap`, which zeroes the
+solver's arm mapping weights under the same mask and so changes
+[the solve](FINALIK_FBBIK.md) too.
+
+## Settings written while playing
+
+**Source-derived and implemented in C; the curve's evaluation is unobserved.**
+
+| Setting | Writer | Value |
+|---|---|---|
+| `maxFootRotationAngle` | `Motion_Move_Human`, every update | `m_ForwardAngleFootRotate.Evaluate(forwardGroundAngle)`; angle 0 without a physics controller |
+| `spineBend` | `IKCmpt.enableGrounderSpineEffect` | 4.5 while the spine mask is empty, else 0 |
+
+The curve is serialized on `Motion_Move_Human` (component 11400024) of
+`EntityPlayer.prefab`, five keys with clamped ends:
+
+| Ground angle | −90° | −60° | 0° | 60° | 90° |
+|---|---|---|---|---|---|
+| Limit | 40° | 30° | 5° | 30° | 40° |
+
+So feet may tilt only 5° on level ground and up to 40° on a wall-steep slope.
+`export_grounder.py` pins the keys and tangents, the component's script GUID,
+the single assignment in `Motion_Move_Human.cs` and the `IKCmpt.cs` setter,
+and writes them to [the metadata](../../rebuild/generated/pe_grounder_source.json)
+and header. `pe_grounder_foot_rotation_limit` evaluates the curve;
+`pe_grounder_set_live` writes both settings into the grounder before an
+update, as the original mutates its component.
+
+- **The ground angle** is `HumanPhyCtrl.forwardGroundAngle`, already
+  [recovered](HUMAN_PHY_CTRL.md) in the disconnected `pe_human_phy` from
+  contact normals. No host produces contact normals yet.
+- **The spine mask** is filled by `Action_Tool` and `HeavyEquipmentCtrl`
+  through `SetSpineEffectDeactiveState`, and evaluated once when the view is
+  built. Which player actions those are is not traced here.
+- **`AnimationCurve.Evaluate` is native.** C uses the Hermite form over the
+  keys, checked against an exact rational evaluation, not against the engine.
+- **Script order** between `HumanPhyCtrl.Update` and `Motion_Move_Human`'s
+  write is not established, so the limit may lag the angle by a frame.
+
+Consistency with the observed session, which did not record the angle: the
+limits fitted on the 1,326 pinned frames span 5° to 38°, inside the curve's 5°
+to 40°, with the lower end exactly the level-ground value. The 17.26° live at
+attach corresponds to a ground angle of about ±28.8°. This does not test the
+curve's shape. The probe now records the ground angle and the arm mapping
+weight per frame, and the analyzer then reports the curve's error directly.
 
 ## Remaining boundary
 
-- **Runtime-varying settings.** `pe_grounder` holds the prefab's foot
-  rotation limit and spine bend as constants. A host must supply the limit
-  from the curve and ground angle and the bend from the spine mask, and the
-  arm mapping weights follow the same mask. The limit is fitted, not
-  recorded, in [the observed session](#observed-on-uneven-ground).
+- **Inputs to the written settings.** [The curve and both writers](#settings-written-while-playing)
+  are recovered, but a host must supply the ground angle (contact normals)
+  and the spine mask, and the arm mapping weights follow the same mask. The
+  curve's evaluation and the limit itself are unobserved: the session's limit
+  is fitted.
 - **Only terrain was underfoot** in the observed session.
 - **Collision.** The layer names are resolved, but which rebuild surfaces
   stand in for them is undecided. Terrain, buildings and static scenery are

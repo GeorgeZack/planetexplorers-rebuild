@@ -8,11 +8,13 @@
  * It covers the serialized mode only: world-up grounding (rotateSolver off)
  * with the three-ray foot plane (quality Simple).
  *
- * No host calls this. Rays are a caller callback; the original casts against
+ * No host calls this. The original rewrites two settings while playing:
+ * max_foot_rotation_angle every update and spine_bend with the spine mask;
+ * pe_grounder_set_live does the same. Rays are a caller callback; the original casts against
  * Unity colliders on the serialized layers. Quaternion FromToRotation/Slerp
  * and Vector3 RotateTowards are conventional float adapters, and Leg.r starts
- * at identity where the original leaves a zero quaternion. Nothing here has
- * been compared with the original on uneven ground. State is transient and
+ * at identity where the original leaves a zero quaternion. One observed
+ * terrain session agrees with the update. State is transient and
  * unsaved; zero-initialize and call pe_grounder_init on host creation/load. */
 typedef struct {
     float max_step,foot_speed,foot_radius,prediction;
@@ -22,6 +24,7 @@ typedef struct {
     /* GrounderFBBIK.spine by FullBodyBipedEffector ordinal; absent entries are zero. */
     float spine_horizontal[PE_FBBIK_EFFECTORS],spine_vertical[PE_FBBIK_EFFECTORS];
 } PeGrounderSettings;
+typedef struct {float time,value,in_slope,out_slope;} PeGrounderCurveKey;
 typedef struct {PeVec3 point,normal; float distance;} PeGrounderHit;
 /* Physics.Raycast(origin, direction, out hit, max_distance, layers). Return
  * false for a miss and leave *hit alone. */
@@ -62,6 +65,15 @@ typedef struct {
 } PeGrounderOutput;
 
 const PeGrounderSettings *pe_grounder_female_settings(void);
+/* Motion_Move_Human.m_ForwardAngleFootRotate at HumanPhyCtrl.forwardGroundAngle
+ * (degrees; 0 without a physics controller). AnimationCurve.Evaluate is
+ * native: this is the Hermite form over the serialized keys, ends clamped. */
+bool pe_grounder_foot_rotation_limit(float forward_ground_angle,float *degrees);
+/* What Motion_Move_Human and IKCmpt write into the component before the
+ * update: the limit above, and the serialized spine bend while the spine
+ * mask is empty (spine_effect) or 0 while an action holds it. The caller
+ * owns the ground angle and the mask. Failure changes nothing. */
+bool pe_grounder_set_live(PeGrounder *grounder,float forward_ground_angle,bool spine_effect);
 bool pe_grounder_init(PeGrounder *grounder,const PeGrounderSettings *settings,PeGrounderStart start);
 /* One GrounderFBBIK.OnSolverUpdate. Invalid or nonfinite input, or a
  * nonfinite result, leaves state and output unchanged. */

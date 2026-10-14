@@ -21,4 +21,13 @@ static const PeGrounderSettings pe_grounder_source_settings={
  .spine_horizontal={0.0f,0.800000012f,0.800000012f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
  .spine_vertical={0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f,0.0f},
 };
+/* Motion_Move_Human.m_ForwardAngleFootRotate: degrees of ground angle to degrees of limit; clamped ends. */
+#define PE_GROUNDER_SOURCE_LIMIT_KEYS 5u
+static const PeGrounderCurveKey pe_grounder_source_limit_keys[PE_GROUNDER_SOURCE_LIMIT_KEYS]={
+ {-90.0f,40.0f,0.0f,0.0f},
+ {-60.0f,30.0f,0.0733137131f,0.0733137131f},
+ {0.0f,5.0f,0.0f,0.0f},
+ {60.0f,30.0f,-0.0739097595f,-0.0739097595f},
+ {90.0f,40.0f,0.0f,0.0f},
+};
 #endif

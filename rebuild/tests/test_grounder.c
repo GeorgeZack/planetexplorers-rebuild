@@ -42,6 +42,20 @@ int pe_test_grounder(void){
     CHECK(s->spine_horizontal[1]==.8f&&s->spine_horizontal[2]==.8f&&s->spine_horizontal[0]==0&&s->spine_vertical[1]==0);
     NEAR(s->max_foot_rotation_angle,26.70706f,1e-5f);
 
+    /* Motion_Move_Human's curve: 5 on flat ground up to 40 at a right angle, clamped beyond.
+     * Interior values are from an exact rational evaluation of the serialized keys. */
+    float limit=-1;
+    static const float at[][2]={{-90,40},{-60,30},{0,5},{60,30},{90,40},{-200,40},{1e6f,40},
+        {-75,34.7250736f},{-30,18.0498528f},{10,6.95450430f},{45,26.7173636f},{75,34.7228384f}};
+    for(unsigned i=0;i<sizeof at/sizeof *at;i++){CHECK(pe_grounder_foot_rotation_limit(at[i][0],&limit));NEAR(limit,at[i][1],2e-5f);}
+    limit=7;CHECK(!pe_grounder_foot_rotation_limit(NAN,&limit)&&limit==7&&!pe_grounder_foot_rotation_limit(0,NULL));
+    /* The original mutates the component before the update; so does the caller here. */
+    PeGrounder live={0};CHECK(!pe_grounder_set_live(&live,0,true));
+    live=fresh();CHECK(pe_grounder_set_live(&live,0,false)&&live.settings.max_foot_rotation_angle==5&&live.settings.spine_bend==0);
+    CHECK(pe_grounder_set_live(&live,60,true)&&live.settings.max_foot_rotation_angle==30&&live.settings.spine_bend==4.5f);
+    CHECK(!pe_grounder_set_live(&live,INFINITY,false)&&live.settings.max_foot_rotation_angle==30&&live.settings.spine_bend==4.5f);
+    CHECK(!pe_grounder_set_live(NULL,0,true));
+
     /* Root standing on flat ground: nothing is requested, three rays per leg and one for the root. */
     Ground flat={.base=1};PeGrounder g=fresh();PeGrounderOutput out=settle(&g,&flat,1);
     CHECK(out.ran&&out.grounded&&out.root_grounded&&flat.casts==7);

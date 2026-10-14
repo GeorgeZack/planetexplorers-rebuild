@@ -97,6 +97,13 @@ class Analyzer(unittest.TestCase):
         self.assertGreater(self.run_lines(lines)['single_update']['other_effector_offset_m']['max'],.04)
         for frame in lines[2:-1]:frame.update(spineBend=lines[1]['spineBend'],maxFootRotationAngle=lines[1]['maxFootRotationAngle'])
         report=self.run_lines(lines);self.assertEqual(report['live_settings']['source'],'recorded per frame')
+        self.assertNotIn('limit_curve_error_degrees',report['live_settings'])
+        # With the ground angle recorded too, the curve is checked against the limit the grounder held.
+        for frame in lines[2:-1]:frame.update(forwardGroundAngle=45.,maxFootRotationAngle=26.7173636,armMappingWeight=1.)
+        info=self.run_lines(lines)['live_settings'];self.assertLess(info['limit_curve_error_degrees']['max'],1e-5)
+        self.assertEqual(info['frames_where_arm_mapping_and_spine_bend_disagree'],0)
+        lines[20].update(forwardGroundAngle=0.,armMappingWeight=0.);info=self.run_lines(lines)['live_settings']
+        self.assertGreater(info['limit_curve_error_degrees']['max'],21);self.assertEqual(info['frames_where_arm_mapping_and_spine_bend_disagree'],1)
         self.assertGreater(report['single_update']['other_effector_offset_m']['max'],.049)
         lines=json.loads(json.dumps(base));lines[20]['rays'][2]['origin'][0]+=.07
         self.assertGreater(self.run_lines(lines)['single_update']['ray_origin_m']['max'],.069)
