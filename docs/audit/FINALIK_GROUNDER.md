@@ -35,8 +35,14 @@ the solver component by its `ik` reference.
 | lowerPelvisWeight / liftPelvisWeight | 0.2 / 0.8 |
 | spineBend / spineSpeed | 4.5 / 2 |
 | spine effectors | both shoulders, horizontal 0.8, vertical 0; seven other entries zero |
-| layers | mask 620801 (bits 0, 8, 11–14, 16, 19); layer names not resolved |
+| layers | mask 620801: Default, AIPlayer, SceneStatic, VFVoxelTerrain, Building, TreeStatic, Unwalkable, GIEProductLayer (bits 0, 8, 11–14, 16, 19) |
 | root / pelvis / feet | `Model` / `Bip01` / the two foot effector bones |
+
+The layer names are source-derived: `Pathea.Layer` in
+`WhiteCat/PE-VC/Layer.cs` and the 32 names in `ProjectSettings/TagManager.asset`
+agree. The mask leaves out Player (10) and Ragdoll (15), so the grounder's rays
+pass through the character's own colliders and land on terrain, buildings,
+static scenery and trees.
 
 ## Update
 
@@ -132,13 +138,78 @@ python3 rebuild/tools/run_tests.py -k grounder
 make -C rebuild grounder-source-check
 ```
 
+## Prepared uneven-ground capture
+
+**Prepared and compiled offline; not yet run in the game.** The flat tutorial
+session cannot qualify the grounder, so one more supervised session is needed.
+Its tools exist and are tested on synthetic captures:
+
+- `ReferenceGrounderProbe.cs` attaches to the live player's `GrounderFBBIK`.
+  It adds one subscriber each to the grounder's own `OnPreGrounder` and
+  `OnPostGrounder` delegates, which the compiled `OnSolverUpdate` raises
+  immediately before `Grounding.Update` and after the last spine request, and
+  removes them at the end. It writes no grounder or solver field, transform,
+  input or save.
+- **Before each update** it records time, weight, the root position and axes,
+  both foot positions and rotations, the pelvis bone, the nine effector
+  offsets already written by Halt and other effects, and the private leg and
+  pelvis state the update starts from.
+- **It repeats the grounder's seven rays** as plain `Physics.Raycast` queries
+  on the same layers, at the same instant, and records origin, hit point,
+  normal, distance, layer and collider type. The original keeps only its root
+  and heel hits; the analyzer checks the probe's repeats against those two.
+- **After each update** it records the leg and pelvis state, the moved pelvis
+  bone, the rotated feet and the effector offsets, so the grounder's share is
+  the difference from the "before" values.
+- `analyze_reference_grounder.py` replays the capture through `pe_grounder`
+  twice: once restarting every frame from the original's recorded state (one
+  update's arithmetic, no drift), and once free-running from the first frame.
+  It reports errors for foot offset and target, height from ground, foot and
+  leg rotation, pelvis height and bone move, foot and spine effector requests,
+  and ray origins. It also reports live settings against the prefab, the live
+  layer names, what was hit, and whether the capture left flat ground at all
+  (a foot request of 3 cm or more).
+
+What the session should settle, in the order it matters:
+
+1. **Ray conventions**: origins, lengths and miss defaults.
+2. **Foot offset, pelvis height and spine lean** on slopes and steps.
+3. **The four engine-native adapters** (`FromToRotation`, `Slerp`,
+   `SlerpUnclamped`, `RotateTowards`) and the zero starting quaternion of
+   `Leg.r`, through the recorded foot rotations.
+4. **The rigid-translation assumption** for the foot after the pelvis move.
+5. **What the rays actually hit** in play, by layer and collider type.
+
+Session, about two minutes of play, operator input only: load a place with
+natural terrain (the Adventure start has slopes; the tutorial is flat), arm,
+then stand still on a slope, walk and run up, down and across it, step on and
+off a ledge or rock, and jump once. The launcher defaults to the isolated bake
+profile; `--user-data` selects another, and the preserved sandbox reference
+checkpoints must not be overwritten.
+
+```sh
+python3 rebuild/tools/reference_grounder_probe.py          # offline compile only
+python3 rebuild/tools/reference_grounder_probe.py --launch # supervised session
+python3 rebuild/tools/analyze_reference_grounder.py CAPTURE.jsonl
+make -C rebuild grounder-probe-test
+```
+
+The analyzer's tests write a capture from the second transcription over
+rolling ground, and check that both replays agree with it, that a flat capture
+is reported as not qualifying, and that changed state, requests, rays,
+settings and modes are visible or rejected. They establish that the tools
+work, not what the original does. The probe compiles against the installed
+assemblies; its behavior in the running game is untested until the session.
+
 ## Remaining boundary
 
 - **No uneven-ground observation.** The one observed session was on flat
-  ground. A supervised capture on a slope or steps, recording the grounder's
-  rays and outputs, would qualify the adapters and the ray conventions.
-- **Collision.** Which rebuild surfaces correspond to the serialized layer
-  mask is undecided, and the layer names are unresolved.
+  ground. [The capture above](#prepared-uneven-ground-capture) is ready and
+  needs the user present.
+- **Collision.** The layer names are resolved, but which rebuild surfaces
+  stand in for them is undecided. Terrain, buildings and static scenery are
+  the plain reading; whether player-built blocks and tree capsules should
+  catch foot rays waits on what the capture shows the rays hitting.
 - **Host composition** is not started, as for the solver.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town

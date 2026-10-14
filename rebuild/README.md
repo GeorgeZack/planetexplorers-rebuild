@@ -905,6 +905,9 @@ The disconnected FinalIK grounder is documented in
 `python3 rebuild/tools/run_tests.py -k grounder` from the root, or
 `make -C rebuild grounder-source-check` for installed evidence and settings
 regeneration. No host calls it.
+`python3 rebuild/tools/reference_grounder_probe.py` only compiles the
+observation probe; `--launch` starts the original and needs the user present.
+`make -C rebuild grounder-probe-test` checks the probe and its analyzer offline.
 
 Animated solver poses for the staged player clips are documented in
 [the pose audit](../docs/audit/PLAYER_IK_POSE.md). Run

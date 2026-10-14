@@ -25,6 +25,19 @@ upright stand (`rebuild/build/halt-private-20261013a/stop-sheet.png`). That
 session shows the effect draws a coherent pose; it did not measure the lock,
 and its fixture checkpoint is not earned progress.
 
+Follow-up the same day: the mask also refuses herb gathering in both hosts,
+silently (source `DoAction(Gather)`); headless host tests cover it, and the
+tutorial progression still passes with the same counts. Not observed in the
+original and not exercised by a rendered session.
+
+Also prepared, with no launch: the uneven-ground
+[grounder capture](audit/FINALIK_GROUNDER.md#prepared-uneven-ground-capture).
+Its probe compiles against the installed assemblies and its analyzer passes
+eight offline tests on synthetic captures. Nothing about the original's
+grounder is observed yet. With these follow-ups the regression passes 276
+jobs/955 Python tests with 94 optional skips; the tutorial progression
+smoke passes again.
+
 Full regression passes 275 jobs/947 Python tests with 94 optional skips;
 skips are not passes. Sanitizer passes 109 suites with leak scanning, and the
 installed-asset drive harness passes under ASan/UBSan. 26 CLI cases pass. No

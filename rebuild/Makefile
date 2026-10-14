@@ -1041,6 +1041,11 @@ fbbik-probe-test:
 	python3 tests/test_reference_fbbik.py
 test: fbbik-probe-test
 
+.PHONY: grounder-probe-test
+grounder-probe-test: $(CORE_LIB)
+	python3 tests/test_reference_grounder.py
+test: grounder-probe-test
+
 .PHONY: halt-capture-test
 halt-capture-test: $(CORE_LIB)
 	python3 tests/test_reference_halt.py
