@@ -116,14 +116,20 @@ typedef struct {
     PeTrainingReceiverResult result;
 } TrainingBuildView;
 typedef struct { const PeWorld *world;const PeTrainingBuild *blocks; } ReceiverContext;
-/* Grounder ray adapter: the nearest of the room, the dug terrain and the built
- * blocks, which are what the tutorial controller stands on. */
-typedef struct { const PeSceneCollision *scene[3]; } GroundScenes;
+/* Grounder ray adapter: the nearest of the room, the dug terrain, the built
+ * blocks and, while enabled, the lesson tree: what the tutorial controller
+ * stands on. Actors (AIPlayer) are not included. */
+typedef struct { const PeSceneCollision *scene[3]; bool tree; } GroundScenes;
 static bool training_ground_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,PeGrounderHit *out){
     const GroundScenes *ground=context;PeSceneHit best={0};
     if(!out)return false;
     for(int i=0;i<3;i++)if(ground->scene[i]){
         PeSceneHit hit=pe_scene_raycast(ground->scene[i],origin,direction,maximum);
+        if(hit.hit&&(!best.hit||hit.distance<best.distance))best=hit;
+    }
+    /* The HoloTree root capsule is on Default, inside the grounder's mask, while its collider is enabled. */
+    if(ground->tree){
+        PeSceneHit hit=pe_training_tree_ray(origin,direction,maximum);
         if(hit.hit&&(!best.hit||hit.distance<best.distance))best=hit;
     }
     if(!best.hit)return false;
@@ -1198,9 +1204,11 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 PeVec3 ik_offsets[PE_FBBIK_EFFECTORS]={{0}};
                 for(unsigned i=0;i<halt.offset_count;i++)ik_offsets[halt.offsets[i].effector]=pe_ik_drive_model_vector(halt.offsets[i].offset,player_yaw);
                 /* Source GrounderFBBIK, once per drawn frame before the solve, as in the sandbox. */
-                GroundScenes ground_scenes={{scene,terrain?terrain->collision:NULL,building?building->collision:NULL}};PeVec3 left,right;
+                /* The tree collider is enabled for movement under the same condition (pe_training_step). */
+                GroundScenes ground_scenes={{scene,terrain?terrain->collision:NULL,building?building->collision:NULL},
+                    training.tutorial.mission_id==PE_TUTORIAL_TREE&&training.gathering.tree_hp>0};PeVec3 left,right;
                 PeGrounderHostInput ground_input={.time=(float)(grounder_time+dt),.delta_time=dt,.root=training.position,.yaw_degrees=player_yaw,
-                    .controller_grounded=training.grounded,.spine_effect=!held,.ray=training_ground_ray,.context=&ground_scenes};
+                    .ground_contact=training.ground_contact,.ground_normal=training.ground_normal,.spine_effect=!held,.ray=training_ground_ray,.context=&ground_scenes};
                 if(dt>0&&ik_count&&pe_ik_drive_feet(ik,ik_samples,ik_count,&left,&right)){
                     left=pe_ik_drive_world_vector(left,player_yaw);right=pe_ik_drive_world_vector(right,player_yaw);
                     ground_input.foot[0]=(PeVec3){training.position.x+left.x,training.position.y+left.y,training.position.z+left.z};

@@ -326,7 +326,9 @@ static void interact(PeGame *g) {
 static bool sandbox_ground_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,PeGrounderHit *out){
     const PeSandboxCollision *collision=context;
     if(!out||!pe_sandbox_collision_stats(collision).generation)return false;
-    PeSceneHit hit=pe_sandbox_collision_ray_geometry(collision,origin,direction,maximum);
+    /* Geometry plus live tree capsules: the trees' TerrainCollider is on TreeStatic,
+     * inside the grounder's mask. Actors (AIPlayer) are not included. */
+    PeSceneHit hit=pe_sandbox_collision_ray_perception(collision,origin,direction,maximum);
     if(!hit.hit)return false;
     if(hit.normal.y<0)hit.normal=(PeVec3){-hit.normal.x,-hit.normal.y,-hit.normal.z};
     *out=(PeGrounderHit){hit.position,hit.normal,hit.distance};return true;
@@ -1443,10 +1445,12 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(steps>=6)accumulator=0;
             if(!hunt_fixed_pose&&!hunt.encounter.active)pe_sandbox_actor_update(actor,smoke_frames?PE_FIXED_DT:dt,game);
             /* Source GrounderFBBIK, once per played frame before the solve: feet and pelvis follow
-             * the ground under them. Presentation only; the geometry ray is the host's adapter. */
+             * the ground under them. Presentation only; the rays and the contact are host adapters:
+             * the capsule's own support probe, as for grounded, but at any slope. */
             float ground_dt=smoke_frames?PE_FIXED_DT:dt;
+            PeSceneHit ground_contact=pe_sandbox_collision_support(collision,game->player,PE_PLAYER_RADIUS,PE_PLAYER_HEIGHT,.08f,0);
             PeGrounderHostInput ground_input={.time=(float)(grounder_time+ground_dt),.delta_time=ground_dt,.root=game->player,
-                .yaw_degrees=pe_sandbox_actor_yaw(actor,game),.controller_grounded=game->grounded,.spine_effect=!tool_drawn,
+                .yaw_degrees=pe_sandbox_actor_yaw(actor,game),.ground_contact=ground_contact.hit,.ground_normal=ground_contact.normal,.spine_effect=!tool_drawn,
                 .ray=sandbox_ground_ray,.context=collision};
             if(game->hp<=0)pe_grounder_host_reset(&grounder);
             else if(ground_dt>0&&pe_sandbox_actor_feet(actor,game,&ground_input.foot[0],&ground_input.foot[1])&&pe_grounder_host_update(&grounder,&ground_input)){

@@ -19,9 +19,9 @@ static bool ray(void *context,PeVec3 origin,PeVec3 direction,float max_distance,
 }
 /* Root on the ground at the origin; feet .1 either side in the model, .08 up. */
 static PeGrounderHostInput frame(Ground *ground,float time,float yaw){
-    double r=yaw*3.14159265358979323846/180;float c=(float)cos(r),s=(float)sin(r);
+    double r=yaw*3.14159265358979323846/180;float c=(float)cos(r),s=(float)sin(r),m=sqrtf(1+ground->slope*ground->slope);
     return (PeGrounderHostInput){.time=time,.delta_time=.02f,.root={0,ground->base,0},.yaw_degrees=yaw,
-        .foot={{-.1f*c,ground->base+.08f,.1f*s},{.1f*c,ground->base+.08f,-.1f*s}},.controller_grounded=true,.spine_effect=true,.ray=ray,.context=ground};
+        .foot={{-.1f*c,ground->base+.08f,.1f*s},{.1f*c,ground->base+.08f,-.1f*s}},.ground_contact=!ground->none,.ground_normal={0,1/m,-ground->slope/m},.spine_effect=true,.ray=ray,.context=ground};
 }
 static void settle(PeGrounderHost *h,Ground *ground,float yaw,unsigned frames){
     for(unsigned i=1;i<=frames;i++){PeGrounderHostInput in=frame(ground,.02f*i,yaw);CHECK(pe_grounder_host_update(h,&in));}
@@ -61,9 +61,16 @@ int pe_test_grounder_host(void){
     NEAR(fabsf(h.effector_offset[LEFT_FOOT].y-h.effector_offset[RIGHT_FOOT].y),.06f,1e-3f);
     CHECK(h.pose.pelvis_offset.x==0&&h.pose.pelvis_offset.z==0);
 
-    /* Off the ground the angle decays by Lerp(angle, 0, 3*dt) instead of following the surface. */
+    /* Without a contact the angle decays by Lerp(angle, 0, 3*dt) instead of following the surface. */
     pe_grounder_host_reset(&h);settle(&h,&slope,0,200);float before=h.forward_ground_angle;
-    in=frame(&slope,5,0);in.controller_grounded=false;CHECK(pe_grounder_host_update(&h,&in));NEAR(h.forward_ground_angle,before*(1-3*.02f),1e-3f);
+    in=frame(&slope,5,0);in.ground_contact=false;CHECK(pe_grounder_host_update(&h,&in));NEAR(h.forward_ground_angle,before*(1-3*.02f),1e-3f);
+    /* A contact 90 degrees or more from up (a wall, a ceiling) leaves the angle where it was. */
+    before=h.forward_ground_angle;in=frame(&slope,5.02f,0);in.ground_normal=(PeVec3){0,0,-1};
+    CHECK(pe_grounder_host_update(&h,&in));CHECK(h.forward_ground_angle==before);
+    in.ground_normal=(PeVec3){0,-1,0};CHECK(pe_grounder_host_update(&h,&in));CHECK(h.forward_ground_angle==before);
+    /* The angle is the contact's, not the ground under the rays: a steeper contact gives a steeper angle. */
+    in=frame(&flat,5.04f,0);in.ground_normal=(PeVec3){0,.8f,-.6f};CHECK(pe_grounder_host_update(&h,&in));
+    NEAR(h.forward_ground_angle,atanf(.75f)*57.29578f,1e-2f);
 
     /* A step: the left side is .2 lower. The pelvis drops and the feet take opposite requests. */
     Ground step={.base=1,.drop=.2f};pe_grounder_host_reset(&h);settle(&h,&step,0,600);
@@ -80,6 +87,7 @@ int pe_test_grounder_host(void){
     h.active=kept.active;CHECK(!memcmp(&h,&kept,sizeof h));
     in=frame(&step,1,0);in.root.x=NAN;CHECK(!pe_grounder_host_update(&h,&in)&&!h.active);
     in=frame(&step,1,0);in.ray=NULL;CHECK(!pe_grounder_host_update(&h,&in));
+    in=frame(&step,1,0);in.ground_normal.y=NAN;CHECK(!pe_grounder_host_update(&h,&in));
     in=frame(&step,1,0);in.yaw_degrees=INFINITY;CHECK(!pe_grounder_host_update(&h,&in));
     in=frame(&step,1,0);CHECK(!pe_grounder_host_update(NULL,&in)&&!pe_grounder_host_update(&h,NULL));
     pe_grounder_host_reset(&h);CHECK(!h.started&&!h.active);pe_grounder_host_reset(NULL);

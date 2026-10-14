@@ -25,14 +25,13 @@ bool pe_grounder_host_update(PeGrounderHost *h,const PeGrounderHostInput *in){
             (PeGrounderStart){in->delta_time,in->root,{in->foot[0],in->foot[1]}}))return false;
         next.started=true;next.forward_ground_angle=0;
     }
-    const PeVec3 up={0,1,0},down={0,-1,0};
+    const PeVec3 up={0,1,0};
     PeVec3 forward=to_world((PeVec3){0,0,1},in->yaw_degrees),right=to_world((PeVec3){1,0,0},in->yaw_degrees);
-    /* Contact-normal adapter: the surface under the root, within the grounder's own grounded distance. */
-    float step=next.grounder.settings.max_step;PeGrounderHit under={0};bool contact=false;
-    if(in->controller_grounded&&in->ray(in->context,(PeVec3){in->root.x,in->root.y+step,in->root.z},down,step*2,&under))
-        contact=finite3(under.normal)&&under.normal.y>1e-6f;   /* UpdateGroundState: within 90 degrees of world up */
-    next.forward_ground_angle=contact?pe_human_phy_slope_forward_angle(under.normal,forward)
-                                     :pe_human_phy_forward_angle_decay(next.forward_ground_angle,in->delta_time);
+    /* UpdateGroundState: a contact within 90 degrees of world up sets the angle; a contact
+     * outside that leaves it unchanged; no contact lets it decay. */
+    if(in->ground_contact&&!finite3(in->ground_normal))return false;
+    if(!in->ground_contact)next.forward_ground_angle=pe_human_phy_forward_angle_decay(next.forward_ground_angle,in->delta_time);
+    else if(in->ground_normal.y>0)next.forward_ground_angle=pe_human_phy_slope_forward_angle(in->ground_normal,forward);
     if(!isfinite(next.forward_ground_angle)||!pe_grounder_set_live(&next.grounder,next.forward_ground_angle,in->spine_effect))return false;
     PeGrounderInput frame={.time=in->time,.delta_time=in->delta_time,.enabled=true,.weight=1,.root_position=in->root,
         .root_forward=forward,.root_right=right,.root_up=up,.foot={in->foot[0],in->foot[1]},.ray=in->ray,.context=in->context};

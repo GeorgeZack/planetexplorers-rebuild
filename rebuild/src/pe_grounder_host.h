@@ -10,10 +10,10 @@
  * zeroes the spine bend while hand equipment holds its spine mask.
  *
  * Adapters, not original behavior: the ray is the host's own geometry, not
- * Unity colliders on the serialized layers; the ground angle comes from one
- * ray under the root standing in for the capsule's contact normals, used
- * while the host's controller reports ground; the root axes are the drawn
- * body yaw about world up. Presentation only: nothing here moves the
+ * Unity colliders on the serialized layers; the ground angle comes from the
+ * host capsule's one downward support contact, standing in for the PhysX
+ * contact normals HumanPhyCtrl collects; the root axes are the drawn body yaw
+ * about world up. Presentation only: nothing here moves the
  * controller, a capsule or a contact query. State is transient and never
  * saved; zero-initialize. */
 typedef struct {PeVec3 pelvis_offset; PeFbbikQuat foot_rotation[PE_GROUNDER_LEGS];} PeGrounderPose;
@@ -31,7 +31,9 @@ typedef struct {
     float time,delta_time;             /* drawn-frame clock; delta_time > 0 */
     PeVec3 root; float yaw_degrees;    /* drawn actor root and body yaw */
     PeVec3 foot[PE_GROUNDER_LEGS];     /* animated foot bones in the world, before any IK */
-    bool controller_grounded;          /* the host controller stands on something */
+    /* The host capsule's ground contact this frame, standing in for the
+     * OnCollisionStay normals; the source keeps those within 90 degrees of up. */
+    bool ground_contact; PeVec3 ground_normal;
     bool spine_effect;                 /* no hand equipment held */
     PeGrounderRay ray; void *context;
 } PeGrounderHostInput;

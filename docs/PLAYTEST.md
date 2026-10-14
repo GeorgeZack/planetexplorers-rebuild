@@ -63,7 +63,21 @@ The 15,000-frame tutorial progression passed four times with the grounder
 (14,853 solved poses and updates, foot requests up to 24.3 cm) and **failed
 once**, with 14,614 poses drawn. That run's log was not kept, so the cause is
 unknown; the grounder is presentation only and the passing runs match the
-earlier counts exactly. Full check: 277 jobs, 957 Python tests, 95 skipped;
+earlier counts exactly. October 14, after commit `c7c993a`: eight more runs,
+logs kept under `rebuild/build/grounder-progression/`, all passed with
+identical counts (14,853 poses and updates, 14,808 grounded, 0.243 m, 5 Halt
+stops, 65 masked steps), 254–255 s each. The smoke uses a fixed step and its
+desktop-input block is excluded, so the earlier failure is not reproduced and
+remains unexplained; it may have overlapped another heavy job.
+
+October 14, implemented in C: [trees and the ground contact](audit/FINALIK_GROUNDER.md#trees-and-the-ground-contact).
+Trees catch the grounder's rays in both hosts and the ground angle comes from
+each capsule's own support contact. Rendered smokes: sandbox 90 frames, 8.7 cm
+on dune terrain and 1.2 cm on the Adventure fixture; tutorial 3 mm. The
+15,000-frame progression passes with the same counts as before (14,853,
+14,808 grounded, 0.243 m); the player cuts the lesson tree from beside it, so
+no foot ray lands on it there. No tree was stood on in any run; this is
+headless and smoke coverage only. Full check: 277 jobs, 957 Python tests, 95 skipped;
 sanitizer 110 suites.
 
 Full regression passes 275 jobs/947 Python tests with 94 optional skips;

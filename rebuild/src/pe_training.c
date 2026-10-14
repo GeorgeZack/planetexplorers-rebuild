@@ -180,6 +180,7 @@ void pe_training_step(PeTraining *t,const PeSceneCollision *scene,PeTrainingInpu
     bool moving=magnitude>0.0001;
     PeSceneHit ground=sweep(scene,terrain,build,tree_active,t->position,(PeVec3){0,-0.06f,0});
     t->grounded=t->velocity.y<=0&&ground.hit&&ground.normal.y>=WALKABLE_NORMAL_Y;
+    t->ground_contact=ground.hit;t->ground_normal=ground.hit?ground.normal:(PeVec3){0};
     bool was_grounded=t->grounded;
     if(t->grounded){t->jumping=false;t->jump_elapsed=0;}
     bool stamina_active=t->jumping||input.stamina_action||t->dig.stage!=PE_DIG_IDLE||t->dig.stamina_lock;

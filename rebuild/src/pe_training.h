@@ -12,6 +12,9 @@
 typedef struct {
     PeVec3 position, velocity; /* Feet position in original Unity world space. */
     bool ready, grounded, sprinting, jumping;
+    /* The capsule's ground contact at the start of the last step, any slope;
+     * a presentation input standing in for HumanPhyCtrl's contact normals. */
+    bool ground_contact; PeVec3 ground_normal;
     float stamina, stamina_idle, jump_elapsed;
     int camera_mode; /* 0 third person, 1 control, 2 first person. */
     PeTutorial tutorial;

@@ -7,6 +7,10 @@ PeVec3 pe_training_tree_center(void){
      * 1.07916927), collider local center(-.1,3,-.2). */
     return (PeVec3){11.120831f,4.5823307f,11.879339f};
 }
+PeTreeCapsule pe_training_tree_capsule(void){return (PeTreeCapsule){pe_training_tree_center(),1,7};}
+PeSceneHit pe_training_tree_ray(PeVec3 origin,PeVec3 direction,float range){
+    PeTreeCapsule tree=pe_training_tree_capsule();return pe_tree_collision_ray(&tree,origin,direction,range);
+}
 static bool finite3(PeVec3 a){return isfinite(a.x)&&isfinite(a.y)&&isfinite(a.z);}
 static void sphere(double x,double y,double z,double dx,double dy,double dz,double cy,double *best){
     y-=cy;

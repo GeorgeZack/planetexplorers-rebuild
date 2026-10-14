@@ -27,6 +27,15 @@ int pe_test_training_tree_hit(void){
     CHECK(!pe_training_tree_hit(c,(PeVec3){0,0,0},&distance));CHECK(distance==123);
     CHECK(!pe_training_tree_hit((PeVec3){NAN,0,0},(PeVec3){1,0,0},&distance));CHECK(distance==123);
     CHECK(!pe_training_tree_hit(c,(PeVec3){INFINITY,0,0},NULL));
+    /* The grounder's ray: the same capsule, nearest entry, any direction, its own range. */
+    PeTreeCapsule capsule=pe_training_tree_capsule();
+    CHECK(capsule.center.x==c.x&&capsule.center.y==c.y&&capsule.center.z==c.z&&capsule.radius==1&&capsule.height==7);
+    PeSceneHit ray=pe_training_tree_ray((PeVec3){c.x,c.y+5,c.z},(PeVec3){0,-1,0},3);
+    CHECK(ray.hit&&fabsf(ray.distance-1.5f)<1e-5f&&ray.normal.y>.999f);
+    CHECK(!pe_training_tree_ray((PeVec3){c.x,c.y+5,c.z},(PeVec3){0,-1,0},1.4f).hit);
+    ray=pe_training_tree_ray((PeVec3){c.x-3,c.y,c.z},(PeVec3){1,0,0},5);CHECK(ray.hit&&fabsf(ray.distance-2)<1e-5f&&ray.normal.x<-.999f);
+    CHECK(!pe_training_tree_ray((PeVec3){c.x-1.01f,2,c.z},(PeVec3){0,-1,0},1).hit);
+    CHECK(!pe_training_tree_ray(c,(PeVec3){0,-1,0},10).hit);
     PeSceneHit hit=pe_training_tree_sweep((PeVec3){c.x-3,1.503f,c.z},(PeVec3){6,0,0});
     CHECK(hit.hit&&fabsf(hit.fraction-1.7f/6)<1e-6f&&hit.normal.x<-.999f&&hit.triangle==UINT32_MAX);
     CHECK(!pe_training_tree_sweep((PeVec3){c.x-3,1.503f,c.z},(PeVec3){-6,0,0}).hit);
@@ -64,6 +73,8 @@ static int solid_movement_tests(void){
         CHECK(!pe_training_tree_overlap(t.position));
     }
     CHECK(t.position.x<c.x-1.29f&&t.position.x>c.x-1.32f);CHECK(t.grounded);
+    /* The step records the floor contact for the grounder's ground angle; in the air there is none. */
+    CHECK(t.ground_contact&&t.ground_normal.y>.999f);
     float z=t.position.z;
     for(int i=0;i<30;i++){
         pe_training_step(&t,scene,(PeTrainingInput){.move_x=1,.move_z=1});
@@ -78,7 +89,8 @@ static int solid_movement_tests(void){
     }
     CHECK(t.position.x<c.x-1.29f); /* A short jump cannot tunnel through tall trunk. */
     t.position=(PeVec3){c.x-2,c.y+5,c.z};t.velocity=(PeVec3){0};t.grounded=false;
-    for(int i=0;i<25;i++)pe_training_step(&t,scene,(PeTrainingInput){.move_x=1});
+    pe_training_step(&t,scene,(PeTrainingInput){.move_x=1});CHECK(!t.ground_contact);
+    for(int i=0;i<24;i++)pe_training_step(&t,scene,(PeTrainingInput){.move_x=1});
     CHECK(t.position.x>c.x);CHECK(!pe_training_tree_overlap(t.position));
     /* No global obstacle remains after depletion, even during held mission748. */
     t.gathering.tree_hp=0;t.position=(PeVec3){c.x-2,1.503f,c.z};t.velocity=(PeVec3){0};

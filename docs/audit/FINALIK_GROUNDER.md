@@ -302,7 +302,8 @@ update, as the original mutates its component.
 
 - **The ground angle** is `HumanPhyCtrl.forwardGroundAngle`, already
   [recovered](HUMAN_PHY_CTRL.md) in the disconnected `pe_human_phy` from
-  contact normals. No host produces contact normals yet.
+  contact normals. The hosts now supply a stand-in contact; see
+  [trees and the ground contact](#trees-and-the-ground-contact).
 - **The spine mask** is filled by `Action_Tool` and `HeavyEquipmentCtrl`
   through `SetSpineEffectDeactiveState`, and evaluated once when the view is
   built. Which player actions those are is not traced here.
@@ -327,12 +328,13 @@ untouched.
 
 `pe_grounder_host` is the shared adapter. Once per played frame, before the
 solve, each host gives it the frame clock, the actor root and body yaw, the
-animated foot positions from the staged solver pose, whether the controller
-is grounded, whether hand equipment is held, and a ray. It then:
+animated foot positions from the staged solver pose, the capsule's ground
+contact, whether hand equipment is held, and a ray. It then:
 
-1. takes the ground angle from the surface under the root, with the source
-   `forwardGroundAngle` formula, or decays it by `Lerp(angle, 0, 3·dt)` while
-   the controller is off the ground;
+1. takes the ground angle from the contact normal with the source
+   `forwardGroundAngle` formula; with no contact it decays by
+   `Lerp(angle, 0, 3·dt)`, and a contact 90° or more from up leaves it
+   unchanged, as `UpdateGroundState` does;
 2. writes the foot rotation limit and spine bend with `pe_grounder_set_live`;
 3. runs one `pe_grounder` update;
 4. returns the pelvis move, foot rotations and effector requests in the drawn
@@ -345,18 +347,19 @@ offsets. Skin deltas still start from the animated pose.
 
 | | Sandbox | Tutorial |
 |---|---|---|
-| Ray | cached terrain, construction and settlement triangles (`pe_sandbox_collision_ray_geometry`) | nearest of the room, dug terrain and built blocks |
+| Ray | cached terrain, construction and settlement triangles plus live tree capsules (`pe_sandbox_collision_ray_perception`) | nearest of the room, dug terrain, built blocks and, during the tree lesson, the HoloTree capsule |
+| Contact | 0.08 m capsule support sweep, the `grounded` probe without its walkable limit | the step's 0.06 m capsule ground sweep |
 | Clock | frame time while gameplay runs | frame time while the player is drawn |
 | Reset | load, respawn, mode change, death | death |
 
 Adapters, none of them original behavior:
 
 - **The ray is the host's geometry**, not Unity colliders on the eight
-  serialized layers. Trees and actors are not included, although the
-  original's mask names a tree layer; only terrain was observed underfoot.
-- **The ground angle comes from one ray under the root**, not from the
-  capsule's contact normals, and is used only while the host controller
-  reports ground.
+  serialized layers. Trees are included; actors (AIPlayer) are not. Only
+  terrain was observed underfoot.
+- **The ground angle comes from one capsule support contact**, not from the
+  PhysX contact normals the original sums; side contacts with walls are not
+  collected.
 - **The root is the host controller's position.** Any gap between that and
   the rendered surface becomes a foot request; the original's capsule has its
   own contact offset.
@@ -369,7 +372,8 @@ Verification:
 - `core:grounder_host`: level ground requests nothing and holds the 5° limit;
   a slope ahead, behind and across gives the signed angle, the curve's limit
   and feet tilted to it; a step lowers the pelvis and splits the feet; the
-  angle decays off the ground; held equipment zeroes the spine bend; invalid
+  angle follows the contact, not the rays, decays without one and holds for a
+  wall or ceiling contact; held equipment zeroes the spine bend; invalid
   input changes nothing; a reset initiates again.
 - `core:ik_drive`: an identity grounding equals the offset solve; a lowered
   pelvis with the feet requested back leaves them planted and drops the
@@ -380,6 +384,38 @@ Verification:
   and foot requests up to 3.5 cm on the flat fixture and 8.7 cm on imported
   dune terrain; the tutorial 90-frame run reports 3 mm on its flat floor.
 
+### Trees and the ground contact
+
+**October 14, source-derived and implemented in C.** Both stand-ins named
+when the grounder was connected are narrowed.
+
+*Trees.* The grounder's mask includes TreeStatic (14) and Default (0).
+`LSubTerrCreator` puts the layered sub-terrain object, whose `TerrainCollider`
+carries the tree colliders, on TreeStatic. The sandbox's tree capsules model
+those trees, so the sandbox ray is now the perception ray: the same geometry
+plus live tree capsules, NPCs excluded. In the tutorial, the HoloTree root
+(GameObject 167750 in `TrainingManager_New.prefab`, read with UnityPy) is on
+layer 0 and its CapsuleCollider 13687620 starts disabled; the lesson enables
+it. The ray includes it under the same condition as movement (tree mission,
+tree HP above zero) through `pe_training_tree_ray`.
+
+*Actors.* `BiologyViewCmpt` puts model controllers on AIPlayer (8), which is
+in the mask, so the original's feet can rest on another character. The hosts
+leave actors out.
+
+*Contact.* `HumanPhyCtrl` sums the normals of ground-layer contacts (mask
+2751232, which includes TreeStatic and AIPlayer). Each host's capsule already
+probes the ground beneath it; that one contact now feeds the angle, at any
+slope. The tutorial records it at the start of each fixed step
+(`PeTraining.ground_contact`, not persisted); the sandbox probes once per
+played frame.
+
+Verification: `core:grounder_host` (above), `core:training_tree_hit` (the
+tree ray's top, side, range and interior cases; the floor contact on the
+ground and none in the air), full check 277 jobs. Rendered smokes are
+unchanged: 8.7 cm on dune terrain, 1.2 cm on the Adventure fixture, 3 mm on
+the tutorial floor.
+
 **Not checked:** how it looks. The smoke frames show an intact player at a
 distance and nothing more. No slope, step, jump, edge of a block or
 settlement floor has been looked at in play, and nothing here was compared
@@ -388,18 +424,18 @@ with the original's drawn result.
 ## Remaining boundary
 
 - **Inputs to the written settings.** [The curve and both writers](#settings-written-while-playing)
-  are recovered, but a host must supply the ground angle (contact normals)
-  and the spine mask, and the arm mapping weights follow the same mask. The
+  are recovered. The hosts supply the ground angle from one capsule contact
+  and the spine mask from the drawn-tool flag; the arm mapping weights follow
+  the same mask. The
   curve's evaluation and the limit itself are unobserved: the session's limit
   is fitted.
 - **Only terrain was underfoot** in the observed session.
-- **Collision.** The layer names are resolved, but which rebuild surfaces
-  stand in for them is undecided. Terrain, buildings and static scenery are
-  the plain reading; whether player-built blocks and tree capsules should
-  catch foot rays waits on what the capture shows the rays hitting.
+- **Collision.** Terrain, buildings, static scenery, player-built blocks and
+  trees catch the rays; whether player-built blocks belong to a masked layer
+  is not traced.
 - **Visual acceptance** of [the live composition](#live-in-both-hosts) in
   play, on slopes, steps and built surfaces, in both hosts.
-- **Trees and actors** are not in the hosts' ground ray.
+- **Actors** are not in the hosts' ground ray or contact.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town
 Defense gates stay closed. PECSv22 is untouched.
