@@ -103,6 +103,22 @@ int pe_test_ik_drive(void){
         offsets[0]=(PeVec3){0,-.1f,0};CHECK(pe_ik_drive_solve_offsets(d,&rest,1,true,offsets,&dropped));
         CHECK(dropped.delta[SPINE3][7]<-.02f&&fabsf(dropped.delta[13][7])<5e-3f&&fabsf(dropped.delta[16][7])<5e-3f);
         offsets[0].y=NAN;memcpy(&kept,&dropped,sizeof kept);CHECK(!pe_ik_drive_solve_offsets(d,&rest,1,true,offsets,&dropped)&&!memcmp(&kept,&dropped,sizeof kept));
+        /* The grounder's transform writes: none is the offset solve; a lowered pelvis with the feet
+         * requested back up leaves them planted and drops the chest; a foot rotation turns that foot only. */
+        PeGrounderPose level={{0,0,0},{{0,0,0,1},{0,0,0,1}}},lowered=level,tilted=level;PeIkDriveFrame grounded;
+        offsets[0]=(PeVec3){0,0,0};
+        CHECK(pe_ik_drive_solve_grounded(d,&rest,1,true,offsets,&level,&grounded));
+        for(unsigned b=0;b<rig->bone_count;b++)CHECK(same(grounded.delta[b],plain.delta[b],1e-5f));
+        lowered.pelvis_offset.y=-.1f;offsets[7].y=offsets[8].y=.1f;
+        CHECK(pe_ik_drive_solve_grounded(d,&rest,1,true,offsets,&lowered,&grounded));
+        CHECK(grounded.delta[SPINE3][7]<-.05f&&fabsf(grounded.delta[13][7])<5e-3f&&fabsf(grounded.delta[16][7])<5e-3f);
+        offsets[7].y=offsets[8].y=0;tilted.foot_rotation[0]=(PeFbbikQuat){sinf(.1745329f),0,0,cosf(.1745329f)};   /* 20 degrees about x */
+        CHECK(pe_ik_drive_solve_grounded(d,&rest,1,true,offsets,&tilted,&grounded));
+        unsigned left_foot=rig->chain_bone[3][2],right_foot=rig->chain_bone[4][2];
+        float turn=acosf(fminf(1,(grounded.delta[left_foot][0]+grounded.delta[left_foot][5]+grounded.delta[left_foot][10]-1)/2))*57.29578f;
+        CHECK(fabsf(turn-20)<.05f&&same(grounded.delta[right_foot],plain.delta[right_foot],1e-5f)&&same(grounded.delta[SPINE3],plain.delta[SPINE3],1e-5f));
+        tilted.pelvis_offset.y=NAN;memcpy(&kept,&grounded,sizeof kept);
+        CHECK(!pe_ik_drive_solve_grounded(d,&rest,1,true,offsets,&tilted,&grounded)&&!memcmp(&kept,&grounded,sizeof kept));
         /* Foot effector bones of the blended pose, in model space: left at +x of right for this rig's facing or the reverse, never equal. */
         PeVec3 left={9,9,9},right={9,9,9};CHECK(pe_ik_drive_feet(d,&rest,1,&left,&right));
         CHECK(fabsf(left.x-right.x)>.05f&&fabsf(left.y-right.y)<.02f&&left.y<.3f&&fabsf(left.x+right.x)<.05f);

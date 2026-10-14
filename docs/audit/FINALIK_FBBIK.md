@@ -222,10 +222,11 @@ that the tool works, not what the original does.
   `IKCmpt` zeroes the arm mapping weights while its spine mask is held, which
   this rig export treats as constant. It subscribes after `IKAnimEffectCtrl` and
   `InteractionSystem` (observed).
-- **Host composition.** [The zero-offset solve](PLAYER_IK_DRIVE.md) now drives
-  the drawn player and attachments in both hosts from
-  [the staged solver poses](PLAYER_IK_POSE.md). Defence and blade capsules
-  stay on the baked pose, and no effector offset is supplied. Two AimIK
+- **Host composition.** [The solve](PLAYER_IK_DRIVE.md) drives the drawn
+  player and attachments in both hosts from
+  [the staged solver poses](PLAYER_IK_POSE.md), with Halt and
+  [grounder](FINALIK_GROUNDER.md#live-in-both-hosts) offsets. Defence and
+  blade capsules stay on the baked pose. Two AimIK
   components on the same model run separately.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town

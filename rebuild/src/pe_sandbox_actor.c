@@ -76,6 +76,7 @@ struct PeSandboxActor {
     bool running_ready,sprint_ready;
     unsigned long long ik_draws;
     bool ik_offsets;PeVec3 ik_offset[PE_FBBIK_EFFECTORS]; /* world space, Halt stop effect only */
+    bool grounding;PeGrounderPose ground_pose;PeVec3 ground_offset[PE_FBBIK_EFFECTORS]; /* model space, grounder */
     /* Native 150ms natural-end pose recovery; never an action/contact clock. */
     struct {bool was_active,active;int item;uint32_t instance;size_t body_clip,tool_clip;double seconds,age;} recovery;
     struct {bool active;size_t body_clip,knife_clip;double seconds;} melee;
@@ -366,7 +367,14 @@ void pe_sandbox_actor_reset_motion(PeSandboxActor *a,const PeGame *g){
     double durations[PE_LOCOMOTION_COUNT];memcpy(durations,a->locomotion.duration,sizeof durations);
     pe_player_locomotion_init(&a->locomotion,durations);a->previous=g->player;a->have_previous=true;
     a->was_jumping=g->jumping;a->facing_locked=false;a->shield_instance=0;pe_sandbox_actor_set_action(a,NULL);pe_sandbox_actor_face_camera(a,g);
-    a->ik_offsets=false;
+    a->ik_offsets=a->grounding=false;
+}
+bool pe_sandbox_actor_set_grounding(PeSandboxActor *a,const PeGrounderHost *host){
+    if(!a)return false;
+    if(!host||!host->active){a->grounding=false;return true;}
+    if(!finite3(host->pose.pelvis_offset))return false;
+    for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)if(!finite3(host->effector_offset[e]))return false;
+    a->ground_pose=host->pose;memcpy(a->ground_offset,host->effector_offset,sizeof a->ground_offset);a->grounding=true;return true;
 }
 bool pe_sandbox_actor_set_ik_offsets(PeSandboxActor *a,const PeHaltOffset *offsets,unsigned count){
     if(!a||count>PE_HALT_LINKS||(count&&!offsets))return false;
@@ -529,11 +537,14 @@ static bool ik_frame(const PeSandboxActor *a,const PeGame *g,const SelectedPose 
        (p->tool>=0&&a->views[p->tool].loaded&&!a->views[p->tool].ik_bound)||(shield_bound(a,g)&&!a->views[WOOD_SHIELD].ik_bound))return false;
     PeIkDriveSample samples[PE_ACTOR_BLEND_MAX];size_t count=ik_samples(a,g,p,samples);
     if(!count)return false;
-    if(!a->ik_offsets)return pe_ik_drive_solve(a->ik,samples,count,!p->held,out);
-    /* Halt offsets are world vectors; the solver works in the drawn model's frame. */
-    PeVec3 offsets[PE_FBBIK_EFFECTORS];float yaw=pe_sandbox_actor_yaw(a,g);
-    for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)offsets[e]=pe_ik_drive_model_vector(a->ik_offset[e],yaw);
-    return pe_ik_drive_solve_offsets(a->ik,samples,count,!p->held,offsets,out);
+    if(!a->ik_offsets&&!a->grounding)return pe_ik_drive_solve(a->ik,samples,count,!p->held,out);
+    /* Halt offsets are world vectors; the solver works in the drawn model's frame.
+     * The grounder's requests add to them, as both add to positionOffset in the original. */
+    PeVec3 offsets[PE_FBBIK_EFFECTORS]={{0}};float yaw=pe_sandbox_actor_yaw(a,g);
+    if(a->ik_offsets)for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)offsets[e]=pe_ik_drive_model_vector(a->ik_offset[e],yaw);
+    if(a->grounding)for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)
+        offsets[e]=(PeVec3){offsets[e].x+a->ground_offset[e].x,offsets[e].y+a->ground_offset[e].y,offsets[e].z+a->ground_offset[e].z};
+    return pe_ik_drive_solve_grounded(a->ik,samples,count,!p->held,offsets,a->grounding?&a->ground_pose:NULL,out);
 }
 bool pe_sandbox_actor_feet(const PeSandboxActor *a,const PeGame *g,PeVec3 *left,PeVec3 *right){
     if(!a||!a->ik||!g||!left||!right||!finite3(g->player)||!isfinite(g->yaw))return false;

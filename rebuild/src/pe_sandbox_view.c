@@ -320,6 +320,17 @@ static void interact(PeGame *g) {
     else pe_game_gather(g);
 }
 
+/* Grounder ray adapter: the cached terrain, construction and settlement
+ * triangles stand in for the original's collider layers. Trees and actors are
+ * not included. A downward ray reports the surface's upward normal. */
+static bool sandbox_ground_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,PeGrounderHit *out){
+    const PeSandboxCollision *collision=context;
+    if(!out||!pe_sandbox_collision_stats(collision).generation)return false;
+    PeSceneHit hit=pe_sandbox_collision_ray_geometry(collision,origin,direction,maximum);
+    if(!hit.hit)return false;
+    if(hit.normal.y<0)hit.normal=(PeVec3){-hit.normal.x,-hit.normal.y,-hit.normal.z};
+    *out=(PeGrounderHit){hit.position,hit.normal,hit.distance};return true;
+}
 /* Activity retains the tree-excluding immutable ray snapshot. Adventure
  * geometry uses its dedicated collider-aware callback below. */
 static bool sandbox_camera_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,uint32_t mask,float *distance){
@@ -720,6 +731,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
     PeRootMotion *running_motion=NULL;PeSwordRootMotion *ordinary_motion=NULL;PeSprintRootMotion *sprint_motion=NULL;
     PeSwordMotor sword_motor;pe_sword_motor_reset(&sword_motor);bool blade_was_active=false;
     PeHaltHost halt={0};uint64_t halt_starts=0,halt_refusals=0; /* Transient; never saved. */
+    PeGrounderHost grounder={0};double grounder_time=0;uint64_t grounder_updates=0,grounder_planted=0;float grounder_reach=0; /* Transient; never saved. */
     PeSandboxMelee melee={0},blade_templates[2]={{0}};PeHitboxes *knife_capsule=NULL,*sword_capsule=NULL;uint64_t melee_swings=0,running_starts=0,walking_starts=0,sprint_starts=0;
     SandboxBladeFacing blade_facing={0};
     bool captured=false,walk=false,autorun=false,jump_pending=false,third_person=true,build_mode=false;
@@ -974,7 +986,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         }
         if(action.load||debug_action==PE_DEBUG_START_HUNT) {
             loaded=debug_action==PE_DEBUG_START_HUNT||pe_game_load(game,save_path,error,sizeof error);
-            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
+            if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);pe_grounder_host_reset(&grounder);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
                 pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
@@ -1182,7 +1194,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             attack_pending=tool_drawn=placing_torch=autorun=jump_pending=false;
             build_mode=ui.building=false;accumulator=0;
             pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};pe_sandbox_actions_cancel(&tool_action);
-            pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);
+            pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);pe_grounder_host_reset(&grounder);
             /* Preserve the actual cohort, injuries, kill count and encounter
              * clock. Revival must not reload or replace surviving creatures. */
             world_input=action_input=false;
@@ -1430,6 +1442,18 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(result==1)break;
             if(steps>=6)accumulator=0;
             if(!hunt_fixed_pose&&!hunt.encounter.active)pe_sandbox_actor_update(actor,smoke_frames?PE_FIXED_DT:dt,game);
+            /* Source GrounderFBBIK, once per played frame before the solve: feet and pelvis follow
+             * the ground under them. Presentation only; the geometry ray is the host's adapter. */
+            float ground_dt=smoke_frames?PE_FIXED_DT:dt;
+            PeGrounderHostInput ground_input={.time=(float)(grounder_time+ground_dt),.delta_time=ground_dt,.root=game->player,
+                .yaw_degrees=pe_sandbox_actor_yaw(actor,game),.controller_grounded=game->grounded,.spine_effect=!tool_drawn,
+                .ray=sandbox_ground_ray,.context=collision};
+            if(game->hp<=0)pe_grounder_host_reset(&grounder);
+            else if(ground_dt>0&&pe_sandbox_actor_feet(actor,game,&ground_input.foot[0],&ground_input.foot[1])&&pe_grounder_host_update(&grounder,&ground_input)){
+                grounder_time+=ground_dt;grounder_updates++;grounder_planted+=grounder.grounded;
+                for(unsigned e=7;e<=8;e++)grounder_reach=fmaxf(grounder_reach,fabsf(grounder.effector_offset[e].y));
+            }
+            pe_sandbox_actor_set_grounding(actor,&grounder);
         } else {accumulator=0;jump_pending=false;}
         /* Pickup owns no input. Ordinary menus and dead-player expiry continue;
          * only focus loss/pause suspend this once-per-display transaction. */
@@ -1580,6 +1604,7 @@ cleanup:
     printf("Sandbox camera: mode %d, desired %.3fm, distance %.3fm\n",camera_controls.mode,orbit.desired_distance,orbit.distance);
     printf("Sandbox locomotion: exercised mask %u\n",pe_sandbox_actor_locomotion_seen(actor));
     printf("Sandbox IK: %llu poses drawn through the solve\n",pe_sandbox_actor_ik_draws(actor));
+    printf("Sandbox grounder: %llu updates, %llu grounded, largest foot request %.3f m\n",(unsigned long long)grounder_updates,(unsigned long long)grounder_planted,grounder_reach);
     printf("Sandbox halt: %llu stops, %llu steps with the mask held\n",(unsigned long long)halt_starts,(unsigned long long)halt_refusals);
     printf("Sandbox knife: %llu swing stages; hunt contacts %llu outgoing, %llu incoming; kills %u/4\n",(unsigned long long)melee_swings,
         (unsigned long long)hunt.hare_hits,(unsigned long long)hunt.player_hits,game->hunt_kills);

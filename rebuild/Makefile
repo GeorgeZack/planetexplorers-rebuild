@@ -11,6 +11,7 @@ CORE += src/pe_whacked.c
 CORE += src/pe_sword_motor.c
 CORE += src/pe_halt.c
 CORE += src/pe_halt_host.c
+CORE += src/pe_grounder_host.c
 CORE += src/pe_hit_ik.c
 CORE += src/pe_ragdoll_action.c
 CORE += src/pe_animfollow.c

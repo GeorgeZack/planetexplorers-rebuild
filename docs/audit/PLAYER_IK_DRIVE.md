@@ -176,8 +176,9 @@ Counts and logs are in [PLAYTEST](../PLAYTEST.md).
   observed on the original's own inputs; the rebuild's blended input pose is
   not the Animator's.
 - **Halt offsets are connected** since the user's October 13 decision; see
-  [the Halt audit](HALT_STOP_EFFECT.md#live-in-both-hosts). Hit and grounder
-  offsets are not; the grounder is [observed on uneven ground](FINALIK_GROUNDER.md#observed-on-uneven-ground) but not connected.
+  [the Halt audit](HALT_STOP_EFFECT.md#live-in-both-hosts). **The grounder is
+  connected** too: [its audit](FINALIK_GROUNDER.md#live-in-both-hosts). Hit
+  offsets are not.
 - **Contact geometry** stays on the baked pose.
 - **Male rig, other clips and NPCs** are not staged.
 

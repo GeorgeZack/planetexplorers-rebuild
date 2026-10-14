@@ -5,6 +5,7 @@
 #include "pe_actor.h"
 #include "pe_combat.h"
 #include "pe_halt.h"
+#include "pe_grounder_host.h"
 
 typedef struct PeSandboxActor PeSandboxActor;
 /* Requires an active graphics context. asset_root/player/recording.peas must
@@ -83,6 +84,10 @@ bool pe_sandbox_actor_feet(const PeSandboxActor *actor,const PeGame *game,PeVec3
  * does reset_motion. Presentation only: they never move the player, a capsule
  * or a contact query, and are ignored when the pose is not driven. */
 bool pe_sandbox_actor_set_ik_offsets(PeSandboxActor *actor,const PeHaltOffset *offsets,unsigned count);
+/* Copies the grounder's latest pelvis move, foot rotations and effector
+ * requests for the following world draws; NULL or an inactive host clears
+ * them, and so does reset_motion. Presentation only, as above. */
+bool pe_sandbox_actor_set_grounding(PeSandboxActor *actor,const PeGrounderHost *host);
 /* True only for an exact recovered item with complete, clock-validated held,
  * action-body and action-tool scenes (and shovel/pickaxe stowed scene). Host action
  * admission must use this capability; no tool/prototype visual substitution.

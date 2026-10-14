@@ -62,9 +62,13 @@ bool pe_ik_drive_solve(const PeIkDrive *d,const PeIkDriveSample *samples,size_t 
     memset(out,0,sizeof *out);return true;
 }
 static bool ik_had_offsets;static PeVec3 ik_offsets[PE_FBBIK_EFFECTORS];
-bool pe_ik_drive_solve_offsets(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,const PeVec3 *offsets,PeIkDriveFrame *out){
+static bool ik_had_grounding;static PeGrounderPose ik_grounding;
+bool pe_ik_drive_solve_grounded(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,const PeVec3 *offsets,
+                                const PeGrounderPose *grounding,PeIkDriveFrame *out){
     if(!offsets||!pe_ik_drive_solve(d,samples,count,arms_mapped,out))return false;
-    ik_had_offsets=true;memcpy(ik_offsets,offsets,sizeof ik_offsets);return true;
+    ik_had_offsets=true;memcpy(ik_offsets,offsets,sizeof ik_offsets);
+    ik_had_grounding=grounding!=NULL;if(grounding)ik_grounding=*grounding;
+    return true;
 }
 bool pe_ik_drive_feet(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,PeVec3 *left,PeVec3 *right){
     if(!d||!samples||!count||ik_solve_failure)return false;
@@ -468,6 +472,23 @@ static int ik_actor_tests(void){
           !pe_sandbox_actor_set_ik_offsets(a,halt,PE_HALT_LINKS+1)&&!pe_sandbox_actor_set_ik_offsets(NULL,halt,1));
     ik_had_offsets=false;draw(a,g);CHECK(ik_had_offsets&&ik_offsets[0].z==1);                 /* refused updates keep the last set */
     CHECK(pe_sandbox_actor_set_ik_offsets(a,NULL,0));ik_had_offsets=false;draw(a,g);CHECK(!ik_had_offsets&&draws[0].driven);
+    /* The grounder's result is already in the model frame: its requests add to the turned Halt
+     * offsets, and its pelvis move and foot rotations go to the solve unchanged, only while set. */
+    PeGrounderHost grounded={.active=true,.pose={{0,-.07f,0},{{.1f,0,0,.995f},{0,0,0,1}}}};
+    grounded.effector_offset[7]=(PeVec3){0,.02f,0};grounded.effector_offset[1]=(PeVec3){.01f,0,0};
+    CHECK(pe_sandbox_actor_set_grounding(a,&grounded));ik_had_offsets=ik_had_grounding=false;draw(a,g);
+    CHECK(ik_had_offsets&&ik_had_grounding&&draws[0].driven&&ik_offsets[7].y==.02f&&ik_offsets[1].x==.01f&&ik_offsets[0].y==0);
+    CHECK(ik_grounding.pelvis_offset.y==-.07f&&ik_grounding.foot_rotation[0].x==.1f&&ik_grounding.foot_rotation[1].w==1);
+    CHECK(pe_sandbox_actor_set_ik_offsets(a,halt,2));draw(a,g);
+    CHECK(ik_had_grounding&&ik_offsets[7].x==-2&&ik_offsets[7].y==.52f&&ik_offsets[0].z==1&&ik_offsets[1].x==.01f);
+    CHECK(pe_sandbox_actor_set_ik_offsets(a,NULL,0));
+    PeGrounderHost broken=grounded;broken.pose.pelvis_offset.y=NAN;CHECK(!pe_sandbox_actor_set_grounding(a,&broken)&&!pe_sandbox_actor_set_grounding(NULL,&grounded));
+    broken=grounded;broken.effector_offset[3].z=INFINITY;CHECK(!pe_sandbox_actor_set_grounding(a,&broken));
+    ik_had_grounding=false;draw(a,g);CHECK(ik_had_grounding&&ik_grounding.pelvis_offset.y==-.07f);   /* refused updates keep the last set */
+    grounded.active=false;CHECK(pe_sandbox_actor_set_grounding(a,&grounded));ik_had_offsets=ik_had_grounding=false;draw(a,g);CHECK(!ik_had_offsets&&!ik_had_grounding&&draws[0].driven);
+    grounded.active=true;CHECK(pe_sandbox_actor_set_grounding(a,&grounded)&&pe_sandbox_actor_set_grounding(a,NULL));ik_had_offsets=false;draw(a,g);CHECK(!ik_had_offsets);
+    CHECK(pe_sandbox_actor_set_grounding(a,&grounded));pe_sandbox_actor_reset_motion(a,g);pe_sandbox_actor_facing_mode(a,true);
+    CHECK(pe_sandbox_actor_face_yaw(a,90));ik_had_offsets=false;draw(a,g);CHECK(!ik_had_offsets);   /* a motion reset drops it */
     /* Foot bones come back in world space through the same body yaw. */
     PeVec3 left={9,9,9},right={9,9,9};CHECK(pe_sandbox_actor_feet(a,g,&left,&right));
     CHECK(fabsf(left.x-(g->player.x+.3f))<1e-5f&&fabsf(left.y-(g->player.y+.05f))<1e-5f&&fabsf(left.z-(g->player.z-.1f))<1e-5f&&fabsf(right.x-(g->player.x-.3f))<1e-5f);

@@ -8,7 +8,7 @@
  * It covers the serialized mode only: world-up grounding (rotateSolver off)
  * with the three-ray foot plane (quality Simple).
  *
- * No host calls this. The original rewrites two settings while playing:
+ * Hosts reach this through pe_grounder_host. The original rewrites two settings while playing:
  * max_foot_rotation_angle every update and spine_bend with the spine mask;
  * pe_grounder_set_live does the same. Rays are a caller callback; the original casts against
  * Unity colliders on the serialized layers. Quaternion FromToRotation/Slerp

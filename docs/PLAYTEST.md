@@ -50,6 +50,22 @@ Follow-up without a launch: the foot rotation curve and both setting writers
 are [source-derived and implemented](audit/FINALIK_GROUNDER.md#settings-written-while-playing).
 The curve's evaluation is checked against exact arithmetic, not the engine.
 
+Step 3, implemented in C: [the grounder is connected](audit/FINALIK_GROUNDER.md#live-in-both-hosts)
+to the drawn player in both hosts. Headless suites cover the shared host, the
+solver path and the actor. Rendered smokes report foot requests up to 8.7 cm
+on imported dune terrain (sandbox, 90 frames) and 3 mm on the tutorial floor.
+**Not visually accepted**: no one has watched it on a slope, step or built
+surface, and it is not compared with the original's drawn result.
+**Owed by the user (October 14 request):** a manual look at the player
+standing still on a slope, in both the sandbox and the tutorial — foot
+placement, foot tilt and pelvis height while idle.
+The 15,000-frame tutorial progression passed four times with the grounder
+(14,853 solved poses and updates, foot requests up to 24.3 cm) and **failed
+once**, with 14,614 poses drawn. That run's log was not kept, so the cause is
+unknown; the grounder is presentation only and the passing runs match the
+earlier counts exactly. Full check: 277 jobs, 957 Python tests, 95 skipped;
+sanitizer 110 suites.
+
 Full regression passes 275 jobs/947 Python tests with 94 optional skips;
 skips are not passes. Sanitizer passes 109 suites with leak scanning, and the
 installed-asset drive harness passes under ASan/UBSan. 26 CLI cases pass. No

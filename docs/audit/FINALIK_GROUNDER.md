@@ -1,10 +1,10 @@
 # Installed FinalIK grounder
 
-October 13, 2026. **Shipped-artifact-derived and implemented in a disconnected
-C owner.** `pe_grounder` performs one `GrounderFBBIK.OnSolverUpdate` for the
+October 13, 2026. **Shipped-artifact-derived, implemented in C and
+[connected to the drawn player in both hosts](#live-in-both-hosts).**
+`pe_grounder` performs one `GrounderFBBIK.OnSolverUpdate` for the
 female player: the root ray, both legs, the pelvis, and the pelvis, foot and
-spine requests handed to [the full-body solver](FINALIK_FBBIK.md). No host
-calls it. One observed session on natural terrain
+spine requests handed to [the full-body solver](FINALIK_FBBIK.md). One observed session on natural terrain
 [agrees with it](#observed-on-uneven-ground) to 0.2 mm and 0.23°, with two
 settings the game rewrites while playing fitted rather than recorded.
 
@@ -318,6 +318,73 @@ attach corresponds to a ground angle of about ±28.8°. This does not test the
 curve's shape. The probe now records the ground angle and the arm mapping
 weight per frame, and the analyzer then reports the curve's error directly.
 
+## Live in both hosts
+
+**Implemented in C, October 13, as step 3 of the agreed order** (solve, Halt,
+grounder). Presentation only: it changes the drawn player's feet, pelvis and
+spine. The controller, capsules, contact queries, cameras and saves are
+untouched.
+
+`pe_grounder_host` is the shared adapter. Once per played frame, before the
+solve, each host gives it the frame clock, the actor root and body yaw, the
+animated foot positions from the staged solver pose, whether the controller
+is grounded, whether hand equipment is held, and a ray. It then:
+
+1. takes the ground angle from the surface under the root, with the source
+   `forwardGroundAngle` formula, or decays it by `Lerp(angle, 0, 3·dt)` while
+   the controller is off the ground;
+2. writes the foot rotation limit and spine bend with `pe_grounder_set_live`;
+3. runs one `pe_grounder` update;
+4. returns the pelvis move, foot rotations and effector requests in the drawn
+   model's frame.
+
+`pe_ik_drive_solve_grounded` applies them as the original does: the pelvis
+bone is moved and each foot bone rotated in the animated pose before the
+solver reads it, and the foot and spine requests are added to the Halt
+offsets. Skin deltas still start from the animated pose.
+
+| | Sandbox | Tutorial |
+|---|---|---|
+| Ray | cached terrain, construction and settlement triangles (`pe_sandbox_collision_ray_geometry`) | nearest of the room, dug terrain and built blocks |
+| Clock | frame time while gameplay runs | frame time while the player is drawn |
+| Reset | load, respawn, mode change, death | death |
+
+Adapters, none of them original behavior:
+
+- **The ray is the host's geometry**, not Unity colliders on the eight
+  serialized layers. Trees and actors are not included, although the
+  original's mask names a tree layer; only terrain was observed underfoot.
+- **The ground angle comes from one ray under the root**, not from the
+  capsule's contact normals, and is used only while the host controller
+  reports ground.
+- **The root is the host controller's position.** Any gap between that and
+  the rendered surface becomes a foot request; the original's capsule has its
+  own contact offset.
+- **The input pose is the blended staged pose**, as for the solve itself.
+- **Held equipment** is the host's drawn-tool flag, standing in for the spine
+  mask.
+
+Verification:
+
+- `core:grounder_host`: level ground requests nothing and holds the 5° limit;
+  a slope ahead, behind and across gives the signed angle, the curve's limit
+  and feet tilted to it; a step lowers the pelvis and splits the feet; the
+  angle decays off the ground; held equipment zeroes the spine bend; invalid
+  input changes nothing; a reset initiates again.
+- `core:ik_drive`: an identity grounding equals the offset solve; a lowered
+  pelvis with the feet requested back leaves them planted and drops the
+  chest; a 20° foot rotation turns that foot only.
+- `sandbox-actor-test`: the grounding reaches the solve unchanged, adds to
+  the Halt offsets, is kept on a refused update and dropped on clear or reset.
+- Rendered smokes: the sandbox 90-frame runs report 90 updates, 89 grounded
+  and foot requests up to 3.5 cm on the flat fixture and 8.7 cm on imported
+  dune terrain; the tutorial 90-frame run reports 3 mm on its flat floor.
+
+**Not checked:** how it looks. The smoke frames show an intact player at a
+distance and nothing more. No slope, step, jump, edge of a block or
+settlement floor has been looked at in play, and nothing here was compared
+with the original's drawn result.
+
 ## Remaining boundary
 
 - **Inputs to the written settings.** [The curve and both writers](#settings-written-while-playing)
@@ -330,7 +397,9 @@ weight per frame, and the analyzer then reports the curve's error directly.
   stand in for them is undecided. Terrain, buildings and static scenery are
   the plain reading; whether player-built blocks and tree capsules should
   catch foot rays waits on what the capture shows the rays hitting.
-- **Host composition** is not started, as for the solver.
+- **Visual acceptance** of [the live composition](#live-in-both-hosts) in
+  play, on slopes, steps and built surfaces, in both hosts.
+- **Trees and actors** are not in the hosts' ground ray.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town
 Defense gates stay closed. PECSv22 is untouched.

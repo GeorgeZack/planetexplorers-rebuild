@@ -1,7 +1,9 @@
 # HumanPhyCtrl request consumption and force ordering
 
 October 12, 2026. Source-derived from installed CIL and implemented in a
-disconnected C owner. Neither gameplay host calls `pe_human_phy`; live hit
+disconnected C owner. Neither gameplay host calls `pe_human_phy`; only its two
+pure forward-ground-angle rules are used, by
+[the grounder host](FINALIK_GROUNDER.md#live-in-both-hosts). Live hit
 reactions, stun and knockback remain gated.
 
 ## Why the installed assembly

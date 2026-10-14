@@ -54,6 +54,12 @@ typedef struct {
 } PeHumanPhyForces;
 
 void pe_human_phy_init(PeHumanPhy *phy);
+/* The two forwardGroundAngle rules of UpdateGroundState, for a caller that
+ * owns the contact normals itself: the angle for a nonzero sum of normals
+ * within 90 degrees of world up, and Lerp(angle, 0, 3*deltaTime) without
+ * contacts or in water. Positive when the ground rises ahead. */
+float pe_human_phy_slope_forward_angle(PeVec3 normal_sum,PeVec3 forward);
+float pe_human_phy_forward_angle_decay(float current,float delta_time);
 /* ResetSpeed: floors at .1, then multiplies by serialized mSpeedTimes. */
 bool pe_human_phy_reset_speed(PeHumanPhy *phy,float speed);
 /* Sums into the pending request; a magnitude strictly above MaxSubSpeed 10 is

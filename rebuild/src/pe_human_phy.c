@@ -85,9 +85,8 @@ static void ground_state(PeHumanPhy *p,const PeHumanPhyFrame *in){
     p->fall_ground=!was&&p->grounded;
     if(p->spine_in_water||!contacts){
         p->gravity_up=world_up;
-        float t=pe_human_phy_source_forward_angle_lerp_speed*in->delta_time;
         float from=p->is_controller?p->forward_ground_angle:0; /* get_forwardGroundAngle */
-        p->forward_ground_angle=from+(0-from)*(t<0?0:t>1?1:t);
+        p->forward_ground_angle=pe_human_phy_forward_angle_decay(from,in->delta_time);
         return;
     }
     PeVec3 slope=zero;p->gravity_up=zero;
@@ -98,11 +97,18 @@ static void ground_state(PeHumanPhy *p,const PeHumanPhyFrame *in){
     }
     if(!same(zero,slope)){
         /* A zero sum leaves the previous forward angle untouched. */
-        slope=normalized(slope);
-        PeVec3 forward=on_plane(in->forward,world_up);
-        p->forward_ground_angle=angle(on_plane(slope,cross(world_up,forward)),forward)-90;
+        p->forward_ground_angle=pe_human_phy_slope_forward_angle(slope,in->forward);
     }
     p->gravity_up=same(zero,p->gravity_up)?world_up:normalized(p->gravity_up);
+}
+float pe_human_phy_slope_forward_angle(PeVec3 slope,PeVec3 forward){
+    const PeVec3 world_up={0,1,0};
+    slope=normalized(slope);forward=on_plane(forward,world_up);
+    return angle(on_plane(slope,cross(world_up,forward)),forward)-90;
+}
+float pe_human_phy_forward_angle_decay(float current,float delta_time){
+    float t=pe_human_phy_source_forward_angle_lerp_speed*delta_time;
+    return current+(0-current)*(t<0?0:t>1?1:t);
 }
 static void water_state(PeHumanPhy *p,const PeHumanPhyFrame *in){
     p->spine_in_water=p->feet_in_water=p->head_in_water=false;

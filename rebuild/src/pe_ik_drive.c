@@ -124,13 +124,47 @@ bool pe_ik_drive_solve(const PeIkDrive *d,const PeIkDriveSample *samples,size_t 
 }
 bool pe_ik_drive_solve_offsets(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,
                                const PeVec3 *offsets,PeIkDriveFrame *out){
+    return pe_ik_drive_solve_grounded(d,samples,count,arms_mapped,offsets,NULL,out);
+}
+static PeFbbikQuat qmul(PeFbbikQuat a,PeFbbikQuat b){
+    return (PeFbbikQuat){a.w*b.x+a.x*b.w+a.y*b.z-a.z*b.y,a.w*b.y+a.y*b.w+a.z*b.x-a.x*b.z,a.w*b.z+a.z*b.w+a.x*b.y-a.y*b.x,a.w*b.w-a.x*b.x-a.y*b.y-a.z*b.z};
+}
+static PeFbbikQuat qunit(PeFbbikQuat q){
+    float n=sqrtf(q.x*q.x+q.y*q.y+q.z*q.z+q.w*q.w);
+    return isfinite(n)&&n>1e-6f?(PeFbbikQuat){q.x/n,q.y/n,q.z/n,q.w/n}:(PeFbbikQuat){0,0,0,1};
+}
+static PeFbbikQuat qconj(PeFbbikQuat q){return (PeFbbikQuat){-q.x,-q.y,-q.z,q.w};}
+static PeVec3 qrotate(PeFbbikQuat q,PeVec3 v){
+    PeFbbikQuat r=qmul(qmul(q,(PeFbbikQuat){v.x,v.y,v.z,0}),qconj(q));return (PeVec3){r.x,r.y,r.z};
+}
+/* GrounderFBBIK.OnSolverUpdate writes transforms before the solver reads the
+ * pose: the pelvis bone's position, then each foot bone's rotation. */
+static bool ground(const PeFbbikRig *rig,PeFbbikTransform *local,const PeGrounderPose *g){
+    unsigned pelvis=rig->spine[0];PeFbbikTransform parent={{0,0,0},{0,0,0,1}};
+    if(!rig->spine_count||pelvis>=rig->bone_count)return false;
+    if(rig->parent[pelvis]>=0&&!pe_fbbik_world(rig,local,(unsigned)rig->parent[pelvis],&parent))return false;
+    PeVec3 move=qrotate(qconj(qunit(parent.rotation)),g->pelvis_offset);
+    local[pelvis].position=(PeVec3){local[pelvis].position.x+move.x,local[pelvis].position.y+move.y,local[pelvis].position.z+move.z};
+    for(unsigned i=0;i<PE_GROUNDER_LEGS;i++){
+        unsigned foot=rig->chain_bone[3+i][2];PeFbbikTransform world;
+        if(rig->parent[foot]<0||!pe_fbbik_world(rig,local,foot,&world)||!pe_fbbik_world(rig,local,(unsigned)rig->parent[foot],&parent))return false;
+        local[foot].rotation=qunit(qmul(qconj(qunit(parent.rotation)),qmul(qunit(g->foot_rotation[i]),world.rotation)));
+    }
+    return true;
+}
+bool pe_ik_drive_solve_grounded(const PeIkDrive *d,const PeIkDriveSample *samples,size_t count,bool arms_mapped,
+                                const PeVec3 *offsets,const PeGrounderPose *grounding,PeIkDriveFrame *out){
     if(!d||!out)return false;
     const PeFbbik *solver=&d->solver[arms_mapped?1:0];unsigned bones=solver->rig->bone_count;
-    PeFbbikTransform local[PE_FBBIK_MAX_BONES];PeFbbikInput input;PeFbbikOutput solved;PeIkDriveFrame frame;
-    if(!blend(d,samples,count,bones,local)||!pe_fbbik_input(solver,local,&input))return false;
+    PeFbbikTransform animated[PE_FBBIK_MAX_BONES],local[PE_FBBIK_MAX_BONES];PeFbbikInput input;PeFbbikOutput solved;PeIkDriveFrame frame;
+    if(!blend(d,samples,count,bones,animated))return false;
+    memcpy(local,animated,sizeof local);
+    if(grounding&&!ground(solver->rig,local,grounding))return false;
+    if(!pe_fbbik_input(solver,local,&input))return false;
     input.weight=1;
     if(offsets)for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)input.effector[e].position_offset=offsets[e];
-    if(!pe_fbbik_solve(solver,&input,&solved)||!pe_ik_skin_deltas(solver->rig,local,solved.local,frame.delta))return false;
+    /* Skinning is baked from the animated pose, so the deltas start there. */
+    if(!pe_fbbik_solve(solver,&input,&solved)||!pe_ik_skin_deltas(solver->rig,animated,solved.local,frame.delta))return false;
     for(unsigned b=bones;b<PE_FBBIK_MAX_BONES;b++)memset(frame.delta[b],0,sizeof frame.delta[b]);
     *out=frame;return true;
 }

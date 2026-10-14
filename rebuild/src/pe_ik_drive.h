@@ -2,6 +2,7 @@
 #define PE_IK_DRIVE_H
 #include "pe_actor.h"
 #include "pe_fbbik.h"
+#include "pe_grounder_host.h"
 /* Presentation owner for the always-on FinalIK solve of the female player:
  * blends the staged solver poses of the named clips, runs pe_fbbik with no
  * effector offsets, and returns one rigid motion per solver bone for skinning.
@@ -9,8 +10,8 @@
  * Adapters, not original behavior: the pose read during a blend is the
  * weighted blend of single-clip bone poses (the original solves the Animator's
  * own controller pose), the solver initiates from the prefab rest pose, and
- * finger/toe/mount joints follow their solver ancestor. Only the Halt stop
- * effect supplies offsets; hit and grounder offsets are not connected. State
+ * finger/toe/mount joints follow their solver ancestor. The Halt stop effect
+ * and the grounder supply offsets; hit offsets are not connected. State
  * is immutable after load and never saved. */
 _Static_assert(PE_ACTOR_DRIVE_BONES==PE_FBBIK_MAX_BONES,"driven skin bone capacity");
 typedef struct PeIkDrive PeIkDrive;
@@ -33,11 +34,16 @@ const unsigned char *pe_ik_drive_drivers(const PeIkDrive *drive,const char *grou
  * or the solve fails; the caller then draws the undriven pose. */
 bool pe_ik_drive_solve(const PeIkDrive *drive,const PeIkDriveSample *samples,size_t count,bool arms_mapped,PeIkDriveFrame *out);
 /* As above with additive FinalIK effector position offsets: PE_FBBIK_EFFECTORS
- * model-space vectors in FullBodyBipedEffector order, or NULL for none. The
- * Halt stop effect is the only source of them; hit and grounder offsets stay
+ * model-space vectors in FullBodyBipedEffector order, or NULL for none: the
+ * sum of the Halt stop effect's and the grounder's. Hit offsets stay
  * disconnected. */
 bool pe_ik_drive_solve_offsets(const PeIkDrive *drive,const PeIkDriveSample *samples,size_t count,bool arms_mapped,
                                const PeVec3 *effector_offsets,PeIkDriveFrame *out);
+/* As above after the grounder's transform writes: the pelvis bone moved by
+ * pelvis_offset and each foot bone's rotation premultiplied, both in the
+ * model frame, before the solver reads the pose. NULL grounding is none. */
+bool pe_ik_drive_solve_grounded(const PeIkDrive *drive,const PeIkDriveSample *samples,size_t count,bool arms_mapped,
+                                const PeVec3 *effector_offsets,const PeGrounderPose *grounding,PeIkDriveFrame *out);
 /* Model-space positions of the left and right foot effector bones in the
  * blended animated pose. False leaves the outputs untouched. */
 bool pe_ik_drive_feet(const PeIkDrive *drive,const PeIkDriveSample *samples,size_t count,PeVec3 *left,PeVec3 *right);

@@ -116,6 +116,20 @@ typedef struct {
     PeTrainingReceiverResult result;
 } TrainingBuildView;
 typedef struct { const PeWorld *world;const PeTrainingBuild *blocks; } ReceiverContext;
+/* Grounder ray adapter: the nearest of the room, the dug terrain and the built
+ * blocks, which are what the tutorial controller stands on. */
+typedef struct { const PeSceneCollision *scene[3]; } GroundScenes;
+static bool training_ground_ray(void *context,PeVec3 origin,PeVec3 direction,float maximum,PeGrounderHit *out){
+    const GroundScenes *ground=context;PeSceneHit best={0};
+    if(!out)return false;
+    for(int i=0;i<3;i++)if(ground->scene[i]){
+        PeSceneHit hit=pe_scene_raycast(ground->scene[i],origin,direction,maximum);
+        if(hit.hit&&(!best.hit||hit.distance<best.distance))best=hit;
+    }
+    if(!best.hit)return false;
+    if(best.normal.y<0)best.normal=(PeVec3){-best.normal.x,-best.normal.y,-best.normal.z};
+    *out=(PeGrounderHit){best.position,best.normal,best.distance};return true;
+}
 static bool receiver_query(void *opaque,const PeTrainingReceiverRay *ray,PeTrainingReceiverHit *hit) {
     ReceiverContext *context=opaque;
     if(!pe_training_receiver_boxes(ray,hit))return false;
@@ -463,6 +477,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
      * load; every loaded animated player scene must bind to its exact geometry or the pose stays baked. */
     PeIkDrive *ik=NULL;bool ik_ready=false;unsigned long long ik_draws=0;
     PeHaltHost halt={0};unsigned long long halt_starts=0,halt_refusals=0; /* Transient. */
+    PeGrounderHost grounder={0};double grounder_time=0;unsigned long long grounder_updates=0,grounder_planted=0;float grounder_reach=0; /* Transient. */
     struct {PeActorSceneView *view;const char *group;} ik_views[]={{&player,"player"},{&stowed,"player-knife-stowed"},
         {&drawn_view,"player-knife-drawn"},{&axe_view,"player-axe"},{&cut_body_view,"player-cut"},{&cut_axe_view,"player-axe-cut"},
         {&shovel_views[0],"player-shovel"},{&shovel_views[1],"player-shovel-stowed"},{&shovel_views[2],"player-dig"},{&shovel_views[3],"player-shovel-dig"}};
@@ -1171,6 +1186,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 seconds=pe_training_dig_clip_seconds(&training.dig);
             }
             bool blending=animated_player&&!(melee.ready&&melee.action.active)&&cut_phase<0&&training.dig.stage==PE_DIG_IDLE;
+            if(training.hp<=0)pe_grounder_host_reset(&grounder);
             if(ik_ready&&training.hp>0) {
                 PeIkDriveSample ik_samples[PE_ACTOR_BLEND_MAX];size_t ik_count=0;PePlayerLocomotionPose pose;
                 if(!blending){const PeActorClip *c=pe_actor_scene_view_clip_at(body_view,clip);if(c)ik_samples[ik_count++]=(PeIkDriveSample){c->name,seconds,1};}
@@ -1181,7 +1197,22 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 /* The stop effect's world offsets, turned into the drawn model's frame. */
                 PeVec3 ik_offsets[PE_FBBIK_EFFECTORS]={{0}};
                 for(unsigned i=0;i<halt.offset_count;i++)ik_offsets[halt.offsets[i].effector]=pe_ik_drive_model_vector(halt.offsets[i].offset,player_yaw);
-                if(ik_count&&pe_ik_drive_solve_offsets(ik,ik_samples,ik_count,!held,halt.offset_count?ik_offsets:NULL,&ik_solved)) {
+                /* Source GrounderFBBIK, once per drawn frame before the solve, as in the sandbox. */
+                GroundScenes ground_scenes={{scene,terrain?terrain->collision:NULL,building?building->collision:NULL}};PeVec3 left,right;
+                PeGrounderHostInput ground_input={.time=(float)(grounder_time+dt),.delta_time=dt,.root=training.position,.yaw_degrees=player_yaw,
+                    .controller_grounded=training.grounded,.spine_effect=!held,.ray=training_ground_ray,.context=&ground_scenes};
+                if(dt>0&&ik_count&&pe_ik_drive_feet(ik,ik_samples,ik_count,&left,&right)){
+                    left=pe_ik_drive_world_vector(left,player_yaw);right=pe_ik_drive_world_vector(right,player_yaw);
+                    ground_input.foot[0]=(PeVec3){training.position.x+left.x,training.position.y+left.y,training.position.z+left.z};
+                    ground_input.foot[1]=(PeVec3){training.position.x+right.x,training.position.y+right.y,training.position.z+right.z};
+                    if(pe_grounder_host_update(&grounder,&ground_input)){
+                        grounder_time+=dt;grounder_updates++;grounder_planted+=grounder.grounded;
+                        for(unsigned e=7;e<=8;e++)grounder_reach=fmaxf(grounder_reach,fabsf(grounder.effector_offset[e].y));
+                    }
+                }
+                if(grounder.active)for(unsigned e=0;e<PE_FBBIK_EFFECTORS;e++)
+                    ik_offsets[e]=(PeVec3){ik_offsets[e].x+grounder.effector_offset[e].x,ik_offsets[e].y+grounder.effector_offset[e].y,ik_offsets[e].z+grounder.effector_offset[e].z};
+                if(ik_count&&pe_ik_drive_solve_grounded(ik,ik_samples,ik_count,!held,ik_offsets,grounder.active?&grounder.pose:NULL,&ik_solved)) {
                     ik_draws++;
                     for(size_t i=0;i<ik_view_count;i++)pe_actor_scene_view_set_ik(ik_views[i].view,&ik_solved);
                 }
@@ -1368,6 +1399,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
     for(unsigned i=0;i<4;i++)pe_actor_scene_view_unload(&shovel_views[i]);
     pe_training_terrain_view_unload(terrain);free(terrain);
     printf("Training IK: %llu poses drawn through the solve\n",ik_draws);
+    printf("Training grounder: %llu updates, %llu grounded, largest foot request %.3f m\n",grounder_updates,grounder_planted,grounder_reach);
     printf("Training halt: %llu stops, %llu steps with the mask held\n",halt_starts,halt_refusals);
     if(melee.ready)printf("Training melee: %u starts, %u contacts, hare HP %.3f / %.3f\n",melee_swings,melee_hits,melee.target_hp,melee.setup.target_max_hp);
     pe_actor_scene_view_unload(&axe_view);pe_actor_scene_view_unload(&cut_body_view);pe_actor_scene_view_unload(&cut_axe_view);
