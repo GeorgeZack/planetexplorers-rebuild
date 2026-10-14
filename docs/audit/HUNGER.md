@@ -94,8 +94,10 @@ Adapters, not original behavior:
 - The food cooldown counts down scaled time, as the medpack's does.
 
 Not owned here: nutrients and their decay buffs (30200149–152), food
-poisoning, the body-weight presentation, the abnormal notices, oxygen and
-every other food.
+poisoning, the body-weight presentation, oxygen and every other food. Of the
+abnormal notices, only the starvation-start notice's text is exported (for the
+host, [below](#hud-bar-and-starvation-notice)); the periodic hunger notices
+and notice audio are not.
 
 ## Verification
 
@@ -118,9 +120,10 @@ games and the tutorial have no hunger.
 - **Clock.** `sandbox_health_frame` runs `pe_hunger_frame` after the stamina
   owner on the same attribute frame, with the display frame's scaled time and
   whether the player is alive. Pause and focus loss freeze it, as they freeze
-  HP and stamina. Starting or ending starvation sets the HUD message line
-  ("You are starving. Eat something." / "You are no longer starving."); the
-  original's abnormal notices are not recovered.
+  HP and stamina. Starting starvation puts the original's notice text on the
+  message line on every start ([below](#hud-bar-and-starvation-notice); the
+  original shows it once per player lifetime); ending it says nothing, as in
+  the source.
 - **Starvation's effect.** `pe_game_stamina_reduce_percent` returns 1 or 2 and
   replaces the constant at every stamina cost site: sprint drain, jump, tool
   stats, tool action charges and melee's setup (refreshed before each blade
@@ -135,8 +138,8 @@ games and the tutorial have no hunger.
   (u32). Older saves start at 300, not starving. A flag other than 0/1 or a
   hunger outside 0..500 fails without replacing the live game.
 - **Display.** The character panel's existing Hunger row shows the value and
-  "(starving)". The original's mid-screen hunger bar is not added; the shared
-  HUD does not carry comfort either.
+  "(starving)", and the shared HUD draws the original's hunger bar
+  ([below](#hud-bar-and-starvation-notice)).
 
 Verification: `core:hunger_game` (eating, cooldown, quickslot, dead player,
 Legacy refusal, starvation doubling a tool cost, a starving stamina pulse of
@@ -148,3 +151,100 @@ pause freezing the condition clock); every older save suite updated for the
 
 **Not checked:** anyone playing it. Hunger takes about 72 minutes of unpaused
 play to fall from 300 to 50.
+
+## HUD bar and starvation notice
+
+**October 14, source-derived and implemented in C; rendered only in a staged
+private-display fixture.**
+
+*Source.* `UIMainMidCtrl.Update` calls `UpdatePlayerAtrbute` every frame,
+which sets `mScHunger_5.sliderValue = Hunger / HungerMax` (0 when the maximum
+is not positive), with no lerp; HP and stamina are the only lerped values, and
+only comfort has a face icon and alpha curve. `mScHunger_5` is component
+11489644 in `GameMain.prefab`; the recovered layout
+([TRAINING_UI_LAYOUT.json](TRAINING_UI_LAYOUT.json)) gives its widgets under
+`ButtomAnchor/MainMid/Content/CenterInfo/5_Hunger`:
+
+| Widget | Sprite | Local | Size | Notes |
+|---|---|---|---|---|
+| Progress Bar | — | (−10,−2) under 5_Hunger (100,29) | — | rotated 180° about Z |
+| Background 11435264 | `bloodlan_12bg` | (0,0.5), pivot left | 64×5 | depth 6, white |
+| Foreground 11413214 | `bloodlan_12` | (0,0.5), pivot left | 64×5 | depth 7, white; filled sprite, horizontal, not inverted |
+| Sprite (arr3) 11480874 | `tili` | (0,−0.5) | 12×13 | the drumstick icon |
+
+The rotation puts the left-pivot widgets at screen x 666–730 (reference
+1280×720) with their origin at the right end, so the fill grows leftward from
+next to the icon. In the atlas `bloodlan_12` is `bloodlan_11` (comfort)
+already turned 180°; after the prefab's rotation the two bars show the same
+segment shape. The rebuild's earlier HUD drew `bloodlan_12bg` unrotated.
+
+*Starvation notice.* `AbnormalNotice` has one row for condition 8: no timer,
+trigger on the condition starting (`Alnormal.evtStart`), rate 1, no audio,
+content 8000654. `PEAE_Content` registers it with `PeTipMsg` (normal level,
+misc type, the player's face). Its English text, from `i18n.db`, is "I'm so
+hungry, I can probably eat an entire cow!".
+
+The notice is one-shot. `PEAbnormalNotice.ApplyEffect` runs its effects, then
+calls `m_Triggers.Clear()`, which empties the trigger list (not one trigger),
+so `Update`'s `triggerHit = m_Triggers.Count > 0` stays false for that
+instance from then on. `MainPlayerCmpt.Start` starts `UpdateAbnormalNotice`
+only outside the tutorial; it waits 5 s, creates one instance per notice row,
+and updates them every frame for the component's lifetime. So in the
+original, starvation shows the notice at most once per main-player lifetime
+(a load recreates the player), and a start in the first 5 s, including a
+loaded starving player's `Deserialize` → `ApplyEffect`, shows nothing because
+the notice has not subscribed yet. Two further hunger notices (hunger
+0–10 every 60 s at rate 0.5–0.2, content 8000653; comfort 0–150 with hunger
+6–20, content 8000656) are random periodic rolls and are not implemented.
+
+*Implemented.* `pe_training_ui_layout` has a `hunger` rectangle (666,625,64,5,
+bottom-centre anchored). `pe_ui_hud_draw` draws `bloodlan_12bg` there rotated
+180° (`pe_ui_draw_sprite_flip`, both axes) in both hosts, replacing the
+unrotated decoration, and, only when the host's snapshot sets
+`hunger_available`, draws `bloodlan_12` rotated and clipped to the right
+`hunger/max` of the track. The sandbox sets it in Adventure from
+`PeGame.hunger`; Legacy and the tutorial leave it unset and show the empty
+track. `export_hunger.py` pins the notice row and exports its text; the
+sandbox puts it on the message line when starvation starts.
+
+Adapters, not original behavior:
+
+- `UISlider` and the filled sprite live in the compiled NGUI plugin
+  (`Assembly-CSharp-firstpass.dll`), which was not decompiled. The fill uses
+  the same horizontal scissor clip as the existing health and stamina bars;
+  a `fillAmount` clip or a left-pivot scale would both grow from the same end.
+- The message line stands in for `PeTipMsg`'s face-and-text tip list.
+- **The rebuild repeats the notice on every starvation start**, not once per
+  player lifetime, and has no 5 s window. Matching it would need a new
+  transient owner reset on load, new game and menu round trips; it is not
+  claimed. A starving save loads without a message, as in the original, only
+  because loading sets the condition without a start event.
+- No hover text is added; the source shows none for hunger.
+
+Verification:
+
+- `ui-shared-test` (`test_ui_hud`): at four sizes, the rotated track always
+  draws and the fill never does without host data; at 250/500 the fill's clip
+  starts at half the track and ends at its right edge; above the maximum it
+  fills the track; 0, NaN or a zero maximum draw no fill; the 1280×720
+  rectangle is (666,625,64,5).
+- `ui-shared-render-capture` on private Xvfb `:110`: the tutorial and Legacy
+  sandbox HUDs still match exactly (93,170 / 23,320 / 5,936 pixels). The
+  Adventure HUD with hunger 150/500 matches the tutorial everywhere outside the
+  track (92,850 / 23,224 / 5,902 pixels) and its teal fill covers columns
+  710–729 of 666–730 at 1280×720 (355–364 of 333–365 at 640×480, 177–181 of
+  166.5–182.5 at 320×240), against 30% expected. Captures:
+  `rebuild/build/ui-shared-captures/sandbox-hud-hunger-*.png` beside
+  `tutorial-hud-*.png`.
+- `test_sandbox_health_host`: the starvation message is the exported notice;
+  ending starvation leaves an unrelated message untouched; a later start shows
+  the notice again (the adapter above).
+- `test_hunger_export.py`: the notice row's rate, content list and audio, the
+  `PeTipMsg` call, the one-shot `m_Triggers.Clear()`, and the main player's
+  5 s, non-tutorial start are pinned; `--localization` with the default
+  database checks and a missing one fails. `make cli-test` covers only the
+  game executable, not exporters.
+
+**Not checked:** an original-game screenshot of the hunger bar, the bar in
+ordinary play, or readability at small sizes (at 320×240 the track is 16×1.7
+pixels).

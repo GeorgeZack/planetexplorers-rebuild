@@ -24,9 +24,20 @@ void pe_ui_hud_draw(const PeUiCanvas *c,const PeUiHudView *v){
     pe_ui_draw_effect(c,PE_UI_EFFECT_HUD_SCAN,pe_ui_draw_map(c,225,646,830,50,PE_UI_BOTTOM_CENTER));
     bar(c,"bloodlan_6bg","bloodlan_6",l->health,fraction(v->health,v->health_max),WHITE,true);
     bar(c,"bloodlan_7bg","bloodlan_7_1",l->stamina,fraction(v->stamina,v->stamina_max),(Color){65,131,185,255},false);
+    /* UIMainMidCtrl: mScHunger_5.sliderValue = Hunger/HungerMax every frame, no lerp.
+     * Both widgets sit under the 180 degree Progress Bar, so they draw rotated and
+     * the horizontal fill grows from the bar's right end. */
+    pe_ui_draw_sprite_flip(c,"bloodlan_12bg",l->hunger,WHITE,true,true);
+    float hunger=v->hunger_available?fraction(v->hunger,v->hunger_max):0;
+    if(hunger>0){
+        float end=l->hunger.x+l->hunger.w;int right=(int)ceilf(end),left=(int)floorf(end-l->hunger.w*hunger);
+        BeginScissorMode(left,(int)floorf(l->hunger.y),right-left,(int)ceilf(l->hunger.h));
+        pe_ui_draw_sprite_flip(c,"bloodlan_12",l->hunger,WHITE,true,true);
+        EndScissorMode();
+    }
     static const struct {const char *name;float x,y,w,h;} decorations[]={
         {"face3",535,620,12,13},{"tili",734,620,12,13},
-        {"bloodlan_11bg",551,626,64,5},{"bloodlan_12bg",666,625,64,5},
+        {"bloodlan_11bg",551,626,64,5},
         {"bloodlan_8bg",426,704,87,4},{"bloodlan_9bg",767,704,87,4},
         {"arr3",535,695,20,20},{"arr5",723,695,20,20}
     };

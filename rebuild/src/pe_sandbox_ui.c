@@ -126,7 +126,8 @@ void pe_sandbox_ui_prepare(PeSandboxUI *u,const PeGame *g) {
     }
 }
 static void hud(const PeSandboxUI *u,const PeGame *g,bool building){
-    PeUiCanvas c=canvas(u);PeUiHudView v={.health=g->hp,.health_max=g->max_hp,.stamina=g->stamina,.stamina_max=g->stamina_max,.building=building};
+    PeUiCanvas c=canvas(u);PeUiHudView v={.health=g->hp,.health_max=g->max_hp,.stamina=g->stamina,.stamina_max=g->stamina_max,.building=building,
+        .hunger_available=g->mode==PE_GAME_ADVENTURE,.hunger=g->hunger.hunger,.hunger_max=pe_hunger_source.hunger_max};
     for(int k=0;k<PE_UI_QUICKSLOTS;k++){
         int id=g->quickslots[k].item_id,count=0;
         for(int slot=0;slot<pe_inventory_capacity(&g->inventory);slot++){

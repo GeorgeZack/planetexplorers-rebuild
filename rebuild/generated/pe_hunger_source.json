@@ -50,6 +50,14 @@
       "sha256": "f8a0a1cd36cb11b6447984edbe3ea4bfc28279aa4dee4156e0ee1b5150c605f4"
     },
     {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalCondition/PEAbnormalNotice.cs",
+      "sha256": "a6a19985d256d605b94dda888c1df3e4408846bdd34c2de85fb06432de42c3d2"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs",
+      "sha256": "12612b0abc184af2e92f5c77345679d2ecbb6ea29da6ff6653c6233f1c504b57"
+    },
+    {
       "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalConditionCmpt.cs",
       "sha256": "9e4d6c28d7d4b05128fb2b4e35a3b1365f323f64a4f7cc917b10dc47ab5c1c3e"
     },
@@ -301,11 +309,29 @@
       "nutrient_gain": 4.0
     }
   ],
+  "starvation_notice": {
+    "row": {
+      "Trigger_Time": "0",
+      "Trigger_Abnormal": "8",
+      "Hit_Attr": "0",
+      "Hit_AreaTime": "0",
+      "Hit_Rate": "1",
+      "Eff_HumanAudio": "0",
+      "Eff_Content": "8000654"
+    },
+    "content_id": 8000654,
+    "english": "I'm so hungry, I can probably eat an entire cow!",
+    "localization": {
+      "path": "i18n.db",
+      "sha256": "965648c34c5767aeeba8187c121ba128a24e5915eb532d18f666371e24f40299"
+    }
+  },
   "semantics": {
     "drain": "Initial buff 30200050 every 5 s on the shared eight-frame attribute pass: raw hunger += summed speed * summed percent * 5 (-0.347 with starter values), first execution at mount; clamps 0..HungerMax at summation.",
     "starvation": "AbnormalType 8: while inactive, a frame-time timer is checked before it accumulates; at >= 1 s it resets and, if alive, hunger in [0,50] starts the condition (rate Lerp(1,1)=1). While active, a 0.1 s timer and hunger in [51,1000] end it. Start mounts buff 30200113, end cancels it. Not removed on death. Active state and its buff are saved.",
     "starvation_effect": "Buff 30200113 pre-adds +1 StaminaReducePercent, -10 StaminaRecoverSpeed, +2 StaminaRecoverDelay, +1 ComfortReducePercent, +1 OxygenReducePercent.",
     "food": "Each supported food runs one MAD-free expression trigger: raw hunger += gain, its nutrient += gain capped at 100; skill cooldown 4 s, shared group 12. A second trigger has a 1% chance to mount 20 s food poisoning (-3 HP per second while HP > 3).",
-    "scope": "Player hunger only. Nutrient decay buffs 30200149-152, food poisoning, the body-weight presentation, abnormal notices, oxygen and every other food stay outside this export."
+    "notice": "AbnormalNotice: starvation starting (Trigger_Abnormal 8, rate 1, no audio) registers PeTipMsg content 8000654 with the player face. It is one-shot per notice instance: ApplyEffect clears its trigger list. MainPlayerCmpt creates the instances once, 5 s after Start and never in the tutorial, so a start before then (including a loaded starving player) shows nothing and later starts in the same player lifetime show nothing. The hunger 0..10 and 6..20 notices are periodic random rolls and are not exported.",
+    "scope": "Player hunger only. Of the abnormal notices only the starvation-start notice (content 8000654) is exported; the periodic hunger notices 8000653/8000656, notice audio, nutrient decay buffs 30200149-152, food poisoning, the body-weight presentation, oxygen and every other food stay outside this export."
   }
 }

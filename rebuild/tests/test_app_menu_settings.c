@@ -103,6 +103,7 @@ void UnloadImage(Image i){(void)i;}
 PeUiAssets *pe_ui_assets_load(const char *d,char *e,size_t c){(void)d;(void)e;(void)c;return (PeUiAssets *)(uintptr_t)1;}
 void pe_ui_assets_free(PeUiAssets *p){CHECK(p==(PeUiAssets *)(uintptr_t)1);}
 bool pe_ui_sprite(const PeUiAssets *u,const char *n,Rectangle r,Color c,float s){(void)u;(void)n;(void)r;(void)c;(void)s;return false;}
+bool pe_ui_sprite_flip(const PeUiAssets *u,const char *n,Rectangle r,Color c,bool h,bool v){(void)u;(void)n;(void)r;(void)c;(void)h;(void)v;return false;}
 Font pe_ui_font(const PeUiAssets *u,bool b){(void)u;(void)b;return (Font){0};}
 Font pe_ui_font_heading(const PeUiAssets *u){return pe_ui_font(u,false);}
 Font pe_ui_font_small(const PeUiAssets *u,bool b){return pe_ui_font(u,b);}

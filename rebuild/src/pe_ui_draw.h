@@ -15,6 +15,8 @@ Rectangle pe_ui_draw_rect(PeTrainingUIRect r);
 PeTrainingUIRect pe_ui_draw_map(const PeUiCanvas *c,float x,float y,float w,float h,PeTrainingUIAnchor anchor);
 Font pe_ui_draw_font(const PeUiCanvas *c,float size,bool bold);
 void pe_ui_draw_sprite(const PeUiCanvas *c,const char *name,PeTrainingUIRect r,Color tint);
+/* Unsliced sprite mirrored on either axis; both together is NGUI's 180 degree Z rotation. */
+void pe_ui_draw_sprite_flip(const PeUiCanvas *c,const char *name,PeTrainingUIRect r,Color tint,bool horizontal,bool vertical);
 void pe_ui_draw_effect(const PeUiCanvas *c,PeUiEffect effect,PeTrainingUIRect r);
 void pe_ui_draw_text(const PeUiCanvas *c,const char *text,float x,float y,float size,Color tint,bool bold);
 void pe_ui_draw_center(const PeUiCanvas *c,const char *text,PeTrainingUIRect r,float size,Color tint,bool bold);

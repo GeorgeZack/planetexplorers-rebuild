@@ -1,5 +1,28 @@
 # Original-game playtest and C comparison
 
+## October14 Adventure hunger HUD bar and starvation notice
+
+Implemented in C and rendered in a staged fixture only: [the shared HUD
+hunger bar and starvation notice](audit/HUNGER.md#hud-bar-and-starvation-notice).
+No ordinary play or original-game screenshot is claimed.
+
+- `ui-shared-render-capture` (private Xvfb `:110`) keeps exact tutorial/Legacy
+  sandbox HUD parity at 1280×720, 640×480 and 320×240 (93,170 / 23,320 /
+  5,936 pixels). An Adventure HUD at hunger 150/500 matches the tutorial
+  outside the track (92,850 / 23,224 / 5,902 pixels) and fills the track's
+  right 30% (`rebuild/build/ui-shared-captures/sandbox-hud-hunger-*.png`).
+  The tutorial's empty track now draws rotated, as the prefab specifies.
+  Inspected visually at 1280×720 and 640×480; at 320×240 the bar is present
+  but too small to read.
+- The starvation notice repeats on every start, a labelled adapter: the
+  original's is one-shot per player lifetime. Ending shows nothing.
+- Current results, after all code and test changes: full check 280 jobs, 966
+  Python tests, 95 skipped (skips are not passes); sanitizer 112 suites with
+  leak scanning; content and source regeneration pass; `ui-shared-test`,
+  `sandbox-ui-test` and `cli-test` (the game executable's CLI only) pass. The
+  exporter's `--help`, `--check` and `--localization` were checked directly
+  and by `test_hunger_export.py`. Logs: `rebuild/build/compiler-tmp/hud-final-*.log`.
+
 ## October13 Halt lock and stop effect live in both hosts
 
 By the user's decision to apply the lock as the original does,
@@ -85,10 +108,12 @@ fixture shows Hunger 299.7 / 500 (the prototype's 300 after the first drain
 pulse) beside Comfort 499.3. Full check 280 jobs, 963 Python tests, 95
 skipped; sanitizer 112 suites; content regeneration and CLI pass. Eating,
 starvation and the stamina penalty are covered headless only; nobody has
-played with hunger, and no save from this version has been reloaded by hand. Full check: 277 jobs, 957 Python tests, 95 skipped;
-sanitizer 110 suites.
+played with hunger, and no save from this version has been reloaded by hand.
 
-Full regression passes 275 jobs/947 Python tests with 94 optional skips;
+Historical, grounder step 3 (October 13): full check 277 jobs, 957 Python
+tests, 95 skipped; sanitizer 110 suites.
+
+Historical, Halt step (October 13): full regression passes 275 jobs/947 Python tests with 94 optional skips;
 skips are not passes. Sanitizer passes 109 suites with leak scanning, and the
 installed-asset drive harness passes under ASan/UBSan. 26 CLI cases pass. No
 exporter changed in this step. PECSv22 is unchanged.

@@ -10,6 +10,8 @@ typedef struct {int kind;char text[2048];Rectangle box;Color tint;int font;} Dra
 static Draw calls[2048];static size_t count;static int scissors;
 static void record(int kind,const char *text,Rectangle r,Color color,int font){CHECK(count<2048);Draw *d=&calls[count++];memset(d,0,sizeof *d);d->kind=kind;d->box=r;d->tint=color;d->font=font;if(text)snprintf(d->text,sizeof d->text,"%s",text);}
 bool pe_ui_sprite(const PeUiAssets *a,const char *s,Rectangle r,Color c,float z){(void)a;(void)z;record(1,s,r,c,0);return true;}
+/* Kind 8: a mirrored sprite; font carries the flags (1 horizontal, 2 vertical). */
+bool pe_ui_sprite_flip(const PeUiAssets *a,const char *s,Rectangle r,Color c,bool h,bool v){(void)a;record(8,s,r,c,(h?1:0)|(v?2:0));return true;}
 Font pe_ui_font(const PeUiAssets *a,bool bold){(void)a;return (Font){.baseSize=bold?19:18};}
 Font pe_ui_font_small(const PeUiAssets *a,bool bold){(void)a;return (Font){.baseSize=bold?15:14};}
 Font pe_ui_font_heading(const PeUiAssets *a){(void)a;return (Font){.baseSize=32};}
@@ -53,6 +55,20 @@ int main(void){
         CHECK(done->box.y+done->box.height<=l.mission_tracker.y+l.mission_tracker.h+.01f);
         mission.title="Short";reset();pe_ui_tracker_draw(&canvas,&mission);goal=find(2,"First goal");CHECK(goal&&near(goal->box.y,l.mission_tracker.y+25*l.scale));
         mission.title="";reset();CHECK(pe_ui_tracker_draw(&canvas,&mission)==0&&count==0);
+        /* Hunger: 5_Hunger's rotated track always; its fill only with host data, from the right end. */
+        if(size==0)CHECK(near(l.hunger.x,666)&&near(l.hunger.y,625)&&near(l.hunger.w,64)&&near(l.hunger.h,5));
+        reset();pe_ui_hud_draw(&canvas,&view);
+        const Draw *track=find(8,"bloodlan_12bg");CHECK(track&&track->font==3&&near(track->box.x,l.hunger.x)&&near(track->box.width,l.hunger.w));
+        CHECK(!find(1,"bloodlan_12bg")&&!find(8,"bloodlan_12")&&!find(1,"bloodlan_12"));
+        PeUiHudView fed=view;fed.hunger_available=true;fed.hunger=250;fed.hunger_max=500;before=fed;
+        reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!memcmp(&fed,&before,sizeof fed));CHECK(scissors==0);
+        const Draw *fill=find(8,"bloodlan_12");CHECK(fill&&fill->font==3&&near(fill->box.x,l.hunger.x)&&near(fill->box.width,l.hunger.w));
+        const Draw *clip=fill-1;CHECK(clip->kind==5);
+        float end=l.hunger.x+l.hunger.w;CHECK(clip->box.x==floorf(end-l.hunger.w*.5f)&&clip->box.x+clip->box.width==ceilf(end));
+        fed.hunger=900;reset();pe_ui_hud_draw(&canvas,&fed);fill=find(8,"bloodlan_12");CHECK(fill&&(fill-1)->box.x==floorf(l.hunger.x));
+        fed.hunger=0;reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!find(8,"bloodlan_12")&&find(8,"bloodlan_12bg"));
+        fed.hunger=NAN;reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!find(8,"bloodlan_12"));
+        fed.hunger=250;fed.hunger_max=0;reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!find(8,"bloodlan_12"));
         reset();pe_ui_hud_draw(NULL,&view);pe_ui_minimap_chrome_draw(NULL,&map);CHECK(count==0);
     }
     puts("shared HUD, minimap chrome and bounded tracker presentation pass");return 0;

@@ -8,7 +8,7 @@ import re
 import sqlite3
 import sys
 
-from export_content import ROOT, DEFAULT_DATABASE, connect_readonly, describe_source, numeric_rows
+from export_content import ROOT, DEFAULT_DATABASE, DEFAULT_LOCALIZATION, c_string, connect_readonly, describe_source, numeric_rows
 from export_starter_outfit import body, uncomment, expect
 import export_passive_recovery as shared
 
@@ -18,6 +18,8 @@ ADDITIONAL_SOURCES = (
     ABNORMAL + 'PEAbnormalTrigger.cs',
     ABNORMAL + 'PEAbnormalHit.cs',
     ABNORMAL + 'PEAbnormalEff.cs',
+    ABNORMAL + 'PEAbnormalNotice.cs',
+    'Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs',
     'Assets/Scripts/PeEntity/Cmpt/AbnormalConditionCmpt.cs',
     'Assets/Scripts/SkillSystem/SkAttribs.cs',
     'Assets/Scripts/SkillSystem/SkAttribsModifier.cs',
@@ -29,6 +31,9 @@ STARVATION_ID = 8
 STARVATION_BUFF = 30200113
 STARVATION_MODS = 'exp,4,target.buffPreAdd+=1;#exp,5,target.buffPreAdd-=10;#exp,6,target.buffPreAdd+=2;#exp,9,target.buffPreAdd+=1;#exp,13,target.buffPreAdd+=1'
 POISON_TRIGGER = 489
+# AbnormalNotice row for starvation's start: (Trigger_Time, Trigger_Abnormal, Hit_Attr,
+# Hit_AreaTime, Hit_Rate, Eff_HumanAudio, Eff_Content). Rate 1, no audio, one content ID.
+STARVATION_NOTICE = ('0', '8', '0', '0', '1', '0', '8000654')
 POISON_BUFF = 30200105
 # The foods the rebuild's item catalog carries and its town shops sell (pe_content items, pe_town_offers).
 # Pinned (hunger gain, nutrient attribute, nutrient gain) per food.
@@ -84,12 +89,34 @@ def validate_sources(root):
                      'if(addBuff)entity.CancelBuffById(buffList[i]);'):
         if fragment not in shared.compact(effect):
             raise ValueError('Abnormal buff mount/cancel changed')
-    shared.exact(body(s[ADDITIONAL_SOURCES[4]], r'public\s+override\s+void\s+OnUpdate'), '''
+    notice = s[ABNORMAL + 'PEAbnormalNotice.cs']
+    content = shared.compact(s[ABNORMAL + 'PEAbnormalEff.cs'].split('class PEAE_Content', 1)[1])
+    for fragment in ('PeTipMsg.Register(PELocalization.GetString(contentIDs[Random.Range(0,contentIDs.Length)]),entityInfo.faceTex,PeTipMsg.EMsgLevel.Norm,PeTipMsg.EMsgType.Misc);',):
+        if fragment not in content:
+            raise ValueError('Abnormal notice content display changed')
+    # One-shot: ApplyEffect empties the trigger list, so Update can never hit again
+    # for this notice instance; the main player creates the instances once, 5 s
+    # after its Start, outside the tutorial.
+    shared.exact(body(notice, r'void\s+ApplyEffect\s*\('),
+        'for(int i=0;i<m_Effs.Count;++i)m_Effs[i].Do();for(int i=0;i<m_Triggers.Count;++i)m_Triggers.Clear();',
+        'One-shot abnormal notice')
+    player = s['Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs']
+    shared.exact(body(player, r'IEnumerator\s+UpdateAbnormalNotice\s*\('), '''
+        yield return new WaitForSeconds(5f);PEAbnormalNoticeData[] datas=PEAbnormalNoticeData.datas;
+        m_AbnormalNotices=new PEAbnormalNotice[datas.Length];
+        for(int i=0;i<datas.Length;++i){m_AbnormalNotices[i]=new PEAbnormalNotice();m_AbnormalNotices[i].Init(Entity,datas[i]);}
+        while(true){for(int i=0;i<datas.Length;++i)m_AbnormalNotices[i].Update();yield return null;}''', 'Main player notice lifetime')
+    if 'if(!PeGameMgr.IsTutorial)StartCoroutine(UpdateAbnormalNotice());' not in shared.compact(player):
+        raise ValueError('Main player notice start changed')
+    for fragment in ('m_Entity.Alnormal.evtStart+=abnormalHit.OnHitAbnormal;', 'if(triggerHit&&!m_Entity.IsDeath())CheckHit();'):
+        if fragment not in shared.compact(notice):
+            raise ValueError('Abnormal notice trigger changed')
+    shared.exact(body(s['Assets/Scripts/PeEntity/Cmpt/AbnormalConditionCmpt.cs'], r'public\s+override\s+void\s+OnUpdate'), '''
         if(null==m_AbnormalList)return;PEAbnormal_N abnormal;for(int i=0;i<m_AbnormalList.Length;i++){abnormal=m_AbnormalList[i];if(null!=abnormal)abnormal.Update();}''',
         'Per-frame abnormal update')
-    if '_sums[i]=buffMul*(_raws[i]+buffPreAdd)+buffPostAdd;' not in shared.compact(s[ADDITIONAL_SOURCES[5]]):
+    if '_sums[i]=buffMul*(_raws[i]+buffPreAdd)+buffPostAdd;' not in shared.compact(s['Assets/Scripts/SkillSystem/SkAttribs.cs']):
         raise ValueError('Attribute summation changed')
-    shared.exact(body(s[ADDITIONAL_SOURCES[6]].split('class SkAttribsOpMAD', 1)[1], r'public\s+void\s+Exec'),
+    shared.exact(body(s['Assets/Scripts/SkillSystem/SkAttribsModifier.cs'].split('class SkAttribsOpMAD', 1)[1], r'public\s+void\s+Exec'),
         'float var=dstAttribs.raws[_idx];var=var*_mul+_add;dstAttribs.raws[_idx]=var;', 'MAD modifier')
     return [describe_source(root / p) for p in SOURCE_FILES]
 
@@ -98,7 +125,7 @@ def rows(db, table):
     return [dict(r) for r in db.execute(f'SELECT * FROM "{table}" ORDER BY rowid')]
 
 
-def build_outputs(database=DEFAULT_DATABASE, source_root=ROOT):
+def build_outputs(database=DEFAULT_DATABASE, source_root=ROOT, localization=DEFAULT_LOCALIZATION):
     provenance = validate_sources(source_root)
     with closing(connect_readonly(database)) as db:
         players, _ = numeric_rows(db, 'initProp', 'id'); buffs, _ = numeric_rows(db, 'skBuff', '_id')
@@ -128,6 +155,12 @@ def build_outputs(database=DEFAULT_DATABASE, source_root=ROOT):
             'Eff_BuffAdd': STARVATION_BUFF, 'Eff_RemoveAbnormal': 0, 'Eff_Anim': 0, 'Eff_Camera': 0,
             'RT_Imm': 0, 'RT_Time': '.1', 'RT_BuffRemove': 0, 'RT_EffEnd': 0, 'RT_OutWater': 0,
             'RH_BuffRemove': 0, 'RH_Attr': '16,51,1000,1,1', 'RE_BuffRemove': 0, 'RE_BuffAdd': 0, 'RE_AbnormalAdd': 0}, 'Starvation')
+        notices = [tuple(str(r[k]) for k in ('Trigger_Time', 'Trigger_Abnormal', 'Hit_Attr', 'Hit_AreaTime', 'Hit_Rate', 'Eff_HumanAudio', 'Eff_Content'))
+                   for r in rows(db, 'AbnormalNotice') if str(r['Trigger_Abnormal']) == str(STARVATION_ID)]
+        if notices != [STARVATION_NOTICE]:
+            raise ValueError('Starvation notice row changed')
+        translations, _ = numeric_rows(db, 'Translation', 'ID', allow_duplicates=True)
+        english = {i: r['English'] for i, r in translations.items()}
         triggers = {r['_id']: r for r in rows(db, 'skTriggerEvent')}
         expect(triggers[str(POISON_TRIGGER)], {'_cond': 'True', '_modsTarget': f'rnd,1,1,{POISON_BUFF},0.01'}, 'Food poisoning trigger')
         skills = {r['_id']: r for r in rows(db, 'skMain')}
@@ -149,6 +182,13 @@ def build_outputs(database=DEFAULT_DATABASE, source_root=ROOT):
             foods.append(dict(item_id=item_id, name=item['_engName'], skill_id=int(item['skillId']), trigger_id=int(events[0]),
                 hunger=float(match.group(1)), nutrient=int(match.group(2)), nutrient_name=NUTRIENTS[int(match.group(2))],
                 nutrient_gain=float(match.group(3))))
+    if localization is not None:
+        with closing(connect_readonly(localization)) as external:
+            extra, _ = numeric_rows(external, 'Translation', 'ID', allow_duplicates=True)
+            english.update({i: r['English'] for i, r in extra.items() if r['English']})
+    notice_id = int(STARVATION_NOTICE[6]); notice_text = english.get(notice_id)
+    if not isinstance(notice_text, str) or not notice_text or '\0' in notice_text or '\n' in notice_text or len(notice_text) >= 160:
+        raise ValueError('Starvation notice text missing or unusable')
     hunger_max, initial = float(player['HungerMax']), float(player['Hunger'])
     speed, percent = float(player['HungerRecoverSpeed']), float(player['HungerReducePercent'])
     rule = dict(player_init_id=1, drain_buff_id=DRAIN_BUFF, starvation_abnormal_id=STARVATION_ID, starvation_buff_id=STARVATION_BUFF,
@@ -185,21 +225,27 @@ static const PeHungerSource pe_hunger_source = {
     %(end_interval_seconds).1ff, %(end_minimum).1ff, %(end_maximum).1ff, %(end_rate).1ff,
     %(food_cooldown_seconds).1ff, %(food_cooldown_group)d, %(nutrient_maximum).1ff,
 ''' % rule + '    %.1ff, %.1ff, %.1ff, %.1ff, %.1ff\n};\n' % tuple(m['pre_add'] for m in starvation) + '''typedef struct { int item_id, skill_id; float hunger; int nutrient; float nutrient_gain; } PeHungerFoodSource;
+/* AbnormalNotice for starvation's start: PeTipMsg content %d. */
+static const char pe_hunger_source_starvation_notice[] = %s;
 #define PE_HUNGER_SOURCE_FOODS %d
 static const PeHungerFoodSource pe_hunger_source_foods[PE_HUNGER_SOURCE_FOODS] = {
 %s};
 #endif
-''' % (len(foods), food_rows)
+''' % (notice_id, c_string(notice_text), len(foods), food_rows)
     manifest = dict(schema=1, source=describe_source(database), source_files=provenance, rule=rule,
         initial_player={k: player[k] for k in ('id', 'InitBuffList', 'HungerMax', 'Hunger', 'HungerReducePercent', 'HungerRecoverSpeed')},
         drain_buff=drain, starvation_abnormal=abnormal, starvation_buff=starve_buff, starvation_pre_adds=starvation,
         poison_buff=poison, foods=foods,
+        starvation_notice=dict(row=dict(zip(('Trigger_Time', 'Trigger_Abnormal', 'Hit_Attr', 'Hit_AreaTime', 'Hit_Rate',
+            'Eff_HumanAudio', 'Eff_Content'), STARVATION_NOTICE)), content_id=notice_id, english=notice_text,
+            localization=describe_source(localization) if localization is not None else None),
         semantics=dict(
             drain='Initial buff 30200050 every 5 s on the shared eight-frame attribute pass: raw hunger += summed speed * summed percent * 5 (-0.347 with starter values), first execution at mount; clamps 0..HungerMax at summation.',
             starvation='AbnormalType 8: while inactive, a frame-time timer is checked before it accumulates; at >= 1 s it resets and, if alive, hunger in [0,50] starts the condition (rate Lerp(1,1)=1). While active, a 0.1 s timer and hunger in [51,1000] end it. Start mounts buff 30200113, end cancels it. Not removed on death. Active state and its buff are saved.',
             starvation_effect='Buff 30200113 pre-adds +1 StaminaReducePercent, -10 StaminaRecoverSpeed, +2 StaminaRecoverDelay, +1 ComfortReducePercent, +1 OxygenReducePercent.',
             food='Each supported food runs one MAD-free expression trigger: raw hunger += gain, its nutrient += gain capped at 100; skill cooldown 4 s, shared group 12. A second trigger has a 1% chance to mount 20 s food poisoning (-3 HP per second while HP > 3).',
-            scope='Player hunger only. Nutrient decay buffs 30200149-152, food poisoning, the body-weight presentation, abnormal notices, oxygen and every other food stay outside this export.'),
+            notice='AbnormalNotice: starvation starting (Trigger_Abnormal 8, rate 1, no audio) registers PeTipMsg content 8000654 with the player face. It is one-shot per notice instance: ApplyEffect clears its trigger list. MainPlayerCmpt creates the instances once, 5 s after Start and never in the tutorial, so a start before then (including a loaded starving player) shows nothing and later starts in the same player lifetime show nothing. The hunger 0..10 and 6..20 notices are periodic random rolls and are not exported.',
+            scope='Player hunger only. Of the abnormal notices only the starvation-start notice (content 8000654) is exported; the periodic hunger notices 8000653/8000656, notice audio, nutrient decay buffs 30200149-152, food poisoning, the body-weight presentation, oxygen and every other food stay outside this export.'),
     )
     return {'pe_hunger_source.h': header.encode(),
             'pe_hunger_source.json': (json.dumps(manifest, indent=2, ensure_ascii=False) + '\n').encode()}
@@ -208,11 +254,12 @@ static const PeHungerFoodSource pe_hunger_source_foods[PE_HUNGER_SOURCE_FOODS] =
 def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--database', type=Path, default=DEFAULT_DATABASE)
+    p.add_argument('--localization', type=Path, default=DEFAULT_LOCALIZATION)
     p.add_argument('--output', type=Path, default=ROOT / 'rebuild/generated')
     p.add_argument('--check', action='store_true')
     a = p.parse_args(argv)
     try:
-        outputs = build_outputs(a.database)
+        outputs = build_outputs(a.database, localization=a.localization)
         for name, data in outputs.items():
             path = a.output / name
             if a.check:

@@ -72,6 +72,10 @@ bool pe_training_ui_layout(float width,float height,PeTrainingUILayout *out) {
     for (int i=0;i<PE_UI_QUICKSLOTS;i++)
         l.quickslots[i]=rect(&l,bottom,i<4?329+51*i:748+51*(i-4),647,48,48);
     R(health,bottom,558,648,164,30); R(stamina,bottom,571,678.5f,138,9);
+    /* GameMain MainMid CenterInfo/5_Hunger: Progress Bar at anchor-local x 90
+       (100-10), rotated 180 degrees about Z, so its 64x5 left-pivot widgets span
+       x 666..730 on screen with their origin at the right end. */
+    R(hunger,bottom,666,625,64,5);
     R(mission_button,right,1254,173,20,26);
     R(history_button,right,1253,148,22,22);
     R(minimap,right,1069,0,210,208); R(mission_tracker,right,994,224,282,309);

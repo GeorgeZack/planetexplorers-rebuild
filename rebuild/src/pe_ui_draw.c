@@ -12,6 +12,10 @@ void pe_ui_draw_sprite(const PeUiCanvas *c,const char *name,PeTrainingUIRect r,C
     if(!name||!*name)return;
     if(!pe_ui_sprite(c->assets,name,pe_ui_draw_rect(r),tint,c->layout->scale))DrawRectangleRec(pe_ui_draw_rect(r),(Color){36,62,105,210});
 }
+void pe_ui_draw_sprite_flip(const PeUiCanvas *c,const char *name,PeTrainingUIRect r,Color tint,bool horizontal,bool vertical){
+    if(!name||!*name)return;
+    if(!pe_ui_sprite_flip(c->assets,name,pe_ui_draw_rect(r),tint,horizontal,vertical))DrawRectangleRec(pe_ui_draw_rect(r),(Color){36,62,105,210});
+}
 void pe_ui_draw_effect(const PeUiCanvas *c,PeUiEffect fx,PeTrainingUIRect r){pe_training_ui_shader_draw(c->effects,fx,pe_ui_draw_rect(r),c->seconds,1,false);}
 void pe_ui_draw_text(const PeUiCanvas *c,const char *s,float x,float y,float size,Color tint,bool bold){if(s)DrawTextEx(pe_ui_draw_font(c,size,bold),s,(Vector2){x,y},size*c->layout->scale,0,tint);}
 void pe_ui_draw_center(const PeUiCanvas *c,const char *s,PeTrainingUIRect r,float size,Color tint,bool bold){

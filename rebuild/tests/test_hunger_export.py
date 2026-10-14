@@ -62,6 +62,15 @@ class HungerExportTests(unittest.TestCase):
         self.mutate_database("UPDATE skTriggerEvent SET _modsTarget=replace(_modsTarget,'+=80','+=81') WHERE _id='457'")
         self.mutate_database("UPDATE skTriggerEvent SET _modsTarget='rnd,1,1,30200105,0.02' WHERE _id='489'")
 
+    def test_starvation_notice_is_pinned(self):
+        j = json.loads(exporter.build_outputs()['pe_hunger_source.json'])
+        self.assertEqual(j['starvation_notice']['content_id'], 8000654)
+        self.assertEqual(j['starvation_notice']['english'], "I'm so hungry, I can probably eat an entire cow!")
+        self.assertIn(b'pe_hunger_source_starvation_notice[] = "I\'m so hungry', exporter.build_outputs()['pe_hunger_source.h'])
+        for field, value in [('Hit_Rate', '.5'), ('Eff_Content', '8000654,8000653'), ('Eff_HumanAudio', '3')]:
+            with self.subTest(field=field):
+                self.mutate_database(f'UPDATE AbnormalNotice SET "{field}"=? WHERE Trigger_Abnormal=\'8\'', (value,))
+
     def mutate_source(self, relative, old, new):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -80,6 +89,24 @@ class HungerExportTests(unittest.TestCase):
         self.mutate_source(a + 'PEAbnormalCondition.cs', b'if (val < minThreshold || val > maxThreshold)', b'if (val <= minThreshold || val > maxThreshold)')
         self.mutate_source(a + 'PEAbnormalCondition.cs', b'UnityEngine.Random.value < hitRate)\n\t\t{', b'UnityEngine.Random.value <= hitRate)\n\t\t{')
         self.mutate_source('Assets/Scripts/SkillSystem/SkAttribsModifier.cs', b'var = var*_mul + _add;', b'var = var + _add;')
+        self.mutate_source(a + 'PEAbnormalEff.cs', b'PeTipMsg.EMsgType.Misc', b'PeTipMsg.EMsgType.Mission')
+
+    def test_one_shot_notice_lifecycle_is_pinned(self):
+        a = exporter.ABNORMAL
+        self.mutate_source(a + 'PEAbnormalNotice.cs', b'm_Triggers.Clear();', b'm_Triggers[i].Clear();')
+        self.mutate_source('Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs', b'WaitForSeconds(5f)', b'WaitForSeconds(1f)')
+        self.mutate_source('Assets/Scripts/PeEntity/Cmpt/MainPlayerCmpt.cs', b'if(!PeGameMgr.IsTutorial)', b'if(true)')
+        semantics = json.loads(exporter.build_outputs()['pe_hunger_source.json'])['semantics']
+        self.assertIn('one-shot per notice instance', semantics['notice'])
+        self.assertIn('only the starvation-start notice', semantics['scope'])
+
+    def test_localization_option(self):
+        with tempfile.TemporaryDirectory() as directory:
+            for name, data in exporter.build_outputs().items():
+                (Path(directory) / name).write_bytes(data)
+            self.assertEqual(exporter.main(['--output', directory, '--check', '--localization', str(exporter.DEFAULT_LOCALIZATION)]), 0)
+            with redirect_stderr(io.StringIO()):
+                self.assertEqual(exporter.main(['--output', directory, '--check', '--localization', str(Path(directory) / 'missing.db')]), 1)
 
     def test_check_does_not_rewrite_stale_header(self):
         with tempfile.TemporaryDirectory() as directory:

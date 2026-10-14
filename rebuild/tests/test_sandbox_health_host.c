@@ -125,11 +125,21 @@ static void hunger(PeGame *g){
     g->hunger.hunger=g->hunger.raw=40;
     for(unsigned i=0;i<4;i++)CHECK(sandbox_health_frame(&clock,g,.25,true,false));
     CHECK(!g->hunger.starving);CHECK(sandbox_health_frame(&clock,g,.25,true,false));
-    CHECK(g->hunger.starving&&strstr(g->message,"starving")&&pe_game_stamina_reduce_percent(g)==2);
+    CHECK(g->hunger.starving&&!strcmp(g->message,pe_hunger_source_starvation_notice)&&pe_game_stamina_reduce_percent(g)==2);
     /* Pause freezes the condition's clock. */
     float elapsed=g->hunger.end_elapsed;
     for(unsigned i=0;i<8;i++)CHECK(sandbox_health_frame(&clock,g,.25,true,true));
     CHECK(g->hunger.end_elapsed==elapsed);
+    /* Ending emits nothing: an unrelated message survives it. */
+    snprintf(g->message,sizeof g->message,"sentinel");
+    g->hunger.hunger=g->hunger.raw=60;
+    for(unsigned i=0;i<2&&g->hunger.starving;i++)CHECK(sandbox_health_frame(&clock,g,.1,true,false));
+    CHECK(!g->hunger.starving&&!strcmp(g->message,"sentinel"));
+    /* Native adapter: a later start shows the notice again. The original's notice
+     * clears its triggers after firing, so it shows once per player component. */
+    g->hunger.hunger=g->hunger.raw=40;
+    for(unsigned i=0;i<6&&!g->hunger.starving;i++)CHECK(sandbox_health_frame(&clock,g,.25,true,false));
+    CHECK(g->hunger.starving&&!strcmp(g->message,pe_hunger_source_starvation_notice));
 }
 int main(void){
     PeGame *g=calloc(1,sizeof *g);CHECK(g);if(!g)return 1;

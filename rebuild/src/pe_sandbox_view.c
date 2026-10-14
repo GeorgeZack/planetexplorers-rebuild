@@ -4,6 +4,7 @@
 #include "pe_adventure_hunt.h"
 #include "../generated/pe_torch_source.h"
 #include "pe_sandbox_view.h"
+#include "../generated/pe_hunger_source.h"
 #include "pe_ui_settings.h"
 #include "pe_sandbox_ui.h"
 #include "pe_halt_host.h"
@@ -475,8 +476,9 @@ static bool sandbox_health_frame(PeAttributeClock *clock,PeGame *game,double dt,
     game->revival=revival;
     game->stamina_recovery=stamina;game->stamina=vitals.stamina;game->comfort=vitals.comfort;
     game->hunger=hunger;
-    if(hunger_event==PE_HUNGER_STARTED)snprintf(game->message,sizeof game->message,"You are starving. Eat something.");
-    else if(hunger_event==PE_HUNGER_ENDED)snprintf(game->message,sizeof game->message,"You are no longer starving.");
+    /* AbnormalNotice: starvation starting registers PeTipMsg content 8000654 with the
+     * player's face; the message line stands in for that tip list. Ending has no notice. */
+    if(hunger_event==PE_HUNGER_STARTED)snprintf(game->message,sizeof game->message,"%s",pe_hunger_source_starvation_notice);
     return true;
 }
 /* One observed world-clock update per active display frame, independent of

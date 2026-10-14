@@ -10,6 +10,7 @@ typedef struct {int kind;char text[2048];Rectangle box;Color tint;int font;} Dra
 static Draw calls[4096];static size_t count;static int scissors;
 static void record(int kind,const char *text,Rectangle r,Color color,int font){CHECK(count<4096);Draw *d=&calls[count++];memset(d,0,sizeof *d);d->kind=kind;d->box=r;d->tint=color;d->font=font;if(text)snprintf(d->text,sizeof d->text,"%s",text);}
 bool pe_ui_sprite(const PeUiAssets *a,const char *s,Rectangle r,Color c,float z){(void)a;(void)z;record(1,s,r,c,0);return true;}
+bool pe_ui_sprite_flip(const PeUiAssets *a,const char *s,Rectangle r,Color c,bool h,bool v){(void)a;(void)h;(void)v;record(1,s,r,c,0);return true;}
 Font pe_ui_font(const PeUiAssets *a,bool bold){(void)a;return (Font){.baseSize=bold?19:18};}
 Font pe_ui_font_small(const PeUiAssets *a,bool bold){(void)a;return (Font){.baseSize=bold?15:14};}
 Font pe_ui_font_heading(const PeUiAssets *a){(void)a;return (Font){.baseSize=32};}

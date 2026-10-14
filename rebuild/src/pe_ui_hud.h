@@ -7,6 +7,9 @@
 typedef struct { int item_id,count; float cooldown; } PeUiQuickslotView;
 typedef struct {
     float health,health_max,stamina,stamina_max;
+    /* Adventure only: the host's summed hunger. Without it the track stays empty. */
+    bool hunger_available;
+    float hunger,hunger_max;
     PeUiQuickslotView slots[PE_UI_QUICKSLOTS];
     int hand_item_id;
     bool building;

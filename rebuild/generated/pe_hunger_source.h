@@ -21,6 +21,8 @@ static const PeHungerSource pe_hunger_source = {
     1.0f, -10.0f, 2.0f, 1.0f, 1.0f
 };
 typedef struct { int item_id, skill_id; float hunger; int nutrient; float nutrient_gain; } PeHungerFoodSource;
+/* AbnormalNotice for starvation's start: PeTipMsg content 8000654. */
+static const char pe_hunger_source_starvation_notice[] = "I'm so hungry, I can probably eat an entire cow!";
 #define PE_HUNGER_SOURCE_FOODS 8
 static const PeHungerFoodSource pe_hunger_source_foods[PE_HUNGER_SOURCE_FOODS] = {
     {384, 20150001, 30.0f, 47, 2.0f},

@@ -63,6 +63,36 @@ static void compare_region(Image a,Image b,PeTrainingUIRect r,const char *label)
     printf("%s_PIXELS size=%dx%d checked=%zu different=%zu\n",label,a.width,a.height,checked,different);fflush(stdout);
     REQUIRE(different==0);
 }
+/* The same comparison outside one excluded rectangle; returns that rectangle's
+ * fill columns (the hunger sprite's teal) counted from its right end. */
+static void compare_hud_except(Image a,Image b,PeTrainingUIRect r,PeTrainingUIRect skip,const char *label){
+    REQUIRE(a.width==b.width&&a.height==b.height);
+    int x0=(int)fmaxf(0,floorf(r.x)),y0=(int)fmaxf(0,floorf(r.y)),x1=(int)fminf(a.width,ceilf(r.x+r.w)),y1=(int)fminf(a.height,ceilf(r.y+r.h));
+    int sx0=(int)floorf(skip.x),sy0=(int)floorf(skip.y),sx1=(int)ceilf(skip.x+skip.w),sy1=(int)ceilf(skip.y+skip.h);
+    Color *left=LoadImageColors(a),*right=LoadImageColors(b);REQUIRE(left&&right);
+    size_t different=0,checked=0;
+    for(int y=y0;y<y1;y++)for(int x=x0;x<x1;x++){
+        if(x>=sx0&&x<sx1&&y>=sy0&&y<sy1)continue;
+        size_t k=(size_t)y*(size_t)a.width+(size_t)x;checked++;
+        if(memcmp(&left[k],&right[k],sizeof(Color)))different++;
+    }
+    UnloadImageColors(left);UnloadImageColors(right);
+    printf("%s_PIXELS size=%dx%d checked=%zu different=%zu\n",label,a.width,a.height,checked,different);fflush(stdout);
+    REQUIRE(different==0);
+}
+static void hunger_fill(Image b,PeTrainingUIRect r,float fraction,const char *label){
+    Color *px=LoadImageColors(b);REQUIRE(px);
+    int x0=(int)floorf(r.x),x1=(int)ceilf(r.x+r.w),y0=(int)floorf(r.y),y1=(int)ceilf(r.y+r.h);
+    int first=-1,last=-1;
+    for(int x=x0;x<x1;x++)for(int y=y0;y<y1;y++){
+        Color c=px[(size_t)y*(size_t)b.width+(size_t)x];
+        if(c.g>120&&c.b>120&&c.r<120&&abs((int)c.g-(int)c.b)<40){if(first<0||x<first)first=x;if(x>last)last=x;}
+    }
+    UnloadImageColors(px);
+    float filled=first<0?0:(float)(last-first+1);
+    printf("%s_FILL size=%dx%d track=%.1f..%.1f teal_columns=%d..%d expected_width=%.1f\n",label,b.width,b.height,r.x,r.x+r.w,first,last,r.w*fraction);fflush(stdout);
+    REQUIRE(first>=0&&last>=x1-2&&filled<=r.w*fraction+2&&filled>=r.w*fraction-3);
+}
 static int bag(const PeGame *g,int item){
     for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==item&&g->inventory.slots[i].count>0)return i;
     return -1;
@@ -123,7 +153,14 @@ int main(int argc,char **argv){
         pe_sandbox_ui_prepare(&sandbox,game);
         Image a=training_capture(&tutorial,training,argv[1],"tutorial-hud",w,h);
         Image b=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud",w,h);
-        compare_region(a,b,pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER),"HUD");UnloadImage(a);UnloadImage(b);
+        compare_region(a,b,pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER),"HUD");UnloadImage(b);
+        /* Adventure only: the same staged HUD with hunger 150 of 500. Everything else
+         * matches the tutorial; the track fills its right 30% (5_Hunger is rotated). */
+        game->mode=PE_GAME_ADVENTURE;game->hunger.hunger=game->hunger.raw=150;
+        b=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud-hunger",w,h);
+        game->mode=PE_GAME_LEGACY;
+        compare_hud_except(a,b,pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER),sandbox.layout.hunger,"HUD_OUTSIDE_HUNGER");
+        hunger_fill(b,sandbox.layout.hunger,.3f,"HUNGER");UnloadImage(a);UnloadImage(b);
         training->inventory_open=sandbox.inventory_open=true;
         a=training_capture(&tutorial,training,argv[1],"tutorial-inventory",w,h);
         b=sandbox_capture(&sandbox,game,argv[1],"sandbox-inventory",w,h);
