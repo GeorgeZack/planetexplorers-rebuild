@@ -4,6 +4,7 @@
 
 static bool finite3(PeVec3 v){return isfinite(v.x)&&isfinite(v.y)&&isfinite(v.z);}
 void pe_halt_host_reset(PeHaltHost *h){if(h)memset(h,0,sizeof *h);}
+bool pe_halt_host_masked(const PeHaltHost *h){return h&&h->action.running&&h->action.mask;}
 static bool offsets(PeHaltHost *h,float dt,bool *ended){
     PeHaltUpdate update;
     PeHaltTick tick={.delta_time=dt,.effect_present=true,.motor_present=true,.effect_enabled=true,.master_weight=1};

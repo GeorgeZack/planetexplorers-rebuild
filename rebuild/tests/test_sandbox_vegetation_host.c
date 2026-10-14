@@ -38,6 +38,12 @@ int main(void){
         assert(action.consume_actions&&!action.consume_world&&sandbox_hunt_runs(&ui,action)&&strstr(g->message,"Finish"));
     }
     melee=(PeSandboxMelee){0};tool=(PeSandboxActions){0};action=plant_route(&ui,g);
+    /* The Halt mask refuses Gather silently; the press is still owned. */
+    input.halt_masked=true;g->message[0]=0;
+    assert(sandbox_vegetation_interact(g,collision,input,&action,&gate,0));
+    assert(!g->vegetation.plants[0].depleted&&pe_inventory_count(&g->inventory,source->item_id)==count&&g->gathered==gathered);
+    assert(action.consume_actions&&!action.consume_world&&!g->message[0]);
+    input.halt_masked=false;action=plant_route(&ui,g);
     PeInventory expected=g->inventory;uint32_t expected_rng=g->rng_state;
     assert(pe_harvest_grant(&expected,&expected_rng,15,1,1,0,false));
     assert(sandbox_vegetation_interact(g,collision,input,&action,&gate,2));

@@ -32,6 +32,10 @@ typedef struct {
 typedef struct {bool block_move,block_jump,started,ended;} PeHaltHostOutput;
 /* Invalid input leaves state and output unchanged. */
 bool pe_halt_host_step(PeHaltHost *host,PeHaltHostInput input,PeHaltHostOutput *out);
+/* Whether the Halt mask is set after the latest step. Row 50 also lists Gather
+ * and PickUpItem; a host refuses a herb Gather request while this is true. The
+ * player's PickUpItem action has no caller in the source. */
+bool pe_halt_host_masked(const PeHaltHost *host);
 /* Load, respawn, teleport or mode change: EndImmediately, and Move is not running. */
 void pe_halt_host_reset(PeHaltHost *host);
 #endif

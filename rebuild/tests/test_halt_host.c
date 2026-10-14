@@ -28,14 +28,15 @@ int pe_test_halt_host(void){
     CHECK(pe_halt_host_step(&h,standing(),&out)&&!out.started&&!out.block_move&&!out.block_jump&&!h.moving);
     /* A walk stop holds the mask for about 0.22 s and moves nothing. */
     CHECK(pe_halt_host_step(&h,moving(2),&out)&&h.moving&&!out.block_move);
-    CHECK(pe_halt_host_step(&h,released(2),&out)&&out.started&&out.block_move&&out.block_jump&&!h.moving);
+    CHECK(!pe_halt_host_masked(&h)&&!pe_halt_host_masked(NULL));
+    CHECK(pe_halt_host_step(&h,released(2),&out)&&out.started&&out.block_move&&out.block_jump&&!h.moving&&pe_halt_host_masked(&h));
     CHECK(h.offset_count==PE_HALT_LINKS&&h.action.weight==0);
     float largest=0;unsigned steps=hold(&h,moving(2),&largest);
     CHECK(steps>=12&&steps<=15&&largest==0);
     /* Movement held through the lock starts on the first free step, and a second release stops again. */
     CHECK(pe_halt_host_step(&h,moving(2),&out)&&h.moving&&!out.block_move&&h.offset_count==0);
     CHECK(pe_halt_host_step(&h,released(2),&out)&&out.started);hold(&h,standing(),NULL);
-    CHECK(pe_halt_host_step(&h,standing(),&out)&&!out.started&&!out.block_move);
+    CHECK(pe_halt_host_step(&h,standing(),&out)&&!out.started&&!out.block_move&&!pe_halt_host_masked(&h));
     /* A sprint stop lasts 0.9 s; its first pass adds nothing and later ones reach decimetres. */
     CHECK(pe_halt_host_step(&h,moving(8),&out)&&pe_halt_host_step(&h,released(8),&out)&&out.started&&h.action.weight==1);
     for(unsigned i=0;i<h.offset_count;i++)CHECK(h.offsets[i].offset.x==0&&h.offsets[i].offset.y==0&&h.offsets[i].offset.z==0);

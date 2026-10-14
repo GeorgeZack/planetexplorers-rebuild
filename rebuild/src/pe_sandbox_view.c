@@ -507,6 +507,7 @@ typedef struct {
     unsigned index;
     float distance,other_distance;
     bool enabled,available,requested,modal_priority;
+    bool halt_masked; /* Action_Halt mask: MotionMgr refuses Gather without a message */
     const PeSandboxMelee *melee;
     const PeSandboxActions *tool;
 } SandboxVegetationInput;
@@ -520,7 +521,8 @@ static bool sandbox_vegetation_interact(PeGame *game,const PeSandboxCollision *c
        isnan(input.other_distance)||input.distance>=input.other_distance)return false;
     /* DBActionRelation Gather requires SwordAttack/Dig/Fell masks false.
      * Reject while their native owners run; do not cancel or freeze them. */
-    if(!input.melee->action.active&&!input.melee->tick_pending&&input.tool->stage==PE_SANDBOX_ACTION_IDLE)
+    if(input.halt_masked){}
+    else if(!input.melee->action.active&&!input.melee->tick_pending&&input.tool->stage==PE_SANDBOX_ACTION_IDLE)
         pe_vegetation_harvest(game,input.index,collision);
     else snprintf(game->message,sizeof game->message,"Finish the current tool or weapon action before gathering.");
     action->consume_actions=true;action->npc_interaction=false;action->camera_cycle_allowed=false;
@@ -1132,7 +1134,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
         bool npc_right=right_click||(ui.free_cursor&&IsMouseButtonPressed(MOUSE_BUTTON_RIGHT));
         SandboxVegetationInput plant_input={.index=picked_plant,.distance=plant_distance,.other_distance=fminf(repair_distance,fminf(nearest_npc,deploy_distance)),
             .enabled=focused&&!loaded&&!build_mode&&!placing_torch,.available=pe_vegetation_view_available(vegetation_view),
-            .requested=IsKeyPressed(KEY_E)||npc_right,.modal_priority=auto_welcome,.melee=&melee,.tool=&tool_action};
+            .requested=IsKeyPressed(KEY_E)||npc_right,.modal_priority=auto_welcome,.halt_masked=pe_halt_host_masked(&halt),.melee=&melee,.tool=&tool_action};
         if(sandbox_vegetation_interact(game,collision,plant_input,&action,&pointer_gate,pointer_buttons)){
             action_input=false;right_click=false;attack_pending=false;
         }

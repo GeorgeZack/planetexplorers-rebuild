@@ -169,7 +169,15 @@ input. From `ActionRelation` rows 1, 2, 4 and 50, `MotionMgrCmpt` and
 So an unarmed player cannot move or jump for about 0.22 s after a walk stop,
 0.5 s after a run stop and 0.9 s after a sprint stop. With a tool, knife or
 torch drawn there is no Halt and no lock. Load, revival and reset clear it.
-The source also blocks Gather and PickUpItem on the mask; those are not wired.
+The mask also refuses Gather. `MainPlayerCmpt` requests it with a plain
+`DoAction(PEActionType.Gather)` on the gather key, and a refused request does
+nothing and shows nothing. Both hosts follow that: while
+`pe_halt_host_masked` is true the sandbox owns the press but harvests nothing
+and writes no message, and the tutorial does not begin a herb. The player
+presses again after the lock. The mask lists PickUpItem too, but no source
+code requests that action for the player (`grep -a` over `Assets/Scripts`
+finds only its definition, registration and network sender), so hare-drop
+pickup stays independent of the lock.
 
 The offsets reach drawing through [the always-on solve](PLAYER_IK_DRIVE.md),
 turned from world into the drawn model's frame. They never move the player, a

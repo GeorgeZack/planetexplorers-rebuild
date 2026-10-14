@@ -722,7 +722,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                             Vector3 delta=Vector3Subtract(vector(pe_training_gathering_herb_position(i)),vector(training.position));
                             float d=Vector3LengthSqr(delta);if(d<distance){nearest=(int)i;distance=d;}
                         }
-                        if(nearest>=0)pe_training_begin_herb(&training,(unsigned)nearest);
+                        if(nearest>=0&&!pe_halt_host_masked(&halt))pe_training_begin_herb(&training,(unsigned)nearest); /* the Halt mask refuses Gather */
                     }
                 }
                 if(!ui.history.open&&!pointer_release_pending&&!paused&&!training.character_open&&!menu_open&&!training.replicator_open&&!training.kit_open&&!inventory&&!log) {
@@ -895,7 +895,7 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                         float distance=hypotf(delta.x,delta.z);
                         if(!pe_training_gathering_movement_locked(&training.gathering)) {
                             if(distance>1.5f){input.move_x=delta.x/distance;input.move_z=delta.z/distance;}
-                            else pe_training_begin_herb(&training,i);
+                            else if(!pe_halt_host_masked(&halt))pe_training_begin_herb(&training,i);
                         }
                         yaw=atan2f(delta.x,-delta.z);pitch=-20*DEG2RAD;break;
                     }
