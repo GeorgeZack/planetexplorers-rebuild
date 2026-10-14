@@ -89,6 +89,7 @@ The latest running-knife increment adds grounded female third-person Knife33 sta
 | Attack contact playback and offline engine curve arithmetic | [Playback](docs/audit/ATTACK_PLAYBACK.md), [numerical qualification](docs/audit/UNITY5_CURVE_EVALUATOR.md), [clock owner](rebuild/src/pe_attack_playback.h) |
 | Shield admission, action relations and cancellation | [Headless contract](docs/audit/SHIELD_ACTION.md), [action owner](rebuild/src/pe_shield_action.h); ordinary activation remains gated |
 | Stamina pulse ordering, comfort and v16 persistence | [Stamina recovery](docs/audit/STAMINA_RECOVERY.md), [core owner](rebuild/src/pe_stamina_recovery.h) |
+| Hunger drain, starvation and food gains (disconnected) | [Hunger](docs/audit/HUNGER.md), [core owner](rebuild/src/pe_hunger.h) |
 | What was actually tested | [Playtest record](docs/PLAYTEST.md) |
 | Help test the current build | [Ordinary four-hare acceptance and isolated checkpoint](docs/audit/HUNT_ACCEPTANCE.md); [movement/camera checklist](docs/PLAYTEST.md#hands-on-checklist--current-movement-and-running-knife-build) |
 | Extend or verify running Knife33 | [Running implementation and evidence](docs/audit/SANDBOX_RUNNING_KNIFE.md), [live branch capture](docs/audit/RUNNING_KNIFE_LIVE_OBSERVER.md) |

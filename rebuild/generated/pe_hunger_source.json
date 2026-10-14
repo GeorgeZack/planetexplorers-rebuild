@@ -1,0 +1,331 @@
+{
+  "schema": 1,
+  "source": {
+    "path": "Assets/Resources/DataBase/localData.bytes",
+    "sha256": "c3d63ee865a7e10e309e11e9ee561c93feef39c379a584dcf68722a523cd4376"
+  },
+  "source_files": [
+    {
+      "path": "Assets/Scripts/SkillSystem/SkBuffs.cs",
+      "sha256": "d02d2ee9311c1362047aaf9361ef7baca27d2b946cec81ef777a46209ac20be6"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkExpFuncSet.cs",
+      "sha256": "462543e6d4b61da4a9fb71a79c81dfafbdc8eaaa4cd287d66afcc0a35a878874"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/PESkEntity.cs",
+      "sha256": "33892866d1fcb4947e97cdbe844b5946600409a77001cf09bb94ccb1159f4975"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntityHelper.cs",
+      "sha256": "afa0b70c1026adc9acce4c3df715b9d565b6b5d5a3485bf9732baab639de4c0a"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkEntityAttribsUpdater.cs",
+      "sha256": "089d2ee0a9f8cdc233c6beae9641b73169e9a757a8a3d4ecaf367be16518745c"
+    },
+    {
+      "path": "Assets/PeWorld/PeEntityCreator.cs",
+      "sha256": "7808c7c9b0c71fdce5a83217e3d34a7e93c9cca8fd46085ad574b2687370a71b"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAliveEntity.cs",
+      "sha256": "a74c7a07590895fda1ba0769bb6a96d115e0e0bfdb4c594710b4cff3e74757a9"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalCondition/PEAbnormalCondition.cs",
+      "sha256": "8d06817956866e33d74d469049d9b9ddf0e1783302fabe8db1f8e1230fd63bd1"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalCondition/PEAbnormalTrigger.cs",
+      "sha256": "e23d6100d6e330af9b11714f87b2783e66352338fcb847bc836f6ffed2cfd515"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalCondition/PEAbnormalHit.cs",
+      "sha256": "334362a4ac36adf39c38f95da98148d61c8af798b41447e3ef684fa03a47a9be"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalCondition/PEAbnormalEff.cs",
+      "sha256": "f8a0a1cd36cb11b6447984edbe3ea4bfc28279aa4dee4156e0ee1b5150c605f4"
+    },
+    {
+      "path": "Assets/Scripts/PeEntity/Cmpt/AbnormalConditionCmpt.cs",
+      "sha256": "9e4d6c28d7d4b05128fb2b4e35a3b1365f323f64a4f7cc917b10dc47ab5c1c3e"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAttribs.cs",
+      "sha256": "b9b7141ad740b4498fca8270b33bc15f86d19623055aacef5aa406587f44ca5d"
+    },
+    {
+      "path": "Assets/Scripts/SkillSystem/SkAttribsModifier.cs",
+      "sha256": "d47b491e102524182341f68ccf291e00d8105155ed5915d66b336e7b99ef0368"
+    }
+  ],
+  "rule": {
+    "player_init_id": 1,
+    "drain_buff_id": 30200050,
+    "starvation_abnormal_id": 8,
+    "starvation_buff_id": 30200113,
+    "hunger_max": 500.0,
+    "initial_hunger": 300.0,
+    "recovery_speed": -0.0694,
+    "reduction_percent": 1.0,
+    "drain_scale": 5.0,
+    "drain_interval_seconds": 5.0,
+    "start_interval_seconds": 1.0,
+    "start_minimum": 0.0,
+    "start_maximum": 50.0,
+    "start_rate": 1.0,
+    "end_interval_seconds": 0.1,
+    "end_minimum": 51.0,
+    "end_maximum": 1000.0,
+    "end_rate": 1.0,
+    "food_cooldown_seconds": 4.0,
+    "food_cooldown_group": 12,
+    "nutrient_maximum": 100.0,
+    "poison_buff_id": 30200105,
+    "poison_chance": 0.01,
+    "poison_seconds": 20.0,
+    "poison_interval_seconds": 1.0,
+    "poison_damage": 3.0,
+    "poison_minimum_hp": 3.0
+  },
+  "initial_player": {
+    "id": "1",
+    "InitBuffList": "30200049,30200050,30200051,30200052,30200053,30200046,30200149,30200150,30200151,30200152,30200175",
+    "HungerMax": "500",
+    "Hunger": "300",
+    "HungerReducePercent": "1",
+    "HungerRecoverSpeed": "-.0694"
+  },
+  "drain_buff": {
+    "_id": "30200050",
+    "_name": "饱食度下降",
+    "_icon": "0",
+    "_desc": "2300000",
+    "_type": "65507",
+    "_priority": "0",
+    "_stackLimit": "1",
+    "_timeActive": "-1",
+    "_timeInterval": "5",
+    "_eff": "0",
+    "_effBeg": "0",
+    "_effEnd": "0",
+    "_mods": "exp,1,target.raws[16]+=target.sums[18]*target.sums[17]*5",
+    "_AttType": "公式"
+  },
+  "starvation_abnormal": {
+    "AbnormalId": "8",
+    "AbnormalName": "饥饿",
+    "TranslationNameId": "2300037",
+    "TranslationDescribeId": "2300037",
+    "Icon": "Hunger",
+    "AbnormalTarget": "1",
+    "IsDeathRemove": "0",
+    "UpdateByModel": "1",
+    "Trigger_Time": "1",
+    "Trigger_BuffAdd": "0",
+    "Trigger_ItemGet": "0",
+    "Trigger_Damage": "0",
+    "Trigger_IntoWater": "0",
+    "Hit_MutexAbnormal": "0",
+    "Hit_PreAbnormal": "0",
+    "Hit_BuffList": "0",
+    "Hit_Attr": "16,0,50,1,1",
+    "Hit_Damage": "0",
+    "Hit_Time": "0",
+    "Hit_AreaTime": "0",
+    "Hit_RainTime": "0",
+    "Hit_Rate": "0",
+    "Eff_Model": "0",
+    "Eff_BuffAdd": "30200113",
+    "Eff_RemoveAbnormal": "0",
+    "Eff_Anim": "0",
+    "Eff_Camera": "0",
+    "Eff_Particle": "0",
+    "Eff_SkinColor": "0",
+    "Eff_BodyWeight": "18,-1;21,-1;0,-1;1,-1;23,-1;24,-1;16,-1;17,-1;15,-1;14,-1",
+    "RT_Imm": "0",
+    "RT_Time": ".1",
+    "RT_BuffRemove": "0",
+    "RT_EffEnd": "0",
+    "RT_OutWater": "0",
+    "RH_BuffRemove": "0",
+    "RH_Attr": "16,51,1000,1,1",
+    "RE_BuffRemove": "0",
+    "RE_BuffAdd": "0",
+    "RE_AbnormalAdd": "0",
+    "RE_Anim": "0",
+    "RE_Camera": "0",
+    "RE_Particle": "0"
+  },
+  "starvation_buff": {
+    "_id": "30200113",
+    "_name": "饥饿",
+    "_icon": "0",
+    "_desc": "2300000",
+    "_type": "40701",
+    "_priority": "0",
+    "_stackLimit": "1",
+    "_timeActive": "-1",
+    "_timeInterval": "0",
+    "_eff": "0",
+    "_effBeg": "0",
+    "_effEnd": "0",
+    "_mods": "exp,4,target.buffPreAdd+=1;#exp,5,target.buffPreAdd-=10;#exp,6,target.buffPreAdd+=2;#exp,9,target.buffPreAdd+=1;#exp,13,target.buffPreAdd+=1",
+    "_AttType": "临时属性"
+  },
+  "starvation_pre_adds": [
+    {
+      "attribute": 4,
+      "name": "StaminaReducePercent",
+      "pre_add": 1.0
+    },
+    {
+      "attribute": 5,
+      "name": "StaminaRecoverSpeed",
+      "pre_add": -10.0
+    },
+    {
+      "attribute": 6,
+      "name": "StaminaRecoverDelay",
+      "pre_add": 2.0
+    },
+    {
+      "attribute": 9,
+      "name": "ComfortReducePercent",
+      "pre_add": 1.0
+    },
+    {
+      "attribute": 13,
+      "name": "OxygenReducePercent",
+      "pre_add": 1.0
+    }
+  ],
+  "poison_buff": {
+    "_id": "30200105",
+    "_name": "食物中毒",
+    "_icon": "0",
+    "_desc": "2300000",
+    "_type": "30201",
+    "_priority": "0",
+    "_stackLimit": "1",
+    "_timeActive": "20",
+    "_timeInterval": "1",
+    "_eff": "0",
+    "_effBeg": "453",
+    "_effEnd": "454",
+    "_mods": "exp,1,if(target.raws[1]>3){target.raws[1]-=3;}",
+    "_AttType": "属性公式"
+  },
+  "foods": [
+    {
+      "item_id": 384,
+      "name": "red mushroom soup",
+      "skill_id": 20150001,
+      "trigger_id": 455,
+      "hunger": 30.0,
+      "nutrient": 47,
+      "nutrient_name": "Food_Bean",
+      "nutrient_gain": 2.0
+    },
+    {
+      "item_id": 385,
+      "name": "fried lotus",
+      "skill_id": 20150002,
+      "trigger_id": 456,
+      "hunger": 60.0,
+      "nutrient": 47,
+      "nutrient_name": "Food_Bean",
+      "nutrient_gain": 4.0
+    },
+    {
+      "item_id": 386,
+      "name": "roasted meat",
+      "skill_id": 20150003,
+      "trigger_id": 457,
+      "hunger": 80.0,
+      "nutrient": 46,
+      "nutrient_name": "Food_Meat",
+      "nutrient_gain": 4.0
+    },
+    {
+      "item_id": 387,
+      "name": "puree",
+      "skill_id": 20150004,
+      "trigger_id": 458,
+      "hunger": 20.0,
+      "nutrient": 48,
+      "nutrient_name": "Food_Fruit",
+      "nutrient_gain": 4.0
+    },
+    {
+      "item_id": 388,
+      "name": "nuts",
+      "skill_id": 20150005,
+      "trigger_id": 459,
+      "hunger": 30.0,
+      "nutrient": 48,
+      "nutrient_name": "Food_Fruit",
+      "nutrient_gain": 6.0
+    },
+    {
+      "item_id": 389,
+      "name": "smoked sausage",
+      "skill_id": 20150006,
+      "trigger_id": 460,
+      "hunger": 60.0,
+      "nutrient": 46,
+      "nutrient_name": "Food_Meat",
+      "nutrient_gain": 3.0
+    },
+    {
+      "item_id": 390,
+      "name": "sashimi",
+      "skill_id": 20150007,
+      "trigger_id": 461,
+      "hunger": 80.0,
+      "nutrient": 46,
+      "nutrient_name": "Food_Meat",
+      "nutrient_gain": 4.0
+    },
+    {
+      "item_id": 391,
+      "name": "compressed biscuit I",
+      "skill_id": 20150008,
+      "trigger_id": 462,
+      "hunger": 20.0,
+      "nutrient": 49,
+      "nutrient_name": "Food_Energy",
+      "nutrient_gain": 2.0
+    },
+    {
+      "item_id": 392,
+      "name": "compressed biscuit II",
+      "skill_id": 20150009,
+      "trigger_id": 463,
+      "hunger": 40.0,
+      "nutrient": 49,
+      "nutrient_name": "Food_Energy",
+      "nutrient_gain": 4.0
+    },
+    {
+      "item_id": 394,
+      "name": "ration sticks",
+      "skill_id": 20150011,
+      "trigger_id": 465,
+      "hunger": 30.0,
+      "nutrient": 49,
+      "nutrient_name": "Food_Energy",
+      "nutrient_gain": 3.0
+    }
+  ],
+  "semantics": {
+    "drain": "Initial buff 30200050 every 5 s on the shared eight-frame attribute pass: raw hunger += summed speed * summed percent * 5 (-0.347 with starter values), first execution at mount; clamps 0..HungerMax at summation.",
+    "starvation": "AbnormalType 8: while inactive, a frame-time timer is checked before it accumulates; at >= 1 s it resets and, if alive, hunger in [0,50] starts the condition (rate Lerp(1,1)=1). While active, a 0.1 s timer and hunger in [51,1000] end it. Start mounts buff 30200113, end cancels it. Not removed on death. Active state and its buff are saved.",
+    "starvation_effect": "Buff 30200113 pre-adds +1 StaminaReducePercent, -10 StaminaRecoverSpeed, +2 StaminaRecoverDelay, +1 ComfortReducePercent, +1 OxygenReducePercent.",
+    "food": "Each supported food runs one MAD-free expression trigger: raw hunger += gain, its nutrient += gain capped at 100; skill cooldown 4 s, shared group 12. A second trigger has a 1% chance to mount 20 s food poisoning (-3 HP per second while HP > 3).",
+    "scope": "Player hunger only. Nutrient decay buffs 30200149-152, food poisoning, the body-weight presentation, abnormal notices, oxygen and every other food stay outside this export."
+  }
+}
