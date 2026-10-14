@@ -13,6 +13,7 @@ STUBS = r'''
 #include "pe_settlement.h"
 #include "pe_adventure_hunt.h"
 #include "pe_town_interaction.h"
+#include "pe_town_wallet.h"
 #include <string.h>
 bool pe_settlement_configure(const char *p,char *e,size_t n){(void)p;(void)e;(void)n;return true;}
 bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
@@ -22,10 +23,14 @@ bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
     for(int k=0;k<4;k++)g->inventory.slots[k*stride]=(PeSlot){.item_id=100+k,.count=k+1};
     g->yaw=.5f;g->pitch=-.25f;g->velocity=(PeVec3){1,2,3};g->grounded=true;
     g->quickslots[0]=(PeQuickslot){100,42};g->hunger.hunger=123.5f;g->hunger.starving=!g->inventory.categorized;
-    g->town_stock[1]=(PeTownStock){true,17,99.5};return true;
+    g->town_stock[1]=(PeTownStock){true,17,99.5};g->town_wallet[1]=(PeTownWallet){4480,true};return true;
 }
 void pe_game_destroy(PeGame *g){(void)g;}
 bool pe_hunger_is_food(int id){return id==386||id==391;}
+const PeTownWalletSource *pe_town_wallet_source_at(size_t i){
+    static const PeTownWalletSource w[2]={{20002,1000,9000,100,false},{20028,4392,9000,100,true}};
+    return i<2?&w[i]:NULL;
+}
 const PeTownOffer *pe_town_shop_offer_at(size_t i){
     static const PeTownOffer o[3]={{20028,153,1,386,141,40,46800},{20028,153,2,391,18,35,46800},{20028,153,3,916,10,60,46800}};
     return i<3?&o[i]:NULL;
@@ -65,7 +70,7 @@ class InspectorOutput(unittest.TestCase):
 
     def test_all_adventure_categories_and_pose(self):
         data = self.inspect('adventure')
-        self.assertEqual(data['schema'], 3)
+        self.assertEqual(data['schema'], 4)
         self.assertTrue(data['inventory_categorized'])
         self.assertEqual(data['inventory_capacity'], 1680)
         self.assertEqual([s['slot'] for s in data['inventory']], [0, 420, 840, 1260])
@@ -85,6 +90,11 @@ class InspectorOutput(unittest.TestCase):
         self.assertEqual({k: data['food_offers'][1][k] for k in ('initialized', 'remaining', 'create_time')},
                          {'initialized': True, 'remaining': 17, 'create_time': 99.5})
         self.assertTrue(self.inspect('legacy')['hunger']['starving'])
+
+    def test_vendor_wallets_in_source_order(self):
+        wallets = self.inspect('adventure')['town_wallets']
+        self.assertEqual(wallets, [{'index': 0, 'entity_id': 20002, 'balance': 0, 'added': False},
+                                   {'index': 1, 'entity_id': 20028, 'balance': 4480, 'added': True}])
 
     def test_legacy_layout_remains_flat(self):
         data = self.inspect('legacy')

@@ -69,4 +69,21 @@ October 14, director-chosen goal: [the Adventure HUD comfort presentation](audit
 
 Not checked: ordinary play (a revival flash), the original's load/pause behaviour, and engine-qualified curve values. At 320×240 face2 is indistinguishable from face3.
 
+October 14, director-chosen goal, left uncommitted for review: [ordinary native selling and buyback](audit/TOWN_SELL_BUYBACK.md#ordinary-native-acceptance) at Xing Zhang, in session `rebuild/build/trade-private-20261014-01` from the earned food save (`40e47365…e114`, unchanged). Observed:
+- The equipped refusal.
+- A worn exact-instance sale and buyback: shovel instance 10 at 3543 durability, 41 each way, vendor credited 42.
+- A partial Wood sale and buyback (10 out, 4 back) with both purses checked.
+- Buyback retained across close/reopen.
+- Load clearing buyback while money and inventory persist: the paused re-save is byte-identical to `traded` (`21a80c12…1ac0`).
+- Live comfort fill matching the saved comfort on two in-world frames.
+
+The final earned save for the next goal (camp repair) is `rebuild/build/trade-private-20261014-01/reloaded.pesave`: shovel instance 10 at 3543, Wood 194, money 261. No runtime code changed; the read-only save inspector gains vendor purses (schema 4) with a formatter test. No defect found. Not checked:
+- digits versus quickslots, the small window, panel drag and a held close button;
+- other vendors;
+- a revival flash.
+
+Checks: full check 282 passed, 0 failed; 978 Python tests, 98 skipped (skips are not passes) (`rebuild/build/compiler-tmp/trade-check.log`). The sanitizer is the director's pre-push run.
+
 October 14 pre-push verification of the food-acceptance checkpoint: the required full sanitizer run passes 112 suites with zero failures/skips (`rebuild/build/compiler-tmp/food-prepush-sanitize.log`). Its first sandboxed attempt could not initialize LeakSanitizer under ptrace; the unrestricted rerun passed without disabling leak checks. The prior full check remains 280 jobs / 971 Python tests with 95 explicit optional skips; runtime sources are unchanged.
+
+October 14 director pre-push verification of the ordinary commerce checkpoint: 113 sanitizer suites pass, zero failures/skips, with leak checks enabled (`rebuild/build/compiler-tmp/trade-prepush-sanitize.log`); the full regression is 282 jobs / 978 Python tests with 98 explicit optional skips. Director review independently verified the exact worn instance, purses/counts, byte-identical reload and all twelve lossless evidence crops.

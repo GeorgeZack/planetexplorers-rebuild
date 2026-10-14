@@ -1,5 +1,41 @@
 # Original-game playtest and C comparison
 
+## October14 ordinary native selling and buyback
+
+Observed in the native production runtime with ordinary private-display input
+([details](audit/TOWN_SELL_BUYBACK.md#ordinary-native-acceptance),
+[evidence](reference/trade-native-20261014/checkpoints.json)). No original-game
+comparison.
+
+- Session `rebuild/build/trade-private-20261014-01` (`:115`), from the earned
+  food save `40e47365…e114`, which was unchanged afterwards. Binary
+  `f5c07847…a8e` (runtime `e72816b`).
+- One ordinary dig wore Wood Shovel instance 10 from 3553 to 3543 (saved
+  `dug`). While it was equipped, Sell refused it ("Unequip this item before
+  selling."). After the Knife was re-equipped it sold for 41, matching float32
+  42 × (0.8 × 3543/3553 + 0.2) = 41.905 truncated.
+- After close/reopen it was bought back for 41, and the vendor was credited 42
+  (the source asymmetry). Saved state shows the same instance 10, slot 425 and
+  durability 3543.
+- Sold 10 Wood for 40 and bought back 4 for 16; the ×6 row survived
+  close/reopen. Money 237 → 278 → 237 → 277 → 261; Xing Zhang's purse
+  4480 → 4439 → 4481 → 4441 → 4457.
+- Saved `traded`. A distinguishing sale of 1 Wood (265 / 4453, a separate ×1
+  row) was undone by Pause → Load: the buyback list was empty and 261 / 4457
+  restored. A paused re-save after a second load is byte-identical to `traded`
+  (`21a80c12…1ac0`).
+- Comfort HUD, measured on in-world frames: happy face. The fill's last teal
+  column is 589 at saved comfort 303.53 (expected edge 589.85) and 587 at
+  283.41 (587.28). This is a screenshot measurement at those frames' times; no
+  revival flash was observed.
+- Not checked: conversation digits versus quickslots, the small window, panel
+  drag, a held close button, and other vendors.
+- Teardown: explicit stop sent SIGTERM to the owned game (−15, supervisor exit
+  241); no lease or process remained.
+- Checks: full check 282 passed, 0 failed; 978 Python tests, 98 skipped (skips
+  are not passes) (`rebuild/build/compiler-tmp/trade-check.log`). Inspector
+  formatter tests: 4 pass. The sanitizer is the director's pre-push run.
+
 ## October14 Adventure HUD comfort fill, face and drop flash
 
 Implemented in C and rendered in staged private-display fixtures only:

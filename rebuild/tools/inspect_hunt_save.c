@@ -6,6 +6,7 @@
 #include "pe_settlement.h"
 #include "pe_adventure_hunt.h"
 #include "pe_town_interaction.h"
+#include "pe_town_wallet.h"
 #include <stdio.h>
 #include <stdlib.h>
 int main(int argc,char **argv){
@@ -19,7 +20,7 @@ int main(int argc,char **argv){
     if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
         fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;
     }
-    printf("{\"schema\":3,\"interpretation\":\"current-loader\",\"mode\":%u,"
+    printf("{\"schema\":4,\"interpretation\":\"current-loader\",\"mode\":%u,"
         "\"hunt_state\":%u,\"hunt_kills\":%u,\"pending_return_talk\":%d,"
         "\"source_position\":[%.17g,%.17g,%.17g],\"hunt_destination\":[%.9g,%.9g,%.9g],"
         "\"hp\":%.9g,\"max_hp\":%.9g,\"stamina\":%.9g,\"comfort\":%.9g,"
@@ -67,6 +68,16 @@ int main(int argc,char **argv){
         printf("%s{\"offer\":%zu,\"entity_id\":%u,\"item_id\":%d,\"price\":%u,\"limit\":%u,"
             "\"initialized\":%s,\"remaining\":%u,\"create_time\":%.17g}",
             comma?",":"",i,o->entity_id,o->item_id,o->price,o->limit,t->initialized?"true":"false",t->remaining,t->create_time);
+        comma=true;
+    }
+    /* Schema 4: every persisted vendor purse, in stable source order. Buyback rows are
+     * transient and never saved, so none are reported. */
+    printf("],\"town_wallets\":[");
+    comma=false;
+    for(size_t i=0;i<PE_TOWN_WALLET_CAPACITY;i++){
+        const PeTownWalletSource *w=pe_town_wallet_source_at(i);if(!w)continue;
+        printf("%s{\"index\":%zu,\"entity_id\":%u,\"balance\":%u,\"added\":%s}",
+            comma?",":"",i,w->entity_id,g->town_wallet[i].balance,g->town_wallet[i].added?"true":"false");
         comma=true;
     }
     puts("]}");pe_game_destroy(g);free(g);return 0;

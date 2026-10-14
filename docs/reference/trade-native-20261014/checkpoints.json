@@ -1,0 +1,336 @@
+{
+  "schema": 1,
+  "runtime_commit": "e72816b",
+  "binary_sha256": "f5c07847ee664bb9ca7771637736d6af8c6bbc3b440fc59ba8c2036defb43a8e",
+  "baseline": {
+    "path": "rebuild/build/food-private-20261014-02/reloaded.pesave",
+    "sha256": "40e47365323383b09ad6fcb169d67a80648e01f0a3ee33894a5cc248c0cde114",
+    "provenance": "earned food session food-native-20261014 (reloaded save)",
+    "unchanged_after_session": true,
+    "inspection": {
+      "money": 237,
+      "equipped_instance": 1,
+      "comfort": 303.533966,
+      "items": [
+        {
+          "slot": 420,
+          "category": 1,
+          "item_id": 33,
+          "count": 1,
+          "instance_id": 1,
+          "durability": 100
+        },
+        {
+          "slot": 425,
+          "category": 1,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3553
+        },
+        {
+          "slot": 841,
+          "category": 2,
+          "item_id": 279,
+          "count": 200,
+          "instance_id": 0,
+          "durability": 0
+        }
+      ],
+      "xing_zhang_wallet": {
+        "index": 3,
+        "entity_id": 20028,
+        "balance": 4480,
+        "added": true
+      }
+    }
+  },
+  "session": {
+    "path": "rebuild/build/trade-private-20261014-01",
+    "display": ":115",
+    "stop": "explicit stop: SIGTERM of the owned game (return -15, supervisor exit 241); not a clean application quit; baseline unchanged; no lease left"
+  },
+  "saves": {
+    "dug": {
+      "sha256": "3457ecf4c820950b5c6b0731f1316eca3daf9fa683f8ae043af67cf90fa88eb8",
+      "inspection": {
+        "money": 237,
+        "equipped_instance": 10,
+        "comfort": 298.675964,
+        "game_seconds": 8856989.801347129,
+        "items": [
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3543
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 200,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "xing_zhang_wallet": {
+          "index": 3,
+          "entity_id": 20028,
+          "balance": 4480,
+          "added": true
+        }
+      }
+    },
+    "traded": {
+      "sha256": "21a80c1268275d72f9336a3e9a33799cc67f2dadaae45a04000d9c57483e1ac0",
+      "inspection": {
+        "money": 261,
+        "equipped_instance": 1,
+        "comfort": 283.407959,
+        "game_seconds": 8858306.801415816,
+        "items": [
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3543
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 194,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "xing_zhang_wallet": {
+          "index": 3,
+          "entity_id": 20028,
+          "balance": 4457,
+          "added": true
+        }
+      }
+    },
+    "reloaded": {
+      "sha256": "21a80c1268275d72f9336a3e9a33799cc67f2dadaae45a04000d9c57483e1ac0",
+      "inspection": {
+        "money": 261,
+        "equipped_instance": 1,
+        "comfort": 283.407959,
+        "game_seconds": 8858306.801415816,
+        "items": [
+          {
+            "slot": 420,
+            "category": 1,
+            "item_id": 33,
+            "count": 1,
+            "instance_id": 1,
+            "durability": 100
+          },
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3543
+          },
+          {
+            "slot": 841,
+            "category": 2,
+            "item_id": 279,
+            "count": 194,
+            "instance_id": 0,
+            "durability": 0
+          }
+        ],
+        "xing_zhang_wallet": {
+          "index": 3,
+          "entity_id": 20028,
+          "balance": 4457,
+          "added": true
+        }
+      }
+    }
+  },
+  "expected_prices": {
+    "shovel": "42*(0.8f*(3543/3553f)+0.2f)=41.90 truncated 41; vendor credited full base 42 on buyback (source asymmetry)",
+    "wood": "full price 4 per unit"
+  },
+  "comfort_fill": {
+    "method": "teal #41b9b9 columns on rows 626..630; tooling measurement of screenshots",
+    "initial.png": {
+      "columns": [
+        552,
+        589
+      ],
+      "comfort": 303.533966,
+      "expected_right_edge": 589.85
+    },
+    "loaded-world.png": {
+      "columns": [
+        552,
+        587
+      ],
+      "comfort": 283.407959,
+      "expected_right_edge": 587.28
+    },
+    "face": "face1 (slider above 0.5) in all in-world frames"
+  },
+  "lossless_crops": {
+    "equipped-refused.png": {
+      "source": "sell-equipped-refused.png",
+      "source_sha256": "fcab0661eeda702a7ade73d210ef879768fad7799e77899a865cfeecceeb8d79",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "shovel-price-41.png": {
+      "source": "sell-shovel-selected.png",
+      "source_sha256": "c49988cf06c8928f2c544a86351888bf0c92205799d018f8d2d7fbc67dc35065",
+      "box": [
+        330,
+        15,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "sold-shovel.png": {
+      "source": "sold-shovel.png",
+      "source_sha256": "0b30dc8990a9e1ebe789ec7db1de7208cf12a96c95874837a24132696426a684",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "buyback-shovel-reopened.png": {
+      "source": "buyback-reopened.png",
+      "source_sha256": "74411b691ffb112695d887975e1ed82a3fc5f18f64db6ad654c11e160a1188dc",
+      "box": [
+        330,
+        15,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "bought-back-shovel.png": {
+      "source": "bought-back-shovel.png",
+      "source_sha256": "890e64b05ed2bfc2d935b764efa713699b13906e18343faa70c6aaa584939323",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "sold-wood-10.png": {
+      "source": "sold-wood-10.png",
+      "source_sha256": "9a74f54606a482a92e37c7e15dbb7bc9725aa84e758ac3c6dbe9ec1ff8ce2b88",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "bought-back-wood-4.png": {
+      "source": "bought-back-wood-4.png",
+      "source_sha256": "0a1a2d8cfb9af863427f968abf2445d74b6825639b81c02fa1976a758b778769",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "buyback-wood-6-reopened.png": {
+      "source": "buyback-retained-reopen.png",
+      "source_sha256": "5ed38e3a38fc5189ce7852cb3488671fdb7cb68fee66ea80d18ba82b439ebd68",
+      "box": [
+        330,
+        15,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "before-load-two-rows.png": {
+      "source": "before-load-buyback.png",
+      "source_sha256": "e5e0bf10e0ca4b408f2313dd9ce60328f9cf0b2baec773702e37f1c372136f66",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "after-load-empty.png": {
+      "source": "after-load-buyback.png",
+      "source_sha256": "728a203b41af51a51cba3b5f9a6f6a073243ccb1ebaf0d3e44eb52861aed88d8",
+      "box": [
+        330,
+        15,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "comfort-initial-hud.png": {
+      "source": "initial.png",
+      "source_sha256": "e191673100909226555830e4d2b5c63447398a560b14725db11fbff7e6ab9cfc",
+      "box": [
+        520,
+        600,
+        760,
+        720
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "comfort-after-load-hud.png": {
+      "source": "loaded-world.png",
+      "source_sha256": "36478d36e3b889f2882c44d18a9484ed1a9b4636f0d42a2eee653278a6739b8f",
+      "box": [
+        520,
+        600,
+        760,
+        720
+      ],
+      "pixels_equal_to_source_crop": true
+    }
+  }
+}
