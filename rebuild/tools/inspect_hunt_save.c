@@ -20,7 +20,7 @@ int main(int argc,char **argv){
     if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
         fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;
     }
-    printf("{\"schema\":4,\"interpretation\":\"current-loader\",\"mode\":%u,"
+    printf("{\"schema\":5,\"interpretation\":\"current-loader\",\"mode\":%u,"
         "\"hunt_state\":%u,\"hunt_kills\":%u,\"pending_return_talk\":%d,"
         "\"source_position\":[%.17g,%.17g,%.17g],\"hunt_destination\":[%.9g,%.9g,%.9g],"
         "\"hp\":%.9g,\"max_hp\":%.9g,\"stamina\":%.9g,\"comfort\":%.9g,"
@@ -80,5 +80,12 @@ int main(int argc,char **argv){
             comma?",":"",i,w->entity_id,g->town_wallet[i].balance,g->town_wallet[i].added?"true":"false");
         comma=true;
     }
-    puts("]}");pe_game_destroy(g);free(g);return 0;
+    /* Schema 5: the camp repair machine's saved job (PECSv20): its one reserved
+     * item and the remaining CounterScript ticks; all zero when empty. */
+    const PeCampRepair *r=&g->repair;
+    printf("],\"repair\":{\"occupied\":%s,\"item_id\":%d,\"count\":%d,\"instance_id\":%u,"
+        "\"durability\":%.9g,\"running\":%s,\"remaining_ticks\":%lld}}\n",
+        r->item.count>0?"true":"false",r->item.item_id,r->item.count,r->item.instance_id,(double)r->item.durability,
+        r->running?"true":"false",(long long)r->remaining_ticks);
+    pe_game_destroy(g);free(g);return 0;
 }

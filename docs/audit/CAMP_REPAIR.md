@@ -105,3 +105,79 @@ The original disconnected C-owner tests pass optimized and ASan/UBSan with leak 
 All63 current profiles are category1 and have one repair material. The generic cross-category and multi-material transaction branches therefore have no current source-profile fixture coverage; their implementation must not be described as exhaustive tested parity. No zero-maximum profile is emitted. These source/headless checks do not establish original partial-job replay, final UI rendering or new physical acceptance.
 
 The focused [repair UI routes](../../rebuild/tests/test_sandbox_repair_ui.c) pass optimized and ASan/UBSan with leak detection headlessly. They exercise admission/modal shortcut isolation, paging through high bag indices, stale wear snapshots, focus-loss/drop behavior, explicit insertion, failed/confirmed starts, no-refund cancel/restart, full-category failed return and exact same-category replacement, completion while a cancel prompt is open, close/held/release ownership, and moved/resized hit geometry down to320×240. This is route/layout evidence, not a rendered screenshot or manual usability check. Integrated host/persistence verification is recorded separately in [PLAYTEST](../PLAYTEST.md).
+
+## Ordinary native acceptance
+
+**October 14, observed in the native production runtime with ordinary input;
+no original-game comparison.** The question the source and headless proofs
+could not answer was whether an ordinary player can reach machine 20006, open
+its panel by interaction, and run the whole insert, quote, pay, wait, reload
+and take loop through the rendered UI. Evidence: [manifest, input journal and
+lossless crops](../reference/repair-native-20261014/checkpoints.json). Full
+captures and saves stay under `rebuild/build/repair-private-20261014-01`.
+
+*Setup.*
+- Runtime `35124c7`, binary SHA256 `f5c07847…a8e`, private display `:116`.
+- Baseline: the earned trade save `trade-private-20261014-01/reloaded.pesave`
+  (SHA256 `21a80c12…1ac0`), unchanged afterwards.
+- Starting state: Wood Shovel 12 as instance 10 in slot 425 at 3543 / 3553
+  (worn by an earlier ordinary dig), Wood 279 ×194, money 261, Knife equipped.
+- No fixture, cheat, teleport, construction, save edit or grant.
+
+*Travel.* The player walked and sprinted from Xing Zhang (−292, 161) north and
+west, using the traced route's middle legs in reverse, to below the lot at
+(−618, 407).
+- That save (`near-machine`) puts the player at height 22.95, while the machine
+  root is at 29.5. The lot is a raised plateau with cliffs of about 6 m; the
+  traced route's step from the lot to (−626, 429) is a one-way drop.
+- *Candidate (analysis).* A read-only height grid from `pe_world_height` on
+  that save (a scratch tool, not committed) suggested one ramp: z ≈ 399.5, from
+  x −568 (23.3 m) to x −576 (28.1 m). It rises about 1 m per metre, an upward
+  normal of about 0.707, which is above the native minimum walkable normal of
+  0.65. The grid ignores static building collision, so it was a candidate
+  only.
+- *Observed.* The player walked round to that ramp and up onto the lot with
+  ordinary input, then round the hotel to (−609, 401), about 5.5 m from the
+  root.
+
+*Observed, in order:*
+
+| Step | Input | UI result | Saved state (inspector) |
+|---|---|---|---|
+| Open | free pointer, right-click the machine | REPAIR MACHINE panel; the bag list includes Wood Shovel ("36 / 36" display) | — |
+| Insert | select Wood Shovel, Insert selected | "Item placed in the machine."; "Repair time: 60 seconds"; "Wood: 1 (bag 194)" | — |
+| Confirm | Repair | "Start repair? Spend the listed materials … for 60 seconds? Cancelling will not refund materials." | — |
+| Start | Repair (Enter) | "Repairing: 58.9 seconds"; "Materials paid Wood: 1 (bag 193)"; bag list locked | — |
+| Partial save | close the panel; about 15 s later, Pause → Save | — | `partial`: running, 3,677,326 ticks left, instance 10 at 3543 in the machine, Wood 193, the shovel not in the bag |
+| Advance | Resume, about 10 s, reopen | "Repairing: 25.4 seconds" | — |
+| Load | close, Pause → Load, then Save while paused | — | `partial-reloaded`: byte-identical to `partial` (`f3e087ff…68bc`), identical inspection |
+| Resume | Resume, reopen | "Repairing: 34.9 seconds" (later than the save, because the clock resumed) | — |
+| Completion with the panel closed | close; walk about 14 m away; about 38 s; return; reopen | idle; "Required materials Wood: 0 (bag 193)"; Repair disabled; Take item enabled (UI only; completion rests on the two saves) | `finished-in-machine`: not running, 0 ticks, instance 10 at 3553 still in the machine |
+| Take | Take item | "Item returned to your bag." | `completed`: instance 10 back in slot 425 at 3553; machine empty; Wood 193; money 261; quickslots unchanged |
+
+*Against the source.*
+- **Observed match:** the quote, ceil(4 × (1 − 3543/3553)) = ceil(0.011258) = 1
+  Wood, is what the panel showed and what was charged. The panel also showed
+  the source duration, 60 seconds. That is the source and panel value, not a
+  measured runtime: the elapsed time was not measured exactly.
+- **Lifecycle:** completion came while the panel was closed and the player was
+  out of range. It restored the same instance to its maximum without returning
+  it automatically, and Take returned it to its original bag slot.
+- **Native adapters observed:** the Load restoring the saved tick count, and
+  the clock running on after Resume. No original partial-job reload has been
+  observed.
+- **Timing:** wall-clock gaps and on-screen seconds are not measurements of the
+  counter; only the saved tick counts are exact.
+
+*Limits.*
+- Cancel, replacement, a full bag on return, and death during a job were not
+  exercised.
+- The route found is an ordinary terrain ramp. Whether the original lot is
+  reached the same way is unknown.
+- The panel's "36 / 36" is the display's rounding; wear comes from the
+  inspector only.
+
+*Tooling.* The read-only inspector's schema 5 adds `repair` (occupied, item,
+count, instance, durability, running, remaining ticks), with a formatter test
+that includes a value above 2³² for output width. Real saved jobs are bounded
+to 6,000,000 ticks.

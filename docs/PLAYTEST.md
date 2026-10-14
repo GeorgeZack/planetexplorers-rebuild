@@ -1,5 +1,32 @@
 # Original-game playtest and C comparison
 
+## October14 ordinary native camp repair
+
+Observed in the native production runtime with ordinary private-display input
+([details](audit/CAMP_REPAIR.md#ordinary-native-acceptance),
+[evidence](reference/repair-native-20261014/checkpoints.json)). No
+original-game comparison. This answers the October 7 "manual visual acceptance
+outstanding" note for the Wood Shovel path only.
+
+- Session `rebuild/build/repair-private-20261014-01` (`:116`), from the earned
+  trade save `21a80c12…1ac0`, unchanged afterwards. Binary `f5c07847…a8e`
+  (runtime `35124c7`).
+- Travel: walked from town toward the lot. The traced route's lot exit is a
+  one-way drop, so a read-only height grid located an east ramp at z ≈ 399.5;
+  the player walked up it to (−609, 401). No construction, excavation or
+  relocation.
+- Right-click opened the panel. Inserting the shovel (instance 10, 3543)
+  quoted Wood: 1 and 60 seconds; Confirm paid 1 Wood (194 → 193).
+- `partial`: running, 3,677,326 ticks, instance 10 at 3543 held by the machine.
+  After a 10 s advance, Pause → Load and a paused re-save gave a byte-identical
+  file (`f3e087ff…68bc`). After Resume the clock continued (34.9 s shown).
+- Completion happened with the panel closed and the player away.
+  `finished-in-machine`: instance 10 at 3553, not running, 0 ticks. Take
+  returned it to slot 425. `completed` (`49ed477c…a96a`): machine empty,
+  Wood 193, money 261.
+- Teardown: explicit stop sent SIGTERM to the owned game (−15, supervisor exit
+  241); no lease or process remained.
+
 ## October14 ordinary native selling and buyback
 
 Observed in the native production runtime with ordinary private-display input

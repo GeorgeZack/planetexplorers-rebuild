@@ -23,7 +23,9 @@ bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
     for(int k=0;k<4;k++)g->inventory.slots[k*stride]=(PeSlot){.item_id=100+k,.count=k+1};
     g->yaw=.5f;g->pitch=-.25f;g->velocity=(PeVec3){1,2,3};g->grounded=true;
     g->quickslots[0]=(PeQuickslot){100,42};g->hunger.hunger=123.5f;g->hunger.starving=!g->inventory.categorized;
-    g->town_stock[1]=(PeTownStock){true,17,99.5};g->town_wallet[1]=(PeTownWallet){4480,true};return true;
+    g->town_stock[1]=(PeTownStock){true,17,99.5};g->town_wallet[1]=(PeTownWallet){4480,true};
+    if(g->inventory.categorized)g->repair=(PeCampRepair){.item={.item_id=12,.count=1,.instance_id=10,.durability=3543},.remaining_ticks=6123456789LL,.running=true};
+    return true;
 }
 void pe_game_destroy(PeGame *g){(void)g;}
 bool pe_hunger_is_food(int id){return id==386||id==391;}
@@ -70,7 +72,7 @@ class InspectorOutput(unittest.TestCase):
 
     def test_all_adventure_categories_and_pose(self):
         data = self.inspect('adventure')
-        self.assertEqual(data['schema'], 4)
+        self.assertEqual(data['schema'], 5)
         self.assertTrue(data['inventory_categorized'])
         self.assertEqual(data['inventory_capacity'], 1680)
         self.assertEqual([s['slot'] for s in data['inventory']], [0, 420, 840, 1260])
@@ -90,6 +92,15 @@ class InspectorOutput(unittest.TestCase):
         self.assertEqual({k: data['food_offers'][1][k] for k in ('initialized', 'remaining', 'create_time')},
                          {'initialized': True, 'remaining': 17, 'create_time': 99.5})
         self.assertTrue(self.inspect('legacy')['hunger']['starving'])
+
+    def test_repair_job_fields(self):
+        # Formatter-only width check above 2^32; real saved jobs are bounded to 6,000,000 ticks.
+        self.assertEqual(self.inspect('adventure')['repair'],
+                         {'occupied': True, 'item_id': 12, 'count': 1, 'instance_id': 10, 'durability': 3543,
+                          'running': True, 'remaining_ticks': 6123456789})
+        self.assertEqual(self.inspect('legacy')['repair'],
+                         {'occupied': False, 'item_id': 0, 'count': 0, 'instance_id': 0, 'durability': 0,
+                          'running': False, 'remaining_ticks': 0})
 
     def test_vendor_wallets_in_source_order(self):
         wallets = self.inspect('adventure')['town_wallets']

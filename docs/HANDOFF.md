@@ -69,7 +69,7 @@ October 14, director-chosen goal: [the Adventure HUD comfort presentation](audit
 
 Not checked: ordinary play (a revival flash), the original's load/pause behaviour, and engine-qualified curve values. At 320×240 face2 is indistinguishable from face3.
 
-October 14, director-chosen goal, left uncommitted for review: [ordinary native selling and buyback](audit/TOWN_SELL_BUYBACK.md#ordinary-native-acceptance) at Xing Zhang, in session `rebuild/build/trade-private-20261014-01` from the earned food save (`40e47365…e114`, unchanged). Observed:
+October 14, director-chosen goal: [ordinary native selling and buyback](audit/TOWN_SELL_BUYBACK.md#ordinary-native-acceptance) at Xing Zhang, in session `rebuild/build/trade-private-20261014-01` from the earned food save (`40e47365…e114`, unchanged). Observed:
 - The equipped refusal.
 - A worn exact-instance sale and buyback: shovel instance 10 at 3543 durability, 41 each way, vendor credited 42.
 - A partial Wood sale and buyback (10 out, 4 back) with both purses checked.
@@ -87,3 +87,18 @@ Checks: full check 282 passed, 0 failed; 978 Python tests, 98 skipped (skips are
 October 14 pre-push verification of the food-acceptance checkpoint: the required full sanitizer run passes 112 suites with zero failures/skips (`rebuild/build/compiler-tmp/food-prepush-sanitize.log`). Its first sandboxed attempt could not initialize LeakSanitizer under ptrace; the unrestricted rerun passed without disabling leak checks. The prior full check remains 280 jobs / 971 Python tests with 95 explicit optional skips; runtime sources are unchanged.
 
 October 14 director pre-push verification of the ordinary commerce checkpoint: 113 sanitizer suites pass, zero failures/skips, with leak checks enabled (`rebuild/build/compiler-tmp/trade-prepush-sanitize.log`); the full regression is 282 jobs / 978 Python tests with 98 explicit optional skips. Director review independently verified the exact worn instance, purses/counts, byte-identical reload and all twelve lossless evidence crops.
+
+October 14, director-chosen goal, left uncommitted for review: [ordinary native camp repair](audit/CAMP_REPAIR.md#ordinary-native-acceptance) in session `rebuild/build/repair-private-20261014-01`, from the earned trade save (`21a80c12…1ac0`, unchanged).
+- Travel: walked to the lot. The traced exit is a one-way drop, so a read-only height grid suggested an east ramp, which the player then actually climbed. No construction or relocation.
+- Opened the machine by right-click and inserted Wood Shovel instance 10 (3543). The quote of 1 Wood and the 60-second source duration were shown, and 1 Wood was paid.
+- `partial` (`f3e087ff…68bc`): running, 3,677,326 ticks, instance 10 in the machine. A 10 s advance, then Load and a paused re-save, gave a byte-identical file.
+- Completion with the panel closed: `finished-in-machine` shows instance 10 at 3553, not running. Take returned it to slot 425. `completed` (`49ed477c…a96a`): machine empty, Wood 193, money 261.
+
+No runtime code changed; the read-only inspector reports the repair job (schema 5) with formatter tests. No defect found. Not exercised: cancel, replacement, a full-bag return, and death mid-job.
+
+Checks:
+- Full check: 282 passed, 0 failed; 979 Python tests, 98 skipped (skips are not passes) (`rebuild/build/compiler-tmp/repair-check.log`).
+- Inspector tests: 5 pass.
+- Pre-push sanitizer: the director's run.
+
+October 14 director pre-push verification of camp repair acceptance: full regression 282 jobs / 979 Python tests, 98 explicit optional skips; 113 sanitizer suites pass with leak checks enabled, zero failures/skips (`rebuild/build/compiler-tmp/repair-prepush-sanitize.log`). Independent review confirmed partial-save byte equality, reserved and returned exact instance ownership, baseline integrity, owned process teardown and all eleven lossless evidence crops.

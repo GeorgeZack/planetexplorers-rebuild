@@ -1,0 +1,442 @@
+{
+  "schema": 1,
+  "runtime_commit": "35124c7",
+  "binary_sha256": "f5c07847ee664bb9ca7771637736d6af8c6bbc3b440fc59ba8c2036defb43a8e",
+  "baseline": {
+    "path": "rebuild/build/trade-private-20261014-01/reloaded.pesave",
+    "sha256": "21a80c1268275d72f9336a3e9a33799cc67f2dadaae45a04000d9c57483e1ac0",
+    "provenance": "earned trade session trade-native-20261014",
+    "unchanged_after_session": true,
+    "inspection": {
+      "repair": {
+        "occupied": false,
+        "item_id": 0,
+        "count": 0,
+        "instance_id": 0,
+        "durability": 0,
+        "running": false,
+        "remaining_ticks": 0
+      },
+      "shovel": [
+        {
+          "slot": 425,
+          "category": 1,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3543
+        }
+      ],
+      "wood": 194,
+      "money": 261,
+      "source_position": [
+        -292.4359130859375,
+        21.500646591186523,
+        160.76436614990234
+      ],
+      "game_seconds": 8858306.801415816,
+      "quickslots": [
+        {
+          "key": 1,
+          "item_id": 33,
+          "instance_id": 1
+        },
+        {
+          "key": 2,
+          "item_id": 925,
+          "instance_id": 0
+        },
+        {
+          "key": 3,
+          "item_id": 916,
+          "instance_id": 0
+        },
+        {
+          "key": 4,
+          "item_id": 391,
+          "instance_id": 0
+        }
+      ]
+    }
+  },
+  "session": {
+    "path": "rebuild/build/repair-private-20261014-01",
+    "display": ":116",
+    "stop": "explicit stop: SIGTERM of the owned game (return -15, supervisor exit 241); not a clean application quit; baseline unchanged; no lease left"
+  },
+  "saves": {
+    "near-machine": {
+      "sha256": "25f4b980d67d4683225139a971a3f6765d350b35fc84844674f8d5aece0b3897",
+      "inspection": {
+        "repair": {
+          "occupied": false,
+          "item_id": 0,
+          "count": 0,
+          "instance_id": 0,
+          "durability": 0,
+          "running": false,
+          "remaining_ticks": 0
+        },
+        "shovel": [
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3543
+          }
+        ],
+        "wood": 194,
+        "money": 261,
+        "source_position": [
+          -618.2366027832031,
+          22.951980590820312,
+          407.24066162109375
+        ],
+        "game_seconds": 8860831.201547474,
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 391,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    "partial": {
+      "sha256": "f3e087ff4c205d64ffa61353a70f7a33209e2416c1153fe7670b89fd3dea68bc",
+      "inspection": {
+        "repair": {
+          "occupied": true,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3543,
+          "running": true,
+          "remaining_ticks": 3677326
+        },
+        "shovel": [],
+        "wood": 193,
+        "money": 261,
+        "source_position": [
+          -608.5254993438721,
+          28.501943588256836,
+          401.44256591796875
+        ],
+        "game_seconds": 8865187.601774678,
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 391,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    "partial-reloaded": {
+      "sha256": "f3e087ff4c205d64ffa61353a70f7a33209e2416c1153fe7670b89fd3dea68bc",
+      "inspection": {
+        "repair": {
+          "occupied": true,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3543,
+          "running": true,
+          "remaining_ticks": 3677326
+        },
+        "shovel": [],
+        "wood": 193,
+        "money": 261,
+        "source_position": [
+          -608.5254993438721,
+          28.501943588256836,
+          401.44256591796875
+        ],
+        "game_seconds": 8865187.601774678,
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 391,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    "finished-in-machine": {
+      "sha256": "5bbe01a2c14a79ed1654978bad6012d06144a42853aa0a826c27f87331a9f89e",
+      "inspection": {
+        "repair": {
+          "occupied": true,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3553,
+          "running": false,
+          "remaining_ticks": 0
+        },
+        "shovel": [],
+        "wood": 193,
+        "money": 261,
+        "source_position": [
+          -608.5238285064697,
+          28.501943588256836,
+          401.4425354003906
+        ],
+        "game_seconds": 8865910.801812395,
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 391,
+            "instance_id": 0
+          }
+        ]
+      }
+    },
+    "completed": {
+      "sha256": "49ed477cc0b4921deac8f4b698adf53bdd169ffc263e54884c26b0da3236a96a",
+      "inspection": {
+        "repair": {
+          "occupied": false,
+          "item_id": 0,
+          "count": 0,
+          "instance_id": 0,
+          "durability": 0,
+          "running": false,
+          "remaining_ticks": 0
+        },
+        "shovel": [
+          {
+            "slot": 425,
+            "category": 1,
+            "item_id": 12,
+            "count": 1,
+            "instance_id": 10,
+            "durability": 3553
+          }
+        ],
+        "wood": 193,
+        "money": 261,
+        "source_position": [
+          -608.5238285064697,
+          28.501943588256836,
+          401.4425354003906
+        ],
+        "game_seconds": 8865957.001814805,
+        "quickslots": [
+          {
+            "key": 1,
+            "item_id": 33,
+            "instance_id": 1
+          },
+          {
+            "key": 2,
+            "item_id": 925,
+            "instance_id": 0
+          },
+          {
+            "key": 3,
+            "item_id": 916,
+            "instance_id": 0
+          },
+          {
+            "key": 4,
+            "item_id": 391,
+            "instance_id": 0
+          }
+        ]
+      }
+    }
+  },
+  "source_derived": {
+    "quote": "ceil(4*(1-3543/3553)) = ceil(0.011258f) = 1 Wood279",
+    "duration": "60 s = 6,000,000 CounterScript ticks at 100,000/s"
+  },
+  "route": {
+    "note": "The traced annot-route leg from the lot (waypoint 8, y 28.53) to (-626.2,20.9,429.5) is a one-way drop. A read-only height query (pe_world_height on near-machine.pesave, scratch tool) found an east ramp at z~399.5 from x -568 (23.3 m) to x -576 (28.1 m); the player walked up it with ordinary input. No construction, excavation or relocation."
+  },
+  "lossless_crops": {
+    "panel-open.png": {
+      "source": "repair-open.png",
+      "source_sha256": "8b2590255980ea33202ef4544a6d3f1a3dbb85e80698d5899c404f6a938a1a5e",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "inserted-quote.png": {
+      "source": "inserted.png",
+      "source_sha256": "4207ca8a147c60b8bace98c8ad5d62fe6c21f68e22c582e855e3ed7d1b0b86d4",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "confirm.png": {
+      "source": "confirm.png",
+      "source_sha256": "24692f8ee1f1063784e8f143ad3f5772dfff3bdd611ac8105b4676285c49a1b2",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "running-58.9s.png": {
+      "source": "running-1.png",
+      "source_sha256": "4d5c1581f2f1c335ddf99d501a63940243ae12943e3f1fad278c476d57d6177b",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "advanced-25.4s.png": {
+      "source": "advanced.png",
+      "source_sha256": "f91ba1ba3786fa2bf2053cbb63b801dc64e0ba4b626d064920491469b6261c69",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "after-load-34.9s.png": {
+      "source": "after-load-panel.png",
+      "source_sha256": "241c7a80f8c2ed8f8dd3abbe670f8d9375fa70afb6d746384f46112298990cd3",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "completed-idle.png": {
+      "source": "completed-panel.png",
+      "source_sha256": "dbbb61f57d2e83e9064993469d2e18fa5c31955cbd9317955f2ea4447a13519d",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "returned.png": {
+      "source": "taken.png",
+      "source_sha256": "00bdfc20e387ea4ff39c47ef6b67da217aecdfad3a1a09917e12da2088349232",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "lot-machine-view.png": {
+      "source": "machine-2.png",
+      "source_sha256": "13e35519337129d4bdd74cfbf9ea4d1ef65d08b5d45ddd834f5bc58df49e6ea0",
+      "box": [
+        400,
+        150,
+        1100,
+        520
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "cliff-below-lot.png": {
+      "source": "find-5.png",
+      "source_sha256": "c3a3c3d865071c8063130f7d07289806ff6d5e3ccfdfda2c2ca04962106aec23",
+      "box": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "pixels_equal_to_source_crop": true
+    },
+    "ramp-top.png": {
+      "source": "ramp-1.png",
+      "source_sha256": "30d7784881ef4da61f32e122a9925d461c07b524d5955e2951ccfa9fab88344f",
+      "box": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "pixels_equal_to_source_crop": true
+    }
+  }
+}
