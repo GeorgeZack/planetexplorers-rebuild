@@ -33,10 +33,18 @@ original and not exercised by a rendered session.
 Also prepared, with no launch: the uneven-ground
 [grounder capture](audit/FINALIK_GROUNDER.md#prepared-uneven-ground-capture).
 Its probe compiles against the installed assemblies and its analyzer passes
-eight offline tests on synthetic captures. Nothing about the original's
-grounder is observed yet. With these follow-ups the regression passes 276
+eight offline tests on synthetic captures. With these follow-ups the regression passes 276
 jobs/955 Python tests with 94 optional skips; the tutorial progression
 smoke passes again.
+
+**Observed in the original, October 13**: one supervised 120-second Adventure
+session on sloped terrain, operator input only, 1,453 frames.
+[`pe_grounder` agrees](audit/FINALIK_GROUNDER.md#observed-on-uneven-ground)
+with the original's grounder to 0.2 mm and 0.23°, with the foot rotation
+limit and spine bend fitted per frame because the game rewrites them while
+playing and that capture recorded them only at attach. Rays hit only voxel
+terrain. A first launch aborted before arming and recorded nothing. No host
+calls the grounder; this is not a visual or rendered check.
 
 Full regression passes 275 jobs/947 Python tests with 94 optional skips;
 skips are not passes. Sanitizer passes 109 suites with leak scanning, and the

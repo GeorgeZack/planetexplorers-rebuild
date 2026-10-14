@@ -77,6 +77,8 @@ class Analyzer(unittest.TestCase):
             lines=capture(seed);report=self.run_lines(lines)
             self.assertEqual(report['setting_differences'],[]);self.assertEqual(report['frames'],len(lines)-3);self.assertGreater(report['frames'],50)
             self.close(report['single_update']);self.close(report['free_running'],2e-4,.05)
+            fitted=report['live_settings'];self.assertTrue(fitted['source'].startswith('fitted'))
+            self.assertEqual(fitted['spine_bend_frames'][str(float(lines[1]['spineBend']))],report['frames'])
             self.assertTrue(report['coverage']['uneven_ground_observed']);self.assertGreater(report['coverage']['foot_offset_m']['max'],.05)
             self.assertLess(report['probe_rays_against_original']['heel_hit_m']['max'],1e-9);self.assertLess(report['probe_rays_against_original']['root_hit_m']['max'],1e-9)
             self.assertEqual(report['layers']['12'],'VFVoxelTerrain');self.assertEqual(sorted(report['layers']),sorted(str(b) for b in (0,8,11,12,13,14,16,19)))
@@ -91,7 +93,11 @@ class Analyzer(unittest.TestCase):
         lines=json.loads(json.dumps(base));lines[20]['post']['pelvisBone'][1]+=.04
         self.assertGreater(self.run_lines(lines)['single_update']['pelvis_bone_move_m']['max'],.039)
         lines=json.loads(json.dumps(base));lines[20]['post']['offsets'][2][0]+=.05
-        self.assertGreater(self.run_lines(lines)['single_update']['other_effector_offset_m']['max'],.049)
+        # Without per-frame settings the spine bend is fitted, which absorbs part of a wrong request.
+        self.assertGreater(self.run_lines(lines)['single_update']['other_effector_offset_m']['max'],.04)
+        for frame in lines[2:-1]:frame.update(spineBend=lines[1]['spineBend'],maxFootRotationAngle=lines[1]['maxFootRotationAngle'])
+        report=self.run_lines(lines);self.assertEqual(report['live_settings']['source'],'recorded per frame')
+        self.assertGreater(report['single_update']['other_effector_offset_m']['max'],.049)
         lines=json.loads(json.dumps(base));lines[20]['rays'][2]['origin'][0]+=.07
         self.assertGreater(self.run_lines(lines)['single_update']['ray_origin_m']['max'],.069)
         lines=json.loads(json.dumps(base));lines[20]['post']['legs'][0]['heelPoint'][1]-=.02

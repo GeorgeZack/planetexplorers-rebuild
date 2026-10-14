@@ -4,7 +4,9 @@ October 13, 2026. **Shipped-artifact-derived and implemented in a disconnected
 C owner.** `pe_grounder` performs one `GrounderFBBIK.OnSolverUpdate` for the
 female player: the root ray, both legs, the pelvis, and the pelvis, foot and
 spine requests handed to [the full-body solver](FINALIK_FBBIK.md). No host
-calls it. Nothing here has been compared with the original on uneven ground.
+calls it. One observed session on natural terrain
+[agrees with it](#observed-on-uneven-ground) to 0.2 mm and 0.23°, with two
+settings the game rewrites while playing fitted rather than recorded.
 
 ## Evidence
 
@@ -140,9 +142,9 @@ make -C rebuild grounder-source-check
 
 ## Prepared uneven-ground capture
 
-**Prepared and compiled offline; not yet run in the game.** The flat tutorial
-session cannot qualify the grounder, so one more supervised session is needed.
-Its tools exist and are tested on synthetic captures:
+The flat tutorial session could not qualify the grounder, so a second
+supervised session was prepared and then [run](#observed-on-uneven-ground).
+Its tools:
 
 - `ReferenceGrounderProbe.cs` attaches to the live player's `GrounderFBBIK`.
   It adds one subscriber each to the grounder's own `OnPreGrounder` and
@@ -198,14 +200,91 @@ The analyzer's tests write a capture from the second transcription over
 rolling ground, and check that both replays agree with it, that a flat capture
 is reported as not qualifying, and that changed state, requests, rays,
 settings and modes are visible or rejected. They establish that the tools
-work, not what the original does. The probe compiles against the installed
-assemblies; its behavior in the running game is untested until the session.
+work, not what the original does.
+
+## Observed on uneven ground
+
+**Observed in the original, October 13, 2026.** One supervised Adventure
+session with the female player on the isolated bake profile, launch-only shim,
+single-threaded rendering. The operator armed after loading and supplied every
+input on sloped terrain for 120 seconds; no input was injected. The capture
+closed at its time limit with 1,453 frames (`pose-captures/female-grounder-02.jsonl`,
+SHA-256 `5cdf64e150d1f1660cf7288ecc78d995e3857b8fbec98688bcde35f4e6c02ed4`,
+kept in the local profile and not committed).
+
+The first launch aborted by itself just after the world loaded, before
+arming, and recorded only its header. It was a segfault in generated code
+followed by Mono's abort, which resembles the
+[earlier graphics faults](RUNNING_KNIFE_LIVE_OBSERVER.md#first-launch-pre-arm-graphics-crash);
+the core was not opened, so the cause is not established. Its log is kept
+beside the capture.
+
+Coverage: foot requests up to the 0.4 m step limit (mean 8.5 cm), pelvis
+moves up to 24.9 cm, foot tilts up to 37.5°, 288 frames with the root ray
+missing and 115 frames ungrounded. Every frame cast all seven rays.
+
+**Two settings are not constants.** The session showed it and the source
+explains it:
+
+- `Motion_Move_Human` writes `solver.maxFootRotationAngle` every update from
+  its serialized `m_ForwardAngleFootRotate` curve evaluated at the physics
+  controller's `forwardGroundAngle`. The prefab's 26.7° is only the value
+  before the first write; 17.26° was live at attach.
+- `IKCmpt` sets `spineBend` to its prefab value (4.5) while its spine mask is
+  empty and to 0 otherwise. `Action_Tool` and `HeavyEquipmentCtrl` fill the
+  mask. It was 0 at attach.
+
+The probe recorded both only at attach, so the analyzer fits them one update
+at a time: the spine bend as 0 or 4.5 from the spine requests, the rotation
+limit from the leg rotations. The fit chose no bend on 1,121 frames and 4.5 on
+332; the limit ranged up to 38° and was pinned to within 1° on 1,326 frames
+(a frame pins it only while a foot is clamped). Replaying with the prefab
+constants instead left foot rotations wrong by up to 21.7° and spine requests
+by up to 7.5 cm. The probe now records both per frame, and the analyzer uses
+recorded values when present.
+
+| Measure over 1,453 frames, one update restarted from the original's state | Max |
+|---|---|
+| Ray origins against the original's | 0 |
+| Probe's repeated root / heel hits against the hits the original kept | 0 / 0.011 mm |
+| Foot offset, height from ground, pelvis height and damper | under 1e-7 |
+| Foot target position | 0.16 mm |
+| Pelvis bone move | 0.019 mm |
+| Foot effector request | 0.015 mm |
+| Spine offset and the other effector requests (fitted bend) | 0.003 mm |
+| Leg and foot rotation (fitted limit) | 0.23° |
+| Grounded-flag differences, failed frames, ray-count differences | 0 |
+
+Left running from the first frame on recorded inputs, the figures are the
+same: nothing drifts over the two minutes.
+
+What this settles:
+
+1. **Ray conventions**: origins, lengths, order and miss defaults.
+2. **Foot offset, pelvis height and damping** on slopes, steps and in the air.
+3. **The foot is a rigid translation of the pelvis move** to 0.02 mm.
+4. **The native rotation adapters and the zero starting `Leg.r`**, to the
+   resolution of the fitted limit. A capture with the limit recorded would
+   tighten this.
+5. **The rays hit only voxel terrain**: 8,938 hits, all layer 12
+   `VFVoxelTerrain`, all `MeshCollider`. Nothing else was underfoot, so
+   buildings, scenery and trees are still unobserved.
+6. `OnPreGrounder` and `OnPostGrounder` had no other subscribers.
+
+Not settled: the curve's keys (the entity prefab holding them is binary) and
+`forwardGroundAngle`, which a host needs to produce the rotation limit; which
+actions held the spine mask in this session; and `IKCmpt`'s companion
+`enableArmMap`, which zeroes the solver's arm mapping weights under the same
+mask and so changes [the solve](FINALIK_FBBIK.md) too.
 
 ## Remaining boundary
 
-- **No uneven-ground observation.** The one observed session was on flat
-  ground. [The capture above](#prepared-uneven-ground-capture) is ready and
-  needs the user present.
+- **Runtime-varying settings.** `pe_grounder` holds the prefab's foot
+  rotation limit and spine bend as constants. A host must supply the limit
+  from the curve and ground angle and the bend from the spine mask, and the
+  arm mapping weights follow the same mask. The limit is fitted, not
+  recorded, in [the observed session](#observed-on-uneven-ground).
+- **Only terrain was underfoot** in the observed session.
 - **Collision.** The layer names are resolved, but which rebuild surfaces
   stand in for them is undecided. Terrain, buildings and static scenery are
   the plain reading; whether player-built blocks and tree capsules should

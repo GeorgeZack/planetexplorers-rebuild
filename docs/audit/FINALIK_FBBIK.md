@@ -217,8 +217,10 @@ that the tool works, not what the original does.
   and bend goals were zero throughout the observed session.
 - **GrounderFBBIK** (component 11400014, enabled, weight 1) writes foot, pelvis
   and spine offsets into the same solver from raycasts each update. It is now
-  [recovered separately](FINALIK_GROUNDER.md) into `pe_grounder`, unobserved on
-  uneven ground. It subscribes after `IKAnimEffectCtrl` and
+  [recovered separately](FINALIK_GROUNDER.md) into `pe_grounder` and
+  [observed on uneven ground](FINALIK_GROUNDER.md#observed-on-uneven-ground).
+  `IKCmpt` zeroes the arm mapping weights while its spine mask is held, which
+  this rig export treats as constant. It subscribes after `IKAnimEffectCtrl` and
   `InteractionSystem` (observed).
 - **Host composition.** [The zero-offset solve](PLAYER_IK_DRIVE.md) now drives
   the drawn player and attachments in both hosts from

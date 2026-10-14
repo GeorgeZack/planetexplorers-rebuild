@@ -42,6 +42,8 @@ int main(void){
     if(scanf("%u",&frames)!=1||!pe_grounder_init(&g,pe_grounder_female_settings(),(PeGrounderStart){0}))return 2;
     for(unsigned f=0;f<frames;f++){
         int seed;Rays rays={0};PeGrounderInput in={.enabled=true,.ray=cast,.context=&rays};PeGrounderOutput out;
+        /* Motion_Move_Human and IKCmpt rewrite these two settings while playing. */
+        if(scanf("%f%f",&g.settings.spine_bend,&g.settings.max_foot_rotation_angle)!=2)return 3;
         if(scanf("%d%f%f%f",&seed,&in.time,&in.delta_time,&in.weight)!=4||!v3(&in.root_position)||!v3(&in.root_forward)||!v3(&in.root_right)||!v3(&in.root_up)||
            !v3(&in.foot[0])||!v3(&in.foot[1]))return 3;
         if(seed){
@@ -111,10 +113,11 @@ def settings_differences(source,record):
     if any(abs(s-1)>1e-4 for s in record['rootLossyScale']):out.append('the root is scaled: %r'%record['rootLossyScale'])
     return out
 
-def lines(frames,seed_all):
+def lines(frames,seed_all,live):
+    """live: per-frame (spineBend, maxFootRotationAngle), the two settings the game rewrites while playing."""
     fmt=lambda values:' '.join('%.9g'%v for v in values);out=[str(len(frames))]
     for index,f in enumerate(frames):
-        seed=seed_all or index==0;root=f['root']
+        seed=seed_all or index==0;root=f['root'];out.append(fmt(live[index]))
         out.append('%d %s'%(seed,fmt([f['time'],f['dt'],f['weight']]+root[0]+root[1]+root[2]+root[3]+f['legs'][0]['position']+f['legs'][1]['position'])))
         if seed:
             for leg in f['legs']:out.append(fmt([leg['lastTime']]+leg['lastPosition']+[leg['ikOffset']]+leg['r']+leg['rotationOffset']))
@@ -124,14 +127,53 @@ def lines(frames,seed_all):
             hit=ray['hit'];out.append(fmt(ray['origin'])+' %d '%hit+fmt((ray['point']+ray['normal']+[ray['hitDistance']]) if hit else [0]*7))
     return out
 
-def replay(frames,seed_all,build=None):
+def replays(frames,seed_all,runs,build=None):
+    """One compile, one replay per entry of runs; each entry is the per-frame live settings."""
     require(LIBRARY.is_file(),'Build the core library first: make -C rebuild')
+    out=[]
     with tempfile.TemporaryDirectory(dir=build or ROOT/'rebuild/build') as folder:
         source=Path(folder)/'harness.c';binary=Path(folder)/'harness';source.write_text(HARNESS)
         subprocess.run(['cc','-std=c11','-O2','-I',str(ROOT/'rebuild/src'),str(source),str(LIBRARY),'-lm','-o',str(binary)],check=True)
-        result=subprocess.run([str(binary)],input='\n'.join(lines(frames,seed_all))+'\n',capture_output=True,text=True,check=True)
-    rows=result.stdout.splitlines();require(len(rows)==len(frames),'Grounder harness returned a different frame count')
-    return [None if row=='failed' else [float(v) for v in row.split()] for row in rows]
+        for live in runs:
+            result=subprocess.run([str(binary)],input='\n'.join(lines(frames,seed_all,live))+'\n',capture_output=True,text=True,check=True)
+            rows=result.stdout.splitlines();require(len(rows)==len(frames),'Grounder harness returned a different frame count')
+            out.append([None if row=='failed' else [float(v) for v in row.split()] for row in rows])
+    return out
+def replay(frames,seed_all,live,build=None):return replays(frames,seed_all,[live],build)[0]
+
+def live_settings(frames,record,source):
+    """Per-frame spineBend and maxFootRotationAngle. Recorded when the probe wrote them per frame;
+    otherwise fitted, one update at a time, to the original's own leg rotations and spine offset."""
+    if all('spineBend' in f and 'maxFootRotationAngle' in f for f in frames):
+        return [(f['spineBend'],f['maxFootRotationAngle']) for f in frames],dict(source='recorded per frame',
+            spine_bend_values=sorted({f['spineBend'] for f in frames}),max_foot_rotation_angle=stats([f['maxFootRotationAngle'] for f in frames]))
+    count=len(frames);bends=sorted({0.,float(source['spine_bend']),float(record['spineBend'])})
+    def leg_error(f,row):
+        if row is None:return math.inf
+        c=unpack(row);post=f['post']
+        return max(max(turn(post['legs'][i]['r'],c['legs'][i]['r']),turn(post['legs'][i]['rotationOffset'],c['legs'][i]['rotation_offset'])) for i in range(2))
+    def spine_error(f,row):
+        # With no bend the update leaves spineOffset alone, so the requests have to be compared too.
+        if row is None:return math.inf
+        c=unpack(row);added=[sub(a,b) for a,b in zip(f['post']['offsets'],f['offsets'])]
+        return max([gap(f['post']['spineOffset'],c['spine'])]+[gap(added[e],c['effectors'][e]) for e in range(9) if e not in FEET])
+    grid=[x*.5 for x in range(181)];tilt=lambda f,i:turn(f['post']['legs'][i]['rotationOffset'],(0,0,0,1))
+    runs=[[(bends[0],g)]*count for g in grid]+[[(bends[0],min(90.,tilt(f,i))) for f in frames] for i in range(2)]
+    runs+=[[(b,float(record['maxFootRotationAngle']))]*count for b in bends]
+    rows=replays(frames,True,runs);angle_runs=rows[:len(grid)+2];bend_runs=rows[len(grid)+2:]
+    live=[];residual=[];width=[];chosen=[];bend_residual=[]
+    for n,f in enumerate(frames):
+        errors=[leg_error(f,run[n]) for run in angle_runs];best=min(range(len(errors)),key=errors.__getitem__)
+        angle=runs[best][n][1];near=[grid[k] for k in range(len(grid)) if errors[k]<=errors[best]+.01]
+        spine=[spine_error(f,run[n]) for run in bend_runs];b=min(range(len(bends)),key=spine.__getitem__)
+        live.append((bends[b],angle));residual.append(errors[best]);width.append(max(near)-min(near) if near else 0.);chosen.append(angle);bend_residual.append(spine[b])
+    pinned=[a for a,w in zip(chosen,width) if w<=1.]
+    return live,dict(source='fitted: the probe recorded these two settings only at attach',
+        attach=dict(spineBend=record['spineBend'],maxFootRotationAngle=record['maxFootRotationAngle']),
+        spine_bend_frames={str(b):sum(1 for x in live if x[0]==b) for b in bends},spine_offset_residual_m=stats(bend_residual),
+        max_foot_rotation_angle=stats(chosen),leg_rotation_residual_degrees=stats(residual),
+        # A frame pins the limit only while a foot is actually clamped by it.
+        frames_where_the_limit_is_pinned_within_1_degree=len(pinned),pinned_limit_degrees=stats(pinned))
 
 def unpack(row):
     it=iter(row);take=lambda n:[next(it) for _ in range(n)]
@@ -220,15 +262,16 @@ def analyze(path,settings=None):
     require(all(numbers(f) for f in frames),'Capture holds a nonfinite value')
     differences=settings_differences(source,record)
     require(not record['rotateSolver'] and record['quality']==source['solver']['quality'],'pe_grounder covers only world-up grounding at the serialized quality')
-    mask=record['layers'];names=record['layerNames']
+    mask=record['layers'];names=record['layerNames'];live,fitted=live_settings(frames,record,source)
     report=dict(schema='pe-grounder-comparison-1',capture=str(path),frames=len(frames),end=end and end.get('reason'),setting_differences=differences,
         layers={str(bit):names[bit] for bit in range(32) if mask>>bit&1},
         pre_grounder_subscribers=record['preGrounderSubscribers'],post_grounder_subscribers=record['postGrounderSubscribers'],pre_update_subscribers=record['preUpdateSubscribers'],
         coverage=coverage(frames,record),probe_rays_against_original=probe_rays(frames,record['maxStep']),
         # Each frame restarted from the original's own state: one update's arithmetic, no accumulated drift.
-        single_update=compare(frames,replay(frames,True)),
+        live_settings=fitted,
+        single_update=compare(frames,replay(frames,True,live)),
         # Started once from the first frame and left to run on the recorded inputs and hits.
-        free_running=compare(frames,replay(frames,False)),
+        free_running=compare(frames,replay(frames,False,live)),
         scope='Observed original grounder state, rays and requests on the live player against pe_grounder. The rays are the probe\'s repeats of the original\'s, '
               'checked against the root and heel hits the original keeps. Collision in the rebuild is not involved.')
     return report

@@ -180,7 +180,9 @@ public sealed class PoseProbe : MonoBehaviour {
         try {
             if (!File.Exists(arm) || samples >= maxFrames || bytes >= MaxBytes - 262144) return;
             StringBuilder b = new StringBuilder(8192); Grounding.Pelvis pelvis = grounding.pelvis; RaycastHit rootHit = grounding.rootHit;
-            b.Append("{\"type\":\"frame\",\"sample\":").Append(samples).Append(",\"frame\":").Append(Time.frameCount).Append(",\"time\":").Append(F(Time.time)).Append(",\"dt\":").Append(F(Time.deltaTime)).Append(',')
+            b.Append("{\"type\":\"frame\",\"sample\":").Append(samples).Append(",\"frame\":").Append(Time.frameCount).Append(",\"time\":").Append(F(Time.time)).Append(",\"dt\":").Append(F(Time.deltaTime))
+             // Motion_Move_Human and IKCmpt rewrite these two while playing.
+             .Append(",\"spineBend\":").Append(F(grounder.spineBend)).Append(",\"maxFootRotationAngle\":").Append(F(grounding.maxFootRotationAngle)).Append(',')
              .Append(pre).Append(",\"post\":{\"pelvisBone\":").Append(V(ik.references.pelvis.position)).Append(",\"spineOffset\":").Append(V((Vector3)Private(grounder, "spineOffset")))
              .Append(",\"offsets\":"); Offsets(b);
             b.Append(",\"grounded\":").Append(B(grounding.isGrounded)).Append(",\"rootGrounded\":").Append(B(grounding.rootGrounded))
