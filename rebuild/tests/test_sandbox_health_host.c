@@ -9,7 +9,7 @@ static unsigned failures;
 
 static void fresh_health(PeGame *g){
     g->mode=PE_GAME_ADVENTURE;g->hp=100;g->max_hp=500;
-    g->passive_recovery=(PePassiveRecovery){0};g->stamina_recovery=(PeStaminaRecovery){0};g->revival=(PeRevival){0};
+    g->passive_recovery=(PePassiveRecovery){0};g->stamina_recovery=(PeStaminaRecovery){0};g->revival=(PeRevival){0};pe_hunger_fresh(&g->hunger);
 }
 static void frame_gate(PeGame *g){
     fresh_health(g);PeAttributeClock clock={.seconds=10};
@@ -115,9 +115,25 @@ done:
     free(first);free(second);free(snapshot);
     pe_game_destroy(g);pe_game_destroy(loaded);free(g);free(loaded);
 }
+/* Hunger runs on the same display frame: the drain at mount, then starvation
+ * once hunger is at or below 50, with its message, and its stamina pre-adds. */
+static void hunger(PeGame *g){
+    fresh_health(g);g->hp=500;PeAttributeClock clock={.seconds=30};
+    unsigned frames=0;
+    while(frames<9&&g->hunger.hunger==300){CHECK(sandbox_health_frame(&clock,g,0,true,false));frames++;}
+    CHECK(frames==8&&clock.attribute_frame==clock.frame&&fabsf(g->hunger.hunger-(300-.347f))<1e-3f);
+    g->hunger.hunger=g->hunger.raw=40;
+    for(unsigned i=0;i<4;i++)CHECK(sandbox_health_frame(&clock,g,.25,true,false));
+    CHECK(!g->hunger.starving);CHECK(sandbox_health_frame(&clock,g,.25,true,false));
+    CHECK(g->hunger.starving&&strstr(g->message,"starving")&&pe_game_stamina_reduce_percent(g)==2);
+    /* Pause freezes the condition's clock. */
+    float elapsed=g->hunger.end_elapsed;
+    for(unsigned i=0;i<8;i++)CHECK(sandbox_health_frame(&clock,g,.25,true,true));
+    CHECK(g->hunger.end_elapsed==elapsed);
+}
 int main(void){
     PeGame *g=calloc(1,sizeof *g);CHECK(g);if(!g)return 1;
-    pe_game_init(g,942);frame_gate(g);contacts(g);pe_game_destroy(g);free(g);save_load();
+    pe_game_init(g,942);frame_gate(g);contacts(g);hunger(g);pe_game_destroy(g);free(g);save_load();
     if(failures)return 1;
     puts("sandbox health host: display cadence, catch-up isolation, admitted-zero hurt, death, pause/focus and current V21 load lifecycle passed");return 0;
 }

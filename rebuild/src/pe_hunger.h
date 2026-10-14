@@ -1,7 +1,8 @@
 #ifndef PE_HUNGER_H
 #define PE_HUNGER_H
 #include "pe_passive_recovery.h"
-/* The player's source hunger (attribute 16), not connected to any host yet.
+/* The player's source hunger (attribute 16). The Adventure sandbox drives it from
+ * sandbox_health_frame; PeGame owns it and PECSv23 saves its value and condition.
  *
  * Source rules (export_hunger.py): initial buff 30200050 drains raw hunger by
  * speed * percent * 5 every 5 s on the shared eight-frame attribute pass, the

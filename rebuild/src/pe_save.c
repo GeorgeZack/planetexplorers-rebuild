@@ -3,6 +3,7 @@
 #include "pe_town_trade.h"
 #include "pe_game.h"
 #include "pe_hunt_loot.h"
+#include "../generated/pe_hunger_source.h"
 #include "pe_vegetation.h"
 #include "pe_settlement.h"
 #include "pe_town_interaction.h"
@@ -20,8 +21,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+65536u+PE_SAVE_V21_APPEND+PE_SAVE_V22_APPEND)
+#define SAVE_CAPACITY (PE_WORLD_LIMIT_COUNT*2u+PE_MAX_VOXEL_COUNT*2u+65536u+PE_SAVE_V21_APPEND+PE_SAVE_V22_APPEND+PE_SAVE_V23_APPEND)
 #define SAVE_VERSION PE_SAVE_VERSION
+_Static_assert(PE_SAVE_V23_APPEND==8u,"V23 appends summed hunger and the starvation flag");
 _Static_assert(PE_SAVE_V22_APPEND==2052u,"V22 appends bounded identified hunt loot");
 _Static_assert(PE_SAVE_V21_APPEND==84484u,"V21 appends bounded conversation history");
 _Static_assert(PE_SAVE_V20_APPEND==32,"V20 appends fixed camp repair ownership");
@@ -51,6 +53,7 @@ static bool valid(const PeGame *g,bool trees,bool outfit) {
     if(outfit&&!pe_outfit_state_valid(g))return false;
     if(!pe_shield_state_valid(g))return false;
     if(!isfinite(g->comfort)||g->comfort<0||g->comfort>pe_stamina_recovery_source.comfort_max)return false;
+    if(!isfinite(g->hunger.hunger)||g->hunger.hunger<0||g->hunger.hunger>pe_hunger_source.hunger_max)return false;
     if((g->mode!=PE_GAME_LEGACY&&g->mode!=PE_GAME_ADVENTURE)||
        !isfinite(g->hp)||!isfinite(g->max_hp)||g->max_hp<=0||g->max_hp>1000000||g->hp<0||g->hp>g->max_hp||
        !isfinite(g->medpack_cooldown)||g->medpack_cooldown<0||g->medpack_cooldown>10||
@@ -289,6 +292,9 @@ static void encode(Stream *s,const PeGame *g) {
         put32(s,drop->instance_id);put32(s,(uint32_t)drop->item_id);put32(s,(uint32_t)drop->count);
         putvec(s,drop->position);putd(s,drop->created_seconds);
     }
+    /* V23: the summed hunger and the starvation condition; raw remainder, drain phase,
+     * condition timers and the food cooldown are transient. */
+    putf(s,g->hunger.hunger);put32(s,g->hunger.starving?1u:0u);
 }
 /* Decode signed-domain values by range check before C conversion. */
 static int getint(Stream *s) {uint32_t v=get32(s);if(v>2147483647u){s->ok=false;return 0;}return (int)v;}
@@ -458,12 +464,17 @@ static void decode(Stream *s,PeGame *g,uint32_t version) {
             drop->position=getvec(s);drop->created_seconds=getd(s);
         }
     }
+    /* Older saves start at the prototype's hunger, not starving. */
+    if(version>=23){
+        float hunger=getf(s);uint32_t starving=get32(s);
+        if(starving>1||!pe_hunger_loaded(&g->hunger,hunger,starving!=0)){s->ok=false;return;}
+    }else pe_hunger_fresh(&g->hunger);
 }
 bool pe_game_save(const PeGame *g,const char *path,char *error,size_t capacity) {
     _Static_assert(sizeof(float)==4&&sizeof(double)==8,"Save format needs 32/64-bit floats");
     if(g&&g->inventory.categorized!=(g->mode==PE_GAME_ADVENTURE)){err(error,capacity,"Inventory layout does not match game mode.");return false;}
     if(!g||!path||!path[0]||!valid(g,true,true)){err(error,capacity,"Invalid save path or game state.");return false;}
-    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+65536u+PE_SAVE_V21_APPEND+PE_SAVE_V22_APPEND;
+    size_t buffer_size=pe_world_voxel_count(&g->world)*2u+PE_MAX_VOXEL_COUNT*2u+65536u+PE_SAVE_V21_APPEND+PE_SAVE_V22_APPEND+PE_SAVE_V23_APPEND;
     unsigned char *data=malloc(buffer_size);
     if(!data){err(error,capacity,"Out of memory.");return false;}
     Stream s={data,16,buffer_size,true};encode(&s,g);

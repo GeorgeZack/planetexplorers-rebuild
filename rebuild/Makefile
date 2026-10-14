@@ -297,9 +297,9 @@ cli-test: all
 .PHONY: actor-blend-test
 .PHONY: training-asset-clocks-test
 .PHONY: sandbox-equipment-host-test
-$(BUILD)/test_sandbox_equipment_host: tests/test_sandbox_equipment_host.c src/pe_sandbox_view.c src/pe_revival.c src/pe_inventory.c src/pe_game.c src/pe_sandbox_actions.c src/pe_stamina_recovery.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c $(DEPS)/test_sandbox_equipment_host.d | $(BUILD)
-	$(call DEPGEN,$(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_equipment_host.c src/pe_revival.c src/pe_inventory.c src/pe_game.c src/pe_sandbox_actions.c src/pe_stamina_recovery.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c)
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_equipment_host.c src/pe_revival.c src/pe_inventory.c src/pe_game.c src/pe_sandbox_actions.c src/pe_stamina_recovery.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c -Wl,--gc-sections -o $@ -lm
+$(BUILD)/test_sandbox_equipment_host: tests/test_sandbox_equipment_host.c src/pe_sandbox_view.c src/pe_revival.c src/pe_inventory.c src/pe_game.c src/pe_sandbox_actions.c src/pe_stamina_recovery.c src/pe_hunger.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c $(DEPS)/test_sandbox_equipment_host.d | $(BUILD)
+	$(call DEPGEN,$(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_equipment_host.c src/pe_revival.c src/pe_inventory.c src/pe_game.c src/pe_sandbox_actions.c src/pe_stamina_recovery.c src/pe_hunger.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c)
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(RAYLIB_CFLAGS) -ffunction-sections -fdata-sections tests/test_sandbox_equipment_host.c src/pe_revival.c src/pe_inventory.c src/pe_game.c src/pe_sandbox_actions.c src/pe_stamina_recovery.c src/pe_hunger.c src/pe_outfit.c src/pe_world.c src/pe_combat.c src/pe_sword.c generated/pe_content.c -Wl,--gc-sections -o $@ -lm
 sandbox-equipment-host-test: $(BUILD)/test_sandbox_equipment_host
 	./$(BUILD)/test_sandbox_equipment_host
 

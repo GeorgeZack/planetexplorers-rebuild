@@ -55,8 +55,8 @@ int pe_test_hunger(void){
 
     /* It ends on the 0.1 s check once hunger reaches 51, and stays between 50 and 51. */
     f=established(20,true);
-    CHECK(step(&f,.05f,true,true));CHECK(pe_hunger_eat(&f.hunger,394,&meal));   /* ration sticks +30 */
-    CHECK(meal.item_id==394&&meal.hunger==30&&meal.nutrient==49&&meal.nutrient_gain==3);
+    CHECK(step(&f,.05f,true,true));CHECK(pe_hunger_eat(&f.hunger,384,&meal));   /* red mushroom soup +30 */
+    CHECK(meal.item_id==384&&meal.hunger==30&&meal.nutrient==47&&meal.nutrient_gain==2);
     NEAR(f.hunger.raw,50);NEAR(f.hunger.hunger,20);   /* raw now, summed at the next pass */
     CHECK(until_event(&f,.05f,10,true)==0&&f.hunger.starving);
     f.hunger.food_cooldown=0;CHECK(pe_hunger_eat(&f.hunger,387,NULL));   /* puree +20 */
@@ -73,7 +73,7 @@ int pe_test_hunger(void){
     CHECK(step(&f,3.99f,false,true)&&!pe_hunger_eat(&f.hunger,384,NULL));
     CHECK(step(&f,.01f,false,true)&&pe_hunger_eat(&f.hunger,384,NULL));
     f.hunger.food_cooldown=0;CHECK(!pe_hunger_eat(&f.hunger,925,NULL)&&!pe_hunger_eat(&f.hunger,393,NULL));
-    CHECK(pe_hunger_is_food(390)&&!pe_hunger_is_food(916));
+    CHECK(pe_hunger_is_food(392)&&!pe_hunger_is_food(390)&&!pe_hunger_is_food(394)&&!pe_hunger_is_food(916));
     for(int i=0;i<PE_HUNGER_SOURCE_FOODS;i++)CHECK(pe_hunger_source_foods[i].hunger>0&&pe_hunger_source_foods[i].nutrient>=45&&pe_hunger_source_foods[i].nutrient<=49);
     /* Empty hunger stays at 0. */
     f=established(.1f,false);CHECK(step(&f,6,true,true));CHECK(f.hunger.hunger==0);

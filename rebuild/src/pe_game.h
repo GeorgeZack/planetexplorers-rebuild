@@ -9,6 +9,7 @@
 #include "pe_outfit.h"
 #include "pe_passive_recovery.h"
 #include "pe_stamina_recovery.h"
+#include "pe_hunger.h"
 #include "pe_revival.h"
 #include "pe_sandbox_collision.h"
 #define PE_INVENTORY_SLOTS 32 /* Literal v1-v18 wire prefix and Legacy capacity. */
@@ -52,7 +53,8 @@ typedef struct { unsigned count,cursor; PeBuildEdit edits[PE_BUILD_HISTORY_CAPAC
 /* V21 preserves v20, then stores count and20 canonical fixed UTF-8 pairs. */
 #define PE_SAVE_V21_APPEND (4u + PE_CONVERSATION_HISTORY_CAPACITY * (PE_CONVERSATION_SPEAKER_CAPACITY + PE_CONVERSATION_CONTENT_CAPACITY))
 #define PE_SAVE_V22_APPEND (4u + 32u * PE_HUNT_LOOT_CAPACITY)
-#define PE_SAVE_VERSION 22u
+#define PE_SAVE_V23_APPEND 8u
+#define PE_SAVE_VERSION 23u
 #define PE_MAX_PLANTS 32
 typedef struct { uint32_t prototype_id; PeVec3 position; bool depleted; } PePlant;
 typedef struct { bool installed; unsigned count; PePlant plants[PE_MAX_PLANTS]; } PeVegetation;
@@ -116,6 +118,7 @@ typedef struct PeGame {
     float stamina, stamina_max, stamina_regen;
     float comfort;
     PeStaminaRecovery stamina_recovery;
+    PeHunger hunger; /* Summed hunger and starvation persist (PECSv23); phase and timers are transient. */
     float stamina_recover_delay, stamina_idle, tool_cooldown;
     PeBlock blocks[PE_MAX_BLOCKS];
     int block_count;
@@ -188,6 +191,11 @@ bool pe_game_discard_slot(PeGame *game,int inventory_slot,const PeSlot *expected
 /* Supported live-player healing916/924/925, including empty/cooldown retry
  * input ownership. Revival937 and unsupported medicine are deliberately false. */
 bool pe_game_item_is_healing_consumable(int item_id);
+/* Healing items and, in Adventure, the supported foods: used, never equipped. */
+bool pe_game_item_is_consumable(const PeGame *game,int item_id);
+/* Summed StaminaReducePercent: the prototype value plus starvation's pre-add.
+ * It multiplies every stamina cost and the recovery pulse. */
+float pe_game_stamina_reduce_percent(const PeGame *game);
 /* Remaining supported source item cooldown; unknown items return0. */
 float pe_game_item_cooldown(const PeGame *game,int item_id);
 /* inventory_slot=-1 clears a shortcut. Assignment never consumes an item. */

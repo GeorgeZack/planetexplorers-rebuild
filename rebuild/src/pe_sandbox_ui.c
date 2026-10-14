@@ -1,4 +1,5 @@
 #include "../generated/pe_stamina_recovery_source.h"
+#include "../generated/pe_hunger_source.h"
 #include "pe_sandbox_ui.h"
 #include "pe_ui_draw.h"
 #include "pe_ui_hud.h"
@@ -245,12 +246,13 @@ static void character(const PeSandboxUI *u,const PeGame *g) {
         char number[64];
         if(k==0)snprintf(number,sizeof number,"%.0f / %.0f",g->hp,g->max_hp);
         else if(k==1)snprintf(number,sizeof number,"%.0f / %.0f",g->stamina,g->stamina_max);
+        else if(k==2&&g->mode==PE_GAME_ADVENTURE)snprintf(number,sizeof number,"%.1f / %.0f%s",g->hunger.hunger,pe_hunger_source.hunger_max,g->hunger.starving?" (starving)":"");
         else if(k==3&&g->mode==PE_GAME_ADVENTURE)snprintf(number,sizeof number,"%.1f / %.0f",g->comfort,pe_stamina_recovery_source.comfort_max);
         else if(k==7)snprintf(number,sizeof number,"%.0f",pe_player_defaults.attack+(tool&&!(tool->id==1&&equipped->durability<=0)?tool->attack:0));
         else if(k==8)snprintf(number,sizeof number,"%.0f",pe_player_defaults.defense+pe_outfit_defense(&g->outfit)+(u->starter_pair_available?pe_shield_defense(shield):0));
         else snprintf(number,sizeof number,"--");
         Vector2 extent=MeasureTextEx(font(u,18,true),number,18*z,0);
-        text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||(k==3&&g->mode==PE_GAME_ADVENTURE)||k==7||k==8?gold:dim,true);
+        text(u,number,p.x+265*z-extent.x,y,18,k==0||k==1||((k==2||k==3)&&g->mode==PE_GAME_ADVENTURE)||k==7||k==8?gold:dim,true);
     }
     if(tool){
         const char *detail=pe_item_has_durability(tool->id)?TextFormat("%s\nDurability %d / %d\nRight-click hand to unequip",tool->name,pe_sandbox_ui_durability(equipped->durability,false),pe_sandbox_ui_durability((float)tool->durability_max,false)):TextFormat("%s\nRight-click hand to unequip",tool->name);

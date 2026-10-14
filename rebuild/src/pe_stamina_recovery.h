@@ -14,6 +14,9 @@ typedef struct {
 } PeStaminaRecovery;
 typedef struct {
     float stamina, maximum, recovery_speed, base_delay, comfort;
+    /* Buff pre-adds to the two ReducePercent sums (starvation); zero otherwise.
+     * recovery_speed and base_delay are already summed by the caller. */
+    float reduce_percent_add, comfort_reduce_percent_add;
 } PeStaminaVitals;
 /* The parent before/after snapshots are from this frame's successful passive
  * lifecycle update. All formulas precede attribute recalculation/clamping. */

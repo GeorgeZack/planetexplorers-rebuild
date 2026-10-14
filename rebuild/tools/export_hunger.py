@@ -30,10 +30,10 @@ STARVATION_BUFF = 30200113
 STARVATION_MODS = 'exp,4,target.buffPreAdd+=1;#exp,5,target.buffPreAdd-=10;#exp,6,target.buffPreAdd+=2;#exp,9,target.buffPreAdd+=1;#exp,13,target.buffPreAdd+=1'
 POISON_TRIGGER = 489
 POISON_BUFF = 30200105
-# The foods the rebuild's catalog already carries (content_manifest/pe_inventory_source).
+# The foods the rebuild's item catalog carries and its town shops sell (pe_content items, pe_town_offers).
 # Pinned (hunger gain, nutrient attribute, nutrient gain) per food.
 FOODS = {384: (30, 47, 2), 385: (60, 47, 4), 386: (80, 46, 4), 387: (20, 48, 4), 388: (30, 48, 6),
-         389: (60, 46, 3), 390: (80, 46, 4), 391: (20, 49, 2), 392: (40, 49, 4), 394: (30, 49, 3)}
+         389: (60, 46, 3), 391: (20, 49, 2), 392: (40, 49, 4)}
 FOOD_TRIGGER = re.compile(r'exp,16,target\.raws\[16\]\+=([0-9]+);#exp,(4[5-9]),target\.raws\[\2\]\+=([0-9]+);'
                           r'#exp,\2,if\(target\.raws\[\2\]>100\)\{target\.raws\[\2\]=100;\}')
 NUTRIENTS = {45: 'Food_Cereals', 46: 'Food_Meat', 47: 'Food_Bean', 48: 'Food_Fruit', 49: 'Food_Energy'}

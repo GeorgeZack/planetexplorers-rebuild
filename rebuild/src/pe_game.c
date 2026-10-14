@@ -68,7 +68,7 @@ bool pe_game_tool_stats(const PeGame *g,PeToolStats *stats){
     stats->attack=attack;
     stats->mining_damage=stats->attack*(1.0f+pe_player_defaults.resource_damage+def->resource_damage)*5.0f;
     stats->mining_radius=pe_player_defaults.resource_range+def->resource_range;
-    stats->stamina_cost=def->stamina_cost*pe_player_defaults.stamina_reduce_percent;
+    stats->stamina_cost=def->stamina_cost*pe_game_stamina_reduce_percent(g);
     stats->durability_cost=def->durability_cost;stats->tool_kind=def->tool_kind;
     return true;
 }
@@ -279,6 +279,7 @@ void pe_game_init(PeGame *g, uint32_t seed) {
     g->rng_state=seed?seed:UINT32_C(0x9e3779b9);
     g->stamina=g->stamina_max=pe_player_defaults.stamina_max;
     g->comfort=pe_stamina_recovery_source.initial_comfort;
+    pe_hunger_fresh(&g->hunger);
     g->stamina_regen=pe_player_defaults.stamina_recover_speed;
     g->stamina_recover_delay=pe_player_defaults.stamina_recover_delay;
     g->hp=pe_player_defaults.hp;g->max_hp=pe_player_defaults.hp_max;
@@ -388,9 +389,17 @@ bool pe_game_discard_slot(PeGame *g,int index,const PeSlot *expected){
     return true;
 }
 bool pe_game_item_is_healing_consumable(int item_id){return item_id==916||pe_instant_heal_def(item_id)!=NULL;}
+bool pe_game_item_is_consumable(const PeGame *g,int item_id){
+    return pe_game_item_is_healing_consumable(item_id)||(g&&g->mode==PE_GAME_ADVENTURE&&pe_hunger_is_food(item_id));
+}
+float pe_game_stamina_reduce_percent(const PeGame *g){
+    float add=g&&g->mode==PE_GAME_ADVENTURE?pe_hunger_starvation(&g->hunger).stamina_reduce_percent:0;
+    return pe_player_defaults.stamina_reduce_percent+add;
+}
 float pe_game_item_cooldown(const PeGame *g,int item_id){
     if(!g)return 0;
-    double cooldown=item_id==916?g->juice_cooldown:pe_instant_heal_def(item_id)?g->medpack_cooldown:0;
+    double cooldown=item_id==916?g->juice_cooldown:pe_instant_heal_def(item_id)?g->medpack_cooldown:
+        g->mode==PE_GAME_ADVENTURE&&pe_hunger_is_food(item_id)?g->hunger.food_cooldown:0;
     return isfinite(cooldown)&&cooldown>0?(float)cooldown:0;
 }
 bool pe_game_use_slot(PeGame *g,int index){
@@ -423,6 +432,14 @@ bool pe_game_use_slot(PeGame *g,int index){
         if(g->juice_cooldown>0||!isfinite(g->max_hp)||g->max_hp<=0)return false;
         consume_slot(g,index);g->juice_cooldown=10;g->juice_buff_elapsed=0;g->juice_buff_tick=1;g->juice_buff_active=true;
         g->hp=fminf(g->max_hp,g->hp+30);say(g,"Herbal Juice used.");return true;
+    }
+    if(pe_hunger_is_food(d->id)){
+        /* Source food skill: hunger rises, the shared 4 s food cooldown starts, one item is used. */
+        if(g->mode!=PE_GAME_ADVENTURE||s->count<=0||s->count>d->stack_limit||s->instance_id)return false;
+        PeHunger hunger=g->hunger;
+        if(!pe_hunger_eat(&hunger,d->id,NULL))return false;
+        const char *name=d->name;consume_slot(g,index);g->hunger=hunger;
+        snprintf(g->message,sizeof g->message,"%s eaten.",name);return true;
     }
     const PeInstantHealDef *healing=pe_instant_heal_def(d->id);
     if(healing){
@@ -486,14 +503,14 @@ static void game_step(PeGame *g, PeInput input, float dt,const PeSandboxCollisio
     if(!input.sprint||mag<0.0001f||!g->grounded)g->sprinting=false;
     else if(!g->sprinting && g->stamina>=PE_SPRINT_MIN_STAMINA)g->sprinting=true;
     if(g->sprinting){
-        g->stamina=fmaxf(0,g->stamina-PE_SPRINT_STAMINA_PER_SECOND*pe_player_defaults.stamina_reduce_percent*dt);
+        g->stamina=fmaxf(0,g->stamina-PE_SPRINT_STAMINA_PER_SECOND*pe_game_stamina_reduce_percent(g)*dt);
         stamina_active=true;
         if(g->stamina<=0)g->sprinting=false;
     }
     float speed=g->sprinting?PE_SPRINT_SPEED:(input.walk?PE_WALK_SPEED:PE_RUN_SPEED);
     g->velocity.x=input.move_x*speed; g->velocity.z=input.move_z*speed;
     if(motion){g->velocity.x=motion->x;g->velocity.z=motion->z;}
-    float jump_cost=PE_JUMP_STAMINA*pe_player_defaults.stamina_reduce_percent;
+    float jump_cost=PE_JUMP_STAMINA*pe_game_stamina_reduce_percent(g);
     if (input.jump && g->grounded && g->stamina>=jump_cost) {
         g->stamina-=jump_cost;g->jumping=true;g->sprinting=false;stamina_active=true;
         g->velocity.y=7;g->grounded=false;g->jump_action_elapsed=0;

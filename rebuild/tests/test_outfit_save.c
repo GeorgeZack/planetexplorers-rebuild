@@ -57,8 +57,8 @@ int pe_test_outfit_save(void){
     CHECK(loaded->deployed_count==1&&loaded->deployed[0].instance_id==deployed&&loaded->equipped_instance_id==g->equipped_instance_id);
     CHECK(pe_outfit_defense(&loaded->outfit)==11&&loaded->medpack_cooldown==3.5f&&loaded->juice_cooldown==1.25);
     bytes=read_bytes(path,&n);CHECK(bytes&&n>PE_SAVE_V14_APPEND+16);if(!bytes||n<=PE_SAVE_V14_APPEND+16)goto done;
-    CHECK(get32(bytes+4)==PE_SAVE_VERSION);if(n<=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+2048){CHECK(false);goto done;}
-    n-=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
+    CHECK(get32(bytes+4)==PE_SAVE_VERSION);if(n<=((((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+2048){CHECK(false);goto done;}
+    n-=((((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND; /* Literal V16 malformed/migration fixtures. */
     size_t footer=n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND,counter=pe_test_save_counter_offset(g);
     CHECK(get32(bytes+counter)==g->inventory.next_instance_id);
     for(unsigned i=0;i<3;i++){
@@ -114,13 +114,13 @@ int pe_test_outfit_save(void){
     /* Migrating the same checkpoint is deterministic, not repeated in-memory
      * allocation. Subsequent v14 saves preserve wear, including exhausted shoes. */
     PeOutfit migrated=loaded->outfit;CHECK(pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(&migrated,&loaded->outfit,sizeof migrated)&&loaded->inventory.next_instance_id==next+3);
-    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
+    CHECK(pe_game_save(loaded,path,error,sizeof error));after=read_bytes(path,&after_n);CHECK(after&&after_n==n+((((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND);
     if(after){put32(bad+counter,next+3);CHECK(!memcmp(after+16,bad+16,footer-16));} /* Only required allocator field changed in retained prefix. */
     CHECK(pe_outfit_wear(&loaded->outfit,50));loaded->outfit.items[2].durability=0;migrated=loaded->outfit;
     CHECK(pe_game_save(loaded,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));CHECK(!memcmp(&migrated,&loaded->outfit,sizeof migrated));
     /* Legacy retains zero outfit and allocates nothing on old load. */
     pe_game_init(legacy,97);CHECK(pe_game_save(legacy,path,error,sizeof error));free(after);after=read_bytes(path,&after_n);CHECK(after);
-    if(after){after_n-=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(!memcmp(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,(unsigned char[36]){0},36));
+    if(after){after_n-=((((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND;CHECK(!memcmp(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,(unsigned char[36]){0},36));
         CHECK(write_bytes(path,after,after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,13)&&pe_game_load(loaded,path,error,sizeof error));
         CHECK(loaded->mode==PE_GAME_LEGACY&&pe_outfit_defense(&loaded->outfit)==0&&loaded->inventory.next_instance_id==legacy->inventory.next_instance_id);
         put32(after+after_n-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-36,95);CHECK(write_bytes(path,after,after_n,16));

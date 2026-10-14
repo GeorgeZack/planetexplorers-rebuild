@@ -32,8 +32,8 @@ int pe_test_conversation_history_save(void){
         assert(pe_conversation_history_add(&g->conversation_history,"名字","café 🌱",NULL));
         assert(pe_game_save(g,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));
         assert(!memcmp(&g->conversation_history,&loaded->conversation_history,sizeof g->conversation_history));
-        size_t n=0,m=0;unsigned char *bytes=read_file(path,&n);assert(bytes&&n>(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+16);
-        size_t tail=n-(PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND);assert(get(bytes+4)==PE_SAVE_VERSION&&get(bytes+tail)==2);
+        size_t n=0,m=0;unsigned char *bytes=read_file(path,&n);assert(bytes&&n>((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+16);
+        size_t tail=n-((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND);assert(get(bytes+4)==PE_SAVE_VERSION&&get(bytes+tail)==2);
         assert(!strcmp((char *)bytes+tail+4,"Westina"));
         assert(!strcmp((char *)bytes+tail+4+PE_CONVERSATION_SPEAKER_CAPACITY,"Hello, explorer.\nWelcome!"));
         /* V20 is a literal prefix; old files acquire no invented past rows. */
@@ -42,7 +42,7 @@ int pe_test_conversation_history_save(void){
         assert(!memcmp(&g->inventory,&loaded->inventory,sizeof g->inventory));
         assert(pe_game_save(loaded,path,error,sizeof error));unsigned char *again=read_file(path,&m);
         assert(again&&m==n&&!memcmp(bytes+16,again+16,tail-16));
-        for(size_t i=tail;i<m;i++)assert(!again[i]);
+        for(size_t i=tail;i<m-PE_SAVE_V23_APPEND;i++)assert(!again[i]);
         free(again);
         assert(write_file(path,bytes,tail-PE_SAVE_V20_APPEND,19)&&pe_game_load(loaded,path,error,sizeof error)&&!loaded->conversation_history.count);
         assert(write_file(path,bytes,n,PE_SAVE_VERSION)&&pe_game_load(loaded,path,error,sizeof error));

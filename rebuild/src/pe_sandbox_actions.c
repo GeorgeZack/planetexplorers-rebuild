@@ -78,9 +78,9 @@ bool pe_sandbox_actions_pose(const PeSandboxActions *a,const PeGame *g,PeSandbox
     *out=pose;return true;
 }
 static void target(PeSandboxActions *a,PeHit h){a->target_x=h.x;a->target_y=h.y;a->target_z=h.z;}
-static void charge(PeSandboxActions *a,float *stamina){
+static void charge(PeSandboxActions *a,const PeGame *g,float *stamina){
     const PeItemDef *item=pe_item_def(a->item_id);
-    *stamina=fmaxf(0,*stamina-item->stamina_cost*pe_player_defaults.stamina_reduce_percent);
+    *stamina=fmaxf(0,*stamina-item->stamina_cost*pe_game_stamina_reduce_percent(g));
     a->speed=timing(a->item_id)->speed;
     if(*stamina<=timing(a->item_id)->slow_threshold)a->speed*=.9f;
     if(*stamina<=20)a->speed*=.9f;
@@ -106,7 +106,7 @@ static bool strike(PeSandboxActions *a,PeGame *g,PeHit current,PeSlot *tool,floa
     out->swung=true;out->changed=edit.changed;out->removed=edit.removed;
     if(a->swings!=UINT64_MAX)a->swings++;
     if(tool->durability<=0)a->ending=true;
-    if(!a->ending)charge(a,stamina);
+    if(!a->ending)charge(a,g,stamina);
     return true;
 }
 bool pe_sandbox_actions_step(PeSandboxActions *a,PeGame *g,PeSandboxActionInput input,PeSandboxActionUpdate *out){
@@ -155,7 +155,7 @@ bool pe_sandbox_actions_step(PeSandboxActions *a,PeGame *g,PeSandboxActionInput 
         next.seconds=next.exit_seconds=next.ending_seconds=next.since_hit=0;
         next.first=true;next.ending=false;next.change_count=next.hit_count=0;next.stamina_lock=true;
         next.tree_index=input.camera_tree;if(next.kind==PE_SANDBOX_ACTION_DIG)target(&next,current);
-        charge(&next,&stamina);result.started=true;
+        charge(&next,g,&stamina);result.started=true;
     }
     if(!input.held&&!next.ending){next.ending=true;next.ending_seconds=0;}
     next.since_hit+=1.0/60;

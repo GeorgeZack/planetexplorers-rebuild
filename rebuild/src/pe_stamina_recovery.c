@@ -23,7 +23,8 @@ bool pe_stamina_recovery_frame(PeStaminaRecovery *state,const PePassiveRecovery 
        !isfinite(vitals->stamina)||!isfinite(vitals->maximum)||vitals->maximum<=0||
        vitals->stamina<0||vitals->stamina>vitals->maximum||!isfinite(vitals->recovery_speed)||vitals->recovery_speed<0||
        !isfinite(vitals->base_delay)||vitals->base_delay<0||!isfinite(vitals->comfort)||
-       vitals->comfort<0||vitals->comfort>pe_stamina_recovery_source.comfort_max)return false;
+       vitals->comfort<0||vitals->comfort>pe_stamina_recovery_source.comfort_max||
+       !isfinite(vitals->reduce_percent_add)||!isfinite(vitals->comfort_reduce_percent_add))return false;
     PeStaminaRecovery next=*state;PeStaminaVitals value=*vitals;
     if(!next.initialized){next.initialized=true;next.summed_delay=value.base_delay;}
     next.frame=frame.frame;
@@ -42,10 +43,10 @@ bool pe_stamina_recovery_frame(PeStaminaRecovery *state,const PePassiveRecovery 
         unsigned stamina_count=pulses(&next.stamina_ticks,elapsed,pe_stamina_recovery_source.stamina_interval_seconds);
         for(unsigned i=0;i<stamina_count;i++)if(frame.now>next.last_consumption+
             fmaxf(next.summed_delay,pe_stamina_recovery_source.minimum_delay_seconds))
-                value.stamina+=value.recovery_speed*pe_stamina_recovery_source.reduction_percent;
+                value.stamina+=value.recovery_speed*(pe_stamina_recovery_source.reduction_percent+value.reduce_percent_add);
         unsigned comfort_count=pulses(&next.comfort_ticks,elapsed,pe_stamina_recovery_source.comfort_interval_seconds);
         for(unsigned i=0;i<comfort_count;i++)value.comfort+=pe_stamina_recovery_source.comfort_recovery_speed*
-            pe_stamina_recovery_source.comfort_reduction_percent*(float)pe_stamina_recovery_source.comfort_interval_seconds;
+            (pe_stamina_recovery_source.comfort_reduction_percent+value.comfort_reduce_percent_add)*(float)pe_stamina_recovery_source.comfort_interval_seconds;
         /* Ascending attribute order: delay6 sees raw comfort8 BEFORE clamping.
          * The temporary modifier is assignment, not repeated accumulation. */
         if(delay_dirty)next.summed_delay=value.base_delay+

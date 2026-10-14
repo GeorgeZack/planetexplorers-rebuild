@@ -281,16 +281,6 @@
       "nutrient_gain": 3.0
     },
     {
-      "item_id": 390,
-      "name": "sashimi",
-      "skill_id": 20150007,
-      "trigger_id": 461,
-      "hunger": 80.0,
-      "nutrient": 46,
-      "nutrient_name": "Food_Meat",
-      "nutrient_gain": 4.0
-    },
-    {
       "item_id": 391,
       "name": "compressed biscuit I",
       "skill_id": 20150008,
@@ -309,16 +299,6 @@
       "nutrient": 49,
       "nutrient_name": "Food_Energy",
       "nutrient_gain": 4.0
-    },
-    {
-      "item_id": 394,
-      "name": "ration sticks",
-      "skill_id": 20150011,
-      "trigger_id": 465,
-      "hunger": 30.0,
-      "nutrient": 49,
-      "nutrient_name": "Food_Energy",
-      "nutrient_gain": 3.0
     }
   ],
   "semantics": {

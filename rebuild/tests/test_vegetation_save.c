@@ -45,8 +45,8 @@ int pe_test_vegetation_save(void){
     CHECK(loaded->world.extended&&loaded->world.extended!=g->world.extended);
     CHECK(pe_vegetation_install_fixture(loaded,(PeVec3){40,10,40}));
     CHECK(!memcmp(&g->vegetation,&loaded->vegetation,sizeof g->vegetation)&&loaded->tree_count==2);
-    bytes=read_bytes(path,&n);CHECK(bytes&&n>((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+16);if(!bytes||n<=((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+16)goto done;
-    size_t tail=n-((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)-PE_SAVE_V19_APPEND-PE_SAVE_V18_APPEND;
+    bytes=read_bytes(path,&n);CHECK(bytes&&n>(((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+16);if(!bytes||n<=(((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND+16)goto done;
+    size_t tail=n-(((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)-PE_SAVE_V19_APPEND-PE_SAVE_V18_APPEND;
     CHECK(get32(bytes+4)==PE_SAVE_VERSION&&get32(bytes+tail)==1&&get32(bytes+tail+4)==8);
     CHECK(get32(bytes+tail+8)==g->vegetation.plants[0].prototype_id&&get32(bytes+tail+24)==1);
     for(size_t i=tail+8+8*20;i<tail+PE_SAVE_V18_APPEND;i++)CHECK(bytes[i]==0);

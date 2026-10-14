@@ -21,7 +21,7 @@ static const PeHungerSource pe_hunger_source = {
     1.0f, -10.0f, 2.0f, 1.0f, 1.0f
 };
 typedef struct { int item_id, skill_id; float hunger; int nutrient; float nutrient_gain; } PeHungerFoodSource;
-#define PE_HUNGER_SOURCE_FOODS 10
+#define PE_HUNGER_SOURCE_FOODS 8
 static const PeHungerFoodSource pe_hunger_source_foods[PE_HUNGER_SOURCE_FOODS] = {
     {384, 20150001, 30.0f, 47, 2.0f},
     {385, 20150002, 60.0f, 47, 4.0f},
@@ -29,9 +29,7 @@ static const PeHungerFoodSource pe_hunger_source_foods[PE_HUNGER_SOURCE_FOODS] =
     {387, 20150004, 20.0f, 48, 4.0f},
     {388, 20150005, 30.0f, 48, 6.0f},
     {389, 20150006, 60.0f, 46, 3.0f},
-    {390, 20150007, 80.0f, 46, 4.0f},
     {391, 20150008, 20.0f, 49, 2.0f},
     {392, 20150009, 40.0f, 49, 4.0f},
-    {394, 20150011, 30.0f, 49, 3.0f},
 };
 #endif

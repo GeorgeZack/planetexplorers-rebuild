@@ -77,7 +77,15 @@ on dune terrain and 1.2 cm on the Adventure fixture; tutorial 3 mm. The
 15,000-frame progression passes with the same counts as before (14,853,
 14,808 grounded, 0.243 m); the player cuts the lesson tree from beside it, so
 no foot ray lands on it there. No tree was stood on in any run; this is
-headless and smoke coverage only. Full check: 277 jobs, 957 Python tests, 95 skipped;
+headless and smoke coverage only.
+
+October 14, implemented in C: [hunger is connected in the Adventure sandbox](audit/HUNGER.md#connected-in-the-sandbox)
+with PECSv23. The 90-frame character-panel smoke on the older Adventure
+fixture shows Hunger 299.7 / 500 (the prototype's 300 after the first drain
+pulse) beside Comfort 499.3. Full check 280 jobs, 963 Python tests, 95
+skipped; sanitizer 112 suites; content regeneration and CLI pass. Eating,
+starvation and the stamina penalty are covered headless only; nobody has
+played with hunger, and no save from this version has been reloaded by hand. Full check: 277 jobs, 957 Python tests, 95 skipped;
 sanitizer 110 suites.
 
 Full regression passes 275 jobs/947 Python tests with 94 optional skips;

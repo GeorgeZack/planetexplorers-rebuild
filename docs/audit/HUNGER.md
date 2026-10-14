@@ -1,12 +1,12 @@
 # Player hunger: drain, starvation and food
 
-October 14, 2026. **Source-derived and implemented in C as a disconnected
-owner.** `pe_hunger` is not called by either host: no HUD bar, no eating, no
-save field. No original-game session or desktop input was used.
+October 14, 2026. **Source-derived and implemented in C, connected in the
+Adventure sandbox** ([below](#connected-in-the-sandbox)). No original-game
+session or desktop input was used, and nobody has played with it yet.
 
 ## Why now
 
-The town shops already sell ten foods (384–392, 394) from the recovered
+The town shops already sell eight foods (384–389, 391, 392) from the recovered
 catalog, but the rebuild has no hunger attribute for them to act on. The
 [replication plan](../REPLICATION.md#survival-and-equipment--partial) names
 hunger as the next survival attribute.
@@ -49,9 +49,11 @@ buff. `Eff_BodyWeight` thins the character model, which is presentation.
 **Starvation's effect.** Buff 30200113 pre-adds, into
 `sum = buffMul·(raw + buffPreAdd) + buffPostAdd`: StaminaReducePercent +1,
 StaminaRecoverSpeed −10, StaminaRecoverDelay +2, ComfortReducePercent +1 and
-OxygenReducePercent +1. With the starter values, stamina costs double, a
-stamina pulse adds 30 instead of 40 after a longer delay, and comfort drains
-twice as fast.
+OxygenReducePercent +1. StaminaReducePercent multiplies every stamina cost
+(`Action_HumanMove` sprint and jump, `Action_DigTerrain`, `Action_Fell`,
+`Action_Sword`) and also the recovery pulse `raws[3] += sums[5] * sums[4]`.
+With the starter values, costs double, a pulse adds (40 − 10) × 2 = 60 instead
+of 40 but only after a delay 2 s longer, and comfort drains twice as fast.
 
 **Food.** Each food's skill has a 4 s cooldown (shared group 12) and two
 triggers. The first is an `exp` expression: `raws[16] += gain`, and its
@@ -67,10 +69,11 @@ while HP is above 3.
 | 387 | puree | +20 | Fruit +4 |
 | 388 | nuts | +30 | Fruit +6 |
 | 389 | smoked sausage | +60 | Meat +3 |
-| 390 | sashimi | +80 | Meat +4 |
 | 391 | compressed biscuit I | +20 | Energy +2 |
 | 392 | compressed biscuit II | +40 | Energy +4 |
-| 394 | ration sticks | +30 | Energy +3 |
+
+Sashimi (390) and ration sticks (394) use the same pattern but have no row in
+the rebuild's item catalog, so the exporter leaves them out.
 
 ## The C owner
 
@@ -107,15 +110,41 @@ every other food.
   buff, food skills, gains and poisoning chance, and the condition's clock,
   range and roll source.
 
-## Before connecting it
+## Connected in the sandbox
 
-Connecting it needs decisions that change play and saves:
+**Implemented in C, October 14, by user request.** Adventure only; Legacy
+games and the tutorial have no hunger.
 
-1. **Save:** PECSv23 appending the summed hunger and the starving flag; older
-   saves would start at the prototype's 300, not starving.
-2. **Stamina and comfort:** the starvation pre-adds must reach
-   `pe_stamina_recovery` and every stamina cost owner.
-3. **Use:** eating through the shared item-use path (inventory, quickslots),
-   with the 4 s group-12 cooldown.
-4. **HUD:** the hunger bar in `pe_ui_hud` for both hosts. The tutorial does not
-   run Adventure survival, so it would stay without hunger.
+- **Clock.** `sandbox_health_frame` runs `pe_hunger_frame` after the stamina
+  owner on the same attribute frame, with the display frame's scaled time and
+  whether the player is alive. Pause and focus loss freeze it, as they freeze
+  HP and stamina. Starting or ending starvation sets the HUD message line
+  ("You are starving. Eat something." / "You are no longer starving."); the
+  original's abnormal notices are not recovered.
+- **Starvation's effect.** `pe_game_stamina_reduce_percent` returns 1 or 2 and
+  replaces the constant at every stamina cost site: sprint drain, jump, tool
+  stats, tool action charges and melee's setup (refreshed before each blade
+  tick). The stamina owner's `PeStaminaVitals` gains the two ReducePercent
+  pre-adds; the host also adds the recovery speed and delay pre-adds. Each
+  frame reads the previous frame's condition.
+- **Eating.** `pe_game_use_slot` eats a supported food in Adventure: one item
+  is used and raw hunger rises, unless the player is dead or the 4 s cooldown
+  is running. Inventory right-click and quickslots reach it through the new
+  `pe_game_item_is_consumable`, and the quickbar shows the cooldown.
+- **Save.** PECSv23 appends the summed hunger (f32) and the starving flag
+  (u32). Older saves start at 300, not starving. A flag other than 0/1 or a
+  hunger outside 0..500 fails without replacing the live game.
+- **Display.** The character panel's existing Hunger row shows the value and
+  "(starving)". The original's mid-screen hunger bar is not added; the shared
+  HUD does not carry comfort either.
+
+Verification: `core:hunger_game` (eating, cooldown, quickslot, dead player,
+Legacy refusal, starvation doubling a tool cost, a starving stamina pulse of
+60 and a doubled comfort drain, the v23 round trip, a literal v22 at 300 and
+four malformed suffixes); `test_sandbox_health_host` (the drain on the first
+attribute pass, starvation after a full second at hunger 40 with its message,
+pause freezing the condition clock); every older save suite updated for the
+8-byte suffix.
+
+**Not checked:** anyone playing it. Hunger takes about 72 minutes of unpaused
+play to fall from 300 to 50.

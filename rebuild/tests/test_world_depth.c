@@ -21,7 +21,7 @@ static bool corrupt(const char *path,int mode){
     if(mode==0){
         /* This case is the inline64 fixture: target the actual v7 depth word,
          * not a newer unrelated suffix that happens to fail validation. */
-        size_t at=n-PE_SAVE_V22_APPEND-PE_SAVE_V21_APPEND-PE_SAVE_V20_APPEND-PE_SAVE_V19_APPEND-PE_SAVE_V18_APPEND-PE_SAVE_V17_APPEND-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-(8+16*(PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY))-(12+4+16*PE_TOWN_V8_STOCK_CAPACITY)-4;
+        size_t at=n-(PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)-PE_SAVE_V21_APPEND-PE_SAVE_V20_APPEND-PE_SAVE_V19_APPEND-PE_SAVE_V18_APPEND-PE_SAVE_V17_APPEND-PE_SAVE_V16_APPEND-PE_SAVE_V15_APPEND-PE_SAVE_V14_APPEND-PE_SAVE_V13_APPEND-PE_SAVE_V11_APPEND-PE_SAVE_V10_APPEND-(8+16*(PE_TOWN_STOCK_CAPACITY-PE_TOWN_V8_STOCK_CAPACITY))-(12+4+16*PE_TOWN_V8_STOCK_CAPACITY)-4;
         if(!ok||at<16||at+4>(size_t)n||p[at]!=64||p[at+1]||p[at+2]||p[at+3]){free(p);return false;}
         put32(p+at,96);
     }else if(mode==1)n--;else p[n++]=0;

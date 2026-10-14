@@ -200,7 +200,7 @@ bool pe_sandbox_ui_item_tooltip(const PeSandboxUI *u,const PeGame *g,char *out,s
         if(entry.eligible){if(!details_append(out,capacity,"\n%s unit price: %u",u->shop_mode==PE_SANDBOX_SHOP_SELL?"Sell":u->shop_mode==PE_SANDBOX_SHOP_BUYBACK?"Buyback":"Buy",entry.unit_price))return false;}
         else if(!details_append(out,capacity,"\n%s",entry.reason))return false;
     }else if(!u->repair_open){
-        const char *action=d->learn_kind==PE_LEARN_SCAN?"Right-click to scan":d->learn_count?"Right-click to learn":(d->equip_position&(16|512))?"Right-click to equip":pe_game_item_is_healing_consumable(d->id)?"Right-click to use":"Drag to quickbar";
+        const char *action=d->learn_kind==PE_LEARN_SCAN?"Right-click to scan":d->learn_count?"Right-click to learn":(d->equip_position&(16|512))?"Right-click to equip":pe_game_item_is_consumable(g,d->id)?"Right-click to use":"Drag to quickbar";
         if(value.instance_id&&value.instance_id==g->shield_instance_id)action=u->starter_pair_available?"Right-click shield slot to unequip":"Unavailable; right-click slot to unequip";
         if(worn)action=value.durability>0?"Equipped clothing":"Broken clothing";
         if(!details_append(out,capacity,"\n%s",action))return false;
@@ -415,7 +415,7 @@ static void quick_use(const PeSandboxUI *u,PeSandboxUIResult *r,PeGame *g,int i)
     }else pe_game_quickslot_use(g,i);
     /* A cooldown/empty-stack retry owns the key too, but must not interrupt
        locomotion, camera capture, drawn equipment or enemy clocks. */
-    if(d&&pe_game_item_is_healing_consumable(d->id))r->consume_actions=true;
+    if(d&&pe_game_item_is_consumable(g,d->id))r->consume_actions=true;
     else r->consume_world=true;
 }
 static void close_panels(PeSandboxUI *u) {

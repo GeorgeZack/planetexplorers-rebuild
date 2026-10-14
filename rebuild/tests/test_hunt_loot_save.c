@@ -35,17 +35,17 @@ static int loot_cases(void){
     assert(pe_hunt_loot_spawn(g,&point,1)&&g->hunt_loot.count==4);
     assert(pe_game_save(g,path,error,sizeof error)&&pe_game_load(loaded,path,error,sizeof error));
     assert(!memcmp(&g->hunt_loot,&loaded->hunt_loot,sizeof g->hunt_loot)&&g->rng_state==loaded->rng_state&&!memcmp(&g->inventory,&loaded->inventory,sizeof g->inventory));
-    size_t n,m;unsigned char *bytes=read_file(path,&n);assert(n>PE_SAVE_V22_APPEND+16);
-    size_t tail=n-PE_SAVE_V22_APPEND,row=tail+4;assert(get32(bytes+4)==PE_SAVE_VERSION&&get32(bytes+tail)==4);
+    size_t n,m;unsigned char *bytes=read_file(path,&n);assert(n>(PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+16);
+    size_t tail=n-(PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND),row=tail+4;assert(get32(bytes+4)==PE_SAVE_VERSION&&get32(bytes+tail)==4);
     assert(get32(bytes+row)==g->hunt_loot.drops[0].instance_id&&get32(bytes+row+4)==229&&get32(bytes+row+8)==30);
-    for(size_t i=row+32*g->hunt_loot.count;i<n;i++)assert(bytes[i]==0);
+    for(size_t i=row+32*g->hunt_loot.count;i<n-PE_SAVE_V23_APPEND;i++)assert(bytes[i]==0);
     /* A literal v21 knows nothing of world loot; it preserves the existing RNG
      * and already allocated counter rather than attempting to recreate drops. */
     write_file(path,bytes,tail,21);assert(pe_game_load(loaded,path,error,sizeof error));
     assert(!loaded->hunt_loot.count&&pe_hunt_loot_valid(loaded));
     assert(loaded->rng_state==g->rng_state&&!memcmp(&loaded->inventory,&g->inventory,sizeof g->inventory)&&!memcmp(&loaded->conversation_history,&g->conversation_history,sizeof g->conversation_history));
     assert(pe_game_save(loaded,path,error,sizeof error));unsigned char *again=read_file(path,&m);
-    assert(m==n&&!memcmp(bytes+16,again+16,tail-16));for(size_t i=tail;i<n;i++)assert(!again[i]);free(again);
+    assert(m==n&&!memcmp(bytes+16,again+16,tail-16));for(size_t i=tail;i<n-PE_SAVE_V23_APPEND;i++)assert(!again[i]);free(again);
     write_file(path,bytes,n,PE_SAVE_VERSION);assert(pe_game_load(loaded,path,error,sizeof error));
     unsigned picked=7,expired=8;assert(pe_hunt_loot_update(loaded,&picked,&expired)&&!picked&&!expired);
     assert(!memcmp(&g->hunt_loot,&loaded->hunt_loot,sizeof g->hunt_loot));

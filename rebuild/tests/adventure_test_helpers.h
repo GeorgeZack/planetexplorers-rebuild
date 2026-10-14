@@ -22,7 +22,8 @@ static inline size_t pe_test_save_counter_offset(const PeGame *game){
     return 16u+52u+8u*PE_INVENTORY_SLOTS+12u+4u+16u*(size_t)game->block_count+
         4u+16u*(size_t)game->tree_count+12u+2u*PE_VOXEL_COUNT+16u;
 }
-/* Produce older inline-world fixtures. V16 appends4 bytes raw comfort.
+/* Produce older inline-world fixtures. V23 appends8 bytes of hunger.
+ * V16 appends4 bytes raw comfort.
  * V15 appends4 bytes of shield reference.
  * V14 appends36 bytes of worn instances.
  * V13 appends a four-byte medpack clock.
@@ -39,6 +40,7 @@ static inline bool pe_test_save_pre_welcome(const char *path,unsigned version){
     rewind(file);unsigned char *data=malloc((size_t)size);if(!data){fclose(file);return false;}
     bool ok=fread(data,1,(size_t)size,file)==(size_t)size;fclose(file);
     if(ok&&data[4]>=6&&data[4]<=PE_SAVE_VERSION&&version<=data[4]&&data[5]==0&&data[6]==0&&data[7]==0){
+        if(data[4]>=23){if(size<=PE_SAVE_V23_APPEND+20){free(data);return false;}size-=PE_SAVE_V23_APPEND;}
         if(data[4]>=22){if(size<=PE_SAVE_V22_APPEND+20){free(data);return false;}size-=PE_SAVE_V22_APPEND;}
         if(data[4]>=21){if(size<=PE_SAVE_V21_APPEND+20){free(data);return false;}size-=PE_SAVE_V21_APPEND;}
         if(data[4]>=20){if(size<=PE_SAVE_V20_APPEND+20){free(data);return false;}size-=PE_SAVE_V20_APPEND;}

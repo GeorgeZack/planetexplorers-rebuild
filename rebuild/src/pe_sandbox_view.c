@@ -459,14 +459,25 @@ static bool sandbox_health_frame(PeAttributeClock *clock,PeGame *game,double dt,
     PePassiveRecovery recovery=game->passive_recovery;float hp=game->hp;
     PeStaminaRecovery stamina=game->stamina_recovery;
     PeRevival revival=game->revival;
-    PeStaminaVitals vitals={game->stamina,game->stamina_max,game->stamina_regen,game->stamina_recover_delay,game->comfort};
+    /* Starvation buff 30200113 from the previous frame's condition: pre-adds to the summed stamina
+     * and comfort parameters. Adventure only; the tutorial has no hunger. */
+    PeHungerStarvation starving=pe_hunger_starvation(&game->hunger);
+    PeStaminaVitals vitals={game->stamina,game->stamina_max,game->stamina_regen+starving.stamina_recover_speed,
+        game->stamina_recover_delay+starving.stamina_recover_delay,game->comfort,
+        starving.stamina_reduce_percent,starving.comfort_reduce_percent};
+    PeHunger hunger=game->hunger;PeHungerEvent hunger_event=PE_HUNGER_NO_CHANGE;
     if(active&&game->mode==PE_GAME_ADVENTURE&&
        (!pe_revival_frame(&revival,frame,hp>0)||
         !pe_passive_recovery_frame(&recovery,frame,&hp,game->max_hp)||
-        !pe_stamina_recovery_frame(&stamina,&game->passive_recovery,&recovery,frame,&vitals)))return false;
+        !pe_stamina_recovery_frame(&stamina,&game->passive_recovery,&recovery,frame,&vitals)||
+        !pe_hunger_frame(&hunger,&game->passive_recovery,&recovery,frame,(float)dt,hp>0,&hunger_event)))return false;
     *clock=next;game->passive_recovery=recovery;game->hp=hp;
     game->revival=revival;
-    game->stamina_recovery=stamina;game->stamina=vitals.stamina;game->comfort=vitals.comfort;return true;
+    game->stamina_recovery=stamina;game->stamina=vitals.stamina;game->comfort=vitals.comfort;
+    game->hunger=hunger;
+    if(hunger_event==PE_HUNGER_STARTED)snprintf(game->message,sizeof game->message,"You are starving. Eat something.");
+    else if(hunger_event==PE_HUNGER_ENDED)snprintf(game->message,sizeof game->message,"You are no longer starving.");
+    return true;
 }
 /* One observed world-clock update per active display frame, independent of
  * player life, shop visibility and fixed-step catch-up. Native pause/focus
@@ -1291,6 +1302,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 PeCombatInterval attack_interval={0};bool began=false,rejected=false;
                 const bool blade_active_before=melee.ready&&melee.action.active;
                 float attack_yaw=pe_sandbox_actor_yaw(actor,game);
+                /* The Animator's stamina multiplier is the live summed StaminaReducePercent (starvation doubles it). */
+                if(melee.ready)melee.setup.stamina_reduce_percent=pe_game_stamina_reduce_percent(game);
                 PeVec3 attack_request;
                 if(melee.ready&&(!pe_melee_facing_request((PeVec3){input.move_x,0,input.move_z},
                     settings.preferences.camera_facing_attacks,camera_controls.mode==PE_SANDBOX_CAMERA_FREE,game->yaw,&attack_request)||

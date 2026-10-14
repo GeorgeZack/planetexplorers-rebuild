@@ -65,8 +65,8 @@ int pe_test_v10_save(void){
     CHECK(loaded->medicine_state==PE_MEDICINE_COMPLETE&&loaded->inventory.next_instance_id==g->inventory.next_instance_id);
     CHECK(!pe_inventory_count(&loaded->inventory,10));
     size_t size=0;original=read_save(path,&size);CHECK(original&&size>PE_SAVE_V10_APPEND);if(!original||size<=PE_SAVE_V10_APPEND)goto done;
-    CHECK(get32(original+4)==PE_SAVE_VERSION);if(size<=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND+2048){CHECK(false);goto done;}
-    size-=(((PE_SAVE_V22_APPEND+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND;CHECK(write_save(path,original,size,10));size_t footer=size-PE_SAVE_V10_APPEND;CHECK(get32(original+footer+16)==2);
+    CHECK(get32(original+4)==PE_SAVE_VERSION);if(size<=((((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND+2048){CHECK(false);goto done;}
+    size-=((((PE_SAVE_V23_APPEND+PE_SAVE_V22_APPEND)+PE_SAVE_V21_APPEND)+PE_SAVE_V20_APPEND)+PE_SAVE_V19_APPEND+PE_SAVE_V18_APPEND)+PE_SAVE_V17_APPEND+PE_SAVE_V16_APPEND+PE_SAVE_V15_APPEND+PE_SAVE_V14_APPEND+PE_SAVE_V13_APPEND+PE_SAVE_V11_APPEND;CHECK(write_save(path,original,size,10));size_t footer=size-PE_SAVE_V10_APPEND;CHECK(get32(original+footer+16)==2);
     /* A literal v9 prefix has no phantom deployed instances or quest progress.
      * Existing inventory, medicine, stocks and owned world remain intact. */
     CHECK(write_save(path,original,footer,9));CHECK(pe_game_load(loaded,path,error,sizeof error));
