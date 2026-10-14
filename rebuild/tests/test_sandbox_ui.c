@@ -349,8 +349,40 @@ static void shared_chrome(void){
     }
     pe_game_destroy(g);free(g);
 }
+/* The HUD comfort presentation: Adventure only, one update call outside drawing,
+   a fresh component on reset, frozen while the host reports the HUD inactive. */
+static void comfort_presentation(void){
+    PeGame *g=calloc(1,sizeof *g);assert(g&&pe_game_init_mode(g,77,PE_GAME_ADVENTURE));
+    PeSandboxUI u;pe_sandbox_ui_init(&u,1280,720);
+    assert(u.comfort_hud.alpha==1&&u.comfort_hud.face==PE_COMFORT_FACE3&&u.comfort_hud.last_comfort==0);
+    g->comfort=300;pe_sandbox_ui_comfort_reset(&u,g);
+    assert(!u.comfort_hud.playing&&u.comfort_hud.last_comfort==300&&u.comfort_hud.face==PE_COMFORT_FACE1);
+    PeUiHudView v={0};pe_sandbox_ui_comfort_view(&u,g,&v);
+    assert(v.comfort_available&&fabsf(v.comfort_slider-.6f)<1e-6f&&v.comfort_alpha==1&&v.comfort_face==1);
+    /* A revival-sized drop (25) flashes; the snapshot carries the curve's alpha. */
+    g->comfort=275;assert(pe_sandbox_ui_comfort_frame(&u,g,.1f,true)&&u.comfort_hud.playing);
+    pe_sandbox_ui_comfort_view(&u,g,&v);float v_alpha;assert(pe_comfort_hud_curve(.1f,&v_alpha)&&v.comfort_alpha==v_alpha);
+    /* Inactive (building, paused, unfocused): the state holds exactly. */
+    PeComfortHud held=u.comfort_hud;g->comfort=100;
+    assert(pe_sandbox_ui_comfort_frame(&u,g,.5f,false)&&!memcmp(&held,&u.comfort_hud,sizeof held));
+    /* Back on: the previous frame is the one before the gap. */
+    assert(pe_sandbox_ui_comfort_frame(&u,g,.1f,true)&&u.comfort_hud.playing&&u.comfort_hud.curve_time==.1f&&u.comfort_hud.face==PE_COMFORT_FACE2);
+    /* Invalid clocks fail and change nothing. */
+    held=u.comfort_hud;assert(!pe_sandbox_ui_comfort_frame(&u,g,-1,true)&&!pe_sandbox_ui_comfort_frame(&u,g,NAN,true)&&!memcmp(&held,&u.comfort_hud,sizeof held));
+    assert(!pe_sandbox_ui_comfort_frame(NULL,g,.1f,true)&&!pe_sandbox_ui_comfort_frame(&u,NULL,.1f,true));
+    /* A load resets to a fresh component: no flash for the loaded value, whatever came before. */
+    g->comfort=20;pe_sandbox_ui_comfort_reset(&u,g);assert(!u.comfort_hud.playing&&u.comfort_hud.alpha==1&&u.comfort_hud.face==PE_COMFORT_FACE3);
+    /* Legacy has no comfort: never updated, snapshot absent, even with a value present. */
+    PeGame *legacy=calloc(1,sizeof *legacy);assert(legacy&&pe_game_init_mode(legacy,5,PE_GAME_LEGACY));
+    PeSandboxUI lu;pe_sandbox_ui_init(&lu,1280,720);held=lu.comfort_hud;legacy->comfort=10;
+    pe_sandbox_ui_comfort_reset(&lu,legacy);assert(!memcmp(&held,&lu.comfort_hud,sizeof held));
+    assert(pe_sandbox_ui_comfort_frame(&lu,legacy,.1f,true)&&!memcmp(&held,&lu.comfort_hud,sizeof held));
+    v=(PeUiHudView){.comfort_available=true,.comfort_face=2};pe_sandbox_ui_comfort_view(&lu,legacy,&v);
+    assert(!v.comfort_available&&v.comfort_face==0&&v.comfort_slider==0);
+    pe_game_destroy(legacy);free(legacy);pe_game_destroy(g);free(g);
+}
 int main(void) {
-    shared_chrome();medpack_use();
+    shared_chrome();medpack_use();comfort_presentation();
     /* A 150ms dialogue click outlives its closing frame. No frame in that
        hold, including release, may recapture or supply a held tool action. */
     PeSandboxPointerGate gate={0};

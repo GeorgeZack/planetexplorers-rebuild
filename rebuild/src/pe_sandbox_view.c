@@ -757,6 +757,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
        !pe_deployable_view_load(&deploy_view,assets,error,sizeof error)) {
        fprintf(stderr,"Sandbox initialization failed: %s\n",error);result=1;goto cleanup;
     }
+    pe_sandbox_ui_comfort_reset(&ui,game);
     vegetation_view=pe_vegetation_view_load(assets,error,sizeof error);
     if(!vegetation_view||(game->vegetation.installed&&!pe_vegetation_view_available(vegetation_view))){
         if(vegetation_view)snprintf(error,sizeof error,"This vegetation patch requires recovered sandbox-vegetation assets.");
@@ -1004,7 +1005,7 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             if(loaded){pe_camera_geometry_init(&camera_geometry);pe_sandbox_camera_init(&orbit);pe_sandbox_camera_recovery_init(&camera_recovery);melee.playback=(PeAttackPlayback){0};pe_sandbox_actor_reset_motion(actor,game);pe_halt_host_reset(&halt);pe_grounder_host_reset(&grounder);pe_sandbox_camera_controls_cancel(&camera_controls);hunt=(PeHuntCombat){0};hunt_attempted=false;return_prompted=false;ui.hunt_encounter_available=false;attack_pending=false;pe_sandbox_melee_cancel(&melee);pe_sandbox_actor_set_action(actor,NULL);blade_facing=(SandboxBladeFacing){0};placing_torch=false;autorun=false;jump_pending=false;accumulator=0;ui.map_valid=false;tool_drawn=false;tool_instance=0;pe_sandbox_actions_cancel(&tool_action);
                 pe_adventure_dialogue_cancel(&ui.dialogue);supplier=(PeAdventureNpc){0};supplier_visible=false;ui.supplier_present=false;
                 welcome=(PeAdventureNpc){0};welcome_visible=false;welcome_prompted=false;ui.welcome_present=false;
-                pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
+                pe_sandbox_ui_cancel_town(&ui);pe_sandbox_ui_cancel_repair(&ui);pe_sandbox_ui_comfort_reset(&ui,game);for(int i=0;i<PE_ADVENTURE_POPULATION_COUNT;i++){residents[i].npc=(PeAdventureNpc){0};residents[i].visible=false;}}
             if(!loaded)snprintf(game->message,sizeof game->message,"%.159s",error);
             /* A loaded body keeps its saved velocity: this is not an attack ending. */
             if(loaded){pe_sword_motor_reset(&sword_motor);blade_was_active=false;}
@@ -1215,6 +1216,11 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
             world_input=action_input=false;
             fprintf(stderr,"Player revived: hp=%.6f stamina=%.6f comfort=%.6f kills=%u\n",
                 game->hp,game->stamina,game->comfort,game->hunt_kills);
+        }
+        /* UIMainMidCtrl's comfort update reads this frame's comfort. MainMid is hidden
+         * while building (source); pause and focus loss freeze it (native adapter). */
+        if(!pe_sandbox_ui_comfort_frame(&ui,game,smoke_frames?PE_FIXED_DT:dt,focused&&!action.paused&&!build_mode)){
+            snprintf(error,sizeof error,"Invalid comfort HUD state or clock");result=1;break;
         }
         if(focused&&!action.paused) {
             supplier_seconds+=smoke_frames?PE_FIXED_DT:dt;

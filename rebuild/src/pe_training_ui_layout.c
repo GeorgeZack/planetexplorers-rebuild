@@ -76,6 +76,9 @@ bool pe_training_ui_layout(float width,float height,PeTrainingUILayout *out) {
        (100-10), rotated 180 degrees about Z, so its 64x5 left-pivot widgets span
        x 666..730 on screen with their origin at the right end. */
     R(hunger,bottom,666,625,64,5);
+    /* CenterInfo/4_Comfort, unrotated (export_comfort_hud.py): the left-pivot
+       64x5 track and the centre-pivot 12x13 face. */
+    R(comfort,bottom,551,626,64,5); R(comfort_face,bottom,535,620,12,13);
     R(mission_button,right,1254,173,20,26);
     R(history_button,right,1253,148,22,22);
     R(minimap,right,1069,0,210,208); R(mission_tracker,right,994,224,282,309);

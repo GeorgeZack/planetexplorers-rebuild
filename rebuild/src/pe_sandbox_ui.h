@@ -8,6 +8,8 @@
 #include "pe_ui_input.h"
 #include "pe_ui_history.h"
 #include "pe_training_ui_shader.h"
+#include "pe_comfort_hud.h"
+#include "pe_ui_hud.h"
 
 /* Presentation only. All possessions, equipment, recipes and quickslots live
  * in PeGame. The route API is deterministic and does not call window/GPU APIs. */
@@ -112,6 +114,7 @@ typedef struct {
     char search[64];
     double seconds, message_until;
     char last_message[160];
+    PeComfortHud comfort_hud; /* UIMainMidCtrl comfort presentation; transient, never saved. */
     uint32_t map_revision, map_seed, map_source;
     int32_t map_origin_x, map_origin_y, map_origin_z;
     int map_world_height;
@@ -158,6 +161,18 @@ PeSandboxUIResult pe_sandbox_ui_update(PeSandboxUI *ui,PeGame *game,float dt);
 void pe_sandbox_ui_prepare(PeSandboxUI *ui,const PeGame *game);
 /* Call inside BeginDrawing after 3D mode. Does not advance simulation. */
 void pe_sandbox_ui_draw(PeSandboxUI *ui,const PeGame *game,bool build_mode);
+/* The HUD comfort update (UIMainMidCtrl.UpdatePlayerAtrbute), once per display
+ * frame after the attribute frame and never from drawing. Adventure only; other
+ * modes leave it untouched. hud_active is false while the normal HUD is hidden
+ * (building: the source's Hide stops its Update) and while paused or unfocused
+ * (a native adapter); the state then holds. dt is that frame's delta. */
+bool pe_sandbox_ui_comfort_frame(PeSandboxUI *ui,const PeGame *game,float dt,bool hud_active);
+/* A fresh component for a new session or a load (a native lifecycle adapter: the
+ * original's recreation is compiled code), then, in Adventure, one zero-time
+ * update so the first drawn frame shows the game's comfort. */
+void pe_sandbox_ui_comfort_reset(PeSandboxUI *ui,const PeGame *game);
+/* The HUD snapshot's comfort fields: the presentation state in Adventure, absent otherwise. */
+void pe_sandbox_ui_comfort_view(const PeSandboxUI *ui,const PeGame *game,PeUiHudView *view);
 /* Capture presented TALK pages; rendering itself stays read-only. */
 void pe_sandbox_ui_record_dialogue(PeSandboxUI *ui,PeGame *game);
 PeAdventureDialogueBindings pe_sandbox_ui_dialogue_bindings(const PeSandboxUI *ui,const PeGame *game,char seed[32]);

@@ -35,9 +35,24 @@ void pe_ui_hud_draw(const PeUiCanvas *c,const PeUiHudView *v){
         pe_ui_draw_sprite_flip(c,"bloodlan_12",l->hunger,WHITE,true,true);
         EndScissorMode();
     }
+    /* UIMainMidCtrl comfort: the unrotated 4_Comfort track fills from its left end
+     * (mComfort_4.sliderValue); the filled foreground carries the drop-flash alpha;
+     * the face is face1..3. Without a snapshot: empty track and the prefab's face3. */
+    pe_ui_draw_sprite(c,"bloodlan_11bg",l->comfort,WHITE);
+    const char *face="face3";
+    if(v->comfort_available&&v->comfort_face>=1&&v->comfort_face<=3&&isfinite(v->comfort_alpha)){
+        static const char *faces[]={"face1","face2","face3"};face=faces[v->comfort_face-1];
+        float comfort=fraction(v->comfort_slider,1),alpha=fminf(1,fmaxf(0,v->comfort_alpha));
+        if(comfort>0){
+            int left=(int)floorf(l->comfort.x),right=(int)ceilf(l->comfort.x+l->comfort.w*comfort);
+            BeginScissorMode(left,(int)floorf(l->comfort.y),right-left,(int)ceilf(l->comfort.h));
+            pe_ui_draw_sprite(c,"bloodlan_11",l->comfort,(Color){255,255,255,(unsigned char)roundf(alpha*255)});
+            EndScissorMode();
+        }
+    }
+    pe_ui_draw_sprite(c,face,l->comfort_face,WHITE);
     static const struct {const char *name;float x,y,w,h;} decorations[]={
-        {"face3",535,620,12,13},{"tili",734,620,12,13},
-        {"bloodlan_11bg",551,626,64,5},
+        {"tili",734,620,12,13},
         {"bloodlan_8bg",426,704,87,4},{"bloodlan_9bg",767,704,87,4},
         {"arr3",535,695,20,20},{"arr5",723,695,20,20}
     };

@@ -69,6 +69,25 @@ int main(void){
         fed.hunger=0;reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!find(8,"bloodlan_12")&&find(8,"bloodlan_12bg"));
         fed.hunger=NAN;reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!find(8,"bloodlan_12"));
         fed.hunger=250;fed.hunger_max=0;reset();pe_ui_hud_draw(&canvas,&fed);CHECK(!find(8,"bloodlan_12"));
+        /* Comfort: 4_Comfort's unrotated track always; fill, alpha and face only with host data. */
+        if(size==0)CHECK(near(l.comfort.x,551)&&near(l.comfort.y,626)&&near(l.comfort.w,64)&&near(l.comfort.h,5)&&
+                         near(l.comfort_face.x,535)&&near(l.comfort_face.y,620)&&near(l.comfort_face.w,12)&&near(l.comfort_face.h,13));
+        reset();pe_ui_hud_draw(&canvas,&view);
+        const Draw *ctrack=find(1,"bloodlan_11bg"),*cface=find(1,"face3");
+        CHECK(ctrack&&near(ctrack->box.x,l.comfort.x)&&near(ctrack->box.width,l.comfort.w)&&!find(1,"bloodlan_11"));
+        CHECK(cface&&near(cface->box.x,l.comfort_face.x)&&near(cface->box.height,l.comfort_face.h)&&!find(1,"face1")&&!find(1,"face2"));
+        PeUiHudView comfy=view;comfy.comfort_available=true;comfy.comfort_slider=.25f;comfy.comfort_alpha=.3f;comfy.comfort_face=2;before=comfy;
+        reset();pe_ui_hud_draw(&canvas,&comfy);CHECK(!memcmp(&comfy,&before,sizeof comfy));
+        const Draw *cfill=find(1,"bloodlan_11");CHECK(cfill&&near(cfill->box.x,l.comfort.x)&&near(cfill->box.width,l.comfort.w));
+        CHECK(cfill->tint.a==77&&cfill->tint.r==255);   /* roundf(.3*255) */
+        const Draw *cclip=cfill-1;CHECK(cclip->kind==5&&cclip->box.x==floorf(l.comfort.x)&&cclip->box.x+cclip->box.width==ceilf(l.comfort.x+l.comfort.w*.25f));
+        CHECK(find(1,"face2")&&!find(1,"face3"));
+        comfy.comfort_face=1;comfy.comfort_alpha=1;reset();pe_ui_hud_draw(&canvas,&comfy);CHECK(find(1,"face1")&&find(1,"bloodlan_11")->tint.a==255);
+        comfy.comfort_slider=0;comfy.comfort_face=3;reset();pe_ui_hud_draw(&canvas,&comfy);CHECK(!find(1,"bloodlan_11")&&find(1,"face3")&&find(1,"bloodlan_11bg"));
+        comfy.comfort_slider=2;comfy.comfort_alpha=-1;reset();pe_ui_hud_draw(&canvas,&comfy);cfill=find(1,"bloodlan_11");
+        CHECK(cfill&&cfill->tint.a==0&&(cfill-1)->box.x+(cfill-1)->box.width==ceilf(l.comfort.x+l.comfort.w));
+        comfy.comfort_face=4;reset();pe_ui_hud_draw(&canvas,&comfy);CHECK(!find(1,"bloodlan_11")&&find(1,"face3"));   /* invalid: absent */
+        comfy.comfort_face=1;comfy.comfort_alpha=NAN;reset();pe_ui_hud_draw(&canvas,&comfy);CHECK(!find(1,"bloodlan_11")&&find(1,"face3"));
         reset();pe_ui_hud_draw(NULL,&view);pe_ui_minimap_chrome_draw(NULL,&map);CHECK(count==0);
     }
     puts("shared HUD, minimap chrome and bounded tracker presentation pass");return 0;

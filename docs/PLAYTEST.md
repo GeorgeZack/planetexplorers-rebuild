@@ -1,5 +1,29 @@
 # Original-game playtest and C comparison
 
+## October14 Adventure HUD comfort fill, face and drop flash
+
+Implemented in C and rendered in staged private-display fixtures only:
+[comfort HUD](audit/COMFORT_HUD.md). No ordinary play or original-game
+screenshot is claimed.
+
+- `ui-shared-render-capture` keeps exact tutorial/Legacy sandbox HUD parity
+  (93,170 / 23,320 / 5,936 pixels). With comfort staged at 0, the Adventure
+  hunger capture still matches the tutorial outside the hunger track.
+- Comfort 50/175/400 draws face3/face2/face1 with left-anchored fills of 7/23/52
+  columns at 1280×720 (6.4/22.4/51.2 expected), and matches everywhere outside
+  the face and track. A flash staged 0.2 s after a 25-point drop has alpha
+  0.300 and differs only inside the track.
+- At 320×240 the face is 3×3 pixels and face2 is identical to face3.
+- Results (log paths are under `rebuild/build/compiler-tmp/`):
+  - Full check: 282 passed, 0 failed; 977 Python tests, 98 skipped (skips are
+    not passes; three are the UnityPy prefab tests, which pass under
+    `check-sources`) (`comfort-check.log`).
+  - `check-content` (`comfort-content.log`) and `check-sources`
+    (`comfort-sources.log`) pass.
+  - Render capture: `comfort-render.log`.
+  - Pre-push sanitizer: 113 passed, 0 failed, 0 skipped, with leak checks enabled (`comfort-prepush-sanitize.log`; per-suite logs in `rebuild/build/test-logs/sanitize_*.log`).
+  - `ui-shared-test`, `sandbox-ui-test` and `cli-test` pass (`comfort-ui-cli.log`).
+
 ## October14 ordinary native food loop
 
 Observed in the native production runtime with ordinary private-display input

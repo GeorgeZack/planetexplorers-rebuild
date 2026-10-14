@@ -5,6 +5,7 @@ CFLAGS ?= -O2 -g
 CFLAGS += -std=c11 -Wall -Wextra -Wpedantic
 ASAN_OPTIONS ?= detect_leaks=1
 CORE = src/pe_debug.c src/pe_hunt_loot.c src/pe_hunt_loot_combat.c src/pe_preferences.c src/pe_melee_facing.c src/pe_hunt_targeting.c src/pe_camera_query.c src/pe_camera_projection.c src/pe_conversation_history.c src/pe_ui_input.c src/pe_camera_geometry.c src/pe_camp_repair.c src/pe_camp_repair_interaction.c src/pe_hare_pounce.c src/pe_inventory.c src/pe_harvest.c src/pe_vegetation.c src/pe_build_history.c src/pe_town_trade.c src/pe_town_wallet.c src/pe_sword_root_motion.c src/pe_sword_variant.c src/pe_sword_motion.c src/pe_revival.c src/pe_attack_playback.c src/pe_shield_action.c src/pe_capsule_history.c src/pe_stamina_recovery.c src/pe_hunger.c src/pe_passive_recovery.c src/pe_sword.c src/pe_shield.c src/pe_outfit.c src/pe_running_attack_motion.c src/pe_root_motion.c src/pe_sword_targeting.c src/pe_town_defense_clock.c src/pe_hunt_combat.c src/pe_hare_skill.c src/pe_hunt_encounter.c src/pe_hare_perception.c src/pe_hare_damage.c src/pe_sandbox_melee.c src/pe_adventure_hunt.c src/pe_deployable.c src/pe_adventure_medicine.c src/pe_town_interaction.c src/pe_settlement.c src/pe_terrain_material.c src/pe_adventure_dialogue.c src/pe_adventure_npc.c src/pe_sandbox_camera.c src/pe_tree_collision.c src/pe_sandbox_actions.c src/pe_sandbox_collision.c src/pe_world.c src/pe_mesh.c src/pe_legacy.c src/pe_block.c src/pe_game.c src/pe_save.c src/pe_tutorial.c src/pe_scene_collision.c src/pe_training.c src/pe_player_locomotion.c src/pe_training_melee.c src/pe_training_tree_hit.c src/pe_training_dig.c src/pe_training_terrain.c src/pe_training_build.c src/pe_training_receiver.c src/pe_training_npc.c src/pe_training_ui_layout.c src/pe_training_gathering.c src/pe_training_text.c src/pe_actor.c src/pe_hare.c src/pe_combat.c src/pe_knife_contact.c src/pe_hare_attack.c src/pe_hitbox.c src/pe_actor_scene_manifest.c generated/pe_content.c
+CORE += src/pe_comfort_hud.c
 CORE += src/pe_repulsed.c
 CORE += src/pe_human_phy.c
 CORE += src/pe_whacked.c
@@ -1057,3 +1058,12 @@ test: halt-capture-test
 player-ik-drive-test: $(CORE_LIB)
 	python3 tests/test_player_ik_drive.py
 test: player-ik-drive-test
+
+.PHONY: comfort-hud-source-test comfort-hud-source-check
+comfort-hud-source-test:
+	python3 tests/test_comfort_hud_export.py
+comfort-hud-source-check:
+	$(UNITY_PYTHON) tools/export_comfort_hud.py --check
+	$(UNITY_PYTHON) tests/test_comfort_hud_export.py
+test: comfort-hud-source-test
+check-sources: comfort-hud-source-check

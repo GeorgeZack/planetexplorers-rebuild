@@ -10,6 +10,11 @@ typedef struct {
     /* Adventure only: the host's summed hunger. Without it the track stays empty. */
     bool hunger_available;
     float hunger,hunger_max;
+    /* Adventure only: the host's pe_comfort_hud presentation (slider 0..1, foreground
+     * alpha, face 1..3). Without it the track stays empty and the prefab's face3 shows. */
+    bool comfort_available;
+    float comfort_slider,comfort_alpha;
+    int comfort_face;
     PeUiQuickslotView slots[PE_UI_QUICKSLOTS];
     int hand_item_id;
     bool building;

@@ -93,6 +93,29 @@ static void hunger_fill(Image b,PeTrainingUIRect r,float fraction,const char *la
     printf("%s_FILL size=%dx%d track=%.1f..%.1f teal_columns=%d..%d expected_width=%.1f\n",label,b.width,b.height,r.x,r.x+r.w,first,last,r.w*fraction);fflush(stdout);
     REQUIRE(first>=0&&last>=x1-2&&filled<=r.w*fraction+2&&filled>=r.w*fraction-3);
 }
+/* Comfort fill: the track columns that differ from the empty-track capture, from
+ * the left end (4_Comfort is unrotated). */
+static void comfort_fill(Image empty,Image b,PeTrainingUIRect r,float fraction,const char *label){
+    REQUIRE(empty.width==b.width&&empty.height==b.height);
+    Color *e=LoadImageColors(empty),*px=LoadImageColors(b);REQUIRE(e&&px);
+    int x0=(int)floorf(r.x),x1=(int)ceilf(r.x+r.w),y0=(int)floorf(r.y),y1=(int)ceilf(r.y+r.h),first=-1,last=-1;
+    for(int x=x0;x<x1;x++)for(int y=y0;y<y1;y++){
+        size_t k=(size_t)y*(size_t)b.width+(size_t)x;
+        if(memcmp(&e[k],&px[k],sizeof(Color))){if(first<0||x<first)first=x;if(x>last)last=x;}
+    }
+    UnloadImageColors(e);UnloadImageColors(px);
+    float filled=first<0?0:(float)(last-first+1);
+    printf("%s_FILL size=%dx%d track=%.1f..%.1f changed_columns=%d..%d expected_width=%.1f\n",label,b.width,b.height,r.x,r.x+r.w,first,last,r.w*fraction);fflush(stdout);
+    REQUIRE(first>=0&&first<=x0+1&&filled<=r.w*fraction+2&&filled>=r.w*fraction-3);
+}
+/* Whether any pixel inside r differs between two captures. */
+static bool region_differs(Image a,Image b,PeTrainingUIRect r){
+    Color *left=LoadImageColors(a),*right=LoadImageColors(b);REQUIRE(left&&right);bool d=false;
+    for(int y=(int)floorf(r.y);y<(int)ceilf(r.y+r.h)&&!d;y++)for(int x=(int)floorf(r.x);x<(int)ceilf(r.x+r.w);x++){
+        size_t k=(size_t)y*(size_t)a.width+(size_t)x;if(memcmp(&left[k],&right[k],sizeof(Color))){d=true;break;}
+    }
+    UnloadImageColors(left);UnloadImageColors(right);return d;
+}
 static int bag(const PeGame *g,int item){
     for(int i=0;i<pe_inventory_capacity(&g->inventory);i++)if(g->inventory.slots[i].item_id==item&&g->inventory.slots[i].count>0)return i;
     return -1;
@@ -156,11 +179,46 @@ int main(int argc,char **argv){
         compare_region(a,b,pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER),"HUD");UnloadImage(b);
         /* Adventure only: the same staged HUD with hunger 150 of 500. Everything else
          * matches the tutorial; the track fills its right 30% (5_Hunger is rotated). */
+        /* Comfort is staged at 0 through the host's reset, so its track is empty
+         * and its face is face3, exactly as the tutorial draws them. */
         game->mode=PE_GAME_ADVENTURE;game->hunger.hunger=game->hunger.raw=150;
+        game->comfort=0;pe_sandbox_ui_comfort_reset(&sandbox,game);
         b=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud-hunger",w,h);
-        game->mode=PE_GAME_LEGACY;
-        compare_hud_except(a,b,pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER),sandbox.layout.hunger,"HUD_OUTSIDE_HUNGER");
-        hunger_fill(b,sandbox.layout.hunger,.3f,"HUNGER");UnloadImage(a);UnloadImage(b);
+        PeTrainingUIRect hud_region=pe_training_ui_map(&tutorial.layout,(PeTrainingUIRect){217,610,847,111},PE_UI_BOTTOM_CENTER);
+        compare_hud_except(a,b,hud_region,sandbox.layout.hunger,"HUD_OUTSIDE_HUNGER");
+        hunger_fill(b,sandbox.layout.hunger,.3f,"HUNGER");
+        /* Comfort: low (face3), mid (face2), high (face1) and a mid-flash frame, each
+         * through the host's reset/update; outside the face and track they match the
+         * hunger capture. The union rectangle covers face (535..547) and track (551..615). */
+        PeTrainingUIRect comfort_region=pe_training_ui_map(&sandbox.layout,(PeTrainingUIRect){535,620,80,13},PE_UI_BOTTOM_CENTER);
+        static const struct {float comfort;const char *name;} levels[]={{50,"sandbox-hud-comfort-low"},{175,"sandbox-hud-comfort-mid"},{400,"sandbox-hud-comfort-high"}};
+        Image steady={0};
+        for(size_t c=0;c<3;c++){
+            game->comfort=levels[c].comfort;pe_sandbox_ui_comfort_reset(&sandbox,game);
+            REQUIRE(!sandbox.comfort_hud.playing&&sandbox.comfort_hud.face==(PeComfortFace)(PE_COMFORT_FACE3-c));
+            Image d=sandbox_capture(&sandbox,game,argv[1],levels[c].name,w,h);
+            compare_hud_except(b,d,hud_region,comfort_region,"HUD_OUTSIDE_COMFORT");
+            comfort_fill(b,d,sandbox.layout.comfort,levels[c].comfort/500,"COMFORT");
+            /* The face is 12x13 at 1280x720; at 320x240 it is 3x3 pixels and faces may coincide. */
+            bool face_differs=region_differs(b,d,sandbox.layout.comfort_face);
+            printf("COMFORT_FACE size=%dx%d face=%d differs_from_face3=%d\n",w,h,(int)sandbox.comfort_hud.face,face_differs);fflush(stdout);
+            if(c==0||sandbox.layout.scale>=.5f)REQUIRE(face_differs==(c>0));
+            if(c==2)steady=d;else UnloadImage(d);
+        }
+        /* A 25-point drop (a revival's cost) 0.2 s ago: the curve's alpha 0.3 on the
+         * same fill; the face stays face1. Compared with the steady comfort-400 frame
+         * staged at 375. */
+        UnloadImage(steady);game->comfort=375;pe_sandbox_ui_comfort_reset(&sandbox,game);
+        steady=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud-comfort-steady",w,h);
+        game->comfort=400;pe_sandbox_ui_comfort_reset(&sandbox,game);game->comfort=375;
+        REQUIRE(pe_sandbox_ui_comfort_frame(&sandbox,game,.2f,true)&&sandbox.comfort_hud.playing&&fabsf(sandbox.comfort_hud.alpha-.3f)<1e-3f);
+        Image flash=sandbox_capture(&sandbox,game,argv[1],"sandbox-hud-comfort-flash",w,h);
+        compare_hud_except(steady,flash,hud_region,sandbox.layout.comfort,"HUD_OUTSIDE_COMFORT_FLASH");
+        REQUIRE(region_differs(steady,flash,sandbox.layout.comfort)&&!region_differs(steady,flash,sandbox.layout.comfort_face));
+        printf("COMFORT_FLASH size=%dx%d alpha=%.3f curve_time=%.3f\n",w,h,sandbox.comfort_hud.alpha,sandbox.comfort_hud.curve_time);fflush(stdout);
+        UnloadImage(steady);UnloadImage(flash);
+        game->mode=PE_GAME_LEGACY;pe_sandbox_ui_comfort_reset(&sandbox,game);
+        UnloadImage(a);UnloadImage(b);
         training->inventory_open=sandbox.inventory_open=true;
         a=training_capture(&tutorial,training,argv[1],"tutorial-inventory",w,h);
         b=sandbox_capture(&sandbox,game,argv[1],"sandbox-inventory",w,h);

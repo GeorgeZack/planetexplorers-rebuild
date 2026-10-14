@@ -1,0 +1,210 @@
+{
+  "schema": 1,
+  "sources": [
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Resources/Prefab/GameUI/GameMain.prefab",
+      "sha256": "3270941177daafdfd9d1051216ea08c6ea6c1a275feea1bcd4850c7e27fb48c3"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/GameMain/UIMainMidCtrl.cs",
+      "sha256": "dc51780461ee68e7eb6d296bc29100412ecc3a26f6470d4a17bd1de3f85919c2"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/PE_GameUI/GameMain/UIMainMidCtrl.cs.meta",
+      "sha256": "405caee3ecf7848fc0afd2a6edb829342ab123bf6f5a1e1e537a028b0d8997c2"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/UIComponent/BaseClass/UIStaticWnd.cs",
+      "sha256": "4d394cd1d218e3ec6c1d79978923e0057263c7eecb188dbed07fdd8799f9b866"
+    },
+    {
+      "path": "Assets/Scripts/Chenzhi/NewUI/Scripts/GameUISystem/GameUIMode.cs",
+      "sha256": "d811b9587bcb30e6620755f4a496f2bf14acca39fa1251d17a7a306c259a7e51"
+    }
+  ],
+  "comfort_hud": {
+    "component": 11400156,
+    "script_guid": "3eca6a77f3861594db9423b4b63d6170",
+    "fall_value": 10.0,
+    "initial_last_comfort": 0.0,
+    "initial_alpha": 1.0,
+    "initial_slider": 1.0,
+    "initial_face": "face3",
+    "curve": {
+      "key_fields": [
+        "time",
+        "value",
+        "inSlope",
+        "outSlope"
+      ],
+      "keys": [
+        [
+          0.0,
+          0.9800000190734863,
+          -1.8666667938232422,
+          -1.8666667938232422
+        ],
+        [
+          0.15000000596046448,
+          0.699999988079071,
+          -4.933333396911621,
+          -4.933333396911621
+        ],
+        [
+          0.20000000298023224,
+          0.30000001192092896,
+          -2.5,
+          -2.5
+        ],
+        [
+          0.30000001192092896,
+          0.6000000238418579,
+          -2.384185791015625e-07,
+          -2.384185791015625e-07
+        ],
+        [
+          0.5,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.699999988079071,
+          0.6000000238418579,
+          3.5762786865234375e-07,
+          3.5762786865234375e-07
+        ],
+        [
+          0.800000011920929,
+          0.30000001192092896,
+          2.4999990463256836,
+          2.4999990463256836
+        ],
+        [
+          0.8500000238418579,
+          0.699999988079071,
+          4.999999046325684,
+          4.999999046325684
+        ],
+        [
+          1.0,
+          1.0,
+          2.000000476837158,
+          2.000000476837158
+        ]
+      ],
+      "pre_infinity": 2,
+      "post_infinity": 2,
+      "tangent_mode": 10,
+      "sha256": "2a0ccaf14f2f11a4c06cb03a5409d84096a8865b3608421f0dbd9716e9d648a7"
+    },
+    "widgets": {
+      "foreground": {
+        "id": 11400042,
+        "sprite": "bloodlan_11",
+        "pivot": 3,
+        "depth": 7,
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "chain": [
+          "MainMid",
+          "Content",
+          "CenterInfo",
+          "4_Comfort",
+          "Progress Bar",
+          "Foreground"
+        ],
+        "anchor_local": [
+          -89.0,
+          91.5
+        ],
+        "rect": [
+          551.0,
+          626.0,
+          64.0,
+          5.0
+        ]
+      },
+      "background": {
+        "id": 11400046,
+        "sprite": "bloodlan_11bg",
+        "pivot": 3,
+        "depth": 5,
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "chain": [
+          "MainMid",
+          "Content",
+          "CenterInfo",
+          "4_Comfort",
+          "Progress Bar",
+          "Background"
+        ],
+        "anchor_local": [
+          -89.0,
+          91.5
+        ],
+        "rect": [
+          551.0,
+          626.0,
+          64.0,
+          5.0
+        ]
+      },
+      "face": {
+        "id": 11400062,
+        "sprite": "face3",
+        "pivot": 4,
+        "depth": 5,
+        "color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "chain": [
+          "MainMid",
+          "Content",
+          "CenterInfo",
+          "4_Comfort",
+          "Sprite (arr3)"
+        ],
+        "anchor_local": [
+          -99.0,
+          93.5
+        ],
+        "rect": [
+          535.0,
+          620.0,
+          12.0,
+          13.0
+        ]
+      }
+    }
+  },
+  "call_chain": {
+    "update": "UIMainMidCtrl.Update calls UpdatePlayerAtrbute every frame while GameUI.Instance.mMainPlayer is set and MainMid is active.",
+    "slider": "mComfort_4.sliderValue = ComfortMax <= 0 ? 0 : Comfort / ComfortMax; no lerp.",
+    "fall": "m_CurComfort = Comfort; if it is above m_lastComfort, store it; else if m_lastComfort - m_CurComfort > m_ComfortFallValue, start the curve (m_CurvePlay, m_CurveTotalTime = 0) and store it; else store it. The comparison is with the previous frame only.",
+    "curve": "While m_CurvePlay: m_CurveTotalTime += Time.deltaTime; mComfortForeground.alpha = mComfortAlphaCurve.Evaluate(m_CurveTotalTime); stop once that alpha >= 1. The alpha is never otherwise written.",
+    "face": "sliderValue < 0.2 face3, < 0.5 face2, else face1; reassigned with MakePixelPerfect only when the name changes.",
+    "hide": "GameUIMode.HideMode (building) calls mUIMainMidCtrl.Hide; UIStaticWnd.OnHide deactivates MainMid itself because mWndCenter is null, so Update stops until ShowMode."
+  },
+  "scope": "Source presentation of the Adventure HUD comfort bar, face and drop flash. Not a comfort simulation.",
+  "limitations": [
+    "UISlider and UIFilledSprite are in the compiled NGUI firstpass assembly, not decompiled: the fill is drawn with the shared scissor adapter and the slider value is clamped to 0..1 as an adapter.",
+    "AnimationCurve.Evaluate is native; C evaluates these keys with the float Hermite polynomial used for attack playback, a bounded arithmetic adapter not separately qualified for this curve.",
+    "Which code recreates GameUI on a load or a menu return is compiled (PeFlowMgr); the C reset on load is a native lifecycle adapter.",
+    "PeGameMgr.gamePause is compiled; freezing the presentation clock while paused or unfocused is a native adapter.",
+    "Widget alpha reaches the vertex colour through NGUI; C rounds alpha*255.",
+    "Rects are the reference 1280x720 canvas; the hide tween's exact frame is not modelled."
+  ]
+}

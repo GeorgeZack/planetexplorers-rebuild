@@ -79,6 +79,11 @@ the installed assembly, regenerates the female grounding settings from
 and the installed game). It is part of `check-sources`; see
 [the grounder audit](FINALIK_GROUNDER.md).
 
+`comfort-hud-source-check` regenerates `pe_comfort_hud_source.{h,json}` from
+`GameMain.prefab` and `UIMainMidCtrl.cs` and runs all six comfort-export tests
+(three need UnityPy). It is part of `check-sources`; see
+[the comfort HUD audit](COMFORT_HUD.md).
+
 `export_player_ik_pose.py` has no `--check` mode: its inputs are local bake
 captures outside the repository. Its staged manifest records each capture's
 hash, and `test_player_ik_pose.py` verifies the installed file against that

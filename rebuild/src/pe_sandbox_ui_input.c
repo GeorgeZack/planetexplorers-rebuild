@@ -8,6 +8,7 @@
 #include "pe_build_history.h"
 #include "pe_camp_repair.h"
 #include "../generated/pe_revival_source.h"
+#include "../generated/pe_stamina_recovery_source.h"
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
@@ -32,11 +33,29 @@ bool pe_sandbox_pointer_route(PeSandboxPointerGate *gate,PeSandboxUIResult *r,un
     if(blocked){r->npc_interaction=false;r->camera_cycle_allowed=false;}
     return blocked;
 }
+bool pe_sandbox_ui_comfort_frame(PeSandboxUI *u,const PeGame *g,float dt,bool hud_active){
+    if(!u||!g)return false;
+    if(g->mode!=PE_GAME_ADVENTURE||!hud_active)return true;
+    return pe_comfort_hud_frame(&u->comfort_hud,g->comfort,pe_stamina_recovery_source.comfort_max,dt);
+}
+void pe_sandbox_ui_comfort_reset(PeSandboxUI *u,const PeGame *g){
+    if(!u)return;
+    pe_comfort_hud_reset(&u->comfort_hud);
+    if(g&&g->mode==PE_GAME_ADVENTURE)pe_comfort_hud_frame(&u->comfort_hud,g->comfort,pe_stamina_recovery_source.comfort_max,0);
+}
+void pe_sandbox_ui_comfort_view(const PeSandboxUI *u,const PeGame *g,PeUiHudView *v){
+    if(!u||!g||!v)return;
+    v->comfort_available=g->mode==PE_GAME_ADVENTURE;
+    v->comfort_slider=v->comfort_available?u->comfort_hud.slider:0;
+    v->comfort_alpha=v->comfort_available?u->comfort_hud.alpha:1;
+    v->comfort_face=v->comfort_available?(int)u->comfort_hud.face:0;
+}
 void pe_sandbox_ui_init(PeSandboxUI *u,float w,float h) {
     if(!u)return;
     memset(u,0,sizeof *u);u->batches=1;u->selected_slot=-1;u->drag_slot=-1;u->drag_quickslot=-1;u->repair_slot=-1;
     u->build_item=PE_ITEM_WOOD;u->build_shape=PE_B45_CUBE;u->build_brush=4;
     pe_training_ui_windows_layout(w,h,&u->windows,&u->layout);
+    pe_comfort_hud_reset(&u->comfort_hud);
 }
 void pe_sandbox_ui_resize(PeSandboxUI *u,float w,float h) {
     if(u)pe_training_ui_windows_layout(w,h,&u->windows,&u->layout);
