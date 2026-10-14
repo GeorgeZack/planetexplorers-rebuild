@@ -12,6 +12,7 @@ STUBS = r'''
 #include "pe_game.h"
 #include "pe_settlement.h"
 #include "pe_adventure_hunt.h"
+#include "pe_town_interaction.h"
 #include <string.h>
 bool pe_settlement_configure(const char *p,char *e,size_t n){(void)p;(void)e;(void)n;return true;}
 bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
@@ -20,9 +21,15 @@ bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
     int stride=g->inventory.categorized?PE_INVENTORY_CATEGORY_SLOTS:1;
     for(int k=0;k<4;k++)g->inventory.slots[k*stride]=(PeSlot){.item_id=100+k,.count=k+1};
     g->yaw=.5f;g->pitch=-.25f;g->velocity=(PeVec3){1,2,3};g->grounded=true;
-    g->quickslots[0]=(PeQuickslot){100,42};return true;
+    g->quickslots[0]=(PeQuickslot){100,42};g->hunger.hunger=123.5f;g->hunger.starving=!g->inventory.categorized;
+    g->town_stock[1]=(PeTownStock){true,17,99.5};return true;
 }
 void pe_game_destroy(PeGame *g){(void)g;}
+bool pe_hunger_is_food(int id){return id==386||id==391;}
+const PeTownOffer *pe_town_shop_offer_at(size_t i){
+    static const PeTownOffer o[3]={{20028,153,1,386,141,40,46800},{20028,153,2,391,18,35,46800},{20028,153,3,916,10,60,46800}};
+    return i<3?&o[i]:NULL;
+}
 int pe_adventure_hunt_return_talk(const PeGame *g){(void)g;return 0;}
 float pe_outfit_defense(const PeOutfit *o){(void)o;return 0;}
 int pe_inventory_capacity(const PeInventory *p){return p->categorized?PE_INVENTORY_MAX_SLOTS:PE_INVENTORY_SLOTS;}
@@ -58,7 +65,7 @@ class InspectorOutput(unittest.TestCase):
 
     def test_all_adventure_categories_and_pose(self):
         data = self.inspect('adventure')
-        self.assertEqual(data['schema'], 2)
+        self.assertEqual(data['schema'], 3)
         self.assertTrue(data['inventory_categorized'])
         self.assertEqual(data['inventory_capacity'], 1680)
         self.assertEqual([s['slot'] for s in data['inventory']], [0, 420, 840, 1260])
@@ -68,6 +75,16 @@ class InspectorOutput(unittest.TestCase):
         self.assertEqual(data['velocity'], [1, 2, 3])
         self.assertTrue(data['grounded'])
         self.assertEqual(data['quickslots'][0], {'key': 1, 'item_id': 100, 'instance_id': 42})
+        self.assertEqual(data['hunger'], {'value': 123.5, 'starving': False})
+
+    def test_food_offer_stock_only_lists_supported_foods(self):
+        data = self.inspect('adventure')
+        self.assertEqual([(o['offer'], o['item_id']) for o in data['food_offers']], [(0, 386), (1, 391)])
+        self.assertEqual(data['food_offers'][0], {'offer': 0, 'entity_id': 20028, 'item_id': 386, 'price': 141, 'limit': 40,
+                                                  'initialized': False, 'remaining': 0, 'create_time': 0})
+        self.assertEqual({k: data['food_offers'][1][k] for k in ('initialized', 'remaining', 'create_time')},
+                         {'initialized': True, 'remaining': 17, 'create_time': 99.5})
+        self.assertTrue(self.inspect('legacy')['hunger']['starving'])
 
     def test_legacy_layout_remains_flat(self):
         data = self.inspect('legacy')

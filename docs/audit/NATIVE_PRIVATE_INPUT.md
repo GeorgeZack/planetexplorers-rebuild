@@ -40,6 +40,8 @@ python rebuild/tools/native_private_input.py button /absolute/new/acceptance-dir
 python rebuild/tools/native_private_input.py burst /absolute/new/acceptance-directory 2 1
 python rebuild/tools/native_private_input.py look /absolute/new/acceptance-directory 40 -10
 python rebuild/tools/native_private_input.py click /absolute/new/acceptance-directory 640 400 1 0.12
+python rebuild/tools/native_private_input.py drag /absolute/new/acceptance-directory 857 357 505 668 0.4 --dwell 0.25
+python rebuild/tools/native_private_input.py wheel /absolute/new/acceptance-directory 640 330 -5
 python rebuild/tools/native_private_input.py shot /absolute/new/acceptance-directory after-input-001.png
 python rebuild/tools/native_private_input.py stop /absolute/new/acceptance-directory
 ```
@@ -52,7 +54,7 @@ Key/button holds and bursts are limited to5s, key chords to four distinct suppor
 
 ## Verification and evidence limits
 
-[Twenty-six focused tests](../../rebuild/tests/test_native_private_input.py) pass with zero skips using synthetic process records, mocked input/children and one short non-graphical Linux subprocess probe. They cover argument bounds, forbidden/duplicate chords, screenshot paths, valid ownership, PID reuse, wrong executable/parent/display/token, smoke-argument rejection, expiry, interrupted key/button release, journal-failure release, button bursts without pointer warps, exact relative motion totals, fresh-directory enforcement, unchanged baseline/progress copies and owned child cleanup. High-display regressions cover range/inherited/occupied exclusions, filesystem and abstract listeners, startup failure/timeout, exact listener ownership and stripped server display environment. Lifecycle coverage also includes all three interruption handlers, HUP release with retained abort lease, successful lease removal, failed-lease overwrite rejection, missing/reused/expired/malformed owners, deterministic publication/removal/replacement races, watchdog operation while the command lock is held, finite lifetime and signal-both-before-wait cleanup. The subprocess probe kills its own short Python supervisor and verifies/reaps its detached sleep child after kernel parent-death SIGKILL; its subreaper setting is confined to the probe wrapper. Tests do not touch the running prototype, native game, or any live display.
+[Thirty focused tests](../../rebuild/tests/test_native_private_input.py) pass with zero skips using synthetic process records, mocked input/children and one short non-graphical Linux subprocess probe. They cover argument bounds, forbidden/duplicate chords, screenshot paths, valid ownership, PID reuse, wrong executable/parent/display/token, smoke-argument rejection, expiry, interrupted key/button release, journal-failure release, button bursts without pointer warps, exact relative motion totals, fresh-directory enforcement, unchanged baseline/progress copies and owned child cleanup. High-display regressions cover range/inherited/occupied exclusions, filesystem and abstract listeners, startup failure/timeout, exact listener ownership and stripped server display environment. Lifecycle coverage also includes all three interruption handlers, HUP release with retained abort lease, successful lease removal, failed-lease overwrite rejection, missing/reused/expired/malformed owners, deterministic publication/removal/replacement races, watchdog operation while the command lock is held, finite lifetime and signal-both-before-wait cleanup. The subprocess probe kills its own short Python supervisor and verifies/reaps its detached sleep child after kernel parent-death SIGKILL; its subreaper setting is confined to the probe wrapper. Tests do not touch the running prototype, native game, or any live display.
 
 ```sh
 python rebuild/tests/test_native_private_input.py
@@ -67,3 +69,38 @@ command holds up to four keys around a nonwarping button pulse, then releases
 all controls in `finally`. The total BEFORE+pulse+AFTER is at most5 seconds.
 Tests cover normal ordering and interruption in each phase. It drove the
 [normal sprint session](SANDBOX_SPRINT_KNIFE.md).
+
+## Visible-pointer drag and wheel
+
+Added October 14 for the [food loop acceptance](HUNGER.md#ordinary-native-acceptance-of-the-food-loop):
+quickslot assignment is press-drag-release and the shop list scrolls only by
+wheel.
+
+- `drag DIRECTORY X Y X2 Y2 [TRAVEL] [--dwell D]` is a left-button UI drag:
+  absolute move to the start, 0.12 s positioning, press, dwell, at most 50
+  interpolated absolute steps over TRAVEL seconds, dwell, release. Both points
+  must lie on the 1280×720 display; dwell is at least 0.05 s and
+  2 × dwell + travel at most 5 s. Like `click`, it warps the pointer, so it is
+  for visible-pointer UI only.
+- `wheel DIRECTORY X Y NOTCHES` moves to the point, waits 0.12 s, then sends
+  |NOTCHES| (1–20) X11 button 4 (positive, up) or 5 (negative, down)
+  press/release pairs, one notch per 0.15 seconds of wall-clock time, not tied
+  to render frames.
+
+Both use the same session validation, input lease (armed for their exact
+duration), journal records and `finally` release of every pressed button.
+Four tests cover them. For `drag`: event order, step totals, timing and
+argument bounds; interruption while positioning (no press), after the press,
+during travel and during the final dwell, and a journal failure during travel,
+each ending with exactly one release. For `wheel`: event order, button choice,
+pacing and argument bounds, and a journal failure while a notch is pressed,
+which still releases it. Wheel interruption at each phase is not separately
+tested.
+
+**Restart the supervisor before using a new or changed input action.** The
+supervisor keeps the action set it loaded at `start`; it rejects a lease for
+an action it does not know and aborts the session. October 14 session 01 did
+exactly that: the supervisor predated `wheel`, the first `wheel` command's
+lease failed with `input-watchdog-abort: invalid input lease action`, and the
+game was killed with the baseline unchanged. Finish and test helper changes,
+then start a new session.

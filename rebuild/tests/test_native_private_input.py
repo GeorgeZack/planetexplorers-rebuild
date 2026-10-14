@@ -126,6 +126,60 @@ class PrivateInputTests(unittest.TestCase):
         m.perform_input('look',args,target,lambda e:None,sleep=lambda s:None)
         self.assertTrue(all(e[0]=='relative' for e in target.events))
         self.assertEqual((sum(e[1] for e in target.events),sum(e[2] for e in target.events)),(-103,77))
+    def test_drag_positions_presses_steps_and_releases_once(self):
+        args=self.arguments('drag','unused','100','200','160','170','.3','--dwell','.2')
+        self.assertAlmostEqual(m.input_seconds('drag',args),.82)
+        target=FakeInput();delays=[];journal=[]
+        m.perform_input('drag',args,target,journal.append,sleep=delays.append)
+        self.assertEqual(target.events[:2],[('absolute',100,200),('button',1,True)])
+        self.assertEqual(target.events[-2:],[('absolute',160,170),('button',1,False)])
+        moves=[e for e in target.events[2:-1]]
+        self.assertTrue(all(e[0]=='absolute' for e in moves) and len(moves)==6)
+        self.assertEqual(sum(1 for e in target.events if e==('button',1,False)),1)
+        self.assertAlmostEqual(sum(delays),.12+.2+.3+.2)
+        self.assertEqual([e for e in journal if e['event']=='button'],[{'event':'button','button':1,'down':True},{'event':'button','button':1,'down':False}])
+        for values in [('drag','unused','0','0','1280','0'),('drag','unused','0','0','0','720'),('drag','unused','-1','0','5','5'),
+                       ('drag','unused','0','0','5','5','4.6','--dwell','.25'),('drag','unused','0','0','5','5','nan'),
+                       ('drag','unused','0','0','5','5','-.1'),('drag','unused','0','0','5','5','.4','--dwell','0')]:
+            with self.subTest(values=values),self.assertRaises(m.ToolError):
+                self.arguments(*values)
+    def test_drag_interruption_or_journal_failure_releases_button(self):
+        args=self.arguments('drag','unused','100','200','300','200')
+        for interrupted in (0,1,5,-1):
+            target=FakeInput();calls=[0]
+            def sleep(seconds):
+                index=calls[0];calls[0]+=1
+                if index==interrupted or (interrupted<0 and seconds==args.dwell and index>1):raise KeyboardInterrupt()
+            with self.subTest(interrupted=interrupted),self.assertRaises(KeyboardInterrupt):
+                m.perform_input('drag',args,target,lambda e:None,sleep=sleep)
+            presses=[e for e in target.events if e[0]=='button']
+            # Interrupted while positioning: never pressed; otherwise exactly one press and one release.
+            self.assertEqual(presses,[] if interrupted==0 else [('button',1,True),('button',1,False)])
+        target=FakeInput()
+        def record(event):
+            if event.get('event')=='absolute-motion' and event['x']==200:raise OSError('simulated journal failure')
+        with self.assertRaises(OSError):
+            m.perform_input('drag',args,target,record,sleep=lambda s:None)
+        self.assertEqual(target.events[-1],('button',1,False))
+    def test_wheel_positions_then_paces_notches(self):
+        args=self.arguments('wheel','unused','600','300','-3')
+        self.assertAlmostEqual(m.input_seconds('wheel',args),.12+3*.15)
+        target=FakeInput();delays=[]
+        m.perform_input('wheel',args,target,lambda e:None,sleep=delays.append)
+        self.assertEqual(target.events,[('absolute',600,300)]+[('button',5,True),('button',5,False)]*3)
+        self.assertEqual(delays,[.12,.15,.15,.15])
+        target=FakeInput();m.perform_input('wheel',self.arguments('wheel','unused','1','2','1'),target,lambda e:None,sleep=lambda s:None)
+        self.assertEqual(target.events[1:],[('button',4,True),('button',4,False)])
+        for values in [('wheel','unused','600','300','0'),('wheel','unused','600','300','21'),('wheel','unused','600','300','-21'),('wheel','unused','1280','0','1'),('wheel','unused','0','-1','1')]:
+            with self.subTest(values=values),self.assertRaises(m.ToolError):
+                self.arguments(*values)
+    def test_wheel_journal_failure_releases_pressed_notch(self):
+        target=FakeInput()
+        def record(event):
+            if event.get('event')=='button' and event['down']:raise OSError('simulated journal failure')
+        with self.assertRaises(OSError):
+            m.perform_input('wheel',self.arguments('wheel','unused','600','300','4'),target,record,sleep=lambda s:None)
+        self.assertEqual(target.events[1:],[('button',4,True),('button',4,False)])
     def test_burst_bounded_and_release_on_interrupt(self):
         target=FakeInput();args=self.arguments('burst','unused','.35')
         now=[0.0]

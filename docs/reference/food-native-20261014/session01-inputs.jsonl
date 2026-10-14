@@ -1,0 +1,245 @@
+{"action": "start", "baseline_sha256": "9a28960b3894bab1b89c1128b78772d98ce49ebac5b98b3fec1b9e8a9e49e0d2", "binary_sha256": "9ee96016281eb90c3cea61264bd905edebabc8a6dbb33422fae54d2044823d01", "deadline": 187936.067212563, "directory": "/home/admin/Projects/Mine/planetexplorers-rebuild/rebuild/build/food-private-20261014-01", "display": ":111", "game": 1384064, "game_start": "18493606", "lifetime": 3000.0, "monotonic": 184936.080627258, "schema": 1, "server": 1384063, "server_start": "18493600", "source": "/home/admin/Projects/Mine/planetexplorers-rebuild/rebuild/build/hunt-private-20261007-03/completed.pesave", "supervisor": 1384053, "supervisor_start": "18493586", "token": "5bd7645bb4aa482faca83a7c42382a0e", "wall_time": 1792002810.832889}
+{"action": "status", "arguments": {}, "monotonic": 184939.11417589, "phase": "begin", "wall_time": 1792002813.8664372}
+{"action": "status", "monotonic": 184939.114459084, "phase": "complete", "wall_time": 1792002813.8667216}
+{"action": "shot", "arguments": {"filename": "initial.png"}, "monotonic": 184983.046668311, "phase": "begin", "wall_time": 1792002857.7989297}
+{"action": "shot", "monotonic": 184983.614887319, "phase": "complete", "wall_time": 1792002858.3671496}
+{"action": "key", "arguments": {"keys": ["w"], "seconds": 1.5}, "monotonic": 184992.186320502, "phase": "begin", "wall_time": 1792002866.9385822}
+{"code": 25, "down": true, "event": "key", "monotonic": 184992.194215247, "wall_time": 1792002866.9464777}
+{"code": 25, "down": false, "event": "key", "monotonic": 184993.694394148, "wall_time": 1792002868.4466558}
+{"action": "key", "monotonic": 184993.694848521, "phase": "complete", "wall_time": 1792002868.447111}
+{"action": "shot", "arguments": {"filename": "walk-01.png"}, "monotonic": 184993.848572518, "phase": "begin", "wall_time": 1792002868.6008341}
+{"action": "shot", "monotonic": 184994.114535461, "phase": "complete", "wall_time": 1792002868.8667982}
+{"action": "key", "arguments": {"keys": ["s"], "seconds": 4.0}, "monotonic": 185000.42735269, "phase": "begin", "wall_time": 1792002875.1796143}
+{"code": 39, "down": true, "event": "key", "monotonic": 185000.430817974, "wall_time": 1792002875.1830802}
+{"code": 39, "down": false, "event": "key", "monotonic": 185004.430990048, "wall_time": 1792002879.1832516}
+{"action": "key", "monotonic": 185004.431400982, "phase": "complete", "wall_time": 1792002879.1836634}
+{"action": "shot", "arguments": {"filename": "walk-02.png"}, "monotonic": 185004.583369162, "phase": "begin", "wall_time": 1792002879.335631}
+{"action": "shot", "monotonic": 185004.900677204, "phase": "complete", "wall_time": 1792002879.6529398}
+{"action": "look", "arguments": {"dx": 600, "dy": 0}, "monotonic": 185010.28510605, "phase": "begin", "wall_time": 1792002885.0373669}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.288680174, "wall_time": 1792002885.0409427}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.308894031, "wall_time": 1792002885.0611558}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.329222076, "wall_time": 1792002885.081484}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.349500801, "wall_time": 1792002885.1017628}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.369790079, "wall_time": 1792002885.1220522}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.390088873, "wall_time": 1792002885.142351}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.410396328, "wall_time": 1792002885.1626582}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.43068549, "wall_time": 1792002885.1829474}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.450939432, "wall_time": 1792002885.2032006}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.471233171, "wall_time": 1792002885.2234952}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.491510157, "wall_time": 1792002885.2437723}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.51178219, "wall_time": 1792002885.264044}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.532073376, "wall_time": 1792002885.2843354}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.552356289, "wall_time": 1792002885.3046184}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.572692317, "wall_time": 1792002885.324954}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.592966078, "wall_time": 1792002885.345228}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.613241212, "wall_time": 1792002885.3655033}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.633539122, "wall_time": 1792002885.3858013}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.653845922, "wall_time": 1792002885.406108}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.674163763, "wall_time": 1792002885.426426}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.694415852, "wall_time": 1792002885.446678}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.714690636, "wall_time": 1792002885.466952}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.734978512, "wall_time": 1792002885.4872406}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.755232494, "wall_time": 1792002885.5074944}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.775537197, "wall_time": 1792002885.5277991}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.795816091, "wall_time": 1792002885.548078}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.816126929, "wall_time": 1792002885.568389}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.836406468, "wall_time": 1792002885.5886683}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.856690185, "wall_time": 1792002885.6089523}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.876955618, "wall_time": 1792002885.6292176}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.897245021, "wall_time": 1792002885.6495063}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.917573168, "wall_time": 1792002885.6698353}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.937857882, "wall_time": 1792002885.6901195}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.9581124, "wall_time": 1792002885.7103744}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.978376707, "wall_time": 1792002885.7306385}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185010.998624486, "wall_time": 1792002885.7508864}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.01890506, "wall_time": 1792002885.771167}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.039214699, "wall_time": 1792002885.7914765}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.059526749, "wall_time": 1792002885.8117886}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.079842812, "wall_time": 1792002885.832105}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.100075497, "wall_time": 1792002885.8523374}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.120344561, "wall_time": 1792002885.8726065}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.140618595, "wall_time": 1792002885.8928807}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.160920157, "wall_time": 1792002885.9131823}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.181229208, "wall_time": 1792002885.9334912}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.201495647, "wall_time": 1792002885.9537573}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.2217787, "wall_time": 1792002885.9740405}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.242037544, "wall_time": 1792002885.9942994}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.262326248, "wall_time": 1792002886.0145879}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.282600753, "wall_time": 1792002886.0348628}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.302875351, "wall_time": 1792002886.0551374}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.323177277, "wall_time": 1792002886.0754395}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.343453911, "wall_time": 1792002886.0957158}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.363765685, "wall_time": 1792002886.116015}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.384038876, "wall_time": 1792002886.1363008}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.404305599, "wall_time": 1792002886.1565676}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.424572164, "wall_time": 1792002886.1768343}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.444819802, "wall_time": 1792002886.1970818}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.465062469, "wall_time": 1792002886.2173238}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185011.485373556, "wall_time": 1792002886.2376359}
+{"action": "look", "monotonic": 185011.506553234, "phase": "complete", "wall_time": 1792002886.2588153}
+{"action": "shot", "arguments": {"filename": "look-01.png"}, "monotonic": 185011.661798741, "phase": "begin", "wall_time": 1792002886.4140606}
+{"action": "shot", "monotonic": 185011.977815503, "phase": "complete", "wall_time": 1792002886.7300775}
+{"action": "key", "arguments": {"keys": ["s"], "seconds": 2.6}, "monotonic": 185017.486471674, "phase": "begin", "wall_time": 1792002892.2387333}
+{"code": 39, "down": true, "event": "key", "monotonic": 185017.491634696, "wall_time": 1792002892.2438972}
+{"code": 39, "down": false, "event": "key", "monotonic": 185020.091833913, "wall_time": 1792002894.8440955}
+{"action": "key", "monotonic": 185020.092410315, "phase": "complete", "wall_time": 1792002894.8446727}
+{"action": "shot", "arguments": {"filename": "walk-03.png"}, "monotonic": 185020.245510229, "phase": "begin", "wall_time": 1792002894.9977722}
+{"action": "shot", "monotonic": 185020.56156045, "phase": "complete", "wall_time": 1792002895.313823}
+{"action": "key", "arguments": {"keys": ["F5"], "seconds": 0.15}, "monotonic": 185051.439215988, "phase": "begin", "wall_time": 1792002926.1914778}
+{"code": 71, "down": true, "event": "key", "monotonic": 185051.443216968, "wall_time": 1792002926.1954794}
+{"code": 71, "down": false, "event": "key", "monotonic": 185051.593436715, "wall_time": 1792002926.3456984}
+{"action": "key", "monotonic": 185051.593935643, "phase": "complete", "wall_time": 1792002926.346198}
+{"action": "look", "arguments": {"dx": 400, "dy": 0}, "monotonic": 185051.751385017, "phase": "begin", "wall_time": 1792002926.5036466}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.754871366, "wall_time": 1792002926.5071337}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.775081534, "wall_time": 1792002926.5273433}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.795359573, "wall_time": 1792002926.5476217}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.815646356, "wall_time": 1792002926.5679083}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.835901092, "wall_time": 1792002926.5881631}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.856225655, "wall_time": 1792002926.6084874}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.876570485, "wall_time": 1792002926.6288323}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.896884977, "wall_time": 1792002926.6491468}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.917152597, "wall_time": 1792002926.669414}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.937402872, "wall_time": 1792002926.6896648}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.957671467, "wall_time": 1792002926.7099333}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.977997954, "wall_time": 1792002926.73026}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185051.998319277, "wall_time": 1792002926.750581}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.018620171, "wall_time": 1792002926.7708821}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.038899426, "wall_time": 1792002926.7911613}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.059163881, "wall_time": 1792002926.8114254}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.079448241, "wall_time": 1792002926.83171}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.099724526, "wall_time": 1792002926.8519864}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.12002578, "wall_time": 1792002926.8722873}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.14028437, "wall_time": 1792002926.8925464}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.160564488, "wall_time": 1792002926.912826}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.180877472, "wall_time": 1792002926.9331396}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.201148904, "wall_time": 1792002926.9534106}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.221437131, "wall_time": 1792002926.9736989}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.241696718, "wall_time": 1792002926.993958}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.261948349, "wall_time": 1792002927.0142097}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.28222571, "wall_time": 1792002927.0344877}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.30249627, "wall_time": 1792002927.054758}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.32276599, "wall_time": 1792002927.075028}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.343063378, "wall_time": 1792002927.0953255}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.363349067, "wall_time": 1792002927.1156106}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.383616881, "wall_time": 1792002927.1358786}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.403873015, "wall_time": 1792002927.1561348}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.424190532, "wall_time": 1792002927.176452}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.444458795, "wall_time": 1792002927.1967204}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.464736042, "wall_time": 1792002927.2169983}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.485018919, "wall_time": 1792002927.2372804}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.505281538, "wall_time": 1792002927.2575433}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.525562691, "wall_time": 1792002927.2778242}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185052.545856849, "wall_time": 1792002927.2981186}
+{"action": "look", "monotonic": 185052.566356025, "phase": "complete", "wall_time": 1792002927.3186183}
+{"action": "shot", "arguments": {"filename": "look-02.png"}, "monotonic": 185052.720591597, "phase": "begin", "wall_time": 1792002927.4728534}
+{"action": "shot", "monotonic": 185053.036632206, "phase": "complete", "wall_time": 1792002927.7888947}
+{"action": "look", "arguments": {"dx": 400, "dy": 0}, "monotonic": 185057.648345939, "phase": "begin", "wall_time": 1792002932.4006066}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.65174195, "wall_time": 1792002932.4040043}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.67195099, "wall_time": 1792002932.424213}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.692230222, "wall_time": 1792002932.4444926}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.712498299, "wall_time": 1792002932.46476}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.732840703, "wall_time": 1792002932.4851027}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.753090264, "wall_time": 1792002932.5053523}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.773358913, "wall_time": 1792002932.5256205}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.793642852, "wall_time": 1792002932.545905}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.813882152, "wall_time": 1792002932.5661438}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.834209272, "wall_time": 1792002932.586471}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.854490107, "wall_time": 1792002932.606752}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.874729823, "wall_time": 1792002932.626991}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.894972967, "wall_time": 1792002932.6472347}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.915257291, "wall_time": 1792002932.6675186}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.935550283, "wall_time": 1792002932.6878119}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.955833978, "wall_time": 1792002932.708096}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.976083604, "wall_time": 1792002932.7283452}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185057.996345225, "wall_time": 1792002932.7486074}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.016591173, "wall_time": 1792002932.768853}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.03690094, "wall_time": 1792002932.7891624}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.057194739, "wall_time": 1792002932.8094566}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.077447922, "wall_time": 1792002932.8297095}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.09771223, "wall_time": 1792002932.8499737}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.117955944, "wall_time": 1792002932.870218}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.13827126, "wall_time": 1792002932.890533}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.158560772, "wall_time": 1792002932.9108226}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.178835485, "wall_time": 1792002932.9310973}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.199073367, "wall_time": 1792002932.9513352}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.219354124, "wall_time": 1792002932.971616}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.239731028, "wall_time": 1792002932.9919922}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.2600197, "wall_time": 1792002933.012282}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.280261445, "wall_time": 1792002933.0325232}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.300536752, "wall_time": 1792002933.0527987}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.320802631, "wall_time": 1792002933.0730646}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.341185965, "wall_time": 1792002933.0934477}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.361472581, "wall_time": 1792002933.1137345}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.38174538, "wall_time": 1792002933.1340072}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.402013837, "wall_time": 1792002933.1542757}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.422303847, "wall_time": 1792002933.1745656}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185058.442607058, "wall_time": 1792002933.1948688}
+{"action": "look", "monotonic": 185058.463176347, "phase": "complete", "wall_time": 1792002933.2154384}
+{"action": "shot", "arguments": {"filename": "look-03.png"}, "monotonic": 185058.617758047, "phase": "begin", "wall_time": 1792002933.3700197}
+{"action": "shot", "monotonic": 185058.933988786, "phase": "complete", "wall_time": 1792002933.6862512}
+{"action": "look", "arguments": {"dx": 110, "dy": 0}, "monotonic": 185064.957196505, "phase": "begin", "wall_time": 1792002939.709458}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185064.961026497, "wall_time": 1792002939.713289}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185064.981216451, "wall_time": 1792002939.7334783}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.001460749, "wall_time": 1792002939.7537227}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.021750822, "wall_time": 1792002939.7740123}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.042105417, "wall_time": 1792002939.7943673}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.062431763, "wall_time": 1792002939.8146937}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.082719415, "wall_time": 1792002939.8349814}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.103026648, "wall_time": 1792002939.8552883}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.123306789, "wall_time": 1792002939.8755682}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.143609291, "wall_time": 1792002939.895871}
+{"dx": 10, "dy": 0, "event": "relative-motion", "monotonic": 185065.163957059, "wall_time": 1792002939.916219}
+{"action": "look", "monotonic": 185065.1845214, "phase": "complete", "wall_time": 1792002939.9367836}
+{"action": "key", "arguments": {"keys": ["w"], "seconds": 1.3}, "monotonic": 185065.340284322, "phase": "begin", "wall_time": 1792002940.092546}
+{"code": 25, "down": true, "event": "key", "monotonic": 185065.344116894, "wall_time": 1792002940.0963788}
+{"code": 25, "down": false, "event": "key", "monotonic": 185066.64431502, "wall_time": 1792002941.3965771}
+{"action": "key", "monotonic": 185066.644677733, "phase": "complete", "wall_time": 1792002941.3969402}
+{"action": "shot", "arguments": {"filename": "approach-01.png"}, "monotonic": 185066.796605317, "phase": "begin", "wall_time": 1792002941.5488667}
+{"action": "shot", "monotonic": 185067.112782222, "phase": "complete", "wall_time": 1792002941.8650446}
+{"action": "look", "arguments": {"dx": 140, "dy": 15}, "monotonic": 185072.407453575, "phase": "begin", "wall_time": 1792002947.1597154}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.411349797, "wall_time": 1792002947.1636121}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.431528255, "wall_time": 1792002947.1837904}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.451802093, "wall_time": 1792002947.204064}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.472075639, "wall_time": 1792002947.2243378}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.492341125, "wall_time": 1792002947.2446032}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.512618862, "wall_time": 1792002947.2648807}
+{"dx": 10, "dy": 2, "event": "relative-motion", "monotonic": 185072.532924929, "wall_time": 1792002947.2851868}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.553187582, "wall_time": 1792002947.3054492}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.573478804, "wall_time": 1792002947.3257408}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.593754054, "wall_time": 1792002947.346016}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.614041833, "wall_time": 1792002947.3662963}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.634328518, "wall_time": 1792002947.3865907}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.654602924, "wall_time": 1792002947.406865}
+{"dx": 10, "dy": 1, "event": "relative-motion", "monotonic": 185072.674885126, "wall_time": 1792002947.427147}
+{"action": "look", "monotonic": 185072.695428061, "phase": "complete", "wall_time": 1792002947.4476902}
+{"action": "shot", "arguments": {"filename": "aim-01.png"}, "monotonic": 185072.848519053, "phase": "begin", "wall_time": 1792002947.6007805}
+{"action": "shot", "monotonic": 185073.164677932, "phase": "complete", "wall_time": 1792002947.9169405}
+{"action": "key", "arguments": {"keys": ["F5"], "seconds": 0.15}, "monotonic": 185080.736942269, "phase": "begin", "wall_time": 1792002955.489204}
+{"code": 71, "down": true, "event": "key", "monotonic": 185080.740989016, "wall_time": 1792002955.4932513}
+{"code": 71, "down": false, "event": "key", "monotonic": 185080.891237748, "wall_time": 1792002955.6434994}
+{"action": "key", "monotonic": 185080.891685097, "phase": "complete", "wall_time": 1792002955.6439476}
+{"action": "key", "arguments": {"keys": ["F5"], "seconds": 0.15}, "monotonic": 185081.350822222, "phase": "begin", "wall_time": 1792002956.103084}
+{"code": 71, "down": true, "event": "key", "monotonic": 185081.354369539, "wall_time": 1792002956.106632}
+{"code": 71, "down": false, "event": "key", "monotonic": 185081.50457848, "wall_time": 1792002956.25684}
+{"action": "key", "monotonic": 185081.504986617, "phase": "complete", "wall_time": 1792002956.257249}
+{"action": "shot", "arguments": {"filename": "free-01.png"}, "monotonic": 185082.159957794, "phase": "begin", "wall_time": 1792002956.91222}
+{"action": "shot", "monotonic": 185082.477020745, "phase": "complete", "wall_time": 1792002957.229283}
+{"action": "click", "arguments": {"button": 3, "seconds": 0.12, "x": 930, "y": 420}, "monotonic": 185086.876771781, "phase": "begin", "wall_time": 1792002961.6290336}
+{"event": "absolute-motion", "monotonic": 185086.88037999, "wall_time": 1792002961.6326423, "x": 930, "y": 420}
+{"button": 3, "down": true, "event": "button", "monotonic": 185087.000593039, "wall_time": 1792002961.7528548}
+{"button": 3, "down": false, "event": "button", "monotonic": 185087.120834249, "wall_time": 1792002961.873096}
+{"action": "click", "monotonic": 185087.121201983, "phase": "complete", "wall_time": 1792002961.8734643}
+{"action": "shot", "arguments": {"filename": "talk-01.png"}, "monotonic": 185087.877969669, "phase": "begin", "wall_time": 1792002962.6302307}
+{"action": "shot", "monotonic": 185088.244295611, "phase": "complete", "wall_time": 1792002962.9965582}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 170, "y": 234}, "monotonic": 185092.34531082, "phase": "begin", "wall_time": 1792002967.0975726}
+{"event": "absolute-motion", "monotonic": 185092.348653171, "wall_time": 1792002967.1009154, "x": 170, "y": 234}
+{"button": 1, "down": true, "event": "button", "monotonic": 185092.4688223, "wall_time": 1792002967.2210834}
+{"button": 1, "down": false, "event": "button", "monotonic": 185092.589086116, "wall_time": 1792002967.3413482}
+{"action": "click", "monotonic": 185092.589505924, "phase": "complete", "wall_time": 1792002967.3417685}
+{"action": "shot", "arguments": {"filename": "shop-01.png"}, "monotonic": 185093.346043541, "phase": "begin", "wall_time": 1792002968.0983055}
+{"action": "shot", "monotonic": 185093.712629536, "phase": "complete", "wall_time": 1792002968.464892}
+{"action": "wheel", "arguments": {"notches": -5, "x": 640, "y": 330}, "monotonic": 185133.061808942, "phase": "begin", "wall_time": 1792003007.8140705}
+{"event": "absolute-motion", "monotonic": 185133.06534563, "wall_time": 1792003007.8176079, "x": 640, "y": 330}
+{"action": "input-watchdog-abort", "monotonic": 185133.065894837, "reason": "invalid input lease action", "wall_time": 1792003007.818157}
+{"action": "supervisor-exit", "baseline_unchanged": true, "game_returncode": -9, "monotonic": 185133.181127104, "wall_time": 1792003007.933389}
+{"button": 5, "down": true, "event": "button", "monotonic": 185133.18561156, "wall_time": 1792003007.937873}

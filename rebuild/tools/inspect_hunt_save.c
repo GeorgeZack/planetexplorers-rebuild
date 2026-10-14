@@ -5,6 +5,7 @@
 #include "pe_game.h"
 #include "pe_settlement.h"
 #include "pe_adventure_hunt.h"
+#include "pe_town_interaction.h"
 #include <stdio.h>
 #include <stdlib.h>
 int main(int argc,char **argv){
@@ -18,7 +19,7 @@ int main(int argc,char **argv){
     if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
         fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;
     }
-    printf("{\"schema\":2,\"interpretation\":\"current-loader\",\"mode\":%u,"
+    printf("{\"schema\":3,\"interpretation\":\"current-loader\",\"mode\":%u,"
         "\"hunt_state\":%u,\"hunt_kills\":%u,\"pending_return_talk\":%d,"
         "\"source_position\":[%.17g,%.17g,%.17g],\"hunt_destination\":[%.9g,%.9g,%.9g],"
         "\"hp\":%.9g,\"max_hp\":%.9g,\"stamina\":%.9g,\"comfort\":%.9g,"
@@ -54,6 +55,19 @@ int main(int argc,char **argv){
         printf("%s{\"instance_id\":%u,\"item_id\":%d,\"count\":%d,\"source_position\":[%.9g,%.9g,%.9g],\"created_seconds\":%.17g}",
             i?",":"",d->instance_id,d->item_id,d->count,(double)d->position.x+g->world.origin_x,
             (double)d->position.y+g->world.origin_y,(double)d->position.z+g->world.origin_z,d->created_seconds);
+    }
+    /* Schema 3: saved hunger and the stock of every supported food offer. */
+    printf("],\"hunger\":{\"value\":%.9g,\"starving\":%s},\"food_offers\":[",
+        (double)g->hunger.hunger,g->hunger.starving?"true":"false");
+    comma=false;
+    for(size_t i=0;i<PE_TOWN_STOCK_CAPACITY;i++){
+        const PeTownOffer *o=pe_town_shop_offer_at(i);
+        if(!o||!pe_hunger_is_food(o->item_id))continue;
+        const PeTownStock *t=&g->town_stock[i];
+        printf("%s{\"offer\":%zu,\"entity_id\":%u,\"item_id\":%d,\"price\":%u,\"limit\":%u,"
+            "\"initialized\":%s,\"remaining\":%u,\"create_time\":%.17g}",
+            comma?",":"",i,o->entity_id,o->item_id,o->price,o->limit,t->initialized?"true":"false",t->remaining,t->create_time);
+        comma=true;
     }
     puts("]}");pe_game_destroy(g);free(g);return 0;
 }

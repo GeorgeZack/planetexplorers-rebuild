@@ -1,5 +1,37 @@
 # Original-game playtest and C comparison
 
+## October14 ordinary native food loop
+
+Observed in the native production runtime with ordinary private-display input
+([details](audit/HUNGER.md#ordinary-native-acceptance-of-the-food-loop),
+[evidence](reference/food-native-20261014/checkpoints.json)). No original-game
+comparison.
+
+- Baseline: earned completed hunt save, SHA256 `9a28960b…e0d2`, unchanged
+  after both sessions. Binary `9ee96016…3d01` (runtime `6939ae0`).
+- Session 01 (`rebuild/build/food-private-20261014-01`) was aborted by the
+  watchdog before any purchase (`invalid input lease action`: the supervisor
+  predated the new `wheel` action). Nothing is claimed from it.
+- Session 02 (`rebuild/build/food-private-20261014-02`): bought three
+  Compressed Biscuit I (391) and one Biscuit II (392) from Xing Zhang; money
+  325→237, stock 35→32 and 20→19. Ate 391 from the bag; a 392 retry 0.40 s
+  later used nothing. Dragged 391 to quickslot 4. A key-4 press with the
+  inventory open was ignored by the panel gate (not a cooldown test); with it
+  closed, key 4 ate one 391, and a retry 0.75 s later used nothing. Wall-clock
+  gaps are not engine cooldown timings.
+- Saves (Pause → Save): `purchase` hunger 292.713318; `eaten` hunger 325.773621,
+  391 ×1, 392 ×1, quickslot 4 = 391. After 15 s of play, Pause → Load restored
+  the saved clock; saving while paused gave a file byte-identical to `eaten`
+  (SHA256 `40e47365…e114`). The food cooldown is transient and resets on load.
+- The live hunger bar's fill moved 691 → 692 → 690 → 688 px, matching
+  730 − 64 × hunger/500 (screenshot measurement).
+- The quickslot eat showed no message, because the message line skips text
+  identical to the previous message. Not fixed here.
+- Teardown: explicit `stop` sent SIGTERM to the owned game (return −15,
+  supervisor exit 241); not a clean application quit. No lease or process
+  remained.
+- Checks: listed in [HANDOFF](HANDOFF.md).
+
 ## October14 Adventure hunger HUD bar and starvation notice
 
 Implemented in C and rendered in a staged fixture only: [the shared HUD

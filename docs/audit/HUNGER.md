@@ -2,7 +2,10 @@
 
 October 14, 2026. **Source-derived and implemented in C, connected in the
 Adventure sandbox** ([below](#connected-in-the-sandbox)). No original-game
-session or desktop input was used, and nobody has played with it yet.
+session was used. The food loop (purchase, bag and quickslot eating, cooldown
+retries, Pause save/load) is observed with ordinary input in the native
+runtime ([acceptance](#ordinary-native-acceptance-of-the-food-loop));
+starvation in play and any original-game comparison are not.
 
 ## Why now
 
@@ -149,8 +152,9 @@ attribute pass, starvation after a full second at hunger 40 with its message,
 pause freezing the condition clock); every older save suite updated for the
 8-byte suffix.
 
-**Not checked:** anyone playing it. Hunger takes about 72 minutes of unpaused
-play to fall from 300 to 50.
+**Not checked:** starvation in play (hunger takes about 72 minutes of unpaused
+play to fall from 300 to 50) or the original game. The food loop is observed
+in [ordinary native play](#ordinary-native-acceptance-of-the-food-loop).
 
 ## HUD bar and starvation notice
 
@@ -245,6 +249,77 @@ Verification:
   database checks and a missing one fails. `make cli-test` covers only the
   game executable, not exporters.
 
-**Not checked:** an original-game screenshot of the hunger bar, the bar in
-ordinary play, or readability at small sizes (at 320×240 the track is 16×1.7
-pixels).
+**Not checked:** an original-game screenshot of the hunger bar or readability
+at small sizes (at 320×240 the track is 16×1.7 pixels). The bar in ordinary
+play is now observed ([below](#ordinary-native-acceptance-of-the-food-loop)).
+
+## Ordinary native acceptance of the food loop
+
+**October 14, observed in the native production runtime with ordinary input;
+no original-game comparison.** Evidence: [manifest, journals and lossless
+crops](../reference/food-native-20261014/checkpoints.json). Full captures and
+saves stay under `rebuild/build/food-private-20261014-0{1,2}`.
+
+*Setup.* Runtime `6939ae0`; the runtime C sources are unchanged since (the
+uncommitted work is the save inspector, which is C, and the Python input
+helper, neither part of the game binary), binary SHA256 `9ee96016…3d01`. Baseline: the earned October 7
+completed hunt save (`hunt-private-20261007-03/completed.pesave`, SHA256
+`9a28960b…e0d2`, the hash [recorded there](HUNT_ORDINARY_ACCEPTANCE.md)). It
+predates PECSv23, so its hunger is the loader default 300. The
+[private-input supervisor](NATIVE_PRIVATE_INPUT.md) owned the display; no
+fixture, cheat, teleport, save edit or grant was used.
+
+*Session 01* (`:111`) was aborted by the supervisor's watchdog before any
+purchase or save: `input-watchdog-abort`, reason `invalid input lease action`.
+The supervisor had loaded the helper before the `wheel` action was added, so
+the new action's lease failed its check; the game was killed (−9), baseline
+unchanged. Nothing from it is claimed.
+
+*Session 02* (`:112`), all observed:
+
+| Step | Input | Result |
+|---|---|---|
+| Talk, shop | right-click Xing Zhang (20028), Shop, wheel 5 notches | buy list rows 6–13 of 57 |
+| Buy | select Compressed Biscuit I (391), + twice, Buy; select Biscuit II (392), Buy | "Bought 3 … for 54", "Bought 1 … for 34"; money 325→271→237, stock 35→32 and 20→19 |
+| Save | Pause → Save | `purchase.pesave`: hunger 292.713318, 391 ×3, 392 ×1 |
+| Bag eat | right-click 391 in the bag | "Compressed Biscuit I eaten.", 391 3→2 |
+| Bag retry | right-click 392 0.40 s later (wall clock) | nothing used: 392 stays 1 |
+| Quickslot | drag the 391 stack to quickslot 4 | quickslot 4 = item 391 |
+| Ignored | key 4 with the inventory open | no effect: the rebuild drops quickbar digits while any panel is open; not a cooldown test |
+| Quickslot eat | inventory closed, key 4 | cooldown overlay appears on quickslot 4 |
+| Quickslot retry | key 4 again 0.75 s later (wall clock) | nothing used |
+| Save | Pause → Save | `eaten.pesave`: hunger 325.773621, 391 ×1, 392 ×1, quickslot 4 = 391, money 237, stock 32/19 |
+| Reload | Resume ~15 s, Pause → Load, Save while paused | in-game clock back to the saved 16:09; `reloaded.pesave` byte-identical to `eaten.pesave` (SHA256 `40e47365…e114`), identical inspection |
+
+The saved values are consistent with the source arithmetic: 300 − 21 × 0.347
+= 292.713 for the purchase save, and 292.713318 + 2 × 20 − 20 × 0.347 =
+325.773318 for the eaten save (0.0003 from f32 summation). The 21 and 20 pulse
+counts are inferred from that arithmetic; the drain events themselves were not
+observed. Had either retry eaten, 392 would be 0 or 391 would be 0 and
+hunger 20–40 higher. The wall-clock gaps only show that each retry fell inside
+4 s of its eat; they are not a measurement of the engine's cooldown clock.
+The cooldown is transient and resets on load, so the saves do not carry it.
+
+The live bar tracked hunger. The fill (colour `#41b9b9`, row 625) starts at
+x 691, 692, 690, 688, 688 and 688 across the start, purchase, bag eat,
+quickslot eat, retry and pre-reload captures, against 730 − 64 × hunger/500 =
+691.6, 692.5, 690.0 and 688.3. This is a pixel measurement of screenshots, not
+saved state.
+
+*Observed, not changed here.*
+- The quickslot eat showed no message: the HUD message line re-shows text only
+  when it differs from the last message (`pe_sandbox_ui.c`), and the text was
+  identical to the bag eat's. This applies to any repeated identical message.
+- In the source, quickbar keys are gated by `PeInput.InputEnable` (focus,
+  creation editor, plot animation) and `Key_wordMgr.enableQuickKey` (cleared
+  only by `UIBuildBlock`), not by the inventory window. The rebuild's panel
+  gate therefore differs from the original. It is outside this goal and
+  unchanged.
+
+*Tooling.* The read-only save inspector (schema 3) adds `hunger` (value,
+starving) and `food_offers` (offer index, vendor, item, price, limit and saved
+stock for every supported food). `native_private_input.py` gains bounded
+`drag` and `wheel` actions ([contract](NATIVE_PRIVATE_INPUT.md)).
+
+**Not checked:** starvation in play, other vendors or foods, food on the
+tutorial or Legacy hosts, or the original game.

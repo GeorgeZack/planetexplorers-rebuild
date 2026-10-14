@@ -1,0 +1,446 @@
+{
+  "schema": 1,
+  "runtime_commit": "6939ae0",
+  "runtime_note": "C sources unchanged from 6939ae0; uncommitted changes were tooling only",
+  "binary_sha256": "9ee96016281eb90c3cea61264bd905edebabc8a6dbb33422fae54d2044823d01",
+  "baseline": {
+    "path": "rebuild/build/hunt-private-20261007-03/completed.pesave",
+    "sha256": "9a28960b3894bab1b89c1128b78772d98ce49ebac5b98b3fec1b9e8a9e49e0d2",
+    "provenance": "earned October7 session03 final Pause save; hash recorded in docs/audit/HUNT_ORDINARY_ACCEPTANCE.md",
+    "inspection": {
+      "hunger": {
+        "value": 300,
+        "starving": false
+      },
+      "money": 325,
+      "game_seconds": 8854157.001199387,
+      "foods": [],
+      "quickslots": [
+        {
+          "key": 1,
+          "item_id": 33,
+          "instance_id": 1
+        },
+        {
+          "key": 2,
+          "item_id": 925,
+          "instance_id": 0
+        },
+        {
+          "key": 3,
+          "item_id": 916,
+          "instance_id": 0
+        }
+      ],
+      "food_offers_391_392": [
+        {
+          "offer": 27,
+          "entity_id": 20028,
+          "item_id": 391,
+          "price": 18,
+          "limit": 35,
+          "initialized": true,
+          "remaining": 35,
+          "create_time": 8837165.000313185
+        },
+        {
+          "offer": 29,
+          "entity_id": 20028,
+          "item_id": 392,
+          "price": 34,
+          "limit": 20,
+          "initialized": true,
+          "remaining": 20,
+          "create_time": 8837165.000313185
+        }
+      ]
+    },
+    "note": "pre-v23 save: hunger is the loader default 300, not a saved value"
+  },
+  "session01": {
+    "path": "rebuild/build/food-private-20261014-01",
+    "display": ":111",
+    "result": "aborted before any purchase or save; no food acceptance claimed",
+    "reason": "input-watchdog-abort: invalid input lease action (supervisor loaded before the wheel action was added)",
+    "game_returncode": -9,
+    "baseline_unchanged": true
+  },
+  "session02": {
+    "path": "rebuild/build/food-private-20261014-02",
+    "display": ":112",
+    "stop": "explicit stop: helper SIGTERM of the owned game (game_returncode -15, supervisor exit 241 = 256-15); not a clean application quit; baseline_unchanged true; no lease left",
+    "saves": {
+      "purchase": {
+        "sha256": "9296304f26a9a5c107e07a41af02ce6b9dfd4546d6a65d79d6581a7c002b000b",
+        "inspection": {
+          "hunger": {
+            "value": 292.713318,
+            "starving": false
+          },
+          "money": 237,
+          "game_seconds": 8855388.80126363,
+          "foods": [
+            {
+              "slot": 13,
+              "category": 0,
+              "item_id": 391,
+              "count": 3,
+              "instance_id": 0,
+              "durability": 0
+            },
+            {
+              "slot": 14,
+              "category": 0,
+              "item_id": 392,
+              "count": 1,
+              "instance_id": 0,
+              "durability": 0
+            }
+          ],
+          "quickslots": [
+            {
+              "key": 1,
+              "item_id": 33,
+              "instance_id": 1
+            },
+            {
+              "key": 2,
+              "item_id": 925,
+              "instance_id": 0
+            },
+            {
+              "key": 3,
+              "item_id": 916,
+              "instance_id": 0
+            }
+          ],
+          "food_offers_391_392": [
+            {
+              "offer": 27,
+              "entity_id": 20028,
+              "item_id": 391,
+              "price": 18,
+              "limit": 35,
+              "initialized": true,
+              "remaining": 32,
+              "create_time": 8854955.001241006
+            },
+            {
+              "offer": 29,
+              "entity_id": 20028,
+              "item_id": 392,
+              "price": 34,
+              "limit": 20,
+              "initialized": true,
+              "remaining": 19,
+              "create_time": 8854955.001241006
+            }
+          ]
+        }
+      },
+      "eaten": {
+        "sha256": "40e47365323383b09ad6fcb169d67a80648e01f0a3ee33894a5cc248c0cde114",
+        "inspection": {
+          "hunger": {
+            "value": 325.773621,
+            "starving": false
+          },
+          "money": 237,
+          "game_seconds": 8856589.601326257,
+          "foods": [
+            {
+              "slot": 13,
+              "category": 0,
+              "item_id": 391,
+              "count": 1,
+              "instance_id": 0,
+              "durability": 0
+            },
+            {
+              "slot": 14,
+              "category": 0,
+              "item_id": 392,
+              "count": 1,
+              "instance_id": 0,
+              "durability": 0
+            }
+          ],
+          "quickslots": [
+            {
+              "key": 1,
+              "item_id": 33,
+              "instance_id": 1
+            },
+            {
+              "key": 2,
+              "item_id": 925,
+              "instance_id": 0
+            },
+            {
+              "key": 3,
+              "item_id": 916,
+              "instance_id": 0
+            },
+            {
+              "key": 4,
+              "item_id": 391,
+              "instance_id": 0
+            }
+          ],
+          "food_offers_391_392": [
+            {
+              "offer": 27,
+              "entity_id": 20028,
+              "item_id": 391,
+              "price": 18,
+              "limit": 35,
+              "initialized": true,
+              "remaining": 32,
+              "create_time": 8854955.001241006
+            },
+            {
+              "offer": 29,
+              "entity_id": 20028,
+              "item_id": 392,
+              "price": 34,
+              "limit": 20,
+              "initialized": true,
+              "remaining": 19,
+              "create_time": 8854955.001241006
+            }
+          ]
+        }
+      },
+      "reloaded": {
+        "sha256": "40e47365323383b09ad6fcb169d67a80648e01f0a3ee33894a5cc248c0cde114",
+        "inspection": {
+          "hunger": {
+            "value": 325.773621,
+            "starving": false
+          },
+          "money": 237,
+          "game_seconds": 8856589.601326257,
+          "foods": [
+            {
+              "slot": 13,
+              "category": 0,
+              "item_id": 391,
+              "count": 1,
+              "instance_id": 0,
+              "durability": 0
+            },
+            {
+              "slot": 14,
+              "category": 0,
+              "item_id": 392,
+              "count": 1,
+              "instance_id": 0,
+              "durability": 0
+            }
+          ],
+          "quickslots": [
+            {
+              "key": 1,
+              "item_id": 33,
+              "instance_id": 1
+            },
+            {
+              "key": 2,
+              "item_id": 925,
+              "instance_id": 0
+            },
+            {
+              "key": 3,
+              "item_id": 916,
+              "instance_id": 0
+            },
+            {
+              "key": 4,
+              "item_id": 391,
+              "instance_id": 0
+            }
+          ],
+          "food_offers_391_392": [
+            {
+              "offer": 27,
+              "entity_id": 20028,
+              "item_id": 391,
+              "price": 18,
+              "limit": 35,
+              "initialized": true,
+              "remaining": 32,
+              "create_time": 8854955.001241006
+            },
+            {
+              "offer": 29,
+              "entity_id": 20028,
+              "item_id": 392,
+              "price": 34,
+              "limit": 20,
+              "initialized": true,
+              "remaining": 19,
+              "create_time": 8854955.001241006
+            }
+          ]
+        }
+      }
+    }
+  },
+  "hunger_bar_measurement": {
+    "method": "first/last column of fill colour #41b9b9 on row y=625 at 1280x720; tooling measurement of screenshots, not saved state",
+    "expected_first_x": "730 - 64*hunger/500",
+    "rows": [
+      {
+        "screenshot": "approach-01.png",
+        "source_sha256": "d0649ce4b0bcf3fee5a740b45c7e31a4beb0e7f54d79b01989e1e72fd67b539f",
+        "first_fill_x": 691,
+        "last_fill_x": 726
+      },
+      {
+        "screenshot": "buy-392.png",
+        "source_sha256": "2b19acc299909c1db3b66a9bda638e6b1d2327b60740bc01000f1b9c72acfdaa",
+        "first_fill_x": 692,
+        "last_fill_x": 726
+      },
+      {
+        "screenshot": "cooldown-bag-retry.png",
+        "source_sha256": "449825345bc44344ae53a3b0ee9e001ba03a9096e4f51537a564c11ed6a7ea46",
+        "first_fill_x": 690,
+        "last_fill_x": 726
+      },
+      {
+        "screenshot": "quickslot-eat.png",
+        "source_sha256": "0794078e7f314a1d7adf4f9627c30e4a1da72f6843506495057b43b1cc070287",
+        "first_fill_x": 688,
+        "last_fill_x": 726
+      },
+      {
+        "screenshot": "quickslot-retry.png",
+        "source_sha256": "157570c2dd81fe05eede317d1191e03490d4470ed3ff99b23d5e6c08fd23f103",
+        "first_fill_x": 688,
+        "last_fill_x": 726
+      },
+      {
+        "screenshot": "before-reload.png",
+        "source_sha256": "68339146290dd7ecf48af9a26affc23ee206e21a3cbf32824440db90f25aa37c",
+        "first_fill_x": 688,
+        "last_fill_x": 726
+      }
+    ]
+  },
+  "lossless_crops": {
+    "note": "unscaled RGB crops of original 1280x720 captures; each verified pixel-equal to the source region; full originals remain under rebuild/build",
+    "files": {
+      "buy-391-shop.png": {
+        "source": "buy-391.png",
+        "source_sha256": "222de4f9cec4ed29ceb2afe7d3d74a835be98c6fba3a5f2152bbe8d57f57be0e",
+        "box": [
+          0,
+          0,
+          950,
+          615
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "cooldown-bag-retry-inventory.png": {
+        "source": "cooldown-bag-retry.png",
+        "source_sha256": "449825345bc44344ae53a3b0ee9e001ba03a9096e4f51537a564c11ed6a7ea46",
+        "box": [
+          0,
+          0,
+          1130,
+          720
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "quickslot-retry-hud.png": {
+        "source": "quickslot-retry.png",
+        "source_sha256": "157570c2dd81fe05eede317d1191e03490d4470ed3ff99b23d5e6c08fd23f103",
+        "box": [
+          220,
+          600,
+          1060,
+          720
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "before-reload-hud.png": {
+        "source": "before-reload.png",
+        "source_sha256": "68339146290dd7ecf48af9a26affc23ee206e21a3cbf32824440db90f25aa37c",
+        "box": [
+          220,
+          600,
+          1060,
+          720
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "hunger-bar-1-approach-01.png": {
+        "source": "approach-01.png",
+        "source_sha256": "d0649ce4b0bcf3fee5a740b45c7e31a4beb0e7f54d79b01989e1e72fd67b539f",
+        "box": [
+          650,
+          615,
+          770,
+          635
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "hunger-bar-2-buy-392.png": {
+        "source": "buy-392.png",
+        "source_sha256": "2b19acc299909c1db3b66a9bda638e6b1d2327b60740bc01000f1b9c72acfdaa",
+        "box": [
+          650,
+          615,
+          770,
+          635
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "hunger-bar-3-cooldown-bag-retry.png": {
+        "source": "cooldown-bag-retry.png",
+        "source_sha256": "449825345bc44344ae53a3b0ee9e001ba03a9096e4f51537a564c11ed6a7ea46",
+        "box": [
+          650,
+          615,
+          770,
+          635
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "hunger-bar-4-quickslot-eat.png": {
+        "source": "quickslot-eat.png",
+        "source_sha256": "0794078e7f314a1d7adf4f9627c30e4a1da72f6843506495057b43b1cc070287",
+        "box": [
+          650,
+          615,
+          770,
+          635
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "hunger-bar-5-quickslot-retry.png": {
+        "source": "quickslot-retry.png",
+        "source_sha256": "157570c2dd81fe05eede317d1191e03490d4470ed3ff99b23d5e6c08fd23f103",
+        "box": [
+          650,
+          615,
+          770,
+          635
+        ],
+        "pixels_equal_to_source_crop": true
+      },
+      "hunger-bar-6-before-reload.png": {
+        "source": "before-reload.png",
+        "source_sha256": "68339146290dd7ecf48af9a26affc23ee206e21a3cbf32824440db90f25aa37c",
+        "box": [
+          650,
+          615,
+          770,
+          635
+        ],
+        "pixels_equal_to_source_crop": true
+      }
+    }
+  }
+}

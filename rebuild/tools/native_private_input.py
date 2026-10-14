@@ -27,7 +27,8 @@ BINARY = ROOT / 'rebuild/build/planet_explorers'
 XVFB = ROOT / 'rebuild/build/private-xvfb/usr/bin/Xvfb'
 WIDTH, HEIGHT = 1280, 720
 MAX_HOLD, MAX_LIFETIME = 5.0, 3600.0
-INPUT_ACTIONS = frozenset(('key','key-button','click','button','burst','look'))
+INPUT_ACTIONS = frozenset(('key','key-button','click','button','burst','look','drag','wheel'))
+WHEEL_NOTCH_SECONDS, MAX_WHEEL_NOTCHES = .15, 20
 SETUP_LEASE_SECONDS, RELEASE_GRACE_SECONDS = 5.0, 1.0
 MAX_LEASE_SECONDS = MAX_HOLD + .12 + RELEASE_GRACE_SECONDS
 WATCHDOG_INTERVAL = .05
@@ -365,6 +366,40 @@ def perform_input(action, args, target, record, sleep=time.sleep, clock=time.mon
                 button(args.button,False)
                 target.flush()
                 sleep(min(.1,max(0,until-clock())))
+        elif action == 'drag':
+            # Visible-pointer UI drag: position, press, dwell, step to the end, dwell, release.
+            target.motion(args.x,args.y)
+            record({'event':'absolute-motion','x':args.x,'y':args.y})
+            target.flush()
+            sleep(.12)
+            button(1,True)
+            target.flush()
+            sleep(args.dwell)
+            steps = drag_steps(args)
+            for step in range(steps):
+                x = args.x + round((step+1)*(args.x2-args.x)/steps)
+                y = args.y + round((step+1)*(args.y2-args.y)/steps)
+                target.motion(x,y)
+                record({'event':'absolute-motion','x':x,'y':y})
+                target.flush()
+                sleep(args.travel/steps)
+            sleep(args.dwell)
+            button(1,False)
+            target.flush()
+        elif action == 'wheel':
+            # X11 wheel notches are buttons 4 (up) and 5 (down), one notch per 0.15 seconds
+            # (wall-clock pacing, not tied to render frames).
+            target.motion(args.x,args.y)
+            record({'event':'absolute-motion','x':args.x,'y':args.y})
+            target.flush()
+            sleep(.12)
+            number = 4 if args.notches > 0 else 5
+            for _ in range(abs(args.notches)):
+                button(number,True)
+                target.flush()
+                button(number,False)
+                target.flush()
+                sleep(WHEEL_NOTCH_SECONDS)
         elif action == 'look':
             steps = max(1,max(abs(args.dx),abs(args.dy))//10)
             for step in range(steps):
@@ -415,10 +450,15 @@ def install_signal_handlers():
     for signum in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP):
         signal.signal(signum,interrupted)
 
+def drag_steps(args):
+    return max(1,min(50,max(abs(args.x2-args.x),abs(args.y2-args.y))//10))
+
 def input_seconds(action,args):
     if action == 'look':
         return max(1,max(abs(args.dx),abs(args.dy))//10)*.02
-    return args.seconds + (.12 if action == 'click' else 0)
+    if action == 'wheel':
+        return .12 + abs(args.notches)*WHEEL_NOTCH_SECONDS
+    return args.seconds + (.12 if action in ('click','drag') else 0)
 
 class InputLease:
     """Persistent ownership survives command SIGKILL/Xlib fatal exit."""
@@ -588,7 +628,7 @@ def stop_owned(session, directory):
 def parser():
     p = argparse.ArgumentParser(description=__doc__)
     sub = p.add_subparsers(dest='action',required=True)
-    for action in ('start','status','stop','key','key-button','click','button','burst','look','shot'):
+    for action in ('start','status','stop','key','key-button','click','button','burst','look','drag','wheel','shot'):
         q = sub.add_parser(action)
         q.add_argument('directory',type=Path)
         if action == 'start':
@@ -609,6 +649,15 @@ def parser():
         elif action == 'burst':
             q.add_argument('seconds',type=float)
             q.add_argument('button',type=int,nargs='?',default=1)
+        elif action == 'drag':
+            for name in ('x','y','x2','y2'):
+                q.add_argument(name,type=int)
+            q.add_argument('travel',type=float,nargs='?',default=.4)
+            q.add_argument('--dwell',type=float,default=.25)
+        elif action == 'wheel':
+            q.add_argument('x',type=int)
+            q.add_argument('y',type=int)
+            q.add_argument('notches',type=int)
         elif action == 'look':
             q.add_argument('dx',type=int)
             q.add_argument('dy',type=int)
@@ -633,6 +682,13 @@ def validate_arguments(args):
         require(args.button in (1,3), 'Only left1/right3 buttons are supported')
     if args.action == 'click':
         require(0<=args.x<WIDTH and 0<=args.y<HEIGHT, 'UI click is outside the private1280x720 display')
+    if args.action == 'wheel':
+        require(0<=args.x<WIDTH and 0<=args.y<HEIGHT, 'UI wheel is outside the private1280x720 display')
+        require(args.notches!=0 and abs(args.notches)<=MAX_WHEEL_NOTCHES, 'Wheel notches must be nonzero and at most20 per command')
+    if args.action == 'drag':
+        require(all(0<=x<WIDTH for x in (args.x,args.x2)) and all(0<=y<HEIGHT for y in (args.y,args.y2)), 'UI drag is outside the private1280x720 display')
+        require(math.isfinite(args.travel) and math.isfinite(args.dwell) and args.travel>=0 and args.dwell>=.05, 'Invalid drag travel/dwell duration')
+        args.seconds = bounded_seconds(2*args.dwell+args.travel)
     if args.action == 'look':
         require(abs(args.dx)<=1000 and abs(args.dy)<=1000, 'Relative movement is bounded to1000 pixels per axis')
     if args.action == 'shot':
