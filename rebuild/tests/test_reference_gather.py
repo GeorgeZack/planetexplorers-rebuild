@@ -68,6 +68,44 @@ class GatherLauncherTests(unittest.TestCase):
             self.assertEqual(manifest['schema'], 'pe-gather-launch-1')
             self.assertEqual(manifest['probe_source_sha256'], 'a'*64)
             self.assertEqual(json.loads(self.output.with_suffix('.exit.json').read_text())['returncode'], -15)
+            self.assertNotIn('PE_GATHER_OUTCOMES', env)
+            self.assertIs(manifest['outcomes'], False)
+
+    def test_outcomes_are_opt_in_and_inherited_setting_is_cleared(self):
+        for name in ('mono', 'shim', 'dll'):
+            (self.root/name).write_bytes(b'fixture')
+        def digest(path):
+            return launcher.OUTCOME_ASSEMBLY_SHA256 if Path(path).name == 'Assembly-CSharp.dll' else 'a'*64
+        for flag, inherited in (([], {'PE_GATHER_OUTCOMES': '1'}), (['--outcomes'], {})):
+            output = self.root/('capture-%d.jsonl' % len(flag))
+            with self.subTest(flag=flag), \
+                 mock.patch.object(launcher, 'build', return_value=tuple(self.root/name for name in ('mono','shim','dll'))), \
+                 mock.patch.object(launcher, 'digest', side_effect=digest), \
+                 mock.patch.object(launcher.launch_reference, 'launch_command', return_value=(['game'], dict(inherited))), \
+                 mock.patch.object(launcher.launch_reference, 'prepare_settings'), \
+                 mock.patch.object(launcher.launch_reference, 'prepare_unity_preferences'), \
+                 mock.patch.object(launcher.subprocess, 'run', return_value=mock.Mock(returncode=0)) as run:
+                self.assertEqual(launcher.main(['--launch','--user-data',str(self.root),'--output',str(output)] + flag), 0)
+                env = run.call_args.kwargs['env']
+                manifest = json.loads(output.with_suffix('.launch.json').read_text())
+                self.assertEqual(env.get('PE_GATHER_OUTCOMES'), '1' if flag else None)
+                self.assertIs(manifest['outcomes'], bool(flag))
+
+    def test_outcomes_refuse_unqualified_assembly_before_any_write(self):
+        for mode in ([], ['--launch']):
+            with self.subTest(mode=mode), \
+                 mock.patch.object(launcher, 'digest', return_value='b'*64), \
+                 mock.patch.object(launcher, 'build') as build, \
+                 mock.patch.object(launcher.launch_reference, 'launch_command', return_value=(['game'], {})), \
+                 mock.patch.object(launcher.launch_reference, 'prepare_settings') as settings, \
+                 mock.patch.object(launcher.launch_reference, 'prepare_unity_preferences') as prefs, \
+                 mock.patch.object(launcher.subprocess, 'run') as run:
+                self.assertEqual(launcher.main(mode + ['--outcomes', '--user-data', str(self.root), '--output', str(self.output)]), 1)
+                build.assert_not_called(); settings.assert_not_called(); prefs.assert_not_called(); run.assert_not_called()
+                self.assertEqual(list(self.root.iterdir()), [])
+
+    def test_v2_build_never_targets_first_capture_binaries(self):
+        self.assertEqual(launcher.BUILD.name, 'gather-probe-v2')
 
 
 if __name__ == '__main__':

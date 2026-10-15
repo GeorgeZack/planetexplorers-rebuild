@@ -65,3 +65,39 @@ Neither capture qualifies:
 - graphics.
 
 The fitted weights in the entry diagnostic are not accepted native values.
+
+## 6. Prepared opt-in outcome observer (not yet run)
+
+Section 3 is now implemented as offline tooling only. No launch, arm or input has been used. The first capture's exact probe source, DLL, shim, compiler and launch manifest are preserved, read-only and hashed, in the ignored `rebuild/build/gather-probe-provenance-01`. New builds go to `rebuild/build/gather-probe-v2`.
+
+- **Opt-in, qualified installation only.** `reference_gather.py --outcomes` (off by default) sets `PE_GATHER_OUTCOMES=1` and records `outcomes` in the launch manifest; an inherited value is cleared. The flag is refused unless the installed `Assembly-CSharp.dll` has SHA-256 `56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3`. That is the assembly in which `WorldPos` was verified pure, and the check runs before any build, profile write or launch. The launcher is the supported entry point; setting the environment variable directly bypasses that check and is unsupported. Without the flag the probe's output format is unchanged.
+- **Snapshots.** `ReferenceGatherProbe.cs` writes a `pre` snapshot from its existing handler on each `Gather` receipt. It adds a `post` handler only at an end-of-frame sample where `Action_Gather.OnAnimEvent` is already in the recorded invocation list, and records that as an `outcome-attach` row. Each snapshot records:
+  - the selected and found tree's raw terrain index, local position, prototype and `WorldPos`;
+  - the exact `treeHPInfos` entry for that key, read through the raw `m_Instance` (absent or null stays explicit);
+  - every bag item instance by tab and slot, read through the raw `mPackage`.
+
+  `WorldPos` is the one approved pure exception to raw-field reads; its read-only installed IL is recorded in [world-position-readonly-il.json](../reference/gather-20261015/world-position-readonly-il.json).
+- **Grants.** The probe's own subscriber on the raw `PlayerPackageCmpt.mEventor` records each successful grant's prototype and count.
+- **Safety.** The new rows share the sequence counter, the event and byte bounds, and the observer-error closure. Snapshots are capped at 1,024 bag items. Teardown removes only the probe's own handlers.
+- **Analyzer.** `analyze_reference_gather.py` accepts outcome rows only when both the header and the manifest declare outcomes. It requires exactly one pre and at most one post observer role, and a post handler that follows the Gather handler. It reports every `Gather` receipt in a top-level `outcomePairs` list, including receipts that arrive after an action end such as a cancellation, and gives each cycle its share of that list. Each receipt gets one of these statuses: `paired`, `partial-pair`, `invalid-pair`, `nested-gather-unsupported`, `post-not-attached-before-Gather` or `ambiguous-order`. `paired` requires all of: pre and post snapshots carrying that receipt's ID, receipt < pre < post in sequence, the receipt's own frame and time, pre before and post after the Gather handler, and no other `Gather` receipt in between. Each pair also carries the raw HP entries, the grants between the snapshots and the bag differences by unique instance ID. It infers no expected item or quantity. Legacy captures validate unchanged.
+
+Outcome fields remain pending runtime observation. Neither the commit boundary nor any native behaviour is qualified by this tooling.
+
+### Observer checkpoint status
+
+- **What is established.** The probe compiles offline against the pinned installation. All 10 raw snapshot field names are confirmed in that assembly by the root's metadata inventory, recorded in [world-position-readonly-il.json](../reference/gather-20261015/world-position-readonly-il.json). The `WorldPos` helper IL is fully decoded and its bytes are hash-verified.
+- **What is not established.** The generic signatures of `mEventor` and `treeHPInfos` were only partly parsed, so the runtime casts are unobserved. This is a compiled and field-name-verified observer, not a runtime-qualified harvest capture.
+- **First capture's binaries.** They remain preserved in `rebuild/build/gather-probe-provenance-01`: DLL `74c29a10…`, shim `b0c7f921…`, source `a362c2bf…`.
+- **Validation.** The offline `--outcomes` build-only run compiled into `rebuild/build/gather-probe-v2` without any profile write. The legacy `gather-live-01` capture still validates (1,711 frames, 76 events, 4 admissions), and its clock replay still has 0 mismatches. Focused suites: `test_reference_gather` 7, `test_reference_gather_analysis` 21, `test_replay_gather_clock` 10. Gate results are in the table below.
+
+The gates ran with `TMPDIR=rebuild/build/compiler-tmp` on a code snapshot hashed beforehand (`rebuild/build/compiler-tmp/outcome-gates-1/tree.sha256`):
+
+| Gate | Result |
+|---|---|
+| `make -C rebuild check` | exit0. 285 suites passed, 0 failed. 1,021 Python tests, of which 98 were skipped; skips are not passes. |
+| `make -C rebuild cli-test` | exit0 |
+| `make -C rebuild check-content` | exit0 |
+| `make -C rebuild check-sources` | exit0 |
+| `make -C rebuild check-sanitize` | exit0. 113 suites passed, 0 failed, 0 skipped. |
+
+Runtime outcome observation is still pending.

@@ -1,0 +1,786 @@
+{
+  "schema": "pe-gather-world-position-cil-1",
+  "authority": "shipped-artifact",
+  "confidence": "observed",
+  "provider": "Cached REA inspect-managed-members inventory; cil_disasm.py reads installed method bytes without executing the assembly",
+  "rea_evidence_id": "ev_13b79477fb6033537478536807957a9437d4a82d8da7d9d87b9ef1ef27ee7243",
+  "assembly_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+  "mvid": "7ddcc464-5353-4750-b969-fe628ee474da",
+  "cache_sha256": "132b091a2521c11a7613737d7890a059624f9509ef39d0bdf90abdbc1a8ee5f6",
+  "methods": [
+    {
+      "declaring_type": "GlobalTreeInfo",
+      "name": "get_WorldPos",
+      "token": "0x060090ec",
+      "signature": {
+        "raw_length": 4,
+        "raw_sha256": "820ec3fabe83886ce034026d3061e2e50ba716db194ef4587bee4e66ef210bec",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default has-this",
+        "generic_parameter_count": null,
+        "parameter_count": 0,
+        "return_type": "valuetype:33",
+        "parameter_types": [],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "fat",
+        "rva": 3817788,
+        "file_offset": 3810108,
+        "max_stack": 4,
+        "init_locals": true,
+        "local_var_sig_token": null,
+        "il_size": 47,
+        "il_sha256": "a029675467c3eeb71fc6c9add1ba141138bb731b6ed3ab1d9afe31c6fe721c6a",
+        "normalized_il_sha256": "e0b72387dd62403dd60f6ed1811ce7011ebb0e0db84f0aea19aeab86fc8c8303",
+        "instruction_count": 15,
+        "decoded_instruction_count": 15,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.0": 4,
+          "ldfld": 6,
+          "ldc.i4.0": 1,
+          "bge": 1,
+          "ret": 2,
+          "call": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 1,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040077cf"
+          },
+          {
+            "il_offset": 7,
+            "opcode": "bge",
+            "operand_kind": "branch",
+            "operand": "24"
+          },
+          {
+            "il_offset": 13,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040077d0"
+          },
+          {
+            "il_offset": 18,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x04006cb7"
+          },
+          {
+            "il_offset": 25,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040077cf"
+          },
+          {
+            "il_offset": 31,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x040077d0"
+          },
+          {
+            "il_offset": 36,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x04006cb7"
+          },
+          {
+            "il_offset": 41,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x0600912d"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "027bcf770004163c0c000000027bd07700047bb76c00042a027bcf770004027bd07700047bb76c0004282d9100062a",
+      "listing": [
+        "IL_0000: ldarg.0",
+        "IL_0001: ldfld GlobalTreeInfo::_terrainIndex",
+        "IL_0006: ldc.i4.0",
+        "IL_0007: bge IL_0018",
+        "IL_000c: ldarg.0",
+        "IL_000d: ldfld GlobalTreeInfo::_treeInfo",
+        "IL_0012: ldfld TreeInfo::m_pos",
+        "IL_0017: ret",
+        "IL_0018: ldarg.0",
+        "IL_0019: ldfld GlobalTreeInfo::_terrainIndex",
+        "IL_001e: ldarg.0",
+        "IL_001f: ldfld GlobalTreeInfo::_treeInfo",
+        "IL_0024: ldfld TreeInfo::m_pos",
+        "IL_0029: call LSubTerrUtils::TreeTerrainPosToWorldPos",
+        "IL_002e: ret"
+      ],
+      "calls": [
+        {
+          "caller_token": "0x060090ec",
+          "caller": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "call",
+          "target_token": "0x0600912d",
+          "target_kind": "method-def",
+          "target_name": "TreeTerrainPosToWorldPos"
+        }
+      ],
+      "field_accesses": [
+        {
+          "method_token": "0x060090ec",
+          "method": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x040077cf",
+          "field_name": "_terrainIndex"
+        },
+        {
+          "method_token": "0x060090ec",
+          "method": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x040077d0",
+          "field_name": "_treeInfo"
+        },
+        {
+          "method_token": "0x060090ec",
+          "method": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x04006cb7",
+          "field_name": "m_pos"
+        },
+        {
+          "method_token": "0x060090ec",
+          "method": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x040077cf",
+          "field_name": "_terrainIndex"
+        },
+        {
+          "method_token": "0x060090ec",
+          "method": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x040077d0",
+          "field_name": "_treeInfo"
+        },
+        {
+          "method_token": "0x060090ec",
+          "method": "GlobalTreeInfo.get_WorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x04006cb7",
+          "field_name": "m_pos"
+        }
+      ]
+    },
+    {
+      "declaring_type": "LSubTerrUtils",
+      "name": "TreeTerrainPosToWorldPos",
+      "token": "0x0600912c",
+      "signature": {
+        "raw_length": 8,
+        "raw_sha256": "2a64dd3265d0b9fb5dbdbb30088104b6ebee2080b0aaec31bb0e9ccdefb21629",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 3,
+        "return_type": "valuetype:33",
+        "parameter_types": [
+          "i4",
+          "i4",
+          "valuetype:33"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "fat",
+        "rva": 3828348,
+        "file_offset": 3820668,
+        "max_stack": 5,
+        "init_locals": true,
+        "local_var_sig_token": "0x11000001",
+        "il_size": 105,
+        "il_sha256": "e80b891d47561c515d02011b0944a0415977dfd65a37384d3ff5915cdb47ec73",
+        "normalized_il_sha256": "45aac060589c46e84bef5efd9e91a9b7242816989ab96e33a886d7b66d7ea427",
+        "instruction_count": 40,
+        "decoded_instruction_count": 40,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.2": 1,
+          "stloc.0": 1,
+          "ldloca.s": 5,
+          "dup": 5,
+          "ldfld": 5,
+          "ldc.r4": 5,
+          "mul": 5,
+          "stfld": 5,
+          "ldarg.0": 1,
+          "conv.r4": 2,
+          "add": 2,
+          "ldarg.1": 1,
+          "ldloc.0": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 2,
+            "opcode": "ldloca.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 5,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001c"
+          },
+          {
+            "il_offset": 10,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "256"
+          },
+          {
+            "il_offset": 16,
+            "opcode": "stfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001c"
+          },
+          {
+            "il_offset": 21,
+            "opcode": "ldloca.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 24,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x0a000019"
+          },
+          {
+            "il_offset": 29,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "3000"
+          },
+          {
+            "il_offset": 35,
+            "opcode": "stfld",
+            "operand_kind": "field",
+            "operand": "0x0a000019"
+          },
+          {
+            "il_offset": 40,
+            "opcode": "ldloca.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 43,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001d"
+          },
+          {
+            "il_offset": 48,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "256"
+          },
+          {
+            "il_offset": 54,
+            "opcode": "stfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001d"
+          },
+          {
+            "il_offset": 59,
+            "opcode": "ldloca.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 62,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001c"
+          },
+          {
+            "il_offset": 69,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "256"
+          },
+          {
+            "il_offset": 76,
+            "opcode": "stfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001c"
+          },
+          {
+            "il_offset": 81,
+            "opcode": "ldloca.s",
+            "operand_kind": "variable",
+            "operand": "0"
+          },
+          {
+            "il_offset": 84,
+            "opcode": "ldfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001d"
+          },
+          {
+            "il_offset": 91,
+            "opcode": "ldc.r4",
+            "operand_kind": "constant",
+            "operand": "256"
+          },
+          {
+            "il_offset": 98,
+            "opcode": "stfld",
+            "operand_kind": "field",
+            "operand": "0x0a00001d"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "040a1200257b1c00000a22000080435a7d1c00000a1200257b1900000a2200803b455a7d1900000a1200257b1d00000a22000080435a7d1d00000a1200257b1c00000a026b22000080435a587d1c00000a1200257b1d00000a036b22000080435a587d1d00000a062a",
+      "listing": [
+        "IL_0000: ldarg.2",
+        "IL_0001: stloc.0",
+        "IL_0002: ldloca.s 0",
+        "IL_0004: dup",
+        "IL_0005: ldfld [0x01000008]::x",
+        "IL_000a: ldc.r4 256.0",
+        "IL_000f: mul",
+        "IL_0010: stfld [0x01000008]::x",
+        "IL_0015: ldloca.s 0",
+        "IL_0017: dup",
+        "IL_0018: ldfld [0x01000008]::y",
+        "IL_001d: ldc.r4 3000.0",
+        "IL_0022: mul",
+        "IL_0023: stfld [0x01000008]::y",
+        "IL_0028: ldloca.s 0",
+        "IL_002a: dup",
+        "IL_002b: ldfld [0x01000008]::z",
+        "IL_0030: ldc.r4 256.0",
+        "IL_0035: mul",
+        "IL_0036: stfld [0x01000008]::z",
+        "IL_003b: ldloca.s 0",
+        "IL_003d: dup",
+        "IL_003e: ldfld [0x01000008]::x",
+        "IL_0043: ldarg.0",
+        "IL_0044: conv.r4",
+        "IL_0045: ldc.r4 256.0",
+        "IL_004a: mul",
+        "IL_004b: add",
+        "IL_004c: stfld [0x01000008]::x",
+        "IL_0051: ldloca.s 0",
+        "IL_0053: dup",
+        "IL_0054: ldfld [0x01000008]::z",
+        "IL_0059: ldarg.1",
+        "IL_005a: conv.r4",
+        "IL_005b: ldc.r4 256.0",
+        "IL_0060: mul",
+        "IL_0061: add",
+        "IL_0062: stfld [0x01000008]::z",
+        "IL_0067: ldloc.0",
+        "IL_0068: ret"
+      ],
+      "calls": [],
+      "field_accesses": [
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x0a00001c",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "stfld",
+          "field_token": "0x0a00001c",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x0a000019",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "stfld",
+          "field_token": "0x0a000019",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x0a00001d",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "stfld",
+          "field_token": "0x0a00001d",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x0a00001c",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "stfld",
+          "field_token": "0x0a00001c",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "ldfld",
+          "field_token": "0x0a00001d",
+          "field_name": null
+        },
+        {
+          "method_token": "0x0600912c",
+          "method": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "stfld",
+          "field_token": "0x0a00001d",
+          "field_name": null
+        }
+      ]
+    },
+    {
+      "declaring_type": "LSubTerrUtils",
+      "name": "TreeTerrainPosToWorldPos",
+      "token": "0x0600912d",
+      "signature": {
+        "raw_length": 7,
+        "raw_sha256": "fdf6a0fb2c63dc72ea1b80acb3c89f039bd5cb363ea8d3117868f503c92275b4",
+        "kind": "method",
+        "parse_status": "decoded",
+        "calling_convention": "default",
+        "generic_parameter_count": null,
+        "parameter_count": 2,
+        "return_type": "valuetype:33",
+        "parameter_types": [
+          "i4",
+          "valuetype:33"
+        ],
+        "field_type": null,
+        "issue": null
+      },
+      "body": {
+        "status": "present",
+        "header_format": "fat",
+        "rva": 3828468,
+        "file_offset": 3820788,
+        "max_stack": 4,
+        "init_locals": true,
+        "local_var_sig_token": "0x1100002e",
+        "il_size": 19,
+        "il_sha256": "3fb7af0e5c30acaff790beb73576c01586aa6b23ed155333b6f592fb26531f53",
+        "normalized_il_sha256": "034146961764b8bcd8ee2932acfe986a63fad02599501f138ab7633a7dbf538c",
+        "instruction_count": 13,
+        "decoded_instruction_count": 13,
+        "truncated_instructions": 0,
+        "opcode_counts": {
+          "ldarg.0": 2,
+          "ldc.i4.s": 2,
+          "rem": 1,
+          "stloc.0": 1,
+          "div": 1,
+          "stloc.1": 1,
+          "ldloc.0": 1,
+          "ldloc.1": 1,
+          "ldarg.1": 1,
+          "call": 1,
+          "ret": 1
+        },
+        "anchors": [
+          {
+            "il_offset": 1,
+            "opcode": "ldc.i4.s",
+            "operand_kind": "constant",
+            "operand": "72"
+          },
+          {
+            "il_offset": 6,
+            "opcode": "ldc.i4.s",
+            "operand_kind": "constant",
+            "operand": "72"
+          },
+          {
+            "il_offset": 13,
+            "opcode": "call",
+            "operand_kind": "method",
+            "operand": "0x0600912c"
+          }
+        ],
+        "exception_regions": [],
+        "issue": null
+      },
+      "raw_il_hex": "021f485d0a021f485b0b060703282c9100062a",
+      "listing": [
+        "IL_0000: ldarg.0",
+        "IL_0001: ldc.i4.s 72",
+        "IL_0003: rem",
+        "IL_0004: stloc.0",
+        "IL_0005: ldarg.0",
+        "IL_0006: ldc.i4.s 72",
+        "IL_0008: div",
+        "IL_0009: stloc.1",
+        "IL_000a: ldloc.0",
+        "IL_000b: ldloc.1",
+        "IL_000c: ldarg.1",
+        "IL_000d: call LSubTerrUtils::TreeTerrainPosToWorldPos",
+        "IL_0012: ret"
+      ],
+      "calls": [
+        {
+          "caller_token": "0x0600912d",
+          "caller": "LSubTerrUtils.TreeTerrainPosToWorldPos",
+          "opcode": "call",
+          "target_token": "0x0600912c",
+          "target_kind": "method-def",
+          "target_name": "TreeTerrainPosToWorldPos"
+        }
+      ],
+      "field_accesses": []
+    }
+  ],
+  "limitations": [
+    "Static CIL inspection only; no method or game was executed.",
+    "Metadata tokens are build-local and require the assembly digest and MVID.",
+    "Local/by-value Vector3 field stores are distinguished from writes to gameplay objects by their stack operands and signatures.",
+    "All ten raw snapshot field names exist. The cached parser does not decode generic signatures for mEventor and treeHPInfos; their raw metadata is retained, and runtime cast compatibility remains unobserved."
+  ],
+  "raw_snapshot_fields": [
+    {
+      "token": "0x04004cdb",
+      "row_offset": 5023646,
+      "declaring_type_token": "0x02000cb0",
+      "declaring_type": "ItemAsset.ItemSample",
+      "name": "mProtoId",
+      "flags": 1,
+      "signature": {
+        "raw_length": 2,
+        "raw_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "i4",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x04004cdc",
+      "row_offset": 5023656,
+      "declaring_type_token": "0x02000cb0",
+      "declaring_type": "ItemAsset.ItemSample",
+      "name": "mStackCount",
+      "flags": 1,
+      "signature": {
+        "raw_length": 2,
+        "raw_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "i4",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x04004ce9",
+      "row_offset": 5023786,
+      "declaring_type_token": "0x02000cb3",
+      "declaring_type": "ItemAsset.ItemObject",
+      "name": "mInstanceId",
+      "flags": 1,
+      "signature": {
+        "raw_length": 2,
+        "raw_sha256": "557c754d26e2667287367a856ea5fcd584f35ab796d24a6a875d1648a4637d23",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "i4",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x04004d0f",
+      "row_offset": 5024166,
+      "declaring_type_token": "0x02000cd5",
+      "declaring_type": "ItemAsset.ItemPackage",
+      "name": "mSlotListArray",
+      "flags": 1,
+      "signature": {
+        "raw_length": 5,
+        "raw_sha256": "7eedf364c51d8e92f735d7c9f24cd1b9c0a5f224156a5b01bbec08237c67fdc0",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "class:13168[]",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x04004d27",
+      "row_offset": 5024406,
+      "declaring_type_token": "0x02000cdc",
+      "declaring_type": "ItemAsset.SlotList",
+      "name": "mSlots",
+      "flags": 1,
+      "signature": {
+        "raw_length": 5,
+        "raw_sha256": "e363700831c0a4b80a7156c8e4163663ba8c7c3d2809afbd25eafbab4f02f202",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "class:13004[]",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x0400613b",
+      "row_offset": 5075806,
+      "declaring_type_token": "0x02000fbf",
+      "declaring_type": "Pathea.PlayerPackageCmpt",
+      "name": "mPackage",
+      "flags": 1,
+      "signature": {
+        "raw_length": 6,
+        "raw_sha256": "825a477490a41d3542959dadc5d079e5432d0b92fe390a8e55d56b0d0f4f4ce7",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "class:19564",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x0400613e",
+      "row_offset": 5075836,
+      "declaring_type_token": "0x02000fbf",
+      "declaring_type": "Pathea.PlayerPackageCmpt",
+      "name": "mEventor",
+      "flags": 1,
+      "signature": {
+        "raw_length": 11,
+        "raw_sha256": "464e1d1c683a2b1917d4b607446905b0ad63cbfed2017b6475cf89c1690fccfa",
+        "kind": "unknown",
+        "parse_status": "unsupported",
+        "calling_convention": null,
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": null,
+        "issue": "unsupported element type 0x15"
+      }
+    },
+    {
+      "token": "0x040068d8",
+      "row_offset": 5095296,
+      "declaring_type_token": "0x02001109",
+      "declaring_type": "SkEntitySubTerrain",
+      "name": "m_Instance",
+      "flags": 17,
+      "signature": {
+        "raw_length": 6,
+        "raw_sha256": "a0ecb32631e4182c08fb537dcf6205a3fe672aefd2f7bbc2d1e47a9bbc16be70",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "class:17444",
+        "issue": null
+      }
+    },
+    {
+      "token": "0x040068d9",
+      "row_offset": 5095306,
+      "declaring_type_token": "0x02001109",
+      "declaring_type": "SkEntitySubTerrain",
+      "name": "treeHPInfos",
+      "flags": 1,
+      "signature": {
+        "raw_length": 9,
+        "raw_sha256": "e4689df30928ae4eb520fad247847d227d7972321cbb56fb3398fcae229d7760",
+        "kind": "unknown",
+        "parse_status": "unsupported",
+        "calling_convention": null,
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": null,
+        "issue": "unsupported element type 0x15"
+      }
+    },
+    {
+      "token": "0x0400766e",
+      "row_offset": 5130076,
+      "declaring_type_token": "0x0200131b",
+      "declaring_type": "PlayerPackage",
+      "name": "_playerPak",
+      "flags": 6,
+      "signature": {
+        "raw_length": 4,
+        "raw_sha256": "8d899a6cf654ea3b414ff3ca6054ca78e467b89c83cbd67fc68aa2f4ebab563f",
+        "kind": "field",
+        "parse_status": "decoded",
+        "calling_convention": "field",
+        "generic_parameter_count": null,
+        "parameter_count": null,
+        "return_type": null,
+        "parameter_types": [],
+        "field_type": "class:13140",
+        "issue": null
+      }
+    }
+  ]
+}

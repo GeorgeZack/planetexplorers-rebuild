@@ -17,8 +17,12 @@ import launch_reference
 import reference_pose
 
 TOOLS = Path(__file__).resolve().parent
-BUILD = TOOLS.parent / 'build/gather-probe'
+# v2: never overwrite the binaries that recorded gather-live-01 (preserved in gather-probe-provenance-01).
+BUILD = TOOLS.parent / 'build/gather-probe-v2'
 SOURCE = TOOLS / 'ReferenceGatherProbe.cs'
+# --outcomes reads GlobalTreeInfo.WorldPos, verified pure only in this installed assembly
+# (docs/reference/gather-20261015/world-position-readonly-il.json). Other installations are refused.
+OUTCOME_ASSEMBLY_SHA256 = '56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3'
 
 
 def digest(path):
@@ -57,6 +61,7 @@ def main(argv=None):
     ap.add_argument('--frames', type=int, choices=range(1,3601), default=3600, metavar='1..3600')
     ap.add_argument('--wait-seconds', type=int, choices=range(1,1801), default=900, metavar='1..1800')
     ap.add_argument('--output', type=Path)
+    ap.add_argument('--outcomes', action='store_true', help='opt-in raw harvest-outcome snapshots and grant receipts')
     a = ap.parse_args(argv)
     try:
         game = a.game_dir.expanduser().resolve(); profile = a.user_data.expanduser().resolve()
@@ -64,6 +69,8 @@ def main(argv=None):
         command, env = launch_reference.launch_command(game, profile, a.single_threaded_rendering)
         if a.launch and env.get('LD_PRELOAD'):
             raise ValueError('Existing preload refused')
+        if a.outcomes and digest(game/'PE_Client_Data/Managed/Assembly-CSharp.dll') != OUTCOME_ASSEMBLY_SHA256:
+            raise ValueError('--outcomes is qualified only for the verified Assembly-CSharp.dll')
         mono, shim, dll = build(game)
         if not a.launch:
             print(f'Offline observer built: {dll}\nNo game launched or profile settings changed.'); return 0
@@ -74,11 +81,13 @@ def main(argv=None):
                    PE_POSE_ASSEMBLY=str(dll), PE_POSE_OUTPUT=str(output), PE_POSE_ARM=str(arm), PE_POSE_STOP=str(stop),
                    PE_POSE_WAIT=str(a.wait_seconds), PE_POSE_FRAMES=str(a.frames), PE_POSE_SECONDS=str(a.seconds),
                    PE_GATHER_PROBE_SHA256=source_hash)
+        env.pop('PE_GATHER_OUTCOMES', None)
+        if a.outcomes: env['PE_GATHER_OUTCOMES'] = '1'
         launch_reference.prepare_settings(profile); launch_reference.prepare_unity_preferences(profile/'engine-config')
         output.parent.mkdir(parents=True, exist_ok=True)
         with manifest.open('x') as f:
             json.dump({'schema': 'pe-gather-launch-1', 'command': command, 'profile': str(profile), 'capture': str(output),
-                       'arm': str(arm), 'stop': str(stop), 'frames': a.frames, 'seconds': a.seconds, 'wait_seconds': a.wait_seconds,
+                       'arm': str(arm), 'stop': str(stop), 'outcomes': a.outcomes, 'frames': a.frames, 'seconds': a.seconds, 'wait_seconds': a.wait_seconds,
                        'assembly_sha256': digest(dll), 'probe_source_sha256': source_hash, 'shim_sha256': digest(shim),
                        'engine_sha256': digest(game/'PE_Client_Data/Managed/UnityEngine.dll'),
                        'game_assembly_sha256': digest(game/'PE_Client_Data/Managed/Assembly-CSharp.dll'),

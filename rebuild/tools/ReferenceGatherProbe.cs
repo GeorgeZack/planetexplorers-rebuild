@@ -24,6 +24,14 @@ public sealed class PoseProbe : MonoBehaviour {
     FieldInfo eventField, runningField;
     int eventRecords;
     const int MaxEvents = 4096;
+    // Opt-in harvest outcomes (PE_GATHER_OUTCOMES=1). Raw fields only, plus the
+    // audited pure GlobalTreeInfo.WorldPos arithmetic. Never call
+    // SkEntitySubTerrain.Instance, GetTreeHP, PlayerPackageCmpt.package or RNG.
+    const int MaxBagItems = 1024, BagTabs = 4, MaxSlotsPerTab = 1024;
+    bool outcomes, postAttached;
+    int openGather; // sequence of the Gather receipt whose post snapshot is pending; 0 when none
+    FieldInfo subTerrainField, treeHpField, packageField, playerPakField, slotArrayField, slotsField, grantField;
+    PeEvent.Event<PlayerPackageCmpt.GetItemEventArg> grantEvent;
     static FieldInfo PrivateField(Type type, string name) {
         for (; type != null; type = type.BaseType) {
             FieldInfo f = type.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
@@ -51,10 +59,12 @@ public sealed class PoseProbe : MonoBehaviour {
         eventField = PrivateField(animation.GetType(), "AnimEvtString");
         runningField = PrivateField(motion.GetType(), "m_RunningAction");
         if (runningField.GetValue(motion) == null) throw new InvalidOperationException("Motion state not ready");
+        if (outcomes) PrepareOutcomes(player);
         observedAnimation = animation; observedMotion = motion; observedAnimator = animator;
         animation.AnimEvtString += ObserveAnimation;
         motion.onActionStart += ObserveAdmission;
         motion.onActionEnd += ObserveEnd;
+        if (grantEvent != null) grantEvent.Subscribe(ObserveGrant);
         Write("{\"type\":\"subscription\",\"frame\":" + Time.frameCount + ",\"handlers\":" + HandlerOrder() + "}");
         output.Flush();
         Console.Error.WriteLine("[gather] Event and action observers attached; operator may begin");
@@ -68,7 +78,10 @@ public sealed class PoseProbe : MonoBehaviour {
             if (i > 0) b.Append(','); Delegate h = handlers[i];
             b.Append("{\"targetType\":").Append(Q(h.Target == null ? null : h.Target.GetType().FullName));
             b.Append(",\"declaringType\":").Append(Q(h.Method.DeclaringType == null ? null : h.Method.DeclaringType.FullName));
-            b.Append(",\"method\":").Append(Q(h.Method.Name)).Append(",\"observer\":").Append(System.Object.ReferenceEquals(h.Target,this) ? "true" : "false").Append('}');
+            bool own = System.Object.ReferenceEquals(h.Target,this);
+            b.Append(",\"method\":").Append(Q(h.Method.Name)).Append(",\"observer\":").Append(own ? "true" : "false");
+            if (outcomes && own) b.Append(",\"role\":").Append(Q(h.Method.Name == "ObserveAnimationPost" ? "post" : "pre"));
+            b.Append('}');
         }
         return b.Append(']').ToString();
     }
@@ -86,7 +99,121 @@ public sealed class PoseProbe : MonoBehaviour {
         }
         b.Append("]}");
     }
-    void ObserveAnimation(string value) { Receipt("animation-event", value, -1); }
+    void ObserveAnimation(string value) {
+        Receipt("animation-event", value, -1);
+        if (outcomes && value == "Gather" && !finished) {
+            // A second Gather before the first post stays visible; the analyzer rejects nesting.
+            openGather = eventRecords;
+            Outcome("outcome-snapshot", "pre", null);
+        }
+    }
+    void ObserveAnimationPost(string value) {
+        if (value != "Gather") return;
+        Outcome("outcome-snapshot", "post", null);
+        openGather = 0;
+    }
+    void ObserveGrant(object sender, PlayerPackageCmpt.GetItemEventArg arg) {
+        Outcome("item-grant", null, arg == null ? null : "{\"protoId\":" + arg.protoId + ",\"count\":" + arg.count + "}");
+    }
+    static Delegate Handlers(FieldInfo field, object owner) { return owner == null ? null : field.GetValue(owner) as Delegate; }
+    object GatherAction() {
+        Delegate callbacks = Handlers(eventField, observedAnimation);
+        if (callbacks == null) return null;
+        foreach (Delegate h in callbacks.GetInvocationList())
+            if (h.Target != null && h.Target.GetType().FullName == "Pathea.Action_Gather" && h.Method.Name == "OnAnimEvent") return h.Target;
+        return null;
+    }
+    void PrepareOutcomes(Component player) {
+        PlayerPackageCmpt package = player.GetComponent<PlayerPackageCmpt>();
+        if (package == null) throw new InvalidOperationException("Player package component missing");
+        subTerrainField = typeof(SkEntitySubTerrain).GetField("m_Instance", BindingFlags.NonPublic | BindingFlags.Static);
+        if (subTerrainField == null) throw new InvalidOperationException("Required installed field missing: m_Instance");
+        treeHpField = PrivateField(typeof(SkEntitySubTerrain), "treeHPInfos");
+        packageField = PrivateField(typeof(PlayerPackageCmpt), "mPackage");
+        playerPakField = PrivateField(typeof(PlayerPackage), "_playerPak");
+        slotArrayField = PrivateField(typeof(ItemAsset.ItemPackage), "mSlotListArray");
+        slotsField = PrivateField(typeof(ItemAsset.SlotList), "mSlots");
+        grantField = PrivateField(typeof(PlayerPackageCmpt), "mEventor");
+        grantEvent = grantField.GetValue(package) as PeEvent.Event<PlayerPackageCmpt.GetItemEventArg>;
+        if (grantEvent == null) throw new InvalidOperationException("Grant event unavailable");
+        observedPackage = package;
+    }
+    PlayerPackageCmpt observedPackage;
+    void TryAttachPost() {
+        // Only after the original Gather handler exists, so the post handler follows it.
+        if (!outcomes || postAttached || GatherAction() == null) return;
+        observedAnimation.AnimEvtString += ObserveAnimationPost;
+        postAttached = true;
+        Outcome("outcome-attach", null, null);
+    }
+    static void Vector(StringBuilder b, Vector3 v) { b.Append('[').Append(N(v.x)).Append(',').Append(N(v.y)).Append(',').Append(N(v.z)).Append(']'); }
+    static GlobalTreeInfo TreeField(object action, string field) {
+        return action == null ? null : PrivateField(action.GetType(), field).GetValue(action) as GlobalTreeInfo;
+    }
+    static void Tree(StringBuilder b, GlobalTreeInfo tree) {
+        if (tree == null || tree._treeInfo == null) { b.Append("null"); return; }
+        b.Append("{\"terrainIndex\":").Append(tree._terrainIndex).Append(",\"localPosition\":"); Vector(b, tree._treeInfo.m_pos);
+        b.Append(",\"prototype\":").Append(tree._treeInfo.m_protoTypeIdx).Append(",\"worldPosition\":"); Vector(b, tree.WorldPos);
+        b.Append('}');
+    }
+    void Herb(StringBuilder b, GlobalTreeInfo tree) {
+        // Exact source key only; an absent entry is not HP 255 (that default is GetTreeHP's own insertion).
+        object instance = subTerrainField.GetValue(null);
+        if (instance == null) { b.Append("{\"instance\":false}"); return; }
+        System.Collections.Generic.Dictionary<Vector3, float> hp = treeHpField.GetValue(instance) as System.Collections.Generic.Dictionary<Vector3, float>;
+        if (hp == null) throw new InvalidOperationException("Tree HP dictionary unavailable");
+        b.Append("{\"instance\":true");
+        if (tree != null && tree._treeInfo != null) {
+            float value; bool present = hp.TryGetValue(tree.WorldPos, out value);
+            b.Append(",\"entry\":").Append(present ? "true" : "false").Append(",\"hp\":").Append(present ? N(value) : "null");
+        } else b.Append(",\"entry\":null,\"hp\":null");
+        b.Append('}');
+    }
+    void Bag(StringBuilder b) {
+        object package = observedPackage == null ? null : packageField.GetValue(observedPackage);
+        if (package == null) { b.Append("null"); return; }
+        object pak = playerPakField.GetValue(package);
+        Array lists = pak == null ? null : slotArrayField.GetValue(pak) as Array;
+        if (lists == null) { b.Append("{\"slotLists\":null}"); return; }
+        if (lists.Length != BagTabs) throw new InvalidOperationException("Unexpected bag tab count");
+        b.Append("{\"slotLists\":["); int items = 0;
+        for (int tab = 0; tab < lists.Length; tab++) {
+            if (tab > 0) b.Append(','); object list = lists.GetValue(tab);
+            Array slots = list == null ? null : slotsField.GetValue(list) as Array;
+            if (slots == null) { b.Append("null"); continue; }
+            if (slots.Length > MaxSlotsPerTab) throw new InvalidOperationException("Bag slot bound exceeded");
+            b.Append("{\"slots\":").Append(slots.Length).Append(",\"items\":["); bool first = true;
+            for (int i = 0; i < slots.Length; i++) {
+                object item = slots.GetValue(i); if (item == null) continue;
+                if (++items > MaxBagItems) throw new InvalidOperationException("Bag item bound exceeded");
+                if (!first) b.Append(','); first = false;
+                b.Append("{\"slot\":").Append(i).Append(",\"instanceId\":").Append((int)Raw(item, "mInstanceId"));
+                b.Append(",\"protoId\":").Append((int)Raw(item, "mProtoId")).Append(",\"stackCount\":").Append((int)Raw(item, "mStackCount")).Append('}');
+            }
+            b.Append("]}");
+        }
+        b.Append("]}");
+    }
+    void Outcome(string kind, string role, string grant) {
+        // Same sequence, byte and failure policy as other receipts; never throws into the game.
+        if (finished) return;
+        try {
+            if (++eventRecords > MaxEvents) throw new InvalidOperationException("Event record bound exceeded");
+            StringBuilder b = new StringBuilder("{\"type\":"); b.Append(Q(kind));
+            b.Append(",\"sequence\":").Append(eventRecords).Append(",\"frame\":").Append(Time.frameCount);
+            b.Append(",\"time\":").Append(N(Time.time)).Append(",\"realtime\":").Append(N(Time.realtimeSinceStartup));
+            b.Append(",\"handlers\":").Append(HandlerOrder());
+            if (kind != "outcome-attach") b.Append(",\"gatherReceipt\":").Append(openGather == 0 ? "null" : openGather.ToString(Invariant));
+            if (role != null) {
+                object action = GatherAction(); GlobalTreeInfo selected = TreeField(action, "mOpTreeInfo");
+                b.Append(",\"role\":").Append(Q(role)).Append(",\"gatherAction\":").Append(action == null ? "false" : "true");
+                b.Append(",\"selected\":"); Tree(b, selected); b.Append(",\"found\":"); Tree(b, TreeField(action, "mFindTreeInfo"));
+                b.Append(",\"selectedHp\":"); Herb(b, selected); b.Append(",\"bag\":"); Bag(b);
+            }
+            if (grant != null) b.Append(",\"grant\":").Append(grant);
+            b.Append('}'); Write(b.ToString()); output.Flush();
+        } catch (Exception error) { Console.Error.WriteLine("[gather] Outcome observer stopped: " + error.Message); Finish("event-error"); }
+    }
     void ObserveAdmission(PEActionType type) { Receipt("action-admission", null, (int)type); }
     void ObserveEnd(PEActionType type) { Receipt("action-end-notification", null, (int)type); }
     void Receipt(string kind, string value, int action) {
@@ -104,13 +231,15 @@ public sealed class PoseProbe : MonoBehaviour {
     }
     void Unsubscribe() {
         // Remove only our own handlers; preserve every original subscriber.
-        try { if (!System.Object.ReferenceEquals(observedAnimation,null)) observedAnimation.AnimEvtString -= ObserveAnimation; }
+        try { if (!System.Object.ReferenceEquals(observedAnimation,null)) { observedAnimation.AnimEvtString -= ObserveAnimation; observedAnimation.AnimEvtString -= ObserveAnimationPost; } }
         catch (Exception error) { Console.Error.WriteLine("[gather] Animation unsubscribe: " + error.Message); }
         try { if (!System.Object.ReferenceEquals(observedMotion,null)) observedMotion.onActionStart -= ObserveAdmission; }
         catch (Exception error) { Console.Error.WriteLine("[gather] Admission unsubscribe: " + error.Message); }
         try { if (!System.Object.ReferenceEquals(observedMotion,null)) observedMotion.onActionEnd -= ObserveEnd; }
         catch (Exception error) { Console.Error.WriteLine("[gather] End unsubscribe: " + error.Message); }
-        observedAnimation = null; observedMotion = null; observedAnimator = null;
+        try { if (grantEvent != null) grantEvent.Unsubscribe(ObserveGrant); }
+        catch (Exception error) { Console.Error.WriteLine("[gather] Grant unsubscribe: " + error.Message); }
+        observedAnimation = null; observedMotion = null; observedAnimator = null; grantEvent = null; observedPackage = null;
     }
     const long MaxBytes = 256L * 1024 * 1024;
     const int MaxTransforms = 1024;
@@ -137,6 +266,9 @@ public sealed class PoseProbe : MonoBehaviour {
         stop = Environment.GetEnvironmentVariable("PE_POSE_STOP");
         if (String.IsNullOrEmpty(arm) || String.IsNullOrEmpty(stop)) throw new ArgumentException("Arm/stop paths required");
         if (Convert.ToInt32(Enum.Parse(typeof(PEActionType),"Gather")) != 32 || Convert.ToInt32(Enum.Parse(typeof(PEActionMask),"Gather")) != 29) throw new InvalidOperationException("Installed Gather enum identity differs");
+        string outcomeSetting = Environment.GetEnvironmentVariable("PE_GATHER_OUTCOMES");
+        if (!String.IsNullOrEmpty(outcomeSetting) && outcomeSetting != "1") throw new ArgumentException("PE_GATHER_OUTCOMES");
+        outcomes = outcomeSetting == "1";
         maxFrames = Setting("PE_POSE_FRAMES", 600, 1, 3600);
         waitSeconds = Setting("PE_POSE_WAIT", 900, 1, 1800);
         captureSeconds = Setting("PE_POSE_SECONDS", 20, 1, 120);
@@ -147,7 +279,7 @@ public sealed class PoseProbe : MonoBehaviour {
         if (playerField == null) throw new InvalidOperationException("MainPlayerCmpt.gMainPlayer unavailable");
         output = new StreamWriter(new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.Read), new UTF8Encoding(false));
         installedAt = Time.realtimeSinceStartup;
-        Write("{\"type\":\"header\",\"schema\":1,\"kind\":\"observed-original-gather-pose\",\"callbackPhase\":\"synchronous-event-dispatch\",\"probeSourceSha256\":" + Q(Environment.GetEnvironmentVariable("PE_GATHER_PROBE_SHA256")) + ",\"phase\":\"WaitForEndOfFrame\",\"matrixOrder\":\"row-major\",\"unity\":" + Q(Application.unityVersion) + ",\"maxFrames\":" + maxFrames + ",\"maxBytes\":" + MaxBytes + "}");
+        Write("{\"type\":\"header\",\"schema\":1,\"kind\":\"observed-original-gather-pose\",\"callbackPhase\":\"synchronous-event-dispatch\",\"probeSourceSha256\":" + Q(Environment.GetEnvironmentVariable("PE_GATHER_PROBE_SHA256")) + ",\"phase\":\"WaitForEndOfFrame\",\"matrixOrder\":\"row-major\",\"unity\":" + Q(Application.unityVersion) + ",\"maxFrames\":" + maxFrames + ",\"maxBytes\":" + MaxBytes + (outcomes ? ",\"outcomes\":true" : "") + "}");
         WriteHumanTraits();
         output.Flush();
         Console.Error.WriteLine("[pose] Waiting for arm file: " + arm);
@@ -173,6 +305,7 @@ public sealed class PoseProbe : MonoBehaviour {
         Transform model = Read(view, "modelTrans") as Transform;
         if (model == null) return;
         ObservePlayer(player, model);
+        TryAttachPost();
         if (startedAt < 0) { startedAt = now; Console.Error.WriteLine("[pose] Capturing player poses"); }
         Transform[] transforms = model.GetComponentsInChildren<Transform>(true);
         if (transforms.Length > MaxTransforms) throw new InvalidOperationException("Model transform bound exceeded");
