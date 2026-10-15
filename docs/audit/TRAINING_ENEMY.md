@@ -84,18 +84,7 @@ The movement capsule's dimensions scale with entity scale `s`: radius `.6*s`, he
 
 ## Proposed bounded C integration and tests
 
-Keep the next increment separate from the terrain sandbox: one training enemy record with prototype ID, fixed-spawn ID, position/velocity, scale, difficulty, HP/attack/defense, alive/death-reported flags and explicit attack state. Suggested interfaces are `pe_training_enemy_spawn(scale,difficulty)`, `pe_training_enemy_step(scene,dt,player)`, `pe_training_enemy_hit(attack_id,part,damage)` and a single mission death event. These are design suggestions, not implemented APIs. The frontend should submit attacks to authoritative combat state; it should not advance mission 746 merely because an enemy was clicked or drawn.
-
-Source-verified initial fixtures:
-
-- Spawn activates once for mission 746 at `(15,2,12)` without an additional .5 m offset; physics may settle it onto the recovered room.
-- At scale 1, normal difficulty, initial HP/attack/defense are 212/64/29; at scale .8 they are 169.6/51.2/23.2; Easy halves those effective combat attributes without halving movement speeds.
-- Root collision uses the scaled .6 × 1.5 capsule. Defence hit tests distinguish the head multiplier from body hits, or clearly label a body-only proxy limitation.
-- Kill count increments only for prototype 13 while target 1025 is active; one death completes it, repeated death notifications cannot grant progress twice, and the completion dialogue precedes 719.
-- Wrong species, pre-mission attacks, already-dead targets and blocked/out-of-range attacks cannot progress the lesson.
-- Melee and pounce eligibility test facing, bounds-gap distance and obstruction independently from hit timing; never use the XML's .5 m as a player-center distance.
-
-Remaining fidelity work includes the compiled behaviour-tree topology and action scheduling, runtime integration of the recovered animated attack capsules and hit windows, complete damage eligibility/camp relations, navigation/avoidance and escape transitions, scale/difficulty observed in the running tutorial, injury/knockback/ragdoll and corpse/loot handling. Choosing a stationary or simplified pursuing enemy is a useful bounded prototype only if documented as a replacement. No original combat measurement or graphics validation is claimed here.
+Native enemy spawning, actual posed contacts, HP/death and the719 transition are implemented. [Training combat](TRAINING_COMBAT.md) and [training melee](TRAINING_MELEE.md) own integration; [PLAYTEST](../PLAYTEST.md#tutorial-native-graphical-fixtures) owns graphical results. Do not repeat the historical plan to create another enemy owner or substitute a synthetic kill. Source stat/event contracts above remain the reference; this does not qualify general Adventure AI.
 
 ## Reproduction anchors
 

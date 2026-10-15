@@ -1,8 +1,8 @@
 # Qualified camp repair and native service
 
-October7,2026, US/Central. **Source-derived:** the existing starting-town machine, its camp binding, item transfer/material rules, timer and archive ownership. **Decoded archived evidence:** two empty repair jobs at the same machine. **Implemented in C:** the qualified machine now connects the exact-instance owner, modal service UI, sandbox interaction/display clock and PECSv20 persistence. No original game, Unity scene, desktop input or new gameplay recording was used for this increment. Source/headless checks do not establish visual acceptance.
+**Source-derived:** the existing starting-town machine, its camp binding, the item-transfer and material rules, the timer and archive ownership. **Decoded archive evidence:** two empty repair jobs at that machine. **Implemented in C:** the exact-instance owner, the modal UI, sandbox interaction, the display clock and PECSv20 persistence. **Observed natively:** see [ordinary native acceptance](#ordinary-native-acceptance). No original partial-job reload has been observed.
 
-[export_camp_repair.py](../../rebuild/tools/export_camp_repair.py) produces [the C contract](../../rebuild/generated/pe_camp_repair_source.h) and [complete metadata](../../rebuild/generated/pe_camp_repair_source.json). UnityPy reads serialized source and installed assets offline; no Unity dependency is added to the C runtime. This increment follows [the source progression audit](SOURCE_AUDIT_PROGRESSION_FOLLOWUP.md), replacing its unresolved machine-placement gate with existing qualified evidence.
+[export_camp_repair.py](../../rebuild/tools/export_camp_repair.py) produces [the C contract](../../rebuild/generated/pe_camp_repair_source.h) and [metadata](../../rebuild/generated/pe_camp_repair_source.json). It reads source and installed assets offline with UnityPy, with no Unity dependency in C.
 
 ## One real machine, already in the route
 
@@ -93,171 +93,46 @@ Worker colonies, arbitrary placed repair machines, creation repair, LifeLimit, s
 
 ## Verification
 
-The exporter guards complete source files, the source/installed serialized machine bindings, the read-only database and both exact archive profiles. It regenerates the63 C material profiles and retains full evidence for exclusions and empty jobs. Ten focused Python tests pass with zero skips in the existing isolated UnityPy interpreter. They cover exact regeneration; entity/type/creator/duration bindings; catalog and material closure; source/prefab/database/bundle drift; all326 possible archive truncations plus trailing bytes; corrupted owners/timers/flags; malformed materials; and missing-material rejection. No reference input was changed.
+The exporter guards the source files, the source and installed machine bindings, the database and both archive profiles. `--check` regenerates the 63 profiles. Its tests cover archive truncations at every one of the 326 offsets, corrupted owners, timers and flags, and material closure.
 
 ```sh
 rebuild/build/unity-tools/bin/python rebuild/tools/export_camp_repair.py --check
 rebuild/build/unity-tools/bin/python rebuild/tests/test_camp_repair_export.py
 ```
 
-The original disconnected C-owner tests pass optimized and ASan/UBSan with leak detection. They cover all63 profile quotes, full/broken and malformed instances, required external-owner guards, atomic missing-cost rollback, busy insertion/return rejection, no-refund cancellation and paid restart, same-category replacement with a full bag, failed return capacity, and snapshot ID collision/malformed-state rejection. Clock tests include paused/subtick/invalid/overflow input,3600 display intervals of float1/60 leaving2400 ticks, and the final.024-second update producing exactly one completion edge. Source/UI's potentially repeated idempotent `Repair.Do` is represented by one equivalent native maximum-durability completion.
-
-All63 current profiles are category1 and have one repair material. The generic cross-category and multi-material transaction branches therefore have no current source-profile fixture coverage; their implementation must not be described as exhaustive tested parity. No zero-maximum profile is emitted. These source/headless checks do not establish original partial-job replay, final UI rendering or new physical acceptance.
-
-The focused [repair UI routes](../../rebuild/tests/test_sandbox_repair_ui.c) pass optimized and ASan/UBSan with leak detection headlessly. They exercise admission/modal shortcut isolation, paging through high bag indices, stale wear snapshots, focus-loss/drop behavior, explicit insertion, failed/confirmed starts, no-refund cancel/restart, full-category failed return and exact same-category replacement, completion while a cancel prompt is open, close/held/release ownership, and moved/resized hit geometry down to320×240. This is route/layout evidence, not a rendered screenshot or manual usability check. Integrated host/persistence verification is recorded separately in [PLAYTEST](../PLAYTEST.md).
+Clock fixtures: 3,600 display intervals of float 1/60 leave 2,400 ticks, and a final 0.024 s update produces exactly one completion edge. Every current profile is category 1 with a single material, so the cross-category and multi-material branches have no source-profile fixture. The [repair UI tests](../../rebuild/tests/test_sandbox_repair_ui.c) cover routes and layout down to 320×240; they are not a rendered usability check.
 
 ## Ordinary native acceptance
 
-**October 14, observed in the native production runtime with ordinary input;
-no original-game comparison.** The question the source and headless proofs
-could not answer was whether an ordinary player can reach machine 20006, open
-its panel by interaction, and run the whole insert, quote, pay, wait, reload
-and take loop through the rendered UI. Evidence: [manifest, input journal and
-lossless crops](../reference/repair-native-20261014/checkpoints.json). Full
-captures and saves stay under `rebuild/build/repair-private-20261014-01`.
+Observed October 14 in the native production runtime with ordinary input, with no original comparison. Evidence: [manifest, inputs and crops](../reference/repair-native-20261014/checkpoints.json); the captures and saves are in `rebuild/build/repair-private-20261014-01`.
 
-*Setup.*
-- Runtime `35124c7`, binary SHA256 `f5c07847…a8e`, private display `:116`.
-- Baseline: the earned trade save `trade-private-20261014-01/reloaded.pesave`
-  (SHA256 `21a80c12…1ac0`), unchanged afterwards.
-- Starting state: Wood Shovel 12 as instance 10 in slot 425 at 3543 / 3553
-  (worn by an earlier ordinary dig), Wood 279 ×194, money 261, Knife equipped.
-- No fixture, cheat, teleport, construction, save edit or grant.
+- **Setup.** Runtime `35124c7`, binary `f5c07847…a8e`, display `:116`. The baseline is the earned trade save (`21a80c12…1ac0`), unchanged afterwards. Wood Shovel 12 is instance 10 in slot 425 at 3543/3553 (worn by an ordinary dig); Wood ×194, money 261. No fixture, cheat, teleport, construction, save edit or grant.
+- **Travel.** On foot from Xing Zhang (−292, 161) to below the lot (−618, 407), at height 22.95 against the machine root's 29.5. The lot is a plateau with cliffs of about 6 m, and the traced route's step from the lot is one-way. A read-only `pe_world_height` grid suggested a ramp at z ≈ 399.5 from x −568 (23.3 m) to −576 (28.1 m), with an upward normal of about 0.707, above the 0.65 minimum. The grid ignores buildings, so this was only a candidate. The player walked up it to (−609, 401), about 5.5 m from the root.
 
-*Travel.* The player walked and sprinted from Xing Zhang (−292, 161) north and
-west, using the traced route's middle legs in reverse, to below the lot at
-(−618, 407).
-- That save (`near-machine`) puts the player at height 22.95, while the machine
-  root is at 29.5. The lot is a raised plateau with cliffs of about 6 m; the
-  traced route's step from the lot to (−626, 429) is a one-way drop.
-- *Candidate (analysis).* A read-only height grid from `pe_world_height` on
-  that save (a scratch tool, not committed) suggested one ramp: z ≈ 399.5, from
-  x −568 (23.3 m) to x −576 (28.1 m). It rises about 1 m per metre, an upward
-  normal of about 0.707, which is above the native minimum walkable normal of
-  0.65. The grid ignores static building collision, so it was a candidate
-  only.
-- *Observed.* The player walked round to that ramp and up onto the lot with
-  ordinary input, then round the hotel to (−609, 401), about 5.5 m from the
-  root.
-
-*Observed, in order:*
-
-| Step | Input | UI result | Saved state (inspector) |
+| Step | Input | UI | Saved state |
 |---|---|---|---|
-| Open | free pointer, right-click the machine | REPAIR MACHINE panel; the bag list includes Wood Shovel ("36 / 36" display) | — |
-| Insert | select Wood Shovel, Insert selected | "Item placed in the machine."; "Repair time: 60 seconds"; "Wood: 1 (bag 194)" | — |
-| Confirm | Repair | "Start repair? Spend the listed materials … for 60 seconds? Cancelling will not refund materials." | — |
-| Start | Repair (Enter) | "Repairing: 58.9 seconds"; "Materials paid Wood: 1 (bag 193)"; bag list locked | — |
-| Partial save | close the panel; about 15 s later, Pause → Save | — | `partial`: running, 3,677,326 ticks left, instance 10 at 3543 in the machine, Wood 193, the shovel not in the bag |
-| Advance | Resume, about 10 s, reopen | "Repairing: 25.4 seconds" | — |
-| Load | close, Pause → Load, then Save while paused | — | `partial-reloaded`: byte-identical to `partial` (`f3e087ff…68bc`), identical inspection |
-| Resume | Resume, reopen | "Repairing: 34.9 seconds" (later than the save, because the clock resumed) | — |
-| Completion with the panel closed | close; walk about 14 m away; about 38 s; return; reopen | idle; "Required materials Wood: 0 (bag 193)"; Repair disabled; Take item enabled (UI only; completion rests on the two saves) | `finished-in-machine`: not running, 0 ticks, instance 10 at 3553 still in the machine |
-| Take | Take item | "Item returned to your bag." | `completed`: instance 10 back in slot 425 at 3553; machine empty; Wood 193; money 261; quickslots unchanged |
+| Open | right-click the machine | REPAIR MACHINE panel listing the shovel ("36 / 36") | — |
+| Insert | select, Insert selected | "Repair time: 60 seconds", "Wood: 1 (bag 194)" | — |
+| Start | Repair, then Enter | prompt states no refund; "Materials paid Wood: 1 (bag 193)" | — |
+| Partial | close; about 15 s; Pause → Save | — | `partial`: running, 3,677,326 ticks, instance 10 at 3543 in the machine |
+| Reload | Pause → Load, then Save while paused | — | `partial-reloaded` byte-identical (`f3e087ff…68bc`) |
+| Complete | panel closed, player about 14 m away | idle; Wood 0; Take enabled | `finished-in-machine`: 0 ticks, instance 10 at 3553 |
+| Take | Take item | "Item returned to your bag." | `completed` (`49ed477c…a96a`): slot 425 at 3553, machine empty, Wood 193, money 261 |
 
-*Against the source.*
-- **Observed match:** the quote, ceil(4 × (1 − 3543/3553)) = ceil(0.011258) = 1
-  Wood, is what the panel showed and what was charged. The panel also showed
-  the source duration, 60 seconds. That is the source and panel value, not a
-  measured runtime: the elapsed time was not measured exactly.
-- **Lifecycle:** completion came while the panel was closed and the player was
-  out of range. It restored the same instance to its maximum without returning
-  it automatically, and Take returned it to its original bag slot.
-- **Native adapters observed:** the Load restoring the saved tick count, and
-  the clock running on after Resume. No original partial-job reload has been
-  observed.
-- **Timing:** wall-clock gaps and on-screen seconds are not measurements of the
-  counter; only the saved tick counts are exact.
-
-*Limits.*
-- Cancel, replacement, a full bag on return, and death during a job were not
-  exercised. Session 02 below later observed cancel and same-category
-  replacement.
-- The route found is an ordinary terrain ramp. Whether the original lot is
-  reached the same way is unknown.
-- The panel's "36 / 36" is the display's rounding; wear comes from the
-  inspector only.
-
-*Tooling.* The read-only inspector's schema 5 adds `repair` (occupied, item,
-count, instance, durability, running, remaining ticks), with a formatter test
-that includes a value above 2³² for output width. Real saved jobs are bounded
-to 6,000,000 ticks.
+- **Matches the source:** the quote ceil(4 × (1 − 3543/3553)) = 1 Wood; completion with the panel closed; the same instance at maximum; no automatic return.
+- **Native adapters seen:** Load restoring the tick count, and the clock resuming after Resume.
+- **Not measured:** wall-clock gaps are not counter measurements.
+- **Inspector.** The schema-5 inspector adds `repair` (occupied, item, count, instance, durability, running, ticks). Real jobs are bounded to 6,000,000 ticks.
 
 ### Cancellation and same-category replacement (session 02)
 
-**October 14, observed in the native production runtime with ordinary input;
-no original-game comparison.** This addresses the cancel and replacement
-limits above. Evidence: [manifest, input journal and lossless
-crops](../reference/repair-cancel-20261014/checkpoints.json). Full captures
-and saves stay under `rebuild/build/repair-private-20261014-02`.
+October 14, native runtime `a0ee7ac`, display `:120`, starting from `partial-reloaded` ([evidence](../reference/repair-cancel-20261014/checkpoints.json)). Wood Axe 26 instance 12 was at its maximum, 3553. The source `UIRepairWnd.OnDropItem` checks only the material list, and only `Repair()` refuses full durability. An Escape sent at `Sandbox ready` did not pause, so the job ran until the panel was opened (not diagnosed).
 
-*Questions.* Source and the headless UI routes already cover the no-refund
-cancel and the exact same-category exchange. The open questions were whether
-the rendered panel lets an ordinary player do them on the real machine, and
-whether the saves show exclusive ownership afterwards.
-
-*Setup.*
-- Runtime `a0ee7ac`, binary SHA256 `f5c07847…a8e`, private display `:120`,
-  Claude as sole operator.
-- Baseline: the earned `partial-reloaded` save (`f3e087ff…68bc`), unchanged
-  afterwards. The machine held Wood Shovel 12 instance 10 at 3543 / 3553,
-  running with 3,677,326 ticks left. Wood was 193.
-- No fixture, cheat, save edit or grant. UI positions came from the first
-  session's recorded inputs and crops.
-
-*Source-derived replacement candidate.* Wood Axe 26 is a qualified ordinary
-profile: maximum 3553, Wood 279 ×4. Source `UIRepairWnd.OnDropItem` checks the
-material list but not missing wear. The full-value refusal is in `Repair()`.
-The native `pe_camp_repair_insert` likewise has no missing-wear requirement;
-only start rejects full durability. Instance 12 was at its maximum, 3553, so
-no wear had to be invented.
-
-*Pause at startup did not take effect.* The plan was to pause as soon as
-`Sandbox ready` appeared in the log. The bounded poll observed the line and waited 0.4 s before sending Escape,
-but the first captured gameplay frame showed the game unpaused. The
-job therefore ran until the panel was opened. The window may not yet have
-accepted input; this was not diagnosed and is not claimed as a defect.
-
-*Observed, in order:*
-
-| Step | Input | UI result | Saved state (inspector) |
+| Step | Input | UI | Saved state |
 |---|---|---|---|
-| Open | right-click the machine | "Repairing: 15.5 seconds"; "Materials paid Wood: 1 (bag 193)"; Cancel repair enabled | — |
-| Cancel prompt | Cancel repair | "CANCEL REPAIR? Stop repairing this item? Materials already spent will not be refunded."; Stop (Enter) / Back (Esc) | — |
-| Confirm | Enter | "Repair cancelled. Materials were not refunded."; the shovel still in the slot; "Repair time: 60 seconds"; a new quote of "Wood: 1 (bag 193)"; Repair and Take item enabled | `cancelled` (`856362f6…e753`): not running, 0 ticks, instance 10 at 3543 in the machine, Wood 193, tools in slots 426–430 unchanged |
-| Select | Resume, reopen, click Wood Axe | tooltip "Wood Axe / Durability 36 / 36 / Repair: Wood x0"; Replace selected enabled | — |
-| Replace | Replace selected | "Item placed in the machine."; Wood Axe in the slot; "Wood: 0 (bag 193)"; Repair disabled; Wood Shovel listed in the bag | `replaced` (`8e0b2cda…add4`): machine holds item 26 instance 12 at 3553, idle; slot 427 now holds item 12 instance 10 at 3543 |
-| Take | reopen, Take item | "Item returned to your bag."; empty machine slot | `returned` (`1a791bbf…55cc`): machine empty; instance 12 at 3553 in slot 425; instance 10 at 3543 in slot 427; Wood 193 |
+| Open | right-click | "Repairing: 15.5 seconds" | — |
+| Cancel | Cancel repair, then Enter | "Repair cancelled. Materials were not refunded."; a new 1-Wood quote | `cancelled` (`856362f6…e753`): idle, instance 10 at 3543 in the machine, Wood 193 |
+| Replace | select the Wood Axe, Replace selected | axe in the slot, Repair disabled | `replaced` (`8e0b2cda…add4`): machine holds instance 12; slot 427 holds instance 10 at 3543 |
+| Take | Take item | "Item returned to your bag." | `returned` (`1a791bbf…55cc`): instance 12 in slot 425, instance 10 in slot 427 |
 
-Each save holds each tool instance exactly once, in either the bag or the
-machine. Money (261), the equipped Knife (instance 1) and the quickslots are
-unchanged throughout.
-
-*Against the source.*
-- **Observed match, cancel:** the job stopped with the same item retained and
-  not repaired (3543 stays 3543). The 1 Wood paid in the earlier session was
-  not refunded. The panel showed a fresh 1-Wood quote; a paid restart was not
-  exercised.
-- **Observed match, replacement:** same category (1) exchanged through the
-  incoming grid. The old shovel took the axe's former slot 427, with its exact
-  wear. The panel blocked starting a repair on the full axe.
-- **Native adapters:** the confirmation prompt and its wording, Enter to
-  confirm, and the bag-only listing.
-- **Cancel timing:** cancellation came before completion, about 15 s of
-  displayed time before the end. The on-screen seconds are not a counter
-  measurement.
-
-*Incidental input.* After Replace, one left click at (1100, 650) landed
-outside the panel while the modal was open. Compared with `cancelled`, the `replaced` save shows the expected tool
-exchange and no additional inventory, wear, position, money or equipment
-change. This is bounded saved-state evidence, not a held-input acceptance test.
-
-*Limits.* Cross-category replacement, a full bag on return, failed
-replacement while running, cancel then paid restart, and death during a job
-were not exercised. The panel's "36 / 36" is display rounding; wear comes from
-the inspector only.
-
-The session ended by explicit guarded stop (owned game SIGTERM, −15). The
-supervisor, Xvfb and game PIDs were absent afterwards, and the baseline was
-unchanged. Six lossless 620×515 crops were checked pixel-exactly against
-their captures. No runtime code changed.
+Each save holds each instance exactly once, and money, the equipped Knife and the quickslots are unchanged. A stray left click outside the panel after Replace changed nothing. Not exercised: cross-category replacement, a full bag on return, cancelling then a paid restart, and death during a job.

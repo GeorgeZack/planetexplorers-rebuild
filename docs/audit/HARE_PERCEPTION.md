@@ -50,8 +50,6 @@ make -C rebuild hare-perception-assets-check ASSET_PYTHON="$PWD/rebuild/build/un
 
 ## Validation
 
-Focused optimized strict C11 and ASan/UBSan with leak detection pass. Tests cover independent20/16/15 cadence, cached membership and component-order differences; inclusive expanded XZ radius; strict full3D angle and supplied sensor axis; exact callback origins/targets/mask; occlusion/ignoreBlock/Snake/death distinctions; separate bidirectional reputation/force/threat/damage gates; lifecycle/carrier/duplicate collection gates; and transactional malformed-input/query failure.
-
 Six exporter tests pass with UnityPy, including actual installed sensor settings, inverse-bind point reconstruction, conformal sampled matrices, regeneration, wrong joint/path rejection and actor-hash rejection. `--check` passes. Standard Python runs the two dependency-free contract tests and explicitly skips the four UnityPy-dependent checks when that optional dependency is absent.
 
 See [HARE_MOVEMENT.md](HARE_MOVEMENT.md), [HARE_DAMAGE.md](HARE_DAMAGE.md), [TRAINING_ENEMY.md](TRAINING_ENEMY.md), and [PLAYTEST.md](../PLAYTEST.md) for separate movement, contact and physical evidence.

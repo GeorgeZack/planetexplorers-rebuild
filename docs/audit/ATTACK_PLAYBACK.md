@@ -1,6 +1,6 @@
 # Contact-responsive attack playback
 
-2026-10-06. Source-derived and implemented in the C sandbox; no game launch or new physical playtest. This closes the numerical contact-speed gap identified by the [source-first combat audit](SOURCE_FIRST_COMBAT.md). [Shield action admission](SHIELD_ACTION.md) is a separate, disconnected foundation; ordinary shield activation stays gated.
+2026-10-06. Source-derived and implemented in the C sandbox; no game launch or new physical playtest. This closes the numerical contact-speed gap identified by the [source-first combat audit](SOURCE_FIRST_REBUILD.md). [Shield action admission](SHIELD_ACTION.md) is a separate, disconnected foundation; ordinary shield activation stays gated.
 
 ## Recovered contract
 

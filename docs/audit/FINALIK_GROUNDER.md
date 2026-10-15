@@ -1,6 +1,6 @@
 # Installed FinalIK grounder
 
-October 13, 2026. **Shipped-artifact-derived, implemented in C and
+**Shipped-artifact-derived, implemented in C and
 [connected to the drawn player in both hosts](#live-in-both-hosts).**
 `pe_grounder` performs one `GrounderFBBIK.OnSolverUpdate` for the
 female player: the root ray, both legs, the pelvis, and the pelvis, foot and
@@ -142,52 +142,14 @@ make -C rebuild grounder-source-check
 
 ## Prepared uneven-ground capture
 
-The flat tutorial session could not qualify the grounder, so a second
-supervised session was prepared and then [run](#observed-on-uneven-ground).
-Its tools:
+`ReferenceGrounderProbe.cs` adds one subscriber each to the grounder's own `OnPreGrounder` and `OnPostGrounder` delegates, and removes them at the end. It writes no field, transform, input or save.
 
-- `ReferenceGrounderProbe.cs` attaches to the live player's `GrounderFBBIK`.
-  It adds one subscriber each to the grounder's own `OnPreGrounder` and
-  `OnPostGrounder` delegates, which the compiled `OnSolverUpdate` raises
-  immediately before `Grounding.Update` and after the last spine request, and
-  removes them at the end. It writes no grounder or solver field, transform,
-  input or save.
-- **Before each update** it records time, weight, the root position and axes,
-  both foot positions and rotations, the pelvis bone, the nine effector
-  offsets already written by Halt and other effects, and the private leg and
-  pelvis state the update starts from.
-- **It repeats the grounder's seven rays** as plain `Physics.Raycast` queries
-  on the same layers, at the same instant, and records origin, hit point,
-  normal, distance, layer and collider type. The original keeps only its root
-  and heel hits; the analyzer checks the probe's repeats against those two.
-- **After each update** it records the leg and pelvis state, the moved pelvis
-  bone, the rotated feet and the effector offsets, so the grounder's share is
-  the difference from the "before" values.
-- `analyze_reference_grounder.py` replays the capture through `pe_grounder`
-  twice: once restarting every frame from the original's recorded state (one
-  update's arithmetic, no drift), and once free-running from the first frame.
-  It reports errors for foot offset and target, height from ground, foot and
-  leg rotation, pelvis height and bone move, foot and spine effector requests,
-  and ray origins. It also reports live settings against the prefab, the live
-  layer names, what was hit, and whether the capture left flat ground at all
-  (a foot request of 3 cm or more).
+- **Before each update:** time, weight, root position and axes, the feet, the pelvis bone, the nine effector offsets already written, and the private leg and pelvis state.
+- **Rays:** the seven rays repeated as plain `Physics.Raycast` queries on the same layers, recording hit, normal, layer and collider type. The root and heel hits are checked against the original's kept hits.
+- **After each update:** the same state, so the grounder's share is the difference from "before".
+- **Per frame since then:** the ground angle, the arm-mapping weight, `maxFootRotationAngle` and `spineBend`.
 
-What the session should settle, in the order it matters:
-
-1. **Ray conventions**: origins, lengths and miss defaults.
-2. **Foot offset, pelvis height and spine lean** on slopes and steps.
-3. **The four engine-native adapters** (`FromToRotation`, `Slerp`,
-   `SlerpUnclamped`, `RotateTowards`) and the zero starting quaternion of
-   `Leg.r`, through the recorded foot rotations.
-4. **The rigid-translation assumption** for the foot after the pelvis move.
-5. **What the rays actually hit** in play, by layer and collider type.
-
-Session, about two minutes of play, operator input only: load a place with
-natural terrain (the Adventure start has slopes; the tutorial is flat), arm,
-then stand still on a slope, walk and run up, down and across it, step on and
-off a ledge or rock, and jump once. The launcher defaults to the isolated bake
-profile; `--user-data` selects another, and the preserved sandbox reference
-checkpoints must not be overwritten.
+`analyze_reference_grounder.py` replays the capture through `pe_grounder` twice: once restarting every frame from the recorded state, and once free-running. It reports whether the capture left flat ground at all (a foot request of 3 cm or more).
 
 ```sh
 python3 rebuild/tools/reference_grounder_probe.py          # offline compile only
@@ -195,12 +157,6 @@ python3 rebuild/tools/reference_grounder_probe.py --launch # supervised session
 python3 rebuild/tools/analyze_reference_grounder.py CAPTURE.jsonl
 make -C rebuild grounder-probe-test
 ```
-
-The analyzer's tests write a capture from the second transcription over
-rolling ground, and check that both replays agree with it, that a flat capture
-is reported as not qualifying, and that changed state, requests, rays,
-settings and modes are visible or rejected. They establish that the tools
-work, not what the original does.
 
 ## Observed on uneven ground
 
@@ -367,22 +323,7 @@ Adapters, none of them original behavior:
 - **Held equipment** is the host's drawn-tool flag, standing in for the spine
   mask.
 
-Verification:
-
-- `core:grounder_host`: level ground requests nothing and holds the 5° limit;
-  a slope ahead, behind and across gives the signed angle, the curve's limit
-  and feet tilted to it; a step lowers the pelvis and splits the feet; the
-  angle follows the contact, not the rays, decays without one and holds for a
-  wall or ceiling contact; held equipment zeroes the spine bend; invalid
-  input changes nothing; a reset initiates again.
-- `core:ik_drive`: an identity grounding equals the offset solve; a lowered
-  pelvis with the feet requested back leaves them planted and drops the
-  chest; a 20° foot rotation turns that foot only.
-- `sandbox-actor-test`: the grounding reaches the solve unchanged, adds to
-  the Halt offsets, is kept on a refused update and dropped on clear or reset.
-- Rendered smokes: the sandbox 90-frame runs report 90 updates, 89 grounded
-  and foot requests up to 3.5 cm on the flat fixture and 8.7 cm on imported
-  dune terrain; the tutorial 90-frame run reports 3 mm on its flat floor.
+Verification: `core:grounder_host` covers level ground (no request, 5° limit), signed slope angles and the curve limit, steps, decay and wall contacts, the spine-bend zero with equipment held, invalid input and reset. `core:ik_drive` covers identity grounding, planted feet with a lowered pelvis, and single-foot rotation. `sandbox-actor-test` checks that the grounding reaches the solve. In 90-frame rendered smokes, foot requests reach 3.5 cm on the flat fixture, 8.7 cm on dune terrain and 3 mm on the tutorial floor.
 
 ### Trees and the ground contact
 
@@ -410,11 +351,7 @@ slope. The tutorial records it at the start of each fixed step
 (`PeTraining.ground_contact`, not persisted); the sandbox probes once per
 played frame.
 
-Verification: `core:grounder_host` (above), `core:training_tree_hit` (the
-tree ray's top, side, range and interior cases; the floor contact on the
-ground and none in the air), full check 277 jobs. Rendered smokes are
-unchanged: 8.7 cm on dune terrain, 1.2 cm on the Adventure fixture, 3 mm on
-the tutorial floor.
+Verification: `core:training_tree_hit` covers the tree ray's top, side, range and interior cases, and the floor contact on the ground and none in the air. Smokes: 8.7 cm on dune terrain, 1.2 cm on the Adventure fixture, 3 mm on the tutorial floor.
 
 **Not checked:** how it looks. The smoke frames show an intact player at a
 distance and nothing more. No slope, step, jump, edge of a block or

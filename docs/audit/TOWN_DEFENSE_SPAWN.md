@@ -1,6 +1,6 @@
 # Disconnected Town Defense spawn planner and member owner
 
-October7,2026, US/Central. Source-derived and implemented in C. No game, graphics, desktop input or new capture was used. [The progression audit](SOURCE_AUDIT_PROGRESSION_FOLLOWUP.md#3-the-next-defense-module-is-a-plannermember-owner-not-a-captured-cohort-requirement) identifies this offline slice; [Town Defense evidence](ADVENTURE_TOWN_DEFENSE.md) separately records the original observations, archived center/protected NPC and unqualified dependencies.
+October7,2026, US/Central. Source-derived and implemented in C. No game, graphics, desktop input or new capture was used. [The progression audit](SOURCE_FIRST_REBUILD.md) identifies this offline slice; [Town Defense evidence](ADVENTURE_TOWN_DEFENSE.md) separately records the original observations, archived center/protected NPC and unqualified dependencies.
 
 [pe_town_defense_spawn](../../rebuild/src/pe_town_defense_spawn.h) is disconnected from `PeGame`, quest acceptance, saved state and graphics. The existing clock still emits two wave requests only. The new planner can consume each request and retain a plan; neither a finished clock nor an admitted plan establishes that an actor exists or that9077 is complete. The generated cohort-availability flag remains0.
 
@@ -27,8 +27,6 @@ That latch does not complete a gameplay quest, grant a reward or remove any acto
 ## Guards and verification
 
 [The exporter](../../rebuild/tools/export_adventure_town_defense.py) still emits the same quest/schedule/species metadata and adds radius, deferred-Y and permission constants. Six whitespace-normalized method-body guards pin active beacon initialization, wave construction, the correct AiUtil overload, creation/death binding, target death credit and deferred creation. Negative tests change orientation, radius, permissions, death subscription, flattening, death arithmetic, deferred Y and support admission and require rejection. Regenerate outputs through the exporter; do not hand-edit the generated files.
-
-Focused optimized C tests pass with strict warnings treated as errors. They cover integer maximum exclusivity, exact callback order, radial/angle endpoints and axes, nonunit flattened forward, failed draw rollback of output, unclamped out-of-route anchors, canonical plans/state, deferred support failure, duplicate/wrong creation, beacon-owned death deduplication and15-credit completion with three live members plus four pending agents. An integration fixture consumes the real clock's wave0/1 events and proves that twenty admitted pending requests leave death progress0 and completion false. The same suite passes ASan/UBSan with leak detection. Eight exporter tests pass without skips. These checks establish headless rules and ownership, not actor/geometry or visual parity.
 
 One initial fixture assertion incorrectly expected a50m south sample to leave the captured Z range; its computed Z84 was correctly inside. The fixture now explicitly injects90°/80m and verifies unchanged X−204. That development assertion failure is not a game crash or a passing test; the corrected optimized and sanitizer runs passed. Subsequent assert-based test launches disable core dumps only for that shell process to avoid desktop crash notifications.
 

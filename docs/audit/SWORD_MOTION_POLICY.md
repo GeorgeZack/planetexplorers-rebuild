@@ -2,7 +2,7 @@
 
 Subsequent checkpoint: [grounded walking attacks](SANDBOX_WALKING_KNIFE.md) now qualify, export and integrate ordinary Attack6–9 root motion, including running continuations. The remaining-extraction statements below describe this earlier policy checkpoint; visual acceptance and ordinary hunt completion remain open.
 
-October 6, 2026. Source-derived and implemented in C, with offline numerical and recovered-asset tests. Neither game was launched. This advances the walking-attack work in [the source-first review](SOURCE_FIRST_REVIEW.md); slow-walking attacks are not enabled by this increment.
+October 6, 2026. Source-derived and implemented in C, with offline numerical and recovered-asset tests. Neither game was launched. This advances the walking-attack work in [the source-first review](SOURCE_FIRST_REBUILD.md); slow-walking attacks are not enabled by this increment.
 
 ## One source selector
 
@@ -26,4 +26,4 @@ The existing native ordinary stationary path still supplies zero horizontal requ
 
 `make -C rebuild sword-source-check` runs exact regeneration and all15 exporter tests using the local UnityPy interpreter, with no skips. Override `UNITY_PYTHON` when using a different environment. Ordinary system-Python exporter tests skip four optional prefab cases; those skips are not passes. The new prefab-dependent check is separate from the existing dependency-light `check-content` target.
 
-Logs are under ignored `rebuild/build/sword-motion-check`. The accompanying [root-channel investigation](PLAYER_ROOT_CHANNELS.md) now supplies a reproducible source decoder, static native flag/scale evidence and comparison against2,595 existing running samples. It leaves the final root-delta composition/basis connection unproven for the ordinary clips. Static pose-root coordinates and sums of paused-seek delta diagnostics do not establish sequential displacement. Four ordinary native hare kills, physical partial-progress reload and graphical revival acceptance remain open.
+Logs are under ignored `rebuild/build/sword-motion-check`. The accompanying [root-channel investigation](PLAYER_ROOT_CHANNELS.md) now supplies a reproducible source decoder, static native flag/scale evidence and comparison against2,595 existing running samples. It leaves the final root-delta composition/basis connection unproven for the ordinary clips. Static pose-root coordinates and sums of paused-seek delta diagnostics do not establish sequential displacement. Four-hare completion and partial reload were accepted separately ([hunt acceptance](HUNT_ORDINARY_ACCEPTANCE.md)); graphical revival acceptance remains open.

@@ -48,7 +48,7 @@ The native Steam client accepted9072 and used its pink Herbal Drink Script in th
 
 This confirms acceptance and script learning in the original. It does not establish original crafting or medicine turn-in; the fresh checkpoint preserves active9072. Reproduce the evidence with [audit_reference_medicine.py](../../rebuild/tools/audit_reference_medicine.py), supplying the two cloned save directories and an output JSON path.
 
-The final physical pass confirmed source refusal/retry/acceptance and native archive learning of337/388/390. Native graphics verified acceptance, the corrected held-click/camera transition, final4100 delivery, exact saved rewards, completion after reload, Tammana catalog scrolling and Sherley purchase persistence. [The playtest](../PLAYTEST.md#october-5-annot-medicine-and-expanded-shops) separates the original observations, headless preparation, physical interactions and remaining glyph/item-behavior limits. Both native test sessions exited0 through their UI.
+The final physical pass confirmed source refusal/retry/acceptance and native archive learning of337/388/390. Native graphics verified acceptance, the corrected held-click/camera transition, final4100 delivery, exact saved rewards, completion after reload, Tammana catalog scrolling and Sherley purchase persistence. [The playtest](../PLAYTEST.md) separates the original observations, headless preparation, physical interactions and remaining glyph/item-behavior limits. Both native test sessions exited0 through their UI.
 
 ## October 5 original delivery timing and retained native policy
 

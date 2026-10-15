@@ -260,7 +260,7 @@ group mapped to the host names, confirms unchanged readiness, the 25-clip
 defence with its 16 capsules, rejection of the 42-clip actor, and that an
 idle draw touches no reaction scene. Both are headless. The later preview qualifies the actual actor GPU load and isolated rendering in a window; the full sandbox host startup and live dispatch remain untested.
 
-## Next animation set: get-up and sprint attack
+## Recovered get-up and sprint attack
 
 The clip/state identities below were recovered from the installed controller
 on October 12. The [action lifecycle](RAGDOLL_ACTIONS.md) is now recovered
@@ -304,21 +304,7 @@ skill system is not traced here. Compared with the running lunge the blade
 opens earlier (0.169 s against 0.297 s) and closes earlier (0.568 s against
 0.709 s).
 
-Implemented in C on October 12 as timing and admission only:
-`PE_COMBAT_SPRINT` carries the clip-401 event clock and the stage sequence,
-and `pe_sandbox_melee` accepts the sprint branch only when a host declares
-`sprint_motion_ready` with matching SprintSwordAttack poses. No host does.
-**In the live game a press above 7 m/s is still rejected before any stamina
-debit**, the motion router refuses a sprint first stage rather than borrow the
-running curve, and nothing about sprinting or attacking changes.
-
-The completed reaction bake supplies its isolated pose. The separate
-[source root qualification](SPRINT_ROOT_CHANNELS.md) now supplies clip401
-knots through the unchanged native branch proof and running408 oracle; a new
-engine root probe is optional corroboration. Both groups are staged and
-uninstalled. Opening sprint still requires its own runtime reader, matching
-body/held/defence playback, shared collision/contact routing and presentation
-acceptance. No host sets sprint readiness.
+Clip401 pose/root integration is now live for the bounded grounded Knife33 branch; [sprint integration](SANDBOX_SPRINT_KNIFE.md) owns matching body/equipment/defence clocks, shared motion/contact and acceptance. The former no-host-readiness/staged-only claim is obsolete. Get-up leaves remain captured but do not enable ragdoll/get-up gameplay. Exact skill interruption semantics and full engine transitions remain unqualified.
 
 ## Validation and remaining gate
 

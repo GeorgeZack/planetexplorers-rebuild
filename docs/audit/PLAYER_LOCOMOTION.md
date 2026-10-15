@@ -1,6 +1,6 @@
-# Player locomotion selection for recovered clips
+# Player locomotion selection
 
-The standalone [pe_player_locomotion.c](../../rebuild/src/pe_player_locomotion.c) selects the six recovered normal locomotion clips from actual host movement and maintains a bounded authored animation clock. It provides walking/running instead of a frozen avatar while keeping its approximation explicit. It does not implement Unity's full blend graph, movement physics, root motion, attack selection or weapon-style layers. [Animator baking](ANIMATOR_BAKE.md) documents how the original Unity runtime evaluated the skeletal samples; source-derived samples do not make a simplified selector equivalent to the original Animator.
+`pe_player_locomotion` is the shared twelve-state native presentation adapter. [Facing/blending](PLAYER_STRAFING.md) and [directional assets](DIRECTIONAL_PLAYER.md) own current host/asset qualification. The initial six-clip scope is obsolete; this is not the full Unity Animator.
 
 ## Source/controller evidence
 
@@ -15,7 +15,7 @@ The inspected installed controller is `FemaleAnimator2`, object779 in `PE_Client
 | Run forward | 0 | 5 | NormalRF |
 | Sprint forward | 0 | 8 | NormalSprint |
 
-The normal tree also includes side/back/diagonal leaves. Forward walking/running pass through ForwardAngle blends: WF appears at the upper end of thresholds−25/−15; RF at−45/−30, with NormalRunForwardDown as another leaf. Their compiled leaf duration multipliers are1. The selector cannot reproduce these blends with the limited six-clip locomotion set. In particular **NormalSprint is not among the current ten baked clips**; choosing RF and adjusting its clock is a fallback, not recovered sprint animation.
+The normal tree also includes side/back/diagonal leaves. Forward walking/running pass through ForwardAngle blends: WF appears at the upper end of thresholds−25/−15; RF at−45/−30, with NormalRunForwardDown as another leaf. Their compiled leaf duration multipliers are1. The native selector does not reproduce these complete blends; ordinary locomotion sprint fallback is distinct from qualified Knife sprint-attack401.
 
 `Motion_Move_Human.cs` declares default walk/run/sprint speeds2/5/8m/s and AnimLerpSpeed5. `Action_HumanMove.cs` feeds ForwardSpeed/RightSpeed using movement transformed into player-local coordinates; ordinary updates lerp with5×deltaTime, while aiming uses a different immediate path. `Motion_Move_Human.UpdateAnim` supplies OnGround. Source movement commonly uses desired movement direction, so the native selector's use of actual host velocity deliberately differs when blocked by a wall.
 
@@ -35,27 +35,8 @@ Additional EndJump, water and competing-action transitions are present but are n
 
 ## API and bounded behavior
 
-The public [header](../../rebuild/src/pe_player_locomotion.h) defines enum order IDLE/WALK/RUN/JUMP/FALL/LAND. `pe_player_locomotion_name()` maps these to NormalIdle, NormalWF, NormalRF, Jump, Fall and Land. The host reads those clips' actual durations from its loaded actor and calls `pe_player_locomotion_init(state,durations)`. No baked part index, clip index or fixed duration is assumed.
+[Header](../../rebuild/src/pe_player_locomotion.h): twelve enum-indexed loaded durations; no hard-coded actor indices. Input is measured velocity/ground/walk/sprint plus one accepted jump edge, and optional body-local directional axes. Select dominant axis with forward/back ties; preserve gait phase. Finite dt0..1, zero no-op; invalid input preserves state. No allocation/graphics/physics/events.
 
-Each `step(state,input,dt)` consumes actual velocity (the training frontend uses horizontal position displacement divided by the fixed step, rather than the controller’s pre-collision requested velocity), grounded state, walk/sprint mode and **one accepted physical jump edge**. Held Space is not a jump edge. It returns the selected enum and authored seconds in the state. Time must be finite and between0 and1s; zero is a no-op. Invalid values leave the state unchanged. The module allocates nothing and makes no graphics, physics or event calls.
+Preserve source-backed .85 Jump exit, .7 Land exit, strict .3s ledge delay and .1s jump-ground grace. Idle/gaits/Fall wrap, Jump/Land clamp. Discrete selected state and continuous drawn snapshot are distinct: .12s exponential weight adapter advances outgoing clips and phase-aligns gaits. Init/reset snaps Idle. Hosts map the same exact clocks/weights to body, attachments and defence; actions override the whole locomotion snapshot.
 
-The current presentation policy is:
-
-- Ground speed above.05m/s selects walking when walk is set without sprint, otherwise running. Below that threshold selects idle. This dead zone and discrete selection are provisional; there is no 2D blend, strafing or reverse clip selection.
-- WF runs at actual horizontal speed/2 and RF at speed/5, each clamped to.25–2 times authored rate. Thus8m/s sprint uses RF at1.6×. These rates are presentation approximations based on source speed anchors, not recovered Animator speed multipliers. Walk↔run preserves normalized gait phase; other changes reset the selected clip to its first frame. New states do not consume that update's delta, another explicit bounded approximation.
-- An accepted jump selects Jump at time0. While airborne it switches to Fall at the source .85 normalized Jump exit; it does not infer that transition solely from vertical velocity. Natural ledge departure waits strictly more than.3s before Fall. Short ground-probe gaps do not replay landing. The .1s jump-ground grace avoids immediately cancelling a just-accepted jump.
-- Stationary contact after a jump/fall selects Land; Land exits at.7 normalized time. Actual movement immediately selects its gait, approximating the source StartMove path. This does not prove an actual source StartMove trigger was delivered on that frame. No transition crossfade is applied.
-- Idle/walk/run/fall wrap by their loaded authored durations. Jump/land clamp to their duration if necessary. Air-age tracking saturates and clip clocks remain bounded in long sessions.
-
-The selector does not use the baked Attack6–9 clips or authorize combat. Equipment-specific normal/sword/rifle poses, FP/TP layering, IK, turn/lean blending, humanoid retargeting, root displacement and collision remain separate work. Choosing normal locomotion while a weapon is equipped is therefore still an approximation. Rendering integration remains owned by the training frontend; this audit does not claim a graphical locomotion smoke succeeded.
-
-## Validation
-
-[tests/test_player_locomotion.c](../../rebuild/tests/test_player_locomotion.c) exposes `pe_test_player_locomotion()`. Strict C11 compilation and standalone AddressSanitizer/UndefinedBehaviorSanitizer/leak checks pass. Fixtures exercise idle→walk→run, preserved gait phase, speed-scaled sprint fallback, actual zero-speed stop, accepted jump and authored Jump→Fall timing, stationary/moving landing, .1s ground grace, strict .3s ledge-fall threshold, brief ground gaps, immediate movement out of Land,10,000 update clock bounds, invalid input and atomic initialization failure. These checks establish deterministic selector behavior, not Unity blend or root-motion parity.
-
-
-## Next directional/blend recovery scope
-
-The normal branch contains19 unique leaves: NormalIdle; NormalWF/WB/WL/WR; NormalRF/RB/RL/RR and RFL/RFR/RBL/RBR; NormalRunForwardDown; NormalSprint; and NormalWalkTurnLeft/Right plus NormalRunTurnLeft/Right. The existing bake covers only Idle/WF/RF from that branch. A useful next bounded expansion would first bake the missing normal directional and sprint leaves on the same source rig, preserving exact durations and loop flags. Equipment-style branches should be a subsequent explicit selection, not silently mixed into the normal branch.
-
-The next controller fixture should preserve node2's serialized blendType2, RightSpeed/ForwardSpeed anchors, parent MoveStyleH/V and BeatWeight branches, ForwardAngle child thresholds, and source local-velocity smoothing. The presence of compiled pair/neighbor arrays does not establish a verified blending formula. Validate candidate weights and synchronized clocks against the original Animator at selected parameter points: zero, each authored anchor, an interior forward walk/run point, side/back diagonals, and a turn/lean threshold. Isolated leaf baking cannot validate those blends. Only then add a bounded multi-clip pose blender with compatible-skeleton checks and use actual source-local movement direction; keep host/world root motion separate. This staged scope avoids treating today’s velocity-scaled forward fallback as directional Animator parity.
+Speed scaling/sprint fallback and blending are adapters, not root-motion or full Animator parity. Tests: [test_player_locomotion.c](../../rebuild/tests/test_player_locomotion.c); [PLAYTEST](../PLAYTEST.md) owns physical/native fixture observations. Equipment/turn/lean/masked style blending remains separately qualified; do not request already-recovered directional leaves again.

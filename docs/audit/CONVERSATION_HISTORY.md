@@ -39,10 +39,7 @@ PECSv21 preserves the literal v20 payload, then appends **84,484 bytes**: a litt
 
 Verification passed: four Python source guards; focused model ASan/UBSan with leak detection; focused save optimized checks; and a combined ASan/UBSan run with leak detection covering 17 C entry points (history model/save, repair/inventory/vegetation/construction-history/wallet/stamina/shield/outfit saves, literal v10–v13 and medicine saves, bandage and revival). The combined build used `-Wall -Wextra -Wpedantic -Werror` and exited 0 without sanitizer diagnostics. Audit links resolve and `git diff --check` passes. These headless checks establish model/save behavior; they do not establish original rendered parity or physical input acceptance.
 
-
 ## Integrated verification
-
-The full optimized core and aggregate `make test` complete successfully. The aggregate Python suites report51 optional dependency/asset skips; these are not coverage. All new focused source, model, history UI and routing checks pass without skips. Seventeen combined model/historical-save suites pass ASan/UBSan with leak detection, as do the history renderer and the three production-extracted tutorial input checks. `check-content` passes with installed UnityPy, zero skips; all26 CLI tests pass.
 
 The paired actual-renderer fixture on private display `:102` captures27 images at1280×720,640×480 and320×240. Equal HUD values still produce zero pixel differences. Identical twenty-row history fixtures match exactly at both top and bottom:324,720 /81,180 /20,584 pixels per view, zero differences. [Shared history fixture](../reference/conversation-camera/shared-history-fixture.png) shows source speaker/body styling, line flow and clipping. These are staged C presentations with recovered assets, not original screenshots.
 

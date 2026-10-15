@@ -197,14 +197,3 @@ a Halt begun in a step takes its zero first offset pass in that step; a jump
 requested together with a release wins; the feet for the foot test come from
 the blended staged pose; the velocity is the host controller's. The grounder,
 which shares the foot and shoulder channels, is not connected.
-
-Verification: the `halt_host` core suite covers each row above, lock lengths
-for walk, run and sprint stops, the foot rule, repeat requests, death, reset
-and atomic invalid input. `sandbox-actor-test` covers the world-to-model turn,
-refused offset updates and reset. `test_player_ik_drive.py` runs the three
-stops through the real actor over the installed assets. The tutorial's
-15,000-frame progression passes with 5 stops and 65 locked steps. A
-private-display sandbox session with ordinary key input shows a sprint stop as
-a forward lunge and crouch that recovers within a second
-(`rebuild/build/halt-private-20261013a/`). None of this compares the drawn
-stop with the original's.

@@ -170,22 +170,6 @@ The largest HerbDown discrepancies occur at the first end-of-frame sample after 
 
 The next offline goal must explain the boundary discrepancies as well as replaying current/next states and event receipt frames. Leaf recovery succeeded; live composition remains unqualified.
 
-## Checkpoint validation
-
-These gates ran from the repository root with `TMPDIR=rebuild/build/compiler-tmp`, on a tool and test tree whose 315 files were hashed at the start (`rebuild/build/compiler-tmp/gather-gates-2/tree-tools.sha256`). The same hashes were rechecked after the last gate.
-
-| Gate | Result |
-|---|---|
-| `make -C rebuild check` | exit0. 284 suites passed, 0 failed. 991 Python tests, of which 98 were skipped; skips are not passes. `test_reference_animator_bake` (27), `test_reference_gather` (4) and `test_reference_gather_analysis` (5) all ran without skips. |
-| `make -C rebuild cli-test` | exit0 |
-| `make -C rebuild check-content` | exit0 |
-| `make -C rebuild check-sources` | exit0, with no skip lines. This was a rerun: the first attempt's process ended mid-run with no result and was not counted. |
-| `make -C rebuild check-sanitize` | exit0. 113 suites passed, 0 failed, 0 skipped. |
-
-Logs are in the ignored directories `rebuild/build/compiler-tmp/gather-gates-2` (check, cli-test, check-content) and `gather-gates-3` (check-sources, check-sanitize).
-
-These checks cover the tools, analyzers, exporter regeneration and the unchanged native core. They do not establish the Gather schedule, pose composition, the commit boundary, graphical acceptance or any runtime integration.
-
 ## Offline FullBody controller-clock replay
 
 `rebuild/tools/replay_gather_clock.py` replays the source FullBody Gather state clock against this capture. It runs offline: no launch, no input, no native code.
@@ -270,18 +254,5 @@ The tool prints `4 cycles, 0 mismatches; qualified=True (observed delta domain o
   - ambiguous or changing player animators.
 - `test_reference_animator_bake.py` adds the controller-record guards for cycle offset, speed parameter, idle speed, fixed duration, entry exit time, selectors and chain destinations.
 
-### Clock-replay validation
-
-The gates ran from the repository root with `TMPDIR=rebuild/build/compiler-tmp`, on a code snapshot hashed beforehand (`rebuild/build/compiler-tmp/clock-gates-1/tree.sha256`: tools, tests and Makefile). The snapshot was rechecked unchanged after the last gate.
-
-| Gate | Result |
-|---|---|
-| `check` | exit0. 285 suites passed, 0 failed. 1,002 Python tests, of which 98 were skipped; skips are not passes. `test_replay_gather_clock` (10) and `test_reference_animator_bake` (28) ran without skips. |
-| `cli-test` | exit0, 26 tests |
-| `check-content` | exit0 |
-| `check-sources` | exit0, with no skip lines |
-| `check-sanitize` | exit0. 113 suites passed, 0 failed, 0 skipped. |
-
-These gates validate the tools and tests and the unchanged native core. They do not qualify anything beyond the clock domain stated above.
 
 Next capture questions, covering the harvest-commit snapshots and the isolated layer-weight boundary, are planned source-only in [GATHER_COMMIT_CAPTURE_PLAN](GATHER_COMMIT_CAPTURE_PLAN.md).

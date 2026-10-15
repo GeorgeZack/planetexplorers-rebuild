@@ -118,8 +118,7 @@ evidence/staging/backups are under
 backups are also retained in `actor-materials-20261007/`. Intermediate
 `actor-materials-20261007-v2/` evidence/backups are retained as well. This includes player body/attachments, all
 archived residents and tutorial actor groups without changing their clip sets.
-The currently running older process does not acquire the shader update until
-the rebuilt binary is restarted.
+Reload assets through a new process after installing changed material metadata.
 
 ## Verification and limits
 

@@ -9,10 +9,7 @@ starvation in play and any original-game comparison are not.
 
 ## Why now
 
-The town shops already sell eight foods (384–389, 391, 392) from the recovered
-catalog, but the rebuild has no hunger attribute for them to act on. The
-[replication plan](../REPLICATION.md#survival-and-equipment--partial) names
-hunger as the next survival attribute.
+When this audit started, the town shops already sold eight foods (384–389, 391, 392) and the rebuild had no hunger attribute for them to act on. Hunger is now implemented as described below.
 
 ## Source rules
 
@@ -143,14 +140,6 @@ games and the tutorial have no hunger.
 - **Display.** The character panel's existing Hunger row shows the value and
   "(starving)", and the shared HUD draws the original's hunger bar
   ([below](#hud-bar-and-starvation-notice)).
-
-Verification: `core:hunger_game` (eating, cooldown, quickslot, dead player,
-Legacy refusal, starvation doubling a tool cost, a starving stamina pulse of
-60 and a doubled comfort drain, the v23 round trip, a literal v22 at 300 and
-four malformed suffixes); `test_sandbox_health_host` (the drain on the first
-attribute pass, starvation after a full second at hunger 40 with its message,
-pause freezing the condition clock); every older save suite updated for the
-8-byte suffix.
 
 **Not checked:** starvation in play (hunger takes about 72 minutes of unpaused
 play to fall from 300 to 50) or the original game. The food loop is observed

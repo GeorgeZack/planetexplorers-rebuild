@@ -1,6 +1,6 @@
 # Grounded walking Knife attacks
 
-October6,2026. Source-derived ordinary root motion is now integrated into Adventure's existing female third-person blade path. No original or native graphics session was run. This closes the walking-admission implementation gap identified by [the source-first review](SOURCE_FIRST_REVIEW.md); ordinary four-hare completion and physical partial-progress reload remain unverified.
+Source-derived ordinary root motion is integrated into Adventure's female third-person blade path. No original or native graphics session was run for this increment. Ordinary four-hare completion and partial reload were accepted separately ([acceptance](HUNT_ORDINARY_ACCEPTANCE.md)).
 
 ## Source extraction
 

@@ -58,4 +58,4 @@ Defaults select the preserved Adventure save, installed native game and closed f
 
 Full source hashes, selected resources/materials/morphs, collider metadata and saved identity are retained in `supplier-manifest.json` and `source/supplier-rig.json`. The closed bake validation report is `source/bake-report.json`. Original resource files, save archives and shaders remain unchanged.
 
-Integrated C desktop verification subsequently passed: source menu and all five dialogue pages, visible saved appearance/portrait, cancellation without items, final grant once, and save/reload. See [PLAYTEST](../PLAYTEST.md#october-5-adventure-supplier-interaction); this does not imply a new original-game observation or full town parity.
+Integrated C desktop verification subsequently passed: source menu and all five dialogue pages, visible saved appearance/portrait, cancellation without items, final grant once, and save/reload. See [PLAYTEST](../PLAYTEST.md); this does not imply a new original-game observation or full town parity.

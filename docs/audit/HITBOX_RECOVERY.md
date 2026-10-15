@@ -105,7 +105,7 @@ The standard Python run passes five tests and skips the optional installed-sourc
 
 Native actor and hitbox tests have passed strict compiler checks and AddressSanitizer/UndefinedBehaviorSanitizer, including the actual exported hare. Fixtures cover joint-point skinning, aliasing and atomic invalid inputs, root transforms and scaled radius, strict tangency, parallel/skew/crossing/endpoint/sphere contacts, contact symmetry, every truncated file prefix, malformed headers/names/groups/joints/floats, actor mismatch and trailing bytes. The installed fixture checks 12 enabled defence parts, three disabled parts and four posed attack parts.
 
-The original capsule code also samples motion from previous endpoints to current endpoints and corrects those samples around a parent center. That swept-history behavior is not implemented; fast motions can pass between instantaneous tests. Remaining combat integration must also supply broadphase selection, source collision-layer and faction permissions, authoritative skill-guide timing, per-target deduplication, actual damage processing and death/mission transitions. Neither a capsule overlap nor a highlighted attack window independently authorizes damage. The current training scene still runs only the limited [leisure movement controller](HARE_MOVEMENT.md), with no hostile target supplied.
+The base hitbox module remains an instantaneous geometry primitive. [Capsule history](MELEE_CAPSULE_HISTORY.md) adds sandbox previous/current sampling and parent-center correction; [training melee](TRAINING_MELEE.md) and [hunt combat](ADVENTURE_HUNT_COMBAT.md) own actual permissions, skill clocks, damage and death. Geometry or a highlighted window alone never authorizes damage.
 
 ## Contact resolver integration
 

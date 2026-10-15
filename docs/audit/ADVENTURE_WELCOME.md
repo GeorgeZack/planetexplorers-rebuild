@@ -32,7 +32,7 @@ Westina uses supported local placement around X28/Z35; Eitai remains around X32/
 
 ## Verification and remaining scope
 
-The C desktop harness verifies automatic1949, modal input, cancellation/page3 resume, page8 save/reload, final acknowledgment, completed close-only interaction and another reload. All saved inventories match the starter inventory, no early Arrival/supplies occur, and counters remain zero tool swings/resource changes. The final long paragraph fits the recovered1280×720 dialogue panel. See [playtest evidence](../PLAYTEST.md#october-5-adventure-welcome).
+The C desktop harness verifies automatic1949, modal input, cancellation/page3 resume, page8 save/reload, final acknowledgment, completed close-only interaction and another reload. All saved inventories match the starter inventory, no early Arrival/supplies occur, and counters remain zero tool swings/resource changes. The final long paragraph fits the recovered1280×720 dialogue panel. See [playtest evidence](../PLAYTEST.md).
 
 Headless tests cover all nine source pages/speakers, every-page persistence, invalid progression, old-save migration and supplier handoff. Actual native skinning evaluates all558 part/frame combinations (9×62), totaling7,991 vertices. Export tests validate role identity, helmet slot replacement, equipment compatibility and deterministic output; the existing supplier export remains unchanged.
 

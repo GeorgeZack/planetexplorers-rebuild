@@ -1,6 +1,6 @@
 # Hare pounce: offline extraction and isolated lifecycle
 
-October 7,2026, US/Central. This completes the bounded extraction/state-owner recommendation in [the combat follow-up audit](SOURCE_AUDIT_COMBAT_FOLLOWUP.md). The production hunt still selects its existing five ordinary attacks. This work does not enable pounce, increase aggression, integrate root movement or certify a new visible combat behavior. No Unity/game launch, graphics context or desktop input was used.
+October 7,2026, US/Central. This completes the bounded extraction/state-owner recommendation in [the combat follow-up audit](SOURCE_FIRST_REBUILD.md). The production hunt still selects its existing five ordinary attacks. This work does not enable pounce, increase aggression, integrate root movement or certify a new visible combat behavior. No Unity/game launch, graphics context or desktop input was used.
 
 ## Source contract
 

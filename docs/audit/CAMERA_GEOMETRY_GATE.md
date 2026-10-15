@@ -1,6 +1,6 @@
 # Camera geometry: qualified math and query boundary
 
-Subsequent checkpoint: [Adventure host integration](CAMERA_ALIGNMENT.md) now connects this evaluator through dedicated camera queries and a documented native projection adapter. The disconnected status below describes the preceding checkpoint.
+[Adventure integration](CAMERA_ALIGNMENT.md) connects this qualified evaluator through camera-only queries and labelled native projection adapters.
 
 This October7 audit qualifies the remaining `GeometryClamp` and `EvaluateNearclipPlaneRadius` source path. It follows the implemented [activity-space and recovery increment](CAMERA_ENVIRONMENT.md). No runtime camera, collision code, exporter or Makefile changed. The source algorithm is recoverable without manual play; its physics and projection prerequisites prevent a safe radius-only replacement of the current host approximation.
 
@@ -46,7 +46,7 @@ All these source geometry calls use mask8468481 and ignore triggers. Trees remai
 
 ## Actual native mismatch and CPU proof
 
-Current `game_camera` keeps the player-eye anchor at+1.58m, targets eye+2*direction, adds.5m rise to its backward offset and sweeps a.1m-radius/.2m-height capsule. Its feedback uses `distance*hit_fraction`, intentionally preserving the previous bounded framing adapter. The source algorithm expects an unraised Follow pose and separate camera basis. Its near-plane sphere cannot be substituted for that capsule without changing the pose construction as well.
+At the pre-integration checkpoint, `game_camera` kept the player-eye anchor at+1.58m, targets eye+2*direction, adds.5m rise to its backward offset and sweeps a.1m-radius/.2m-height capsule. Its feedback uses `distance*hit_fraction`, intentionally preserving the previous bounded framing adapter. The source algorithm expects an unraised Follow pose and separate camera basis. Its near-plane sphere cannot be substituted for that capsule without changing the pose construction as well.
 
 [reference_camera_geometry.c](../../rebuild/tools/reference_camera_geometry.c) runs only CPU collision/math APIs; it never initializes a window or graphics context. Against a plane, a sphere centered.05m from it with radius.1 is initially overlapping. The current C sweep returns an inward contact at fraction0, while separating motion has no hit. This is deliberate existing movement-query behavior.
 
@@ -80,8 +80,4 @@ The strict optimized probe and ASan/UBSan probe with leak detection both pass. L
 
 ## Pure increment completed; host gate remains
 
-The subsequent [disconnected C evaluator](CAMERA_GEOMETRY.md) now implements the bounded mathematical step below, with guarded graph/source metadata, transactional query callbacks and analytical optimized/sanitizer tests. No live camera, movement backend or projection was changed. The remaining prerequisite is a qualified camera-query/rendering integration, not further recovery of these formulas.
-
-First add a disconnected pure geometry evaluator and guarded graph metadata, with explicit callbacks for ray/line, sphere overlap and sphere cast. Port the source endpoint/binary search, ring order, one-cast correction and frame-based rise; return corrected pose, NCR/near clip, pre-rise distance and clamp flag transactionally. Use deterministic analytical callback fixtures for open space, narrow walls, initial overlap, alternate visible rings, aspect changes and failed queries. Keep desired distance untouched. Preview/aim evaluation must not commit rise or a clamp latch; only the final display evaluation may commit them.
-
-Before enabling it in the host, specify a camera-only backend with explicit initial-overlap/collider-granularity and crop-edge behavior. Preserve the current player movement backend. Projection/near-camera rendering and pointer-origin behavior need a coordinated decision: a documented native rendering adapter is possible, but it must not be presented as exact Unity geometry parity. The qualified pure algorithm can be implemented and tested now without manual attention; a silent host radius swap cannot safely close these outstanding contracts. No new original-game launch is needed for this bounded next step.
+The pure evaluator and camera-only query/projection host are now integrated. [Geometry](CAMERA_GEOMETRY.md), [query](CAMERA_QUERY.md) and [alignment](CAMERA_ALIGNMENT.md) own the implemented boundary and labelled terrain/near-plane adapters. Keep original math qualification separate from physical camera/visual acceptance. The old disconnected-host implementation order is retired.

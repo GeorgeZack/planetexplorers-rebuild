@@ -55,8 +55,7 @@ ThirdPersonFollow computes `distcoef=clamp(ActivitySpace*.15,.15,1)`, then `Dist
 
 ## Bounded next integration
 
-The implemented first slice uses explicit zoom state with the verified default/bounds/sign while retaining the native collision approximation. Zoom is gated by the host's `world_input` and third-person mode; all modal panels block it, which is stricter than the original hovered-GUI/input gates. The first host slice used immediate distance changes. The new headless smoothing helper below implements the verified scalar SmoothDamp step; activity-space scaling and two-second geometry-clamp recovery remain unported. Validate normal versus build maximum, GUI-consumed wheel, first-person isolation, pause/load behavior and no camera-dependent tool reach extension. A fuller port needs layered obstacle queries, source anchor/FOV/near clip, activity-space evaluation, damped distance and clamp recovery, followed by geometry and yaw/pitch finding in the serialized order. Fixtures should distinguish a terrain wall, a near-tree collider and leaf cards: the latter two must not silently become original camera blockers. None of this authorizes moving saved trees or fading their leaves to hide a provisional spawn issue.
-
+Scalar zoom, activity/recovery and ring/rise geometry now have integrated owners: [environment](CAMERA_ENVIRONMENT.md), [query](CAMERA_QUERY.md) and [alignment](CAMERA_ALIGNMENT.md). Preserve tree exclusion, UI wheel ownership, one display clock and independent player reach. Remaining anchor/graph/framing and physics-query differences stay explicit; do not move saved trees or fade leaves to conceal them. The old scalar-first implementation plan is retired.
 
 ## Verified scalar zoom helper
 
@@ -98,4 +97,4 @@ October6 native host verification now passes free-pointer WASD, a short NPC RMB 
 
 ## October6 Tab/F5 physical follow-up
 
-Native PID1371835 physically passed captured-third-person→Tab pointer override→F5 first person. Inventory-owned F5 did not cycle; closing inventory retained first person. A final F5 restored free third person (exit log mode0). See [PLAYTEST](../PLAYTEST.md#october-6--med-pack925-pecsv13-and-tabf5-verification) for the exact session and limits.
+Native PID1371835 physically passed captured-third-person→Tab pointer override→F5 first person. Inventory-owned F5 did not cycle; closing inventory retained first person. A final F5 restored free third person (exit log mode0). See [PLAYTEST](../PLAYTEST.md) for the exact session and limits.

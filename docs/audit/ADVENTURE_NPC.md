@@ -69,4 +69,17 @@ The inspected original prefabs are `Assets/Scripts/Chenzhi/NewUI/Resources/Prefa
 
 The table uses one column and variable-height21; wrapped text must control actual row height and hitboxes. These are default source coordinates before resizing, user window movement, font normalization or dynamic row content. Existing recovered bottom dialogue chrome can be reused separately. The supplier choice list must expose only implemented source-backed choices; this geometry is not permission to fabricate recruitment or shop functionality.
 
-Integrated C desktop verification subsequently passed: source menu and all five dialogue pages, visible saved appearance/portrait, cancellation without items, final grant once, and save/reload. See [PLAYTEST](../PLAYTEST.md#october-5-adventure-supplier-interaction); this does not imply a new original-game observation or full town parity.
+Integrated C desktop verification subsequently passed: source menu and all five dialogue pages, visible saved appearance/portrait, cancellation without items, final grant once, and save/reload. See [PLAYTEST](../PLAYTEST.md); this does not imply a new original-game observation or full town parity.
+
+## October 5 physical acceptance
+
+Physical C input with no new original launch ([result](../reference/sandbox/rebuild-supplier-result.json)). The recovered Eitai Takayama (entity 20016, RandomNpc 22, mission role 2; twelve parts, 8,800 vertices) stands on supported ground near local X32/Z27.
+
+- Arrival follows the source integer-truncated role-2 start and the strict 5 m XZ condition, and completed without any items.
+- E, and free-cursor right mouse after Tab, open the window. Question 4089 leads through 4090–4094.
+- Only acknowledging 4094 accepts 9032 and grants the eighteen-entry package, once. The tracker shows "Go to Annot" only after acceptance. The menu afterwards offers only "That's all.", with no repeat reward.
+- Escape at the promise page cancels without a grant; this is a native choice. Background clicks advance pages.
+- F9/F10 preserved the inventory, and the run recorded zero tool swings and no resource changes.
+- Captures: [menu](../reference/sandbox/rebuild-supplier-menu.png), [page 4094](../reference/sandbox/rebuild-supplier-page-4094.png), [accepted tracker](../reference/sandbox/rebuild-supplier-accepted.png), [reloaded menu](../reference/sandbox/rebuild-supplier-reloaded-menu.png).
+
+Contracts for this encounter: [dialogue](SANDBOX_DIALOGUE.md), [appearance](ADVENTURE_SUPPLIER_APPEARANCE.md).

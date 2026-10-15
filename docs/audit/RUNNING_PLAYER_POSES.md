@@ -51,7 +51,7 @@ TMPDIR="$PWD/rebuild/build/compiler-tmp" python3 rebuild/tests/test_running_play
 
 `PE_RUNNING_STAGE` can select another compatible stage. The optional test verifies the original base against the manifest hash snapshot, using the installed base before installation or the preserved `player-before-running-20261006` backup afterward. `PE_RUNNING_BASE` selects an explicit preserved base. When the running group is installed, its files must match the stage and the native validator reads the installed scenes; it never compares retained prefixes against themselves.
 
-The separate root-motion curve now passes strict clone qualification and is installed with these reviewed poses. Native running-attack validation must still establish the correct source skill/timing, swept collision movement and shared body/weapon/defence clocks; installation alone does not establish those outcomes. Sprint, first-person and airborne attacks, full Animator blends and procedural IK remain separate work.
+The separate root-motion curve now passes strict clone qualification and is installed with these reviewed poses. [Running integration](SANDBOX_RUNNING_KNIFE.md) now owns skill/timing, swept collision, shared clocks and bounded native observations; installation alone never establishes those outcomes. [Sprint](SANDBOX_SPRINT_KNIFE.md) and [presentation IK](PLAYER_IK_DRIVE.md) have separate owners. First-person/air attacks and full Animator parity remain unsupported.
 
 
 ## Explicit reversible installation

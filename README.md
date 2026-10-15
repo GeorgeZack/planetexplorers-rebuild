@@ -20,10 +20,6 @@ As for the code portion of the project, Pathea Games LLC does not provide techni
 
 All third-party plugins are intentionally excluded to avoid copyright issues. Pathea Games will not provide the plugins.
 
-## C rebuild
+## Development
 
-Start with the [project map](PROJECT_MAP.md) and [agent guidance](AGENTS.md) for future work. The [local structural knowledge graph](docs/KNOWLEDGE_GRAPH.md) provides queryable source, documentation and Unity metadata relationships.
-
-The [replication specification](docs/REPLICATION.md) documents the Unity source audit and the plan for reconstruction. The new [C rebuild](rebuild/README.md) contains a playable first slice, build instructions, tests, and its current limitations. The original project and terms above are preserved.
-
-The [automated reference playtest](docs/PLAYTEST.md) records observed tutorial behavior, source-driven corrections, and recovered room rendering.
+Read [AGENTS.md](AGENTS.md) for rules, [feature contracts](docs/FEATURE_CONTRACTS.md) for supported behavior, and [HANDOFF](docs/HANDOFF.md) for current work. [PLAYTEST](docs/PLAYTEST.md) distinguishes original observations from native acceptance. The rebuild is partial; [scope and limits](docs/REPLICATION.md) are explicit.

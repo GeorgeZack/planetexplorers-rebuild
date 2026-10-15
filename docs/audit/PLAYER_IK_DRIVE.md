@@ -183,4 +183,4 @@ Counts and logs are in [PLAYTEST](../PLAYTEST.md).
 - **Male rig, other clips and NPCs** are not staged.
 
 Live reactions, stun/knockback, get-up, shield, pounce/aggression and Town
-Defense gates stay closed. PECSv22 is untouched.
+Defense gates stay closed. This presentation increment adds no save fields.

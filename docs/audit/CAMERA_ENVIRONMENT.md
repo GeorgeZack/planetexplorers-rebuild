@@ -64,7 +64,7 @@ Both camera and recovery state are transient. Initialize them together on a new 
 
 The pure API accepts finite display intervals[0,1]; no gameplay catch-up tick may advance it again. It validates all state and inputs before commit. The old scalar helper remains available for hosts without environment queries and retains its previous tests and behavior.
 
-Still unported are the source animated camera anchor, FOV/near-plane-radius search, visibility rings, dynamic near clip, clamp rise, YawPitchFinding, and the full graph's blends and alternate camera branches. The existing wheel-notch conversion and free-pointer gesture are native input adapters. This increment establishes the portable evaluator, targets, lock ordering and clocks, not full visual camera parity. Host geometry integration and its limitations are recorded separately by the host owner.
+The animated anchor, YawPitchFinding, remaining graph blends and alternate branches remain unported. [Camera alignment](CAMERA_ALIGNMENT.md) now integrates the ring/rise evaluator and camera-only backend; its query/near-plane policies remain labelled native adapters. Wheel-notch conversion and free-pointer gesture are native input adapters.
 
 The subsequent [camera geometry qualification](CAMERA_GEOMETRY_GATE.md) recovers the active.8m near clip, full ring/rise arithmetic and projection ordering. CPU probes expose initial-overlap and picking-origin differences in the current backend. It defines the smallest safe pure-evaluator increment without changing runtime geometry or requiring manual play.
 

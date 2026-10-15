@@ -21,7 +21,7 @@ The two trees reuse the existing recovered `Grassland_tree_B` appearance, source
 - [Source metadata exporter](../../rebuild/tools/export_vegetation_source.py) guards original identities and rules. [Offline asset exporter](../../rebuild/tools/export_sandbox_vegetation_assets.py) recovers actual wild prefabs into an ignored asset directory, preserving source hashes and IDs.
 - [main.c](../../rebuild/src/main.c) installs examples on new sandbox routes or explicit CLI request. The tutorial retains its separate lesson gathering behavior.
 
-The v18 vegetation extension, retained in current PECSv19, preserves the v17 payload layout and appends648 bytes: installed flag and count (two32-bit words), followed by32 fixed20-byte records (prototype ID, XYZ floats, depleted flag). Unused records must be zero. Counts, flags, finite coordinates, supported prototype IDs, world bounds, duplicates and decorative depletion are validated. Versions1–17 infer no plant patch; their existing trees are retained. Save/load and invalid-load rejection are transactional. Loading never generates or replenishes vegetation.
+The v18 vegetation extension, retained by every later version, preserves the v17 payload layout and appends648 bytes: installed flag and count (two32-bit words), followed by32 fixed20-byte records (prototype ID, XYZ floats, depleted flag). Unused records must be zero. Counts, flags, finite coordinates, supported prototype IDs, world bounds, duplicates and decorative depletion are validated. Versions1–17 infer no plant patch; their existing trees are retained. Save/load and invalid-load rejection are transactional. Loading never generates or replenishes vegetation.
 
 ## Try it later
 

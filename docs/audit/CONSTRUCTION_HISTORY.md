@@ -40,10 +40,9 @@ make -C rebuild build-history-test sandbox-build-history-host-test
 python3 rebuild/tools/export_build_history.py --check
 ```
 
-Focused checks exercise source rounding, mixed materials and ramps,64-cell transactions, sixth-entry eviction, redo invalidation, resource/refund/geometry failures, exact conflicts, mining exclusion, malformed journals, clone/move and save/world lifecycle. The real host/input regression checks chord/pointer ownership and immediate ray/sweep refresh with no fixed tick. Optimized full core/build, content and23 CLI checks pass, as do full core and focused actual-host ASan/UBSan with leak detection. The14 source-exporter tests have no skips; the broader Python suite retains51 optional skips, which are not passes. [PLAYTEST](../PLAYTEST.md) records commands and the separate renderer-only rebuild.
+Regression proof: [PLAYTEST](../PLAYTEST.md).
 
-When the user next tests the build, place a small cube/ramp batch, undo/redo via keys and toolbar, repeat while moving, and verify a menu blocks the shortcut. Check that leaving/reentering B keeps history and loading clears it. Use an isolated checkpoint and account for source rounding when comparing material counts. No fresh original-game run is needed to recover these rules, and no graphical acceptance or ordinary hunt completion is claimed here.
-
+Remaining manual checks: successful replay while moving and player contact/climbing on a replayed ramp. Completed key/toolbar/Pause/B/load cases are recorded below.
 
 ## Ordinary native acceptance
 
@@ -94,15 +93,6 @@ were absent afterwards. Session 01's watchdog exit is not a clean game quit.
 The runtime binary was unchanged (`f5c07847…a8e`). Only the read-only inspector
 changed: schema 6 reports saved cell encoding, mapped item and `built`, with
 signed-coordinate, rotation and legacy-empty formatter coverage.
-
-Verification: full unrestricted `make -C rebuild check` passed 282 jobs,
-980 Python tests with 98 optional skips; `check-sanitize` passed 113 suites
-with leak detection, zero failures/skips. Logs are
-`rebuild/build/compiler-tmp/build-acceptance-check-unrestricted.log` and
-`build-acceptance-sanitize.log`. The initial sandboxed check failed five
-Python jobs because LeakSanitizer cannot run under ptrace; it was rerun
-outside the sandbox without disabling leak detection. All twelve evidence
-crops were checked for exact source pixels.
 
 Still unobserved in this acceptance: ramps, replay while moving, blocked
 geometry/resource/refund transactions, sixth-entry eviction, failure to load,

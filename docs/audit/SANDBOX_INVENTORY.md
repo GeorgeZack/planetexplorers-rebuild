@@ -1,6 +1,6 @@
 # Sandbox inventory categories and editing
 
-October 6, 2026. This increment is source-derived and implemented in C; it does not add an original-game or native physical playtest. The preceding [systems audit](SOURCE_AUDIT_SYSTEMS_FOLLOWUP.md) identified the original capacity difference and the retained save-prefix constraint.
+October 6, 2026. This increment is source-derived and implemented in C; it does not add an original-game or native physical playtest. The preceding [systems audit](SOURCE_FIRST_REBUILD.md) identified the original capacity difference and the retained save-prefix constraint.
 
 ## Recovered contract
 

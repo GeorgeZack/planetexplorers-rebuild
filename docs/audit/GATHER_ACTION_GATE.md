@@ -1,46 +1,72 @@
-# General Gather animation: offline qualification gate
+# General Gather: source contract and gate
 
-The existing tutorial assets do **not** supply a reusable player Gather animation. An October7 source-only audit found no `Gather`, `Herb`, `HerbDown` or `HerbUp` clip in335 recovered PEAC files under `rebuild/build/reference-assets`, including retained backups. The gathering/gathering-complete packages described in [GATHERING_ASSETS](GATHERING_ASSETS.md) contain plant/tree props. The tutorial renderer selects locomotion, melee, axe and mining poses; its herb action never selects a Gather pose.
+**Gate: closed.** Immediate transactional herb harvesting ([SANDBOX_HARVESTING](SANDBOX_HARVESTING.md)) remains the native adapter.
 
-Accordingly, this audit adds no speculative timer or runtime action. The immediate transactional herb harvesting documented in [SANDBOX_HARVESTING](SANDBOX_HARVESTING.md) remains unchanged. No original game, desktop input or graphics session was used.
+| Topic | Owner |
+|---|---|
+| Live observation, leaf bake, clock replay | [GATHER_LIVE_CAPTURE](GATHER_LIVE_CAPTURE.md) |
+| First-stable pose residual | [GATHER_ENTRY_POSE_DIAGNOSTIC](GATHER_ENTRY_POSE_DIAGNOSTIC.md) |
+| Harvest-commit and weight-boundary questions | [GATHER_COMMIT_CAPTURE_PLAN](GATHER_COMMIT_CAPTURE_PLAN.md) |
 
-## Qualified source action and installed graph
+## Status
 
-`Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Gather.cs` admits a selected resource when the actor has a transform and is not aiming. `PreDoAction` retains the selected tree identity and sets the Gather mask; `DoAction` resets `ResetFullBody` and triggers `Gather`. It starts skill20110003 only after the `Gather` animation notification and only if the retained resource still has HP. `GatherEnd` sets a completion flag; the subsequent action update clears the mask. Immediate cancellation clears both resource references and the mask, sets `ResetFullBody`, and resets the Gather trigger. The general action does not use the tutorial's independent1.1s depletion/1.966s activity clocks.
+| Item | State |
+|---|---|
+| Source call chain, controller graph, events | Source-derived (below) |
+| Female HerbDown/Herb/HerbUp leaf poses with attachments and defence | Engine-sampled and staged, not installed (`rebuild/build/player-gather-01`) |
+| FullBody controller clock | Qualified only within `gather-live-01`'s recorded delta domain (0.01352–0.11407 s) |
+| Pose application at the entry boundary | Supported provisional hypothesis: a one-update layer-weight lag |
+| Skill commit, admission and deferred start, mask release, cancellation | Unqualified |
 
-The existing vegetation exporter already guards the relevant `ActionRelation` row32 and C# dependency logic. Gather immediately ends Move1, Sprint2 and Rotate3 among its listed actions; other equipment/action entries can require orderly termination before `DoAction`. The Gather mask and deferred action admission are player-action ownership, not a global NPC/simulation pause. Future integration must preserve the source relation checks instead of reusing modal `consume_world` to stop gameplay.
+## Source call chain
 
-The read-only installed `PE_Client_Data/sharedassets1.assets` has SHA256 `d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67`. Its FemaleAnimator2 controller779 contains the following actual FullBody machine1 states:
+`Assets/Scripts/PeEntity/Cmpt/Motion/PEAction/Action_Gather.cs`:
 
-| State index / name | Clip array index / path ID | Source clip duration | Outgoing transition |
-| --- | --- | --- | --- |
-|22 / `FullBody.Gather.HerbDown`|405 /267, `HerbDown`|.5333347321s|To23; exit time.5312511921, duration.4687487781|
-|23 / `FullBody.Gather.Herb`|406 /273, `Herb`|.8000011444s|To24; exit time.6874997020, duration.3125002980|
-|24 / `FullBody.Gather.HerbUp`|407 /280, `HerbUp`|.6333332062s|To submachine exit30009; exit time.6052631140, duration.3947369158|
+1. **Admission.** `CanDoAction` requires a transform, a found type-10 resource and `!motionMgr.isInAimState`.
+   - **Order.** `MotionMgrCmpt.DoAction` checks `CanDoAction` and `CheckDepend`, then raises `onActionStart`, and only after that calls `RunningAction.Do`. `onActionStart` is therefore an admission request, not proof that the deferred `DoAction` ran.
+   - **ActionRelation row 32.**
+     - EndImmediately: 1 Move, 2 Sprint, 3 Rotate, 14 SwordAttack, 30 Dig, 31 Fell, 42 Pump, 45 Draw, 49 TwoHandSwordAttack, 50 Halt, 60, 61.
+     - EndAction (orderly end): 4 Jump, 12 Step, 13 EquipmentHold, 15 HoldShield, 28 AimEquipHold, 47 TwoHandSwordHold, 58 Leisure.
+     - Pause: 40 HoldFlashLight.
+     - `RunningAction` waits until the EndAction targets stop ([SHIELD_ACTION](SHIELD_ACTION.md)).
+   - **What Gather blocks.** The relation columns start at index 5 as `PEActionMask` values, and the `Gather` column (index 34) is mask 29. Value 2 means "requires that mask false". Rows 1, 2, 3, 4 and 13 have it, so movement during Gather is **refused**; it does not cancel.
+   - **What ends Gather.**
+     - Rows listing 32 as EndImmediately: 5 Whacked, 7 Wentfly, 8 Knocked, 9 Death, 17 Fall, 26 Sleep, 41 Stuned, 52 Lie, 59 AlienDeath.
+     - Rows listing 32 as EndAction: 27 Eat, 39 Build, 54 Cutscene, 55 Cure, 58 Leisure, 61 Abnormal. The inherited `EndAction` calls `EndImmediately`.
+     - Sleep, Build and Abnormal need the Gather mask false, so they cannot start during Gather. Eat is called only by NPC behaviour trees.
+     - Ordinary movement requests do not cancel Gather; the listed interruptions do, when they are admitted.
+   - **No global pause.** The Gather mask is player-action ownership; never reuse modal `consume_world` for it.
+2. **Held tool.** `Action_HandChangeEquipHold.EndAction` (`Action_Tool.cs`) sets the put-off trigger, clears its mask, calls `SetWeapon(null)` and waits for `PutOffAnimEnd`, with a 5 s `m_FixErrorTimer` fallback. A drawn tool delays the Gather start by an event-driven put-off.
+3. **Start.** `PreDoAction` sets the Gather mask and keeps `mOpTreeInfo`. `DoAction` does `ResetTrigger("ResetFullBody")`, `SetTrigger("Gather")` and clears `m_EndAnim`.
+4. **Events.** The Herb state's `AnimatorEventSender` (behaviour 1119) sends `Gather` on `OnStateExit`; HerbUp's (behaviour 1219) sends `GatherEnd`. Neither has enter or timed events, and both use MonoScript 1916. Their raw 52- and 56-byte records were decoded against the class field order.
+   - **Delivery path:** `SendMsg` → `AnimatorCtrl.AnimEvent` → `AnimatorCmpt.AnimEvent` → the public `event Action<string> AnimEvtString`, synchronously inside the Animator update.
+   - **Lazy subscription.** `PEAction.anim` subscribes on first getter access (`PEAction.cs` around line 230). Gather first reads it in `DoAction`, so an earlier subscriber runs before `Action_Gather.OnAnimEvent`.
+   - **Interruption.** A `ResetFullBody` interrupt still exits Herb and can still send `Gather`. The `IsActionRunning` check prevents a grant from an action that has already ended.
+5. **Harvest.** On `Gather`, if `GetTreeHP` is above ε, the action calls `StartSkill(SkEntitySubTerrain.Instance, 20110003)`. Skill 20110003 has every time at 0, cooling 0, `_cond=False`, and trigger 234 (`_cond=True`; target `sums[0]=10000; sums[1]=caster.sums[23]; sums[2]=1`; `caster.raws[74]+=0.2f`). Whether the commit is synchronous is provisional ([plan](GATHER_COMMIT_CAPTURE_PLAN.md)).
+6. **End.** `GatherEnd` sets `m_EndAnim`, and the next action update clears the mask. Normal completion keeps `mOpTreeInfo`. `EndImmediately` clears the mask, sets `ResetFullBody` (a zero-duration snap to Empty), resets `Gather` and clears both tree references.
+7. **Root motion.** HerbDown and HerbUp have `m_AverageSpeed` z ≈ 0.216 m/s, and x ≈ 0.172 with z ≈ 0.093 m/s, with `KeepOriginalPositionXZ=false`. In `gather-live-01` the sampled player root did not move, with `applyRootMotion=false`.
 
-All three states have speed1, offset0 and nonfixed transition durations. Those normalized transitions overlap clip evaluation. All three installed clips use humanoid bindings (`classID95`, `customType8`), not directly applicable generic Transform curves. Their `m_Events` arrays are empty. The absence of clip events does not mean the action lacks events: they are attached to the controller states.
+The tutorial is a separate path: `HoloherbGather` calls `SetBool("Gather", true)` on a trigger parameter and runs its own 1.1 s and 1.966 s clocks. None of it transfers to the general action.
 
-Controller behavior1119 is bound to `FullBody.Gather.Herb`; behavior1219 is bound to `FullBody.Gather.HerbUp`. Each references external sharedassets0 MonoScript1916, confirmed as class `AnimatorEventSender` in `Assembly-CSharp.dll`. Their serialized enter events are empty, exit events are respectively `Gather` and `GatherEnd`, and timed-event arrays are empty. The records are52 and56 bytes respectively. The installed MonoBehaviour's generic type tree omits its custom fields, so reading it as that generic tree rejects trailing bytes; its full raw payload was decoded against the identified class's serialized field order.
+## Installed controller graph
 
-`Assets/Scripts/Anim/AnimatorEventSender.cs` sends `m_EixtEvent` from `OnStateExit`. Therefore the general harvest trigger is **Herb state exit**, and completion is **HerbUp state exit**. Neither event can safely be mapped to tutorial1.1s, a clip's first frame, or the sum of its unblended clip lengths. A transition's exit threshold begins a blend; it is not by itself proof of the wall-clock time at which Unity delivers `OnStateExit`.
+Installed `sharedassets1.assets` SHA256 `d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67`, `FemaleAnimator2` 779. Layer 1 `FullBody` is override blending at weight 1, with a full body mask, no skeleton mask and `m_IKPass=false`. Hashes and clocks are bound in the inventory's `gather_controller` record.
 
-## Exact remaining gate
+| State | Clip (array index / path ID) | Length | Outgoing |
+|---|---|---|---|
+| 22 `FullBody.Gather.HerbDown` | 405 / 267 | 0.5333347321 s | → 23, exit 0.5312511921, duration 0.4687487781 |
+| 23 `FullBody.Gather.Herb` | 406 / 273 | 0.8000011444 s | → 24, exit 0.6874997020, duration 0.3125002980 |
+| 24 `FullBody.Gather.HerbUp` | 407 / 280 | 0.6333332062 s | → exit selector → DoNothing, exit 0.6052631140, duration 0.3947369158 |
 
-Before adding the visible general Gather lifecycle, recover and qualify the complete female third-person HerbDown/Herb/HerbUp pose group on the existing player rig, with matching worn/stowed attachments and player defence poses. The body and incoming defence must follow the same action clock. The current humanoid source channels and controller transitions are available offline, but no compatible Gather PEAC poses or existing qualified capture were found in the recovered packages.
+- **Entry.** Motionless `FullBody.DoNothing` → entry selector, on condition `Gather` If, duration 0.1 normalized, no exit time.
+- **Reset.** AnyState → `Empty` on `ResetFullBody`, duration 0. Empty returns to DoNothing at exit 0.02.
+- **Transitions.** All durations are non-fixed, and each exit time plus duration equals 1.0. Every blend lasts 0.25 s.
+- **Clips.** Humanoid bindings, empty `m_Events`; the events come from the state behaviours.
+- **Idle behaviours.** DoNothing carries `AnimatorEventSender` (enter `OnEndFullAnim`) and `AnimatorLayerWeightCtr` (fadeout 5), as bound in [reaction presentation](REACTION_PRESENTATION.md).
+- **Higher layers.** Layers 2 `UpbodyOnly` and 3 `LArmOnly` (override) and 4 `Arm` (additive) can act over FullBody within their masks.
 
-An offline humanoid evaluator could remove the capture need only after its retargeted poses and transition/event scheduling are qualified against existing engine evidence. The present generic TRS exporter cannot establish that equivalence for these muscle clips. Alternatively, a future small isolated engine capture can qualify this specific group and its state-exit notifications; it does not require another broad exploratory play session. No such capture was requested or launched by this audit.
+Neither event time may be taken from the tutorial's 1.1 s, from a clip's first frame, or from summed clip lengths. An exit threshold starts a blend; it is not the frame on which `OnStateExit` is delivered.
 
-Once qualified, the transient owner should retain the selected plant, advance the verified composed action clock, commit the existing atomic harvest only on the qualified Herb-exit event, and release its player mask on HerbUp exit or cancellation. It must keep capacity failure retryable, prevent duplicate grants, and preserve the source's independent NPC clocks. Until then, adding a delayed invisible gathering lock would replace the current known adapter with another unqualified behavior.
+## Integration rule, once qualified
 
-Local inspection evidence is retained under ignored `rebuild/build/gather-action-audit`: the335-file PEAC clip scan, decoded controller779, three source clip records, and raw state behavior records. These are source/asset findings, not graphical acceptance or a passing general-Gather runtime test.
-
-
-## October 15 qualification work order
-
-[The current qualification plan](GATHER_QUALIFICATION_PLAN.md) rechecks recovered pose availability and separates isolated leaf-pose baking from observation of the live controller and its event receipts. It also traces the held-tool put-off dependency, refused movement during Gather, lazy event-handler ordering and action admission versus execution. No capture, asset installation or runtime change is part of that planning checkpoint. The gate above remains closed until the complete pose group, composition and harvest boundary are qualified.
-
-October 15 checkpoint: [the live observation and leaf-pose bake](GATHER_LIVE_CAPTURE.md) recorded four complete original Gather cycles, with event receipts, handler order and end-of-frame poses. A separate isolated bake of the female HerbDown, Herb and HerbUp leaves is staged uninstalled at `rebuild/build/player-gather-01`, as a complete body, attachment and defence group on identical clocks. The gate stays closed: scheduler and frame replay, composition and blending, and the skill-commit boundary are not qualified, and immediate transactional harvesting remains the native adapter.
-
-October 15 clock checkpoint: the bounded [FullBody controller-clock replay](GATHER_LIVE_CAPTURE.md#offline-fullbody-controller-clock-replay) is now qualified **within the recorded delta domain** of `gather-live-01`, with deltas from 0.01352 to 0.11407s. It reproduces every sampled state hash, transition flag and normalized time across all 4 cycles, and every `Gather`, `GatherEnd` and `OnEndFullAnim` receipt frame, with 0 mismatches. Its time zero, the motionless 1s idle length and its threshold rules are captured-engine rules, not source-derived ones.
-
-The gate itself stays closed. Pose application (see the provisional [entry-pose diagnostic](GATHER_ENTRY_POSE_DIAGNOSTIC.md)), the skill-commit boundary ([next-capture plan](GATHER_COMMIT_CAPTURE_PLAN.md)), action admission, the deferred start, mask release and native integration are all unqualified. Immediate transactional harvesting remains the native adapter.
+The transient owner keeps the selected plant and advances the qualified composed clock. It commits the existing atomic harvest only on the qualified Herb-exit update, and releases the mask on the update after `GatherEnd` or on cancellation. A capacity failure stays retryable, grants never duplicate, and NPC clocks stay independent. A delayed invisible lock in place of this would be another unqualified adapter.

@@ -1,6 +1,6 @@
 # Adventure Revival Shot lifecycle
 
-October6, 2026. Source-derived rules and implemented C behavior, tested without running either game. This follows [the source-first review](SOURCE_FIRST_REVIEW.md). No new original observation, native graphical check or ordinary hunt completion is claimed.
+October6, 2026. Source-derived rules and implemented C behavior, tested without running either game. This follows [the source-first review](SOURCE_FIRST_REBUILD.md). No new original observation, native graphical check or ordinary hunt completion is claimed.
 
 ## Source contract
 

@@ -39,7 +39,7 @@ The original saved town0/role3/4 roster above is retained exactly. A separate or
 
 The extension validates their saved `NpcCmpt.FixedPointPos` against the live captured town4 bounds X[-331,-237], Z[87,181]. It preserves their actual saved transforms and appearance, while retaining the original13 snapshot poses despite later wandering or streaming resets. Fresh entity20020 Nnyadzeni Obi is outside those bounds and the route, at source(-711,24.498039,535), and is explicitly excluded. The completed route capture records town0 **Haleiwa**, nameID8500180, and town4 **Annot**, nameID8500008; `town-names.json`/`town-name.txt` retain capture hash provenance. Names were observed, not inferred from NPC names or source dialogue placeholders.
 
-Town0's seventeen supported offers remain the native shop scope. Annot's additional vendors use their recovered appearances and generic close-only interaction; their broader catalogs, storage and follow-up mission chains are not implemented by this population recovery.
+The population module owns appearances and role/placement metadata. [Town interactions](ADVENTURE_TOWN_INTERACTIONS.md) separately integrates the original17 Town0 offers plus267 Annot offers across eight shops, discovery and supported follow-up quests. General NPC storage/mission-chain simulation is not implied by appearance recovery.
 
 The generated metadata preserves the nonbreaking space within Dikeledi's archived family name. Names do not determine sex. Annot's two lazily loaded `AvatarCmpt` records have empty prefab strings but complete saved nude `MaleModel` selections, all27 morph weights and four colors, corroborated by `CommonCmpt.sex=2`. The recovery uses those records, never a female template or tutorial NPC appearance.
 

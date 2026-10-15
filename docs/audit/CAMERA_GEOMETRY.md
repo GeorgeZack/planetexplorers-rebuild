@@ -1,10 +1,6 @@
-# Disconnected camera geometry evaluator
+# Camera geometry evaluator
 
-Subsequent checkpoint: [Adventure host integration](CAMERA_ALIGNMENT.md) now connects this evaluator through dedicated camera queries and a documented native projection adapter. The disconnected status below describes the preceding checkpoint.
-
-October7,2026, US/Central. **Source-derived:** active normal CameraForge graph bindings and `GeometryClamp`/`EvaluateNearclipPlaneRadius` control flow. **Implemented in C:** a pure evaluator with explicit physics-query callbacks and transactional rise state. **Not integrated:** native camera framing, collision backend, near-camera rendering or pointer projection. No desktop input, Unity runtime, game launch or new physical acceptance is involved.
-
-The preceding [geometry qualification](CAMERA_GEOMETRY_GATE.md) remains the authority for source paths, query/projection mismatches and original-versus-native boundaries. The existing [camera activity/recovery host](CAMERA_ENVIRONMENT.md) continues unchanged. This increment completes the pure-math step proposed by that gate; it does not remove the backend or rendering prerequisites.
+Source-derived CameraForge calculation with a pure transactional query API. [Adventure integration](CAMERA_ALIGNMENT.md) connects the dedicated [query backend](CAMERA_QUERY.md) and labelled native projection/near-plane adapters. The old disconnected-host checkpoint is retired. Native framing/PhysX/visual parity remains limited by those contracts.
 
 ## Guarded source and active graph
 

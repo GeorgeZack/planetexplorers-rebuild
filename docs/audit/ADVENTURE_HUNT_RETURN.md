@@ -17,7 +17,7 @@ The four rewards are **scripts**, not four functional movement devices:
 |594|Glider|189|
 |595|Rope Gun|190|
 
-All have stack limit1 and neutral sex eligibility. Exporting the reward closure adds items592/594 and recipe output72, bringing the current content catalog to317 items and95 recipes. Granting a script does not automatically learn it. Existing inventory Use performs the source formula-learning transaction; this increment does not implement jetpack/glider/parachute/rope-gun movement.
+All have stack limit1 and neutral sex eligibility. Exporting the reward closure adds items592/594 and recipe output72, retained within the current341-item/108-formula closure. Granting a script does not automatically learn it. Existing inventory Use performs the source formula-learning transaction; this increment does not implement jetpack/glider/parachute/rope-gun movement.
 
 `RewardSP=2` does not mean unconditional two-point currency. The source completion branch mounts its five-point buff only when Adventure skill trees are enabled. This native increment has no skill-tree implementation or invented substitute reward.
 
@@ -57,8 +57,6 @@ PECSv12 changes the supported state values while preserving **every byte and len
 
 ## Verification and physical test sequence
 
-Focused optimized C checks and ASan/UBSan with leak detection pass with strict warnings. They cover the exact5m boundary, just-inside/negativeY/dead-player/unsupported-world cases, atomic full-bag failure after three provisional grants, retry after freeing capacity, no duplicate rewards, stale acknowledgments, preserved money/RNG, every pending/completed page roundtrip, old-version rejection and literal v11 payload preservation. Added tests reject the exact diagonal3/4/5m boundary and accept a just-inside diagonal at nonnegativeY. An isolated real-route fixture executes the actual reward transaction, then saves/reloads4105,4106 and completed state while checking exact inventory/instance preservation and no regrant. Its elevated clear player position tests serialization and XZ discovery, not supported walking. Seven exporter tests and its regeneration check pass. Tests use explicit synthetic state/geometry fixtures for isolated transactions; they are not gameplay shortcuts installed in the runtime.
-
 For a future instrumented return observation that fills the remaining inventory/timing gap, load preserved manual slot7/save6 in the isolated hunt profile. Record inventory592–595 and active9127 before approaching the archived destination, then approach through ordinary movement. Record the transition into4105 and inventory change before acknowledging it, the4105→4106 transition, any role4 movement, and9077's subsequent opening order. Save a new slot rather than overwrite the active-return checkpoint. Compare archive completion/reward/active-quest records with the screenshots. A minimal observation component can read these values but must not advance dialogue, set quest state or grant items.
 
 For native combat verification, reuse an unchanged ordinary equipped-Knife33/full-health checkpoint in a distinct save path. Starter Herbal Juice916×10 and medicine-reward Portable Medpack925×10 are supported through normal inventory/quickslot use. Medpack heals350 immediately with its own10-second cooldown, independent of juice; see [consumables](SANDBOX_CONSUMABLES.md). Juice can also be purchased from the supported20011/store338 or20028/store1406 vendors. Do not reduce hare HP, modify the kill counter or create a combat-completion save by changing fields.
@@ -72,7 +70,6 @@ The current noncritical attack19 gives approximately6.43–8.43 body damage agai
 After saving/reloading that return state, the fixture checks that the distant hunt position grants nothing, explicitly relocates and settles at the archived return anchor, and obtains exactly one each of592–595. It saves/reloads4105,4106 and completed state, preserving inventory/instance identity and checking that repeated arrival or stale acknowledgments cannot grant again. This extends the isolated return tests with a complete transaction chain; it does not replace their exact distance, capacity and old-version rejection cases.
 
 The contact player poses are deliberately arranged against recovered hare capsules, AI/retaliation is not stepped, and anchor relocation is explicit. The player stays at500HP and retains all ten medpacks. Thus this is headless persistence/damage coverage, **not physical four-kill completion, a survival test or evidence of original nonzero-kill reload behavior**. Full optimized core and the focused lifecycle ASan/UBSan run with leak detection both exited0 without diagnostics or fixture skips. Exact final local logs, registration and child leak-check details are recorded in the [combat audit](ADVENTURE_HUNT_COMBAT.md#full-hp-lifecycle-regression-october6).
-
 
 ## Native physical return segment, October6
 

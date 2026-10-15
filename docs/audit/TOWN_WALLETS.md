@@ -1,6 +1,6 @@
 # Archived vendor wallets and purchase credit
 
-October6,2026. Follow-up to the [source-first checkpoint audit](SOURCE_FIRST_CHECKPOINT_REVIEW.md). The C sandbox now owns the eight archived vendor purses, credits a normal purchase atomically and applies the source observed-update refill latch. This is implemented source-derived behavior; no original or native graphical session was run. Subsequent [selling and buyback](TOWN_SELL_BUYBACK.md) now use these purses; repair remains unimplemented.
+October6,2026. Follow-up to the [source-first checkpoint audit](SOURCE_FIRST_REBUILD.md). The C sandbox now owns the eight archived vendor purses, credits a normal purchase atomically and applies the source observed-update refill latch. This is implemented source-derived behavior; no original or native graphical session was run. Subsequent [selling and buyback](TOWN_SELL_BUYBACK.md) now use these purses; repair remains unimplemented.
 
 ## Source and extraction
 
@@ -12,7 +12,7 @@ python3 rebuild/tools/export_town_wallets.py --check
 make -C rebuild town-wallet-test sandbox-wallet-host-test
 ```
 
-The eight profiles are stable-order entities20002,20011,20014,20028,20031,20032,20033,20037. They are particular saved residents, not procedural wallet generation. All have archived `added=false`. Exact values and active call sites are in [the progression audit](SOURCE_AUDIT_PROGRESSION_FOLLOWUP.md).
+The eight profiles are stable-order entities20002,20011,20014,20028,20031,20032,20033,20037. They are particular saved residents, not procedural wallet generation. All have archived `added=false`. Exact values and active call sites are in [the progression audit](SOURCE_FIRST_REBUILD.md).
 
 Source `AutoIncreaseMoney.Update` observes the time of day. Before half of the26-hour/93600-second game day it clears the latch; at or after46800 seconds it adds the selected increment only if the latch is false, then sets it. The native evaluator retains the source divide/floor/multiply order for the day fraction; its double world-seconds clock remains an adapter to the original integer-tick timer. It does not count missed days. If no morning update was observed, later afternoons do not create another payment. The serialized `mMax` is provenance: the active update and digital setter do not cap the balance at that value.
 

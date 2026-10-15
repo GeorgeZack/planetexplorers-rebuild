@@ -81,7 +81,7 @@ Acceptance: start/finish/cancel/save at2.9/3/5/6s; three3s batches deliver2 at6s
 
 ## Vitals, movement and mode lifecycle
 
-`PESkEntity.cs:8–128` defines HP/stamina/comfort/oxygen/hunger/energy, modifiers/injury/progression; current/max clamps at`:120–160`. Sandbox only stores stamina, no HP. Training HP500/Herbal Juice/melee do not make these available here. Survival rates require active update/buff tracing; no hunger/oxygen drains are invented here.
+`PESkEntity.cs:8–128` defines HP/stamina/comfort/oxygen/hunger/energy, modifiers/injury/progression; current/max clamps at`:120–160`. At this audit's date the sandbox stored only stamina. HP, recovery, comfort and hunger have since been implemented from source ([PASSIVE_RECOVERY](PASSIVE_RECOVERY.md), [STAMINA_RECOVERY](STAMINA_RECOVERY.md), [HUNGER](HUNGER.md)). Oxygen and energy drains are still not implemented, and none is invented.
 
 initProp1 provides stamina100/recovery40/delay0/reduction1, Atk10/ResRange0.49/ResDamage0/CutDamage0. `SkExpFuncSet.cs:116` recovers only when scaled Time.time is strictly later than last consumption+max(delay,0.1). Serialized normal walk2/run5/sprint8/start15/drain5 supersede class-initializer assumptions. Jump cost10 aligns; C velocity7/gravity20 and instant acceleration/step-up are provisional.
 

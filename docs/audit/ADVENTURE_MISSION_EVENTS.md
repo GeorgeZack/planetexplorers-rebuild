@@ -51,8 +51,6 @@ Eligibility checks source prerequisite/mutex state only. The caller still owns a
 
 Sixteen guarded method/enum bodies pin admission, opening trigger dispatch, active acceptance/completion ordering, auto-reply, plot processing and separately recorded grant ownership. Source quest/target/plot/dialogue-role rows are also hashed and retained. Negative Python tests alter next-quest edges, grant quantities, Get versus Complete plot, required removal, target completion policy, dialogue roles, source grant guards, recorded latch output and final-page trigger selection; regeneration must reject those changes.
 
-Focused optimized C tests pass with strict warnings treated as errors. They verify final-opening acceptance and wrong-page rejection;9077 completion with no automatically offered9078;9079's pending plot while its travel remains active;9080 grant-once behavior before and after restored queues/accepted snapshots; source any-target auto-completion; queued9084 versus automatic acceptance; and the bounded external9114 request.9082 tests reject insufficient pigment and a missing-catalog callback after staging earlier effects, preserving every item and chain counter, then commit exactly one50-item removal/seven-script reward/chain advance. Ending acknowledgment and reload do not replay grants. The focused suite also passes ASan/UBSan with leak detection. Seven exporter tests pass with no skips.
-
 ```sh
 python3 rebuild/tools/export_adventure_mission_events.py --check
 python3 rebuild/tests/test_adventure_mission_events_export.py
