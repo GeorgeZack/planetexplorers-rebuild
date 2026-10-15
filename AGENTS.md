@@ -6,6 +6,8 @@ Read [PROJECT_MAP.md](PROJECT_MAP.md) for ownership and navigation, [rebuild/REA
 
 ## How to work
 
+Use the repository-local [Caveman skill](docs/skills/caveman/SKILL.md) for chat by default: answer first, keep replies terse, and preserve every technical fact. Read it at session start. The user can disable it with “stop caveman” or “normal mode.” Keep code, comments, documentation, commits and other persisted text in normal prose. Project rules and required progress updates still apply.
+
 Follow the [current source-first checkpoint audit](docs/audit/SOURCE_FIRST_CHECKPOINT_REVIEW.md) and [evidence workflow](docs/audit/SOURCE_FIRST_REBUILD.md): recover active C# call chains, database/XML/prefab contracts and existing archived state before planning another original-game session. Before a launch, identify the unresolved question, why available source/captures cannot answer it, and the smallest useful capture; batch compatible questions and reuse qualified poses. Engine-evaluated animation and final visual/integration checks remain valid runtime needs. This is an evidence workflow, not an extra user approval requirement. Keep the unqualified shield animation work separate from source-portable gameplay fixes.
 
 Label findings as source-derived, observed in the original, implemented in C, or still provisional. Source code, screenshots and passing C tests establish different things. Record mode, settings, inputs and outcome for reference tests; do not infer exact timing, hidden IDs or durability from a still image.
