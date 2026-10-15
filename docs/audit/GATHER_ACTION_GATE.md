@@ -33,3 +33,8 @@ An offline humanoid evaluator could remove the capture need only after its retar
 Once qualified, the transient owner should retain the selected plant, advance the verified composed action clock, commit the existing atomic harvest only on the qualified Herb-exit event, and release its player mask on HerbUp exit or cancellation. It must keep capacity failure retryable, prevent duplicate grants, and preserve the source's independent NPC clocks. Until then, adding a delayed invisible gathering lock would replace the current known adapter with another unqualified behavior.
 
 Local inspection evidence is retained under ignored `rebuild/build/gather-action-audit`: the335-file PEAC clip scan, decoded controller779, three source clip records, and raw state behavior records. These are source/asset findings, not graphical acceptance or a passing general-Gather runtime test.
+
+
+## October 15 qualification work order
+
+[The current qualification plan](GATHER_QUALIFICATION_PLAN.md) rechecks recovered pose availability and separates isolated leaf-pose baking from observation of the live controller and its event receipts. It also traces the held-tool put-off dependency, refused movement during Gather, lazy event-handler ordering and action admission versus execution. No capture, asset installation or runtime change is part of that planning checkpoint. The gate above remains closed until the complete pose group, composition and harvest boundary are qualified.
