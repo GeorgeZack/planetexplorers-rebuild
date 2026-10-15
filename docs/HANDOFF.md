@@ -109,3 +109,15 @@ October 14, director-chosen goal: [ordinary native construction history](audit/C
 The user also requested Caveman in the local agent instruction files. `AGENTS.md` activates the vendored `docs/skills/caveman/SKILL.md` for chat by default, and new `CLAUDE.md` imports both. Code, documentation and commits keep normal prose. No global hooks or mode state are installed. Claude must read the changed instructions when it next resumes; it remains usage-limited, with its automatic retry canceled.
 
 Next source-first acceptance candidates: construction ramps and replay while moving, or camp repair cancellation/replacement with exact-instance ownership. Do not reopen the closed gameplay gates. Grounder user acceptance on slopes remains pending. No private-display session or test job is left running at this checkpoint.
+
+Status update: Claude's usage limit has since reset. The director cleared the checkpointed context and resumed Claude for the ramp session below. The usage-limit note above is historical.
+
+October 14, director-chosen goal: [ordinary native ramp replay](audit/CONSTRUCTION_HISTORY.md#rotated-ramp-replay-session-03). Claude operated fresh session `rebuild/build/build-private-20261014-03` on `:119` from the earned five-cube save (`69bc9209…5c62`, unchanged). Observed:
+- A rotated four-cell Wood ramp (type 9: shape 2, rotation 1; material 11; cells x64–65, y58, z664–665) placed for 1 Wood, undone with a 1-Wood refund and redone for 1 Wood. The rendered ramp disappeared and returned. `ramp-placed` and `ramp-redone` hold identical cells, Wood 189 and `built=3`.
+- Ctrl+Z, sent in one input batch with W from about 4.1 m away, showed *Cannot undo construction here.* Cells and Wood were unchanged. Undo stayed enabled and Redo stayed disabled, consistent with the retained one-entry history. The reach cause is source-derived inference.
+
+Not established: player contact with, blocking by or climbing a replayed ramp. Neither recorded path isolates the ramp interior, and the baseline cubes adjoin it. A successful replay during movement is also not established. The audit records the exact positions and a cleaner future setup. The session ended by explicit guarded stop (−15); all three owned PIDs were absent and the baseline was unchanged. No runtime code changed; evidence is `docs/reference/build-native-20261014-ramp`.
+
+Checks: full `make -C rebuild check` passed 282 jobs, 0 failed; 980 Python tests, 98 skipped (skips are not passes) (`rebuild/build/compiler-tmp/ramp-check.log`). The pre-push sanitizer is the director's run.
+
+October 14 director pre-push verification of the ramp replay checkpoint: 113 sanitizer suites pass with leak checks enabled, zero failures/skips (`rebuild/build/compiler-tmp/ramp-prepush-sanitize.log`). Independent review verified all eight save hashes, the four exact crops, the unchanged baseline and owned-PID teardown. The ramp task is concluded. Next director-chosen goal: camp repair cancellation and same-category replacement with earned exact instances; not yet launched, and no private-display session or test job is running.

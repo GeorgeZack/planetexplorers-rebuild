@@ -1,5 +1,25 @@
 # Original-game playtest and C comparison
 
+## October14 ordinary native ramp replay
+
+[Ramp acceptance](audit/CONSTRUCTION_HISTORY.md#rotated-ramp-replay-session-03),
+[evidence](reference/build-native-20261014-ramp/checkpoints.json). Adventure,
+1280×720, production binary `f5c07847…a8e`, earned five-cube checkpoint
+`69bc9209…5c62`; session `build-private-20261014-03` on `:119`, no original
+launch.
+
+- A four-cell Wood ramp at 90 degrees was saved as `type=9` (shape 2,
+  rotation 1), material 11 at x64–65, y58, z664–665. Wood went 190 → 189 and
+  `built` went to 3.
+- Ctrl+Z removed it (Wood 190) and Ctrl+X restored it (Wood 189). The saved
+  cells were identical and `built` stayed 3.
+- Ctrl+Z sent in one input batch with W, about 4.1 m from the ramp, showed
+  *Cannot undo construction here.* Cells and Wood were unchanged; Undo/Redo
+  states were consistent with the retained history.
+- The contact and traversal attempts did not isolate the ramp's interior and
+  establish nothing. Contact, climbing and a successful moving replay remain
+  pending.
+
 ## October14 ordinary native construction history
 
 [Native acceptance](audit/CONSTRUCTION_HISTORY.md#ordinary-native-acceptance),

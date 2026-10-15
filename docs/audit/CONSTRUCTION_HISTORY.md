@@ -1,6 +1,6 @@
 # Sandbox construction undo and redo
 
-October6,2026. The C sandbox now has a five-action undo/redo journal for its supported half-meter cube/ramp cell edits. This is a source-derived implementation checked without launching either game. [The source audit](CONSTRUCTION_HISTORY_SOURCE.md) identifies original list, input, resource and lifecycle behavior; ordinary native cube acceptance is recorded below. Ramp and movement acceptance remain pending.
+October6,2026. The C sandbox now has a five-action undo/redo journal for its supported half-meter cube/ramp cell edits. This is a source-derived implementation checked without launching either game. [The source audit](CONSTRUCTION_HISTORY_SOURCE.md) identifies original list, input, resource and lifecycle behavior; ordinary native cube acceptance is recorded below, followed by a bounded rotated-ramp replay session. Player contact with and traversal of a replayed ramp remain unobserved.
 
 ## Controls and scope
 
@@ -108,3 +108,97 @@ Still unobserved in this acceptance: ramps, replay while moving, blocked
 geometry/resource/refund transactions, sixth-entry eviction, failure to load,
 small-window input and physical collision after replay. Headless checks cover
 several of these separately. No original visual parity or difficulty claim.
+The ramp session below addresses part of this list.
+
+### Rotated ramp replay (session 03)
+
+October 14, 2026. Claude was the sole operator of fresh session
+`rebuild/build/build-private-20261014-03` on `:119`. It started from the
+earned five-cube checkpoint `69bc9209…5c62`: Wood 190, `built=2`, player at
+(−608.58, 28.55, 395.32). The production binary was unchanged
+(`f5c07847…a8e`). Input was ordinary only: no cheats, fixtures, save edits,
+original launch or helper changes. [Manifest, inspections and lossless
+crops](../reference/build-native-20261014-ramp/checkpoints.json) record every
+saved position quoted here.
+
+Coordinates use source = local + (−640, 0, 64). A cell (x, y, z) covers
+local [x/2, x/2 + 0.5) on each axis. The player capsule radius is 0.30 m
+(`PE_PLAYER_RADIUS`).
+
+**Observed in C, ramp replay.** In B mode the operator pressed V for Ramp,
+kept the four-cell brush and pressed T once ("90 deg"). A left click on open
+grass placed a horizontal 2×2 Wood ramp batch. The message read *Construction
+placed (one resource per four cells, rounded up)* and Wood went 190 → 189.
+The paused save `ramp-placed` (`c2629f19…9228`, `built=3`) adds four cells:
+x 64–65, y 58, z 664–665, each `type=9` (shape 2, rotation 1) and material
+11 / Wood 279. In source coordinates that is x −608…−607, z 396…397 and
+y 29.0…29.5.
+
+After Resume, Ctrl+Z showed *Construction undone.*, removed the rendered ramp
+and refunded floor(4/4) = 1 Wood (189 → 190). Redo became enabled. Ctrl+X
+showed *Construction redone.*, rendered the ramp again and debited 1 Wood
+(→ 189). The paused save `ramp-redone` (`1506a675…132e`) has the same nine
+cells in the same order, with identical packed type, rotation and material,
+and still `built=3`. Replay did not increment the statistic. The two files
+differ in bytes only through non-cell state; the inspector does not show live
+history.
+
+Both renders show the same sawtooth: each of the two cell rows is its own
+0.5 m ramp with a vertical face. This matches the per-cell ramp geometry.
+These stills establish orientation and presence. They do not establish a
+contact frame.
+
+**Observed in C, replay attempted while moving, rejected.** The helper presses
+every key of a chord before one XTest flush. Ctrl+Z and W were therefore sent
+in one input batch, and W was held for 0.6 s. The flush is not instrumented
+against display frames. This is simultaneous input, not a replay in the
+middle of a walk; the helper was deliberately not extended. The chord started
+at `face-present` (−609.08, 28.73, 392.16). The game showed *Cannot undo
+construction here.* while the player kept walking to (−612.01, 28.71,
+392.80). Undo stayed enabled and Redo stayed disabled, consistent with the
+retained one-entry history. Wood stayed 189, and `final` (`66909106…82ab`)
+kept the nine cells unchanged. The live history cursor was not directly
+observed.
+
+The message does not name a cause. Source-derived inference: the native
+removal check requires the cell within 3 m of the eye (player y + 1.5). From
+the starting save, the nearest ramp point was about 4.1 m away. Reach is the
+only failing check consistent with the saved positions, but the cause was not
+observed.
+
+**Contact and traversal attempts: not established.** Two attempts were made
+without first verifying a clean approach line. Both are recorded as
+negative results:
+
+- `contact-before` (−608.30, 28.52, 396.38) placed the capsule 3 mm on the −x side
+  of the ramp's x = −608 face and clear of the cubes. Holding S for 1.0 s ended
+  at `contact-after-s` (−605.55, 28.50, 395.26), on the +x side of the ramp footprint
+  at the same ground height. No intermediate frame or position was captured.
+  A straight path would cross the footprint's z 396…396.5 row, but the save does not
+  show whether the player climbed, slid along or skirted the ramp.
+- `face-start` (−608.42, 28.52, 396.70) was beside the ramp, 0.12 m on its −x
+  side, not in front of its vertical face. It was also 3 mm on the −z side of the
+  baseline cube batch at x −609…−608, z 397…398. Holding A for 1.0 s moved
+  4.5 m toward −z to (−609.08, 28.73, 392.16), away from both structures. This
+  tests no face contact.
+- Earlier short W/S moves near (−608, 397) were small. Both the ramp and the
+  baseline cubes adjoin that spot, so they cannot be attributed to the ramp.
+
+The ramp base is at y 29.0, while the nearby ground under the player was at
+about 28.5. Ramp placement raises a batch to the highest terrain sample in
+its footprint, so the low edge may stand up to 0.5 m above the surrounding
+ground. Under the native controller (step 0.35 m, walkable normal y ≥ 0.65;
+an adapter, not Unity physics), the 45° surface is walkable. The 0.5 m faces
+exceed the step height, but the low-edge offset may also exceed it. Neither
+climb nor block was observed. A future check needs a ramp whose base is level
+with the ground, approached along a verified line. A location clear of the
+cubes, such as ramp center x ≈ −607.5, is preferred. It should also take a
+save or position reading while the player is on the ramp. Comparing the same
+approach with the ramp present and undone would separate replay geometry
+from the cubes.
+
+The session ended with an explicit guarded stop (owned game SIGTERM, −15).
+The supervisor, Xvfb and game PIDs were absent afterwards. The baseline was
+unchanged. Four lossless 1000×720 crops (`ramp-placed`, `ramp-undo`,
+`ramp-redo`, `moving-undo`) were checked pixel-exactly against their source
+captures. No runtime code changed.

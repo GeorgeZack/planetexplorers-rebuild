@@ -1,0 +1,880 @@
+{
+  "schema": 1,
+  "runtime_commit": "e90f38f",
+  "binary_sha256": "f5c07847ee664bb9ca7771637736d6af8c6bbc3b440fc59ba8c2036defb43a8e",
+  "mode": "Adventure",
+  "window": [
+    1280,
+    720
+  ],
+  "coordinate_note": "source = local + (-640, 0, 64); cell (x,y,z) covers local [x/2, x/2+0.5) per axis; player capsule radius 0.30 m",
+  "session": {
+    "path": "rebuild/build/build-private-20261014-03",
+    "operator": "Claude; sole operator",
+    "display": ":119",
+    "source": "rebuild/build/build-private-20261014-02/reloaded.pesave",
+    "baseline_sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+    "baseline_unchanged": true,
+    "exit": {
+      "action": "supervisor-exit",
+      "baseline_unchanged": true,
+      "game_returncode": -15,
+      "monotonic": 213614.849789293,
+      "wall_time": 1792031489.602051
+    },
+    "owned_processes_absent": true
+  },
+  "saves": {
+    "baseline.pesave": {
+      "sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -608.5764827728271,
+        28.55131721496582,
+        395.3196716308594
+      ],
+      "grounded": true,
+      "built": 2,
+      "cell_count": 5,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 190
+    },
+    "ramp-placed.pesave": {
+      "sha256": "c2629f19d915569facec8f83f2f51913ed939f0c4c290bf079e7498f88e29228",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -608.5764827728271,
+        28.55131721496582,
+        395.3196716308594
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    },
+    "ramp-redone.pesave": {
+      "sha256": "1506a675fa18de3472daebf39046f8997497f5a96be55ce4bcb9a994ae3a132e",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -608.5764827728271,
+        28.55131721496582,
+        395.3196716308594
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    },
+    "contact-before.pesave": {
+      "sha256": "95e867fb9f7050ff3ab02284d49215da35cb5d2f884c72da12ce31359ed5eb11",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -608.3030529022217,
+        28.524776458740234,
+        396.3824462890625
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    },
+    "contact-after-s.pesave": {
+      "sha256": "47d827227fad558cbabc67fac46f02a8de3705e2acccee6bf8b02d4bbb513ef5",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -605.5494232177734,
+        28.499866485595703,
+        395.26324462890625
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    },
+    "face-start.pesave": {
+      "sha256": "6bd7f758ba4a95d7123605156b96b284e2cce5e54b38a7511a5e55189112f070",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -608.4174747467041,
+        28.515846252441406,
+        396.69708251953125
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    },
+    "face-present.pesave": {
+      "sha256": "5458915c31fbf5079a0187727922234e98032fe0d7badab6b85bc5e5c2bb3cef",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -609.0834999084473,
+        28.73462677001953,
+        392.1597900390625
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    },
+    "final.pesave": {
+      "sha256": "669091065b297cf13a0c61c04f5d34e37a10b3cfb3b24db22238682a6db382ab",
+      "interpretation": "current-loader; cannot inspect live history",
+      "source_position": [
+        -612.0134391784668,
+        28.71036720275879,
+        392.800048828125
+      ],
+      "grounded": true,
+      "built": 3,
+      "cell_count": 9,
+      "cells": [
+        {
+          "x": 61,
+          "y": 58,
+          "z": 660,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 666,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 62,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 63,
+          "y": 58,
+          "z": 667,
+          "type": 4,
+          "shape": 1,
+          "rotation": 0,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 664,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 64,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        },
+        {
+          "x": 65,
+          "y": 58,
+          "z": 665,
+          "type": 9,
+          "shape": 2,
+          "rotation": 1,
+          "material": 11,
+          "item_id": 279
+        }
+      ],
+      "wood": 189
+    }
+  },
+  "lossless_crops": {
+    "ramp-placed.png": {
+      "source": "rebuild/build/build-private-20261014-03/ramp-placed.png",
+      "source_sha256": "58c21c57fead786c5f779525846cdbd4cc8da25142d1e6597c8545002e0950e5",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "8d89d0bf6d6dbddb266e55dae0402f37dc6844bd09202c78ebf2c678b955fbe6"
+    },
+    "ramp-undo.png": {
+      "source": "rebuild/build/build-private-20261014-03/ramp-undo.png",
+      "source_sha256": "cfbb977834fe266dc4dcd64e611cd9db1400855f310388f6e4c52c9ed393a643",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "9abdea3d2bdf38ba417d37efe98a4f9b3513a63a88d59a6b47be4c7478511886"
+    },
+    "ramp-redo.png": {
+      "source": "rebuild/build/build-private-20261014-03/ramp-redo.png",
+      "source_sha256": "8b24b55b8c10b471e66c9246788024087c2abd44d8b9c8f24e2fbff8713f3f6f",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "673ee7d58112259fd5b60f382bc294125fbd90c896ab8be4ee3ab5f23f49a1e9"
+    },
+    "moving-undo.png": {
+      "source": "rebuild/build/build-private-20261014-03/moving-undo.png",
+      "source_sha256": "6374463920272797d29b1dec1fed8e3181ad92927bef040e53926b6d135450fc",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "1cb57219d4d029f37f516d00f301694ef8c4ef57301d674425c862f1a9977b11"
+    }
+  },
+  "inputs_sha256": "76dc09cb72f26f8d73ee6cc59d89d13a8e34ac0652cd1128101f34a886a4e2c2"
+}
