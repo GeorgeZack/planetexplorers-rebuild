@@ -1,5 +1,43 @@
 # Original-game playtest and C comparison
 
+## October15 ordinary native durable-tool discard
+
+[Discard acceptance](audit/INVENTORY_DISCARD.md#durable-tool-with-a-quickslot-session-01-october-15),
+[evidence](reference/discard-native-20261015/checkpoints.json). Adventure,
+1280×720, production binary `f5c07847…a8e`, earned `equipment-sorted` save
+`ca79fffb…866c`; session `discard-private-20261015-01` on `:122`, no original
+launch.
+
+- The inventory window was dragged up so quickslot 5 was uncovered. Dragging
+  the Wood Pickaxe (instance 11) onto it bound that instance and left the tool
+  in its cell.
+- Delete → pickaxe → Escape closed only the prompt; the mode stayed armed and
+  no pause menu opened. The saved item and ownership fields matched the bound state.
+- Delete → pickaxe → Enter: "Item discarded." Only instance 11 and the
+  quickslot 5 reference were removed; all other recorded item and ownership
+  fields were unchanged.
+- Not exercised: a same-prototype twin (none exists), Quest Item and equipped
+  guards.
+
+## October14 ordinary native inventory editing and discard
+
+[Inventory acceptance](audit/SANDBOX_INVENTORY.md#ordinary-native-acceptance),
+[discard](audit/INVENTORY_DISCARD.md#ordinary-native-acceptance),
+[evidence](reference/inventory-native-20261014/checkpoints.json). Adventure,
+1280×720, production binary `f5c07847…a8e`, earned `returned` save
+`1a791bbf…55cc`; session `inventory-private-20261014-01` on `:121`, no
+original launch.
+
+- Split of 10 Wood: 183 stays in 841 and 10 goes to the first empty cell, 843.
+- Drag to a vacant cell, then onto the 183: the stacks exchanged without
+  merging.
+- Resource Sort consolidated Wood to 193 and ordered the cells by source label.
+  Equipment Sort reordered the tools by label, keeping every instance and its
+  wear. The equipped Knife stayed instance 1, hidden in cell 421.
+- Split 10 again → Delete → Cancel kept both stacks. Delete → Discard removed
+  only the 10, leaving Wood 183 in total with no other change.
+- Not exercised: Shift+drop merge (needs a held key during a drag).
+
 ## October14 ordinary native repair cancel and replacement
 
 [Acceptance](audit/CAMP_REPAIR.md#cancellation-and-same-category-replacement-session-02),

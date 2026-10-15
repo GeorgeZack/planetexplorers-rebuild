@@ -1,0 +1,214 @@
+{"action": "start", "baseline_sha256": "ca79fffb81b5fcc7fd122188728b11ecd095e8f23654febdf0ba8198ac69866c", "binary_sha256": "f5c07847ee664bb9ca7771637736d6af8c6bbc3b440fc59ba8c2036defb43a8e", "deadline": 224995.932614316, "directory": "/home/admin/Projects/Mine/planetexplorers-rebuild/rebuild/build/discard-private-20261015-01", "display": ":122", "game": 2696025, "game_start": "22319593", "lifetime": 1800.0, "monotonic": 223195.946984493, "schema": 1, "server": 2696023, "server_start": "22319586", "source": "/home/admin/Projects/Mine/planetexplorers-rebuild/rebuild/build/inventory-private-20261014-01/equipment-sorted.pesave", "supervisor": 2695999, "supervisor_start": "22319568", "token": "70e552a326b1461ab5e475138c146b21", "wall_time": 1792041070.6992464}
+{"action": "status", "arguments": {}, "monotonic": 223205.55817322, "phase": "begin", "wall_time": 1792041080.310435}
+{"action": "status", "monotonic": 223205.558422272, "phase": "complete", "wall_time": 1792041080.3106847}
+{"action": "shot", "arguments": {"filename": "start.png"}, "monotonic": 223216.812160231, "phase": "begin", "wall_time": 1792041091.5644217}
+{"action": "shot", "monotonic": 223217.382717466, "phase": "complete", "wall_time": 1792041092.1349797}
+{"action": "key", "arguments": {"keys": ["i"], "seconds": 0.12}, "monotonic": 223217.54565055, "phase": "begin", "wall_time": 1792041092.2979124}
+{"code": 31, "down": true, "event": "key", "monotonic": 223217.553110457, "wall_time": 1792041092.305372}
+{"code": 31, "down": false, "event": "key", "monotonic": 223217.673401677, "wall_time": 1792041092.4256632}
+{"action": "key", "monotonic": 223217.673806107, "phase": "complete", "wall_time": 1792041092.4260685}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 874, "y": 183}, "monotonic": 223218.824865768, "phase": "begin", "wall_time": 1792041093.5771275}
+{"event": "absolute-motion", "monotonic": 223218.828178466, "wall_time": 1792041093.5804408, "x": 874, "y": 183}
+{"button": 1, "down": true, "event": "button", "monotonic": 223218.948364361, "wall_time": 1792041093.7006264}
+{"button": 1, "down": false, "event": "button", "monotonic": 223219.068629277, "wall_time": 1792041093.820891}
+{"action": "click", "monotonic": 223219.069104472, "phase": "complete", "wall_time": 1792041093.8213668}
+{"action": "shot", "arguments": {"filename": "equip-tab.png"}, "monotonic": 223220.21920822, "phase": "begin", "wall_time": 1792041094.9714694}
+{"action": "shot", "monotonic": 223220.485097409, "phase": "complete", "wall_time": 1792041095.2373595}
+{"action": "drag", "arguments": {"dwell": 0.25, "seconds": 0.9, "travel": 0.4, "x": 900, "x2": 900, "y": 145, "y2": 45}, "monotonic": 223227.440136699, "phase": "begin", "wall_time": 1792041102.1923983}
+{"event": "absolute-motion", "monotonic": 223227.443437182, "wall_time": 1792041102.1956997, "x": 900, "y": 145}
+{"button": 1, "down": true, "event": "button", "monotonic": 223227.563602152, "wall_time": 1792041102.3158638}
+{"event": "absolute-motion", "monotonic": 223227.813851768, "wall_time": 1792041102.5661132, "x": 900, "y": 135}
+{"event": "absolute-motion", "monotonic": 223227.854135314, "wall_time": 1792041102.6063972, "x": 900, "y": 125}
+{"event": "absolute-motion", "monotonic": 223227.89440476, "wall_time": 1792041102.6466668, "x": 900, "y": 115}
+{"event": "absolute-motion", "monotonic": 223227.934671544, "wall_time": 1792041102.6869333, "x": 900, "y": 105}
+{"event": "absolute-motion", "monotonic": 223227.974927451, "wall_time": 1792041102.7271895, "x": 900, "y": 95}
+{"event": "absolute-motion", "monotonic": 223228.015202606, "wall_time": 1792041102.7674642, "x": 900, "y": 85}
+{"event": "absolute-motion", "monotonic": 223228.055472618, "wall_time": 1792041102.8077345, "x": 900, "y": 75}
+{"event": "absolute-motion", "monotonic": 223228.095745398, "wall_time": 1792041102.8480074, "x": 900, "y": 65}
+{"event": "absolute-motion", "monotonic": 223228.135975636, "wall_time": 1792041102.8882375, "x": 900, "y": 55}
+{"event": "absolute-motion", "monotonic": 223228.176299786, "wall_time": 1792041102.9285617, "x": 900, "y": 45}
+{"button": 1, "down": false, "event": "button", "monotonic": 223228.466671534, "wall_time": 1792041103.2189336}
+{"action": "drag", "monotonic": 223228.467117052, "phase": "complete", "wall_time": 1792041103.219379}
+{"action": "shot", "arguments": {"filename": "moved-up.png"}, "monotonic": 223229.620248269, "phase": "begin", "wall_time": 1792041104.37251}
+{"action": "shot", "monotonic": 223229.887331326, "phase": "complete", "wall_time": 1792041104.6395938}
+{"action": "drag", "arguments": {"dwell": 0.25, "seconds": 0.9, "travel": 0.4, "x": 1077, "x2": 772, "y": 155, "y2": 671}, "monotonic": 223236.231723595, "phase": "begin", "wall_time": 1792041110.983985}
+{"event": "absolute-motion", "monotonic": 223236.235525579, "wall_time": 1792041110.987788, "x": 1077, "y": 155}
+{"button": 1, "down": true, "event": "button", "monotonic": 223236.355745852, "wall_time": 1792041111.1080074}
+{"event": "absolute-motion", "monotonic": 223236.606079384, "wall_time": 1792041111.3583415, "x": 1071, "y": 165}
+{"event": "absolute-motion", "monotonic": 223236.614322132, "wall_time": 1792041111.366584, "x": 1065, "y": 176}
+{"event": "absolute-motion", "monotonic": 223236.622585341, "wall_time": 1792041111.3748477, "x": 1059, "y": 186}
+{"event": "absolute-motion", "monotonic": 223236.630803682, "wall_time": 1792041111.3830647, "x": 1053, "y": 196}
+{"event": "absolute-motion", "monotonic": 223236.639105313, "wall_time": 1792041111.3913674, "x": 1047, "y": 207}
+{"event": "absolute-motion", "monotonic": 223236.647351416, "wall_time": 1792041111.3996136, "x": 1040, "y": 217}
+{"event": "absolute-motion", "monotonic": 223236.655566062, "wall_time": 1792041111.4078283, "x": 1034, "y": 227}
+{"event": "absolute-motion", "monotonic": 223236.663764869, "wall_time": 1792041111.4160268, "x": 1028, "y": 238}
+{"event": "absolute-motion", "monotonic": 223236.672034839, "wall_time": 1792041111.4242961, "x": 1022, "y": 248}
+{"event": "absolute-motion", "monotonic": 223236.680389849, "wall_time": 1792041111.4326518, "x": 1016, "y": 258}
+{"event": "absolute-motion", "monotonic": 223236.688640234, "wall_time": 1792041111.4409027, "x": 1010, "y": 269}
+{"event": "absolute-motion", "monotonic": 223236.696828367, "wall_time": 1792041111.4490905, "x": 1004, "y": 279}
+{"event": "absolute-motion", "monotonic": 223236.705064047, "wall_time": 1792041111.4573255, "x": 998, "y": 289}
+{"event": "absolute-motion", "monotonic": 223236.71340309, "wall_time": 1792041111.465665, "x": 992, "y": 299}
+{"event": "absolute-motion", "monotonic": 223236.721693299, "wall_time": 1792041111.4739554, "x": 985, "y": 310}
+{"event": "absolute-motion", "monotonic": 223236.729961298, "wall_time": 1792041111.482224, "x": 979, "y": 320}
+{"event": "absolute-motion", "monotonic": 223236.738132531, "wall_time": 1792041111.4903948, "x": 973, "y": 330}
+{"event": "absolute-motion", "monotonic": 223236.746305374, "wall_time": 1792041111.4985673, "x": 967, "y": 341}
+{"event": "absolute-motion", "monotonic": 223236.754555796, "wall_time": 1792041111.5068176, "x": 961, "y": 351}
+{"event": "absolute-motion", "monotonic": 223236.762840653, "wall_time": 1792041111.5151024, "x": 955, "y": 361}
+{"event": "absolute-motion", "monotonic": 223236.771099307, "wall_time": 1792041111.5233614, "x": 949, "y": 372}
+{"event": "absolute-motion", "monotonic": 223236.779342045, "wall_time": 1792041111.5316045, "x": 943, "y": 382}
+{"event": "absolute-motion", "monotonic": 223236.787535623, "wall_time": 1792041111.5397978, "x": 937, "y": 392}
+{"event": "absolute-motion", "monotonic": 223236.795778272, "wall_time": 1792041111.5480402, "x": 931, "y": 403}
+{"event": "absolute-motion", "monotonic": 223236.804050712, "wall_time": 1792041111.5563126, "x": 925, "y": 413}
+{"event": "absolute-motion", "monotonic": 223236.81233097, "wall_time": 1792041111.564593, "x": 918, "y": 423}
+{"event": "absolute-motion", "monotonic": 223236.820581501, "wall_time": 1792041111.572844, "x": 912, "y": 434}
+{"event": "absolute-motion", "monotonic": 223236.828774497, "wall_time": 1792041111.5810368, "x": 906, "y": 444}
+{"event": "absolute-motion", "monotonic": 223236.83699421, "wall_time": 1792041111.5892563, "x": 900, "y": 454}
+{"event": "absolute-motion", "monotonic": 223236.845309761, "wall_time": 1792041111.5975716, "x": 894, "y": 465}
+{"event": "absolute-motion", "monotonic": 223236.853616623, "wall_time": 1792041111.6058786, "x": 888, "y": 475}
+{"event": "absolute-motion", "monotonic": 223236.861875371, "wall_time": 1792041111.614138, "x": 882, "y": 485}
+{"event": "absolute-motion", "monotonic": 223236.870070526, "wall_time": 1792041111.6223328, "x": 876, "y": 496}
+{"event": "absolute-motion", "monotonic": 223236.878267381, "wall_time": 1792041111.6305296, "x": 870, "y": 506}
+{"event": "absolute-motion", "monotonic": 223236.886504648, "wall_time": 1792041111.6387665, "x": 863, "y": 516}
+{"event": "absolute-motion", "monotonic": 223236.894801773, "wall_time": 1792041111.6470635, "x": 857, "y": 527}
+{"event": "absolute-motion", "monotonic": 223236.903029623, "wall_time": 1792041111.6552916, "x": 851, "y": 537}
+{"event": "absolute-motion", "monotonic": 223236.91126113, "wall_time": 1792041111.6635237, "x": 845, "y": 547}
+{"event": "absolute-motion", "monotonic": 223236.91944542, "wall_time": 1792041111.671707, "x": 839, "y": 557}
+{"event": "absolute-motion", "monotonic": 223236.927735395, "wall_time": 1792041111.6799977, "x": 833, "y": 568}
+{"event": "absolute-motion", "monotonic": 223236.935992395, "wall_time": 1792041111.6882539, "x": 827, "y": 578}
+{"event": "absolute-motion", "monotonic": 223236.944313403, "wall_time": 1792041111.6965754, "x": 821, "y": 588}
+{"event": "absolute-motion", "monotonic": 223236.952563827, "wall_time": 1792041111.704826, "x": 815, "y": 599}
+{"event": "absolute-motion", "monotonic": 223236.960768218, "wall_time": 1792041111.7130303, "x": 809, "y": 609}
+{"event": "absolute-motion", "monotonic": 223236.968968564, "wall_time": 1792041111.7212305, "x": 803, "y": 619}
+{"event": "absolute-motion", "monotonic": 223236.977194248, "wall_time": 1792041111.7294564, "x": 796, "y": 630}
+{"event": "absolute-motion", "monotonic": 223236.985450087, "wall_time": 1792041111.7377117, "x": 790, "y": 640}
+{"event": "absolute-motion", "monotonic": 223236.993696252, "wall_time": 1792041111.7459586, "x": 784, "y": 650}
+{"event": "absolute-motion", "monotonic": 223237.001888257, "wall_time": 1792041111.7541504, "x": 778, "y": 661}
+{"event": "absolute-motion", "monotonic": 223237.01010341, "wall_time": 1792041111.762365, "x": 772, "y": 671}
+{"button": 1, "down": false, "event": "button", "monotonic": 223237.268444145, "wall_time": 1792041112.0207057}
+{"action": "drag", "monotonic": 223237.268847435, "phase": "complete", "wall_time": 1792041112.02111}
+{"action": "shot", "arguments": {"filename": "bound.png"}, "monotonic": 223238.422287156, "phase": "begin", "wall_time": 1792041113.174549}
+{"action": "shot", "monotonic": 223238.688120624, "phase": "complete", "wall_time": 1792041113.440383}
+{"action": "key", "arguments": {"keys": ["i"], "seconds": 0.12}, "monotonic": 223247.062384642, "phase": "begin", "wall_time": 1792041121.8146465}
+{"code": 31, "down": true, "event": "key", "monotonic": 223247.065892479, "wall_time": 1792041121.818155}
+{"code": 31, "down": false, "event": "key", "monotonic": 223247.186087306, "wall_time": 1792041121.938349}
+{"action": "key", "monotonic": 223247.186499773, "phase": "complete", "wall_time": 1792041121.9387622}
+{"action": "key", "arguments": {"keys": ["Escape"], "seconds": 0.12}, "monotonic": 223248.33723155, "phase": "begin", "wall_time": 1792041123.089493}
+{"code": 9, "down": true, "event": "key", "monotonic": 223248.340455279, "wall_time": 1792041123.0927176}
+{"code": 9, "down": false, "event": "key", "monotonic": 223248.460629851, "wall_time": 1792041123.2128916}
+{"action": "key", "monotonic": 223248.46101122, "phase": "complete", "wall_time": 1792041123.2132735}
+{"action": "shot", "arguments": {"filename": "pause1.png"}, "monotonic": 223249.613261535, "phase": "begin", "wall_time": 1792041124.365523}
+{"action": "shot", "monotonic": 223249.930428852, "phase": "complete", "wall_time": 1792041124.6826913}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 640, "y": 394}, "monotonic": 223250.081448534, "phase": "begin", "wall_time": 1792041124.8337104}
+{"event": "absolute-motion", "monotonic": 223250.084632114, "wall_time": 1792041124.8368945, "x": 640, "y": 394}
+{"button": 1, "down": true, "event": "button", "monotonic": 223250.204838265, "wall_time": 1792041124.9571}
+{"button": 1, "down": false, "event": "button", "monotonic": 223250.325079041, "wall_time": 1792041125.0773408}
+{"action": "click", "monotonic": 223250.325465476, "phase": "complete", "wall_time": 1792041125.077728}
+{"action": "shot", "arguments": {"filename": "saved1.png"}, "monotonic": 223252.476690898, "phase": "begin", "wall_time": 1792041127.228953}
+{"action": "shot", "monotonic": 223252.84466342, "phase": "complete", "wall_time": 1792041127.596926}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 640, "y": 298}, "monotonic": 223252.997835557, "phase": "begin", "wall_time": 1792041127.7500978}
+{"event": "absolute-motion", "monotonic": 223253.001242532, "wall_time": 1792041127.753505, "x": 640, "y": 298}
+{"button": 1, "down": true, "event": "button", "monotonic": 223253.12144535, "wall_time": 1792041127.873707}
+{"button": 1, "down": false, "event": "button", "monotonic": 223253.241744518, "wall_time": 1792041127.9940057}
+{"action": "click", "monotonic": 223253.242219102, "phase": "complete", "wall_time": 1792041127.9944813}
+{"action": "key", "arguments": {"keys": ["i"], "seconds": 0.12}, "monotonic": 223259.76230462, "phase": "begin", "wall_time": 1792041134.5145664}
+{"code": 31, "down": true, "event": "key", "monotonic": 223259.765747529, "wall_time": 1792041134.51801}
+{"code": 31, "down": false, "event": "key", "monotonic": 223259.885955683, "wall_time": 1792041134.6382177}
+{"action": "key", "monotonic": 223259.886414014, "phase": "complete", "wall_time": 1792041134.6386764}
+{"action": "shot", "arguments": {"filename": "reopen.png"}, "monotonic": 223261.051855331, "phase": "begin", "wall_time": 1792041135.804117}
+{"action": "shot", "monotonic": 223261.319176321, "phase": "complete", "wall_time": 1792041136.0714388}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 1076, "y": 551}, "monotonic": 223267.71105774, "phase": "begin", "wall_time": 1792041142.4633198}
+{"event": "absolute-motion", "monotonic": 223267.714559833, "wall_time": 1792041142.4668224, "x": 1076, "y": 551}
+{"button": 1, "down": true, "event": "button", "monotonic": 223267.834785278, "wall_time": 1792041142.5870469}
+{"button": 1, "down": false, "event": "button", "monotonic": 223267.95509055, "wall_time": 1792041142.707352}
+{"action": "click", "monotonic": 223267.955538348, "phase": "complete", "wall_time": 1792041142.7078006}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 1077, "y": 155}, "monotonic": 223269.110351471, "phase": "begin", "wall_time": 1792041143.8626132}
+{"event": "absolute-motion", "monotonic": 223269.113508679, "wall_time": 1792041143.865771, "x": 1077, "y": 155}
+{"button": 1, "down": true, "event": "button", "monotonic": 223269.233706429, "wall_time": 1792041143.985968}
+{"button": 1, "down": false, "event": "button", "monotonic": 223269.353975081, "wall_time": 1792041144.106237}
+{"action": "click", "monotonic": 223269.354360179, "phase": "complete", "wall_time": 1792041144.1066227}
+{"action": "shot", "arguments": {"filename": "prompt1.png"}, "monotonic": 223270.5067119, "phase": "begin", "wall_time": 1792041145.2589736}
+{"action": "shot", "monotonic": 223270.772673943, "phase": "complete", "wall_time": 1792041145.5249364}
+{"action": "key", "arguments": {"keys": ["Escape"], "seconds": 0.12}, "monotonic": 223277.130293949, "phase": "begin", "wall_time": 1792041151.882556}
+{"code": 9, "down": true, "event": "key", "monotonic": 223277.136865871, "wall_time": 1792041151.8891282}
+{"code": 9, "down": false, "event": "key", "monotonic": 223277.257078205, "wall_time": 1792041152.00934}
+{"action": "key", "monotonic": 223277.25746503, "phase": "complete", "wall_time": 1792041152.0097275}
+{"action": "shot", "arguments": {"filename": "escaped.png"}, "monotonic": 223278.415275497, "phase": "begin", "wall_time": 1792041153.1675377}
+{"action": "shot", "monotonic": 223278.681269788, "phase": "complete", "wall_time": 1792041153.4335322}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 1076, "y": 551}, "monotonic": 223288.738339358, "phase": "begin", "wall_time": 1792041163.4906013}
+{"event": "absolute-motion", "monotonic": 223288.741645199, "wall_time": 1792041163.4939075, "x": 1076, "y": 551}
+{"button": 1, "down": true, "event": "button", "monotonic": 223288.861843358, "wall_time": 1792041163.6141055}
+{"button": 1, "down": false, "event": "button", "monotonic": 223288.982077377, "wall_time": 1792041163.734339}
+{"action": "click", "monotonic": 223288.982513691, "phase": "complete", "wall_time": 1792041163.734776}
+{"action": "shot", "arguments": {"filename": "disarmed.png"}, "monotonic": 223290.133383785, "phase": "begin", "wall_time": 1792041164.8856456}
+{"action": "shot", "monotonic": 223290.399433984, "phase": "complete", "wall_time": 1792041165.1516964}
+{"action": "key", "arguments": {"keys": ["i"], "seconds": 0.12}, "monotonic": 223290.549622359, "phase": "begin", "wall_time": 1792041165.3018842}
+{"code": 31, "down": true, "event": "key", "monotonic": 223290.553129754, "wall_time": 1792041165.305392}
+{"code": 31, "down": false, "event": "key", "monotonic": 223290.67330161, "wall_time": 1792041165.4255633}
+{"action": "key", "monotonic": 223290.673699053, "phase": "complete", "wall_time": 1792041165.4259615}
+{"action": "key", "arguments": {"keys": ["Escape"], "seconds": 0.12}, "monotonic": 223291.824569425, "phase": "begin", "wall_time": 1792041166.5768313}
+{"code": 9, "down": true, "event": "key", "monotonic": 223291.828350634, "wall_time": 1792041166.580613}
+{"code": 9, "down": false, "event": "key", "monotonic": 223291.948580472, "wall_time": 1792041166.7008421}
+{"action": "key", "monotonic": 223291.949055291, "phase": "complete", "wall_time": 1792041166.7013175}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 640, "y": 394}, "monotonic": 223293.099931943, "phase": "begin", "wall_time": 1792041167.8521936}
+{"event": "absolute-motion", "monotonic": 223293.103743783, "wall_time": 1792041167.8560061, "x": 640, "y": 394}
+{"button": 1, "down": true, "event": "button", "monotonic": 223293.223957009, "wall_time": 1792041167.9762185}
+{"button": 1, "down": false, "event": "button", "monotonic": 223293.344242897, "wall_time": 1792041168.0965047}
+{"action": "click", "monotonic": 223293.345538432, "phase": "complete", "wall_time": 1792041168.0978005}
+{"action": "shot", "arguments": {"filename": "saved2.png"}, "monotonic": 223295.495686156, "phase": "begin", "wall_time": 1792041170.2479482}
+{"action": "shot", "monotonic": 223295.811615834, "phase": "complete", "wall_time": 1792041170.563878}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 640, "y": 298}, "monotonic": 223295.962488453, "phase": "begin", "wall_time": 1792041170.71475}
+{"event": "absolute-motion", "monotonic": 223295.96591247, "wall_time": 1792041170.718175, "x": 640, "y": 298}
+{"button": 1, "down": true, "event": "button", "monotonic": 223296.086110162, "wall_time": 1792041170.8383718}
+{"button": 1, "down": false, "event": "button", "monotonic": 223296.206386664, "wall_time": 1792041170.9586487}
+{"action": "click", "monotonic": 223296.206841485, "phase": "complete", "wall_time": 1792041170.959104}
+{"action": "key", "arguments": {"keys": ["i"], "seconds": 0.12}, "monotonic": 223306.468124366, "phase": "begin", "wall_time": 1792041181.220386}
+{"code": 31, "down": true, "event": "key", "monotonic": 223306.471805969, "wall_time": 1792041181.2240684}
+{"code": 31, "down": false, "event": "key", "monotonic": 223306.59202707, "wall_time": 1792041181.3442893}
+{"action": "key", "monotonic": 223306.592439119, "phase": "complete", "wall_time": 1792041181.3447018}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 1076, "y": 551}, "monotonic": 223307.757434226, "phase": "begin", "wall_time": 1792041182.509696}
+{"event": "absolute-motion", "monotonic": 223307.761029707, "wall_time": 1792041182.513292, "x": 1076, "y": 551}
+{"button": 1, "down": true, "event": "button", "monotonic": 223307.88125031, "wall_time": 1792041182.6335118}
+{"button": 1, "down": false, "event": "button", "monotonic": 223308.001511843, "wall_time": 1792041182.753774}
+{"action": "click", "monotonic": 223308.001912382, "phase": "complete", "wall_time": 1792041182.7541747}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 1077, "y": 155}, "monotonic": 223309.153728715, "phase": "begin", "wall_time": 1792041183.9059906}
+{"event": "absolute-motion", "monotonic": 223309.157085454, "wall_time": 1792041183.9093478, "x": 1077, "y": 155}
+{"button": 1, "down": true, "event": "button", "monotonic": 223309.277257117, "wall_time": 1792041184.0295186}
+{"button": 1, "down": false, "event": "button", "monotonic": 223309.397536605, "wall_time": 1792041184.1497982}
+{"action": "click", "monotonic": 223309.397941362, "phase": "complete", "wall_time": 1792041184.150204}
+{"action": "shot", "arguments": {"filename": "prompt2.png"}, "monotonic": 223310.552241044, "phase": "begin", "wall_time": 1792041185.3045027}
+{"action": "shot", "monotonic": 223310.818206278, "phase": "complete", "wall_time": 1792041185.5704687}
+{"action": "key", "arguments": {"keys": ["Return"], "seconds": 0.1}, "monotonic": 223310.969582033, "phase": "begin", "wall_time": 1792041185.721844}
+{"code": 36, "down": true, "event": "key", "monotonic": 223310.973139536, "wall_time": 1792041185.725402}
+{"code": 36, "down": false, "event": "key", "monotonic": 223311.07335419, "wall_time": 1792041185.825616}
+{"action": "key", "monotonic": 223311.073798594, "phase": "complete", "wall_time": 1792041185.8260608}
+{"action": "shot", "arguments": {"filename": "discarded.png"}, "monotonic": 223312.226446843, "phase": "begin", "wall_time": 1792041186.9787087}
+{"action": "shot", "monotonic": 223312.492360024, "phase": "complete", "wall_time": 1792041187.2446227}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 1076, "y": 551}, "monotonic": 223322.609529406, "phase": "begin", "wall_time": 1792041197.3617911}
+{"event": "absolute-motion", "monotonic": 223322.61276943, "wall_time": 1792041197.365032, "x": 1076, "y": 551}
+{"button": 1, "down": true, "event": "button", "monotonic": 223322.732937334, "wall_time": 1792041197.4851992}
+{"button": 1, "down": false, "event": "button", "monotonic": 223322.853188204, "wall_time": 1792041197.60545}
+{"action": "click", "monotonic": 223322.853540106, "phase": "complete", "wall_time": 1792041197.6058025}
+{"action": "key", "arguments": {"keys": ["i"], "seconds": 0.12}, "monotonic": 223324.004286584, "phase": "begin", "wall_time": 1792041198.7565484}
+{"code": 31, "down": true, "event": "key", "monotonic": 223324.00750921, "wall_time": 1792041198.7597716}
+{"code": 31, "down": false, "event": "key", "monotonic": 223324.127714334, "wall_time": 1792041198.8799763}
+{"action": "key", "monotonic": 223324.128147242, "phase": "complete", "wall_time": 1792041198.8804097}
+{"action": "key", "arguments": {"keys": ["Escape"], "seconds": 0.12}, "monotonic": 223325.280972922, "phase": "begin", "wall_time": 1792041200.0332346}
+{"code": 9, "down": true, "event": "key", "monotonic": 223325.284634924, "wall_time": 1792041200.0368972}
+{"code": 9, "down": false, "event": "key", "monotonic": 223325.404845616, "wall_time": 1792041200.157107}
+{"action": "key", "monotonic": 223325.405288949, "phase": "complete", "wall_time": 1792041200.1575513}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 640, "y": 394}, "monotonic": 223326.561637186, "phase": "begin", "wall_time": 1792041201.3138988}
+{"event": "absolute-motion", "monotonic": 223326.564973104, "wall_time": 1792041201.3172355, "x": 640, "y": 394}
+{"button": 1, "down": true, "event": "button", "monotonic": 223326.685167516, "wall_time": 1792041201.4374287}
+{"button": 1, "down": false, "event": "button", "monotonic": 223326.805438414, "wall_time": 1792041201.5577002}
+{"action": "click", "monotonic": 223326.805798084, "phase": "complete", "wall_time": 1792041201.5580606}
+{"action": "shot", "arguments": {"filename": "saved3.png"}, "monotonic": 223328.951054423, "phase": "begin", "wall_time": 1792041203.7033162}
+{"action": "shot", "monotonic": 223329.267777567, "phase": "complete", "wall_time": 1792041204.02004}
+{"action": "click", "arguments": {"button": 1, "seconds": 0.12, "x": 640, "y": 298}, "monotonic": 223329.419362709, "phase": "begin", "wall_time": 1792041204.1716242}
+{"event": "absolute-motion", "monotonic": 223329.422815978, "wall_time": 1792041204.1750784, "x": 640, "y": 298}
+{"button": 1, "down": true, "event": "button", "monotonic": 223329.543029525, "wall_time": 1792041204.2952914}
+{"button": 1, "down": false, "event": "button", "monotonic": 223329.663295197, "wall_time": 1792041204.415557}
+{"action": "click", "monotonic": 223329.663662525, "phase": "complete", "wall_time": 1792041204.415925}
+{"action": "stop", "arguments": {}, "monotonic": 223330.871151816, "phase": "begin", "wall_time": 1792041205.6234136}
+{"action": "stop-requested", "monotonic": 223330.872208354, "wall_time": 1792041205.6244707}
+{"action": "stop", "monotonic": 223330.872265466, "phase": "complete", "wall_time": 1792041205.6245282}
+{"action": "supervisor-exit", "baseline_unchanged": true, "game_returncode": -15, "monotonic": 223330.999471625, "wall_time": 1792041205.7517335}

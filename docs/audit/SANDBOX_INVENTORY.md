@@ -39,3 +39,71 @@ python3 -m unittest discover -s rebuild/tests -p test_export_inventory.py -v
 Focused C tests cover independent category saturation, Legacy capacity, cross-category rejection, first-empty split, full-category split rollback, source exchange, partial/full merge, source consolidation/order, durable identity/wear, shortcut references, stable migration and exact transfers. Python checks cover source guards, metadata reproduction and current catalog classification coverage. The migration/save suite covers historical prefixes and the v19 authoritative payload. Final aggregate results and the remaining visual acceptance belong in [PLAYTEST](../PLAYTEST.md).
 
 Source mission inventories, creation item categories, network replication, new-item highlights and the complete original drag/modal presentation remain outside this increment. One consolidated future playtest should inspect category pages, empty-cell rearrangement, split amounts, shortcuts and window readability; none of the source capacity or sort constants depends on that visual check.
+
+## Ordinary native acceptance
+
+**October 14, observed in the native production runtime with ordinary input;
+no original-game comparison.** Evidence: [manifest, input journal and lossless
+panel crops](../reference/inventory-native-20261014/checkpoints.json). Full
+captures and saves stay under `rebuild/build/inventory-private-20261014-01`.
+[Discard](INVENTORY_DISCARD.md#ordinary-native-acceptance) was checked in the
+same session.
+
+*Setup.*
+- Runtime `7003add`, binary SHA256 `f5c07847…a8e`, private display `:121`,
+  Claude as sole operator.
+- Baseline: the earned `returned` save from repair session 02
+  (`1a791bbf…55cc`), unchanged afterwards. Resource cells 840–842 held item
+  229 ×400, Wood 279 ×193 and item 270 ×4. Money was 261, and the Knife
+  (instance 1) was equipped.
+- No fixture, cheat, save edit or grant. Each save was made with Pause → Save
+  after closing the inventory.
+
+Adventure category cells are 420-cell segments (Item 0–419, Equipment
+420–839, Resource 840–1259). The panel shows six cells per row.
+
+*Observed, in order:*
+
+| Step | Input | UI result | Saved state (inspector) |
+|---|---|---|---|
+| Split | I, Resource tab, Split, click Wood, type 1 then 0 | "Split stack / Choose 1 - 192", value 10 | — |
+| Confirm | Enter | "Stack split: 10 items."; 183 stays; 10 in the 4th cell | `split` (`75f9713f…e080`): 841 Wood 183, 843 Wood 10 (first empty Resource cell) |
+| Move | drag the 10 to the empty first cell of row 2 | stack moved | — |
+| Exchange | drag the 10 onto the 183 | the two stacks swap places; no merge | `exchanged` (`b4ac8d74…1f40`): 841 Wood 10, 846 Wood 183 |
+| Sort | Sort | "Inventory category sorted."; Wood shown once as 193 | `sorted` (`b95afcb6…23ff`): 840 item 229 ×400, 841 item 270 ×4, 842 Wood 193 |
+| Partial discard | Split 10 again, Delete → Cancel, then Delete → Discard; see the linked discard audit | only the isolated 10 removed | `discarded`: Wood 183; other item totals unchanged |
+| Equipment sort | Equipment tab, Sort | "Inventory category sorted."; page 1 has one hole, the hidden equipped Knife | `equipment-sorted` (`ca79fffb…866c`): see below |
+
+*Against the source.*
+- **Split (observed match):** the new stack took the first empty cell in its
+  category, and the total stayed 193.
+- **Same-prototype exchange (observed match):** dragging one Wood stack onto
+  another swapped them without merging, as source `ItemPackage` drag does.
+- **Sort (observed match):** Sort consolidated the two Wood stacks into 193
+  (source `SlotList.Reduce`). It then ordered the Resource cells by ascending
+  source sort label: 229 (10079), 270 (10464), 279 (10472).
+- **Equipment sort:** the Equipment cells were reordered by ascending source
+  label: 1, 33, 34, 43, 12, 19, 26, 1527, 70, 228, 73. Every instance kept its
+  exact ID and wear, for example shovel 10 at 3543, now in cell 424, and axe 12
+  at 3553, now in 426. The equipped Knife moved from 420 to 421 and stayed
+  hidden there. `equipped_instance` stayed 1, and quickslot 1 still refers to
+  item 33, instance 1.
+
+Across all saves the Item tab, the set of instance IDs, money, outfit,
+quickslots and the empty repair machine stayed unchanged. Item totals matched
+the baseline except Wood after the discard.
+
+*Not exercised.* The explicit Shift+drop merge is a native adapter that needs a
+key held during a drag; the input helper was deliberately not extended, so it
+remains unobserved. Also unobserved: a split into a full category, split
+values typed beyond the maximum, the small window and paging with real
+content.
+
+*Incidental input.* Two clicks used to move the pointer away landed on UI: one
+on an empty Resource cell, and one on the last-page button. The second showed
+page 10 until the first-page button was clicked. Neither changed saved state.
+
+The session ended by explicit guarded stop (owned game SIGTERM, −15). The
+supervisor, Xvfb and game PIDs were absent afterwards, and the baseline was
+unchanged. Ten lossless 380×576 panel crops were checked pixel-exactly. No
+runtime code changed.
