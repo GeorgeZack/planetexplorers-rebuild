@@ -3,6 +3,7 @@
  * Older-save migrations happen in memory only, exactly as in the game loader. */
 #include "pe_paths.h"
 #include "pe_game.h"
+#include "pe_block.h"
 #include "pe_settlement.h"
 #include "pe_adventure_hunt.h"
 #include "pe_town_interaction.h"
@@ -20,7 +21,7 @@ int main(int argc,char **argv){
     if(!pe_settlement_configure(assets,error,sizeof error)||!pe_game_load(g,argv[1],error,sizeof error)){
         fprintf(stderr,"%s\n",error);pe_game_destroy(g);free(g);return 1;
     }
-    printf("{\"schema\":5,\"interpretation\":\"current-loader\",\"mode\":%u,"
+    printf("{\"schema\":6,\"interpretation\":\"current-loader\",\"mode\":%u,"
         "\"hunt_state\":%u,\"hunt_kills\":%u,\"pending_return_talk\":%d,"
         "\"source_position\":[%.17g,%.17g,%.17g],\"hunt_destination\":[%.9g,%.9g,%.9g],"
         "\"hp\":%.9g,\"max_hp\":%.9g,\"stamina\":%.9g,\"comfort\":%.9g,"
@@ -84,8 +85,19 @@ int main(int argc,char **argv){
      * item and the remaining CounterScript ticks; all zero when empty. */
     const PeCampRepair *r=&g->repair;
     printf("],\"repair\":{\"occupied\":%s,\"item_id\":%d,\"count\":%d,\"instance_id\":%u,"
-        "\"durability\":%.9g,\"running\":%s,\"remaining_ticks\":%lld}}\n",
+        "\"durability\":%.9g,\"running\":%s,\"remaining_ticks\":%lld}",
         r->item.count>0?"true":"false",r->item.item_id,r->item.count,r->item.instance_id,(double)r->item.durability,
         r->running?"true":"false",(long long)r->remaining_ticks);
+    /* Schema 6: the saved Block45 cells (PeGame.cells) with the original two-byte
+     * encoding split into shape (type>>2) and rotation (type&3), the material's
+     * item, and the built statistic. Construction history is transient and never
+     * saved, so it is not reported. */
+    printf(",\"built\":%u,\"cell_count\":%d,\"cells\":[",g->built,g->cell_count);
+    for(int i=0;i<g->cell_count&&i<PE_MAX_B45_CELLS;i++){
+        const PeB45Cell *c=&g->cells[i];
+        printf("%s{\"x\":%d,\"y\":%d,\"z\":%d,\"type\":%u,\"shape\":%u,\"rotation\":%u,\"material\":%u,\"item_id\":%d}",
+            i?",":"",c->x,c->y,c->z,(unsigned)c->type,(unsigned)(c->type>>2),(unsigned)(c->type&3),(unsigned)c->material,pe_b45_material_item(c->material));
+    }
+    puts("]}");
     pe_game_destroy(g);free(g);return 0;
 }

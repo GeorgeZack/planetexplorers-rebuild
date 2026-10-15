@@ -1,0 +1,515 @@
+{
+  "schema": 1,
+  "runtime_commit": "eb9956a",
+  "binary_sha256": "f5c07847ee664bb9ca7771637736d6af8c6bbc3b440fc59ba8c2036defb43a8e",
+  "mode": "Adventure",
+  "window": [
+    1280,
+    720
+  ],
+  "sessions": {
+    "01": {
+      "path": "rebuild/build/build-private-20261014-01",
+      "operator": "Claude",
+      "display": ":117",
+      "source": "rebuild/build/repair-private-20261014-01/completed.pesave",
+      "baseline_sha256": "49ed477cc0b4921deac8f4b698adf53bdd169ffc263e54884c26b0da3236a96a",
+      "baseline_unchanged": true,
+      "exit": {
+        "action": "supervisor-exit",
+        "baseline_unchanged": true,
+        "game_returncode": -9,
+        "monotonic": 197932.020424258,
+        "wall_time": 1792015806.772686
+      },
+      "owned_processes_absent": true
+    },
+    "02": {
+      "path": "rebuild/build/build-private-20261014-02",
+      "operator": "Codex after Claude usage limit; sole operator",
+      "display": ":118",
+      "source": "rebuild/build/build-private-20261014-01/constructed.pesave",
+      "baseline_sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+      "baseline_unchanged": true,
+      "exit": {
+        "action": "supervisor-exit",
+        "baseline_unchanged": true,
+        "game_returncode": -15,
+        "monotonic": 210925.943952506,
+        "wall_time": 1792028800.6962142
+      },
+      "owned_processes_absent": true
+    }
+  },
+  "saves": {
+    "01/baseline.pesave": {
+      "sha256": "49ed477cc0b4921deac8f4b698adf53bdd169ffc263e54884c26b0da3236a96a",
+      "interpretation": "current-loader; cannot inspect live history",
+      "inspection": {
+        "schema": 6,
+        "mode": 1,
+        "source_position": [
+          -608.5238285064697,
+          28.501943588256836,
+          401.4425354003906
+        ],
+        "built": 0,
+        "cell_count": 0,
+        "cells": [],
+        "money": 261
+      },
+      "wood": 193
+    },
+    "01/one-cell.pesave": {
+      "sha256": "da62f4f2ce5451eecb408aac721ef796be21abc21c4366e84635526eade24514",
+      "interpretation": "current-loader; cannot inspect live history",
+      "inspection": {
+        "schema": 6,
+        "mode": 1,
+        "source_position": [
+          -608.5764827728271,
+          28.55131721496582,
+          395.3196716308594
+        ],
+        "built": 1,
+        "cell_count": 1,
+        "cells": [
+          {
+            "x": 61,
+            "y": 58,
+            "z": 660,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          }
+        ],
+        "money": 261
+      },
+      "wood": 191
+    },
+    "01/constructed.pesave": {
+      "sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+      "interpretation": "current-loader; cannot inspect live history",
+      "inspection": {
+        "schema": 6,
+        "mode": 1,
+        "source_position": [
+          -608.5764827728271,
+          28.55131721496582,
+          395.3196716308594
+        ],
+        "built": 2,
+        "cell_count": 5,
+        "cells": [
+          {
+            "x": 61,
+            "y": 58,
+            "z": 660,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          }
+        ],
+        "money": 261
+      },
+      "wood": 190
+    },
+    "02/baseline.pesave": {
+      "sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+      "interpretation": "current-loader; cannot inspect live history",
+      "inspection": {
+        "schema": 6,
+        "mode": 1,
+        "source_position": [
+          -608.5764827728271,
+          28.55131721496582,
+          395.3196716308594
+        ],
+        "built": 2,
+        "cell_count": 5,
+        "cells": [
+          {
+            "x": 61,
+            "y": 58,
+            "z": 660,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          }
+        ],
+        "money": 261
+      },
+      "wood": 190
+    },
+    "02/reloaded.pesave": {
+      "sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+      "interpretation": "current-loader; cannot inspect live history",
+      "inspection": {
+        "schema": 6,
+        "mode": 1,
+        "source_position": [
+          -608.5764827728271,
+          28.55131721496582,
+          395.3196716308594
+        ],
+        "built": 2,
+        "cell_count": 5,
+        "cells": [
+          {
+            "x": 61,
+            "y": 58,
+            "z": 660,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          }
+        ],
+        "money": 261
+      },
+      "wood": 190
+    },
+    "02/progress.pesave": {
+      "sha256": "69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62",
+      "interpretation": "current-loader; cannot inspect live history",
+      "inspection": {
+        "schema": 6,
+        "mode": 1,
+        "source_position": [
+          -608.5764827728271,
+          28.55131721496582,
+          395.3196716308594
+        ],
+        "built": 2,
+        "cell_count": 5,
+        "cells": [
+          {
+            "x": 61,
+            "y": 58,
+            "z": 660,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 666,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 62,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          },
+          {
+            "x": 63,
+            "y": 58,
+            "z": 667,
+            "type": 4,
+            "shape": 1,
+            "rotation": 0,
+            "material": 11,
+            "item_id": 279
+          }
+        ],
+        "money": 261
+      },
+      "wood": 190
+    }
+  },
+  "lossless_crops": {
+    "placed-1.png": {
+      "source": "rebuild/build/build-private-20261014-01/placed-1.png",
+      "source_sha256": "2d0ce5bb13e18fdf963c6ae29e83b6648987efff2154afc545a1847b245de270",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "a37c6369ded0804ebe70cfd2fe8363e77ba7d8db56c80e63aa3b9ec7333bc1d3"
+    },
+    "undo-1.png": {
+      "source": "rebuild/build/build-private-20261014-01/undo-1.png",
+      "source_sha256": "ac5c262f2149a9c8739d735ebfc8e790555d4e45ea2ef1e7ccbf04d2b5f3775e",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "c2480d3725ad6b5eb1b444fea298ebaf8bd35ea36c7c50ff1df72aa3b4bfd4e0"
+    },
+    "redo-1.png": {
+      "source": "rebuild/build/build-private-20261014-01/redo-1.png",
+      "source_sha256": "dea97a184e834116eb96ab3b65773bd5058a55f9cb6361de0689183788878f49",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "6442dfec541faf221652996508859f84f8a242c6ac04f7a02d13ee9257c4cb91"
+    },
+    "toolbar-undo.png": {
+      "source": "rebuild/build/build-private-20261014-01/toolbar-undo.png",
+      "source_sha256": "2ebc8115ef498c53103769b2b983ef7b57f7f5634c4b8f7a03ab39e48ca4b235",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "2a1aa6f68966a46e6d61da0c464f51f4c4cb9733ff8eb2ac0239beab4f31cf8a"
+    },
+    "toolbar-redo.png": {
+      "source": "rebuild/build/build-private-20261014-01/toolbar-redo.png",
+      "source_sha256": "fdeb251a583827a05a87e54ffffe9bee29d533393fb4945477cccbff9eebfa0e",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "90ba4ec8ba37531463a40e6384cfe3516ef4bfeeb35c81d9e94d5fa35d80a3df"
+    },
+    "modal-ctrlz.png": {
+      "source": "rebuild/build/build-private-20261014-01/modal-ctrlz.png",
+      "source_sha256": "62aef751857f75cb042e3ffb7b0c6b48dd2788951c971eab134ea8951b43468d",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "202e1d6225e12902edeb1c85a4d677b692b844df1f1126577ae290019bf4e074"
+    },
+    "after-modal.png": {
+      "source": "rebuild/build/build-private-20261014-01/after-modal.png",
+      "source_sha256": "4f1d6667b55b9fd59d11422a20f7b7f8913ecbf2bf0b9e302c16c771773a9dd7",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "aee60b7b10f4355a8e4e4af5c29b128568d43a0d0b755d85acfc1170ec011307"
+    },
+    "held-undo.png": {
+      "source": "rebuild/build/build-private-20261014-01/held-undo.png",
+      "source_sha256": "3bb72a5eaba8fd803724540397e8ded8bbfa082b11ab57ebb3595c9735ba305e",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "0f81b7e6bb3710e715043141a3aeede4fb7d8353fec040c61b281f1cb1f61c51"
+    },
+    "restored.png": {
+      "source": "rebuild/build/build-private-20261014-01/restored.png",
+      "source_sha256": "3c2480dc28ff0d03fdfdbdf11bded317e06711315ef3d80b3c74293df8000b32",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "3704c1684d084ea4b180c870d9a90192110c2d3494019ec608f5049acffaad55"
+    },
+    "distinguishing-removal.png": {
+      "source": "rebuild/build/build-private-20261014-02/distinguishing-removal.png",
+      "source_sha256": "d3df3f5595fa00c8e6fba51f6180f4b00b407e0d2345951b78d4155c9c63e043",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "80a5c659d5f2390fbf2849f51d2a86a216c092dba6ed22084be7a92d6c9be85b"
+    },
+    "empty-undo.png": {
+      "source": "rebuild/build/build-private-20261014-02/empty-undo.png",
+      "source_sha256": "bf9fd62092d5f1188cf2e4cde2ce9da4ff790bc4195643e53b1ca84f9a854058",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "20edc5c37deb432b14fc4e9d2ac67b6c4ca536a50bb7b32c54c0e9ae5812d3a8"
+    },
+    "empty-redo.png": {
+      "source": "rebuild/build/build-private-20261014-02/empty-redo.png",
+      "source_sha256": "a6e840b0212d1499a46d9b409f87aa48e1141ad6944f877653d030891093f008",
+      "box": [
+        0,
+        0,
+        1000,
+        720
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "d7b9bf9827f12c25c0c58827091e8257424fbc81bd4720230e683784b3107155"
+    }
+  }
+}

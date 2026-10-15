@@ -1,5 +1,29 @@
 # Original-game playtest and C comparison
 
+## October14 ordinary native construction history
+
+[Native acceptance](audit/CONSTRUCTION_HISTORY.md#ordinary-native-acceptance),
+[evidence](reference/build-native-20261014/checkpoints.json). Adventure,
+1280×720, production binary, earned repair checkpoint; no original launch.
+
+- One-cell placement/undo/redo: Wood 193 → 192 → 192 → 191.
+- Four-cell batch and toolbar replay: final five cells, Wood 190, `built=2`.
+- Save and B exit/reentry retain history; Pause blocks Ctrl+Z; a 1.5-second
+  held chord undoes only one batch.
+- A fresh private session removed the single cube, then actual Load restored
+  the five-cell save. Paused re-save was byte-identical (`69bc9209…5c62`).
+  Ctrl+Z and Ctrl+X then displayed empty-history messages; saved cells and
+  materials remained unchanged.
+- Claude reached its usage limit. Session 01 expired through its watchdog;
+  Codex completed session 02 alone and explicitly stopped it. Both baselines
+  stayed unchanged; owned process groups were absent.
+
+Ramps, moving replay and blocked transactions remain outside this physical
+acceptance. Full check: 282 jobs, 980 Python tests, 98 optional skips.
+Sanitizer: 113 passed, zero failures/skips. Initial sandboxed LeakSanitizer
+failure was resolved by the unrestricted full rerun.
+
+
 ## October14 ordinary native camp repair
 
 Observed in the native production runtime with ordinary private-display input

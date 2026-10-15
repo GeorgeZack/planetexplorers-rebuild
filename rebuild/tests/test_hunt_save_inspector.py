@@ -14,6 +14,7 @@ STUBS = r'''
 #include "pe_adventure_hunt.h"
 #include "pe_town_interaction.h"
 #include "pe_town_wallet.h"
+#include "pe_block.h"
 #include <string.h>
 bool pe_settlement_configure(const char *p,char *e,size_t n){(void)p;(void)e;(void)n;return true;}
 bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
@@ -24,6 +25,7 @@ bool pe_game_load(PeGame *g,const char *p,char *e,size_t n){
     g->yaw=.5f;g->pitch=-.25f;g->velocity=(PeVec3){1,2,3};g->grounded=true;
     g->quickslots[0]=(PeQuickslot){100,42};g->hunger.hunger=123.5f;g->hunger.starving=!g->inventory.categorized;
     g->town_stock[1]=(PeTownStock){true,17,99.5};g->town_wallet[1]=(PeTownWallet){4480,true};
+    if(g->inventory.categorized){g->built=7;g->cell_count=2;g->cells[0]=(PeB45Cell){-12,40,300,(PE_B45_CUBE<<2)|0,3};g->cells[1]=(PeB45Cell){5,41,-2,(PE_B45_RAMP<<2)|3,4};}
     if(g->inventory.categorized)g->repair=(PeCampRepair){.item={.item_id=12,.count=1,.instance_id=10,.durability=3543},.remaining_ticks=6123456789LL,.running=true};
     return true;
 }
@@ -39,6 +41,7 @@ const PeTownOffer *pe_town_shop_offer_at(size_t i){
 }
 int pe_adventure_hunt_return_talk(const PeGame *g){(void)g;return 0;}
 float pe_outfit_defense(const PeOutfit *o){(void)o;return 0;}
+int pe_b45_material_item(int m){return m==3?279:m==4?1051:0;}
 int pe_inventory_capacity(const PeInventory *p){return p->categorized?PE_INVENTORY_MAX_SLOTS:PE_INVENTORY_SLOTS;}
 int pe_inventory_count(const PeInventory *p,int id){
     int n=0;for(int k=0;k<pe_inventory_capacity(p);k++)if(p->slots[k].item_id==id)n+=p->slots[k].count;return n;
@@ -72,7 +75,7 @@ class InspectorOutput(unittest.TestCase):
 
     def test_all_adventure_categories_and_pose(self):
         data = self.inspect('adventure')
-        self.assertEqual(data['schema'], 5)
+        self.assertEqual(data['schema'], 6)
         self.assertTrue(data['inventory_categorized'])
         self.assertEqual(data['inventory_capacity'], 1680)
         self.assertEqual([s['slot'] for s in data['inventory']], [0, 420, 840, 1260])
@@ -92,6 +95,15 @@ class InspectorOutput(unittest.TestCase):
         self.assertEqual({k: data['food_offers'][1][k] for k in ('initialized', 'remaining', 'create_time')},
                          {'initialized': True, 'remaining': 17, 'create_time': 99.5})
         self.assertTrue(self.inspect('legacy')['hunger']['starving'])
+
+    def test_block_cells_and_built(self):
+        data = self.inspect('adventure')
+        self.assertEqual((data['built'], data['cell_count']), (7, 2))
+        self.assertEqual(data['cells'], [
+            {'x': -12, 'y': 40, 'z': 300, 'type': 4, 'shape': 1, 'rotation': 0, 'material': 3, 'item_id': 279},
+            {'x': 5, 'y': 41, 'z': -2, 'type': 11, 'shape': 2, 'rotation': 3, 'material': 4, 'item_id': 1051}])
+        legacy = self.inspect('legacy')
+        self.assertEqual((legacy['built'], legacy['cell_count'], legacy['cells']), (0, 0, []))
 
     def test_repair_job_fields(self):
         # Formatter-only width check above 2^32; real saved jobs are bounded to 6,000,000 ticks.

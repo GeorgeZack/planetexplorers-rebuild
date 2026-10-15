@@ -88,7 +88,7 @@ October 14 pre-push verification of the food-acceptance checkpoint: the required
 
 October 14 director pre-push verification of the ordinary commerce checkpoint: 113 sanitizer suites pass, zero failures/skips, with leak checks enabled (`rebuild/build/compiler-tmp/trade-prepush-sanitize.log`); the full regression is 282 jobs / 978 Python tests with 98 explicit optional skips. Director review independently verified the exact worn instance, purses/counts, byte-identical reload and all twelve lossless evidence crops.
 
-October 14, director-chosen goal, left uncommitted for review: [ordinary native camp repair](audit/CAMP_REPAIR.md#ordinary-native-acceptance) in session `rebuild/build/repair-private-20261014-01`, from the earned trade save (`21a80c12…1ac0`, unchanged).
+October 14, director-chosen goal, committed as `eb9956a`: [ordinary native camp repair](audit/CAMP_REPAIR.md#ordinary-native-acceptance) in session `rebuild/build/repair-private-20261014-01`, from the earned trade save (`21a80c12…1ac0`, unchanged).
 - Travel: walked to the lot. The traced exit is a one-way drop, so a read-only height grid suggested an east ramp, which the player then actually climbed. No construction or relocation.
 - Opened the machine by right-click and inserted Wood Shovel instance 10 (3543). The quote of 1 Wood and the 60-second source duration were shown, and 1 Wood was paid.
 - `partial` (`f3e087ff…68bc`): running, 3,677,326 ticks, instance 10 in the machine. A 10 s advance, then Load and a paused re-save, gave a byte-identical file.
@@ -102,3 +102,10 @@ Checks:
 - Pre-push sanitizer: the director's run.
 
 October 14 director pre-push verification of camp repair acceptance: full regression 282 jobs / 979 Python tests, 98 explicit optional skips; 113 sanitizer suites pass with leak checks enabled, zero failures/skips (`rebuild/build/compiler-tmp/repair-prepush-sanitize.log`). Independent review confirmed partial-save byte equality, reserved and returned exact instance ownership, baseline integrity, owned process teardown and all eleven lossless evidence crops.
+
+
+October 14, director-chosen goal: [ordinary native construction history](audit/CONSTRUCTION_HISTORY.md#ordinary-native-acceptance). Claude completed cube key/toolbar replay, B reentry, Pause blocking and held-chord checks before reaching its usage limit. Session 01 expired safely. Codex canceled Claude's retry, then completed actual Load clearing in a fresh owned session, stopped it, and verified both process groups absent and baselines unchanged. The earned five-cell checkpoint is `rebuild/build/build-private-20261014-02/reloaded.pesave` (SHA256 `69bc92098f46fab765ee4cd257fcd5f65164cb3f905c96796d17ba8371805c62`), Wood 190, `built=2`, exact repaired shovel retained. Inspector schema 6 reports saved cells and `built`; it cannot inspect live history. Full check: 282 passed, 980 Python tests / 98 optional skips; sanitizer: 113 passed with leak detection, zero failures/skips. The sandboxed full check's five LeakSanitizer/ptrace failures were resolved by the unrestricted full rerun. All twelve lossless crops were verified.
+
+The user also requested Caveman in the local agent instruction files. `AGENTS.md` activates the vendored `docs/skills/caveman/SKILL.md` for chat by default, and new `CLAUDE.md` imports both. Code, documentation and commits keep normal prose. No global hooks or mode state are installed. Claude must read the changed instructions when it next resumes; it remains usage-limited, with its automatic retry canceled.
+
+Next source-first acceptance candidates: construction ramps and replay while moving, or camp repair cancellation/replacement with exact-instance ownership. Do not reopen the closed gameplay gates. Grounder user acceptance on slopes remains pending. No private-display session or test job is left running at this checkpoint.
