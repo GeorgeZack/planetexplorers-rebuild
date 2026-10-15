@@ -1,0 +1,555 @@
+{
+  "schema": 1,
+  "runtime_commit": "a0ee7ac",
+  "binary_sha256": "f5c07847ee664bb9ca7771637736d6af8c6bbc3b440fc59ba8c2036defb43a8e",
+  "mode": "Adventure",
+  "window": [
+    1280,
+    720
+  ],
+  "session": {
+    "path": "rebuild/build/repair-private-20261014-02",
+    "operator": "Claude; sole operator",
+    "display": ":120",
+    "source": "rebuild/build/repair-private-20261014-01/partial-reloaded.pesave",
+    "baseline_sha256": "f3e087ff4c205d64ffa61353a70f7a33209e2416c1153fe7670b89fd3dea68bc",
+    "baseline_unchanged": true,
+    "exit": {
+      "action": "supervisor-exit",
+      "baseline_unchanged": true,
+      "game_returncode": -15,
+      "monotonic": 214276.189478991,
+      "wall_time": 1792032150.9417405
+    },
+    "owned_processes_absent": true,
+    "note": "The Escape sent 0.4 s after the Sandbox ready log line did not pause the game; the job ran until the panel showed 15.5 s remaining and was then cancelled."
+  },
+  "source_derived": {
+    "wood_axe_26": "qualified profile: durability_max 3553, Wood279 x4, eligible; full durability may be inserted, only start rejects it"
+  },
+  "saves": {
+    "baseline.pesave": {
+      "sha256": "f3e087ff4c205d64ffa61353a70f7a33209e2416c1153fe7670b89fd3dea68bc",
+      "interpretation": "current-loader",
+      "source_position": [
+        -608.5254993438721,
+        28.501943588256836,
+        401.44256591796875
+      ],
+      "repair": {
+        "occupied": true,
+        "item_id": 12,
+        "count": 1,
+        "instance_id": 10,
+        "durability": 3543,
+        "running": true,
+        "remaining_ticks": 3677326
+      },
+      "tools": [
+        {
+          "slot": 426,
+          "category": 1,
+          "item_id": 19,
+          "count": 1,
+          "instance_id": 11,
+          "durability": 3553
+        },
+        {
+          "slot": 427,
+          "category": 1,
+          "item_id": 26,
+          "count": 1,
+          "instance_id": 12,
+          "durability": 3553
+        },
+        {
+          "slot": 428,
+          "category": 1,
+          "item_id": 1,
+          "count": 1,
+          "instance_id": 13,
+          "durability": 2369
+        },
+        {
+          "slot": 429,
+          "category": 1,
+          "item_id": 34,
+          "count": 1,
+          "instance_id": 14,
+          "durability": 4312
+        },
+        {
+          "slot": 430,
+          "category": 1,
+          "item_id": 43,
+          "count": 1,
+          "instance_id": 15,
+          "durability": 3288
+        }
+      ],
+      "wood": 193,
+      "money": 261,
+      "equipped_instance": 1,
+      "quickslots": [
+        {
+          "key": 1,
+          "item_id": 33,
+          "instance_id": 1
+        },
+        {
+          "key": 2,
+          "item_id": 925,
+          "instance_id": 0
+        },
+        {
+          "key": 3,
+          "item_id": 916,
+          "instance_id": 0
+        },
+        {
+          "key": 4,
+          "item_id": 391,
+          "instance_id": 0
+        },
+        {
+          "key": 5,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 6,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 7,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 8,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 9,
+          "item_id": 0,
+          "instance_id": 0
+        }
+      ]
+    },
+    "cancelled.pesave": {
+      "sha256": "856362f62381d03232714f6a47c47e4b9c4c8be47171b5364622dde0f5d8e753",
+      "interpretation": "current-loader",
+      "source_position": [
+        -608.5254993438721,
+        28.501943588256836,
+        401.44256591796875
+      ],
+      "repair": {
+        "occupied": true,
+        "item_id": 12,
+        "count": 1,
+        "instance_id": 10,
+        "durability": 3543,
+        "running": false,
+        "remaining_ticks": 0
+      },
+      "tools": [
+        {
+          "slot": 426,
+          "category": 1,
+          "item_id": 19,
+          "count": 1,
+          "instance_id": 11,
+          "durability": 3553
+        },
+        {
+          "slot": 427,
+          "category": 1,
+          "item_id": 26,
+          "count": 1,
+          "instance_id": 12,
+          "durability": 3553
+        },
+        {
+          "slot": 428,
+          "category": 1,
+          "item_id": 1,
+          "count": 1,
+          "instance_id": 13,
+          "durability": 2369
+        },
+        {
+          "slot": 429,
+          "category": 1,
+          "item_id": 34,
+          "count": 1,
+          "instance_id": 14,
+          "durability": 4312
+        },
+        {
+          "slot": 430,
+          "category": 1,
+          "item_id": 43,
+          "count": 1,
+          "instance_id": 15,
+          "durability": 3288
+        }
+      ],
+      "wood": 193,
+      "money": 261,
+      "equipped_instance": 1,
+      "quickslots": [
+        {
+          "key": 1,
+          "item_id": 33,
+          "instance_id": 1
+        },
+        {
+          "key": 2,
+          "item_id": 925,
+          "instance_id": 0
+        },
+        {
+          "key": 3,
+          "item_id": 916,
+          "instance_id": 0
+        },
+        {
+          "key": 4,
+          "item_id": 391,
+          "instance_id": 0
+        },
+        {
+          "key": 5,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 6,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 7,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 8,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 9,
+          "item_id": 0,
+          "instance_id": 0
+        }
+      ]
+    },
+    "replaced.pesave": {
+      "sha256": "8e0b2cda5365027b26fbff1cc37a9d8d540bfe3450d09925ed38bba40345add4",
+      "interpretation": "current-loader",
+      "source_position": [
+        -608.5254993438721,
+        28.501943588256836,
+        401.44256591796875
+      ],
+      "repair": {
+        "occupied": true,
+        "item_id": 26,
+        "count": 1,
+        "instance_id": 12,
+        "durability": 3553,
+        "running": false,
+        "remaining_ticks": 0
+      },
+      "tools": [
+        {
+          "slot": 426,
+          "category": 1,
+          "item_id": 19,
+          "count": 1,
+          "instance_id": 11,
+          "durability": 3553
+        },
+        {
+          "slot": 427,
+          "category": 1,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3543
+        },
+        {
+          "slot": 428,
+          "category": 1,
+          "item_id": 1,
+          "count": 1,
+          "instance_id": 13,
+          "durability": 2369
+        },
+        {
+          "slot": 429,
+          "category": 1,
+          "item_id": 34,
+          "count": 1,
+          "instance_id": 14,
+          "durability": 4312
+        },
+        {
+          "slot": 430,
+          "category": 1,
+          "item_id": 43,
+          "count": 1,
+          "instance_id": 15,
+          "durability": 3288
+        }
+      ],
+      "wood": 193,
+      "money": 261,
+      "equipped_instance": 1,
+      "quickslots": [
+        {
+          "key": 1,
+          "item_id": 33,
+          "instance_id": 1
+        },
+        {
+          "key": 2,
+          "item_id": 925,
+          "instance_id": 0
+        },
+        {
+          "key": 3,
+          "item_id": 916,
+          "instance_id": 0
+        },
+        {
+          "key": 4,
+          "item_id": 391,
+          "instance_id": 0
+        },
+        {
+          "key": 5,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 6,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 7,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 8,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 9,
+          "item_id": 0,
+          "instance_id": 0
+        }
+      ]
+    },
+    "returned.pesave": {
+      "sha256": "1a791bbf8ec072f77e536439cd0039a46f308eb98f2b32ffc239cd696a5c55cc",
+      "interpretation": "current-loader",
+      "source_position": [
+        -608.5254993438721,
+        28.501943588256836,
+        401.44256591796875
+      ],
+      "repair": {
+        "occupied": false,
+        "item_id": 0,
+        "count": 0,
+        "instance_id": 0,
+        "durability": 0,
+        "running": false,
+        "remaining_ticks": 0
+      },
+      "tools": [
+        {
+          "slot": 425,
+          "category": 1,
+          "item_id": 26,
+          "count": 1,
+          "instance_id": 12,
+          "durability": 3553
+        },
+        {
+          "slot": 426,
+          "category": 1,
+          "item_id": 19,
+          "count": 1,
+          "instance_id": 11,
+          "durability": 3553
+        },
+        {
+          "slot": 427,
+          "category": 1,
+          "item_id": 12,
+          "count": 1,
+          "instance_id": 10,
+          "durability": 3543
+        },
+        {
+          "slot": 428,
+          "category": 1,
+          "item_id": 1,
+          "count": 1,
+          "instance_id": 13,
+          "durability": 2369
+        },
+        {
+          "slot": 429,
+          "category": 1,
+          "item_id": 34,
+          "count": 1,
+          "instance_id": 14,
+          "durability": 4312
+        },
+        {
+          "slot": 430,
+          "category": 1,
+          "item_id": 43,
+          "count": 1,
+          "instance_id": 15,
+          "durability": 3288
+        }
+      ],
+      "wood": 193,
+      "money": 261,
+      "equipped_instance": 1,
+      "quickslots": [
+        {
+          "key": 1,
+          "item_id": 33,
+          "instance_id": 1
+        },
+        {
+          "key": 2,
+          "item_id": 925,
+          "instance_id": 0
+        },
+        {
+          "key": 3,
+          "item_id": 916,
+          "instance_id": 0
+        },
+        {
+          "key": 4,
+          "item_id": 391,
+          "instance_id": 0
+        },
+        {
+          "key": 5,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 6,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 7,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 8,
+          "item_id": 0,
+          "instance_id": 0
+        },
+        {
+          "key": 9,
+          "item_id": 0,
+          "instance_id": 0
+        }
+      ]
+    }
+  },
+  "lossless_crops": {
+    "panel-running.png": {
+      "source": "rebuild/build/repair-private-20261014-02/panel-running.png",
+      "source_sha256": "b14aa0ac26d33a486d50898ad8c2705399f21d49e69f0f15f18a1adfcfb129d6",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "d3b8dd45746c4e0019eff5e0753065c3e76dff1ce511f76640531391088c5627"
+    },
+    "cancel-confirm.png": {
+      "source": "rebuild/build/repair-private-20261014-02/cancel-confirm.png",
+      "source_sha256": "0effe94166c33f9a2fac3f1034ecacdf3a4490d207f05bff074e76fc22d9946d",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "115ba69ed98a3e1b697e8c6c221af71278be25a37eb37f43c173758c9930500e"
+    },
+    "cancelled.png": {
+      "source": "rebuild/build/repair-private-20261014-02/cancelled.png",
+      "source_sha256": "39796dbfda0f15d6788a8fac385e73f3bd75bc255ff60c87b0167dd079903a09",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "2caded7dd3d59b2bd8fd9d1ba091aa486b83f9a36b36440b6398c5f0ae041c9a"
+    },
+    "axe-selected.png": {
+      "source": "rebuild/build/repair-private-20261014-02/axe-selected.png",
+      "source_sha256": "5386561ab2d3a4a9f52af41b19b5fc8e5fccf2c1698e2683b7482ef9c05923ac",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "02a8a8da06d684ef41abaf1cc69ee7e0ff8b6b65dbcf49705725a2387c111063"
+    },
+    "replaced.png": {
+      "source": "rebuild/build/repair-private-20261014-02/replaced.png",
+      "source_sha256": "7cffadab4e4cfcc7227d4c87c04d9d99d940e66b18467715e68ce13dc497a5f7",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "a8055896bd2ad0dec55eb5ee2101f1071037e927ca8aa14297b0e5d2c0a76d98"
+    },
+    "returned.png": {
+      "source": "rebuild/build/repair-private-20261014-02/returned.png",
+      "source_sha256": "b9a7e3f9dbe0b5539840c230a5590432e6ab55a4b919185d59fa9417bafcc685",
+      "box": [
+        330,
+        100,
+        950,
+        615
+      ],
+      "pixels_equal_to_source_crop": true,
+      "sha256": "246c207a9363bec7e068c0692d417650dbf5abcaa6c4d0c675cc9ecedba9e005"
+    }
+  },
+  "inputs_sha256": "93a83cf77a64cbb3d0d014dc7be7bd7e8b1f7ec4bc83997891552f1cee28a459"
+}

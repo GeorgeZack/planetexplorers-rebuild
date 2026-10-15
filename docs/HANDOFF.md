@@ -121,3 +121,14 @@ Not established: player contact with, blocking by or climbing a replayed ramp. N
 Checks: full `make -C rebuild check` passed 282 jobs, 0 failed; 980 Python tests, 98 skipped (skips are not passes) (`rebuild/build/compiler-tmp/ramp-check.log`). The pre-push sanitizer is the director's run.
 
 October 14 director pre-push verification of the ramp replay checkpoint: 113 sanitizer suites pass with leak checks enabled, zero failures/skips (`rebuild/build/compiler-tmp/ramp-prepush-sanitize.log`). Independent review verified all eight save hashes, the four exact crops, the unchanged baseline and owned-PID teardown. The ramp task is concluded. Next director-chosen goal: camp repair cancellation and same-category replacement with earned exact instances; not yet launched, and no private-display session or test job is running.
+
+October 14, director-chosen goal: [ordinary native repair cancellation and same-category replacement](audit/CAMP_REPAIR.md#cancellation-and-same-category-replacement-session-02). Claude operated fresh session `rebuild/build/repair-private-20261014-02` on `:120` from the earned `partial-reloaded` save (`f3e087ff…68bc`, unchanged). Observed:
+- Cancel repair, then Stop (Enter), with 15.5 s displayed. `cancelled` (`856362f6…e753`): idle, 0 ticks, shovel instance 10 still in the machine at 3543, Wood 193 (no refund).
+- Replace selected with full Wood Axe 26 instance 12 (3553; qualified source profile, insertion has no wear requirement). `replaced` (`8e0b2cda…add4`): axe in the machine, shovel at 3543 in the incoming slot 427, Repair disabled.
+- Take item. `returned` (`1a791bbf…55cc`): machine empty, axe in slot 425, shovel in slot 427, Wood 193, money, equipment and quickslots unchanged.
+
+The Escape sent 0.4 s after `Sandbox ready` did not pause the game, so the job ran until the panel was opened; this was not diagnosed. One stray left click outside the open panel had no saved effect. Not exercised: cross-category replacement, full-bag return, paid restart, death mid-job. The session ended by explicit guarded stop (−15); all three owned PIDs were absent and the baseline was unchanged. No runtime code changed; evidence is `docs/reference/repair-cancel-20261014`.
+
+Checks: documentation and evidence only, so link, anchor and claim checks replace a new test run (0 broken links or anchors; save hashes and inspections regenerated from the session saves). Runtime and source are unchanged since `a0ee7ac`, whose prior full check (282 jobs) and director sanitizer (113 suites) passed; those are prior results, not new runs.
+
+October 14 director review of repair cancellation/replacement: independently inspected the four saves, verified exact instances 10 and 12 and wear 3543/3553, unchanged Wood 193 and quickslots, all six lossless crops, baseline integrity and owned-PID teardown. Link and claim checks pass. This checkpoint changes only documentation/evidence and uses the documentation-only test exception.

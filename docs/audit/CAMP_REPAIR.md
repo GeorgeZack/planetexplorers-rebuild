@@ -171,7 +171,8 @@ west, using the traced route's middle legs in reverse, to below the lot at
 
 *Limits.*
 - Cancel, replacement, a full bag on return, and death during a job were not
-  exercised.
+  exercised. Session 02 below later observed cancel and same-category
+  replacement.
 - The route found is an ordinary terrain ramp. Whether the original lot is
   reached the same way is unknown.
 - The panel's "36 / 36" is the display's rounding; wear comes from the
@@ -181,3 +182,82 @@ west, using the traced route's middle legs in reverse, to below the lot at
 count, instance, durability, running, remaining ticks), with a formatter test
 that includes a value above 2³² for output width. Real saved jobs are bounded
 to 6,000,000 ticks.
+
+### Cancellation and same-category replacement (session 02)
+
+**October 14, observed in the native production runtime with ordinary input;
+no original-game comparison.** This addresses the cancel and replacement
+limits above. Evidence: [manifest, input journal and lossless
+crops](../reference/repair-cancel-20261014/checkpoints.json). Full captures
+and saves stay under `rebuild/build/repair-private-20261014-02`.
+
+*Questions.* Source and the headless UI routes already cover the no-refund
+cancel and the exact same-category exchange. The open questions were whether
+the rendered panel lets an ordinary player do them on the real machine, and
+whether the saves show exclusive ownership afterwards.
+
+*Setup.*
+- Runtime `a0ee7ac`, binary SHA256 `f5c07847…a8e`, private display `:120`,
+  Claude as sole operator.
+- Baseline: the earned `partial-reloaded` save (`f3e087ff…68bc`), unchanged
+  afterwards. The machine held Wood Shovel 12 instance 10 at 3543 / 3553,
+  running with 3,677,326 ticks left. Wood was 193.
+- No fixture, cheat, save edit or grant. UI positions came from the first
+  session's recorded inputs and crops.
+
+*Source-derived replacement candidate.* Wood Axe 26 is a qualified ordinary
+profile: maximum 3553, Wood 279 ×4. Source `UIRepairWnd.OnDropItem` checks the
+material list but not missing wear. The full-value refusal is in `Repair()`.
+The native `pe_camp_repair_insert` likewise has no missing-wear requirement;
+only start rejects full durability. Instance 12 was at its maximum, 3553, so
+no wear had to be invented.
+
+*Pause at startup did not take effect.* The plan was to pause as soon as
+`Sandbox ready` appeared in the log. The bounded poll observed the line and waited 0.4 s before sending Escape,
+but the first captured gameplay frame showed the game unpaused. The
+job therefore ran until the panel was opened. The window may not yet have
+accepted input; this was not diagnosed and is not claimed as a defect.
+
+*Observed, in order:*
+
+| Step | Input | UI result | Saved state (inspector) |
+|---|---|---|---|
+| Open | right-click the machine | "Repairing: 15.5 seconds"; "Materials paid Wood: 1 (bag 193)"; Cancel repair enabled | — |
+| Cancel prompt | Cancel repair | "CANCEL REPAIR? Stop repairing this item? Materials already spent will not be refunded."; Stop (Enter) / Back (Esc) | — |
+| Confirm | Enter | "Repair cancelled. Materials were not refunded."; the shovel still in the slot; "Repair time: 60 seconds"; a new quote of "Wood: 1 (bag 193)"; Repair and Take item enabled | `cancelled` (`856362f6…e753`): not running, 0 ticks, instance 10 at 3543 in the machine, Wood 193, tools in slots 426–430 unchanged |
+| Select | Resume, reopen, click Wood Axe | tooltip "Wood Axe / Durability 36 / 36 / Repair: Wood x0"; Replace selected enabled | — |
+| Replace | Replace selected | "Item placed in the machine."; Wood Axe in the slot; "Wood: 0 (bag 193)"; Repair disabled; Wood Shovel listed in the bag | `replaced` (`8e0b2cda…add4`): machine holds item 26 instance 12 at 3553, idle; slot 427 now holds item 12 instance 10 at 3543 |
+| Take | reopen, Take item | "Item returned to your bag."; empty machine slot | `returned` (`1a791bbf…55cc`): machine empty; instance 12 at 3553 in slot 425; instance 10 at 3543 in slot 427; Wood 193 |
+
+Each save holds each tool instance exactly once, in either the bag or the
+machine. Money (261), the equipped Knife (instance 1) and the quickslots are
+unchanged throughout.
+
+*Against the source.*
+- **Observed match, cancel:** the job stopped with the same item retained and
+  not repaired (3543 stays 3543). The 1 Wood paid in the earlier session was
+  not refunded. The panel showed a fresh 1-Wood quote; a paid restart was not
+  exercised.
+- **Observed match, replacement:** same category (1) exchanged through the
+  incoming grid. The old shovel took the axe's former slot 427, with its exact
+  wear. The panel blocked starting a repair on the full axe.
+- **Native adapters:** the confirmation prompt and its wording, Enter to
+  confirm, and the bag-only listing.
+- **Cancel timing:** cancellation came before completion, about 15 s of
+  displayed time before the end. The on-screen seconds are not a counter
+  measurement.
+
+*Incidental input.* After Replace, one left click at (1100, 650) landed
+outside the panel while the modal was open. Compared with `cancelled`, the `replaced` save shows the expected tool
+exchange and no additional inventory, wear, position, money or equipment
+change. This is bounded saved-state evidence, not a held-input acceptance test.
+
+*Limits.* Cross-category replacement, a full bag on return, failed
+replacement while running, cancel then paid restart, and death during a job
+were not exercised. The panel's "36 / 36" is display rounding; wear comes from
+the inspector only.
+
+The session ended by explicit guarded stop (owned game SIGTERM, −15). The
+supervisor, Xvfb and game PIDs were absent afterwards, and the baseline was
+unchanged. Six lossless 620×515 crops were checked pixel-exactly against
+their captures. No runtime code changed.

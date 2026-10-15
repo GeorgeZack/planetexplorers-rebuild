@@ -1,5 +1,24 @@
 # Original-game playtest and C comparison
 
+## October14 ordinary native repair cancel and replacement
+
+[Acceptance](audit/CAMP_REPAIR.md#cancellation-and-same-category-replacement-session-02),
+[evidence](reference/repair-cancel-20261014/checkpoints.json). Adventure,
+1280×720, production binary `f5c07847…a8e`, earned `partial-reloaded` save
+`f3e087ff…68bc`; session `repair-private-20261014-02` on `:120`, no original
+launch.
+
+- Cancel repair → Stop (Enter) with 15.5 s displayed: the job stopped and
+  shovel instance 10 stayed in the machine at 3543. Wood stayed 193 (no
+  refund).
+- Replace selected with full Wood Axe instance 12 (3553): the axe went into
+  the machine and the shovel took slot 427 at 3543. Repair was disabled for
+  the full axe.
+- Take item returned the axe to slot 425 and left the machine empty. Each
+  instance was owned exactly once in every save.
+- The Escape sent at `Sandbox ready` did not pause the game. Cancel still
+  preceded completion.
+
 ## October14 ordinary native ramp replay
 
 [Ramp acceptance](audit/CONSTRUCTION_HISTORY.md#rotated-ramp-replay-session-03),
