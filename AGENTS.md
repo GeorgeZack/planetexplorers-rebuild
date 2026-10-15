@@ -14,7 +14,7 @@ Label claims as source-derived, observed in the original, implemented in C or pr
 
 ## Standing decisions
 
-- Keep user-selected differences: medicine commits on final 4100 acknowledgment rather than original 4099 selection; numbered conversation responses; session-only debug cheats default OFF; `camera_facing_attacks` default OFF; fixed vegetation examples. Ignore original autosave slots in capture baselines.
+- Keep user-selected differences: medicine commits on final 4100 acknowledgment rather than original 4099 selection; numbered conversation responses; session-only debug cheats default OFF; `camera_facing_attacks` default OFF; fixed vegetation examples; Halt yields immediately to movement/sprint/jump input. Ignore original autosave slots in capture baselines.
 - Keep normal Sword/Shield readiness/input, Town Defense 9077–9084, hare pounce/aggression and hit-reaction stun/knockback disconnected. Assets, clocks or passing tests do not enable gameplay. Native quests stop before 9077.
 - Saves are append-only PECSv23. Preserve earlier literal payloads and documented defaults; never fabricate history/wear/progress. Malformed loads leave live state unchanged. Never save action clocks, camera, capsule/buyback/build histories, modal/GPU state or transient job pointers.
 - Transactions commit inventory, wear, HP, rewards and quest state together. Capacity failures stay retryable; rewards never duplicate. Exact item instances retain durability and cannot alias bag/equipment/outfit/deployment/repair/quickslots. Never reconstruct an owned item from its prototype.

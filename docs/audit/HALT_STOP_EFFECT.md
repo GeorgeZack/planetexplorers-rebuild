@@ -150,50 +150,41 @@ Still unqualified:
 
 ## Live in both hosts
 
-October 13, 2026. **User decision: apply the lock as the original does.**
-Implemented in C; the lock itself is source-derived and was not observed.
+`pe_halt_host` runs once before each fixed movement step in both hosts.
+Releasing movement starts the source foot-stop effect only while grounded,
+alive, outside water and with hands stowed. Drawing offsets never move the
+controller, capsules, contact queries or camera. Death/load/revival/reset clear
+transient state; missing solver groups retain the same input policy.
 
-[pe_halt_host](../../rebuild/src/pe_halt_host.h) is called once per fixed
-movement step by the sandbox and the tutorial, before the step reads its
-input. From `ActionRelation` rows 1, 2, 4 and 50, `MotionMgrCmpt` and
-`Motion_Move_Human`:
+**User-selected native control policy, October 15:** renewed movement (including
+sprint) or jump input cancels Halt before this step's offsets and admission.
+The request proceeds in the same step; other action locks still govern it.
+This replaces the earlier source-derived Move/Jump refusal after the user
+reported that the demo's stop lock felt bad. It is not an original-game
+observation or a new source-parity claim.
 
-| Event | Result | Source |
-|---|---|---|
-| Movement released on the ground while moving | Halt starts with the current velocity | `Action_Move.EndAction`, `Action_Sprint.EndAction` |
-| In the air, in water, dead, or hand equipment drawn | Halt refused | row 50 forbidden masks |
-| Mask set | movement, sprint and jump requests dropped | rows 1, 2 and 4 forbid on the Halt mask |
-| Jump, sprint/run switch, lost ground, action mask | Move ends without a Halt | `EndImmediately` lists |
-| Death | Halt ends at once | row 9 `EndImmediately` |
+While idle, the source effect/profile is unchanged: about .22s walking,
+.5s running and .9s sprinting, with weights0/.17/1 at2/5/8m/s. Gather remains
+refused while its mask is held; hare-drop pickup stays independent. Movement
+input cancels that mask immediately. Fixed-step pacing, update-before-admission,
+zero first offset, release-plus-jump priority and blended-foot/controller inputs
+remain labelled adapters. Grounder and Halt offsets combine for drawing only.
 
-So an unarmed player cannot move or jump for about 0.22 s after a walk stop,
-0.5 s after a run stop and 0.9 s after a sprint stop. With a tool, knife or
-torch drawn there is no Halt and no lock. Load, revival and reset clear it.
-The mask also refuses Gather. `MainPlayerCmpt` requests it with a plain
-`DoAction(PEActionType.Gather)` on the gather key, and a refused request does
-nothing and shows nothing. Both hosts follow that: while
-`pe_halt_host_masked` is true the sandbox owns the press but harvests nothing
-and writes no message, and the tutorial does not begin a herb. The player
-presses again after the lock. The mask lists PickUpItem too, but no source
-code requests that action for the player (`grep -a` over `Assets/Scripts`
-finds only its definition, registration and network sender), so hare-drop
-pickup stays independent of the lock.
+Existing actor measurements: largest vertex displacement from baked pose
+.001mm walking,22cm running and80cm sprinting. Mid-sprint foot offset.54m,
+chest.34m forward/.23m down, invariant across tested yaws. These are native
+asset measurements, not physical or original-game acceptance.
 
-The offsets reach drawing through [the always-on solve](PLAYER_IK_DRIVE.md),
-turned from world into the drawn model's frame. They never move the player, a
-capsule or a contact query. Without the staged solver groups the lock still
-applies and nothing extra is drawn. Rebuild speeds are 2, 5 and 8 m/s, so a
-walk stop moves nothing, a run stop has weight 0.17 and a sprint stop weight 1.
+Regression proof: `core:halt_host` covers immediate movement/jump interruption
+at walk/run/sprint speeds, first/later effect updates, zero remaining offsets,
+repeat requests and independent movement admission. Source-only `core:halt`
+keeps original curve, mask and cancellation rules. The new input policy is
+implemented/tested in C; user acceptance after rebuilding remains pending.
 
-Measured over the installed assets by the real sandbox actor: the largest
-vertex displacement from the baked pose is 0.001 mm in a walk stop, 22 cm in a
-run stop and 80 cm in a sprint stop. Mid-effect in a sprint stop the stepping
-foot is 0.54 m along the motion and the chest 0.34 m forward and 0.23 m down,
-the same at every body yaw.
-
-Adapters, not original behavior: the 60 Hz fixed step stands in for the
-original's frame; a running Halt is updated before the step's input is read;
-a Halt begun in a step takes its zero first offset pass in that step; a jump
-requested together with a release wins; the feet for the foot test come from
-the blended staged pose; the velocity is the host controller's. The grounder,
-which shares the foot and shoulder channels, is not connected.
+Verification: Halt regressions pass; full `check` reports280 passed and5
+LeakSanitizer/ptrace sandbox failures (1021 Python tests,98 optional skips).
+Earlier functional reruns of those five suites passed with leak scanning
+disabled (26 tests). Full core ASan/UBSan/leak checks pass:113 suites,0
+failures/skips. The user explicitly requested commit/push with the known
+full-check limitation. No clean full-check or post-change physical acceptance
+is claimed.

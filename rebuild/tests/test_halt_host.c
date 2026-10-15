@@ -31,9 +31,9 @@ int pe_test_halt_host(void){
     CHECK(!pe_halt_host_masked(&h)&&!pe_halt_host_masked(NULL));
     CHECK(pe_halt_host_step(&h,released(2),&out)&&out.started&&out.block_move&&out.block_jump&&!h.moving&&pe_halt_host_masked(&h));
     CHECK(h.offset_count==PE_HALT_LINKS&&h.action.weight==0);
-    float largest=0;unsigned steps=hold(&h,moving(2),&largest);
+    float largest=0;unsigned steps=hold(&h,standing(),&largest);
     CHECK(steps>=12&&steps<=15&&largest==0);
-    /* Movement held through the lock starts on the first free step, and a second release stops again. */
+    /* Movement after natural completion starts normally, and a second release stops again. */
     CHECK(pe_halt_host_step(&h,moving(2),&out)&&h.moving&&!out.block_move&&h.offset_count==0);
     CHECK(pe_halt_host_step(&h,released(2),&out)&&out.started);hold(&h,standing(),NULL);
     CHECK(pe_halt_host_step(&h,standing(),&out)&&!out.started&&!out.block_move&&!pe_halt_host_masked(&h));
@@ -65,10 +65,26 @@ int pe_test_halt_host(void){
     /* A jump ends Move without a Halt, even with the release in the same step. */
     PeHaltHostInput jump=released(8);jump.jump_requested=true;
     CHECK(pe_halt_host_step(&h,moving(8),&out)&&pe_halt_host_step(&h,jump,&out)&&!out.started&&!out.block_jump&&!h.moving);
-    /* During a Halt a jump is refused and does not disturb it. */
+    /* Player input cancels a walk/run/sprint stop in the same step, including
+     * after offsets have begun. Other movement admission remains authoritative. */
+    const float speeds[]={2,5,8};
+    for(unsigned speed=0;speed<3;speed++)for(unsigned delay=0;delay<2;delay++)for(unsigned request=0;request<4;request++){
+        pe_halt_host_reset(&h);
+        CHECK(pe_halt_host_step(&h,moving(speeds[speed]),&out));
+        CHECK(pe_halt_host_step(&h,released(speeds[speed]),&out)&&out.started);
+        if(delay)for(unsigned i=0;i<4;i++)CHECK(pe_halt_host_step(&h,standing(),&out));
+        CHECK(h.action.running&&pe_halt_host_masked(&h));
+        PeHaltHostInput resume=standing();
+        resume.move_requested=request!=1;resume.jump_requested=request==1||request==2;
+        if(request==3)resume.move_admissible=false;
+        CHECK(pe_halt_host_step(&h,resume,&out)&&out.ended&&!out.started&&!out.block_move&&!out.block_jump);
+        CHECK(!h.action.running&&!h.action.mask&&!h.action.effect_running&&h.action.remaining==0&&h.offset_count==0);
+        CHECK(h.moving==(request==0));
+        CHECK(pe_halt_host_step(&h,resume,&out)&&!out.started&&!out.ended&&!out.block_move&&!out.block_jump);
+    }
+    /* Death ends a live stop, not merely an already interrupted one. */
+    pe_halt_host_reset(&h);
     CHECK(pe_halt_host_step(&h,moving(8),&out)&&pe_halt_host_step(&h,released(8),&out)&&out.started);
-    PeHalt before=h.action;jump=standing();jump.jump_requested=jump.move_requested=true;
-    CHECK(pe_halt_host_step(&h,jump,&out)&&out.block_jump&&out.block_move&&h.action.running&&h.action.remaining<before.remaining);
     /* Death ends it at once and clears the offsets. */
     PeHaltHostInput dead=standing();dead.alive=false;
     CHECK(pe_halt_host_step(&h,dead,&out)&&out.ended&&!out.block_move&&!h.action.running&&!h.action.mask&&h.offset_count==0);
@@ -79,7 +95,7 @@ int pe_test_halt_host(void){
     pe_halt_host_reset(&h);CHECK(!h.action.running&&!h.action.mask&&!h.moving&&h.offset_count==0);pe_halt_host_reset(NULL);
     CHECK(pe_halt_host_step(&h,standing(),&out)&&!out.block_move&&!out.ended);
     /* Invalid input changes nothing. */
-    CHECK(pe_halt_host_step(&h,moving(8),&out));PeHaltHost kept=h;PeHaltHostOutput same=out;PeHaltHostInput bad=released(8);
+    CHECK(pe_halt_host_step(&h,moving(8),&out)&&pe_halt_host_step(&h,released(8),&out)&&out.started);PeHaltHost kept=h;PeHaltHostOutput same=out;PeHaltHostInput bad=released(8);
     bad.delta_time=0;CHECK(!pe_halt_host_step(&h,bad,&out));bad.delta_time=NAN;CHECK(!pe_halt_host_step(&h,bad,&out));
     bad=released(8);bad.velocity.x=NAN;CHECK(!pe_halt_host_step(&h,bad,&out));bad=released(8);bad.left_foot.y=INFINITY;CHECK(!pe_halt_host_step(&h,bad,&out));
     CHECK(!pe_halt_host_step(NULL,released(8),&out)&&!pe_halt_host_step(&h,released(8),NULL));

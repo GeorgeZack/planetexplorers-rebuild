@@ -23,6 +23,12 @@ bool pe_halt_host_step(PeHaltHost *host,PeHaltHostInput in,PeHaltHostOutput *out
         result.ended=host->action.running;next.moving=false;
         *host=next;*out=result;return true;
     }
+    if(next.action.running&&(in.move_requested||in.jump_requested)){
+        /* Native control policy: player input interrupts the stop effect
+         * before offsets or movement admission are evaluated this step. */
+        if(!pe_halt_cancel(&next.action,&update))return false;
+        result.ended=update.ended;
+    }
     if(next.action.running&&!offsets(&next,in.delta_time,&result.ended))return false;
     bool mask=next.action.mask;
     if(in.jump_requested&&in.grounded&&!mask)next.moving=false;              /* Jump ends Move and Sprint immediately */

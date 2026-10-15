@@ -1027,8 +1027,8 @@ int pe_training_view(const char *asset_dir, int smoke_frames, const char *screen
                 }
                 attack_pending=false;
                 input.stamina_action=melee.ready&&melee.action.active;
-                /* Source Action_Halt, as in the sandbox: releasing movement on the ground with empty
-                 * hands refuses Move and Jump while the foot-stop effect runs (0.2-0.9 s). */
+                /* Shared stop presentation: movement or jump input interrupts
+                 * the foot effect immediately, as in the sandbox. */
                 PeHaltHostInput halt_input={.delta_time=PE_TRAINING_DT,.move_requested=hypotf(input.move_x,input.move_z)>.0001f,
                     .jump_requested=input.jump,.move_admissible=training.grounded,.grounded=training.grounded,.alive=training.hp>0,
                     .equipment_held=(training.axe_equipped&&training.axe_held)||(training.equipped_shovel>=0&&training.shovel_held)||(training.knife_equipped&&knife_drawn),

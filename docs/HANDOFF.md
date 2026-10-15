@@ -1,10 +1,14 @@
 # Current handoff
 
-Updated October 15, 2026. Branch `halt-stop-effect`; latest code checkpoint `0163874` is pushed. Documentation consolidation follows it.
+Updated October 15, 2026. Branch `halt-stop-effect`; Gather tooling checkpoint `0163874` is pushed; the latest control change is below.
 
 ## Current goal
 
 Gather outcome and composed-pose qualification. Documentation is consolidated: main guides have one owner, obsolete review snapshots/work orders are removed, and source algorithms/unique observations stay in their feature audits. Link/anchor, claim and unchanged-source/evidence checks pass; no game launch or runtime change occurred.
+
+## Latest control change
+
+Halt now yields to movement/sprint/jump input in both hosts, by user request. The stop effect cancels before the same step applies offsets/admission; other action locks stay authoritative. See [Halt contract](audit/HALT_STOP_EFFECT.md#live-in-both-hosts). Native acceptance after rebuild remains pending. Full check:280 passed/5 sandbox LeakSanitizer failures,1021 Python tests/98 optional skips. Earlier functional reruns of those five suites passed with leak scanning disabled. Full core ASan/UBSan/leak check:113 passed,0 failures/skips. The user explicitly requested commit/push with the known full-check limitation.
 
 ## Gather checkpoint
 

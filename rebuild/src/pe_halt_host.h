@@ -6,15 +6,17 @@
  *
  * Source rules (ActionRelation rows 1, 2, 4 and 50, Motion_Move_Human):
  * releasing movement while Move or Sprint runs requests Halt; Halt is refused
- * in the air, in water, dead, or with hand equipment drawn; while its mask is
- * set Move and Jump cannot start; Death ends it at once. Jumping, losing the
+ * in the air, in water, dead, or with hand equipment drawn; Death ends it at
+ * once. Jumping, losing the
  * ground and action masks end Move immediately, without a Halt.
  *
  * Adapters, not original behavior: the fixed step stands in for the original's
- * frame, a running Halt is updated before the step's input is read, a Halt
+ * frame, an uninterrupted Halt updates before movement admission, a Halt
  * begun in a step takes its zero first offset pass in that step, and a jump
- * requested with a release wins. The Move/Jump refusal is source-derived and
- * was not observed. State is transient and never saved; zero-initialize. */
+ * requested with a release wins. By user choice, renewed movement (including
+ * sprint) or jump input cancels Halt before that step's offsets and admission;
+ * the source's Move/Jump refusal is not applied. Other action locks still own
+ * admission. State is transient and never saved; zero-initialize. */
 typedef struct {
     PeHalt action;
     bool moving;                       /* Move or Sprint is running */

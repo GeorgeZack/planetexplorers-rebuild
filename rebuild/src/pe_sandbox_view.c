@@ -1382,8 +1382,8 @@ int pe_sandbox_view(PeGame *game,const char *assets,const char *save_path,
                 if(tool_action.stage!=PE_SANDBOX_ACTION_IDLE){input.move_x=input.move_z=0;input.sprint=false;}
                 /* Refresh AFTER timed edits and before each motion step. */
                 if(!pe_game_collision_update(game,collision,error,sizeof error)){result=1;break;}
-                /* Source Action_Halt: releasing movement on the ground with empty hands holds a
-                 * mask that refuses Move and Jump while the foot-stop effect runs (0.2-0.9 s). */
+                /* Releasing movement starts the foot-stop effect (0.2-0.9 s).
+                 * Player movement or jump input interrupts it in the shared adapter. */
                 PeHaltHostInput halt_input={.delta_time=PE_FIXED_DT,.move_requested=fabsf(input.move_x)+fabsf(input.move_z)>.001f,
                     .jump_requested=jump_pending,.move_admissible=game->grounded,.grounded=game->grounded,.alive=game->hp>0,
                     .equipment_held=tool_drawn,.velocity=game->velocity};
