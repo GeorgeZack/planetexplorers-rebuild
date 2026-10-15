@@ -403,6 +403,44 @@ class BakeTests(unittest.TestCase):
             else:bad['m_Controller']['m_StateMachineArray'][0]['data']['m_StateConstantArray'].pop()
             with self.subTest(kind=kind),self.assertRaises(ValueError):inventory.gather_states(bad)
 
+    def gather_graph(self):
+        names=[(1,'FullBody'),(2,'Gather'),(10,'FullBody.DoNothing'),(11,'FullBody.Gather.HerbDown'),
+               (12,'FullBody.Gather.Herb'),(13,'FullBody.Gather.HerbUp'),(20,'FullBody.Gather')]
+        def move(destination,exit_time,duration,conditions=(),has_exit=True):
+            return {'data':dict(m_DestinationState=destination,m_ExitTime=exit_time,m_TransitionDuration=duration,
+                m_HasExitTime=has_exit,m_HasFixedDuration=False,m_TransitionOffset=0.0,
+                m_ConditionConstantArray=[{'data':dict(m_EventID=e,m_ConditionMode=1)} for e in conditions])}
+        def state(path,motion,moves):
+            return {'data':dict(m_NameID=path+100,m_FullPathID=path,m_Speed=1.0,m_CycleOffset=0.0,m_SpeedParamID=0,
+                m_CycleOffsetParamID=0,m_MirrorParamID=0,m_Mirror=False,m_BlendTreeConstantArray=[{}] if motion else [],
+                m_TransitionConstantArray=moves)}
+        states=[state(10,False,[move(30000,.9,.1,(2,),False)]),state(11,True,[move(2,.53,.47)]),
+                state(12,True,[move(3,.69,.31)]),state(13,True,[move(30001,.61,.39)])]
+        selectors=[{'data':dict(m_IsEntry=True,m_FullPathID=20,m_TransitionConstantArray=[{'data':dict(m_Destination=1,m_ConditionConstantArray=[])}])},
+                   {'data':dict(m_IsEntry=False,m_FullPathID=20,m_TransitionConstantArray=[{'data':dict(m_Destination=0,m_ConditionConstantArray=[])}])}]
+        return dict(m_TOS=names,m_Controller=dict(m_LayerArray=[{'data':dict(m_Binding=1,m_StateMachineIndex=0)}],
+            m_StateMachineArray=[{'data':dict(m_StateConstantArray=states,m_SelectorStateConstantArray=selectors)}]))
+
+    def test_gather_controller_binds_entry_chain_exit_and_clock_flags(self):
+        result=inventory.gather_controller(self.gather_graph())
+        self.assertEqual(result['entry']['duration'],.1);self.assertFalse(result['idle']['motion'])
+        self.assertEqual([t['destination'] for t in result['transitions']],
+                         ['FullBody.Gather.Herb','FullBody.Gather.HerbUp','FullBody.DoNothing'])
+        self.assertEqual(result['states'][1]['cycle_offset'],0.0);self.assertIsNone(result['states'][1]['speed_parameter'])
+        def states(c):return c['m_Controller']['m_StateMachineArray'][0]['data']['m_StateConstantArray']
+        def selectors(c):return c['m_Controller']['m_StateMachineArray'][0]['data']['m_SelectorStateConstantArray']
+        changes={'cycle offset':lambda c:states(c)[2]['data'].update(m_CycleOffset=.25),
+                 'speed parameter':lambda c:states(c)[1]['data'].update(m_SpeedParamID=7),
+                 'idle speed':lambda c:states(c)[0]['data'].update(m_Speed=2.0),
+                 'fixed':lambda c:states(c)[3]['data']['m_TransitionConstantArray'][0]['data'].update(m_HasFixedDuration=True),
+                 'entry exit time':lambda c:states(c)[0]['data']['m_TransitionConstantArray'][0]['data'].update(m_HasExitTime=True),
+                 'exit selector':lambda c:selectors(c)[1]['data'].update(m_FullPathID=21),
+                 'entry target':lambda c:selectors(c)[0]['data']['m_TransitionConstantArray'][0]['data'].update(m_Destination=2),
+                 'chain':lambda c:states(c)[1]['data']['m_TransitionConstantArray'][0]['data'].update(m_DestinationState=3)}
+        for name,change in changes.items():
+            c=self.gather_graph();change(c)
+            with self.subTest(name=name),self.assertRaises(ValueError):inventory.gather_controller(c)
+
     def test_managed_configuration_accepts_exactly_inventory_catalog(self):
         # Independent managed guard caused a real pre-capture failure when only
         # Python's catalog grew. Keep both entry-point contracts synchronized.

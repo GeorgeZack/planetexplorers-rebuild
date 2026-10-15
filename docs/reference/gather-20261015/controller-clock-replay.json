@@ -1,0 +1,271 @@
+{
+  "schema": "pe-gather-clock-replay-1",
+  "qualified": true,
+  "tolerance": 1e-05,
+  "captureSha256": "2160e34155fef0a4b13a95111cc88c74d0e75b7edaf19017209b15cee8ede2a3",
+  "launchManifestSha256": "3d4aad9e1bf6a5e323fe9a0a444700858a65f7bfa330a7eedbfa29e5f1a8545e",
+  "planSha256": "d934935d6bd66c7a083219c1412d6ad2494e67932f0fdfbb1ffbb0db9d957173",
+  "reactionPresentationSha256": "461811f296468ed973b21a8e0df8ce256d2039973a37ba4921e8903e3ca026ce",
+  "assetSha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67",
+  "gameAssemblySha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+  "timelineSeconds": {
+    "entry_end": 0.10000000149011612,
+    "starts": [
+      0.0,
+      0.28333471218911654,
+      0.8333352605515074
+    ],
+    "exit_start": 1.216668489106155,
+    "completes": [
+      0.5333347161610504,
+      1.0833358565982962,
+      1.4666684856030656
+    ],
+    "lengths": [
+      0.5333347320556641,
+      0.8000011444091797,
+      0.6333332061767578
+    ]
+  },
+  "capturedEngineRules": [
+    "Time zero is the first executing sample; HerbDown is the NEXT state there, at normalized time 0.",
+    "The initial DoNothing normalized phase is copied from that sample as an initial condition.",
+    "A motionless state advances at 1 normalized unit per second (the 0.1 entry lasts 0.1s).",
+    "A transition starts exactly at its source exit threshold; the destination clock starts there.",
+    "A threshold is crossed on the first update whose accumulated delta reaches it (t >= threshold).",
+    "Exit events arrive on the update that completes a transition; the idle enter event on the update that starts one."
+  ],
+  "limits": [
+    "Qualifies the FullBody controller state clock only: not action admission, deferred DoAction start, Gather mask release, poses or the harvest commit.",
+    "Qualified only within the recorded delta domain; larger steps, multi-threshold updates, interruptions, cancellation and other speeds remain unqualified even where synthetic tests pass.",
+    "FullBody layer weight and pose application are not replayed. A one-update weight-application lag is a supported provisional hypothesis only (see GATHER_ENTRY_POSE_DIAGNOSTIC).",
+    "Clip-info arrays can lag completed blends; state hashes and the transition flag are compared instead.",
+    "Event receipts are compared by frame only; handler side effects are not modelled."
+  ],
+  "cycles": [
+    {
+      "firstExecutingFrame": 9726,
+      "endNotificationFrame": 9749,
+      "frames": 24,
+      "thresholdFrames": {
+        "entry_end": 9728,
+        "herb_start": 9731,
+        "herbdown_exit": 9735,
+        "herbup_start": 9739,
+        "herb_exit": 9743,
+        "idle_enter": 9744,
+        "herbup_exit": 9748
+      },
+      "minimumThresholdMarginSeconds": {
+        "entry_end": 0.027154825609883887,
+        "herb_start": 0.024340851189116552,
+        "herbdown_exit": 0.001969806161050469,
+        "herbup_start": 0.025727649448492373,
+        "herb_exit": 0.012693862698296421,
+        "idle_enter": 3.849869384486837e-05,
+        "herbup_exit": 0.007762557803065784
+      },
+      "multiThresholdUpdates": [],
+      "deltaDomain": [
+        0.0587379932,
+        0.09552288
+      ],
+      "maximumNormalizedError": 2.0068000026185473e-06,
+      "receipts": {
+        "Gather": {
+          "predicted": [
+            9743
+          ],
+          "recorded": [
+            9743
+          ]
+        },
+        "GatherEnd": {
+          "predicted": [
+            9748
+          ],
+          "recorded": [
+            9748
+          ]
+        },
+        "OnEndFullAnim": {
+          "predicted": [
+            9744
+          ],
+          "recorded": [
+            9744
+          ]
+        }
+      },
+      "mismatches": []
+    },
+    {
+      "firstExecutingFrame": 10100,
+      "endNotificationFrame": 10127,
+      "frames": 28,
+      "thresholdFrames": {
+        "entry_end": 10102,
+        "herb_start": 10105,
+        "herbdown_exit": 10110,
+        "herbup_start": 10115,
+        "herb_exit": 10120,
+        "idle_enter": 10122,
+        "herbup_exit": 10126
+      },
+      "minimumThresholdMarginSeconds": {
+        "entry_end": 0.022112985609883895,
+        "herb_start": 0.011832253010883476,
+        "herbdown_exit": 0.0077638511610504946,
+        "herbup_start": 0.02587379454849248,
+        "herb_exit": 0.00610278429829636,
+        "idle_enter": 0.025820619206155193,
+        "herbup_exit": 0.012849454203065713
+      },
+      "multiThresholdUpdates": [],
+      "deltaDomain": [
+        0.0135228634,
+        0.100399017
+      ],
+      "maximumNormalizedError": 4.699999998081239e-07,
+      "receipts": {
+        "Gather": {
+          "predicted": [
+            10120
+          ],
+          "recorded": [
+            10120
+          ]
+        },
+        "GatherEnd": {
+          "predicted": [
+            10126
+          ],
+          "recorded": [
+            10126
+          ]
+        },
+        "OnEndFullAnim": {
+          "predicted": [
+            10122
+          ],
+          "recorded": [
+            10122
+          ]
+        }
+      },
+      "mismatches": []
+    },
+    {
+      "firstExecutingFrame": 10258,
+      "endNotificationFrame": 10277,
+      "frames": 20,
+      "thresholdFrames": {
+        "entry_end": 10260,
+        "herb_start": 10263,
+        "herbdown_exit": 10266,
+        "herbup_start": 10269,
+        "herb_exit": 10272,
+        "idle_enter": 10274,
+        "herbup_exit": 10276
+      },
+      "minimumThresholdMarginSeconds": {
+        "entry_end": 0.009710930309883889,
+        "herb_start": 0.022795654989116565,
+        "herbdown_exit": 0.03486679416105043,
+        "herbup_start": 0.0121516175484927,
+        "herb_exit": 0.017701166301704152,
+        "idle_enter": 0.007116442206154705,
+        "herbup_exit": 0.04010164970306529
+      },
+      "multiThresholdUpdates": [],
+      "deltaDomain": [
+        0.0334620476,
+        0.114074945
+      ],
+      "maximumNormalizedError": 4.524000001282502e-07,
+      "receipts": {
+        "Gather": {
+          "predicted": [
+            10272
+          ],
+          "recorded": [
+            10272
+          ]
+        },
+        "GatherEnd": {
+          "predicted": [
+            10276
+          ],
+          "recorded": [
+            10276
+          ]
+        },
+        "OnEndFullAnim": {
+          "predicted": [
+            10274
+          ],
+          "recorded": [
+            10274
+          ]
+        }
+      },
+      "mismatches": []
+    },
+    {
+      "firstExecutingFrame": 10412,
+      "endNotificationFrame": 10438,
+      "frames": 27,
+      "thresholdFrames": {
+        "entry_end": 10414,
+        "herb_start": 10417,
+        "herbdown_exit": 10422,
+        "herbup_start": 10427,
+        "herb_exit": 10431,
+        "idle_enter": 10432,
+        "herbup_exit": 10437
+      },
+      "minimumThresholdMarginSeconds": {
+        "entry_end": 0.017822168709883873,
+        "herb_start": 0.004096291110883499,
+        "herbdown_exit": 0.008664589661050437,
+        "herbup_start": 0.011488296151507371,
+        "herb_exit": 0.030716874198296162,
+        "idle_enter": 0.0060206672938449834,
+        "herbup_exit": 0.014116652696934295
+      },
+      "multiThresholdUpdates": [],
+      "deltaDomain": [
+        0.0142979622,
+        0.107066154
+      ],
+      "maximumNormalizedError": 3.56499999298876e-07,
+      "receipts": {
+        "Gather": {
+          "predicted": [
+            10431
+          ],
+          "recorded": [
+            10431
+          ]
+        },
+        "GatherEnd": {
+          "predicted": [
+            10437
+          ],
+          "recorded": [
+            10437
+          ]
+        },
+        "OnEndFullAnim": {
+          "predicted": [
+            10432
+          ],
+          "recorded": [
+            10432
+          ]
+        }
+      },
+      "mismatches": []
+    }
+  ]
+}

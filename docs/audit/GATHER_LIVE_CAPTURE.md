@@ -185,3 +185,103 @@ These gates ran from the repository root with `TMPDIR=rebuild/build/compiler-tmp
 Logs are in the ignored directories `rebuild/build/compiler-tmp/gather-gates-2` (check, cli-test, check-content) and `gather-gates-3` (check-sources, check-sanitize).
 
 These checks cover the tools, analyzers, exporter regeneration and the unchanged native core. They do not establish the Gather schedule, pose composition, the commit boundary, graphical acceptance or any runtime integration.
+
+## Offline FullBody controller-clock replay
+
+`rebuild/tools/replay_gather_clock.py` replays the source FullBody Gather state clock against this capture. It runs offline: no launch, no input, no native code.
+
+### Inputs and provenance
+
+- **Controller values** come from the clip-plan inventory that owns them. `inventory_reference_bake.gather_controller` now records the entry, the leaf chain and the exit:
+  - the FullBody layer;
+  - the motionless `FullBody.DoNothing` idle;
+  - the `Gather`-conditioned entry: duration 0.1, not fixed, no exit time;
+  - the shared `FullBody.Gather` entry and exit selectors;
+  - the HerbDown, Herb and HerbUp transitions;
+  - every state's name and full-path hash.
+
+  It requires speed 1, cycle offset 0, no speed, cycle-offset or mirror parameter, and no mirroring. The record was regenerated into the fresh ignored plan `rebuild/build/animator-bake/clip-plan-gather-02.json` (SHA-256 `d934935d6bd66c7a083219c1412d6ad2494e67932f0fdfbb1ffbb0db9d957173`). The bake's original `clip-plan-gather.json` (`2a973b86…`) is unchanged.
+- **Plan checks.** The replay requires the plan's asset hash to equal the launch manifest's `asset_sha256`. Each Herb clip's ID must equal the inventory's `GATHER_CLIPS`, and its recorded transition evidence must equal the controller record. All inputs are size-bounded and strictly decoded, so duplicate keys and nonfinite values fail. The validated clock fields and scalar flags (speeds, cycle offsets, offsets, motion, mirror, exit-time and fixed-duration flags) are type-checked, so a Boolean cannot stand for a number or the reverse. Other JSON fields, such as `schema`, are compared by value only.
+- **Idle contract.** The DoNothing contract is reused from `rebuild/generated/pe_reaction_presentation_source.json`: `AnimatorEventSender` with enter event `OnEndFullAnim`, and `AnimatorLayerWeightCtr` with fadeout 5. Its `sharedassets1.assets` and `Assembly-CSharp.dll` hashes must equal the capture's launch manifest.
+- **Capture.** The capture is validated by `analyze_reference_gather.analyze`. The replay reads only the unique FemaleAnimator2/FemaleAvatar player animator.
+
+### Rules
+
+**Source-derived.** Clip lengths. Exit times and durations multiplied by the source state's length. The resulting timeline in seconds from time zero is below. The one exception is the entry end: 0.1000000015 s combines the *serialized* normalized entry duration (0.10000000149) with the *captured* rule that the motionless DoNothing state lasts 1 s. Every other point uses only source clip lengths and controller values.
+
+| Point | Seconds |
+|---|---|
+| Entry end (serialized 0.1 × captured 1 s idle length) | 0.1000000015 |
+| Herb starts | 0.2833347122 |
+| HerbDown exit completes | 0.5333347162 |
+| HerbUp starts | 0.8333352606 |
+| Herb exit completes | 1.0833358566 |
+| HerbUp-to-DoNothing starts | 1.2166684891 |
+| HerbUp exit completes | 1.4666684856 |
+
+**Captured-engine rules, read from the capture and not derived from source:**
+
+1. Time zero is the first executing sample, where HerbDown is the **next** state at normalized time 0.
+2. The initial DoNothing normalized phase is copied from that sample as an initial condition. The replay compares the later phase; it does not predict the phase itself, nor the deferred start.
+3. A motionless state advances one normalized unit per second.
+4. A transition starts exactly at its source threshold, and the destination clock starts there.
+5. A threshold counts as crossed on the first update whose accumulated recorded delta reaches it.
+6. Exit events arrive on the update that completes a transition; the idle enter event arrives on the update that starts one.
+
+### Result
+
+```sh
+python3 rebuild/tools/replay_gather_clock.py \
+  ~/.local/share/planet-explorers-sandbox-reference/pose-captures/gather-live-01.jsonl \
+  --report rebuild/build/gather-probe/gather-live-01-clock-replay-NEW.json
+```
+
+The tool prints `4 cycles, 0 mismatches; qualified=True (observed delta domain only)`. The canonical committed numerical report is [controller-clock-replay.json](../reference/gather-20261015/controller-clock-replay.json), SHA-256 `04a2dde4faaaafdfd8c93a593e1182211ea5a1628687d6792af40b8fdeb6ee5a`. It holds numbers and hashes only, with no poses or assets. It is byte-identical to the ignored original run output `rebuild/build/gather-probe/gather-live-01-clock-replay-110427.json`. An independent root run reproduced the same result: 4 cycles, 0 mismatches, 99 frames, maximum error 2.0068e-6, plan `d934935d…`.
+
+- **Frames compared:** all 99 sampled frames from each first executing sample through its end notification. On each frame the replay compares the current and next short and full-path hashes, the transition flag, and both normalized times, against a fixed tolerance of 1e-5. The maximum normalized-time error is 2.01e-6.
+- **Receipts:** every `Gather`, `GatherEnd` and `OnEndFullAnim` receipt frame is predicted exactly.
+
+  | Trial | First executing frame | `Gather` | `OnEndFullAnim` | `GatherEnd` | End notification |
+  |---|---|---|---|---|---|
+  | 1 | 9726 | 9743 | 9744 | 9748 | 9749 |
+  | 2 | 10100 | 10120 | 10122 | 10126 | 10127 |
+  | 3 | 10258 | 10272 | 10274 | 10276 | 10277 |
+  | 4 | 10412 | 10431 | 10432 | 10437 | 10438 |
+
+- **Margins:** no update crossed more than one threshold. The smallest margin to a threshold is 3.85e-5 s: trial 1's DoNothing enter at frame 9744. A float32 accumulation difference of that size would move that one decision by a frame. This is a margin, not a fitted value.
+- **Delta domain:** recorded deltas range from 0.01352 to 0.11407 s.
+
+### Limits
+
+- **Clock only.** This qualifies the FullBody controller **state clock** only, and only within that recorded delta domain. It does not qualify action admission, the deferred `DoAction` start, Gather mask release, poses, layer weight or the harvest commit.
+- **Outside the recorded domain.** Larger steps, updates crossing several thresholds, interruption, cancellation and other speeds remain unqualified, although synthetic tests exercise them.
+- **Clip info.** Clip-info arrays can lag a completed blend, so state hashes and the transition flag are compared instead.
+- **Pose application.** The first-stable pose discrepancy and its supported, provisional weight-application-lag hypothesis are recorded separately in [GATHER_ENTRY_POSE_DIAGNOSTIC](GATHER_ENTRY_POSE_DIAGNOSTIC.md). The replay does not use it.
+
+### Tests
+
+- `rebuild/tests/test_replay_gather_clock.py` (10 tests) covers:
+  - source timeline arithmetic and inclusive threshold crossings;
+  - a model-consistent trace, the tolerance boundary and state mismatches;
+  - missing, shifted and extra receipts;
+  - gapped and incomplete cycles, and overlapping transitions;
+  - malformed or clock-changing plan metadata, duplicate and nonfinite JSON and size bounds;
+  - asset, assembly and idle provenance tampering;
+  - ambiguous or changing player animators.
+- `test_reference_animator_bake.py` adds the controller-record guards for cycle offset, speed parameter, idle speed, fixed duration, entry exit time, selectors and chain destinations.
+
+### Clock-replay validation
+
+The gates ran from the repository root with `TMPDIR=rebuild/build/compiler-tmp`, on a code snapshot hashed beforehand (`rebuild/build/compiler-tmp/clock-gates-1/tree.sha256`: tools, tests and Makefile). The snapshot was rechecked unchanged after the last gate.
+
+| Gate | Result |
+|---|---|
+| `check` | exit0. 285 suites passed, 0 failed. 1,002 Python tests, of which 98 were skipped; skips are not passes. `test_replay_gather_clock` (10) and `test_reference_animator_bake` (28) ran without skips. |
+| `cli-test` | exit0, 26 tests |
+| `check-content` | exit0 |
+| `check-sources` | exit0, with no skip lines |
+| `check-sanitize` | exit0. 113 suites passed, 0 failed, 0 skipped. |
+
+These gates validate the tools and tests and the unchanged native core. They do not qualify anything beyond the clock domain stated above.
+
+Next capture questions, covering the harvest-commit snapshots and the isolated layer-weight boundary, are planned source-only in [GATHER_COMMIT_CAPTURE_PLAN](GATHER_COMMIT_CAPTURE_PLAN.md).

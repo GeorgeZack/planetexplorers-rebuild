@@ -211,6 +211,7 @@ test: camera-geometry-test shop-quantity-details-ui-test camp-repair-test camp-r
 	python3 tests/test_reference_pose.py
 	python3 tests/test_reference_gather.py
 	python3 tests/test_reference_gather_analysis.py
+	python3 tests/test_replay_gather_clock.py
 	python3 tests/test_reference_animator_bake.py
 	python3 tests/test_directional_player.py
 	python3 tests/test_running_player.py

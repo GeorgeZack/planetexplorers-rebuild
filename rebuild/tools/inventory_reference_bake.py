@@ -233,6 +233,66 @@ def gather_states(controller):
     return result
 
 
+def gather_controller(controller):
+    """Bind the FullBody Gather entry, leaf chain and exit to exact state hashes.
+
+    Only serialized controller values are recorded. How Unity schedules them
+    (motionless-state length, frame quantization) is left to the replay.
+    """
+    names=dict(controller['m_TOS']);layers=controller['m_Controller']['m_LayerArray']
+    found=[i for i,l in enumerate(layers) if names.get(l['data']['m_Binding'])=='FullBody']
+    if len(found)!=1:raise ValueError('Missing/duplicate FullBody layer')
+    layer=found[0];machine=controller['m_Controller']['m_StateMachineArray'][layers[layer]['data']['m_StateMachineIndex']]['data']
+    states=[e['data'] for e in machine['m_StateConstantArray']]
+    index={names.get(s['m_FullPathID']):i for i,s in enumerate(states)}
+    chain=('FullBody.DoNothing',)+tuple('FullBody.Gather.'+n for n in GATHER_CLIPS)
+    if len(index)!=len(states) or any(p not in index for p in chain):raise ValueError('Gather state graph differs')
+    selectors=[s['data'] for s in machine['m_SelectorStateConstantArray']]
+    def selector(value,entry):
+        if value<30000 or value-30000>=len(selectors):raise ValueError('Expected a Gather selector')
+        s=selectors[value-30000];routes=s['m_TransitionConstantArray']
+        if bool(s['m_IsEntry'])!=entry or len(routes)!=1 or routes[0]['data']['m_ConditionConstantArray']:
+            raise ValueError('Gather selector differs')
+        return s,routes[0]['data']['m_Destination']
+    def timing(t):
+        if t['m_HasFixedDuration'] or t['m_TransitionOffset']!=0:raise ValueError('Unsupported Gather transition timing')
+        return dict(exit_time=t['m_ExitTime'],has_exit_time=bool(t['m_HasExitTime']),duration=t['m_TransitionDuration'],fixed_duration=False,offset=0.0)
+    idle=states[index[chain[0]]]
+    if idle['m_BlendTreeConstantArray']:raise ValueError('FullBody idle is not a motionless state')
+    entries=[t['data'] for t in idle['m_TransitionConstantArray']
+             if any(names.get(c['data']['m_EventID'])=='Gather' for c in t['data']['m_ConditionConstantArray'])]
+    if len(entries)!=1:raise ValueError('Gather entry transition differs')
+    entry=entries[0];conditions=entry['m_ConditionConstantArray']
+    if len(conditions)!=1 or conditions[0]['data']['m_ConditionMode']!=1 or entry['m_HasExitTime']:
+        raise ValueError('Gather entry condition differs')
+    entry_selector,first=selector(entry['m_DestinationState'],True)
+    if first!=index[chain[1]]:raise ValueError('Gather entry destination differs')
+    unsigned=lambda v:v&0xffffffff
+    def identity(path):
+        # Speed, cycle offset and their parameter bindings all move the state clock.
+        s=states[index[path]]
+        if s['m_Speed']!=1 or s['m_CycleOffset']!=0 or s['m_SpeedParamID'] or s['m_CycleOffsetParamID'] or s['m_MirrorParamID']:
+            raise ValueError('Gather state clock configuration differs')
+        return dict(path=path,name_hash=unsigned(s['m_NameID']),full_path_hash=unsigned(s['m_FullPathID']),speed=s['m_Speed'],
+                    cycle_offset=s['m_CycleOffset'],speed_parameter=None,cycle_offset_parameter=None,mirror=bool(s['m_Mirror']),
+                    motion=bool(s['m_BlendTreeConstantArray']))
+    result=dict(layer_index=layer,layer='FullBody',idle=identity(chain[0]),
+                entry=dict(trigger='Gather',selector_full_path_hash=unsigned(entry_selector['m_FullPathID']),**timing(entry)),
+                states=[identity(p) for p in chain[1:]],transitions=[])
+    for source,target in zip(chain[1:],chain[2:]+(None,)):
+        moves=states[index[source]]['m_TransitionConstantArray']
+        if len(moves)!=1 or moves[0]['data']['m_ConditionConstantArray'] or not moves[0]['data']['m_HasExitTime']:
+            raise ValueError('Gather leaf transition differs')
+        move=moves[0]['data'];destination=move['m_DestinationState']
+        if target is None:
+            exit_selector,destination=selector(destination,False)
+            if exit_selector['m_FullPathID']!=entry_selector['m_FullPathID']:raise ValueError('Gather exit selector differs')
+            target=chain[0]
+        if destination!=index[target]:raise ValueError('Gather leaf destination differs')
+        result['transitions'].append(dict(source=source,destination=target,**timing(move)))
+    return result
+
+
 def felling_states(controller):
     return direct_states(controller,'FullBody.Fell.',('Felling1','Felling2','Felling3'))
 
@@ -312,7 +372,7 @@ def inventory(asset):
     with asset.open('rb') as stream:
         asset_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
     result = {'schema': 1, 'asset': str(asset), 'asset_sha256': asset_hash,
-              'unity_version': serialized.unity_version, 'genders': {}}
+              'unity_version': serialized.unity_version, 'gather_controller': gather_controller(controller), 'genders': {}}
     for sex, avatar, name in [('female', 'FemaleAvatar', 'FemaleAnimator2'), ('male', 'MaleAvatar', 'MaleAnimator')]:
         clips = []
         runtime_ids={replacements.get(i,i) if sex=='male' else i for i in refs}
