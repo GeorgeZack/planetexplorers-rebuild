@@ -2,6 +2,8 @@
 
 October 15, 2026, at private commit `bbecc7b`. This is an offline planning checkpoint. It follows the [Gather action gate](GATHER_ACTION_GATE.md) and the [source-first workflow](SOURCE_FIRST_REBUILD.md). No original game was launched, no input was sent, no asset was installed, and no runtime or tool code was changed. The immediate transactional herb harvest in [SANDBOX_HARVESTING](SANDBOX_HARVESTING.md) stays as it is.
 
+Follow-up: the first Lane B capture is recorded in [GATHER_LIVE_CAPTURE](GATHER_LIVE_CAPTURE.md). This plan stays as the historical planning checkpoint.
+
 Labels used below: **source-derived** (C#, database or serialized controller), **observed** (existing original captures), **implemented in C**, and **provisional** (a hypothesis that still needs an engine check).
 
 ## 1. Revalidated evidence

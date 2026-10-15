@@ -340,6 +340,69 @@ class BakeTests(unittest.TestCase):
             self.assertEqual(tool.main(args),0);settings.assert_not_called();launch.assert_not_called()
             self.assertNotEqual(tool.main(args+['--clip','NormalIdle']),0) # a preset excludes explicit clips
 
+    def gather_plan(self):
+        # Installed FemaleAnimator2 lengths for clips684/267/273/280.
+        lengths={'NormalIdle':2.0000152587890625,'HerbDown':.5333347320556641,'Herb':.8000011444091797,'HerbUp':.6333332062}
+        clips=[]
+        for name,pid in inventory.CLIPS.items():
+            clip=dict(name=name,path_id=pid,length=lengths.get(name,1.),frame_rate=30,loop=name=='NormalIdle',humanoid_bindings=127)
+            if name in inventory.GATHER_CLIPS:clip['controller_state']=dict(path='FullBody.Gather.'+name,clip_index=405,speed=1,transitions=[])
+            clips.append(clip)
+        self.data['genders']['female']['clips']=clips
+        self.data['genders']['male']={'avatar':'MaleAvatar','controller':'MaleAnimator','clips':copy.deepcopy(clips)}
+        self.save()
+
+    def test_gather_preset_is_female_exact_leaf_bounded_and_build_only(self):
+        self.gather_plan()
+        self.assertEqual(tool.GATHER_SELECTION,('NormalIdle','HerbDown','Herb','HerbUp'))
+        self.assertEqual(inventory.GATHER_CLIPS,{'HerbDown':267,'Herb':273,'HerbUp':280})
+        p=self.read(tool.GATHER_SELECTION)
+        self.assertEqual([c['path_id'] for c in p['clips']],[684,267,273,280])
+        # ceil(length*30)+1 per clip: 62+18+26+20.
+        self.assertEqual(p['planned_samples'],126)
+        self.assertIn('HerbDown|0.533334732|30|267|0',p['spec'])
+        self.assertTrue(set(inventory.GATHER_CLIPS).isdisjoint(tool.DEFAULT_CLIPS+tool.REACTION_SELECTION+tuple(inventory.SWORD_CLIPS)+tuple(inventory.DIRECTIONAL_CLIPS)))
+        self.assertEqual(len(tool.DEFAULT_CLIPS),10)
+        with self.assertRaises(ValueError):tool.read_plan(self.plan,self.game,'male',tool.GATHER_SELECTION,30)
+        original=copy.deepcopy(self.data)
+        for change in ('id','path','speed','missing'):
+            self.data=copy.deepcopy(original)
+            herb=next(c for c in self.data['genders']['female']['clips'] if c['name']=='Herb')
+            if change=='id':herb['path_id']=231
+            elif change=='path':herb['controller_state']['path']='FullBody.Attack.Herb'
+            elif change=='speed':herb['controller_state']['speed']=2
+            else:del herb['controller_state']
+            self.save()
+            with self.subTest(change=change),self.assertRaises(ValueError):self.read(tool.GATHER_SELECTION)
+        self.data=original;self.save()
+        args=self.args()[:-2]+['--preset','gather']
+        with mock.patch.object(tool,'build',return_value=self.setup_mock_launch()), \
+             mock.patch.object(tool.launch_reference,'launch_command',return_value=(['/original/client'],{})), \
+             mock.patch.object(tool.launch_reference,'prepare_settings') as settings, \
+             mock.patch.object(tool.subprocess,'run') as launch:
+            self.assertEqual(tool.main(args),0);settings.assert_not_called();launch.assert_not_called()
+            self.assertNotEqual(tool.main(args+['--clip','NormalIdle']),0)
+            self.assertNotEqual(tool.main(args+['--sex','male']),0)
+
+    def test_gather_states_require_exact_direct_speed_one_leaves(self):
+        names=[];states=[];refs=[]
+        for i,name in enumerate(('HerbDown','Herb','HerbUp')):
+            names.extend([(i,name),(i+10,'FullBody.Gather.'+name)])
+            refs.append(dict(m_FileID=0,m_PathID=inventory.GATHER_CLIPS[name]))
+            states.append({'data':dict(m_NameID=i,m_FullPathID=i+10,m_Speed=1,
+                m_TransitionConstantArray=[],m_BlendTreeConstantArray=[{'data':{'m_NodeArray':[{'data':dict(m_ChildIndices=[],m_ClipID=i)}]}}])})
+        c=dict(m_TOS=names,m_AnimationClips=refs,m_Controller={'m_StateMachineArray':[{'data':{'m_StateConstantArray':states}}]})
+        result=inventory.gather_states(c)
+        self.assertEqual({n:r['clip_index'] for n,r in result.items()},{'HerbDown':0,'Herb':1,'HerbUp':2})
+        for kind in ('clip','path','speed','branch','missing'):
+            bad=copy.deepcopy(c);state=bad['m_Controller']['m_StateMachineArray'][0]['data']['m_StateConstantArray'][1]['data']
+            if kind=='clip':bad['m_AnimationClips'][1]['m_PathID']=267
+            elif kind=='path':bad['m_TOS'][3]=(11,'FullBody.Fell.Herb')
+            elif kind=='speed':state['m_Speed']=2
+            elif kind=='branch':state['m_BlendTreeConstantArray'][0]['data']['m_NodeArray'][0]['data']['m_ChildIndices']=[1]
+            else:bad['m_Controller']['m_StateMachineArray'][0]['data']['m_StateConstantArray'].pop()
+            with self.subTest(kind=kind),self.assertRaises(ValueError):inventory.gather_states(bad)
+
     def test_managed_configuration_accepts_exactly_inventory_catalog(self):
         # Independent managed guard caused a real pre-capture failure when only
         # Python's catalog grew. Keep both entry-point contracts synchronized.

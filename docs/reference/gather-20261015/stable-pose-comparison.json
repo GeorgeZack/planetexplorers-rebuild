@@ -1,0 +1,941 @@
+{
+  "schema": "pe-gather-stable-pose-comparison-1",
+  "raw_capture_sha256": "2160e34155fef0a4b13a95111cc88c74d0e75b7edaf19017209b15cee8ede2a3",
+  "projection_sha256": "8533858ac905c73dd66bd0ab322467d3d29e75d061c1c02fa5127bbe1ecb2f73",
+  "projection_policy": "Keep original header, humanTraits, frame and end lines unchanged; omit subscription and synchronous event rows. The raw event capture was validated separately.",
+  "comparisons": [
+    {
+      "report_sha256": "deab4e95c793b402398fd826db80cf27d5f7315bb9473bb3232c660ac0037606",
+      "schema": 1,
+      "clip": "HerbDown",
+      "layer": "FullBody",
+      "FirstPerson": 0,
+      "compared_frames": 12,
+      "compared_bones": 42,
+      "coordinate_space": "each Animator/model root removed independently",
+      "clock": "observed current-state normalizedTime * runtime clip.length",
+      "frames": [
+        {
+          "capture_sample": 681,
+          "authored_seconds": 0.1271548267959921,
+          "maximum_position_error_m": 0.20487669930706986
+        },
+        {
+          "capture_sample": 682,
+          "authored_seconds": 0.1965668088284376,
+          "maximum_position_error_m": 0.00875983398691747
+        },
+        {
+          "capture_sample": 683,
+          "authored_seconds": 0.2589938525429304,
+          "maximum_position_error_m": 0.011396065075551994
+        },
+        {
+          "capture_sample": 1055,
+          "authored_seconds": 0.1221129917071476,
+          "maximum_position_error_m": 0.20245287846040563
+        },
+        {
+          "capture_sample": 1056,
+          "authored_seconds": 0.1798260315925311,
+          "maximum_position_error_m": 0.03214339639034199
+        },
+        {
+          "capture_sample": 1057,
+          "authored_seconds": 0.2369320346859648,
+          "maximum_position_error_m": 0.030937154686165105
+        },
+        {
+          "capture_sample": 1213,
+          "authored_seconds": 0.10971093358283546,
+          "maximum_position_error_m": 0.18562065511638148
+        },
+        {
+          "capture_sample": 1214,
+          "authored_seconds": 0.18410492548056756,
+          "maximum_position_error_m": 0.011695774430435272
+        },
+        {
+          "capture_sample": 1215,
+          "authored_seconds": 0.26053907046192043,
+          "maximum_position_error_m": 0.014846847555123076
+        },
+        {
+          "capture_sample": 1367,
+          "authored_seconds": 0.11782216925449522,
+          "maximum_position_error_m": 0.19746744431769322
+        },
+        {
+          "capture_sample": 1368,
+          "authored_seconds": 0.17694712004260538,
+          "maximum_position_error_m": 0.010181730552935867
+        },
+        {
+          "capture_sample": 1369,
+          "authored_seconds": 0.2326600613494108,
+          "maximum_position_error_m": 0.01228897042075304
+        }
+      ],
+      "bones": {
+        "Bip01 Head": {
+          "max_position_error_m": 0.12034958129373527,
+          "max_matrix_element_error": 0.535982541506333,
+          "rms_position_error_m": 0.06240060361036398
+        },
+        "Bip01 L Calf": {
+          "max_position_error_m": 0.17028327927362136,
+          "max_matrix_element_error": 0.16838115504008294,
+          "rms_position_error_m": 0.09730309663337967
+        },
+        "Bip01 L Clavicle": {
+          "max_position_error_m": 0.11217400077856149,
+          "max_matrix_element_error": 0.4560337365837797,
+          "rms_position_error_m": 0.0586340017092177
+        },
+        "Bip01 L Finger0": {
+          "max_position_error_m": 0.10556886068010413,
+          "max_matrix_element_error": 0.5516314883670281,
+          "rms_position_error_m": 0.05745990662540894
+        },
+        "Bip01 L Finger01": {
+          "max_position_error_m": 0.09849720671359846,
+          "max_matrix_element_error": 0.49107291269614917,
+          "rms_position_error_m": 0.053025067875755345
+        },
+        "Bip01 L Finger1": {
+          "max_position_error_m": 0.08363704278580356,
+          "max_matrix_element_error": 0.5321251760185148,
+          "rms_position_error_m": 0.044317955802380966
+        },
+        "Bip01 L Finger11": {
+          "max_position_error_m": 0.07914022828132093,
+          "max_matrix_element_error": 0.6865037328895739,
+          "rms_position_error_m": 0.041510113836491565
+        },
+        "Bip01 L Finger2": {
+          "max_position_error_m": 0.08807023891377672,
+          "max_matrix_element_error": 0.5408694281808671,
+          "rms_position_error_m": 0.04727582622692249
+        },
+        "Bip01 L Finger21": {
+          "max_position_error_m": 0.08409913879387729,
+          "max_matrix_element_error": 0.5227213401498243,
+          "rms_position_error_m": 0.04477575141875861
+        },
+        "Bip01 L Foot": {
+          "max_position_error_m": 0.14712305479421986,
+          "max_matrix_element_error": 0.17709152504620806,
+          "rms_position_error_m": 0.08413920332172538
+        },
+        "Bip01 L Forearm": {
+          "max_position_error_m": 0.2048766550748527,
+          "max_matrix_element_error": 0.4256143694994465,
+          "rms_position_error_m": 0.11417077712262776
+        },
+        "Bip01 L Hand": {
+          "max_position_error_m": 0.1112398272897375,
+          "max_matrix_element_error": 0.4378596661866399,
+          "rms_position_error_m": 0.061206855066879326
+        },
+        "Bip01 L Thigh": {
+          "max_position_error_m": 0.11394836905106884,
+          "max_matrix_element_error": 0.5135852415325804,
+          "rms_position_error_m": 0.059757927829061565
+        },
+        "Bip01 L Toe0": {
+          "max_position_error_m": 0.14430210859582818,
+          "max_matrix_element_error": 0.154468123329095,
+          "rms_position_error_m": 0.08183981132343558
+        },
+        "Bip01 L Toe0Nub": {
+          "max_position_error_m": 0.14344554351208244,
+          "max_matrix_element_error": 0.15446814519410546,
+          "rms_position_error_m": 0.0820442116690626
+        },
+        "Bip01 L UpperArm": {
+          "max_position_error_m": 0.12406967053323659,
+          "max_matrix_element_error": 0.5326057427634387,
+          "rms_position_error_m": 0.06524582534705949
+        },
+        "Bip01 Mouth": {
+          "max_position_error_m": 0.13860833041934426,
+          "max_matrix_element_error": 0.44996839657846693,
+          "rms_position_error_m": 0.07232641736466774
+        },
+        "Bip01 Neck": {
+          "max_position_error_m": 0.11301080304271592,
+          "max_matrix_element_error": 0.4115212854233168,
+          "rms_position_error_m": 0.05887178143282473
+        },
+        "Bip01 Pelvis": {
+          "max_position_error_m": 0.11366419344141551,
+          "max_matrix_element_error": 0.2486682312356733,
+          "rms_position_error_m": 0.05949616323557608
+        },
+        "Bip01 R Calf": {
+          "max_position_error_m": 0.11874565968655833,
+          "max_matrix_element_error": 0.44791098472034463,
+          "rms_position_error_m": 0.062063869202624994
+        },
+        "Bip01 R Clavicle": {
+          "max_position_error_m": 0.11090760421998228,
+          "max_matrix_element_error": 0.29109512319493985,
+          "rms_position_error_m": 0.057853759359159596
+        },
+        "Bip01 R Finger0": {
+          "max_position_error_m": 0.1270854107760597,
+          "max_matrix_element_error": 0.7879838066443128,
+          "rms_position_error_m": 0.06637759918049574
+        },
+        "Bip01 R Finger01": {
+          "max_position_error_m": 0.11262148959716967,
+          "max_matrix_element_error": 0.7759374391035829,
+          "rms_position_error_m": 0.05806858622993393
+        },
+        "Bip01 R Finger1": {
+          "max_position_error_m": 0.14419620154038387,
+          "max_matrix_element_error": 0.7657671973741806,
+          "rms_position_error_m": 0.0750710860172828
+        },
+        "Bip01 R Finger11": {
+          "max_position_error_m": 0.12120305890612432,
+          "max_matrix_element_error": 0.8991582346919489,
+          "rms_position_error_m": 0.062017216496959876
+        },
+        "Bip01 R Finger2": {
+          "max_position_error_m": 0.15534653394009476,
+          "max_matrix_element_error": 0.7235935702199336,
+          "rms_position_error_m": 0.08087266452315398
+        },
+        "Bip01 R Finger21": {
+          "max_position_error_m": 0.13588772369747193,
+          "max_matrix_element_error": 0.7889647401557438,
+          "rms_position_error_m": 0.06982173351630255
+        },
+        "Bip01 R Foot": {
+          "max_position_error_m": 0.120095328713089,
+          "max_matrix_element_error": 0.5499914238997676,
+          "rms_position_error_m": 0.06659684825694952
+        },
+        "Bip01 R Forearm": {
+          "max_position_error_m": 0.08659881477270787,
+          "max_matrix_element_error": 0.7711171584448915,
+          "rms_position_error_m": 0.04398930775992791
+        },
+        "Bip01 R Hand": {
+          "max_position_error_m": 0.1492705473093219,
+          "max_matrix_element_error": 0.6856453935555623,
+          "rms_position_error_m": 0.07876955264503728
+        },
+        "Bip01 R Thigh": {
+          "max_position_error_m": 0.11340247370269958,
+          "max_matrix_element_error": 0.36962149438553377,
+          "rms_position_error_m": 0.059257255199157186
+        },
+        "Bip01 R Toe0": {
+          "max_position_error_m": 0.13033575425250327,
+          "max_matrix_element_error": 0.3168155207870652,
+          "rms_position_error_m": 0.07185439880061653
+        },
+        "Bip01 R Toe0Nub": {
+          "max_position_error_m": 0.1223402015252571,
+          "max_matrix_element_error": 0.31681551426990673,
+          "rms_position_error_m": 0.06786259713852891
+        },
+        "Bip01 R UpperArm": {
+          "max_position_error_m": 0.11563116842858376,
+          "max_matrix_element_error": 0.41135687530786436,
+          "rms_position_error_m": 0.05999518279365814
+        },
+        "Bip01 Spine1": {
+          "max_position_error_m": 0.12207275076799858,
+          "max_matrix_element_error": 0.24831446076924318,
+          "rms_position_error_m": 0.06403685211585952
+        },
+        "Bip01 Spine2": {
+          "max_position_error_m": 0.13613975727556454,
+          "max_matrix_element_error": 0.11163868085991169,
+          "rms_position_error_m": 0.0715494386430577
+        },
+        "Bip01 Spine3": {
+          "max_position_error_m": 0.1351137622179636,
+          "max_matrix_element_error": 0.2538085721934986,
+          "rms_position_error_m": 0.07097923803738605
+        },
+        "Bone Eyelid": {
+          "max_position_error_m": 0.18047311825924467,
+          "max_matrix_element_error": 0.5611021665770232,
+          "rms_position_error_m": 0.09535146274515889
+        },
+        "Bone L Eyeball": {
+          "max_position_error_m": 0.18259483832048792,
+          "max_matrix_element_error": 0.5405673542179226,
+          "rms_position_error_m": 0.09658546102285118
+        },
+        "Bone L Forearm": {
+          "max_position_error_m": 0.20487669930706986,
+          "max_matrix_element_error": 0.4256144088269195,
+          "rms_position_error_m": 0.1141708034215053
+        },
+        "Bone R Eyeball": {
+          "max_position_error_m": 0.17832800228890555,
+          "max_matrix_element_error": 0.5405675019304906,
+          "rms_position_error_m": 0.09410742018354089
+        },
+        "Bone R Forearm": {
+          "max_position_error_m": 0.08659893094320668,
+          "max_matrix_element_error": 0.737864298016238,
+          "rms_position_error_m": 0.04398937366123748
+        }
+      },
+      "maximum_position_error_m": 0.20487669930706986,
+      "general_retargeting_validated": false,
+      "limitations": [
+        "Only selected stable current-state frames; no transition validation.",
+        "Observed poses include controller layers/procedural IK; baked poses contain only source clip.",
+        "Affine interpolation between baked samples introduces sampling error.",
+        "Root trajectories removed; no accepted contact, damage or movement equivalence claimed."
+      ],
+      "sources": [
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-gather-01.jsonl",
+          "sha256": "f1e1045a31ea6ce387dcc7af97168931900f89e54ab88245e0b8fbfa6b90d827"
+        },
+        {
+          "path": "rebuild/build/gather-probe/gather-live-01-eof-view.jsonl",
+          "sha256": "8533858ac905c73dd66bd0ab322467d3d29e75d061c1c02fa5127bbe1ecb2f73"
+        },
+        {
+          "path": "rebuild/build/reference-player-starter/player-female-starter-rig.json",
+          "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+        },
+        {
+          "path": "rebuild/tools/compare_reference_bake.py",
+          "sha256": "c81099520c2e47926a66e64b155e087b3369c82339d9c123c3a000cc14cf7ded"
+        }
+      ]
+    },
+    {
+      "report_sha256": "abc003528cb337be74db19e5b3c103aedacf01c597c6af9fc41ee3fc60df35e0",
+      "schema": 1,
+      "clip": "Herb",
+      "layer": "FullBody",
+      "FirstPerson": 0,
+      "compared_frames": 17,
+      "compared_bones": 42,
+      "coordinate_space": "each Animator/model root removed independently",
+      "clock": "observed current-state normalizedTime * runtime clip.length",
+      "frames": [
+        {
+          "capture_sample": 688,
+          "authored_seconds": 0.3163542923859912,
+          "maximum_position_error_m": 0.037337928977181356
+        },
+        {
+          "capture_sample": 689,
+          "authored_seconds": 0.38220430655137677,
+          "maximum_position_error_m": 0.03851235927779536
+        },
+        {
+          "capture_sample": 690,
+          "authored_seconds": 0.44681215894047355,
+          "maximum_position_error_m": 0.039838443595985144
+        },
+        {
+          "capture_sample": 691,
+          "authored_seconds": 0.5119493176864774,
+          "maximum_position_error_m": 0.039107093522164606
+        },
+        {
+          "capture_sample": 1063,
+          "authored_seconds": 0.2995092858976664,
+          "maximum_position_error_m": 0.035851045499866604
+        },
+        {
+          "capture_sample": 1064,
+          "authored_seconds": 0.3580572480211325,
+          "maximum_position_error_m": 0.035552806346584184
+        },
+        {
+          "capture_sample": 1065,
+          "authored_seconds": 0.4127533102363896,
+          "maximum_position_error_m": 0.035409511583554994
+        },
+        {
+          "capture_sample": 1066,
+          "authored_seconds": 0.46553511451426177,
+          "maximum_position_error_m": 0.03577203166914644
+        },
+        {
+          "capture_sample": 1067,
+          "authored_seconds": 0.5211130915906553,
+          "maximum_position_error_m": 0.0363943448094967
+        },
+        {
+          "capture_sample": 1219,
+          "authored_seconds": 0.2927672986566384,
+          "maximum_position_error_m": 0.029530300252168053
+        },
+        {
+          "capture_sample": 1220,
+          "authored_seconds": 0.38504127060822957,
+          "maximum_position_error_m": 0.031237336336976437
+        },
+        {
+          "capture_sample": 1221,
+          "authored_seconds": 0.4812512481883008,
+          "maximum_position_error_m": 0.032362007308888545
+        },
+        {
+          "capture_sample": 1375,
+          "authored_seconds": 0.2952864574590303,
+          "maximum_position_error_m": 0.03164556682981342
+        },
+        {
+          "capture_sample": 1376,
+          "authored_seconds": 0.3518483903424787,
+          "maximum_position_error_m": 0.03226930393790892
+        },
+        {
+          "capture_sample": 1377,
+          "authored_seconds": 0.4242964139430043,
+          "maximum_position_error_m": 0.034186200598802376
+        },
+        {
+          "capture_sample": 1378,
+          "authored_seconds": 0.4834213312915152,
+          "maximum_position_error_m": 0.03429167737024991
+        },
+        {
+          "capture_sample": 1379,
+          "authored_seconds": 0.5385122372713981,
+          "maximum_position_error_m": 0.033664145131727226
+        }
+      ],
+      "bones": {
+        "Bip01 Head": {
+          "max_position_error_m": 0.011236780817497712,
+          "max_matrix_element_error": 0.011110790489040068,
+          "rms_position_error_m": 0.005589558421511082
+        },
+        "Bip01 L Calf": {
+          "max_position_error_m": 0.039838443595985144,
+          "max_matrix_element_error": 0.08114508310911017,
+          "rms_position_error_m": 0.03225229767400904
+        },
+        "Bip01 L Clavicle": {
+          "max_position_error_m": 0.011583424401542303,
+          "max_matrix_element_error": 0.011514630965122397,
+          "rms_position_error_m": 0.005768179507938995
+        },
+        "Bip01 L Finger0": {
+          "max_position_error_m": 0.012600869883968482,
+          "max_matrix_element_error": 0.012592824577845219,
+          "rms_position_error_m": 0.006088811654698392
+        },
+        "Bip01 L Finger01": {
+          "max_position_error_m": 0.0126675942874589,
+          "max_matrix_element_error": 0.01265577249304961,
+          "rms_position_error_m": 0.006103560284921684
+        },
+        "Bip01 L Finger1": {
+          "max_position_error_m": 0.012591630878284854,
+          "max_matrix_element_error": 0.012579805911999198,
+          "rms_position_error_m": 0.006078198420556948
+        },
+        "Bip01 L Finger11": {
+          "max_position_error_m": 0.012643435505527548,
+          "max_matrix_element_error": 0.012628960709844372,
+          "rms_position_error_m": 0.006092326148395475
+        },
+        "Bip01 L Finger2": {
+          "max_position_error_m": 0.012516521019493755,
+          "max_matrix_element_error": 0.012506043704954173,
+          "rms_position_error_m": 0.006062915314087244
+        },
+        "Bip01 L Finger21": {
+          "max_position_error_m": 0.012532319105737412,
+          "max_matrix_element_error": 0.012518005094259765,
+          "rms_position_error_m": 0.00606796065911075
+        },
+        "Bip01 L Foot": {
+          "max_position_error_m": 0.02432685302797176,
+          "max_matrix_element_error": 0.10691345839907841,
+          "rms_position_error_m": 0.02247450312442798
+        },
+        "Bip01 L Forearm": {
+          "max_position_error_m": 0.01228135278631467,
+          "max_matrix_element_error": 0.012271049851277138,
+          "rms_position_error_m": 0.006062446799303459
+        },
+        "Bip01 L Hand": {
+          "max_position_error_m": 0.012506413726153872,
+          "max_matrix_element_error": 0.012500801131796302,
+          "rms_position_error_m": 0.006067473743800205
+        },
+        "Bip01 L Thigh": {
+          "max_position_error_m": 0.012283812987587944,
+          "max_matrix_element_error": 0.09634753514144004,
+          "rms_position_error_m": 0.006116337617793112
+        },
+        "Bip01 L Toe0": {
+          "max_position_error_m": 0.027199047775802898,
+          "max_matrix_element_error": 0.10733314044349927,
+          "rms_position_error_m": 0.02402984740293501
+        },
+        "Bip01 L Toe0Nub": {
+          "max_position_error_m": 0.02878184901363972,
+          "max_matrix_element_error": 0.1073331547744925,
+          "rms_position_error_m": 0.024627685721403638
+        },
+        "Bip01 L UpperArm": {
+          "max_position_error_m": 0.011641783705344001,
+          "max_matrix_element_error": 0.011581001538439994,
+          "rms_position_error_m": 0.005805492865536436
+        },
+        "Bip01 Mouth": {
+          "max_position_error_m": 0.01105768286871623,
+          "max_matrix_element_error": 0.010925375455898223,
+          "rms_position_error_m": 0.005502087733098744
+        },
+        "Bip01 Neck": {
+          "max_position_error_m": 0.011500595927080352,
+          "max_matrix_element_error": 0.011402948776778832,
+          "rms_position_error_m": 0.0057200961703865304
+        },
+        "Bip01 Pelvis": {
+          "max_position_error_m": 0.012330555487397156,
+          "max_matrix_element_error": 0.012330290252874548,
+          "rms_position_error_m": 0.00613448760020887
+        },
+        "Bip01 R Calf": {
+          "max_position_error_m": 0.010579490552453786,
+          "max_matrix_element_error": 0.0706442995147761,
+          "rms_position_error_m": 0.005465103956350136
+        },
+        "Bip01 R Clavicle": {
+          "max_position_error_m": 0.011750991178367365,
+          "max_matrix_element_error": 0.011661096628006962,
+          "rms_position_error_m": 0.005841293386561817
+        },
+        "Bip01 R Finger0": {
+          "max_position_error_m": 0.011202864740534342,
+          "max_matrix_element_error": 0.020941933492416936,
+          "rms_position_error_m": 0.006039937620331189
+        },
+        "Bip01 R Finger01": {
+          "max_position_error_m": 0.011064806768023128,
+          "max_matrix_element_error": 0.02044880349625877,
+          "rms_position_error_m": 0.00604058218477099
+        },
+        "Bip01 R Finger1": {
+          "max_position_error_m": 0.011347920577785556,
+          "max_matrix_element_error": 0.03392190392156191,
+          "rms_position_error_m": 0.0061843595594282584
+        },
+        "Bip01 R Finger11": {
+          "max_position_error_m": 0.011056847628529926,
+          "max_matrix_element_error": 0.05360386300329674,
+          "rms_position_error_m": 0.006205130818758616
+        },
+        "Bip01 R Finger2": {
+          "max_position_error_m": 0.011364521787049203,
+          "max_matrix_element_error": 0.03388353779752895,
+          "rms_position_error_m": 0.0062410098148458605
+        },
+        "Bip01 R Finger21": {
+          "max_position_error_m": 0.010989880689143952,
+          "max_matrix_element_error": 0.05192510143625506,
+          "rms_position_error_m": 0.0061925884564145075
+        },
+        "Bip01 R Foot": {
+          "max_position_error_m": 0.0363943448094967,
+          "max_matrix_element_error": 0.09689797623709967,
+          "rms_position_error_m": 0.020284336225689807
+        },
+        "Bip01 R Forearm": {
+          "max_position_error_m": 0.011947039832195751,
+          "max_matrix_element_error": 0.013957858939037823,
+          "rms_position_error_m": 0.006101626950199046
+        },
+        "Bip01 R Hand": {
+          "max_position_error_m": 0.011382965575339256,
+          "max_matrix_element_error": 0.016671063949649012,
+          "rms_position_error_m": 0.0060968332096980405
+        },
+        "Bip01 R Thigh": {
+          "max_position_error_m": 0.012375900258199318,
+          "max_matrix_element_error": 0.05303536996809177,
+          "rms_position_error_m": 0.006155203256398341
+        },
+        "Bip01 R Toe0": {
+          "max_position_error_m": 0.030737602407062584,
+          "max_matrix_element_error": 0.11028761406625573,
+          "rms_position_error_m": 0.018148019585963043
+        },
+        "Bip01 R Toe0Nub": {
+          "max_position_error_m": 0.025327410313780687,
+          "max_matrix_element_error": 0.11028761776625573,
+          "rms_position_error_m": 0.01601116980387935
+        },
+        "Bip01 R UpperArm": {
+          "max_position_error_m": 0.011943246744001948,
+          "max_matrix_element_error": 0.011821197414356277,
+          "rms_position_error_m": 0.005952694534682544
+        },
+        "Bip01 Spine1": {
+          "max_position_error_m": 0.012349061574630591,
+          "max_matrix_element_error": 0.0123488683177983,
+          "rms_position_error_m": 0.006143785705697594
+        },
+        "Bip01 Spine2": {
+          "max_position_error_m": 0.012372447276014857,
+          "max_matrix_element_error": 0.012371650195596495,
+          "rms_position_error_m": 0.006155573326192058
+        },
+        "Bip01 Spine3": {
+          "max_position_error_m": 0.012106970473230162,
+          "max_matrix_element_error": 0.01208985880636071,
+          "rms_position_error_m": 0.006024369700540039
+        },
+        "Bone Eyelid": {
+          "max_position_error_m": 0.010726087805543015,
+          "max_matrix_element_error": 0.010594412216798244,
+          "rms_position_error_m": 0.0053358888884873735
+        },
+        "Bone L Eyeball": {
+          "max_position_error_m": 0.010634024714331797,
+          "max_matrix_element_error": 0.010507963928017339,
+          "rms_position_error_m": 0.005297623735792441
+        },
+        "Bone L Forearm": {
+          "max_position_error_m": 0.01228156944811899,
+          "max_matrix_element_error": 0.012271261885739237,
+          "rms_position_error_m": 0.006062581775761075
+        },
+        "Bone R Eyeball": {
+          "max_position_error_m": 0.010817226557012893,
+          "max_matrix_element_error": 0.010679560581635661,
+          "rms_position_error_m": 0.005375438151082877
+        },
+        "Bone R Forearm": {
+          "max_position_error_m": 0.011947049940014078,
+          "max_matrix_element_error": 0.013957857844845684,
+          "rms_position_error_m": 0.006101613630636556
+        }
+      },
+      "maximum_position_error_m": 0.039838443595985144,
+      "general_retargeting_validated": false,
+      "limitations": [
+        "Only selected stable current-state frames; no transition validation.",
+        "Observed poses include controller layers/procedural IK; baked poses contain only source clip.",
+        "Affine interpolation between baked samples introduces sampling error.",
+        "Root trajectories removed; no accepted contact, damage or movement equivalence claimed."
+      ],
+      "sources": [
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-gather-01.jsonl",
+          "sha256": "f1e1045a31ea6ce387dcc7af97168931900f89e54ab88245e0b8fbfa6b90d827"
+        },
+        {
+          "path": "rebuild/build/gather-probe/gather-live-01-eof-view.jsonl",
+          "sha256": "8533858ac905c73dd66bd0ab322467d3d29e75d061c1c02fa5127bbe1ecb2f73"
+        },
+        {
+          "path": "rebuild/build/reference-player-starter/player-female-starter-rig.json",
+          "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+        },
+        {
+          "path": "rebuild/tools/compare_reference_bake.py",
+          "sha256": "c81099520c2e47926a66e64b155e087b3369c82339d9c123c3a000cc14cf7ded"
+        }
+      ]
+    },
+    {
+      "report_sha256": "10ee6306c1aa3e1861e08e71af018dc1eb30ff838d96a8bc85070446138e097d",
+      "schema": 1,
+      "clip": "HerbUp",
+      "layer": "FullBody",
+      "FirstPerson": 0,
+      "compared_frames": 6,
+      "compared_bones": 42,
+      "coordinate_space": "each Animator/model root removed independently",
+      "clock": "observed current-state normalizedTime * runtime clip.length",
+      "frames": [
+        {
+          "capture_sample": 696,
+          "authored_seconds": 0.30035056180162284,
+          "maximum_position_error_m": 0.005354472555141724
+        },
+        {
+          "capture_sample": 1073,
+          "authored_seconds": 0.30989460495901683,
+          "maximum_position_error_m": 0.02425506654257824
+        },
+        {
+          "capture_sample": 1074,
+          "authored_seconds": 0.35751249816752845,
+          "maximum_position_error_m": 0.022157735474662512
+        },
+        {
+          "capture_sample": 1225,
+          "authored_seconds": 0.26770177364172,
+          "maximum_position_error_m": 0.00839812094636951
+        },
+        {
+          "capture_sample": 1226,
+          "authored_seconds": 0.37621683079644,
+          "maximum_position_error_m": 0.0077881016234095015
+        },
+        {
+          "capture_sample": 1384,
+          "authored_seconds": 0.282287690571,
+          "maximum_position_error_m": 0.007284252967572697
+        }
+      ],
+      "bones": {
+        "Bip01 Head": {
+          "max_position_error_m": 0.013227176320968296,
+          "max_matrix_element_error": 0.013033888419472062,
+          "rms_position_error_m": 0.007918440644273128
+        },
+        "Bip01 L Calf": {
+          "max_position_error_m": 0.01114825023626697,
+          "max_matrix_element_error": 0.010687026535936006,
+          "rms_position_error_m": 0.006802370764435235
+        },
+        "Bip01 L Clavicle": {
+          "max_position_error_m": 0.013508885007920223,
+          "max_matrix_element_error": 0.013396738093712557,
+          "rms_position_error_m": 0.008074981491756523
+        },
+        "Bip01 L Finger0": {
+          "max_position_error_m": 0.014130358967620842,
+          "max_matrix_element_error": 0.014123284554030446,
+          "rms_position_error_m": 0.008385430954214183
+        },
+        "Bip01 L Finger01": {
+          "max_position_error_m": 0.014185548835643816,
+          "max_matrix_element_error": 0.014176181142483424,
+          "rms_position_error_m": 0.0084124851426764
+        },
+        "Bip01 L Finger1": {
+          "max_position_error_m": 0.014080305492476129,
+          "max_matrix_element_error": 0.014069807486639885,
+          "rms_position_error_m": 0.008360372910824197
+        },
+        "Bip01 L Finger11": {
+          "max_position_error_m": 0.014136439114750729,
+          "max_matrix_element_error": 0.01412476228105497,
+          "rms_position_error_m": 0.008388186151625057
+        },
+        "Bip01 L Finger2": {
+          "max_position_error_m": 0.014026400994566196,
+          "max_matrix_element_error": 0.014016076818100465,
+          "rms_position_error_m": 0.008336425471877422
+        },
+        "Bip01 L Finger21": {
+          "max_position_error_m": 0.014049847408314577,
+          "max_matrix_element_error": 0.014037202412708116,
+          "rms_position_error_m": 0.008349660443918343
+        },
+        "Bip01 L Foot": {
+          "max_position_error_m": 0.009508431015647483,
+          "max_matrix_element_error": 0.10997869868824392,
+          "rms_position_error_m": 0.0060966285979078905
+        },
+        "Bip01 L Forearm": {
+          "max_position_error_m": 0.014082081267118565,
+          "max_matrix_element_error": 0.014073104781584966,
+          "rms_position_error_m": 0.008379279213314439
+        },
+        "Bip01 L Hand": {
+          "max_position_error_m": 0.014049373174971855,
+          "max_matrix_element_error": 0.014043323131866736,
+          "rms_position_error_m": 0.008346472695924166
+        },
+        "Bip01 L Thigh": {
+          "max_position_error_m": 0.01407420311875955,
+          "max_matrix_element_error": 0.014073879635555286,
+          "rms_position_error_m": 0.008338391007001487
+        },
+        "Bip01 L Toe0": {
+          "max_position_error_m": 0.007527427558588147,
+          "max_matrix_element_error": 0.11037709787381424,
+          "rms_position_error_m": 0.005974147060821547
+        },
+        "Bip01 L Toe0Nub": {
+          "max_position_error_m": 0.0135776755484305,
+          "max_matrix_element_error": 0.11037711294871788,
+          "rms_position_error_m": 0.008896695324065092
+        },
+        "Bip01 L UpperArm": {
+          "max_position_error_m": 0.013573302404635291,
+          "max_matrix_element_error": 0.013462340544758256,
+          "rms_position_error_m": 0.008121249590237169
+        },
+        "Bip01 Mouth": {
+          "max_position_error_m": 0.013037001760845933,
+          "max_matrix_element_error": 0.012828156180288763,
+          "rms_position_error_m": 0.00781587991027952
+        },
+        "Bip01 Neck": {
+          "max_position_error_m": 0.01346440921355687,
+          "max_matrix_element_error": 0.013323216694199447,
+          "rms_position_error_m": 0.008047149104071885
+        },
+        "Bip01 Pelvis": {
+          "max_position_error_m": 0.014064684458637683,
+          "max_matrix_element_error": 0.014064386775603066,
+          "rms_position_error_m": 0.008351927612047609
+        },
+        "Bip01 R Calf": {
+          "max_position_error_m": 0.021923651436979174,
+          "max_matrix_element_error": 0.020801628553669238,
+          "rms_position_error_m": 0.013128828456635927
+        },
+        "Bip01 R Clavicle": {
+          "max_position_error_m": 0.013742112638809189,
+          "max_matrix_element_error": 0.013630233898278554,
+          "rms_position_error_m": 0.008198989732554833
+        },
+        "Bip01 R Finger0": {
+          "max_position_error_m": 0.013668102744432987,
+          "max_matrix_element_error": 0.01366331267640708,
+          "rms_position_error_m": 0.008143996448534387
+        },
+        "Bip01 R Finger01": {
+          "max_position_error_m": 0.013609832913036107,
+          "max_matrix_element_error": 0.01360678333462384,
+          "rms_position_error_m": 0.008112251246823183
+        },
+        "Bip01 R Finger1": {
+          "max_position_error_m": 0.013705587533091503,
+          "max_matrix_element_error": 0.013703634944854604,
+          "rms_position_error_m": 0.00816968290674546
+        },
+        "Bip01 R Finger11": {
+          "max_position_error_m": 0.013751182593399115,
+          "max_matrix_element_error": 0.013749840814327619,
+          "rms_position_error_m": 0.008175276439813231
+        },
+        "Bip01 R Finger2": {
+          "max_position_error_m": 0.013789364921144735,
+          "max_matrix_element_error": 0.013787402332975596,
+          "rms_position_error_m": 0.008223159540818564
+        },
+        "Bip01 R Finger21": {
+          "max_position_error_m": 0.013781099201160498,
+          "max_matrix_element_error": 0.013780334403092453,
+          "rms_position_error_m": 0.008186768766909365
+        },
+        "Bip01 R Foot": {
+          "max_position_error_m": 0.02425506654257824,
+          "max_matrix_element_error": 0.11170198057399786,
+          "rms_position_error_m": 0.014314108565665768
+        },
+        "Bip01 R Forearm": {
+          "max_position_error_m": 0.014136403446715917,
+          "max_matrix_element_error": 0.014092441416722945,
+          "rms_position_error_m": 0.00842761691641919
+        },
+        "Bip01 R Hand": {
+          "max_position_error_m": 0.013759442891237808,
+          "max_matrix_element_error": 0.013752935712183056,
+          "rms_position_error_m": 0.008197286799224997
+        },
+        "Bip01 R Thigh": {
+          "max_position_error_m": 0.014041972074591123,
+          "max_matrix_element_error": 0.018101326246380167,
+          "rms_position_error_m": 0.00836197969033776
+        },
+        "Bip01 R Toe0": {
+          "max_position_error_m": 0.012110066744706998,
+          "max_matrix_element_error": 0.10846832584963752,
+          "rms_position_error_m": 0.007908957789995353
+        },
+        "Bip01 R Toe0Nub": {
+          "max_position_error_m": 0.00839812094636951,
+          "max_matrix_element_error": 0.10846832451387747,
+          "rms_position_error_m": 0.006622943707760558
+        },
+        "Bip01 R UpperArm": {
+          "max_position_error_m": 0.014025917815987119,
+          "max_matrix_element_error": 0.01391709768505267,
+          "rms_position_error_m": 0.008346775677600666
+        },
+        "Bip01 Spine1": {
+          "max_position_error_m": 0.014058043940871616,
+          "max_matrix_element_error": 0.014057828972150022,
+          "rms_position_error_m": 0.008347347230483129
+        },
+        "Bip01 Spine2": {
+          "max_position_error_m": 0.01405113130484126,
+          "max_matrix_element_error": 0.014050857482969858,
+          "rms_position_error_m": 0.008342506040176946
+        },
+        "Bip01 Spine3": {
+          "max_position_error_m": 0.0138463079124268,
+          "max_matrix_element_error": 0.013826286914021768,
+          "rms_position_error_m": 0.00823915964593338
+        },
+        "Bone Eyelid": {
+          "max_position_error_m": 0.012641818339436834,
+          "max_matrix_element_error": 0.012427776561870552,
+          "rms_position_error_m": 0.007603474430803355
+        },
+        "Bone L Eyeball": {
+          "max_position_error_m": 0.012542748379428323,
+          "max_matrix_element_error": 0.012320806193252931,
+          "rms_position_error_m": 0.007549841924021974
+        },
+        "Bone L Forearm": {
+          "max_position_error_m": 0.014082314493396702,
+          "max_matrix_element_error": 0.014073338533353796,
+          "rms_position_error_m": 0.008379450991078018
+        },
+        "Bone R Eyeball": {
+          "max_position_error_m": 0.012751709442277302,
+          "max_matrix_element_error": 0.012536426977659776,
+          "rms_position_error_m": 0.007658030768414902
+        },
+        "Bone R Forearm": {
+          "max_position_error_m": 0.01413632348569912,
+          "max_matrix_element_error": 0.014092360414364347,
+          "rms_position_error_m": 0.008427566777895731
+        }
+      },
+      "maximum_position_error_m": 0.02425506654257824,
+      "general_retargeting_validated": false,
+      "limitations": [
+        "Only selected stable current-state frames; no transition validation.",
+        "Observed poses include controller layers/procedural IK; baked poses contain only source clip.",
+        "Affine interpolation between baked samples introduces sampling error.",
+        "Root trajectories removed; no accepted contact, damage or movement equivalence claimed."
+      ],
+      "sources": [
+        {
+          "path": "/home/admin/.local/share/planet-explorers-bake-reference/pose-captures/female-gather-01.jsonl",
+          "sha256": "f1e1045a31ea6ce387dcc7af97168931900f89e54ab88245e0b8fbfa6b90d827"
+        },
+        {
+          "path": "rebuild/build/gather-probe/gather-live-01-eof-view.jsonl",
+          "sha256": "8533858ac905c73dd66bd0ab322467d3d29e75d061c1c02fa5127bbe1ecb2f73"
+        },
+        {
+          "path": "rebuild/build/reference-player-starter/player-female-starter-rig.json",
+          "sha256": "58f2e013f5c5dc3724ea3e22c41f4ea425f457c3530d3568502452e33d378bff"
+        },
+        {
+          "path": "rebuild/tools/compare_reference_bake.py",
+          "sha256": "c81099520c2e47926a66e64b155e087b3369c82339d9c123c3a000cc14cf7ded"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Measurements only; all errors retained, no acceptance threshold applied.",
+    "Stable current-state selection does not establish composed pose equality at transition boundaries.",
+    "No transition, skill commit, gameplay or root travel equivalence is established."
+  ]
+}

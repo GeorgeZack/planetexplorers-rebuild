@@ -69,6 +69,10 @@ GETUP_STATES = {'GetUpBackMirror': (322,'Base Layer.Ragdoll.GetupBack','GetUpBac
 RECOVERY_CLIPS = {name: row[0] for name,row in GETUP_STATES.items()}
 RECOVERY_CLIPS['SprintSwordAttack'] = 401
 CLIPS.update(RECOVERY_CLIPS)
+# Female FullBody.Gather leaves (controller states 22-24). Leaf poses only:
+# the Herb/HerbUp state-exit events and transition timing are not sampled.
+GATHER_CLIPS = {'HerbDown': 267, 'Herb': 273, 'HerbUp': 280}
+CLIPS.update(GATHER_CLIPS)
 DIRECTIONAL_BRANCHES = {
     'NormalWB': ((0,1,2,33), (0,-2), None),
     'NormalWL': ((0,1,2,34,36), (-2,0), ('FirstPerson',1)),
@@ -222,6 +226,13 @@ def direct_states(controller, prefix, selected):
     return result
 
 
+def gather_states(controller):
+    result=direct_states(controller,'FullBody.Gather.',tuple(GATHER_CLIPS))
+    if any(value['speed']!=1 for value in result.values()):
+        raise ValueError('Gather source state speed differs')
+    return result
+
+
 def felling_states(controller):
     return direct_states(controller,'FullBody.Fell.',('Felling1','Felling2','Felling3'))
 
@@ -297,7 +308,7 @@ def inventory(asset):
     refs = {x['m_PathID'] for x in controller['m_AnimationClips'] if x['m_FileID'] == 0}
     replacements = {x['m_OriginalClip']['m_PathID']: x['m_OverrideClip']['m_PathID']
                     for x in override['m_Clips']}
-    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller),**reaction_states(controller),**getup_states(controller),**sprint_attack_states(controller)}
+    states={**felling_states(controller),**spade_states(controller),**mine_states(controller),**sword_states(controller),**sword_backward_states(controller),**directional_states(controller),**running_attack_states(controller),**reaction_states(controller),**getup_states(controller),**sprint_attack_states(controller),**gather_states(controller)}
     with asset.open('rb') as stream:
         asset_hash = hashlib.file_digest(stream, 'sha256').hexdigest()
     result = {'schema': 1, 'asset': str(asset), 'asset_sha256': asset_hash,

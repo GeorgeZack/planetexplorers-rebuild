@@ -1752,6 +1752,8 @@ Two initial isolated assertion failures were incorrect test expectations: activi
 
 The [Gather audit](audit/GATHER_ACTION_GATE.md) also checked335 recovered actor files and the installed controller. No player Gather poses are recovered: the action depends on exits from three overlapping humanoid states, not the tutorial's fixed timer. No guessed delay or replacement pose was added; immediate transactional harvesting remains its declared adapter.
 
+October 15 follow-up: [the Gather captures](audit/GATHER_LIVE_CAPTURE.md) are now observed in the original. One Adventure run recorded four Gather cycles with event receipts. Trials, user-reported, were: knife stowed; knife drawn; W held twice. A separate Tutorial run baked the female HerbDown, Herb and HerbUp leaves, staged uninstalled. The probes did not record key states or inventory. No native gameplay changed, and immediate harvesting remains the adapter.
+
 
 ## October 7 — inventory discard and follow-up mission contracts
 
