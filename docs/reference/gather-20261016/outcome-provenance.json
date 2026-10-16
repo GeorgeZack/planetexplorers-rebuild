@@ -1,0 +1,228 @@
+{
+  "schema": "pe-gather-outcome-qualification-1",
+  "date": "2026-10-16",
+  "mode": "Adventure Normal, preserved manual slot 1, female audit",
+  "profile": "planet-explorers-sandbox-reference",
+  "client": "Steam native Linux V1.1.4",
+  "unity": "5.2.4f1",
+  "capture": "gather-outcome-live04.jsonl",
+  "captureSha256": "02b53f817c117d0f7144f025304663c3caeb6a695f6093d3b27a47cdacdb517a",
+  "launchManifestSha256": "a704f99b11f1175df06de9dc4609629f49dfe7e75c40fab2723efcbeedfee643",
+  "launch": {
+    "schema": "pe-gather-launch-1",
+    "command": [
+      "/home/admin/.local/share/Steam/steamapps/common/Planet Explorers/PE_Client.x86_64",
+      "-force-gfx-direct",
+      "-from-launcher",
+      "-rw",
+      "1280",
+      "-rh",
+      "720",
+      "-ql",
+      "0",
+      "-language",
+      "English",
+      "-ocl",
+      "Cpu",
+      "-userpath",
+      "/home/admin/.local/share/planet-explorers-sandbox-reference",
+      "-screen-fullscreen",
+      "0"
+    ],
+    "profile": "/home/admin/.local/share/planet-explorers-sandbox-reference",
+    "capture": "/home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/gather-outcome-live04.jsonl",
+    "arm": "/home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/gather-outcome-live04.arm",
+    "stop": "/home/admin/.local/share/planet-explorers-sandbox-reference/pose-captures/gather-outcome-live04.stop",
+    "outcomes": true,
+    "frames": 1800,
+    "seconds": 60,
+    "wait_seconds": 900,
+    "assembly_sha256": "5517178e4c3f0a2b4f9502a1a59c2b8703663ef94020dd0ae1d0f7e453040dce",
+    "probe_source_sha256": "07ba8bac0cd78eb8ed7d83af2b8d88fbd1618d436e9790d90e86ec24bbcc6e1a",
+    "shim_sha256": "b0c7f921a55240eac476427ddbf09b4eaa6defb0d19056703626813f16e81cb8",
+    "engine_sha256": "f728161940fbb8f27659c979bfcabe3f544002858779abfaa1143065926c051b",
+    "game_assembly_sha256": "56d90949e732331be7644fc9185dc088c78ad4888a100f60d96b7aa093f4d7d3",
+    "asset_sha256": "d9c65f820a2186116d9eb73d815fe07d9f46924ddfd103ee9510bf254f9a3d67"
+  },
+  "renderer": {
+    "renderer": "llvmpipe (LLVM 22.1.8, 256 bits)",
+    "vendor": "Mesa",
+    "version": "OpenGL 4.6 Compatibility Profile, Mesa 26.2.2-arch1.1",
+    "window": [
+      800,
+      450
+    ],
+    "environment": {
+      "__GLX_VENDOR_LIBRARY_NAME": "mesa",
+      "LIBGL_ALWAYS_SOFTWARE": "1",
+      "GALLIUM_DRIVER": "llvmpipe"
+    },
+    "singleThreadedRendering": true
+  },
+  "requestedInputs": {
+    "controlMode": "Captured third person; mMMOControlType=False, FirstPersonCtrl=False.",
+    "beforeArm": [
+      {
+        "keys": "d",
+        "seconds": 4
+      },
+      {
+        "keys": "w+d",
+        "seconds": 1.2
+      },
+      {
+        "keys": "w",
+        "seconds": 2
+      },
+      {
+        "keys": "w+d",
+        "seconds": 0.3
+      }
+    ],
+    "afterArm": [
+      {
+        "keys": "e",
+        "seconds": 0.25
+      }
+    ],
+    "physicalKeyTelemetry": false,
+    "stop": "Fresh stop file after one complete cycle; no movement command after arming."
+  },
+  "clockDomain": {
+    "minimumDelta": 0.316823959,
+    "maximumDelta": 0.333333343,
+    "firstSampleFrame": 1200,
+    "lastSampleFrame": 1305,
+    "realSampleSpanSeconds": 35.754425000000026,
+    "scaledSampleSpanSeconds": 34.40277900000001
+  },
+  "receipt": {
+    "sequence": 3,
+    "frame": 1214,
+    "time": 183.058258,
+    "handlers": [
+      {
+        "targetType": "Pathea.Action_Rotate",
+        "declaringType": "Pathea.Action_Rotate",
+        "method": "AnimEvent",
+        "observer": false
+      },
+      {
+        "targetType": "Pathea.Action_Move",
+        "declaringType": "Pathea.PEAction",
+        "method": "OnAnimEvent",
+        "observer": false
+      },
+      {
+        "targetType": "PeReference.PoseProbe",
+        "declaringType": "PeReference.PoseProbe",
+        "method": "ObserveAnimation",
+        "observer": true,
+        "role": "pre"
+      },
+      {
+        "targetType": "Pathea.Action_Gather",
+        "declaringType": "Pathea.Action_Gather",
+        "method": "OnAnimEvent",
+        "observer": false
+      },
+      {
+        "targetType": "PeReference.PoseProbe",
+        "declaringType": "PeReference.PoseProbe",
+        "method": "ObserveAnimationPost",
+        "observer": true,
+        "role": "post"
+      }
+    ]
+  },
+  "snapshotSequence": [
+    {
+      "role": "pre",
+      "sequence": 4,
+      "frame": 1214,
+      "time": 183.058258,
+      "realtime": 227.44783
+    },
+    {
+      "role": "post",
+      "sequence": 6,
+      "frame": 1214,
+      "time": 183.058258,
+      "realtime": 227.460663
+    }
+  ],
+  "exit": {
+    "schema": "pe-gather-exit-1",
+    "returncode": -9,
+    "signal": 9,
+    "observed_utc": "2026-10-16T16:41:11.759417+00:00"
+  },
+  "finalPlayerLogSha256": "b73201d8cd473c6279e94fdef33eee860be3fedc14d60008d9f5164bf3b8327f",
+  "manualSaveFilesUnchanged": [
+    {
+      "path": "PlanetExplorers/GameSave/save0/MainAdventure/block45.arc",
+      "sha256": "dfd2cb36bbdae147c8a77e2eda9a8e55275f9e73732b55d8a3c22143975f3f21"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save0/MainAdventure/index.arc",
+      "sha256": "149860b7eaab236bd016b6b7a37242cdc10055f8aad60e5da6f70acf956b65ae"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save0/MainAdventure/voxel.arc",
+      "sha256": "19de53912ccc411f5aa76427d9f3e0f2b3b17e7d905487f40655f93e4ad3efc4"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save0/MainAdventure/water.arc",
+      "sha256": "b5a299be7029fa91bc1d5f8681abc747dcf68cd35a9bf2164a0faf886a16281b"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save0/MainAdventure/world.arc",
+      "sha256": "dcc22436b7c0652efb6174f9b135e2455a9ad11fdf3e1b1be51b7564cc3bfcf6"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save0/index.arc",
+      "sha256": "939a80153919330eb873d555f944e70194c864ca7b7dcb7a0642efbadfe72cca"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save0/world.arc",
+      "sha256": "74e301a0744ee2e19cf93f2366b046a01f1413fd4be94664573d51d6765d9220"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/index.arc",
+      "sha256": "894e1c7256c4a3270cf1aa2b0188b69309e25d17dfc2e452ff9aab13eecba643"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/main/block45.arc",
+      "sha256": "8c94cd0106669a9d3691937e1d31fe91faa96e7f3a29c9c27b9fc2185dc88f21"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/main/index.arc",
+      "sha256": "6189624b593cb2ecb067707d8e8caf67e2c14e99caa2b0b0d531f5937ad6b919"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/main/voxel.arc",
+      "sha256": "5a5eaa3ad895565efb1de18c17d1471c7778354cbdea6cf8e6a7395649f26ea9"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/main/water.arc",
+      "sha256": "c305510265765544bb01740a74957f8d7fffbe96ab9519066eabef328338ed94"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/main/world.arc",
+      "sha256": "01845c58c261158d6a0f893996f2ceb7d98bd8073cda8bb5d70bd7a6d51c6b9b"
+    },
+    {
+      "path": "PlanetExplorers/GameSave/save1/world.arc",
+      "sha256": "d3c472e6fd383f50053eaa98afb94ac416120e359dfa8927e8815c6484a27fd6"
+    }
+  ],
+  "analysisScriptSha256": "40c509c4055bda0fe23c74bd6b92f47d03c2d7ff814f4c584059795cb85b0464",
+  "qualification": "For this one callback, the selected HP entry and exact inventory grant changed between the observer before Action_Gather.OnAnimEvent and the observer immediately after it.",
+  "limits": [
+    "One successful, non-full bag gather under software rendering only.",
+    "No skill instance/start/finish timing, general coroutine semantics, cancellation, capacity loss or retry branch is qualified.",
+    "No native C admission, masks, pose composition, graphics, physical behavior or replacement of immediate collection is qualified.",
+    "The delta domain exceeds the earlier controller-clock replay qualification; this run does not extend that replay qualification.",
+    "The reported playerRoot transform distance does not establish controller or capsule motion acceptance."
+  ]
+}

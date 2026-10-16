@@ -23,6 +23,8 @@ Default profile without `--user-data`: `/home/admin/.local/share/planet-explorer
 
 These roots live under `/home/admin/.local/share`. Hash the relevant manual saves before/after instrumentation; baseline comparisons exclude autosaves. Adventure reload was observed; the initial Build checkpoint was not reload-tested. Do not overwrite either casually.
 
+Read the current launch log at `PROFILE/engine-config/unity3d/Pathea Games/Planet Explorers/Player.log`; check its modification time before attributing a message to a run. The ordinary `~/.config/unity3d/.../Player.log` can be stale. On October 16 the isolated log explicitly reported `SteamAPI_IsSteamRunning()` and `SteamAPI_Init()` failures while no Steam client was running. Source `SteamMgr.Awake` requests `Application.Quit` on initialization failure, and `PEMutex.OnDestroy` kills the non-editor process. That chain explains how this startup failure can end with signal 9; signal 9 alone does not identify a graphics crash. Start Steam normally and verify it is logged in before retrying the isolated launcher. [Bounded diagnosis](reference/gather-20261016/startup-diagnosis.json) preserves the log/source hashes and the separate later NVIDIA graphics fault.
+
 The TMPDIR override addresses an observed quota failure during LocalDatabase's temporary SQLite copy (`no such table: skEffect` was downstream). The launcher does not set TMPDIR itself. Diagnose current failures before assuming the same cause.
 
 ## Input and capture

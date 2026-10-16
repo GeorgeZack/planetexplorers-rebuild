@@ -334,7 +334,7 @@ def analyze(path):
                         'Callback state is labelled relative to Gather handler order, not harvest commit.',
                         'This report does not qualify a scheduler, blending or native lifecycle.']
                 + (['Outcome snapshots report raw HP-entry and bag differences and grant receipts only; '
-                    'no expected item, quantity or commit rule is inferred. Outcome fields are pending runtime observation.']
+                    'no expected item, quantity or commit rule is inferred.']
                    if header.get('outcomes', False) else []))
 
 

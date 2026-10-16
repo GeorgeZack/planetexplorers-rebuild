@@ -66,7 +66,7 @@ Neither capture qualifies:
 
 The fitted weights in the entry diagnostic are not accepted native values.
 
-## 6. Prepared opt-in outcome observer (not yet run)
+## 6. Prepared opt-in outcome observer (October 15 checkpoint)
 
 Section 3 is now implemented as offline tooling only. No launch, arm or input has been used. The first capture's exact probe source, DLL, shim, compiler and launch manifest are preserved, read-only and hashed, in the ignored `rebuild/build/gather-probe-provenance-01`. New builds go to `rebuild/build/gather-probe-v2`.
 
@@ -100,4 +100,4 @@ The gates ran with `TMPDIR=rebuild/build/compiler-tmp` on a code snapshot hashed
 | `make -C rebuild check-sources` | exit0 |
 | `make -C rebuild check-sanitize` | exit0. 113 suites passed, 0 failed, 0 skipped. |
 
-Runtime outcome observation is still pending.
+Runtime outcome observation was pending at this checkpoint. The subsequent [October 16 outcome qualification](GATHER_OUTCOME_CAPTURE.md) records startup diagnosis, the frame-timestamp correction and one strictly validated callback. Section4's isolated layer-weight evaluation remains future work.

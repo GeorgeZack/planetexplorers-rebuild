@@ -1,0 +1,28 @@
+{
+  "schema": "pe-gather-clock-order-failure-1",
+  "capture": "gather-outcome-live03.jsonl",
+  "captureSha256": "ae1cfd0f87a9f3a6a2820f5ece1137f328cbb3c12812264735ec70bcde703d17",
+  "rejectedBy": "analyze_reference_gather.py: Nonmonotonic Gather clock",
+  "reversals": [
+    {
+      "beforeLine": 204,
+      "afterLine": 205,
+      "beforeType": "outcome-attach",
+      "afterType": "frame",
+      "frame": 1462,
+      "beforeRealtime": 311.014526,
+      "afterRealtime": 311.0135
+    }
+  ],
+  "closure": {
+    "type": "end",
+    "reason": "stop-file",
+    "frames": 269,
+    "eventRecords": 13
+  },
+  "status": "Not a strictly validated outcome capture; retained for diagnosis only.",
+  "fix": "Resample frame real time after TryAttachPost writes the attachment record; retain strict monotonic validation.",
+  "preFixInputs": "rebuild/build/gather-probe-provenance-outcomes-01",
+  "launcherTerminationStatus": 143,
+  "exitSidecarProduced": false
+}

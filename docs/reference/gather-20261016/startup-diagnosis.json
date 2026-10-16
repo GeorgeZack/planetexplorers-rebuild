@@ -1,0 +1,69 @@
+{
+  "schema": "pe-gather-startup-diagnosis-1",
+  "date": "2026-10-16",
+  "observed": {
+    "failedControlLogSha256": "ebc774b6fa7536f792caf42d54705ee91156be974ca0d4d241cc81ea44843770",
+    "failedControlLogMtimeUtc": "2026-10-16T02:29:22.090614+00:00",
+    "staleSharedLogMtimeUtc": "2026-10-13T04:46:43.882237+00:00",
+    "errors": [
+      "SteamAPI_IsSteamRunning() failed.",
+      "SteamAPI_Init() failed; unable to locate a running instance of Steam, or a local steamclient.so.",
+      "InvalidOperationException: Steamworks is not initialized."
+    ],
+    "steamProcessAbsentAtDiagnosis": true,
+    "steamStartedNormally": true,
+    "steamUpdateAppliedByNormalStartup": true,
+    "subsequentSteamInitializationReachedAdventure": true
+  },
+  "sourceDerived": {
+    "sources": [
+      {
+        "label": "Assets/Scripts/SteamWorks/SteamMgr.cs",
+        "sha256": "2a7ac6cf10dce80f75d4bc3015c147e2c0d63defe48df8ad66c7ad4737923282"
+      },
+      {
+        "label": "Assets/Scripts/ZhouXun/AC/PEMutex.cs",
+        "sha256": "a79361e764d14b64e321efe6afda384ccaae46423f65762e9106bcf32637406c"
+      },
+      {
+        "label": "Assets/Scripts/Input/PeInputExt.cs",
+        "sha256": "9cf4c5c41798ab4b5c753273ad014d50fd9508cc8fee180a6ecb7296edd8725d"
+      }
+    ],
+    "shutdown": "SteamMgr.Awake requests Application.Quit after failed SteamAPI.Init; PEMutex.OnDestroy kills the non-editor process.",
+    "keyClick": "ClickPressInfo defaults to 0.5 scaled seconds and IsClickPress accepts release only when elapsed time is strictly below that interval."
+  },
+  "separateNativeGlCrash": {
+    "pid": 2004075,
+    "coreTimestampLocal": "2026-10-16T11:13:13-05:00",
+    "exitObservedUtc": "2026-10-16T16:13:27.637576+00:00",
+    "signal": 6,
+    "faultPc": "0x41b38e06",
+    "mapping": "/memfd:/.glXXXXXX (deleted)",
+    "instruction": "mov (%rsi),%edi",
+    "rsi": "0xc",
+    "callers": "libnvidia-glcore.so.580.178.04",
+    "abortHandler": "libmono.so",
+    "analysisSha256": "5eabab0c5bf9065687e3c62f2c45194d2fbab663ee78896de10f7b8d03504177",
+    "extractedCoreRemoved": true,
+    "limits": [
+      "Exact driver-versus-game defect and observer causation are not established.",
+      "No matching OOM or Xid message was found in the inspected kernel-journal interval."
+    ]
+  },
+  "softwareNegativeCapture": {
+    "capture": "gather-outcome-live02.jsonl",
+    "captureSha256": "2f67e8597a9c520bf08d30abf33f0f5930e672f0ff78a409b71b50a74d818492",
+    "frames": 361,
+    "eventRecords": 3,
+    "gatherAdmissions": 0,
+    "closure": "capture-limit",
+    "postClosureInput": "A later 0.3-second E press produced the visible Shade Weed x2 notification; it occurred after capture closure and does not qualify callback timing.",
+    "manualSaveFilesUnchanged": 14
+  },
+  "limits": [
+    "Signal 9 alone cannot distinguish startup Quit from other termination.",
+    "The stale shared log cannot establish progress in the failed isolated launches.",
+    "No native C gameplay behavior was changed or qualified."
+  ]
+}

@@ -149,7 +149,7 @@ class GatherOutcomeTests(GatherAnalysisTests):
         self.assertEqual(pair['grantsBetween'], [dict(protoId=236, count=2)])
         self.assertEqual(pair['bagChanges'], [dict(instanceId=8, before=None, after=dict(tab=0, slot=1, protoId=236, stackCount=2))])
         self.assertNotIn('expectedItems', pair)
-        self.assertIn('pending runtime observation', report['limits'][-1])
+        self.assertIn('no expected item, quantity or commit rule is inferred', report['limits'][-1])
         self.assertIn('outcome snapshots', report['limits'][0])
 
     def test_pair_order_frame_and_time_must_match_the_receipt(self):

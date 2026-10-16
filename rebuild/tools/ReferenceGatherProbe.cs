@@ -306,6 +306,8 @@ public sealed class PoseProbe : MonoBehaviour {
         if (model == null) return;
         ObservePlayer(player, model);
         TryAttachPost();
+        // Attachment writes a receipt with its own real-time sample before this frame.
+        now = Time.realtimeSinceStartup;
         if (startedAt < 0) { startedAt = now; Console.Error.WriteLine("[pose] Capturing player poses"); }
         Transform[] transforms = model.GetComponentsInChildren<Transform>(true);
         if (transforms.Length > MaxTransforms) throw new InvalidOperationException("Model transform bound exceeded");

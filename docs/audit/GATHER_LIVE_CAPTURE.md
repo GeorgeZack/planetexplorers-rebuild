@@ -255,4 +255,4 @@ The tool prints `4 cycles, 0 mismatches; qualified=True (observed delta domain o
 - `test_reference_animator_bake.py` adds the controller-record guards for cycle offset, speed parameter, idle speed, fixed duration, entry exit time, selectors and chain destinations.
 
 
-Next capture questions, covering the harvest-commit snapshots and the isolated layer-weight boundary, are planned source-only in [GATHER_COMMIT_CAPTURE_PLAN](GATHER_COMMIT_CAPTURE_PLAN.md).
+The subsequent [October 16 outcome capture](GATHER_OUTCOME_CAPTURE.md) qualifies one successful callback's HP and exact bag effects. The isolated layer-weight boundary remains planned in [GATHER_COMMIT_CAPTURE_PLAN](GATHER_COMMIT_CAPTURE_PLAN.md).

@@ -1,0 +1,607 @@
+{
+  "schema": "pe-gather-observation-report-1",
+  "captureSha256": "02b53f817c117d0f7144f025304663c3caeb6a695f6093d3b27a47cdacdb517a",
+  "launchManifestSha256": "a704f99b11f1175df06de9dc4609629f49dfe7e75c40fab2723efcbeedfee643",
+  "probeSourceSha256": "07ba8bac0cd78eb8ed7d83af2b8d88fbd1618d436e9790d90e86ec24bbcc6e1a",
+  "unity": "5.2.4f1",
+  "frames": 106,
+  "eventRecords": 9,
+  "closure": {
+    "type": "end",
+    "reason": "stop-file",
+    "frames": 106,
+    "eventRecords": 9
+  },
+  "outcomes": true,
+  "outcomeRecords": 4,
+  "outcomePairs": [
+    {
+      "receiptSequence": 3,
+      "frame": 1214,
+      "status": "paired",
+      "preHp": {
+        "instance": true,
+        "entry": false,
+        "hp": null
+      },
+      "postHp": {
+        "instance": true,
+        "entry": true,
+        "hp": -1389359.38
+      },
+      "selectedBefore": {
+        "terrainIndex": -1,
+        "localPosition": [
+          -563.6862,
+          21.4523811,
+          349.0192
+        ],
+        "prototype": 15,
+        "worldPosition": [
+          -563.6862,
+          21.4523811,
+          349.0192
+        ]
+      },
+      "selectedAfter": {
+        "terrainIndex": -1,
+        "localPosition": [
+          -563.6862,
+          21.4523811,
+          349.0192
+        ],
+        "prototype": 15,
+        "worldPosition": [
+          -563.6862,
+          21.4523811,
+          349.0192
+        ]
+      },
+      "grantsBetween": [
+        {
+          "protoId": 238,
+          "count": 2
+        }
+      ],
+      "bagChanges": [
+        {
+          "instanceId": 109,
+          "before": null,
+          "after": {
+            "tab": 2,
+            "slot": 4,
+            "protoId": 238,
+            "stackCount": 2
+          }
+        }
+      ]
+    }
+  ],
+  "maximumTrsHierarchyError": 8.721113863430219e-05,
+  "cycles": [
+    {
+      "admissionFrame": 1209,
+      "firstExecutingSample": {
+        "frame": 1209,
+        "time": 181.395676,
+        "realtime": 226.042816,
+        "position": [
+          0,
+          0,
+          0
+        ],
+        "gatherMask": true,
+        "action": {
+          "id": 32,
+          "running": true,
+          "waitingRelation": false,
+          "doActionPending": false
+        }
+      },
+      "outcomePairs": [
+        {
+          "receiptSequence": 3,
+          "frame": 1214,
+          "status": "paired",
+          "preHp": {
+            "instance": true,
+            "entry": false,
+            "hp": null
+          },
+          "postHp": {
+            "instance": true,
+            "entry": true,
+            "hp": -1389359.38
+          },
+          "selectedBefore": {
+            "terrainIndex": -1,
+            "localPosition": [
+              -563.6862,
+              21.4523811,
+              349.0192
+            ],
+            "prototype": 15,
+            "worldPosition": [
+              -563.6862,
+              21.4523811,
+              349.0192
+            ]
+          },
+          "selectedAfter": {
+            "terrainIndex": -1,
+            "localPosition": [
+              -563.6862,
+              21.4523811,
+              349.0192
+            ],
+            "prototype": 15,
+            "worldPosition": [
+              -563.6862,
+              21.4523811,
+              349.0192
+            ]
+          },
+          "grantsBetween": [
+            {
+              "protoId": 238,
+              "count": 2
+            }
+          ],
+          "bagChanges": [
+            {
+              "instanceId": 109,
+              "before": null,
+              "after": {
+                "tab": 2,
+                "slot": 4,
+                "protoId": 238,
+                "stackCount": 2
+              }
+            }
+          ]
+        }
+      ],
+      "endNotificationFrame": 1217,
+      "maximumRootDistanceFromAdmissionSample": 0.0,
+      "edges": [
+        {
+          "type": "action-admission",
+          "sequence": 1,
+          "frame": 1209,
+          "time": 181.395676,
+          "realtime": 225.716553,
+          "event": null,
+          "actionId": 32,
+          "motion": {
+            "gatherMask": false,
+            "actions": [
+              {
+                "id": 1,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 2,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 3,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 4,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 13,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 16,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 32,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              }
+            ]
+          },
+          "handlerPhase": "Gather-handler-absent",
+          "fullBody": {
+            "name": "FullBody",
+            "weight": 0,
+            "inTransition": false,
+            "current": {
+              "fullPathHash": 1458450275,
+              "shortNameHash": 474258567,
+              "normalizedTime": 108.719536,
+              "length": 1,
+              "speed": 1,
+              "speedMultiplier": 1,
+              "loop": true
+            },
+            "next": {
+              "fullPathHash": 0,
+              "shortNameHash": 0,
+              "normalizedTime": 0,
+              "length": 0,
+              "speed": 0,
+              "speedMultiplier": 0,
+              "loop": false
+            },
+            "currentClips": [],
+            "nextClips": []
+          }
+        },
+        {
+          "type": "animation-event",
+          "sequence": 3,
+          "frame": 1214,
+          "time": 183.058258,
+          "realtime": 227.447037,
+          "event": "Gather",
+          "actionId": -1,
+          "motion": {
+            "gatherMask": true,
+            "actions": [
+              {
+                "id": 1,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 2,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 3,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 4,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 13,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 16,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 32,
+                "running": true,
+                "waitingRelation": false,
+                "doActionPending": false
+              }
+            ]
+          },
+          "handlerPhase": "before-Gather-handler",
+          "fullBody": {
+            "name": "FullBody",
+            "weight": 1,
+            "inTransition": false,
+            "current": {
+              "fullPathHash": 1680093607,
+              "shortNameHash": 515342059,
+              "normalizedTime": 0.467228025,
+              "length": 0.6333332,
+              "speed": 1,
+              "speedMultiplier": 1,
+              "loop": false
+            },
+            "next": {
+              "fullPathHash": 0,
+              "shortNameHash": 0,
+              "normalizedTime": 0,
+              "length": 0,
+              "speed": 0,
+              "speedMultiplier": 0,
+              "loop": false
+            },
+            "currentClips": [
+              {
+                "name": "HerbUp",
+                "id": 14872,
+                "weight": 1,
+                "length": 0.6333332
+              }
+            ],
+            "nextClips": [
+              {
+                "name": "HerbUp",
+                "id": 14872,
+                "weight": 1,
+                "length": 0.6333332
+              }
+            ]
+          }
+        },
+        {
+          "type": "animation-event",
+          "sequence": 7,
+          "frame": 1215,
+          "time": 183.3916,
+          "realtime": 227.797119,
+          "event": "OnEndFullAnim",
+          "actionId": -1,
+          "motion": {
+            "gatherMask": true,
+            "actions": [
+              {
+                "id": 1,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 2,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 3,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 4,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 13,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 16,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 32,
+                "running": true,
+                "waitingRelation": false,
+                "doActionPending": false
+              }
+            ]
+          },
+          "handlerPhase": "before-Gather-handler",
+          "fullBody": {
+            "name": "FullBody",
+            "weight": 1,
+            "inTransition": true,
+            "current": {
+              "fullPathHash": 1680093607,
+              "shortNameHash": 515342059,
+              "normalizedTime": 0.993544,
+              "length": 0.6333332,
+              "speed": 1,
+              "speedMultiplier": 1,
+              "loop": false
+            },
+            "next": {
+              "fullPathHash": 1458450275,
+              "shortNameHash": 474258567,
+              "normalizedTime": 0.245911166,
+              "length": 1,
+              "speed": 1,
+              "speedMultiplier": 1,
+              "loop": true
+            },
+            "currentClips": [
+              {
+                "name": "HerbUp",
+                "id": 14872,
+                "weight": 1,
+                "length": 0.6333332
+              }
+            ],
+            "nextClips": []
+          }
+        },
+        {
+          "type": "animation-event",
+          "sequence": 8,
+          "frame": 1216,
+          "time": 183.722488,
+          "realtime": 228.12355,
+          "event": "GatherEnd",
+          "actionId": -1,
+          "motion": {
+            "gatherMask": true,
+            "actions": [
+              {
+                "id": 1,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 2,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 3,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 4,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 13,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 16,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 32,
+                "running": true,
+                "waitingRelation": false,
+                "doActionPending": false
+              }
+            ]
+          },
+          "handlerPhase": "before-Gather-handler",
+          "fullBody": {
+            "name": "FullBody",
+            "weight": 1,
+            "inTransition": false,
+            "current": {
+              "fullPathHash": 1458450275,
+              "shortNameHash": 474258567,
+              "normalizedTime": 0.5768092,
+              "length": 1,
+              "speed": 1,
+              "speedMultiplier": 1,
+              "loop": true
+            },
+            "next": {
+              "fullPathHash": 0,
+              "shortNameHash": 0,
+              "normalizedTime": 0,
+              "length": 0,
+              "speed": 0,
+              "speedMultiplier": 0,
+              "loop": false
+            },
+            "currentClips": [],
+            "nextClips": []
+          }
+        },
+        {
+          "type": "action-end-notification",
+          "sequence": 9,
+          "frame": 1217,
+          "time": 184.046875,
+          "realtime": 228.446442,
+          "event": null,
+          "actionId": 32,
+          "motion": {
+            "gatherMask": false,
+            "actions": [
+              {
+                "id": 1,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 2,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 3,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 4,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 13,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 16,
+                "running": false,
+                "waitingRelation": null,
+                "doActionPending": null
+              },
+              {
+                "id": 32,
+                "running": true,
+                "waitingRelation": false,
+                "doActionPending": false
+              }
+            ]
+          },
+          "handlerPhase": "before-Gather-handler",
+          "fullBody": {
+            "name": "FullBody",
+            "weight": 0,
+            "inTransition": false,
+            "current": {
+              "fullPathHash": 1458450275,
+              "shortNameHash": 474258567,
+              "normalizedTime": 0.5768092,
+              "length": 1,
+              "speed": 1,
+              "speedMultiplier": 1,
+              "loop": true
+            },
+            "next": {
+              "fullPathHash": 0,
+              "shortNameHash": 0,
+              "normalizedTime": 0,
+              "length": 0,
+              "speed": 0,
+              "speedMultiplier": 0,
+              "loop": false
+            },
+            "currentClips": [],
+            "nextClips": []
+          }
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Physical keys were not recorded; inventory only as outcome snapshots around Gather receipts.",
+    "Callback state is labelled relative to Gather handler order, not harvest commit.",
+    "This report does not qualify a scheduler, blending or native lifecycle.",
+    "Outcome snapshots report raw HP-entry and bag differences and grant receipts only; no expected item, quantity or commit rule is inferred."
+  ]
+}

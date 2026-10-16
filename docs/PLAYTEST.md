@@ -49,6 +49,7 @@ Steam-installed native V1.1.4 client with isolated profiles ([runtime](REFERENCE
 | Reaction pose bake | Oct 12. | [reaction](audit/REACTION_PRESENTATION.md#bake-result-and-staged-group), [result](reference/reaction-pose-result.json) |
 | FinalIK solver and grounder | Oct 12–13. | [FBBIK](audit/FINALIK_FBBIK.md), [grounder](audit/FINALIK_GROUNDER.md#observed-on-uneven-ground) |
 | Gather | Oct 15. Four Gather cycles with event receipts, and the Herb leaf bake. | [captures](audit/GATHER_LIVE_CAPTURE.md) |
+| Gather outcome | Oct 16, llvmpipe at 800×450. One callback's pre/post snapshots bound HP-entry creation and item 238 ×2 in new bag instance 109 on frame 1214. Strict capture: 106 frames, nine records. No native integration or general skill-timing qualification. | [outcome](audit/GATHER_OUTCOME_CAPTURE.md), [numerical report](reference/gather-20261016/outcome-observation.json) |
 
 ## Tutorial native graphical fixtures
 
